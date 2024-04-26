@@ -1,6 +1,6 @@
 export default function Home() {
   
   return (
-    <div>SHUT UP PLEASE AAAAAAAAA</div>
+    <div>blame napzilla not me</div>
   )
 }
