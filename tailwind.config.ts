@@ -11,7 +11,11 @@ const config: Config = {
 
     },
     extend: {
-
+      fontFamily: {
+        amatic: ['var(--font-amatic)'],
+        amaticbold: ['var(--font-amaticbold)'],
+        baloo: ['var(--font-baloo)']
+      }
     },
   },
   plugins: [],
