@@ -1,4 +1,15 @@
+"use client"
+
+import { useState } from "react"
+
 export const GoldiswapPage = () => {
+
+  const [walletOpen, setWalletOpen] = useState<boolean>(false)
+
+  const test = () => {
+    console.log('setting to true')
+    setWalletOpen(prev => !prev)
+  }
 
   return (
     <main className="w-screen h-screen">
@@ -25,8 +36,35 @@ export const GoldiswapPage = () => {
         </div>
         <h1 className="absolute top-[12.16%] left-[14%] text-[#D9C6BA] text-[8vw] font-amaticbold" id="page-title">SWAP</h1>
         <div className="absolute top-[9.387%] left-[28.125%] w-[43.75%] h-[2.78%] bg-[#4D0B24] flex flex-row items-center justify-between px-2">
-          <span className="text-white font-baloo">$LOCKS floor price: $0.02</span>
-          <span className="text-white font-baloo">$LOCKS market price: $0.28</span>
+          <span className="text-white font-baloo mt-1">$LOCKS floor price: $0.02</span>
+          <span className="text-white font-baloo mt-1">$LOCKS market price: $0.28</span>
+        </div>
+        <div 
+          className={`absolute h-[24%] w-[2%] top-[16.167%] left-[71.875%] ${walletOpen ? "translate-x-[1100%]" : ""} bg-[#D5A774] border-r-2 border-t-2 border-b-2 border-black cursor-pointer transition-transform ease-linear`}
+          onClick={() => test()}
+        >
+          <div className={`flex flex-row items-center absolute bottom-[41%] ${walletOpen ? "right-[-126%]" : "right-[-123%]"} font-baloo font-semibold text-[0.8vw] -rotate-[90deg] text-nowrap`}>
+            <span>WALLET</span>
+            <span className="ml-2">BALANCE</span>
+          </div>
+        </div>
+        <div className={`absolute w-[22%] h-[32%] top-[12.167%] left-[49.875%] ${walletOpen ? "translate-x-[100%] border-r-2" : ""} border-t-2 border-b-2 border-black bg-[#D5A774] bg-opacity-30 flex flex-col justify-between p-4 text-white transition-transform ease-linear`}>
+          <div className="flex flex-row items-center justify-between w-[100%]">
+            <span className="">locks balance:</span>
+            <span className="">69.66</span>
+          </div>
+          <div className="flex flex-row items-center justify-between w-[100%]">
+            <span className="">locks balance:</span>
+            <span className="">69.66</span>
+          </div>
+          <div className="flex flex-row items-center justify-between w-[100%]">
+            <span className="">locks balance:</span>
+            <span className="">69.66</span>
+          </div>
+          <div className="flex flex-row items-center justify-between w-[100%]">
+            <span className="">locks balance:</span>
+            <span className="">69.66</span>
+          </div>
         </div>
         <div className="absolute top-[12.167%] left-[28.125%] w-[43.75%] h-[48.87%] border-2 border-black bg-[#EEDCD2]">
           <div className="absolute top-3 left-0 w-6 skew-y-[45deg] border-b-2 border-black"></div>
