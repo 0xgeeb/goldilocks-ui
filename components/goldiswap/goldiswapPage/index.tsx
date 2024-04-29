@@ -5,10 +5,11 @@ import { useState } from "react"
 export const GoldiswapPage = () => {
 
   const [walletOpen, setWalletOpen] = useState<boolean>(false)
+  const [chartOpen, setChartOpen] = useState<boolean>(false)
 
   const test = () => {
-    console.log('setting to true')
-    setWalletOpen(prev => !prev)
+    console.log('asdfasdf')
+    setChartOpen(prev => !prev)
   }
 
   return (
@@ -40,8 +41,8 @@ export const GoldiswapPage = () => {
           <span className="text-white font-baloo mt-1">$LOCKS market price: $0.28</span>
         </div>
         <div 
-          className={`absolute h-[24%] w-[2%] top-[16.167%] left-[71.875%] ${walletOpen ? "translate-x-[1100%]" : ""} bg-[#D5A774] border-r-2 border-t-2 border-b-2 border-black cursor-pointer transition-transform ease-linear`}
-          onClick={() => test()}
+          className={`absolute h-[24%] w-[2%] top-[16.167%] left-[71.875%] hover:scale-105 ${walletOpen ? "translate-x-[1100%]" : ""} bg-[#D5A774] border-r-2 border-t-2 border-b-2 border-black cursor-pointer transition-transform ease-linear`}
+          onClick={() => setWalletOpen(prev => !prev)}
         >
           <div className={`flex flex-row items-center absolute bottom-[41%] ${walletOpen ? "right-[-126%]" : "right-[-123%]"} font-baloo font-semibold text-[0.8vw] -rotate-[90deg] text-nowrap`}>
             <span>WALLET</span>
@@ -109,6 +110,13 @@ export const GoldiswapPage = () => {
               </div>
             </div>
           </div>
+        </div>
+        <img className="absolute top-[51.04%] left-[75.5%] h-[2%] w-[3%]" src="/images/icon-bearoutline.png" alt="bearoutline" />
+        <div 
+          className="absolute w-[6%] h-[8%] top-[53.04%] left-[74%] border-2 border-black bg-[#F3AA8A] flex items-center justify-center font-amaticbold text-[1.2vw] hover:scale-110 cursor-pointer"
+          onClick={() => test()}
+        >
+          THIS IS CHART
         </div>
         <button className="absolute h-[8%] w-[16.6%] top-[64.8%] left-[41.7%] bg-[#E7B941] font-amaticbold text-[1.9vw] border-2 border-black">
           BUY
