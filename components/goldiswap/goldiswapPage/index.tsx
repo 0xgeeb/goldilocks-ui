@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from "recharts"
 
 export const GoldiswapPage = () => {
 
@@ -11,6 +12,12 @@ export const GoldiswapPage = () => {
     console.log('asdfasdf')
     setChartOpen(prev => !prev)
   }
+
+  const data = [
+    {name: 'Page A', uv: 400, pv: 2400, amt: 2400},
+    {name: 'Page B', uv: 800, pv: 1200, amt: 3000},
+    {name: 'Page C', uv: 200, pv: 4800, amt: 5000}
+  ]
 
   return (
     <main className="w-screen h-screen">
@@ -75,40 +82,51 @@ export const GoldiswapPage = () => {
           <span className="absolute bottom-[23%] left-[-7.5%] -rotate-[90deg] text-[0.8vw] font-baloo font-semibold">**0.3% fee on all buys**</span>
           <span className="absolute top-[23%] right-[-5.8%] -rotate-[90deg] text-[0.8vw] font-baloo font-semibold">target ratio: 33.7%</span>
           <div className="absolute inset-6 border-2 border-black bg-[#D9C6BA]">
-            <div className="w-[100%] h-[100%] relative flex flex-col">
-              <div className="flex flex-row absolute top-0 right-0 w-[33.61%] h-[10%] font-baloo font-semibold border-b-2 border-l-2 border-black">
-                <div className="flex flex-row items-center justify-center h-[100%] w-[25%] border-r-2 border-black bg-[#DCC2A8]">25%</div>
-                <div className="flex flex-row items-center justify-center h-[100%] w-[25%] border-r-2 border-black bg-[#D5A774]">50%</div>
-                <div className="flex flex-row items-center justify-center h-[100%] w-[25%] border-r-2 border-black bg-[#D19A5B]">75%</div>
-                <div className="flex flex-row items-center justify-center h-[100%] w-[25%] bg-[#CC8634]">MAX</div>
-              </div>
-              <img className="absolute h-6 w-6 top-[16%] left-[76%]" src="/images/icon-settings.png" alt="settings" />
-              <div className="absolute top-[44%] left-[47.27%] bg-[#D9C6BA] z-10 h-10 w-10 border-2 border-black rounded-3xl flex justify-center items-center cursor-pointer hover:scale-110">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0D111C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
-              </div>
-              <div className="w-[100%] h-[50%] border-b-2 border-black">
-                <div className="absolute flex flex-row top-[21%] left-[6%] items-center">
-                  <img className="h-8 w-8" src="/images/logo-honey.png" alt="honeylogo" />
-                  <h1 className="font-baloo font-semibold text-[1.4vw] ml-3">HONEY</h1>
+            {
+              chartOpen ?
+              <div className="w-[100%] h-[100%] bg-[#F3AA8A]">
+                <LineChart width={400} height={400} data={data} margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
+                  <Line type="monotone" dataKey="uv" stroke="#000000" />
+                  <CartesianGrid stroke="#000000" strokeDasharray="5 5 " />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                </LineChart>
+              </div> :
+              <div className="w-[100%] h-[100%] relative flex flex-col">
+                <div className="flex flex-row absolute top-0 right-0 w-[33.61%] h-[10%] font-baloo font-semibold border-b-2 border-l-2 border-black">
+                  <div className="flex flex-row items-center justify-center h-[100%] w-[25%] border-r-2 border-black bg-[#DCC2A8]">25%</div>
+                  <div className="flex flex-row items-center justify-center h-[100%] w-[25%] border-r-2 border-black bg-[#D5A774]">50%</div>
+                  <div className="flex flex-row items-center justify-center h-[100%] w-[25%] border-r-2 border-black bg-[#D19A5B]">75%</div>
+                  <div className="flex flex-row items-center justify-center h-[100%] w-[25%] bg-[#CC8634]">MAX</div>
                 </div>
-                <input
-                  className="absolute h-[22%] w-[49.6%] top-[15%] left-[25%] border-2 border-black focus:outline-none bg-white font-bold font-baloo text-[1.6vw]"
-                  type="number"
-                  id="number-input"
-                />
-              </div>
-              <div className="w-[100%] h-[50%]">
-                <div className="absolute flex flex-row top-[71%] left-[6%] items-center">
-                  <img className="h-8 w-8" src="/images/logo-locks.png" alt="lockslogo" />
-                  <h1 className="font-baloo font-semibold text-[1.4vw] ml-3">LOCKS</h1>
+                <img className="absolute h-6 w-6 top-[16%] left-[76%]" src="/images/icon-settings.png" alt="settings" />
+                <div className="absolute top-[44%] left-[47.27%] bg-[#D9C6BA] z-10 h-10 w-10 border-2 border-black rounded-3xl flex justify-center items-center cursor-pointer hover:scale-110">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0D111C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
                 </div>
-                <input
-                  className="absolute h-[22%] w-[49.6%] top-[65%] left-[25%] border-2 border-black focus:outline-none bg-white font-bold font-baloo text-[1.6vw]"
-                  type="number"
-                  id="number-input"
-                />
+                <div className="w-[100%] h-[50%] border-b-2 border-black">
+                  <div className="absolute flex flex-row top-[21%] left-[6%] items-center">
+                    <img className="h-8 w-8" src="/images/logo-honey.png" alt="honeylogo" />
+                    <h1 className="font-baloo font-semibold text-[1.4vw] ml-3">HONEY</h1>
+                  </div>
+                  <input
+                    className="absolute h-[22%] w-[49.6%] top-[15%] left-[25%] border-2 border-black focus:outline-none bg-white font-bold font-baloo text-[1.6vw]"
+                    type="number"
+                    id="number-input"
+                  />
+                </div>
+                <div className="w-[100%] h-[50%]">
+                  <div className="absolute flex flex-row top-[71%] left-[6%] items-center">
+                    <img className="h-8 w-8" src="/images/logo-locks.png" alt="lockslogo" />
+                    <h1 className="font-baloo font-semibold text-[1.4vw] ml-3">LOCKS</h1>
+                  </div>
+                  <input
+                    className="absolute h-[22%] w-[49.6%] top-[65%] left-[25%] border-2 border-black focus:outline-none bg-white font-bold font-baloo text-[1.6vw]"
+                    type="number"
+                    id="number-input"
+                  />
+                </div>
               </div>
-            </div>
+            }
           </div>
         </div>
         <img className="absolute top-[51.04%] left-[75.5%] h-[2%] w-[3%]" src="/images/icon-bearoutline.png" alt="bearoutline" />
