@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from "recharts"
+import { NavBar } from "../../utils/navBar"
 
 export const GoldiswapPage = () => {
 
@@ -21,22 +22,9 @@ export const GoldiswapPage = () => {
 
   return (
     <main className="w-screen h-screen">
-      <header className="w-[100%] h-[15%] bg-[#EEDCD2] flex flex-row items-center justify-between font-amaticbold text-[2vw] px-[4%]">
-        <div className="w-[18%] flex flex-row items-center hover:opacity-30 cursor-pointer">
-          <img className="w-[37%] h-[70%]" src="/images/logo-goldilocks.png" alt="logo" />
-          <h1 className="text-[2.4vw]">Goldilocks DAO</h1>
-        </div>
-        <div className="w-[65.2%] h-[100%] flex flex-row items-center justify-between">
-          <span className="hover:scale-[150%] cursor-pointer">Wut is this?</span>
-          <span className="hover:scale-[150%] cursor-pointer">Goldiswap</span>
-          <span className="hover:scale-[150%] cursor-pointer">Stake</span>
-          <span className="hover:scale-[150%] cursor-pointer">Borrow</span>
-          <span className="hover:scale-[150%] cursor-pointer">Goldilend</span>
-          <span className="hover:scale-[150%] cursor-pointer">Goldivaults</span>
-          <button className="bg-[#E7B941] border-2 border-black px-9 py-2 hover:bg-[#F3AA8A] hover:scale-[110%] cursor-pointer">Connect</button>
-        </div>
-      </header>
+      <NavBar />
       <div className="w-[100%] h-[85%] bg-cover bg-bottom bg-[url('/images/bg-goldiswap.png')] relative">
+        {/* todo: add hover and cursor and color to these buttons */}
         <div className="absolute h-[7.5%] w-[20.27%] top-[2.62%] left-[78.89%] flex flex-row items-center justify-between font-baloo font-semibold text-[1vw]">
           <div className="w-[30.27%] h-[100%] flex items-center justify-center border-2 border-black bg-[#D9C6BA]">BUY</div>
           <div className="w-[30.27%] h-[100%] flex items-center justify-center border-2 border-black bg-[#D9C6BA]">SELL</div>
@@ -56,6 +44,7 @@ export const GoldiswapPage = () => {
             <span className="ml-2">BALANCE</span>
           </div>
         </div>
+        {/* todo: fix padding and position of balances */}
         <div className={`absolute w-[22%] h-[32%] top-[12.167%] left-[49.875%] ${walletOpen ? "translate-x-[100%] border-r-2" : ""} border-t-2 border-b-2 border-black bg-[#D5A774] bg-opacity-30 flex flex-col justify-between p-4 text-white transition-transform ease-linear`}>
           <div className="flex flex-row items-center justify-between w-[100%]">
             <span className="">locks balance:</span>
@@ -84,6 +73,7 @@ export const GoldiswapPage = () => {
           <div className="absolute inset-6 border-2 border-black bg-[#D9C6BA]">
             {
               chartOpen ?
+              // todo: fix position of chart and make lines black
               <div className="w-[100%] h-[100%] bg-[#F3AA8A]">
                 <LineChart width={400} height={400} data={data} margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
                   <Line type="monotone" dataKey="uv" stroke="#000000" />
@@ -108,6 +98,7 @@ export const GoldiswapPage = () => {
                     <img className="h-8 w-8" src="/images/logo-honey.png" alt="honeylogo" />
                     <h1 className="font-baloo font-semibold text-[1.4vw] ml-3">HONEY</h1>
                   </div>
+                  {/* todo: move tokens and inputs to the left, make inputs a bit bigger, add left padding */}
                   <input
                     className="absolute h-[22%] w-[49.6%] top-[15%] left-[25%] border-2 border-black focus:outline-none bg-white font-bold font-baloo text-[1.6vw]"
                     type="number"
