@@ -12,8 +12,10 @@ export const GoldiswapPage = () => {
 
   const data = [
     {name: 'Page A', uv: 400, pv: 2400, amt: 2400},
-    {name: 'Page B', uv: 800, pv: 1200, amt: 3000},
-    {name: 'Page C', uv: 200, pv: 4800, amt: 5000}
+    {name: 'Page B', uv: 300, pv: 1200, amt: 3000},
+    {name: 'Page C', uv: 350, pv: 4800, amt: 5000},
+    {name: 'Page B', uv: 450, pv: 1200, amt: 3000},
+    {name: 'Page C', uv: 800, pv: 4800, amt: 5000}
   ]
 
   const changeActiveToggle = (toggle: string) => {
@@ -67,22 +69,33 @@ export const GoldiswapPage = () => {
             <span className="ml-2">BALANCE</span>
           </div>
         </div>
-        {/* todo: fix padding and position of balances */}
-        <div className={`absolute w-[22%] h-[32%] top-[12.167%] left-[49.875%] ${walletOpen ? "translate-x-[100%] border-r-2" : ""} border-t-2 border-b-2 border-black bg-[#D5A774] bg-opacity-30 flex flex-col justify-between p-4 text-white transition-transform ease-linear`}>
+        <div className={`absolute w-[22%] h-[32%] top-[12.167%] left-[49.875%] ${walletOpen ? "translate-x-[100%] border-r-2" : ""} font-baloo font-semibold text-[1vw] border-t-2 border-b-2 border-black bg-[#D5A774] bg-opacity-30 flex flex-col justify-between py-[1.5%] px-[3%] text-white transition-transform ease-linear`}>
           <div className="flex flex-row items-center justify-between w-[100%]">
             <span className="">locks balance:</span>
             <span className="">69.66</span>
           </div>
           <div className="flex flex-row items-center justify-between w-[100%]">
-            <span className="">locks balance:</span>
+            <span className="">honey balance:</span>
             <span className="">69.66</span>
           </div>
           <div className="flex flex-row items-center justify-between w-[100%]">
-            <span className="">locks balance:</span>
+            <span className="">porridge balance:</span>
             <span className="">69.66</span>
           </div>
           <div className="flex flex-row items-center justify-between w-[100%]">
-            <span className="">locks balance:</span>
+            <span className="">staked locks:</span>
+            <span className="">69.66</span>
+          </div>
+          <div className="flex flex-row items-center justify-between w-[100%]">
+            <span className="">locked locks:</span>
+            <span className="">69.66</span>
+          </div>
+          <div className="flex flex-row items-center justify-between w-[100%]">
+            <span className="">borrowed honey:</span>
+            <span className="">69.66</span>
+          </div>
+          <div className="flex flex-row items-center justify-between w-[100%]">
+            <span className="">claimable porridge:</span>
             <span className="">69.66</span>
           </div>
         </div>
@@ -96,48 +109,57 @@ export const GoldiswapPage = () => {
           <div className="absolute inset-6 border-2 border-black bg-[#D9C6BA]">
             {
               chartOpen ?
-              // todo: fix position of chart and make lines black
-              <div className="w-[100%] h-[100%] bg-[#F3AA8A]">
-                <LineChart width={400} height={400} data={data} margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
-                  <Line type="monotone" dataKey="uv" stroke="#000000" />
-                  <CartesianGrid stroke="#000000" strokeDasharray="5 5 " />
-                  <XAxis dataKey="name" />
-                  <YAxis />
+              <div className="w-[100%] h-[100%] bg-[#F3AA8A] flex flex-col justify-between pl-[3%] pb-[2.5%] font-baloo text-[1vw]">
+                <h1 className="font-amaticbold text-[3vw] ml-[13%]">this is chart</h1>
+                <LineChart width={window.innerWidth * .365} height={window.innerHeight * .24} data={data} margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
+                  <Line type="natural" dataKey="uv" dot={false} stroke="#000000" />
+                  <CartesianGrid stroke="#000000" vertical={false} />
+                  <XAxis dataKey="name" stroke="#000000" />
+                  <YAxis stroke="#000000" />
                 </LineChart>
               </div> :
               <div className="w-[100%] h-[100%] relative flex flex-col">
                 <div className="flex flex-row absolute top-0 right-0 w-[33.61%] h-[10%] font-baloo font-semibold border-b-2 border-l-2 border-black">
-                  <div className="flex flex-row items-center justify-center h-[100%] w-[25%] border-r-2 border-black bg-[#DCC2A8]">25%</div>
-                  <div className="flex flex-row items-center justify-center h-[100%] w-[25%] border-r-2 border-black bg-[#D5A774]">50%</div>
-                  <div className="flex flex-row items-center justify-center h-[100%] w-[25%] border-r-2 border-black bg-[#D19A5B]">75%</div>
-                  <div className="flex flex-row items-center justify-center h-[100%] w-[25%] bg-[#CC8634]">MAX</div>
+                  <div className="flex flex-row items-center justify-center h-[100%] w-[25%] border-r-2 border-black bg-[#DCC2A8] hover:bg-[#F3AA8A] cursor-pointer">25%</div>
+                  <div className="flex flex-row items-center justify-center h-[100%] w-[25%] border-r-2 border-black bg-[#D5A774] hover:bg-[#F3AA8A] cursor-pointer">50%</div>
+                  <div className="flex flex-row items-center justify-center h-[100%] w-[25%] border-r-2 border-black bg-[#D19A5B] hover:bg-[#F3AA8A] cursor-pointer">75%</div>
+                  <div className="flex flex-row items-center justify-center h-[100%] w-[25%] bg-[#CC8634] hover:bg-[#F3AA8A] cursor-pointer">MAX</div>
                 </div>
-                <img className="absolute h-6 w-6 top-[16%] left-[76%]" src="/images/icon-settings.png" alt="settings" />
+                <img className="absolute h-6 w-6 top-[16%] left-[79%]" src="/images/icon-settings.png" alt="settings" />
                 <div className="absolute top-[44%] left-[47.27%] bg-[#D9C6BA] z-10 h-10 w-10 border-2 border-black rounded-3xl flex justify-center items-center cursor-pointer hover:scale-110">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0D111C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
                 </div>
                 <div className="w-[100%] h-[50%] border-b-2 border-black">
-                  <div className="absolute flex flex-row top-[21%] left-[6%] items-center">
+                  <div className="absolute flex flex-row top-[21%] left-[3%] items-center">
                     <img className="h-8 w-8" src="/images/logo-honey.png" alt="honeylogo" />
                     <h1 className="font-baloo font-semibold text-[1.4vw] ml-3">HONEY</h1>
                   </div>
-                  {/* todo: move tokens and inputs to the left, make inputs a bit bigger, add left padding */}
-                  <input
-                    className="absolute h-[22%] w-[49.6%] top-[15%] left-[25%] border-2 border-black focus:outline-none bg-white font-bold font-baloo text-[1.6vw]"
-                    type="number"
-                    id="number-input"
-                  />
+                  <div className="absolute h-[22%] w-[55.6%] top-[15%] left-[22%] border-2 border-black bg-white">
+                    <div className="relative h-[100%] w-[100%]">
+                      <input
+                        className="absolute top-[21%] left-[5%] focus:outline-none bg-transparent font-bold font-baloo text-[1.6vw]"
+                        type="number"
+                        id="number-input"
+                      />
+                      <span className="absolute bottom-[3%] right-[3%] font-baloo font-bold text-[0.9vw] text-[#7F7F7F]">balance: 69.420</span>
+                    </div>
+                  </div>
                 </div>
                 <div className="w-[100%] h-[50%]">
-                  <div className="absolute flex flex-row top-[71%] left-[6%] items-center">
+                  <div className="absolute flex flex-row top-[71%] left-[3%] items-center">
                     <img className="h-8 w-8" src="/images/logo-locks.png" alt="lockslogo" />
                     <h1 className="font-baloo font-semibold text-[1.4vw] ml-3">LOCKS</h1>
                   </div>
-                  <input
-                    className="absolute h-[22%] w-[49.6%] top-[65%] left-[25%] border-2 border-black focus:outline-none bg-white font-bold font-baloo text-[1.6vw]"
-                    type="number"
-                    id="number-input"
-                  />
+                  <div className="absolute h-[22%] w-[55.6%] top-[65%] left-[22%] border-2 border-black bg-white">
+                    <div className="relative h-[100%] w-[100%]">
+                      <input
+                        className="absolute top-[20%] left-[5%] focus:outline-none bg-transparent font-bold font-baloo text-[1.6vw]"
+                        type="number"
+                        id="number-input"
+                      />
+                      <span className="absolute bottom-[3%] right-[3%] font-baloo font-bold text-[0.9vw] text-[#7F7F7F]">balance: 69.420</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             }
@@ -153,7 +175,6 @@ export const GoldiswapPage = () => {
         <button className="absolute h-[8%] w-[16.6%] top-[64.8%] left-[41.7%] bg-[#E7B941] font-amaticbold text-[1.9vw] border-2 border-black">
           BUY
         </button>
-        {/* todo: make these grow or shrink quickly and change colors on input */}
         <div className="absolute flex flex-row items-center justify-between w-[45%] top-[78%] left-[26%] text-white font-baloo text-[1.1vw]">
           <span>$LOCKS supply: 100,000,000.64</span>
           <span>current fsl: 2,140,262.24</span>
@@ -162,8 +183,12 @@ export const GoldiswapPage = () => {
         <img className="absolute h-10 w-10 bottom-[3%] left-[3%]" src="/images/icon-share.png" alt="share" />
         <div className="absolute bottom-[3%] right-[3%] flex flex-row items-center text-[#D9C6BA]">
           <span className="font-amatic text-[1.3vw] mr-6">OOGA BOOGA</span>
-          <img className="w-8 h-8" src="/images/icon-x.png" alt="x" />
-          <img className="w-8 h-8" src="/images/icon-discord.png" alt="discord" />
+          <a className="cursor-pointer hover:scale-110" href="https:x.com/goldilocksmoney">
+            <img className="w-8 h-8" src="/images/icon-x.png" alt="x" />
+          </a>
+          <a className="cursor-pointer hover:scale-110" href="https://discord.gg/3cdn88Mbq8">
+            <img className="w-8 h-8" src="/images/icon-discord.png" alt="discord" />
+          </a>
           <span className="text-[0.7vw] font-baloo ml-6">© 2024 Goldilocks DAO. All rights reserved.</span>
         </div>
       </div>
