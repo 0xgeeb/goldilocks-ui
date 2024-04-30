@@ -36,4 +36,5 @@ export interface WalletInitialState {
   isConnected: boolean;
   network: string;
   refreshBalances: () => void;
+  balancesLoading: boolean;
 }

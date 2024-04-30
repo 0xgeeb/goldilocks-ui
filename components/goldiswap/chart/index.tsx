@@ -5,11 +5,11 @@ import { LineChart, Line, CartesianGrid, XAxis, YAxis } from "recharts"
 export const Chart = () => {
 
   const data = [
-    {name: 'Page A', uv: 400, pv: 2400, amt: 2400},
-    {name: 'Page B', uv: 300, pv: 1200, amt: 3000},
-    {name: 'Page C', uv: 350, pv: 4800, amt: 5000},
-    {name: 'Page B', uv: 450, pv: 1200, amt: 3000},
-    {name: 'Page C', uv: 800, pv: 4800, amt: 5000}
+    {name: '4/2', uv: 400, pv: 2400, amt: 2400},
+    {name: '4/6', uv: 300, pv: 1200, amt: 3000},
+    {name: '4/10', uv: 350, pv: 4800, amt: 5000},
+    {name: '4/14', uv: 450, pv: 1200, amt: 3000},
+    {name: '4/18', uv: 800, pv: 4800, amt: 5000}
   ]
 
   return (

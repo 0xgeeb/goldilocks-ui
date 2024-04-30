@@ -4,6 +4,7 @@ import { useEffect } from "react"
 import { NavBar, WalletBalance } from "../../utils"
 import { SwapBox } from "../../goldiswap"
 import { useGoldiswap } from "../../../providers/GoldiswapProvider"
+import { useGoldiswapMath } from "../../../hooks/useGoldiswapMath"
 
 export const GoldiswapPage = () => {
 
@@ -11,8 +12,55 @@ export const GoldiswapPage = () => {
     chartOpen, 
     setChartOpen,
     activeToggle,
-    changeActiveToggle 
+    changeActiveToggle,
+    goldiswapInfo,
+    refreshGoldiswapInfo,
+    infoLoading,
+    setInfoLoading
   } = useGoldiswap()
+
+  const { floorPrice, marketPrice } = useGoldiswapMath()
+
+  useEffect(() => {
+    refreshGoldiswapInfo()
+    setInfoLoading(false)
+  }, [])
+
+  const formatAsString = (num: number): string => {
+    return num.toLocaleString('en-US', { maximumFractionDigits: 2 })
+  }
+
+  const formatAsTokenPrice = (num: number): string => {
+    return num.toLocaleString('en-US', { maximumFractionDigits: 6 })
+  }
+
+  const loadingElement = () => {
+    return <span className="loader-small ml-3 mt-2"></span>
+  }
+
+  const handleInfo = (num: number) => {
+    if(infoLoading) {
+      return loadingElement()
+    }
+    else if(num > 0) {
+      return formatAsString(num)
+    }
+    else {
+      return "-"
+    }
+  }
+
+  const handleTokenInfo = (num: number) => {
+    if(infoLoading) {
+      return "-"
+    }
+    else if(num > 0) {
+      return formatAsTokenPrice(num)
+    }
+    else {
+      return "-"
+    }
+  }
 
   return (
     <main className="w-screen h-screen">
@@ -40,8 +88,8 @@ export const GoldiswapPage = () => {
         </div>
         <h1 className="absolute top-[12.16%] left-[14%] text-[#D9C6BA] text-[8vw] font-amaticbold" id="page-title">SWAP</h1>
         <div className="absolute top-[9.387%] left-[28.125%] w-[43.75%] h-[2.78%] bg-[#4D0B24] flex flex-row items-center justify-between px-2">
-          <span className="text-white font-baloo mt-1">$LOCKS floor price: $0.02</span>
-          <span className="text-white font-baloo mt-1">$LOCKS market price: $0.28</span>
+          <span className="text-white font-baloo mt-1">$LOCKS floor price: ${handleTokenInfo(floorPrice(goldiswapInfo.fsl, goldiswapInfo.supply))}</span>
+          <span className="text-white font-baloo mt-1">$LOCKS market price: ${handleTokenInfo(marketPrice(goldiswapInfo.fsl, goldiswapInfo.psl, goldiswapInfo.supply))}</span>
         </div>
         <WalletBalance />
         <SwapBox />
@@ -56,9 +104,9 @@ export const GoldiswapPage = () => {
           BUY
         </button>
         <div className="absolute flex flex-row items-center justify-between w-[45%] top-[78%] left-[26%] text-white font-baloo text-[1.1vw]">
-          <span>$LOCKS supply: 100,000,000.64</span>
-          <span>current fsl: 2,140,262.24</span>
-          <span>current psl: 1,044,753.49</span>
+          <span>$LOCKS supply: {handleInfo(goldiswapInfo.supply)}</span>
+          <span>current fsl: {handleInfo(goldiswapInfo.fsl)}</span>
+          <span>current psl: {handleInfo(goldiswapInfo.psl)}</span>
         </div>
         <img className="absolute h-10 w-10 bottom-[3%] left-[3%]" src="/images/icon-share.png" alt="share" />
         <div className="absolute bottom-[3%] right-[3%] flex flex-row items-center text-[#D9C6BA]">

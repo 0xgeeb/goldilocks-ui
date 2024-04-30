@@ -9,6 +9,7 @@ import { config } from "../../providers/WagmiProvider"
 import { contracts } from "../../utils/addressi"
 
 const INITIAL_STATE = {
+  //todo: goldiswapInfo is broken due to supply variable being removed
   goldiswapInfo: {
     fsl: 0,
     psl: 0,
@@ -58,7 +59,10 @@ const INITIAL_STATE = {
 
   handleTopChange: (_input: string) => {},
 
-  refreshGoldiswapInfo: async() => {}
+  refreshGoldiswapInfo: async() => {},
+
+  infoLoading: true,
+  setInfoLoading: (_loading: boolean) => {}
 }
 
 const GoldiswapContext = createContext(INITIAL_STATE)
@@ -84,6 +88,7 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
   const [bottomDisplayStringState, setBottomDisplayStringState] = useState<string>(INITIAL_STATE.bottomDisplayString)
 
   const [chartOpenState, setChartOpenState] = useState<boolean>(INITIAL_STATE.chartOpen)
+  const [infoLoadingState, setInfoLoadingState] = useState<boolean>(INITIAL_STATE.infoLoading)
 
   const changeActiveToggle = (toggle: string) => {
     setDisplayStringState('')
@@ -95,7 +100,6 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
   }
 
   const flipTokens = () => {
-    console.log('flipping')
     if(activeToggleState === "redeem") {
       return
     }
@@ -496,9 +500,10 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
     let honeySwapAllowanceResult
     if(wallet) {
       honeySwapAllowanceResult = await readContract(config, {
-        address: contracts.goldiswap.address as `0x${string}`,
-        abi: contracts.goldiswap.abi,
-        functionName: 'targetRatio',
+        address: contracts.honey.address as `0x${string}`,
+        abi: contracts.honey.abi,
+        functionName: 'allowance',
+        args: [wallet, contracts.goldiswap.address]
       })
     }
 
@@ -542,7 +547,9 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
         handleTopBalance,
         handleBottomBalance,
         handleTopChange,
-        refreshGoldiswapInfo
+        refreshGoldiswapInfo,
+        infoLoading: infoLoadingState,
+        setInfoLoading: setInfoLoadingState
       }}
     >
       { children }

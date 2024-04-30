@@ -4,8 +4,9 @@ export const useGoldiswapMath = () => {
     return fsl / supply
   }
   
+  //todo: this is the old formula
   const marketPrice = (fsl: number, psl: number, supply: number): number => {
-    return floorPrice(fsl, supply) + (psl / supply) * ((psl + fsl) / fsl)**6
+    return floorPrice(fsl, supply) + (psl / supply) * ((psl + fsl) / fsl)**5
   }
 
   const simulateBuyDry = (locks: number, fsl: number, psl: number, supply: number): number => {

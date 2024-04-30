@@ -21,7 +21,8 @@ const INITIAL_STATE: WalletInitialState = {
   wallet: '',
   isConnected: false,
   network: '',
-  refreshBalances: async () => {}
+  refreshBalances: async () => {},
+  balancesLoading: true
 }
 
 const WalletContext = createContext(INITIAL_STATE)
@@ -33,6 +34,7 @@ export const WalletProvider = (props: PropsWithChildren<{}>) => {
   const { address, isConnected, chain } = useAccount()
 
   const [balanceState, setBalanceState] = useState<BalanceState>(INITIAL_STATE.balance)
+  const [balancesLoadingState, setBalancesLoadingState] = useState<boolean>(INITIAL_STATE.balancesLoading)
 
   const refreshBalances = async () => {
     if(address) {
@@ -90,6 +92,7 @@ export const WalletProvider = (props: PropsWithChildren<{}>) => {
       }
 
       setBalanceState(response)
+      setBalancesLoadingState(false)
     }
   }
 
@@ -100,7 +103,8 @@ export const WalletProvider = (props: PropsWithChildren<{}>) => {
         wallet: address ? address : '',
         isConnected,
         network: chain?.name ? chain.name : '',
-        refreshBalances
+        refreshBalances,
+        balancesLoading: balancesLoadingState
       }}
     >
       { children }

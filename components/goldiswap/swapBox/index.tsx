@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useGoldiswap } from "../../../providers"
+import { useGoldiswap, useWallet } from "../../../providers"
 import { Chart } from "../../goldiswap"
 
 export const SwapBox = () => {
@@ -22,8 +22,13 @@ export const SwapBox = () => {
     flipTokens,
     findLocksBuyAmount,
     simulateBuy,
-    refreshGoldiswapInfo
+    goldiswapInfo,
+    infoLoading,
+    handleTopBalance,
+    handleBottomBalance
   } = useGoldiswap()
+
+  const { balance, balancesLoading } = useWallet()
 
   const resetInfo = () => {
     setDisplayString('')
@@ -33,6 +38,22 @@ export const SwapBox = () => {
     setBottomAmountLoading(false)
   }
 
+  const loadingElement = () => {
+    return <span className="loader-small ml-3"></span>
+  }
+
+  const handleInfo = (num: number) => {
+    if(infoLoading) {
+      return loadingElement()
+    }
+    else if(num > 0) {
+      return formatAsString(num)
+    }
+    else {
+      return "-"
+    }
+  }
+
   const loadedLocks = async (dhb: number) => {
     setBottomAmountLoading(true)
     setTimeout(() => {
@@ -40,6 +61,27 @@ export const SwapBox = () => {
       simulateBuy(locksAmount)
       setBottomAmountLoading(false)
     }, 500)
+  }
+
+  const formatAsPercentage = Intl.NumberFormat('default', {
+    style: 'percent',
+    maximumFractionDigits: 2
+  })
+
+  const formatAsString = (num: number): string => {
+    return num.toLocaleString('en-US', { maximumFractionDigits: 2 })
+  }
+
+  const handleRatioInfo = (num: number) => {
+    if(infoLoading) {
+      return "-"
+    }
+    else if(num > 0) {
+      return formatAsPercentage.format(num)
+    }
+    else {
+      return "-"
+    }
   }
 
   useEffect(() => {
@@ -52,13 +94,19 @@ export const SwapBox = () => {
   }, [debouncedHoneyBuy])
 
   return (
-    <div className="absolute top-[12.167%] left-[28.125%] w-[43.75%] h-[48.87%] border-2 border-black bg-[#EEDCD2]" onClick={() => refreshGoldiswapInfo()}>
+    <div className="absolute top-[12.167%] left-[28.125%] w-[43.75%] h-[48.87%] border-2 border-black bg-[#EEDCD2]">
       <div className="absolute top-3 left-0 w-6 skew-y-[45deg] border-b-2 border-black"></div>
       <div className="absolute bottom-3 left-0 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
       <div className="absolute top-3 right-0 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
       <div className="absolute bottom-3 right-0 w-6 skew-y-[45deg] border-b-2 border-black"></div>
       <span className="absolute bottom-[23%] left-[-7.5%] -rotate-[90deg] text-[0.8vw] font-baloo font-semibold">**0.3% fee on all buys**</span>
-      <span className="absolute top-[23%] right-[-5.8%] -rotate-[90deg] text-[0.8vw] font-baloo font-semibold">target ratio: 33.7%</span>
+      {/* todo: not looking perfect on large screen */}
+      <span 
+        className="absolute top-[13%] right-[2.9%] transform -translate-y-1/2 -rotate-[90deg] text-[0.8vw] font-baloo font-semibold"
+        style={{ transformOrigin: 'top right' }}
+      >
+        target ratio: {handleRatioInfo(goldiswapInfo.targetRatio)}
+      </span>
       <div className="absolute inset-6 border-2 border-black bg-[#D9C6BA]">
         {
           chartOpen ? <Chart /> :
@@ -91,7 +139,7 @@ export const SwapBox = () => {
                     value={displayString}
                     onChange={(e) => handleTopChange(e.target.value)}
                   />
-                  <span className="absolute bottom-[3%] right-[3%] font-baloo font-bold text-[0.9vw] text-[#7F7F7F]">balance: 69.420</span>
+                  <span className="absolute bottom-[3%] right-[3%] font-baloo font-bold text-[0.9vw] text-[#7F7F7F]">balance: {balancesLoading ? loadingElement() : handleTopBalance()}</span>
                 </div>
               </div>
             </div>
@@ -111,7 +159,7 @@ export const SwapBox = () => {
                     // value={bottomDisplayString}
                     // onChange={(e) => handleBottomChange(e.target.value)}
                   />
-                  <span className="absolute bottom-[3%] right-[3%] font-baloo font-bold text-[0.9vw] text-[#7F7F7F]">balance: 69.420</span>
+                  <span className="absolute bottom-[3%] right-[3%] font-baloo font-bold text-[0.9vw] text-[#7F7F7F]">balance: {balancesLoading ? loadingElement() : handleBottomBalance()}</span>
                 </div>
               </div>
             </div>
