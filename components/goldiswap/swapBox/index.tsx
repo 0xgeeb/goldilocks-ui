@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useGoldiswap, useWallet } from "../../../providers"
+import { useGoldiswapMath } from "../../../hooks/useGoldiswapMath"
 import { Chart } from "../../goldiswap"
 
 export const SwapBox = () => {
@@ -14,24 +15,39 @@ export const SwapBox = () => {
     handleTopChange,
     bottomDisplayString,
     activeToggle,
+    honeyBuy,
+    sellingLocks,
+    redeemingLocks,
     debouncedHoneyBuy,
     setDisplayString,
+    setBottomDisplayString,
     setHoneyBuy,
     setSellingLocks,
     setRedeemingLocks,
     flipTokens,
     findLocksBuyAmount,
     simulateBuy,
+    simulateSell,
+    simulateRedeem,
     goldiswapInfo,
     infoLoading,
     handleTopBalance,
-    handleBottomBalance
+    handleBottomBalance,
+    slippage
   } = useGoldiswap()
 
   const { balance, balancesLoading } = useWallet()
 
+  const { 
+    floorPrice,
+    marketPrice,
+    simulateBuyDry,
+    simulateSellDry
+  } = useGoldiswapMath()
+
   const resetInfo = () => {
     setDisplayString('')
+    setBottomDisplayString('')
     setHoneyBuy(0)
     setSellingLocks(0)
     setRedeemingLocks(0)
@@ -42,12 +58,17 @@ export const SwapBox = () => {
     return <span className="loader-small ml-3"></span>
   }
 
-  const handleInfo = (num: number) => {
+  const formatAsPercentage = Intl.NumberFormat('default', {
+    style: 'percent',
+    maximumFractionDigits: 2
+  })
+
+  const handleRatioInfo = (num: number) => {
     if(infoLoading) {
-      return loadingElement()
+      return "-"
     }
     else if(num > 0) {
-      return formatAsString(num)
+      return formatAsPercentage.format(num)
     }
     else {
       return "-"
@@ -63,27 +84,6 @@ export const SwapBox = () => {
     }, 500)
   }
 
-  const formatAsPercentage = Intl.NumberFormat('default', {
-    style: 'percent',
-    maximumFractionDigits: 2
-  })
-
-  const formatAsString = (num: number): string => {
-    return num.toLocaleString('en-US', { maximumFractionDigits: 2 })
-  }
-
-  const handleRatioInfo = (num: number) => {
-    if(infoLoading) {
-      return "-"
-    }
-    else if(num > 0) {
-      return formatAsPercentage.format(num)
-    }
-    else {
-      return "-"
-    }
-  }
-
   useEffect(() => {
     if(!debouncedHoneyBuy) {
       resetInfo()
@@ -92,6 +92,26 @@ export const SwapBox = () => {
       loadedLocks(debouncedHoneyBuy)
     }
   }, [debouncedHoneyBuy])
+
+  useEffect(() => {
+    if(!sellingLocks) {
+      resetInfo()
+    }
+    else {
+      simulateSell(sellingLocks)
+      setBottomDisplayString((simulateSellDry(sellingLocks, goldiswapInfo.fsl, goldiswapInfo.psl, goldiswapInfo.supply) * (1 - (slippage.amount / 100))).toFixed(4))
+    }
+  }, [sellingLocks])
+
+  useEffect(() => {
+    if(!redeemingLocks) {
+      resetInfo()
+    }
+    else {
+      simulateRedeem(redeemingLocks)
+      setBottomDisplayString((redeemingLocks * floorPrice(goldiswapInfo.fsl, goldiswapInfo.supply)).toFixed(4))
+    }
+  }, [])
 
   return (
     <div className="absolute top-[12.167%] left-[28.125%] w-[43.75%] h-[48.87%] border-2 border-black bg-[#EEDCD2]">
@@ -150,15 +170,19 @@ export const SwapBox = () => {
               </div>
               <div className="absolute h-[22%] w-[55.6%] top-[65%] left-[22%] border-2 border-black bg-white">
                 <div className="relative h-[100%] w-[100%]">
-                  <input
-                    className="absolute top-[20%] left-[5%] focus:outline-none border-none bg-transparent font-bold font-baloo text-[1.6vw]"
-                    type="number"
-                    id="number-input"
-                    placeholder="0.00"
-                    defaultValue={bottomDisplayString}
-                    // value={bottomDisplayString}
-                    // onChange={(e) => handleBottomChange(e.target.value)}
-                  />
+                  {
+                    bottomAmountLoading ?
+                    <span className="absolute top-[40%] left-[8%] loader-small"></span> :
+                    <input
+                      className="absolute top-[20%] left-[5%] focus:outline-none border-none bg-transparent font-bold font-baloo text-[1.6vw]"
+                      type="number"
+                      id="number-input"
+                      placeholder="0.00"
+                      value={bottomDisplayString}
+                      disabled={true}
+                    />
+                  }
+
                   <span className="absolute bottom-[3%] right-[3%] font-baloo font-bold text-[0.9vw] text-[#7F7F7F]">balance: {balancesLoading ? loadingElement() : handleBottomBalance()}</span>
                 </div>
               </div>

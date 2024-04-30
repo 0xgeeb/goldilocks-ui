@@ -7,11 +7,11 @@ export const WalletBalance = ()=> {
 
   const [walletOpen, setWalletOpen] = useState<boolean>(false)
 
-  const { balance, refreshBalances } = useWallet()
+  const { balance, refreshBalances, isConnected } = useWallet()
 
   useEffect(() => {
     refreshBalances()
-  }, [])
+  }, [isConnected])
 
   const formatAsString = (num: number): string => {
     return num.toLocaleString('en-US', { maximumFractionDigits: 2 })

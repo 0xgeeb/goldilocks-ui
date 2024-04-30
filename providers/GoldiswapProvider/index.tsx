@@ -37,6 +37,7 @@ const INITIAL_STATE = {
   setSellingLocks: (_sellingLocks: number) => {},
   setRedeemingLocks: (_redeemingLocks: number) => {},
   setDisplayString: (_displayString: string) => {},
+  setBottomDisplayString: (_displayString: string) => {},
 
   activeToggle: 'buy',
   changeActiveToggle: (_toggle: string) => {},
@@ -465,15 +466,17 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
       if(parseFloat(input) > 2000000) {
         input = ""
       }
+      setDisplayStringState(input)
       !input ? setHoneyBuyState(0) : setHoneyBuyState(parseFloat(input))
     }
     else if(activeToggleState === 'sell') {
+      setDisplayStringState(input)
       !input ? setSellingLocksState(0) : setSellingLocksState(parseFloat(input))
     }
     else {
+      setDisplayStringState(input)
       !input ? setRedeemingLocksState(0) : setRedeemingLocksState(parseFloat(input))
     }
-    setDisplayStringState(input)
   }
 
   const refreshGoldiswapInfo = async () => {
@@ -533,6 +536,7 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
         setSellingLocks: setSellingLocksState,
         setRedeemingLocks: setRedeemingLocksState,
         setDisplayString: setDisplayStringState,
+        setBottomDisplayString: setBottomDisplayStringState,
         activeToggle: activeToggleState,
         changeActiveToggle,
         handlePercentageButtons,

@@ -71,19 +71,19 @@ export const GoldiswapPage = () => {
             className={`w-[30.27%] h-[100%] flex items-center justify-center border-2 border-black ${activeToggle === 'buy' ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} hover:bg-[#F3AA8A] cursor-pointer`}
             onClick={() => changeActiveToggle('buy')}
           >
-              BUY
+            BUY
           </div>
           <div 
             className={`w-[30.27%] h-[100%] flex items-center justify-center border-2 border-black ${activeToggle === 'sell' ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} hover:bg-[#F3AA8A] cursor-pointer`}
             onClick={() => changeActiveToggle('sell')}
           >
-              SELL
+            SELL
           </div>
           <div 
             className={`w-[30.27%] h-[100%] flex items-center justify-center border-2 border-black ${activeToggle === 'redeem' ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} hover:bg-[#F3AA8A] cursor-pointer`}
             onClick={() => changeActiveToggle('redeem')}
           >
-              REDEEM
+            REDEEM
           </div>
         </div>
         <h1 className="absolute top-[12.16%] left-[14%] text-[#D9C6BA] text-[8vw] font-amaticbold" id="page-title">SWAP</h1>

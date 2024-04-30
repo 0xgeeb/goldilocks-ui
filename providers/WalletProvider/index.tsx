@@ -92,8 +92,8 @@ export const WalletProvider = (props: PropsWithChildren<{}>) => {
       }
 
       setBalanceState(response)
-      setBalancesLoadingState(false)
     }
+    setBalancesLoadingState(false)
   }
 
   return (
