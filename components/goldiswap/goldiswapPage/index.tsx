@@ -8,11 +8,7 @@ export const GoldiswapPage = () => {
 
   const [walletOpen, setWalletOpen] = useState<boolean>(false)
   const [chartOpen, setChartOpen] = useState<boolean>(false)
-
-  const test = () => {
-    console.log('asdfasdf')
-    setChartOpen(prev => !prev)
-  }
+  const [activeToggleState, setActiveToggleState] = useState<string>('buy')
 
   const data = [
     {name: 'Page A', uv: 400, pv: 2400, amt: 2400},
@@ -20,15 +16,42 @@ export const GoldiswapPage = () => {
     {name: 'Page C', uv: 200, pv: 4800, amt: 5000}
   ]
 
+  const changeActiveToggle = (toggle: string) => {
+    // setDisplayStringState('')
+    // setBottomDisplayStringState('')
+    // setHoneyBuyState(0)
+    // setBuyingLocksState(0)
+    // setSellingLocksState(0)
+    // setGettingHoneyState(0)
+    // setRedeemingLocksState(0)
+    // setRedeemingHoneyState(0)
+    setActiveToggleState(toggle)
+    // setAllowanceButtonsState(false)
+  }
+
   return (
     <main className="w-screen h-screen">
       <NavBar />
       <div className="w-[100%] h-[85%] bg-cover bg-bottom bg-[url('/images/bg-goldiswap.png')] relative">
-        {/* todo: add hover and cursor and color to these buttons */}
         <div className="absolute h-[7.5%] w-[20.27%] top-[2.62%] left-[78.89%] flex flex-row items-center justify-between font-baloo font-semibold text-[1vw]">
-          <div className="w-[30.27%] h-[100%] flex items-center justify-center border-2 border-black bg-[#D9C6BA]">BUY</div>
-          <div className="w-[30.27%] h-[100%] flex items-center justify-center border-2 border-black bg-[#D9C6BA]">SELL</div>
-          <div className="w-[30.27%] h-[100%] flex items-center justify-center border-2 border-black bg-[#D9C6BA]">REDEEM</div>
+          <div 
+            className={`w-[30.27%] h-[100%] flex items-center justify-center border-2 border-black ${activeToggleState === 'buy' ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} hover:bg-[#F3AA8A] cursor-pointer`}
+            onClick={() => changeActiveToggle('buy')}
+          >
+              BUY
+          </div>
+          <div 
+            className={`w-[30.27%] h-[100%] flex items-center justify-center border-2 border-black ${activeToggleState === 'sell' ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} hover:bg-[#F3AA8A] cursor-pointer`}
+            onClick={() => changeActiveToggle('sell')}
+          >
+              SELL
+          </div>
+          <div 
+            className={`w-[30.27%] h-[100%] flex items-center justify-center border-2 border-black ${activeToggleState === 'redeem' ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} hover:bg-[#F3AA8A] cursor-pointer`}
+            onClick={() => changeActiveToggle('redeem')}
+          >
+              REDEEM
+          </div>
         </div>
         <h1 className="absolute top-[12.16%] left-[14%] text-[#D9C6BA] text-[8vw] font-amaticbold" id="page-title">SWAP</h1>
         <div className="absolute top-[9.387%] left-[28.125%] w-[43.75%] h-[2.78%] bg-[#4D0B24] flex flex-row items-center justify-between px-2">
@@ -123,13 +146,14 @@ export const GoldiswapPage = () => {
         <img className="absolute top-[51.04%] left-[75.5%] h-[2%] w-[3%]" src="/images/icon-bearoutline.png" alt="bearoutline" />
         <div 
           className="absolute w-[6%] h-[8%] top-[53.04%] left-[74%] border-2 border-black bg-[#F3AA8A] flex items-center justify-center font-amaticbold text-[1.2vw] hover:scale-110 cursor-pointer"
-          onClick={() => test()}
+          onClick={() => setChartOpen(prev => !prev)}
         >
           THIS IS CHART
         </div>
         <button className="absolute h-[8%] w-[16.6%] top-[64.8%] left-[41.7%] bg-[#E7B941] font-amaticbold text-[1.9vw] border-2 border-black">
           BUY
         </button>
+        {/* todo: make these grow or shrink quickly and change colors on input */}
         <div className="absolute flex flex-row items-center justify-between w-[45%] top-[78%] left-[26%] text-white font-baloo text-[1.1vw]">
           <span>$LOCKS supply: 100,000,000.64</span>
           <span>current fsl: 2,140,262.24</span>

@@ -1,5 +1,12 @@
 import type { Metadata } from "next"
 import { GoldiswapPage } from "../../components/goldiswap"
+import { NotificationManager } from "../../components/utils"
+import {
+  NotificationProvider,
+  WagmiProvider,
+  WalletProvider,
+  GoldiswapProvider
+} from "../../providers"
 
 export const metadata: Metadata = {
   title: "mf goldiswap",
@@ -9,6 +16,15 @@ export const metadata: Metadata = {
 export default function Goldiswap() {
   
   return (
-    <GoldiswapPage />
+    <NotificationProvider>
+      <WagmiProvider> 
+        <WalletProvider>
+          <GoldiswapProvider>
+            <GoldiswapPage />
+            <NotificationManager />
+          </GoldiswapProvider>
+        </WalletProvider>
+      </WagmiProvider>
+    </NotificationProvider>
   )
 }
