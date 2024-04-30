@@ -1,15 +1,12 @@
 "use client"
 
-import { useState } from "react"
-import { NavBar } from "../../utils/navBar"
+import { NavBar, WalletBalance } from "../../utils"
 import { SwapBox } from "../../goldiswap"
 import { useGoldiswap } from "../../../providers/GoldiswapProvider"
 
 export const GoldiswapPage = () => {
 
-  const [walletOpen, setWalletOpen] = useState<boolean>(false)
-
-  const { 
+  const {
     chartOpen, 
     setChartOpen,
     activeToggle,
@@ -45,45 +42,7 @@ export const GoldiswapPage = () => {
           <span className="text-white font-baloo mt-1">$LOCKS floor price: $0.02</span>
           <span className="text-white font-baloo mt-1">$LOCKS market price: $0.28</span>
         </div>
-        <div 
-          className={`absolute h-[24%] w-[2%] top-[16.167%] left-[71.875%] hover:scale-105 ${walletOpen ? "translate-x-[1100%]" : ""} bg-[#D5A774] border-r-2 border-t-2 border-b-2 border-black cursor-pointer transition-transform ease-linear`}
-          onClick={() => setWalletOpen(prev => !prev)}
-        >
-          <div className={`flex flex-row items-center absolute bottom-[41%] ${walletOpen ? "right-[-126%]" : "right-[-123%]"} font-baloo font-semibold text-[0.8vw] -rotate-[90deg] text-nowrap`}>
-            <span>WALLET</span>
-            <span className="ml-2">BALANCE</span>
-          </div>
-        </div>
-        <div className={`absolute w-[22%] h-[32%] top-[12.167%] left-[49.875%] ${walletOpen ? "translate-x-[100%] border-r-2" : ""} font-baloo font-semibold text-[1vw] border-t-2 border-b-2 border-black bg-[#D5A774] bg-opacity-30 flex flex-col justify-between py-[1.5%] px-[3%] text-white transition-transform ease-linear`}>
-          <div className="flex flex-row items-center justify-between w-[100%]">
-            <span className="">locks balance:</span>
-            <span className="">69.66</span>
-          </div>
-          <div className="flex flex-row items-center justify-between w-[100%]">
-            <span className="">honey balance:</span>
-            <span className="">69.66</span>
-          </div>
-          <div className="flex flex-row items-center justify-between w-[100%]">
-            <span className="">porridge balance:</span>
-            <span className="">69.66</span>
-          </div>
-          <div className="flex flex-row items-center justify-between w-[100%]">
-            <span className="">staked locks:</span>
-            <span className="">69.66</span>
-          </div>
-          <div className="flex flex-row items-center justify-between w-[100%]">
-            <span className="">locked locks:</span>
-            <span className="">69.66</span>
-          </div>
-          <div className="flex flex-row items-center justify-between w-[100%]">
-            <span className="">borrowed honey:</span>
-            <span className="">69.66</span>
-          </div>
-          <div className="flex flex-row items-center justify-between w-[100%]">
-            <span className="">claimable porridge:</span>
-            <span className="">69.66</span>
-          </div>
-        </div>
+        <WalletBalance />
         <SwapBox />
         <img className="absolute top-[51.04%] left-[75.5%] h-[2%] w-[3%]" src="/images/icon-bearoutline.png" alt="bearoutline" />
         <div 

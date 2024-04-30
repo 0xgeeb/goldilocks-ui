@@ -2,8 +2,11 @@
 
 import { createContext, PropsWithChildren, useContext, useState } from "react"
 import { useAccount } from "wagmi"
+import { formatEther } from "viem"
 import { readContract } from "@wagmi/core"
 import { WalletInitialState, BalanceState } from "../../utils/interfaces"
+import { config } from "../../providers/WagmiProvider"
+import { contracts } from "../../utils/addressi"
 
 const INITIAL_STATE: WalletInitialState = {
   balance: {
@@ -32,27 +35,62 @@ export const WalletProvider = (props: PropsWithChildren<{}>) => {
   const [balanceState, setBalanceState] = useState<BalanceState>(INITIAL_STATE.balance)
 
   const refreshBalances = async () => {
-    // if(address) {
-    //   const locksBalance = await gammContract.read.balanceOf([address])
-    //   const porridgeBalance = await porridgeContract.read.balanceOf([address])
-    //   const honeyBalance = await honeyContract.read.balanceOf([address])
-    //   const staked = await porridgeContract.read.getStaked([address])
-    //   const claimable = await porridgeContract.read.getClaimable([address])
-    //   const locked = await borrowContract.read.getLocked([address])
-    //   const borrowed = await borrowContract.read.getBorrowed([address])
+    if(address) {
+      const locksBalance = await readContract(config, {
+        address: contracts.goldiswap.address as `0x${string}`,
+        abi: contracts.goldiswap.abi,
+        functionName: 'balanceOf',
+        args: [address]
+      })
+      const porridgeBalance = await readContract(config, {
+        address: contracts.porridge.address as `0x${string}`,
+        abi: contracts.porridge.abi,
+        functionName: 'balanceOf',
+        args: [address]
+      })
+      const honeyBalance = await readContract(config, {
+        address: contracts.honey.address as `0x${string}`,
+        abi: contracts.honey.abi,
+        functionName: 'balanceOf',
+        args: [address]
+      })
+      const stakedBalance = await readContract(config, {
+        address: contracts.porridge.address as `0x${string}`,
+        abi: contracts.porridge.abi,
+        functionName: 'getStaked',
+        args: [address]
+      })
+      const claimableBalance = await readContract(config, {
+        address: contracts.porridge.address as `0x${string}`,
+        abi: contracts.porridge.abi,
+        functionName: 'getClaimable',
+        args: [address]
+      })
+      const lockedBalance = await readContract(config, {
+        address: contracts.borrow.address as `0x${string}`,
+        abi: contracts.borrow.abi,
+        functionName: 'getLocked',
+        args: [address]
+      })
+      const borrowedBalance = await readContract(config, {
+        address: contracts.borrow.address as `0x${string}`,
+        abi: contracts.borrow.abi,
+        functionName: 'getBorrowed',
+        args: [address]
+      })
 
-    //   const response = {
-    //     locks: parseFloat(formatEther(locksBalance as unknown as bigint)),
-    //     prg: parseFloat(formatEther(porridgeBalance as unknown as bigint)),
-    //     honey: parseFloat(formatEther(honeyBalance as unknown as bigint)),
-    //     staked: parseFloat(formatEther(staked as unknown as bigint)), 
-    //     claimable: parseFloat(formatEther(claimable as unknown as bigint)),
-    //     locked: parseFloat(formatEther(locked as unknown as bigint)),
-    //     borrowed: parseFloat(formatEther(borrowed as unknown as bigint))
-    //   }
+      const response = {
+        locks: parseFloat(formatEther(locksBalance as unknown as bigint)),
+        prg: parseFloat(formatEther(porridgeBalance as unknown as bigint)),
+        honey: parseFloat(formatEther(honeyBalance as unknown as bigint)),
+        staked: parseFloat(formatEther(stakedBalance as unknown as bigint)), 
+        claimable: parseFloat(formatEther(claimableBalance as unknown as bigint)),
+        locked: parseFloat(formatEther(lockedBalance as unknown as bigint)),
+        borrowed: parseFloat(formatEther(borrowedBalance as unknown as bigint))
+      }
 
-    //   setBalanceState(response)
-    // }
+      setBalanceState(response)
+    }
   }
 
   return (

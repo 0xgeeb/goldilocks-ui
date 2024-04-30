@@ -18,7 +18,11 @@ export const SwapBox = () => {
     setDisplayString,
     setHoneyBuy,
     setSellingLocks,
-    setRedeemingLocks
+    setRedeemingLocks,
+    flipTokens,
+    findLocksBuyAmount,
+    simulateBuy,
+    refreshGoldiswapInfo
   } = useGoldiswap()
 
   const resetInfo = () => {
@@ -32,9 +36,9 @@ export const SwapBox = () => {
   const loadedLocks = async (dhb: number) => {
     setBottomAmountLoading(true)
     setTimeout(() => {
-      // const locksAmount: number = findLocksBuyAmount(dhb)
-      // simulateBuy(locksAmount)
-      // setBottomAmountLoading(false)
+      const locksAmount: number = findLocksBuyAmount(dhb)
+      simulateBuy(locksAmount)
+      setBottomAmountLoading(false)
     }, 500)
   }
 
@@ -48,7 +52,7 @@ export const SwapBox = () => {
   }, [debouncedHoneyBuy])
 
   return (
-    <div className="absolute top-[12.167%] left-[28.125%] w-[43.75%] h-[48.87%] border-2 border-black bg-[#EEDCD2]">
+    <div className="absolute top-[12.167%] left-[28.125%] w-[43.75%] h-[48.87%] border-2 border-black bg-[#EEDCD2]" onClick={() => refreshGoldiswapInfo()}>
       <div className="absolute top-3 left-0 w-6 skew-y-[45deg] border-b-2 border-black"></div>
       <div className="absolute bottom-3 left-0 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
       <div className="absolute top-3 right-0 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
@@ -66,7 +70,10 @@ export const SwapBox = () => {
               <div className="flex flex-row items-center justify-center h-[100%] w-[25%] bg-[#CC8634] hover:bg-[#F3AA8A] cursor-pointer">MAX</div>
             </div>
             <img className="absolute h-6 w-6 top-[16%] left-[79%]" src="/images/icon-settings.png" alt="settings" />
-            <div className="absolute top-[44%] left-[47.27%] bg-[#D9C6BA] z-10 h-10 w-10 border-2 border-black rounded-3xl flex justify-center items-center cursor-pointer hover:scale-110">
+            <div 
+              className="absolute top-[44%] left-[47.27%] bg-[#D9C6BA] z-10 h-10 w-10 border-2 border-black rounded-3xl flex justify-center items-center cursor-pointer hover:scale-110"
+              onClick={() => flipTokens()}
+            >
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0D111C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
             </div>
             <div className="w-[100%] h-[50%] border-b-2 border-black">
@@ -100,7 +107,8 @@ export const SwapBox = () => {
                     type="number"
                     id="number-input"
                     placeholder="0.00"
-                    value={bottomDisplayString}
+                    defaultValue={bottomDisplayString}
+                    // value={bottomDisplayString}
                     // onChange={(e) => handleBottomChange(e.target.value)}
                   />
                   <span className="absolute bottom-[3%] right-[3%] font-baloo font-bold text-[0.9vw] text-[#7F7F7F]">balance: 69.420</span>
