@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect } from "react"
 import { NavBar, WalletBalance } from "../../utils"
 import { SwapBox } from "../../goldiswap"
 import { useGoldiswap } from "../../../providers/GoldiswapProvider"
