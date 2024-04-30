@@ -1,3 +1,5 @@
+"use client"
+
 import { NavBar } from "../../utils/navBar"
 
 export const BorrowPage = () => {
