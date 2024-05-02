@@ -2,9 +2,12 @@
 
 import { useEffect } from "react"
 import { NavBar, WalletBalance } from "../../utils"
-import { SwapBox } from "../../goldiswap"
 import { useGoldiswap } from "../../../providers/GoldiswapProvider"
 import { useGoldiswapMath } from "../../../hooks/useGoldiswapMath"
+import { 
+  SwapBox,
+  GoldiswapButton
+} from "../../goldiswap"
 
 export const GoldiswapPage = () => {
 
@@ -100,9 +103,7 @@ export const GoldiswapPage = () => {
         >
           THIS IS CHART
         </div>
-        <button className="absolute h-[8%] w-[16.6%] top-[64.8%] left-[41.7%] bg-[#E7B941] font-amaticbold text-[1.9vw] border-2 border-black">
-          BUY
-        </button>
+        <GoldiswapButton />
         <div className="absolute flex flex-row items-center justify-between w-[45%] top-[78%] left-[26%] text-white font-baloo text-[1.1vw]">
           <span>$LOCKS supply: {handleInfo(goldiswapInfo.supply)}</span>
           <span>current fsl: {handleInfo(goldiswapInfo.fsl)}</span>

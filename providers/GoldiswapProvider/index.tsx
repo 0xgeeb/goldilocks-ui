@@ -33,6 +33,9 @@ const INITIAL_STATE = {
   displayString: '',
   bottomDisplayString: '',
 
+  allowanceButtons: false,
+  setAllowanceButtons: (_bool: boolean) => {},
+
   setHoneyBuy: (_honeyBuy: number) => {},
   setSellingLocks: (_sellingLocks: number) => {},
   setRedeemingLocks: (_redeemingLocks: number) => {},
@@ -91,6 +94,8 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
   const [chartOpenState, setChartOpenState] = useState<boolean>(INITIAL_STATE.chartOpen)
   const [infoLoadingState, setInfoLoadingState] = useState<boolean>(INITIAL_STATE.infoLoading)
 
+  const [allowanceButtonsState, setAllowanceButtonsState] = useState<boolean>(INITIAL_STATE.allowanceButtons)
+
   const changeActiveToggle = (toggle: string) => {
     setDisplayStringState('')
     setBottomDisplayStringState('')
@@ -98,6 +103,7 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
     setSellingLocksState(0)
     setRedeemingLocksState(0)
     setActiveToggleState(toggle)
+    setAllowanceButtonsState(false)
   }
 
   const flipTokens = () => {
@@ -108,6 +114,7 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
     setBottomDisplayStringState('')
     setHoneyBuyState(0)
     setSellingLocksState(0)
+    setAllowanceButtonsState(false)
     if(activeToggleState === 'buy') {
       setActiveToggleState('sell')
     }
@@ -180,11 +187,11 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
     const currentMarket: number = marketPrice(goldiswapInfoState.fsl, goldiswapInfoState.psl, goldiswapInfoState.supply)
     const honey: number = debouncedValue
     let locks: number = honey / currentMarket
-    console.log("initial locks: ", locks)
+    // console.log("initial locks: ", locks)
     let temp: number = 0
     while(parseFloat(temp.toFixed(2)) !== parseFloat(honey.toFixed(2))) {
       temp = simulateBuyDry(locks, goldiswapInfoState.fsl, goldiswapInfoState.psl, goldiswapInfoState.supply)
-      console.log("temp: ", temp)
+      // console.log("temp: ", temp)
       if(parseFloat(temp.toFixed(2)) > parseFloat(honey.toFixed(2))) {
         const diff = temp - honey
         if(diff > 10000) {
@@ -243,9 +250,9 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
         const locksWithSlippage: number = locks * (1 - (slippageState.amount / 100))
         // setBuyingLocksState(locksWithSlippage)
         setBottomDisplayStringState(locksWithSlippage.toFixed(4))
-        console.log('found it: ', parseFloat(temp.toFixed(2)))
-        console.log('locks: ', locks)
-        console.log('with slippage: ', locksWithSlippage)
+        // console.log('found it: ', parseFloat(temp.toFixed(2)))
+        // console.log('locks: ', locks)
+        // console.log('with slippage: ', locksWithSlippage)
       }
     }
     return locks * (1 - (slippageState.amount / 100))
@@ -468,6 +475,7 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
       }
       setDisplayStringState(input)
       !input ? setHoneyBuyState(0) : setHoneyBuyState(parseFloat(input))
+      !input && setAllowanceButtonsState(false)
     }
     else if(activeToggleState === 'sell') {
       setDisplayStringState(input)
@@ -553,7 +561,9 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
         handleTopChange,
         refreshGoldiswapInfo,
         infoLoading: infoLoadingState,
-        setInfoLoading: setInfoLoadingState
+        setInfoLoading: setInfoLoadingState,
+        allowanceButtons: allowanceButtonsState,
+        setAllowanceButtons: setAllowanceButtonsState
       }}
     >
       { children }
