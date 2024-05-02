@@ -33,7 +33,8 @@ export const SwapBox = () => {
     infoLoading,
     handleTopBalance,
     handleBottomBalance,
-    slippage
+    slippage,
+    handlePercentageButtons
   } = useGoldiswap()
 
   const { balance, balancesLoading } = useWallet()
@@ -132,10 +133,30 @@ export const SwapBox = () => {
           chartOpen ? <Chart /> :
           <div className="w-[100%] h-[100%] relative flex flex-col">
             <div className="flex flex-row absolute top-0 right-0 w-[33.61%] h-[10%] font-baloo font-semibold border-b-2 border-l-2 border-black">
-              <div className="flex flex-row items-center justify-center h-[100%] w-[25%] border-r-2 border-black bg-[#DCC2A8] hover:bg-[#F3AA8A] cursor-pointer">25%</div>
-              <div className="flex flex-row items-center justify-center h-[100%] w-[25%] border-r-2 border-black bg-[#D5A774] hover:bg-[#F3AA8A] cursor-pointer">50%</div>
-              <div className="flex flex-row items-center justify-center h-[100%] w-[25%] border-r-2 border-black bg-[#D19A5B] hover:bg-[#F3AA8A] cursor-pointer">75%</div>
-              <div className="flex flex-row items-center justify-center h-[100%] w-[25%] bg-[#CC8634] hover:bg-[#F3AA8A] cursor-pointer">MAX</div>
+              <div 
+                className="flex flex-row items-center justify-center h-[100%] w-[25%] border-r-2 border-black bg-[#DCC2A8] hover:bg-[#F3AA8A] cursor-pointer"
+                onClick={() => handlePercentageButtons(1)}
+              >
+                  25%
+              </div>
+              <div 
+                className="flex flex-row items-center justify-center h-[100%] w-[25%] border-r-2 border-black bg-[#D5A774] hover:bg-[#F3AA8A] cursor-pointer"
+                onClick={() => handlePercentageButtons(2)}
+              >
+                  50%
+              </div>
+              <div 
+                className="flex flex-row items-center justify-center h-[100%] w-[25%] border-r-2 border-black bg-[#D19A5B] hover:bg-[#F3AA8A] cursor-pointer"
+                onClick={() => handlePercentageButtons(3)}
+              >
+                  75%
+              </div>
+              <div 
+                className="flex flex-row items-center justify-center h-[100%] w-[25%] bg-[#CC8634] hover:bg-[#F3AA8A] cursor-pointer"
+                onClick={() => handlePercentageButtons(4)}
+              >
+                  MAX
+              </div>
             </div>
             <img className="absolute h-6 w-6 top-[16%] left-[79%]" src="/images/icon-settings.png" alt="settings" />
             <div 
