@@ -9,7 +9,7 @@ import { config } from "../../providers/WagmiProvider"
 import { contracts } from "../../utils/addressi"
 
 const INITIAL_STATE = {
-  //todo: goldiswapInfo is broken due to supply variable being removed
+  
   goldiswapInfo: {
     fsl: 0,
     psl: 0,
@@ -17,6 +17,19 @@ const INITIAL_STATE = {
     targetRatio: 0,
     honeySwapAllowance: 0
   },
+
+  simInfo: {
+    toggle: false,
+    fsl: 0,
+    psl: 0,
+    supply: 0
+  },
+  setSimInfo: (
+    _toggle: boolean,
+    _fsl: number,
+    _psl: number,
+    _supply: number
+  ) => {},
 
   slippage: {
     amount: 0.1,
@@ -95,6 +108,7 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
   const [infoLoadingState, setInfoLoadingState] = useState<boolean>(INITIAL_STATE.infoLoading)
 
   const [allowanceButtonsState, setAllowanceButtonsState] = useState<boolean>(INITIAL_STATE.allowanceButtons)
+  const [simInfoState, setSimInfoState] = useState(INITIAL_STATE.simInfo)
 
   const changeActiveToggle = (toggle: string) => {
     setDisplayStringState('')
@@ -362,16 +376,14 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
     _tax = _purchasePrice * 0.003
 
     const response = {
+      toggle: true,
       fsl: _fsl,
       psl: _psl,
-      floor: floorPrice(_fsl + _tax, _supply),
-      market: marketPrice(_fsl + _tax, _psl, _supply),
       supply: _supply,
-      targetRatio: goldiswapInfoState.targetRatio
     }
     
-    // setNewInfoState(response)
-    // simulateFloorRaise(_fsl + _tax, _psl, _supply)
+    setSimInfoState(response)
+    simulateFloorRaise(_fsl + _tax, _psl, _supply)
   }
 
   const simulateSell = (amt: number) => {
@@ -403,30 +415,26 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
     _tax = _salePrice * 0.053
 
     const response = {
+      toggle: true,
       fsl: _fsl + _tax,
       psl: _psl,
-      floor: floorPrice(_fsl + _tax, _supply),
-      market: marketPrice(_fsl + _tax, _psl, _supply),
       supply: _supply,
-      targetRatio: goldiswapInfoState.targetRatio
     }
     
-    // setNewInfoState(response)
+    setSimInfoState(response)
   }
 
   const simulateRedeem = (amt: number) => {
     let rawTotal: number = amt * floorPrice(goldiswapInfoState.fsl, goldiswapInfoState.supply)
 
     const response = {
+      toggle: true,
       fsl: goldiswapInfoState.fsl - rawTotal,
       psl: goldiswapInfoState.psl,
-      floor: floorPrice(goldiswapInfoState.fsl - rawTotal, goldiswapInfoState.supply - redeemingLocksState),
-      market: marketPrice(goldiswapInfoState.fsl - rawTotal, goldiswapInfoState.psl, goldiswapInfoState.supply - redeemingLocksState),
-      supply: goldiswapInfoState.supply - redeemingLocksState,
-      targetRatio: goldiswapInfoState.targetRatio
+      supply: goldiswapInfoState.supply - redeemingLocksState
     }
 
-    // setNewInfoState(response)
+    setSimInfoState(response)
     simulateFloorRaise(goldiswapInfoState.fsl - rawTotal, goldiswapInfoState.psl, goldiswapInfoState.supply - redeemingLocksState)
   }
 
@@ -437,16 +445,13 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
       const newPsl = _psl - raiseAmount
 
       const response = {
+        toggle: true,
         fsl: newFsl,
         psl: newPsl,
-        floor: floorPrice(newFsl, _supply),
-        market: marketPrice(newFsl, newPsl, _supply),
-        supply: _supply,
-        // targetRatio: newInfoState.targetRatio + (newInfoState.targetRatio / 50),
-        lastFloorRaise: Date.now()
+        supply: _supply
       }
 
-      // setNewInfoState(response)
+      setSimInfoState(response)
     }
   }
 
@@ -526,7 +531,19 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
       honeySwapAllowance: wallet ? parseFloat(formatEther(honeySwapAllowanceResult as unknown as bigint)) : 0
     }
 
+    const simResponse = {
+      toggle: false,
+      fsl: parseFloat(formatEther(fslResult as unknown as bigint)),
+      psl: parseFloat(formatEther(pslResult as unknown as bigint)),
+      supply: parseFloat(formatEther(supplyResult as unknown as bigint)),
+    }
+
     setGoldiswapInfoState(response)
+    setSimInfoState(simResponse)
+  }
+
+  const setSimInfo = (toggle: boolean, fsl: number, psl: number, supply: number) => {
+    setSimInfoState({ toggle, fsl, psl, supply })
   }
   
   return (
@@ -563,7 +580,9 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
         infoLoading: infoLoadingState,
         setInfoLoading: setInfoLoadingState,
         allowanceButtons: allowanceButtonsState,
-        setAllowanceButtons: setAllowanceButtonsState
+        setAllowanceButtons: setAllowanceButtonsState,
+        simInfo: simInfoState,
+        setSimInfo
       }}
     >
       { children }

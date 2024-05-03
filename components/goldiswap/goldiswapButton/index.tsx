@@ -135,6 +135,7 @@ export const GoldiswapButton = () => {
   return (
     <>
       {
+        allowanceButtons &&
         <div>
           <button
             className="absolute bg-[#E7B941]"
@@ -159,7 +160,7 @@ export const GoldiswapButton = () => {
           }) => {
             return (
               <button 
-                className="absolute h-[8%] w-[16.6%] top-[64.8%] left-[41.7%] bg-[#E7B941] font-amaticbold text-[1.9vw] border-2 border-black hover:bg-[#4D0B24] hover:text-[#E7B941]"
+                className="absolute h-[8%] w-[16.6%] top-[64.8%] left-[41.7%] bg-[#E7B941] font-amaticbold text-[1.9vw] border-2 border-black hover:bg-[#4D0B24] hover:text-[#E7B941] hover:scale-110"
                 id="buy-button"
                 onClick={() => {
                   const button = document.getElementById('buy-button')

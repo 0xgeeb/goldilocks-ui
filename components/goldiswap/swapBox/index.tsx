@@ -15,7 +15,6 @@ export const SwapBox = () => {
     handleTopChange,
     bottomDisplayString,
     activeToggle,
-    honeyBuy,
     sellingLocks,
     redeemingLocks,
     debouncedHoneyBuy,
@@ -34,7 +33,8 @@ export const SwapBox = () => {
     handleTopBalance,
     handleBottomBalance,
     slippage,
-    handlePercentageButtons
+    handlePercentageButtons,
+    setSimInfo
   } = useGoldiswap()
 
   const { balance, balancesLoading } = useWallet()
@@ -53,6 +53,7 @@ export const SwapBox = () => {
     setSellingLocks(0)
     setRedeemingLocks(0)
     setBottomAmountLoading(false)
+    setSimInfo(false, goldiswapInfo.fsl, goldiswapInfo.psl, goldiswapInfo.supply)
   }
 
   const loadingElement = () => {
@@ -112,7 +113,7 @@ export const SwapBox = () => {
       simulateRedeem(redeemingLocks)
       setBottomDisplayString((redeemingLocks * floorPrice(goldiswapInfo.fsl, goldiswapInfo.supply)).toFixed(4))
     }
-  }, [])
+  }, [redeemingLocks])
 
   return (
     <div className="absolute top-[12.167%] left-[28.125%] w-[43.75%] h-[48.87%] border-2 border-black bg-[#EEDCD2]">

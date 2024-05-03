@@ -19,7 +19,8 @@ export const GoldiswapPage = () => {
     goldiswapInfo,
     refreshGoldiswapInfo,
     infoLoading,
-    setInfoLoading
+    setInfoLoading,
+    simInfo
   } = useGoldiswap()
 
   const { floorPrice, marketPrice } = useGoldiswapMath()
@@ -65,6 +66,18 @@ export const GoldiswapPage = () => {
     }
   }
 
+  const handleColors = (num1: number, num2: number): string => {
+    if(num1 > num2) {
+      return 'text-red-600'
+    }
+    else if(num1 == num2) {
+      return ''
+    }
+    else {
+      return 'text-green-600'
+    }
+  }
+
   return (
     <main className="w-screen h-screen">
       <NavBar />
@@ -105,9 +118,18 @@ export const GoldiswapPage = () => {
         </div>
         <GoldiswapButton />
         <div className="absolute flex flex-row items-center justify-between w-[45%] top-[78%] left-[26%] text-white font-baloo text-[1.1vw]">
-          <span>$LOCKS supply: {handleInfo(goldiswapInfo.supply)}</span>
-          <span>current fsl: {handleInfo(goldiswapInfo.fsl)}</span>
-          <span>current psl: {handleInfo(goldiswapInfo.psl)}</span>
+          <div className="flex flex-row items-center">
+            <span className="mr-2">$LOCKS supply:</span>
+            <span className={handleColors(goldiswapInfo.supply, simInfo.supply)}>{simInfo.toggle ? handleInfo(simInfo.supply) : handleInfo(goldiswapInfo.supply)}</span>
+          </div>
+          <div className="flex flex-row items-center">
+            <span className="mr-2">current fsl:</span>
+            <span className={handleColors(goldiswapInfo.fsl, simInfo.fsl)}>{simInfo.toggle ? handleInfo(simInfo.fsl) : handleInfo(goldiswapInfo.fsl)}</span>
+          </div>
+          <div className="flex flex-row items-center">
+            <span className="mr-2">current psl:</span>
+            <span className={handleColors(goldiswapInfo.psl, simInfo.psl)}>{simInfo.toggle ? handleInfo(simInfo.psl) : handleInfo(goldiswapInfo.psl)}</span>
+          </div>
         </div>
         <img className="absolute h-10 w-10 bottom-[3%] left-[3%]" src="/images/icon-share.png" alt="share" />
         <div className="absolute bottom-[3%] right-[3%] flex flex-row items-center text-[#D9C6BA]">
