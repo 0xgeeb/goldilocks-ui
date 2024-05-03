@@ -138,12 +138,12 @@ export const GoldiswapButton = () => {
         allowanceButtons &&
         <div>
           <button
-            className="absolute bg-[#E7B941]"
+            className="absolute bg-[#E7B941] h-[8%] w-[16.6%] top-[64.8%] left-[30.9%] border-2 border-black font-amaticbold text-[1.5vw] hover:bg-[#4D0B24] hover:text-[#E7B941] hover:scale-110"
           >
             approve tx
           </button>
           <button
-            className="absolute bg-[#E7B941]"
+            className="absolute bg-[#E7B941] h-[8%] w-[16.6%] top-[64.8%] left-[52.5%] border-2 border-black font-amaticbold text-[1.5vw] hover:bg-[#4D0B24] hover:text-[#E7B941] hover:scale-110"
           >
             approve infinite
           </button>
@@ -160,7 +160,7 @@ export const GoldiswapButton = () => {
           }) => {
             return (
               <button 
-                className="absolute h-[8%] w-[16.6%] top-[64.8%] left-[41.7%] bg-[#E7B941] font-amaticbold text-[1.9vw] border-2 border-black hover:bg-[#4D0B24] hover:text-[#E7B941] hover:scale-110"
+                className="absolute h-[8%] w-[16.6%] top-[64.8%] left-[41.6%] bg-[#E7B941] font-amaticbold text-[1.9vw] border-2 border-black hover:bg-[#4D0B24] hover:text-[#E7B941] hover:scale-110"
                 id="buy-button"
                 onClick={() => {
                   const button = document.getElementById('buy-button')

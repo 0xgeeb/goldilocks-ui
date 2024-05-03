@@ -117,7 +117,7 @@ export const GoldiswapPage = () => {
           THIS IS CHART
         </div>
         <GoldiswapButton />
-        <div className="absolute flex flex-row items-center justify-between w-[45%] top-[78%] left-[26%] text-white font-baloo text-[1.1vw]">
+        <div className="absolute flex flex-row items-center justify-between w-[45%] top-[78%] left-[27%] text-white font-baloo text-[1.1vw]">
           <div className="flex flex-row items-center">
             <span className="mr-2">$LOCKS supply:</span>
             <span className={handleColors(goldiswapInfo.supply, simInfo.supply)}>{simInfo.toggle ? handleInfo(simInfo.supply) : handleInfo(goldiswapInfo.supply)}</span>
