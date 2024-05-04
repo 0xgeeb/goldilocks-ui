@@ -65,7 +65,7 @@ export const useGoldiswapTx = () => {
         address: contracts.goldiswap.address as `0x${string}`,
         abi: contracts.goldiswap.abi,
         functionName: 'sell',
-        args: [parseEther(`${sellAmt}`), parseEther(`${0}`)]
+        args: [parseEther(`${sellAmt}`), parseEther(`${minReceive}`)]
       })
       const data = await waitForTransactionReceipt(config, { hash })
       return data.transactionHash

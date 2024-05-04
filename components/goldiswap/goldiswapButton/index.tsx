@@ -26,7 +26,8 @@ export const GoldiswapButton = () => {
     setSellingLocks,
     setRedeemingLocks,
     gettingHoney,
-    redeemingLocks
+    redeemingLocks,
+    redeemingHoney
   } = useGoldiswap()
 
   const { 
@@ -145,31 +146,51 @@ export const GoldiswapButton = () => {
       return
     }
     else {
-      // todo: add slippage error check here
       setTxConfirming(true)
       if(button) {
         button.innerHTML = "confirming..."
         button.style.backgroundColor = "#4D0B24"
         button.style.color = "#E7B941"
       }
-      console.log(sellingLocks, ':', gettingHoney)
       const sellTx = await sendSellTx(sellingLocks, gettingHoney)
-      setTxConfirming(false)
-      openNotification(
-        true,
-        "You've successfully sold $LOCKS",
-        `You sold ${formatAsString(sellingLocks)} Locks for ${formatAsString(gettingHoney)} Honey`,
-        sellTx
-      )
-      if(button) {
-        button.innerHTML = "sell"
-        button.style.backgroundColor = "#E7B941"
-        button.style.color = "black"
+      if(sellTx === 'slippage') {
+        button && (button.innerHTML = "slippage too low")
+        setTxConfirming(false)
+        setTimeout(() => {
+          if(button) {
+            button.innerHTML = "sell"
+            button.style.backgroundColor = "#E7B941"
+            button.style.color = "black"
+          }
+        }, 3000)
       }
-      refreshInfo()
-      setTimeout(() => {
-        openNotification(false, '', '', '')
-      }, 10000)
+      else if(sellTx.substring(0, 2) === '0x') {
+        setTxConfirming(false)
+        openNotification(
+          true,
+          "You've successfully sold $LOCKS",
+          `You sold ${formatAsString(sellingLocks)} Locks for ${formatAsString(gettingHoney)} Honey`,
+          sellTx
+        )
+        if(button) {
+          button.innerHTML = "sell"
+          button.style.backgroundColor = "#E7B941"
+          button.style.color = "black"
+        }
+        refreshInfo()
+        setTimeout(() => {
+          openNotification(false, '', '', '')
+        }, 10000)
+      }
+      else {
+        if(button) {
+          button.innerHTML = "sell"
+          button.style.backgroundColor = "#E7B941"
+          button.style.color = "black"
+        }
+        refreshInfo()
+        setTxConfirming(false)
+      }
     }
   }
 
@@ -183,7 +204,40 @@ export const GoldiswapButton = () => {
       return
     }
     else {
-
+      setTxConfirming(true)
+      if(button) {
+        button.innerHTML = "confirming..."
+        button.style.backgroundColor = "#4D0B24"
+        button.style.color = "#E7B941"
+      }
+      const redeemTx = await sendRedeemTx(redeemingLocks)
+      if(redeemTx.substring(0, 2) === '0x') {
+        setTxConfirming(false)
+        openNotification(
+          true,
+          "You've successfully redeemed $LOCKS",
+          `You redeemed ${formatAsString(redeemingLocks)} Locks for ${formatAsString(redeemingHoney)} Honey`,
+          redeemTx
+        )
+        if(button) {
+          button.innerHTML = "redeem"
+          button.style.backgroundColor = "#E7B941"
+          button.style.color = "black"
+        }
+        refreshInfo()
+        setTimeout(() => {
+          openNotification(false, '', '', '')
+        }, 10000)
+      }
+      else {
+        if(button) {
+          button.innerHTML = "redeem"
+          button.style.backgroundColor = "#E7B941"
+          button.style.color = "black"
+        }
+        refreshInfo()
+        setTxConfirming(false)
+      }
     }
   }
 

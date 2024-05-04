@@ -37,7 +37,8 @@ export const SwapBox = () => {
     setSimInfo,
     txConfirming,
     notification,
-    setGettingHoney
+    setGettingHoney,
+    setRedeemingHoney
   } = useGoldiswap()
 
   const { balance, balancesLoading } = useWallet()
@@ -116,6 +117,7 @@ export const SwapBox = () => {
     else {
       simulateRedeem(redeemingLocks)
       setBottomDisplayString((redeemingLocks * floorPrice(goldiswapInfo.fsl, goldiswapInfo.supply)).toFixed(4))
+      setRedeemingHoney(redeemingLocks * floorPrice(goldiswapInfo.fsl, goldiswapInfo.supply))
     }
   }, [redeemingLocks])
 

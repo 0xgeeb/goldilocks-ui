@@ -56,7 +56,9 @@ const INITIAL_STATE = {
 
   buyingLocks: 0,
   gettingHoney: 0,
+  redeemingHoney: 0,
   setGettingHoney: (_gettingHoney: number) => {},
+  setRedeemingHoney: (_redeemingHoney: number) => {},
 
   debouncedHoneyBuy: 0,
 
@@ -124,6 +126,7 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
 
   const [buyingLocksState, setBuyingLocksState] = useState<number>(INITIAL_STATE.buyingLocks)
   const [gettingHoneyState, setGettingHoneyState] = useState<number>(INITIAL_STATE.gettingHoney)
+  const [redeemingHoneyState, setRedeemingHoneyState] = useState<number>(INITIAL_STATE.redeemingHoney)
 
   const [activeToggleState, setActiveToggleState] = useState<string>(INITIAL_STATE.activeToggle)
   const [displayStringState, setDisplayStringState] = useState<string>(INITIAL_STATE.displayString)
@@ -632,7 +635,9 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
         notification: notificationState,
         openNotification,
         gettingHoney: gettingHoneyState,
-        setGettingHoney: setGettingHoneyState
+        setGettingHoney: setGettingHoneyState,
+        redeemingHoney: redeemingHoneyState,
+        setRedeemingHoney: setRedeemingHoneyState
       }}
     >
       { children }
