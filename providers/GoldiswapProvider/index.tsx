@@ -84,6 +84,10 @@ const INITIAL_STATE = {
   chartOpen: false,
   setChartOpen: (_chart: boolean) => {},
 
+  changeSlippage: (_amount: number, _displayString: string) => {},
+  changeSlippageToggle: (_toggle: boolean) => {},
+  checkSlippageAmount: () => {},
+
   simulateBuy: (_amt: number) => {},
   simulateSell: (_amt: number) => {},
   simulateRedeem: (_amt: number) => {},
@@ -138,6 +142,27 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
 
   const [allowanceButtonsState, setAllowanceButtonsState] = useState<boolean>(INITIAL_STATE.allowanceButtons)
   const [simInfoState, setSimInfoState] = useState(INITIAL_STATE.simInfo)
+
+  const changeSlippage = (amount: number, displayString: string) => {
+    const updatedState = { ...slippageState }
+    updatedState.amount = amount
+    updatedState.displayString = displayString
+    setSlippageState(updatedState)
+    localStorage.setItem('slippageAmount', amount.toString())
+  }
+
+  const changeSlippageToggle = (toggle: boolean) => {
+    const updatedState = { ...slippageState }
+    updatedState.toggle = toggle
+    setSlippageState(updatedState)
+  }
+
+  const checkSlippageAmount = () => {
+    const storedSlippageAmount = localStorage.getItem('slippageAmount')
+    if(storedSlippageAmount !== null) {
+      changeSlippage(parseFloat(storedSlippageAmount), storedSlippageAmount)
+    }
+  }
 
   const changeActiveToggle = (toggle: string) => {
     setDisplayStringState('')
@@ -637,7 +662,10 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
         gettingHoney: gettingHoneyState,
         setGettingHoney: setGettingHoneyState,
         redeemingHoney: redeemingHoneyState,
-        setRedeemingHoney: setRedeemingHoneyState
+        setRedeemingHoney: setRedeemingHoneyState,
+        changeSlippage,
+        changeSlippageToggle,
+        checkSlippageAmount
       }}
     >
       { children }

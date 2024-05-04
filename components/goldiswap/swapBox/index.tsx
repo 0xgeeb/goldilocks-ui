@@ -38,7 +38,8 @@ export const SwapBox = () => {
     txConfirming,
     notification,
     setGettingHoney,
-    setRedeemingHoney
+    setRedeemingHoney,
+    changeSlippageToggle
   } = useGoldiswap()
 
   const { balance, balancesLoading } = useWallet()
@@ -89,6 +90,19 @@ export const SwapBox = () => {
       setBottomAmountLoading(false)
     }, 500)
   }
+
+  //todo: this affects the honey not the locks as users assume
+  useEffect(() => {
+    if(activeToggle === 'buy') {
+      if(debouncedHoneyBuy > 0) {
+        loadedLocks(debouncedHoneyBuy)
+      }
+    }
+    else if(activeToggle === 'sell') {
+      setGettingHoney(simulateSellDry(sellingLocks, goldiswapInfo.fsl, goldiswapInfo.psl, goldiswapInfo.supply) * (1 - (slippage.amount / 100)))
+      setBottomDisplayString((simulateSellDry(sellingLocks, goldiswapInfo.fsl, goldiswapInfo.psl, goldiswapInfo.supply) * (1 - (slippage.amount / 100))).toFixed(4))
+    }
+  }, [slippage.amount])
 
   useEffect(() => {
     if(!debouncedHoneyBuy) {
@@ -167,7 +181,12 @@ export const SwapBox = () => {
                   MAX
               </div>
             </div>
-            <img className="absolute h-6 w-6 top-[16%] left-[79%]" src="/images/icon-settings.png" alt="settings" />
+            <img 
+              className="absolute h-6 w-6 top-[16%] left-[79%] cursor-pointer hover:scale-110" 
+              src="/images/icon-settings.png" 
+              alt="settings"
+              onClick={() => changeSlippageToggle(true)}
+            />
             <div 
               className="absolute top-[44%] left-[47.27%] bg-[#D9C6BA] z-10 h-10 w-10 border-2 border-black rounded-3xl flex justify-center items-center cursor-pointer hover:scale-110"
               onClick={() => flipTokens()}
