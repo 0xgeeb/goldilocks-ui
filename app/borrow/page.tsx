@@ -1,8 +1,6 @@
 import type { Metadata } from "next"
 import { BorrowPage } from "../../components/borrow"
-import { NotificationManager } from "../../components/utils"
 import {
-  NotificationProvider,
   WagmiProvider,
   WalletProvider
 } from "../../providers"
@@ -15,15 +13,12 @@ export const metadata: Metadata = {
 export default function Borrow() {
 
   return (
-    <NotificationProvider>
     <WagmiProvider> 
       <WalletProvider>
         {/* <GoldiswapProvider> */}
           <BorrowPage />
-          <NotificationManager />
         {/* </GoldiswapProvider> */}
       </WalletProvider>
     </WagmiProvider>
-  </NotificationProvider>
   )
 }

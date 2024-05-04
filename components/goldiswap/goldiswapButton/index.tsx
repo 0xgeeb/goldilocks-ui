@@ -4,7 +4,6 @@ import {
   useWallet
 } from "../../../providers"
 import { useGoldiswapTx } from "../../../hooks"
-import { buildDepositTransaction } from "viem/op-stack"
 
 export const GoldiswapButton = () => {
 
@@ -14,21 +13,53 @@ export const GoldiswapButton = () => {
     goldiswapInfo,
     honeyBuy,
     allowanceButtons,
-    setAllowanceButtons
+    setAllowanceButtons,
+    updateAllowance,
+    buyingLocks,
+    refreshGoldiswapInfo,
+    setTxConfirming,
+    sellingLocks,
+    openNotification,
+    setDisplayString,
+    setBottomDisplayString,
+    setHoneyBuy,
+    setSellingLocks,
+    setRedeemingLocks,
+    gettingHoney,
+    redeemingLocks
   } = useGoldiswap()
 
   const { 
     isConnected, 
     balance,
-    wallet
+    wallet,
+    refreshBalances
   } = useWallet()
 
   const {
-    checkAllowance
+    checkAllowance,
+    sendApproveTx,
+    sendBuyTx,
+    sendSellTx,
+    sendRedeemTx
   } = useGoldiswapTx()
 
+  const formatAsString = (num: number): string => {
+    return num.toLocaleString('en-US', { maximumFractionDigits: 2 })
+  }
+
+  const refreshInfo = () => {
+    setDisplayString('')
+    setBottomDisplayString('')
+    setHoneyBuy(0)
+    setSellingLocks(0)  
+    setRedeemingLocks(0)
+    refreshBalances()
+    refreshGoldiswapInfo()
+  }
+
   const handleButtonClick = () => {
-    const button = document.getElementById('buy-button')
+    const button = document.getElementById('swap-button')
     if(activeToggle === 'buy') {
       buyTxFlow(button)
     }
@@ -52,27 +83,51 @@ export const GoldiswapButton = () => {
     else {
       const sufficientAllowance: boolean | void = await checkAllowance(honeyBuy, wallet)
       if(sufficientAllowance) {
-        // button && (button.innerHTML = "confirming...")
-        // const buyTx = await sendBuyTx(buyingLocks, honeyBuy)
-        // if(buyTx === 'slippage') {
-        //   button && (button.innerHTML = "slippage too low")
-        // }
-        // else if(buyTx.substring(0, 2) === '0x') {
-        //   buyTx && openNotification({
-        //     title: 'Successfully Bought $LOCKS!',
-        //     hash: buyTx,
-        //     direction: 'bought',
-        //     amount: buyingLocks,
-        //     price: honeyBuy,
-        //     page: 'amm'
-        //   })
-        //   button && (button.innerHTML = "buy")
-        //   refreshInfo()
-        // }
-        // else {
-        //   button && (button.innerHTML = "buy")
-        //   refreshInfo()
-        // }
+        setTxConfirming(true)
+        if(button) {
+          button.innerHTML = "confirming..."
+          button.style.backgroundColor = "#4D0B24"
+          button.style.color = "#E7B941"
+        }
+        const buyTx = await sendBuyTx(buyingLocks, honeyBuy)
+        if(buyTx === 'slippage') {
+          button && (button.innerHTML = "slippage too low")
+          setTxConfirming(false)
+          setTimeout(() => {
+            if(button) {
+              button.innerHTML = "buy"
+              button.style.backgroundColor = "#E7B941"
+              button.style.color = "black"
+            }
+          }, 3000)
+        }
+        else if(buyTx.substring(0, 2) === '0x') {
+          setTxConfirming(false)
+          openNotification(
+            true,
+            "You've successfully bought $LOCKS",
+            `You bought ${formatAsString(buyingLocks)} Locks with ${formatAsString(honeyBuy)} Honey`,
+            buyTx
+          )
+          if(button) {
+            button.innerHTML = "buy"
+            button.style.backgroundColor = "#E7B941"
+            button.style.color = "black"
+          }
+          refreshInfo()
+          setTimeout(() => {
+            openNotification(false, '', '', '')
+          }, 10000)
+        }
+        else {
+          if(button) {
+            button.innerHTML = "buy"
+            button.style.backgroundColor = "#E7B941"
+            button.style.color = "black"
+          }
+          refreshInfo()
+          setTxConfirming(false)
+        }
       }
       else {
         setAllowanceButtons(true)
@@ -81,39 +136,95 @@ export const GoldiswapButton = () => {
   }
 
   const sellTxFlow = async (button: HTMLElement | null) => {
-
+    if(sellingLocks == 0) {
+      button && (button.innerHTML = "sell")
+      return
+    }
+    if(sellingLocks > balance.locks) {
+      button && (button.innerHTML = "insufficient balance")
+      return
+    }
+    else {
+      // todo: add slippage error check here
+      setTxConfirming(true)
+      if(button) {
+        button.innerHTML = "confirming..."
+        button.style.backgroundColor = "#4D0B24"
+        button.style.color = "#E7B941"
+      }
+      console.log(sellingLocks, ':', gettingHoney)
+      const sellTx = await sendSellTx(sellingLocks, gettingHoney)
+      setTxConfirming(false)
+      openNotification(
+        true,
+        "You've successfully sold $LOCKS",
+        `You sold ${formatAsString(sellingLocks)} Locks for ${formatAsString(gettingHoney)} Honey`,
+        sellTx
+      )
+      if(button) {
+        button.innerHTML = "sell"
+        button.style.backgroundColor = "#E7B941"
+        button.style.color = "black"
+      }
+      refreshInfo()
+      setTimeout(() => {
+        openNotification(false, '', '', '')
+      }, 10000)
+    }
   }
 
   const redeemTxFlow = async (button: HTMLElement | null) => {
+    if(redeemingLocks == 0) {
+      button && (button.innerHTML = "redeem")
+      return
+    }
+    if(redeemingLocks > balance.locks) {
+      button && (button.innerHTML = "insufficient balance")
+      return
+    }
+    else {
 
+    }
   }
 
   const handleLeftButtonClick = async () => {
-    const ammButton = document.getElementById('amm-button')
+    const swapButton = document.getElementById('swap-button')
     const leftButton = document.getElementById('left-approve-button')
     const rightButton = document.getElementById('right-approve-button')
-    leftButton && (leftButton.innerHTML = "approving...")
-    rightButton && (rightButton.innerHTML = "approving...")
-    // await sendApproveTx(honeyBuy, false)
-    // setTimeout(() => {
-    //   updateAllowance(honeyBuy + 0.01)
-    //   ammButton && (ammButton.innerHTML = "buy")
-    //   setAllowanceButtons(false)
-    // }, 10000)
+    if(leftButton) {
+      leftButton.innerHTML = "approving..."
+      leftButton.style.backgroundColor = "#4D0B24"
+      leftButton.style.color = "#E7B941"
+    }
+    if(rightButton) {
+      rightButton.innerHTML = "approving..."
+      rightButton.style.backgroundColor = "#4D0B24"
+      rightButton.style.color = "#E7B941"
+    }
+    await sendApproveTx(honeyBuy, false)
+    updateAllowance(honeyBuy + 0.01)
+    swapButton && (swapButton.innerHTML = "buy")
+    setAllowanceButtons(false)
   }
 
   const handleRightButtonClick = async () => {
-    const ammButton = document.getElementById('amm-button')
+    const swapButton = document.getElementById('swap-button')
     const rightButton = document.getElementById('right-approve-button')
     const leftButton = document.getElementById('left-approve-button')
-    rightButton && (rightButton.innerHTML = "approving...")
-    leftButton && (leftButton.innerHTML = "approving...")
-    // await sendApproveTx(0, true)
-    // setTimeout(() => {
-    //   updateAllowance(100000000)
-    //   ammButton && (ammButton.innerHTML = "buy")
-    //   setAllowanceButtons(false)
-    // }, 10000)
+    if(leftButton) {
+      leftButton.innerHTML = "approving..."
+      leftButton.style.backgroundColor = "#4D0B24"
+      leftButton.style.color = "#E7B941"
+    }
+    if(rightButton) {
+      rightButton.innerHTML = "approving..."
+      rightButton.style.backgroundColor = "#4D0B24"
+      rightButton.style.color = "#E7B941"
+    }
+    await sendApproveTx(0, true)
+    updateAllowance(100000000)
+    swapButton && (swapButton.innerHTML = "buy")
+    setAllowanceButtons(false)
   }
 
   const renderButton = () => {
@@ -131,7 +242,6 @@ export const GoldiswapButton = () => {
     }
   }
 
-
   return (
     <>
       {
@@ -139,11 +249,15 @@ export const GoldiswapButton = () => {
         <div>
           <button
             className="absolute bg-[#E7B941] h-[8%] w-[16.6%] top-[64.8%] left-[30.9%] border-2 border-black font-amaticbold text-[1.5vw] hover:bg-[#4D0B24] hover:text-[#E7B941] hover:scale-110"
+            id="left-approve-button"
+            onClick={() => handleLeftButtonClick()}
           >
             approve tx
           </button>
           <button
             className="absolute bg-[#E7B941] h-[8%] w-[16.6%] top-[64.8%] left-[52.5%] border-2 border-black font-amaticbold text-[1.5vw] hover:bg-[#4D0B24] hover:text-[#E7B941] hover:scale-110"
+            id="right-approve-button"
+            onClick={() => handleRightButtonClick()}
           >
             approve infinite
           </button>
@@ -161,9 +275,9 @@ export const GoldiswapButton = () => {
             return (
               <button 
                 className="absolute h-[8%] w-[16.6%] top-[64.8%] left-[41.6%] bg-[#E7B941] font-amaticbold text-[1.9vw] border-2 border-black hover:bg-[#4D0B24] hover:text-[#E7B941] hover:scale-110"
-                id="buy-button"
+                id="swap-button"
                 onClick={() => {
-                  const button = document.getElementById('buy-button')
+                  const button = document.getElementById('swap-button')
                   
                   if(!account) {
                     if(button && button.innerHTML === "connect wallet") {

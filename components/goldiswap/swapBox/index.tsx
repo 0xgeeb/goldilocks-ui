@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { useGoldiswap, useWallet } from "../../../providers"
 import { useGoldiswapMath } from "../../../hooks/useGoldiswapMath"
-import { Chart } from "../../goldiswap"
+import { Chart, Notification } from "../../goldiswap"
 
 export const SwapBox = () => {
 
@@ -34,7 +34,10 @@ export const SwapBox = () => {
     handleBottomBalance,
     slippage,
     handlePercentageButtons,
-    setSimInfo
+    setSimInfo,
+    txConfirming,
+    notification,
+    setGettingHoney
   } = useGoldiswap()
 
   const { balance, balancesLoading } = useWallet()
@@ -101,6 +104,7 @@ export const SwapBox = () => {
     }
     else {
       simulateSell(sellingLocks)
+      setGettingHoney(simulateSellDry(sellingLocks, goldiswapInfo.fsl, goldiswapInfo.psl, goldiswapInfo.supply) * (1 - (slippage.amount / 100)))
       setBottomDisplayString((simulateSellDry(sellingLocks, goldiswapInfo.fsl, goldiswapInfo.psl, goldiswapInfo.supply) * (1 - (slippage.amount / 100))).toFixed(4))
     }
   }, [sellingLocks])
@@ -129,9 +133,11 @@ export const SwapBox = () => {
       >
         target ratio: {handleRatioInfo(goldiswapInfo.targetRatio)}
       </span>
-      <div className="absolute inset-6 border-2 border-black bg-[#D9C6BA]">
+      <div className={`absolute inset-6 ${txConfirming ? "" : "border-2 border-black"} bg-[#D9C6BA]`}>
         {
           chartOpen ? <Chart /> :
+          txConfirming ? <img className="w-[100%] h-[100%]" src="/images/bg-transaction.png" alt="tx" /> :
+          notification.toggle ? <Notification /> :
           <div className="w-[100%] h-[100%] relative flex flex-col">
             <div className="flex flex-row absolute top-0 right-0 w-[33.61%] h-[10%] font-baloo font-semibold border-b-2 border-l-2 border-black">
               <div 

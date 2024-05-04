@@ -32,14 +32,31 @@ const INITIAL_STATE = {
   ) => {},
 
   slippage: {
-    amount: 0.1,
+    amount: 0.5,
     toggle: false,
-    displayString: '0.1'
+    displayString: '0.5'
   },
+
+  notification: {
+    toggle: false,
+    action: '',
+    result: '',
+    hash: ''
+  },
+  openNotification: (
+    _toggle: boolean,
+    _action: string,
+    _result: string,
+    _hash: string
+  ) => {},
 
   honeyBuy: 0,
   sellingLocks: 0,
   redeemingLocks: 0,
+
+  buyingLocks: 0,
+  gettingHoney: 0,
+  setGettingHoney: (_gettingHoney: number) => {},
 
   debouncedHoneyBuy: 0,
 
@@ -48,6 +65,7 @@ const INITIAL_STATE = {
 
   allowanceButtons: false,
   setAllowanceButtons: (_bool: boolean) => {},
+  updateAllowance: (_newAllowance: number) => {},
 
   setHoneyBuy: (_honeyBuy: number) => {},
   setSellingLocks: (_sellingLocks: number) => {},
@@ -79,7 +97,10 @@ const INITIAL_STATE = {
   refreshGoldiswapInfo: async() => {},
 
   infoLoading: true,
-  setInfoLoading: (_loading: boolean) => {}
+  setInfoLoading: (_loading: boolean) => {},
+
+  txConfirming: false,
+  setTxConfirming: (_confirming: boolean) => {}
 }
 
 const GoldiswapContext = createContext(INITIAL_STATE)
@@ -94,11 +115,15 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
 
   const [goldiswapInfoState, setGoldiswapInfoState] = useState(INITIAL_STATE.goldiswapInfo)
   const [slippageState, setSlippageState] = useState(INITIAL_STATE.slippage)
+  const [notificationState, setNotificationState] = useState(INITIAL_STATE.notification)
 
   const [honeyBuyState, setHoneyBuyState] = useState<number>(INITIAL_STATE.honeyBuy)
   const debouncedHoneyBuyState = useDebounce(honeyBuyState, 1000)
   const [sellingLocksState, setSellingLocksState] = useState<number>(INITIAL_STATE.sellingLocks)
   const [redeemingLocksState, setRedeemingLocksState] = useState<number>(INITIAL_STATE.redeemingLocks)
+
+  const [buyingLocksState, setBuyingLocksState] = useState<number>(INITIAL_STATE.buyingLocks)
+  const [gettingHoneyState, setGettingHoneyState] = useState<number>(INITIAL_STATE.gettingHoney)
 
   const [activeToggleState, setActiveToggleState] = useState<string>(INITIAL_STATE.activeToggle)
   const [displayStringState, setDisplayStringState] = useState<string>(INITIAL_STATE.displayString)
@@ -106,6 +131,7 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
 
   const [chartOpenState, setChartOpenState] = useState<boolean>(INITIAL_STATE.chartOpen)
   const [infoLoadingState, setInfoLoadingState] = useState<boolean>(INITIAL_STATE.infoLoading)
+  const [txConfirmingState, setTxConfirmingState] = useState<boolean>(INITIAL_STATE.txConfirming)
 
   const [allowanceButtonsState, setAllowanceButtonsState] = useState<boolean>(INITIAL_STATE.allowanceButtons)
   const [simInfoState, setSimInfoState] = useState(INITIAL_STATE.simInfo)
@@ -262,7 +288,7 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
       }
       else {
         const locksWithSlippage: number = locks * (1 - (slippageState.amount / 100))
-        // setBuyingLocksState(locksWithSlippage)
+        setBuyingLocksState(locksWithSlippage)
         setBottomDisplayStringState(locksWithSlippage.toFixed(4))
         // console.log('found it: ', parseFloat(temp.toFixed(2)))
         // console.log('locks: ', locks)
@@ -545,6 +571,22 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
   const setSimInfo = (toggle: boolean, fsl: number, psl: number, supply: number) => {
     setSimInfoState({ toggle, fsl, psl, supply })
   }
+
+  const updateAllowance = (newAllowance: number) => {
+    setGoldiswapInfoState(prevState => ({
+      ...prevState,
+      honeySwapAllowance: newAllowance
+    }))
+  }
+
+  const openNotification = (toggle: boolean, action: string, result: string, hash: string) => {
+    setNotificationState(prevState => ({
+      toggle,
+      action,
+      result,
+      hash
+    }))
+  }
   
   return (
     <GoldiswapContext.Provider
@@ -555,6 +597,7 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
         debouncedHoneyBuy: debouncedHoneyBuyState,
         sellingLocks: sellingLocksState,
         redeemingLocks: redeemingLocksState,
+        buyingLocks: buyingLocksState,
         displayString: displayStringState,
         bottomDisplayString: bottomDisplayStringState,
         setHoneyBuy: setHoneyBuyState,
@@ -582,7 +625,14 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
         allowanceButtons: allowanceButtonsState,
         setAllowanceButtons: setAllowanceButtonsState,
         simInfo: simInfoState,
-        setSimInfo
+        setSimInfo,
+        updateAllowance,
+        txConfirming: txConfirmingState,
+        setTxConfirming: setTxConfirmingState,
+        notification: notificationState,
+        openNotification,
+        gettingHoney: gettingHoneyState,
+        setGettingHoney: setGettingHoneyState
       }}
     >
       { children }
