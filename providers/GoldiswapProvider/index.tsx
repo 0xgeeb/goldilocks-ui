@@ -88,6 +88,9 @@ const INITIAL_STATE = {
   changeSlippageToggle: (_toggle: boolean) => {},
   checkSlippageAmount: () => {},
 
+  redeemPopupToggle: false,
+  setRedeemPopupToggle: (_bool: boolean) => {},
+
   simulateBuy: (_amt: number) => {},
   simulateSell: (_amt: number) => {},
   simulateRedeem: (_amt: number) => {},
@@ -139,6 +142,8 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
   const [chartOpenState, setChartOpenState] = useState<boolean>(INITIAL_STATE.chartOpen)
   const [infoLoadingState, setInfoLoadingState] = useState<boolean>(INITIAL_STATE.infoLoading)
   const [txConfirmingState, setTxConfirmingState] = useState<boolean>(INITIAL_STATE.txConfirming)
+
+  const [redeemPopupToggleState, setRedeemPopupToggleState] = useState<boolean>(INITIAL_STATE.redeemPopupToggle)
 
   const [allowanceButtonsState, setAllowanceButtonsState] = useState<boolean>(INITIAL_STATE.allowanceButtons)
   const [simInfoState, setSimInfoState] = useState(INITIAL_STATE.simInfo)
@@ -665,7 +670,9 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
         setRedeemingHoney: setRedeemingHoneyState,
         changeSlippage,
         changeSlippageToggle,
-        checkSlippageAmount
+        checkSlippageAmount,
+        redeemPopupToggle: redeemPopupToggleState,
+        setRedeemPopupToggle: setRedeemPopupToggleState
       }}
     >
       { children }
