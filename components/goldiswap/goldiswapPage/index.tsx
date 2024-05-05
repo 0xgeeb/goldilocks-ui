@@ -35,7 +35,7 @@ export const GoldiswapPage = () => {
 
   useEffect(() => {
     refreshGoldiswapInfo()
-    // checkSlippageAmount()
+    checkSlippageAmount()
     setInfoLoading(false)
   }, [])
 
