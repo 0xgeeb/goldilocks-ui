@@ -57,19 +57,21 @@ const INITIAL_STATE = {
   buyingLocks: 0,
   gettingHoney: 0,
   redeemingHoney: 0,
-  setGettingHoney: (_gettingHoney: number) => {},
-  setRedeemingHoney: (_redeemingHoney: number) => {},
-
+  
   debouncedHoneyBuy: 0,
-
+  debouncedGettingHoney: 0,
+  
   displayString: '',
   bottomDisplayString: '',
 
   allowanceButtons: false,
   setAllowanceButtons: (_bool: boolean) => {},
   updateAllowance: (_newAllowance: number) => {},
-
+  
   setHoneyBuy: (_honeyBuy: number) => {},
+  setBuyingLocks: (_buyingLocks: number) => {},
+  setGettingHoney: (_gettingHoney: number) => {},
+  setRedeemingHoney: (_redeemingHoney: number) => {},
   setSellingLocks: (_sellingLocks: number) => {},
   setRedeemingLocks: (_redeemingLocks: number) => {},
   setDisplayString: (_displayString: string) => {},
@@ -83,6 +85,11 @@ const INITIAL_STATE = {
 
   chartOpen: false,
   setChartOpen: (_chart: boolean) => {},
+
+  topInputFlag: false,
+  bottomInputFlag: false,
+  setTopInputFlag: (_bool: boolean) => {},
+  setBottomInputFlag: (_bool: boolean) => {},
 
   changeSlippage: (_amount: number, _displayString: string) => {},
   changeSlippageToggle: (_toggle: boolean) => {},
@@ -102,6 +109,7 @@ const INITIAL_STATE = {
   handleBottomBalance: (): string => "0.00",
 
   handleTopChange: (_input: string) => {},
+  handleBottomChange: (_input: string) => {},
 
   refreshGoldiswapInfo: async() => {},
 
@@ -133,7 +141,11 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
 
   const [buyingLocksState, setBuyingLocksState] = useState<number>(INITIAL_STATE.buyingLocks)
   const [gettingHoneyState, setGettingHoneyState] = useState<number>(INITIAL_STATE.gettingHoney)
+  const debouncedGettingHoneyState = useDebounce(gettingHoneyState, 1000)
   const [redeemingHoneyState, setRedeemingHoneyState] = useState<number>(INITIAL_STATE.redeemingHoney)
+
+  const [topInputFlagState, setTopInputFlagState] = useState<boolean>(INITIAL_STATE.topInputFlag)
+  const [bottomInputFlagState, setBottomInputFlagState] = useState<boolean>(INITIAL_STATE.bottomInputFlag)
 
   const [activeToggleState, setActiveToggleState] = useState<string>(INITIAL_STATE.activeToggle)
   const [displayStringState, setDisplayStringState] = useState<string>(INITIAL_STATE.displayString)
@@ -538,16 +550,40 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
         input = ""
       }
       setDisplayStringState(input)
+      setBottomInputFlagState(false)
       !input ? setHoneyBuyState(0) : setHoneyBuyState(parseFloat(input))
       !input && setAllowanceButtonsState(false)
     }
     else if(activeToggleState === 'sell') {
       setDisplayStringState(input)
+      setBottomInputFlagState(false)
       !input ? setSellingLocksState(0) : setSellingLocksState(parseFloat(input))
     }
     else {
       setDisplayStringState(input)
+      setBottomInputFlagState(false)
       !input ? setRedeemingLocksState(0) : setRedeemingLocksState(parseFloat(input))
+    }
+  }
+
+  const handleBottomChange = (input: string) => {
+    if(activeToggleState === 'buy') {
+      setBottomDisplayStringState(input)
+      setTopInputFlagState(false)
+      !input ? setBuyingLocksState(0) : setBuyingLocksState(parseFloat(input))
+    }
+    else if(activeToggleState === 'sell') {
+      if(parseFloat(input) > 2000000) {
+        input = ""
+      }
+      setBottomDisplayStringState(input)
+      setTopInputFlagState(false)
+      !input ? setGettingHoneyState(0) : setGettingHoneyState(parseFloat(input))
+    }
+    else {
+      setBottomDisplayStringState(input)
+      setTopInputFlagState(false)
+      !input ? setRedeemingHoneyState(0) : setRedeemingHoneyState(parseFloat(input))
     }
   }
 
@@ -672,7 +708,14 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
         changeSlippageToggle,
         checkSlippageAmount,
         redeemPopupToggle: redeemPopupToggleState,
-        setRedeemPopupToggle: setRedeemPopupToggleState
+        setRedeemPopupToggle: setRedeemPopupToggleState,
+        setBuyingLocks: setBuyingLocksState,
+        topInputFlag: topInputFlagState,
+        setTopInputFlag: setTopInputFlagState,
+        bottomInputFlag: bottomInputFlagState,
+        setBottomInputFlag: setBottomInputFlagState,
+        handleBottomChange,
+        debouncedGettingHoney: debouncedGettingHoneyState
       }}
     >
       { children }
