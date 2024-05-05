@@ -1,8 +1,8 @@
 "use client"
 
 import { useEffect } from "react"
-import { useGoldiswap } from "../../../providers/GoldiswapProvider"
-import { useGoldiswapMath } from "../../../hooks/useGoldiswapMath"
+import { useGoldiswap } from "../../../providers"
+import { useGoldiswapMath } from "../../../hooks"
 import { 
   NavBar,
   WalletBalance,

@@ -3,7 +3,9 @@
 import { useState, useEffect } from "react"
 import { useGoldiswap, useWallet } from "../../../providers"
 import { useGoldiswapMath } from "../../../hooks/useGoldiswapMath"
-import { Chart, Notification } from "../../goldiswap"
+import { Notification } from "../../goldiswap"
+import { Chart } from "../../utils"
+
 
 export const SwapBox = () => {
 

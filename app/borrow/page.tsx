@@ -2,7 +2,8 @@ import type { Metadata } from "next"
 import { BorrowPage } from "../../components/borrow"
 import {
   WagmiProvider,
-  WalletProvider
+  WalletProvider,
+  BorrowProvider
 } from "../../providers"
 
 export const metadata: Metadata = {
@@ -15,9 +16,9 @@ export default function Borrow() {
   return (
     <WagmiProvider> 
       <WalletProvider>
-        {/* <GoldiswapProvider> */}
+        <BorrowProvider>
           <BorrowPage />
-        {/* </GoldiswapProvider> */}
+        </BorrowProvider>
       </WalletProvider>
     </WagmiProvider>
   )

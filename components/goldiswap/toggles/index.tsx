@@ -28,14 +28,14 @@ export const Toggles = ()=> {
       >
         <span>REDEEM</span>
         <span 
-            className="absolute top-[2%] right-[2%] text-[0.7vw] rounded-full px-1 border-2 border-black hover:bg-black hover:text-white" 
+            className="absolute top-[4%] right-[2%] text-[0.7vw] rounded-full px-1 border-2 border-black hover:bg-black hover:text-white" 
             onClick={(e) => {
               e.stopPropagation()
               setRedeemPopupToggle(true)
             }}
           >
             ?
-          </span>
+        </span>
       </div>
     </div>
   )

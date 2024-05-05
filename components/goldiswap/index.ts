@@ -1,6 +1,5 @@
 export * from './goldiswapPage'
 export * from './swapBox'
-export * from './chart'
 export * from './goldiswapButton'
 export * from './notification'
 export * from './slippagePopup'
