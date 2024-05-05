@@ -3,7 +3,6 @@
 import { PropsWithChildren, createContext, useContext, useState } from "react"
 import { readContract } from "@wagmi/core"
 import { formatEther } from "viem"
-import { useDebounce, useGoldiswapMath } from "../../hooks"
 import { useWallet } from "../../providers"
 import { config } from "../../providers/WagmiProvider"
 import { contracts } from "../../utils/addressi"
@@ -25,7 +24,7 @@ const INITIAL_STATE = {
   displayString: '',
   setDisplayString: (_displayString: string) => {},
 
-  activeToggle: 'borrow',
+  activeToggle: 'BORROW',
   changeActiveToggle: (_toggle: string) => {},
 
   borrowPopupToggle: false,

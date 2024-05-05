@@ -9,10 +9,10 @@ export const Toggles = () => {
   } = useBorrow()
 
   return (
-    <div className="absolute h-[7.5%] w-[16.27%] top-[2.62%] left-[80.89%] flex flex-row items-center justify-between font-baloo font-semibold text-[1vw]">
+    <div className="absolute h-[7.5%] w-[16.27%] top-[2.62%] left-[82.89%] flex flex-row items-center justify-between font-baloo font-semibold text-[1vw]">
       <div
-        className={`w-[44%] h-[100%] relative flex items-center justify-center border-2 border-black bg-[#D9C6BA] ${activeToggle === 'borrow' ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} hover:bg-[#F3AA8A] cursor-pointer`}
-        onClick={() => changeActiveToggle('borrow')}
+        className={`w-[44%] h-[100%] relative flex items-center justify-center border-2 border-black bg-[#D9C6BA] ${activeToggle === 'BORROW' ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} hover:bg-[#F3AA8A] cursor-pointer`}
+        onClick={() => changeActiveToggle('BORROW')}
       >
         <span>BORROW</span>
         <span 
@@ -26,8 +26,8 @@ export const Toggles = () => {
         </span>
       </div>
       <div
-        className={`w-[44%] h-[100%] flex items-center justify-center border-2 border-black bg-[#D9C6BA] ${activeToggle === 'repay' ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} hover:bg-[#F3AA8A] cursor-pointer`}
-        onClick={() => changeActiveToggle('repay')}
+        className={`w-[44%] h-[100%] flex items-center justify-center border-2 border-black bg-[#D9C6BA] ${activeToggle === 'REPAY' ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} hover:bg-[#F3AA8A] cursor-pointer`}
+        onClick={() => changeActiveToggle('REPAY')}
       >
         <span>REPAY</span>
       </div>

@@ -77,7 +77,7 @@ const INITIAL_STATE = {
   setDisplayString: (_displayString: string) => {},
   setBottomDisplayString: (_displayString: string) => {},
 
-  activeToggle: 'buy',
+  activeToggle: 'BUY',
   changeActiveToggle: (_toggle: string) => {},
 
   handlePercentageButtons: (_action: number) => {},
