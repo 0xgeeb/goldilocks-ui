@@ -6,7 +6,6 @@ import { useGoldiswapMath } from "../../../hooks/useGoldiswapMath"
 import { Notification } from "../../goldiswap"
 import { Chart } from "../../utils"
 
-
 export const SwapBox = () => {
 
   const [topAmountLoading, setTopAmountLoading] = useState<boolean>(false)

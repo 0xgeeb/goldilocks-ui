@@ -27,7 +27,10 @@ export const GoldiswapButton = () => {
     setRedeemingLocks,
     gettingHoney,
     redeemingLocks,
-    redeemingHoney
+    redeemingHoney,
+    setBuyingLocks,
+    setGettingHoney,
+    setRedeemingHoney
   } = useGoldiswap()
 
   const { 
@@ -53,8 +56,11 @@ export const GoldiswapButton = () => {
     setDisplayString('')
     setBottomDisplayString('')
     setHoneyBuy(0)
-    setSellingLocks(0)  
+    setBuyingLocks(0)
+    setSellingLocks(0)
+    setGettingHoney(0)  
     setRedeemingLocks(0)
+    setRedeemingHoney(0)
     refreshBalances()
     refreshGoldiswapInfo()
   }

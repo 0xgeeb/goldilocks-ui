@@ -185,8 +185,11 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
     setDisplayStringState('')
     setBottomDisplayStringState('')
     setHoneyBuyState(0)
+    setBuyingLocksState(0)
     setSellingLocksState(0)
+    setGettingHoneyState(0)
     setRedeemingLocksState(0)
+    setRedeemingHoneyState(0)
     setActiveToggleState(toggle)
     setAllowanceButtonsState(false)
   }
@@ -198,7 +201,9 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
     setDisplayStringState('')
     setBottomDisplayStringState('')
     setHoneyBuyState(0)
+    setBuyingLocksState(0)
     setSellingLocksState(0)
+    setGettingHoneyState(0)
     setAllowanceButtonsState(false)
     if(activeToggleState === 'buy') {
       setActiveToggleState('sell')
