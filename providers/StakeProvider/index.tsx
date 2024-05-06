@@ -17,7 +17,7 @@ const INITIAL_STATE = {
     honeyPrgAllowance: 0
   },
 
-  activeToggle: 'STAKE',
+  activeToggle: 'STAKE ',
   changeActiveToggle: (_toggle: string) => {},
 
   infoLoading: true,

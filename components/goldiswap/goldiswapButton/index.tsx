@@ -67,13 +67,13 @@ export const GoldiswapButton = () => {
 
   const handleButtonClick = () => {
     const button = document.getElementById('swap-button')
-    if(activeToggle === 'buy') {
+    if(activeToggle === 'BUY') {
       buyTxFlow(button)
     }
-    if(activeToggle === 'sell') {
+    if(activeToggle === 'SELL') {
       sellTxFlow(button)
     }
-    if(activeToggle === 'redeem') {
+    if(activeToggle === 'REDEEM') {
       redeemTxFlow(button)
     }
   }
@@ -288,13 +288,13 @@ export const GoldiswapButton = () => {
   }
 
   const renderButton = () => {
-    if(activeToggle === 'buy') {
+    if(activeToggle === 'BUY') {
       if(isConnected && debouncedHoneyBuy > goldiswapInfo.honeySwapAllowance && balance.honey >= debouncedHoneyBuy) {
         return 'approve $honey'
       }
       return 'buy'
     }
-    else if(activeToggle === 'sell') {
+    else if(activeToggle === 'SELL') {
       return 'sell'
     }
     else {

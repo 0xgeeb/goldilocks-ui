@@ -108,12 +108,12 @@ export const SwapBox = () => {
 
   //todo: this affects the honey not the locks as users assume
   useEffect(() => {
-    if(activeToggle === 'buy') {
+    if(activeToggle === 'BUY') {
       if(debouncedHoneyBuy > 0) {
         loadedLocks(debouncedHoneyBuy)
       }
     }
-    else if(activeToggle === 'sell') {
+    else if(activeToggle === 'SELL') {
       setGettingHoney(simulateSellDry(sellingLocks, goldiswapInfo.fsl, goldiswapInfo.psl, goldiswapInfo.supply) * (1 - (slippage.amount / 100)))
       setBottomDisplayString((simulateSellDry(sellingLocks, goldiswapInfo.fsl, goldiswapInfo.psl, goldiswapInfo.supply) * (1 - (slippage.amount / 100))).toFixed(4))
     }
@@ -267,8 +267,8 @@ export const SwapBox = () => {
             </div>
             <div className="w-[100%] h-[50%] border-b-2 border-black">
               <div className="absolute flex flex-row top-[21%] left-[3%] items-center">
-                <img className="h-8 w-8" src={`/images/logo-${activeToggle === "buy" ? "honey" : "locks"}.png`} alt="coinlogo" />
-                <h1 className="font-baloo font-semibold text-[1.4vw] ml-3">{activeToggle === "buy" ? "HONEY" : "LOCKS"}</h1>
+                <img className="h-8 w-8" src={`/images/logo-${activeToggle === "BUY" ? "honey" : "locks"}.png`} alt="coinlogo" />
+                <h1 className="font-baloo font-semibold text-[1.4vw] ml-3">{activeToggle === "BUY" ? "HONEY" : "LOCKS"}</h1>
               </div>
               <div className="absolute h-[22%] w-[55.6%] top-[15%] left-[22%] border-2 border-black bg-white">
                 <div className="relative h-[100%] w-[100%]">
@@ -290,8 +290,8 @@ export const SwapBox = () => {
             </div>
             <div className="w-[100%] h-[50%]">
               <div className="absolute flex flex-row top-[71%] left-[3%] items-center">
-                <img className="h-8 w-8" src={`/images/logo-${activeToggle === "buy" ? "locks" : "honey"}.png`} alt="coinlogo" />
-                <h1 className="font-baloo font-semibold text-[1.4vw] ml-3">{activeToggle === "buy" ? "LOCKS" : "HONEY"}</h1>
+                <img className="h-8 w-8" src={`/images/logo-${activeToggle === "BUY" ? "locks" : "honey"}.png`} alt="coinlogo" />
+                <h1 className="font-baloo font-semibold text-[1.4vw] ml-3">{activeToggle === "BUY" ? "LOCKS" : "HONEY"}</h1>
               </div>
               <div className="absolute h-[22%] w-[55.6%] top-[65%] left-[22%] border-2 border-black bg-white">
                 <div className="relative h-[100%] w-[100%]">

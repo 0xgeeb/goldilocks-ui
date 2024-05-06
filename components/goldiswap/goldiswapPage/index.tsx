@@ -85,7 +85,7 @@ export const GoldiswapPage = () => {
       <div className="w-[100%] h-[85%] bg-cover bg-bottom bg-[url('/images/bg-goldiswap.png')] relative">
         <Toggles />
         { redeemPopupToggle && <RedeemPopup /> }
-        <h1 className="absolute top-[12.16%] right-[75%] text-[#D9C6BA] text-[8vw] font-amaticbold" id="page-title">{activeToggle === 'redeem' ? "REDEEM" : "SWAP"}</h1>
+        <h1 className="absolute top-[12.16%] right-[75%] text-[#D9C6BA] text-[8vw] font-amaticbold" id="page-title">{activeToggle === 'REDEEM' ? "REDEEM" : "SWAP"}</h1>
         <div className="absolute top-[9.387%] left-[28.125%] w-[43.75%] h-[2.78%] bg-[#4D0B24] flex flex-row items-center justify-between px-2">
           <span className="text-white font-baloo mt-1">$LOCKS floor price: ${handleTokenInfo(floorPrice(goldiswapInfo.fsl, goldiswapInfo.supply))}</span>
           <span className="text-white font-baloo mt-1">$LOCKS market price: ${handleTokenInfo(marketPrice(goldiswapInfo.fsl, goldiswapInfo.psl, goldiswapInfo.supply))}</span>

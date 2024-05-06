@@ -195,7 +195,7 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
   }
 
   const flipTokens = () => {
-    if(activeToggleState === "redeem") {
+    if(activeToggleState === "REDEEM") {
       return
     }
     setDisplayStringState('')
@@ -205,68 +205,68 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
     setSellingLocksState(0)
     setGettingHoneyState(0)
     setAllowanceButtonsState(false)
-    if(activeToggleState === 'buy') {
-      setActiveToggleState('sell')
+    if(activeToggleState === 'BUY') {
+      setActiveToggleState('SELL')
     }
-    else if(activeToggleState === 'sell') {
-      setActiveToggleState('buy')
+    else if(activeToggleState === 'SELL') {
+      setActiveToggleState('BUY')
     }
   }
 
   const handlePercentageButtons = (action: number) => {
     if(!isConnected) return
     if(action == 1) {
-      if(activeToggleState === 'buy') {
+      if(activeToggleState === 'BUY') {
         setDisplayStringState((balance.honey / 4).toFixed(4))
         setHoneyBuyState(balance.honey / 4)
       }
-      if(activeToggleState === 'sell') {
+      if(activeToggleState === 'SELL') {
         setDisplayStringState((balance.locks / 4).toFixed(4))
         setSellingLocksState(balance.locks / 4)
       }
-      if(activeToggleState === 'redeem') {
+      if(activeToggleState === 'REDEEM') {
         setDisplayStringState((balance.locks / 4).toFixed(4))
         setRedeemingLocksState(balance.locks / 4)
       }
     }
     if(action == 2) {
-      if(activeToggleState === 'buy') {
+      if(activeToggleState === 'BUY') {
         setDisplayStringState((balance.honey / 2).toFixed(4))
         setHoneyBuyState(balance.honey / 2)
       }
-      if(activeToggleState === 'sell') {
+      if(activeToggleState === 'SELL') {
         setDisplayStringState((balance.locks / 2).toFixed(4))
         setSellingLocksState(balance.locks / 2)
       }
-      if(activeToggleState === 'redeem') {
+      if(activeToggleState === 'REDEEM') {
         setDisplayStringState((balance.locks / 2).toFixed(4))
         setRedeemingLocksState(balance.locks / 2)
       }
     }
     if(action == 3) {
-      if(activeToggleState === 'buy') {
+      if(activeToggleState === 'BUY') {
         setDisplayStringState((balance.honey * 0.75).toFixed(4))
         setHoneyBuyState(balance.honey * 0.75)
       }
-      if(activeToggleState === 'sell') {
+      if(activeToggleState === 'SELL') {
         setDisplayStringState((balance.locks * 0.75).toFixed(4))
         setSellingLocksState(balance.locks * 0.75)
       }
-      if(activeToggleState === 'redeem') {
+      if(activeToggleState === 'REDEEM') {
         setDisplayStringState((balance.locks * 0.75).toFixed(4))
         setRedeemingLocksState(balance.locks * 0.75)
       }
     }
     if(action == 4) {
-      if(activeToggleState === 'buy') {
+      if(activeToggleState === 'BUY') {
         setDisplayStringState(balance.honey.toFixed(4))
         setHoneyBuyState(balance.honey - 0.0001)
       }
-      if(activeToggleState === 'sell') {
+      if(activeToggleState === 'SELL') {
         setDisplayStringState(balance.locks.toFixed(4))
         setSellingLocksState(balance.locks - 0.0001)
       }
-      if(activeToggleState === 'redeem') {
+      if(activeToggleState === 'REDEEM') {
         setDisplayStringState(balance.locks.toFixed(4))
         setRedeemingLocksState(balance.locks - 0.0001)
       }
@@ -532,7 +532,7 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
   }
 
   const handleTopBalance = (): string => {
-    if(activeToggleState === 'buy') {
+    if(activeToggleState === 'BUY') {
       return balance.honey > 0 ? balance.honey.toLocaleString('en-US', { maximumFractionDigits: 4 }) : "0.00"      
     }
     else {
@@ -541,7 +541,7 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
   }
 
   const handleBottomBalance = (): string => {
-    if(activeToggleState === 'buy') {
+    if(activeToggleState === 'BUY') {
       return balance.locks > 0 ? balance.locks.toLocaleString('en-US', { maximumFractionDigits: 4 }) : "0.00"
     }
     else {
@@ -550,7 +550,7 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
   }
 
   const handleTopChange = (input: string) => {
-    if(activeToggleState === 'buy') {
+    if(activeToggleState === 'BUY') {
       if(parseFloat(input) > 2000000) {
         input = ""
       }
@@ -559,7 +559,7 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
       !input ? setHoneyBuyState(0) : setHoneyBuyState(parseFloat(input))
       !input && setAllowanceButtonsState(false)
     }
-    else if(activeToggleState === 'sell') {
+    else if(activeToggleState === 'SELL') {
       setDisplayStringState(input)
       setBottomInputFlagState(false)
       !input ? setSellingLocksState(0) : setSellingLocksState(parseFloat(input))
@@ -572,12 +572,12 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
   }
 
   const handleBottomChange = (input: string) => {
-    if(activeToggleState === 'buy') {
+    if(activeToggleState === 'BUY') {
       setBottomDisplayStringState(input)
       setTopInputFlagState(false)
       !input ? setBuyingLocksState(0) : setBuyingLocksState(parseFloat(input))
     }
-    else if(activeToggleState === 'sell') {
+    else if(activeToggleState === 'SELL') {
       if(parseFloat(input) > 2000000) {
         input = ""
       }
