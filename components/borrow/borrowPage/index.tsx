@@ -72,9 +72,9 @@ export const BorrowPage = () => {
         </div>
         <WalletBalance />
         <BorrowBox />
-        <img className="absolute top-[51.04%] left-[75.5%] h-[2%] w-[3%]" src="/images/icon-bearoutline.png" alt="bearoutline" />
+        <img className="absolute top-[46.04%] left-[75.5%] h-[2%] w-[3%]" src="/images/icon-bearoutline.png" alt="bearoutline" />
         <div 
-          className="absolute w-[6%] h-[8%] top-[53.04%] left-[74%] border-2 border-black bg-[#F3AA8A] flex items-center justify-center font-amaticbold text-[1.2vw] hover:scale-110 cursor-pointer"
+          className="absolute w-[6%] h-[8%] top-[48.04%] left-[74%] border-2 border-black bg-[#F3AA8A] flex items-center justify-center font-amaticbold text-[1.2vw] hover:scale-110 cursor-pointer"
           onClick={() => setChartOpen(!chartOpen)}
         >
           THIS IS CHART

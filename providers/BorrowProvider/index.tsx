@@ -2,7 +2,7 @@
 
 import { PropsWithChildren, createContext, useContext, useState } from "react"
 import { readContract } from "@wagmi/core"
-import { formatEther } from "viem"
+import { fallback, formatEther } from "viem"
 import { useWallet } from "../../providers"
 import { config } from "../../providers/WagmiProvider"
 import { contracts } from "../../utils/addressi"
@@ -16,6 +16,19 @@ const INITIAL_STATE = {
     honeyBorrowAllowance: 0
   },
 
+  notification: {
+    toggle: false,
+    action: '',
+    result: '',
+    hash: ''
+  },
+  openNotification: (
+    _toggle: boolean,
+    _action: string,
+    _result: string,
+    _hash: string
+  ) => {},
+
   borrow: 0,
   repay: 0,
   setBorrow: (_borrow: number) => {},
@@ -23,6 +36,10 @@ const INITIAL_STATE = {
 
   displayString: '',
   setDisplayString: (_displayString: string) => {},
+
+  allowanceButtons: false,
+  setAllowanceButtons: (_bool: boolean) => {},
+  updateAllowance: (_newAllowance: number) => {},
 
   activeToggle: 'BORROW',
   changeActiveToggle: (_toggle: string) => {},
@@ -37,11 +54,13 @@ const INITIAL_STATE = {
   setInfoLoading: (_loading: boolean) => {},
 
   handlePercentageButtons: (_action: number) => {},
-  flipTokens: () => {},
   handleChange: (_input: string) => {},
   handleBalance: () => '',
 
-  refreshBorrowInfo: async () => {}
+  refreshBorrowInfo: async () => {},
+  
+  txConfirming: false,
+  setTxConfirming: (_confirming: boolean) => {}
 }
 
 const BorrowContext = createContext(INITIAL_STATE)
@@ -50,9 +69,11 @@ export const BorrowProvider = (props: PropsWithChildren<{}>) => {
 
   const { children } = props
 
-  const { balance, wallet, isConnected } = useWallet()
+  const { balance, wallet } = useWallet()
 
   const [borrowInfoState, setBorrowInfoState] = useState(INITIAL_STATE.borrowInfo)
+  const [notificationState, setNotificationState] = useState(INITIAL_STATE.notification)
+
   const [activeToggleState, setActiveToggleState] = useState<string>(INITIAL_STATE.activeToggle)
 
   const [displayStringState, setDisplayStringState] = useState<string>(INITIAL_STATE.displayString)
@@ -64,66 +85,57 @@ export const BorrowProvider = (props: PropsWithChildren<{}>) => {
 
   const [chartOpenState, setChartOpenState] = useState<boolean>(INITIAL_STATE.chartOpen)
   const [infoLoadingState, setInfoLoadingState] = useState<boolean>(INITIAL_STATE.infoLoading)
+  const [txConfirmingState, setTxConfirmingState] = useState<boolean>(INITIAL_STATE.txConfirming)
+
+  const [allowanceButtonsState, setAllowanceButtonsState] = useState<boolean>(INITIAL_STATE.allowanceButtons)
 
   const changeActiveToggle = (toggle: string) => {
     setDisplayStringState('')
     setBorrowState(0)
     setRepayState(0)
     setActiveToggleState(toggle)
-    // setAllowanceButtonsState(false)
-  }
-
-  const flipTokens = () => {
-    setDisplayStringState('')
-    setBorrowState(0)
-    setRepayState(0)
-    if(activeToggleState === 'borrow') {
-      setActiveToggleState('repay')
-    }
-    else if(activeToggleState === 'repay') {
-      setActiveToggleState('borrow')
-    }
+    setAllowanceButtonsState(false)
   }
 
   const handlePercentageButtons = (action: number) => {
     const borrowTemp = (balance.staked - balance.locked) * (borrowInfoState.fsl / borrowInfoState.supply)
     if(action == 1) {
-      if(activeToggleState === 'borrow') {
-        setDisplayStringState((borrowTemp / 4).toFixed(2))
+      if(activeToggleState === 'BORROW') {
+        setDisplayStringState((borrowTemp / 4).toFixed(4))
         setBorrowState(borrowTemp / 4)
       }
-      if(activeToggleState === 'repay') {
-        setDisplayStringState((balance.borrowed / 4).toFixed(2))
+      if(activeToggleState === 'REPAY') {
+        setDisplayStringState((balance.borrowed / 4).toFixed(4))
         setRepayState(balance.borrowed / 4)
       }
     }
     if(action == 2) {
-      if(activeToggleState === 'borrow') {
-        setDisplayStringState((borrowTemp / 2).toFixed(2))
+      if(activeToggleState === 'BORROW') {
+        setDisplayStringState((borrowTemp / 2).toFixed(4))
         setBorrowState(borrowTemp / 2)
       }
-      if(activeToggleState === 'repay') {
-        setDisplayStringState((balance.borrowed / 2).toFixed(2))
+      if(activeToggleState === 'REPAY') {
+        setDisplayStringState((balance.borrowed / 2).toFixed(4))
         setRepayState(balance.borrowed / 2)
       }
     }
     if(action == 3) {
-      if(activeToggleState === 'borrow') {
-        setDisplayStringState((borrowTemp * 0.75).toFixed(2))
+      if(activeToggleState === 'BORROW') {
+        setDisplayStringState((borrowTemp * 0.75).toFixed(4))
         setBorrowState(borrowTemp * 0.75)
       }
-      if(activeToggleState === 'repay') {
-        setDisplayStringState((balance.borrowed * 0.75).toFixed(2))
+      if(activeToggleState === 'REPAY') {
+        setDisplayStringState((balance.borrowed * 0.75).toFixed(4))
         setRepayState(balance.borrowed * 0.75)
       }
     }
     if(action == 4) {
-      if(activeToggleState === 'borrow') {
-        setDisplayStringState(borrowTemp.toFixed(2))
+      if(activeToggleState === 'BORROW') {
+        setDisplayStringState(borrowTemp.toFixed(4))
         setBorrowState(borrowTemp - 0.0001)
       }
-      if(activeToggleState === 'repay') {
-        setDisplayStringState(balance.borrowed.toFixed(2))
+      if(activeToggleState === 'REPAY') {
+        setDisplayStringState(balance.borrowed.toFixed(4))
         setRepayState(balance.borrowed)
       }
     }
@@ -131,21 +143,21 @@ export const BorrowProvider = (props: PropsWithChildren<{}>) => {
 
   const handleChange = (input: string) => {
     setDisplayStringState(input)
-    if(activeToggleState === 'borrow') {
+    if(activeToggleState === 'BORROW') {
       !input ? setBorrowState(0) : setBorrowState(parseFloat(input))
     }
-    if(activeToggleState === 'repay') {
+    if(activeToggleState === 'REPAY') {
       !input ? setRepayState(0) : setRepayState(parseFloat(input))
-      // !input && setAllowanceButtonsState(false)
+      !input && setAllowanceButtonsState(false)
     }
   }
 
   const handleBalance = (): string => {
-    if(activeToggleState === 'borrow') {
+    if(activeToggleState === 'BORROW') {
       const borrowTemp = (balance.staked - balance.locked) * (borrowInfoState.fsl / borrowInfoState.supply)
       return borrowTemp > 0 ? borrowTemp.toLocaleString('en-US', { maximumFractionDigits: 4 }) : "0.00"
     }
-    if(activeToggleState === 'repay') {
+    if(activeToggleState === 'REPAY') {
       return balance.borrowed > 0 ? balance.borrowed.toLocaleString('en-US', { maximumFractionDigits: 4 }) : "0.00"
     }
 
@@ -188,6 +200,22 @@ export const BorrowProvider = (props: PropsWithChildren<{}>) => {
     setBorrowInfoState(response)
   }
 
+  const updateAllowance = (newAllowance: number) => {
+    setBorrowInfoState(prevState => ({
+      ...prevState,
+      honeyBorrowAllowance: newAllowance
+    }))
+  }
+
+  const openNotification = (toggle: boolean, action: string, result: string, hash: string) => {
+    setNotificationState(prevState => ({
+      toggle,
+      action,
+      result,
+      hash
+    }))
+  }
+
   return (
     <BorrowContext.Provider
       value={{
@@ -208,9 +236,15 @@ export const BorrowProvider = (props: PropsWithChildren<{}>) => {
         setRepay: setRepayState,
         displayString: displayStringState,
         setDisplayString: setDisplayStringState,
-        flipTokens,
         handleChange,
-        handleBalance
+        handleBalance,
+        txConfirming: txConfirmingState,
+        setTxConfirming: setTxConfirmingState,
+        notification: notificationState,
+        openNotification,
+        allowanceButtons: allowanceButtonsState,
+        setAllowanceButtons: setAllowanceButtonsState,
+        updateAllowance
       }}
     >
       { children }

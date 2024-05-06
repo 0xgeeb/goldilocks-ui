@@ -290,7 +290,7 @@ export const GoldiswapButton = () => {
   const renderButton = () => {
     if(activeToggle === 'BUY') {
       if(isConnected && debouncedHoneyBuy > goldiswapInfo.honeySwapAllowance && balance.honey >= debouncedHoneyBuy) {
-        return 'approve $honey'
+        return 'approve honey'
       }
       return 'buy'
     }
@@ -348,11 +348,11 @@ export const GoldiswapButton = () => {
                     }
                   }
                   else if(chain?.name !== "Berachain Artio") {
-                    if(button && button.innerHTML === "switch to testnet plz") {
+                    if(button && button.innerHTML === "where tastenet") {
                       openChainModal()
                     }
                     else {
-                      button && (button.innerHTML = "switch to testnet plz")
+                      button && (button.innerHTML = "where tastenet")
                     }
                   }
                   else {
@@ -360,7 +360,7 @@ export const GoldiswapButton = () => {
                   }
                 }}
               >
-              { renderButton() }
+                { renderButton() }
               </button>
             )
           }}

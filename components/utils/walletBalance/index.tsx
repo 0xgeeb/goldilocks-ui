@@ -17,9 +17,22 @@ export const WalletBalance = ()=> {
     return num.toLocaleString('en-US', { maximumFractionDigits: 2 })
   }
 
+  const formatAsClaimable = (num: number): string => {
+    return num.toLocaleString('en-US', { maximumFractionDigits: 4 })
+  }
+
   const handleInfo = (num: number): string => {
     if(num > 0) {
       return formatAsString(num)
+    }
+    else {
+      return "-"
+    }
+  }
+
+  const handleInfoClaimable = (num: number): string => {
+    if(num > 0) {
+      return formatAsClaimable(num)
     }
     else {
       return "-"
@@ -64,7 +77,7 @@ export const WalletBalance = ()=> {
         </div>
         <div className="flex flex-row items-center justify-between w-[100%]">
           <span className="">claimable porridge:</span>
-          <span className="">{handleInfo(balance.claimable)}</span>
+          <span className="">{handleInfoClaimable(balance.claimable)}</span>
         </div>
       </div>
     </>

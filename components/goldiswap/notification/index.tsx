@@ -1,4 +1,4 @@
-import { useGoldiswap } from "../../../providers/GoldiswapProvider"
+import { useGoldiswap } from "../../../providers"
 
 export const Notification = () => {
 
