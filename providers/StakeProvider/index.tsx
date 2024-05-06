@@ -106,11 +106,11 @@ export const StakeProvider = (props: PropsWithChildren<{}>) => {
 
   const handlePercentageButtons = (action: number) => {
     if(action == 1) {
-      if(activeToggleState === 'stake') {
+      if(activeToggleState === 'STAKE') {
         setDisplayStringState((balance.locks / 4).toFixed(4))
         setStakeState(balance.locks / 4)
       }
-      if(activeToggleState === 'unstake') {
+      if(activeToggleState === 'UNSTAKE') {
         setDisplayStringState((balance.staked / 4).toFixed(4))
         setUnstakeState(balance.staked / 4)
       }
@@ -120,43 +120,43 @@ export const StakeProvider = (props: PropsWithChildren<{}>) => {
       }
     }
     if(action == 2) {
-      if(activeToggleState === 'stake') {
+      if(activeToggleState === 'STAKE') {
         setDisplayStringState((balance.locks / 2).toFixed(4))
         setStakeState(balance.locks / 2)
       }
-      if(activeToggleState === 'unstake') {
+      if(activeToggleState === 'UNSTAKE') {
         setDisplayStringState((balance.staked / 2).toFixed(4))
         setUnstakeState(balance.staked / 2)
       }
-      if(activeToggleState === 'realize') {
+      if(activeToggleState === 'STIR') {
         setDisplayStringState((balance.prg / 2).toFixed(4))
         setStirState(balance.prg / 2)
       }
     }
     if(action == 3) {
-      if(activeToggleState === 'stake') {
+      if(activeToggleState === 'STAKE') {
         setDisplayStringState((balance.locks * 0.75).toFixed(4))
         setStakeState(balance.locks * 0.75)
       }
-      if(activeToggleState === 'unstake') {
+      if(activeToggleState === 'UNSTAKE') {
         setDisplayStringState((balance.staked * 0.75).toFixed(4))
         setUnstakeState(balance.staked * 0.75)
       }
-      if(activeToggleState === 'realize') {
+      if(activeToggleState === 'STIR') {
         setDisplayStringState((balance.prg * 0.75).toFixed(4))
         setStirState(balance.prg * 0.75)
       }
     }
     if(action == 4) {
-      if(activeToggleState === 'stake') {
+      if(activeToggleState === 'STAKE') {
         setDisplayStringState(balance.locks.toFixed(4))
         setStakeState(balance.locks - 0.0001)
       }
-      if(activeToggleState === 'unstake') {
+      if(activeToggleState === 'UNSTAKE') {
         setDisplayStringState(balance.staked.toFixed(4))
         setUnstakeState(balance.staked - 0.0001)
       }
-      if(activeToggleState === 'realize') {
+      if(activeToggleState === 'STIR') {
         setDisplayStringState(balance.prg.toFixed(4))
         setStirState(balance.prg - 0.0001)
       }
