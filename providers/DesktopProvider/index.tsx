@@ -1,6 +1,6 @@
 "use client"
 
-import React, { createContext, useContext, PropsWithChildren, useState, useEffect } from "react"
+import { createContext, useContext, PropsWithChildren, useState, useEffect } from "react"
 
 const DESKTOP_INITIAL_STATE = {
   isDesktop: true
