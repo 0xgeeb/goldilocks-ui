@@ -9,7 +9,6 @@ export const StakeButton = () => {
 
   const {
     stakeInfo,
-    displayString,
     setStake,
     setUnstake,
     setStir,
@@ -22,7 +21,8 @@ export const StakeButton = () => {
     stake,
     unstake,
     stir,
-    setTxConfirming
+    setTxConfirming,
+    openNotification
   } = useStake()
 
   const {
@@ -83,6 +83,39 @@ export const StakeButton = () => {
       const sufficientAllowance: boolean | void = await checkAllowance(stake, 'locks', wallet)
       if(sufficientAllowance) {
         setTxConfirming(true)
+        if(button) {
+          button.innerHTML = "confirming..."
+          button.style.backgroundColor = "#B35227"
+          button.style.color = "#E7B941"
+        }
+        const stakeTx = await sendStakeTx(stake)
+        if(stakeTx.substring(0, 2) === '0x') {
+          setTxConfirming(false)
+          openNotification(
+            true,
+            "You've successfully staked $LOCKS",
+            `You staked ${formatAsString(stake)} Locks`,
+            stakeTx
+          )
+          if(button) {
+            button.innerHTML = "stake"
+            button.style.backgroundColor = "#E7B941"
+            button.style.color = "black"
+          }
+          refreshInfo()
+          setTimeout(() => {
+            openNotification(false, '', '', '')
+          }, 10000)
+        }
+        else {
+          if(button) {
+            button.innerHTML = "stake"
+            button.style.backgroundColor = "#E7B941"
+            button.style.color = "black"
+          }
+          refreshInfo()
+          setTxConfirming(false)
+        }
       }
       else {
         setAllowanceButtons(true)
@@ -91,15 +124,156 @@ export const StakeButton = () => {
   }
 
   const unstakeTxFlow = async (button: HTMLElement | null) => {
-    
+    if(unstake == 0) {
+      button && (button.innerHTML = "unstake")
+      return
+    }
+    if(unstake > balance.staked - balance.locked) {
+      button && (button.innerHTML = "insufficient balance")
+      return
+    }
+    if(unstake > balance.staked) {
+      button && (button.innerHTML = "insufficient balance")
+      return
+    }
+    else {
+      setTxConfirming(true)
+      if(button) {
+        button.innerHTML = "confirming..."
+        button.style.backgroundColor = "#B35227"
+        button.style.color = "#E7B941"
+      }
+      const unstakeTx = await sendUnstakeTx(unstake)
+      if(unstakeTx.substring(0, 2) === '0x') {
+        setTxConfirming(false)
+        openNotification(
+          true,
+          "You've successfully unstaked $LOCKS",
+          `You unstaked ${formatAsString(unstake)} Locks`,
+          unstakeTx
+        )
+        if(button) {
+          button.innerHTML = "unstake"
+          button.style.backgroundColor = "#E7B941"
+          button.style.color = "black"
+        }
+        refreshInfo()
+        setTimeout(() => {
+          openNotification(false, '', '', '')
+        }, 10000)
+      }
+      else {
+        if(button) {
+          button.innerHTML = "unstake"
+          button.style.backgroundColor = "#E7B941"
+          button.style.color = "black"
+        }
+        refreshInfo()
+        setTxConfirming(false)
+      }
+    }
   }
 
   const stirTxFlow = async (button: HTMLElement | null) => {
-    
+    if(stir == 0) {
+      button && (button.innerHTML = "stir")
+      return
+    }
+    if(stir > balance.prg) {
+      button && (button.innerHTML = "insufficient balance")
+      return
+    }
+    else {
+      const sufficientAllowance: boolean | void = await checkAllowance(stir * (stakeInfo.fsl / stakeInfo.supply), 'honey', wallet)
+      if(sufficientAllowance) {
+        setTxConfirming(true)
+        if(button) {
+          button.innerHTML = "confirming..."
+          button.style.backgroundColor = "#B35227"
+          button.style.color = "#E7B941"
+        }
+        const stirTx = await sendStirTx(stir)
+        if(stirTx === 'balance') {
+          button && (button.innerHTML = "need more honey")
+          setTimeout(() => {
+            button && (button.innerHTML = "stir")
+          }, 10000)
+        }
+        else if(stirTx.substring(0, 2) === '0x') {
+          setTxConfirming(false)
+          openNotification(
+            true,
+            "You've successfully stirred $PRG",
+            `You stirred ${formatAsString(stir)} Porridge with ${formatAsString(stir * (stakeInfo.fsl / stakeInfo.supply))} Honey`,
+            stirTx
+          )
+          if(button) {
+            button.innerHTML = "stir"
+            button.style.backgroundColor = "#E7B941"
+            button.style.color = "black"
+          }
+          refreshInfo()
+          setTimeout(() => {
+            openNotification(false, '', '', '')
+          }, 10000)
+        }
+        else {
+          if(button) {
+            button.innerHTML = "stir"
+            button.style.backgroundColor = "#E7B941"
+            button.style.color = "black"
+          }
+          refreshInfo()
+          setTxConfirming(false)
+        }
+      }
+      else {
+        setAllowanceButtons(true)
+      }
+    }
   }
 
   const claimTxFlow = async (button: HTMLElement | null) => {
-    
+    if(balance.claimable == 0) {
+      button && (button.innerHTML = "claim")
+      return
+    }
+    else {
+      setTxConfirming(true)
+      if(button) {
+        button.innerHTML = "confirming..."
+        button.style.backgroundColor = "#B35227"
+        button.style.color = "#E7B941"
+      }
+      const claimTx = await sendClaimTx()
+      if(claimTx.substring(0, 2) === '0x') {
+        setTxConfirming(false)
+        openNotification(
+          true,
+          "You've successfully claimed $PRG",
+          `You claimed ${formatAsString(balance.claimable)} Porridge`,
+          claimTx
+        )
+        if(button) {
+          button.innerHTML = "claim"
+          button.style.backgroundColor = "#E7B941"
+          button.style.color = "black"
+        }
+        refreshInfo()
+        setTimeout(() => {
+          openNotification(false, '', '', '')
+        }, 10000)
+      }
+      else {
+        if(button) {
+          button.innerHTML = "claim"
+          button.style.backgroundColor = "#E7B941"
+          button.style.color = "black"
+        }
+        refreshInfo()
+        setTxConfirming(false)
+      }
+    }
   }
 
 
