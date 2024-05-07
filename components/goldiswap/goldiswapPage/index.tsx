@@ -1,8 +1,9 @@
 "use client"
 
 import { useEffect } from "react"
-import { useGoldiswap } from "../../../providers"
+import { useGoldiswap, useDesktop } from "../../../providers"
 import { useGoldiswapMath } from "../../../hooks"
+import { GoldiswapPageMobile } from "../../goldiswapMobile"
 import { 
   NavBar,
   WalletBalance,
@@ -35,6 +36,8 @@ export const GoldiswapPage = () => {
   } = useGoldiswap()
 
   const { floorPrice, marketPrice } = useGoldiswapMath()
+
+  const { isDesktop } = useDesktop()
 
   useEffect(() => {
     refreshGoldiswapInfo()
@@ -80,6 +83,7 @@ export const GoldiswapPage = () => {
   }
 
   return (
+    isDesktop ?
     <main className="w-screen h-screen" onClick={(e) => handlePopups(e)}>
       <NavBar />
       <div className="w-[100%] h-[85%] bg-cover bg-bottom bg-[url('/images/bg-goldiswap.png')] relative">
@@ -104,6 +108,7 @@ export const GoldiswapPage = () => {
         <Stats />
         <Footer />
       </div>
-    </main>
+    </main> :
+    <GoldiswapPageMobile />
   )
 }

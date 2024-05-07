@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { LayoutProps } from "../utils/interfaces"
 import localFont from "next/font/local"
+import { DesktopProvider } from '../providers'
 import "./globals.css"
 
 export const metadata: Metadata = {
@@ -30,7 +31,9 @@ export default function RootLayout({ children }: Readonly<LayoutProps>) {
   return (
     <html lang="en" className={`${amatic.variable} ${amaticBold.variable} ${baloo.variable}`}>
       <body>
-        { children }
+        <DesktopProvider>
+          { children }
+        </DesktopProvider>
       </body>
     </html>
   )

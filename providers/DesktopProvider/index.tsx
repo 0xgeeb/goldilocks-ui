@@ -3,7 +3,10 @@
 import { createContext, useContext, PropsWithChildren, useState, useEffect } from "react"
 
 const DESKTOP_INITIAL_STATE = {
-  isDesktop: true
+  isDesktop: true,
+  setIsDesktop: (_isDesktop: boolean) => {},
+  navButtonsOpen: false,
+  setNavButtonsOpen: (_navButtonsOpen: boolean) => {}
 }
 
 const DesktopContext = createContext(DESKTOP_INITIAL_STATE)
@@ -13,6 +16,7 @@ export const DesktopProvider = (props: PropsWithChildren<{}>) => {
   const { children } = props
 
   const [isDesktopState, setIsDesktopState] = useState<boolean>(true)
+  const [navButtonsOpenState, setNavButtonsOpenState] = useState<boolean>(false)
 
   useEffect(() => {
     updateDimensions()
@@ -24,7 +28,7 @@ export const DesktopProvider = (props: PropsWithChildren<{}>) => {
   }, [])
   
   function updateDimensions() {
-    if(window.innerWidth > 850) {
+    if(window.innerWidth > 600) {
       setIsDesktopState(true)
     }
     else {
@@ -35,7 +39,10 @@ export const DesktopProvider = (props: PropsWithChildren<{}>) => {
   return (
     <DesktopContext.Provider 
       value={{
-        isDesktop: isDesktopState
+        isDesktop: isDesktopState,
+        setIsDesktop: setIsDesktopState,
+        navButtonsOpen: navButtonsOpenState,
+        setNavButtonsOpen: setNavButtonsOpenState
       }}
     >
       {children}
