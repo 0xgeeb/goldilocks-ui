@@ -1,3 +1,6 @@
+"use client"
+
+import { useDesktop } from "../../../providers"
 import {
   NavBarMobile,
   NavBarButtons
@@ -5,10 +8,12 @@ import {
 
 export const GoldiswapPageMobile = () => {
 
+  const { navButtonsOpen } = useDesktop()
+
   return (
     <main className="w-screen h-screen">
       <NavBarMobile />
-      <NavBarButtons />
+      { navButtonsOpen && <NavBarButtons /> }
     </main>
   )
 }

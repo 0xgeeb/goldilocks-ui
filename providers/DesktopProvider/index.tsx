@@ -28,7 +28,7 @@ export const DesktopProvider = (props: PropsWithChildren<{}>) => {
   }, [])
   
   function updateDimensions() {
-    if(window.innerWidth > 600) {
+    if(window.innerWidth > 639) {
       setIsDesktopState(true)
     }
     else {
