@@ -1,3 +1,4 @@
 export * from './goldiswapPageMobile'
 export * from './statsMobile'
 export * from './goldiswapButtonMobile'
+export * from './swapBoxMobile'

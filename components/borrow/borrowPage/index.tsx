@@ -1,8 +1,9 @@
 "use client"
 
 import { useEffect } from "react"
-import { useBorrow } from "../../../providers"
+import { useBorrow, useDesktop } from "../../../providers"
 import { useGoldiswapMath } from "../../../hooks"
+import { BorrowPageMobile } from "../../borrowMobile"
 import { 
   NavBar,
   WalletBalance,
@@ -32,6 +33,8 @@ export const BorrowPage = () => {
 
   const { floorPrice, marketPrice } = useGoldiswapMath()
 
+  const { isDesktop } = useDesktop()
+
   useEffect(() => {
     refreshBorrowInfo()
     setInfoLoading(false)
@@ -60,6 +63,7 @@ export const BorrowPage = () => {
   }
   
   return (
+    isDesktop ?
     <main className="w-screen h-screen" onClick={() => handlePopups()}>
       <NavBar />
       <div className="w-[100%] h-[85%] bg-cover bg-bottom bg-[url('/images/bg-goldiswap.png')] relative">
@@ -83,6 +87,7 @@ export const BorrowPage = () => {
         <Stats />
         <Footer />
       </div>
-    </main>
+    </main> :
+    <BorrowPageMobile />
   )
 }

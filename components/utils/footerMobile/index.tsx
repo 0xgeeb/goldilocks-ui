@@ -1,6 +1,8 @@
 export const FooterMobile = () => {
 
   return (
-    <div></div>
+    <div className="">
+
+    </div>
   )
 }

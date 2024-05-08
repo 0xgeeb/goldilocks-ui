@@ -1,8 +1,9 @@
 "use client"
 
 import { useEffect } from "react"
-import { useStake } from "../../../providers"
+import { useStake, useDesktop } from "../../../providers"
 import { useGoldiswapMath } from "../../../hooks"
+import { StakePageMobile } from "../../stakeMobile"
 import { 
   NavBar,
   WalletBalance,
@@ -32,6 +33,8 @@ export const StakePage = () => {
 
   const { floorPrice, marketPrice } = useGoldiswapMath()
 
+  const { isDesktop } = useDesktop()
+
   useEffect(() => {
     refreshStakeInfo()
     setInfoLoading(false)
@@ -60,6 +63,7 @@ export const StakePage = () => {
   }
 
   return (
+    isDesktop ?
     <main className="w-screen h-screen" onClick={() => handlePopups()}>
       <NavBar />
       <div className="w-[100%] h-[85%] bg-cover bg-bottom bg-[url('/images/bg-goldiswap.png')] relative">
@@ -83,6 +87,7 @@ export const StakePage = () => {
         <Stats />
         <Footer />
       </div>
-    </main>
+    </main> :
+    <StakePageMobile />
   )
 }
