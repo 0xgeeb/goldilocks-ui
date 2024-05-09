@@ -6,6 +6,9 @@ import { ChartMobile } from "../"
 
 export const SwapBoxMobile = () => {
 
+  const [topAmountLoading, setTopAmountLoading] = useState<boolean>(false)
+  const [bottomAmountLoading, setBottomAmountLoading] = useState<boolean>(false)
+
   const {
     chartOpen,
     txConfirming,
@@ -64,7 +67,15 @@ export const SwapBoxMobile = () => {
                 <h1 className="font-baloo font-semibold text-[6vw] ml-2">{activeToggle === "BUY" ? "HONEY" : "LOCKS"}</h1>
               </div>
               <div className="absolute h-[16%] w-[84%] top-[27%] left-[8%] border-2 border-black bg-white">
-
+                <div className="relative h-[100%] w-[100%]">
+                  {
+                    topAmountLoading ?
+                    <span className=""></span> :
+                    <input 
+                      type="text"
+                    />
+                  }
+                </div>
               </div>
             </div>
             <div className="w-[100%] h-[46%]">
@@ -73,7 +84,15 @@ export const SwapBoxMobile = () => {
                 <h1 className="font-baloo font-semibold text-[6vw] ml-2">{activeToggle === "BUY" ? "LOCKS" : "HONEY"}</h1>
               </div>
               <div className="absolute h-[16%] w-[84%] top-[73%] left-[8%] border-2 border-black bg-white">
-
+                <div className="relative h-[100%] w-[100%]">
+                  {
+                    bottomAmountLoading ?
+                    <span className=""></span> :
+                    <input 
+                      type="text"
+                    />
+                  }
+                </div>
               </div>
             </div>
           </div>
