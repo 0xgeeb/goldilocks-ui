@@ -1,8 +1,11 @@
 "use client"
 
 import { LineChart, Line, CartesianGrid, XAxis, YAxis } from "recharts"
+import { useBorrow } from "../../../providers"
 
-export const SmallChart = () => {
+export const Chart = () => {
+
+  const { setChartOpen } = useBorrow()
 
   const data = [
     {name: '4/2', uv: 400, pv: 2400, amt: 2400},
@@ -13,7 +16,7 @@ export const SmallChart = () => {
   ]
 
   return (
-    <div className="w-[100%] h-[100%] bg-[#F3AA8A] flex flex-col justify-between pl-[3%] pb-[2.5%] font-baloo text-[1vw]">
+    <div className="w-[100%] h-[100%] bg-[#F3AA8A] relative flex flex-col justify-between pl-[3%] pb-[2.5%] font-baloo text-[1vw]">
       <h1 className="font-amaticbold text-[2vw] ml-[4%]">this is chart</h1>
       <LineChart width={window.innerWidth * .365} height={window.innerHeight * .18} data={data} margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
         <Line type="natural" dataKey="uv" dot={false} stroke="#000000" />
@@ -21,6 +24,12 @@ export const SmallChart = () => {
         <XAxis dataKey="name" stroke="#000000" />
         <YAxis stroke="#000000" />
       </LineChart>
+      <p
+        className="absolute top-[-2%] right-[2%] font-baloo text-[2vw] cursor-pointer hover:scale-125"
+        onClick={() => setChartOpen(false)}
+      >
+        x
+      </p>
     </div>
   )
 }

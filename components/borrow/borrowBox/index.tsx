@@ -1,8 +1,7 @@
 "use client"
 
 import { useBorrow, useWallet } from "../../../providers"
-import { Notification } from "../../borrow"
-import { SmallChart } from "../../utils"
+import { Notification, Chart } from "../../borrow"
 
 export const BorrowBox = () => {
 
@@ -31,34 +30,34 @@ export const BorrowBox = () => {
       <div className="absolute bottom-3 right-0 w-6 skew-y-[45deg] border-b-2 border-black"></div>
       <div className={`absolute inset-6 ${txConfirming ? "" : "border-2 border-black"} bg-[#D9C6BA]`}>
         {
-          chartOpen ? <SmallChart /> :
+          chartOpen ? <Chart /> :
           txConfirming ? <img className="w-[100%] h-[100%]" src="/images/bg-transaction.png" alt="tx" /> :
           notification.toggle ? <Notification /> :
           <div className="w-[100%] h-[100%] relative flex flex-col">
             <div className="flex flex-row absolute top-0 right-0 w-[33.61%] h-[14.9%] font-baloo font-semibold border-b-2 border-l-2 border-black">
               <div 
-                className="flex flex-row items-center justify-center h-[100%] w-[25%] border-r-2 border-black bg-[#DCC2A8] hover:bg-[#F3AA8A] cursor-pointer"
+                className="flex items-center justify-center h-[100%] w-[25%] border-r-2 border-black bg-[#DCC2A8] hover:bg-[#F3AA8A] cursor-pointer"
                 onClick={() => handlePercentageButtons(1)}
               >
-                  25%
+                25%
               </div>
               <div 
-                className="flex flex-row items-center justify-center h-[100%] w-[25%] border-r-2 border-black bg-[#D5A774] hover:bg-[#F3AA8A] cursor-pointer"
+                className="flex items-center justify-center h-[100%] w-[25%] border-r-2 border-black bg-[#D5A774] hover:bg-[#F3AA8A] cursor-pointer"
                 onClick={() => handlePercentageButtons(2)}
               >
-                  50%
+                50%
               </div>
               <div 
-                className="flex flex-row items-center justify-center h-[100%] w-[25%] border-r-2 border-black bg-[#D19A5B] hover:bg-[#F3AA8A] cursor-pointer"
+                className="flex items-center justify-center h-[100%] w-[25%] border-r-2 border-black bg-[#D19A5B] hover:bg-[#F3AA8A] cursor-pointer"
                 onClick={() => handlePercentageButtons(3)}
               >
-                  75%
+                75%
               </div>
               <div 
-                className="flex flex-row items-center justify-center h-[100%] w-[25%] bg-[#CC8634] hover:bg-[#F3AA8A] cursor-pointer"
+                className="flex items-center justify-center h-[100%] w-[25%] bg-[#CC8634] hover:bg-[#F3AA8A] cursor-pointer"
                 onClick={() => handlePercentageButtons(4)}
               >
-                  MAX
+                MAX
               </div>
             </div>
             <div className="absolute flex flex-row top-[37%] left-[3%] items-center">

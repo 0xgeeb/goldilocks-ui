@@ -1,8 +1,11 @@
 "use client"
 
 import { LineChart, Line, CartesianGrid, XAxis, YAxis } from "recharts"
+import { useGoldiswap } from "../../../providers"
 
 export const Chart = () => {
+
+  const { setChartOpen } = useGoldiswap()
 
   const data = [
     {name: '4/2', uv: 400, pv: 2400, amt: 2400},
@@ -21,6 +24,12 @@ export const Chart = () => {
         <XAxis dataKey="name" stroke="#000000" />
         <YAxis stroke="#000000" />
       </LineChart>
+      <p
+        className="absolute top-0 right-[3%] font-baloo text-[2vw] cursor-pointer hover:scale-125"
+        onClick={() => setChartOpen(false)}
+      >
+        x
+      </p>
     </div>
   )
 }

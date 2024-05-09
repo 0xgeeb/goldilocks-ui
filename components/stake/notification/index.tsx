@@ -17,7 +17,7 @@ export const Notification = () => {
         <button className="w-[100%] h-[100%] font-amaticbold text-[1.2vw]">VIEW TX</button>
       </a>
       <p
-        className="absolute top-0 right-[3%] font-baloo text-[2vw] cursor-pointer hover:scale-110"
+        className="absolute top-0 right-[3%] font-baloo text-[2vw] cursor-pointer hover:scale-125"
         onClick={() => openNotification(false, '', '', '')}
       >
         x
