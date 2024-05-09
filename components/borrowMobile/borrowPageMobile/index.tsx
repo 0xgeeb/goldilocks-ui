@@ -2,6 +2,9 @@
 
 import { useBorrow, useDesktop } from "../../../providers"
 import {
+  StatsMobile
+} from "../../borrowMobile"
+import {
   NavBarMobile,
   NavBarButtons,
   FooterMobile
@@ -30,6 +33,7 @@ export const BorrowPageMobile = () => {
         >
           <span className="absolute -rotate-[90deg] right-[-21%] bottom-[35%]">THIS IS CHART</span>
         </div>
+        <StatsMobile />
         <FooterMobile />
       </div>
     </main>

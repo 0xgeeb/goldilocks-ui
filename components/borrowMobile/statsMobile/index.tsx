@@ -1,6 +1,6 @@
 import { useBorrow } from "../../../providers"
 
-export const Stats = () => {
+export const StatsMobile = () => {
 
   const {
     borrowInfo,
@@ -38,19 +38,17 @@ export const Stats = () => {
       return 'text-green-600'
     }
   }
-  
+
   return (
-    <div className="absolute flex flex-row items-center justify-between w-[45%] top-[78%] left-[27%] text-white font-baloo text-[1.1vw]">
-      <div className="flex flex-row items-center">
-        <span className="mr-2">locks supply:</span>
+    <div className="text-[3vw] absolute h-[12%] w-[40%] left-[30%] top-[75%] flex flex-row items-center justify-around text-[#D9C6BA] font-baloo font-semibold">
+      <div className="flex flex-col items-end">
+        <span>locks supply:</span>
+        <span>current fsl:</span>
+        <span>current psl:</span>
+      </div>
+      <div className="flex flex-col items-start">
         <span className={handleColors(borrowInfo.supply, borrowInfo.supply)}>{handleInfo(borrowInfo.supply)}</span>
-      </div>
-      <div className="flex flex-row items-center">
-        <span className="mr-2">current fsl:</span>
         <span className={handleColors(borrowInfo.fsl, borrowInfo.fsl)}>{handleInfo(borrowInfo.fsl)}</span>
-      </div>
-      <div className="flex flex-row items-center">
-        <span className="mr-2">current psl:</span>
         <span className={handleColors(borrowInfo.psl, borrowInfo.psl)}>{handleInfo(borrowInfo.psl)}</span>
       </div>
     </div>
