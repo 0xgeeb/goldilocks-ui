@@ -7,7 +7,8 @@ import { GoldiswapPageMobile } from "../../goldiswapMobile"
 import { 
   NavBar,
   WalletBalance,
-  Footer
+  Footer,
+  Loading
 } from "../../utils"
 import { 
   SwapBox,
@@ -83,6 +84,8 @@ export const GoldiswapPage = () => {
   }
 
   return (
+    infoLoading ?
+    <Loading /> :
     isDesktop ?
     <main className="w-screen h-screen" onClick={(e) => handlePopups(e)}>
       <NavBar />

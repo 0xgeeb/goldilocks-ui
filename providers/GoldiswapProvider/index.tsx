@@ -38,7 +38,7 @@ const INITIAL_STATE = {
   },
 
   notification: {
-    toggle: true,
+    toggle: false,
     action: '',
     result: '',
     hash: ''

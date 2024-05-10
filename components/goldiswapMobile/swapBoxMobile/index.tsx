@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { useGoldiswap, useWallet } from "../../../providers"
 import { useGoldiswapMath } from "../../../hooks/useGoldiswapMath"
-import { ChartMobile } from "../"
+import { ChartMobile, NotificationMobile} from "../"
 
 export const SwapBoxMobile = () => {
 
@@ -217,7 +217,7 @@ export const SwapBoxMobile = () => {
         {
           chartOpen ? <ChartMobile /> :
           txConfirming ? <img className="w-[100%] h-[100%]" src="/images/bg-transaction-mobile.png" alt="tx" /> :
-          // Notification.toggle ? <Notification /> :
+          notification.toggle ? <NotificationMobile /> :
           <div className="w-[100%] h-[100%] relative flex flex-col">
             <div className="w-[100%] h-[8%] flex flex-row font-baloo font-semibold border-b-2 border-black">
               <div
@@ -262,7 +262,7 @@ export const SwapBoxMobile = () => {
                     topAmountLoading ?
                     <span className="absolute top-[40%] left-[8%] loader-small"></span> : 
                     <input
-                      className="absolute top-[20%] h-[60%] left-[5%] w-[90%] focus:outline-none border-none bg-transparent font-semibold font-baloo text-[9vw]"
+                      className="absolute top-[0%] h-[100%] left-[5%] w-[90%] focus:outline-none border-none bg-transparent font-semibold font-baloo text-[8vw]"
                       type="number"
                       id="number-input"
                       placeholder="0.00"
@@ -285,7 +285,7 @@ export const SwapBoxMobile = () => {
                     bottomAmountLoading ?
                     <span className="absolute top-[40%] left-[8%] loader-small"></span> : 
                     <input
-                      className="absolute top-[20%] h-[60%] left-[5%] w-[90%] focus:outline-none border-none bg-transparent font-semibold font-baloo text-[9vw]"
+                      className="absolute top-[0%] h-[100%] left-[5%] w-[90%] focus:outline-none border-none bg-transparent font-semibold font-baloo text-[8vw]"
                       type="number"
                       id="number-input"
                       placeholder="0.00"
@@ -295,7 +295,7 @@ export const SwapBoxMobile = () => {
                   }
                 </div>
               </div>
-              <span className="absolute bottom-[1%] right-[3%] font-baloo font-bold text-[3vw] text-[#7F7F7F]">balance: {balancesLoading ? loadingElement() : handleBottomBalance()}</span>
+              <span className="absolute bottom-[1%] right-[3%] font-baloo font-bold text-[3vw] text-[#7F7F7F]" onClick={() => console.log(balancesLoading)}>balance: {balancesLoading ? loadingElement() : handleBottomBalance()}</span>
             </div>
           </div>
         }

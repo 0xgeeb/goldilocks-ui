@@ -5,7 +5,8 @@ import {
   StatsMobile,
   GoldiswapButtonMobile,
   SwapBoxMobile,
-  TogglesMobile
+  TogglesMobile,
+  WalletBalanceMobile
 } from "../../goldiswapMobile"
 import {
   NavBarMobile,
@@ -24,12 +25,6 @@ export const GoldiswapPageMobile = () => {
   const { navButtonsOpen } = useDesktop()
 
   // const { floorPrice, marketPrice } = useGoldiswapMath()
-
-  // useEffect(() => {
-  //   refreshGoldiswapInfo()
-  //   checkSlippageAmount()
-  //   setInfoLoading(false)
-  // }, [])
 
   // const formatAsTokenPrice = (num: number): string => {
   //   return num.toLocaleString('en-US', { maximumFractionDigits: 6 })
@@ -79,12 +74,12 @@ export const GoldiswapPageMobile = () => {
           <span className="text-white font-baloo mt-1">$LOCKS floor price: ${handleTokenInfo(floorPrice(goldiswapInfo.fsl, goldiswapInfo.supply))}</span>
           <span className="text-white font-baloo mt-1">$LOCKS market price: ${handleTokenInfo(marketPrice(goldiswapInfo.fsl, goldiswapInfo.psl, goldiswapInfo.supply))}</span>
         </div> */}
-        {/* <WalletBalance /> */}
+        <WalletBalanceMobile />
         {/* { slippage.toggle && <SlippagePopup /> } */}
         <SwapBoxMobile />
         <img className="absolute top-[73.2%] right-[10.5%] -rotate-[90deg] h-[1.27%] w-[8.36%]" src="/images/icon-bearoutline.png" alt="bearoutline" />
         <div 
-          className="absolute h-[12%] w-[13%] top-[67%] text-nowrap right-[0%] border-t-2 border-l-2 border-b-2 border-black bg-[#F3AA8A] font-amaticbold text-[5vw] hover:scale-110 cursor-pointer"
+          className="absolute h-[12%] w-[13%] top-[67%] text-nowrap right-[0%] border-t-2 border-l-2 border-b-2 border-black bg-[#F3AA8A] font-amaticbold text-[4.5vw] hover:scale-110 cursor-pointer"
           onClick={() => setChartOpen(!chartOpen)}
         >
           <span className="absolute -rotate-[90deg] right-[-21%] bottom-[35%]">THIS IS CHART</span>

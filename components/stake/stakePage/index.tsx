@@ -7,7 +7,8 @@ import { StakePageMobile } from "../../stakeMobile"
 import { 
   NavBar,
   WalletBalance,
-  Footer
+  Footer,
+  Loading
 } from "../../utils"
 import {
   Toggles,
@@ -63,6 +64,8 @@ export const StakePage = () => {
   }
 
   return (
+    infoLoading ?
+    <Loading /> :
     isDesktop ?
     <main className="w-screen h-screen" onClick={() => handlePopups()}>
       <NavBar />

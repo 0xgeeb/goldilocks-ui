@@ -8,7 +8,7 @@ export const TogglesMobile = () => {
   } = useGoldiswap()
 
   return (
-    <div className="absolute flex flex-col items-center justify-around h-[26.5%] w-[7.5%] top-[33.5%] left-[84.5%] font-baloo font-semibold text-[3vw]">
+    <div className="absolute flex flex-col items-center justify-around h-[26.5%] w-[7.5%] top-[33.5%] left-[84.5%] font-baloo text-[3vw]">
       <div
         className={`border-t-2 border-b-2 border-r-2 border-black w-[100%] h-[30%] ${activeToggle === 'REDEEM' ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} hover:bg-[#F3AA8A] cursor-pointer`}
         onClick={() => changeActiveToggle('REDEEM')}

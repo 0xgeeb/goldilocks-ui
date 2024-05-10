@@ -7,7 +7,8 @@ import { BorrowPageMobile } from "../../borrowMobile"
 import { 
   NavBar,
   WalletBalance,
-  Footer
+  Footer,
+  Loading
 } from "../../utils"
 import {
   BorrowBox,
@@ -63,6 +64,8 @@ export const BorrowPage = () => {
   }
   
   return (
+    infoLoading ?
+    <Loading /> :
     isDesktop ?
     <main className="w-screen h-screen" onClick={() => handlePopups()}>
       <NavBar />
