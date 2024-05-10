@@ -84,7 +84,7 @@ export const GoldiswapButtonMobile = () => {
       return
     }
     if(honeyBuy > balance.honey) {
-      button && (button.innerHTML = "insufficient balance")
+      button && (button.innerHTML = "balance too low")
       return
     }
     else {
@@ -148,7 +148,7 @@ export const GoldiswapButtonMobile = () => {
       return
     }
     if(sellingLocks > balance.locks) {
-      button && (button.innerHTML = "insufficient balance")
+      button && (button.innerHTML = "balance too low")
       return
     }
     else {
@@ -206,7 +206,7 @@ export const GoldiswapButtonMobile = () => {
       return
     }
     if(redeemingLocks > balance.locks) {
-      button && (button.innerHTML = "insufficient balance")
+      button && (button.innerHTML = "balance too low")
       return
     }
     else {
@@ -308,14 +308,14 @@ export const GoldiswapButtonMobile = () => {
       allowanceButtons &&
       <div>
         <button
-          className="absolute bg-[#E7B941] h-[8%] w-[16.6%] top-[64.8%] left-[30.9%] border-2 border-black font-amaticbold text-[1.5vw] hover:bg-[#4D0B24] hover:text-[#E7B941] hover:scale-110"
+          className="absolute bg-[#E7B941] h-[8%] w-[23%] top-[64.8%] left-[23%] border-2 border-black font-amaticbold text-[5vw] hover:bg-[#4D0B24] hover:text-[#E7B941] hover:scale-110"
           id="left-approve-button"
           onClick={() => handleLeftButtonClick()}
         >
           approve tx
         </button>
         <button
-          className="absolute bg-[#E7B941] h-[8%] w-[16.6%] top-[64.8%] left-[52.5%] border-2 border-black font-amaticbold text-[1.5vw] hover:bg-[#4D0B24] hover:text-[#E7B941] hover:scale-110"
+          className="absolute bg-[#E7B941] h-[8%] w-[23%] top-[64.8%] left-[54%] border-2 border-black font-amaticbold text-[5vw] hover:bg-[#4D0B24] hover:text-[#E7B941] hover:scale-110"
           id="right-approve-button"
           onClick={() => handleRightButtonClick()}
         >
@@ -334,7 +334,7 @@ export const GoldiswapButtonMobile = () => {
         }) => {
           return (
             <button 
-              className="absolute h-[7.3%] w-[54%] top-[64.8%] left-[23%] bg-[#E7B941] font-amaticbold flex items-center justify-center text-[7vw] border-2 border-black hover:bg-[#4D0B24] hover:text-[#E7B941] hover:scale-110"
+              className="absolute h-[8%] w-[54%] top-[64.8%] left-[23%] bg-[#E7B941] font-amaticbold flex items-center justify-center text-[9vw] border-2 border-black hover:bg-[#4D0B24] hover:text-[#E7B941] hover:scale-110"
               id="swap-button"
               onClick={() => {
                 const button = document.getElementById('swap-button')

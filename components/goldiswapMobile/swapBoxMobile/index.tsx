@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useGoldiswap, useWallet } from "../../../providers"
+import { useGoldiswapMath } from "../../../hooks/useGoldiswapMath"
 import { ChartMobile } from "../"
 
 export const SwapBoxMobile = () => {
@@ -11,11 +12,200 @@ export const SwapBoxMobile = () => {
 
   const {
     chartOpen,
-    txConfirming,
+    displayString,
+    handleTopChange,
+    bottomDisplayString,
+    activeToggle,
+    sellingLocks,
+    redeemingLocks,
+    debouncedHoneyBuy,
+    setDisplayString,
+    setBottomDisplayString,
+    setHoneyBuy,
+    setSellingLocks,
+    setRedeemingLocks,
     flipTokens,
+    findLocksBuyAmount,
+    simulateBuy,
+    simulateSell,
+    simulateRedeem,
+    goldiswapInfo,
+    infoLoading,
+    handleTopBalance,
+    handleBottomBalance,
+    slippage,
     handlePercentageButtons,
-    activeToggle
+    setSimInfo,
+    txConfirming,
+    notification,
+    setGettingHoney,
+    setRedeemingHoney,
+    changeSlippageToggle,
+    topInputFlag,
+    bottomInputFlag,
+    setTopInputFlag,
+    setBottomInputFlag,
+    buyingLocks,
+    debouncedGettingHoney,
+    findLocksSellAmount,
+    setBuyingLocks,
+    redeemingHoney,
+    handleBottomChange
   } = useGoldiswap()
+
+  const { balancesLoading } = useWallet()
+
+  const { 
+    floorPrice,
+    simulateBuyDry,
+    simulateSellDry
+  } = useGoldiswapMath()
+
+  const resetInfo = () => {
+    setDisplayString('')
+    setBottomDisplayString('')
+    setHoneyBuy(0)
+    setBuyingLocks(0)
+    setGettingHoney(0)
+    setSellingLocks(0)
+    setRedeemingHoney(0)
+    setRedeemingLocks(0)
+    setTopAmountLoading(false)
+    setBottomAmountLoading(false)
+    setSimInfo(false, goldiswapInfo.fsl, goldiswapInfo.psl, goldiswapInfo.supply)
+  }
+
+  const loadingElement = () => {
+    return <span className="loader-small ml-3"></span>
+  }
+
+  const formatAsPercentage = Intl.NumberFormat('default', {
+    style: 'percent',
+    maximumFractionDigits: 2
+  })
+
+  const handleRatioInfo = (num: number) => {
+    if(infoLoading) {
+      return "-"
+    }
+    else if(num > 0) {
+      return formatAsPercentage.format(num)
+    }
+    else {
+      return "-"
+    }
+  }
+
+  const loadedLocks = async (dhb: number) => {
+    setBottomAmountLoading(true)
+    setTimeout(() => {
+      const locksAmount: number = findLocksBuyAmount(dhb)
+      simulateBuy(locksAmount)
+      setBottomAmountLoading(false)
+    }, 500)
+  }
+
+  //todo: this affects the honey not the locks as users assume
+  useEffect(() => {
+    if(activeToggle === 'BUY') {
+      if(debouncedHoneyBuy > 0) {
+        loadedLocks(debouncedHoneyBuy)
+      }
+    }
+    else if(activeToggle === 'SELL') {
+      setGettingHoney(simulateSellDry(sellingLocks, goldiswapInfo.fsl, goldiswapInfo.psl, goldiswapInfo.supply) * (1 - (slippage.amount / 100)))
+      setBottomDisplayString((simulateSellDry(sellingLocks, goldiswapInfo.fsl, goldiswapInfo.psl, goldiswapInfo.supply) * (1 - (slippage.amount / 100))).toFixed(4))
+    }
+  }, [slippage.amount])
+
+  useEffect(() => {
+    if(!bottomInputFlag) {
+      if(!debouncedHoneyBuy) {
+        resetInfo()
+      }
+      else {
+        setTopInputFlag(true)
+        loadedLocks(debouncedHoneyBuy)
+      }
+    }
+  }, [debouncedHoneyBuy])
+
+  useEffect(() => {
+    if(!topInputFlag) {
+      const locksWithSlippage: number = buyingLocks * (1 + (slippage.amount / 100))
+      if(!buyingLocks) {
+        resetInfo()
+      }
+      else {
+        setBottomInputFlag(true)
+        !slippage.toggle && setDisplayString(simulateBuyDry(locksWithSlippage, goldiswapInfo.fsl, goldiswapInfo.psl, goldiswapInfo.supply).toFixed(4))
+        !slippage.toggle && setHoneyBuy(simulateBuyDry(locksWithSlippage, goldiswapInfo.fsl, goldiswapInfo.psl, goldiswapInfo.supply))
+        simulateBuy(locksWithSlippage)
+      }
+    }
+  }, [buyingLocks])
+
+  useEffect(() => {
+    if(!bottomInputFlag) {
+      if(!sellingLocks) {
+        resetInfo()
+      }
+      else {
+        setTopInputFlag(true)
+        simulateSell(sellingLocks)
+        setGettingHoney(simulateSellDry(sellingLocks, goldiswapInfo.fsl, goldiswapInfo.psl, goldiswapInfo.supply) * (1 - (slippage.amount / 100)))
+        setBottomDisplayString((simulateSellDry(sellingLocks, goldiswapInfo.fsl, goldiswapInfo.psl, goldiswapInfo.supply) * (1 - (slippage.amount / 100))).toFixed(4))
+      }
+    }
+  }, [sellingLocks])
+
+  useEffect(() => {
+    if(!topInputFlag) {
+      if(!debouncedGettingHoney) {
+        resetInfo()
+      }
+      else {
+        setBottomInputFlag(true)
+        setTopAmountLoading(true)
+        setTimeout(() => {
+          const locksAmountWithSlippage: number = findLocksSellAmount(debouncedGettingHoney) * (1 + (slippage.amount / 100))
+          const locksAmount: number = locksAmountWithSlippage
+          !slippage.toggle && setDisplayString(locksAmount.toFixed(4))
+          !slippage.toggle && setSellingLocks(locksAmount)
+          simulateSell(locksAmount)
+          setTopAmountLoading(false)
+        }, 500)
+      }
+    }
+  }, [debouncedGettingHoney])
+
+  useEffect(() => {
+    if(!bottomInputFlag) {
+      if(!redeemingLocks) {
+        resetInfo()
+      }
+      else {
+        setTopInputFlag(true)
+        simulateRedeem(redeemingLocks)
+        setBottomDisplayString((redeemingLocks * floorPrice(goldiswapInfo.fsl, goldiswapInfo.supply)).toFixed(4))
+        setRedeemingHoney(redeemingLocks * floorPrice(goldiswapInfo.fsl, goldiswapInfo.supply))
+      }
+    }
+  }, [redeemingLocks])
+
+  useEffect(() => {
+    if(!topInputFlag) {
+      if(!redeemingHoney) {
+        resetInfo()
+      }
+      else {
+        setBottomInputFlag(true)
+        simulateRedeem(redeemingHoney / (goldiswapInfo.fsl / goldiswapInfo.supply))
+        setDisplayString((redeemingHoney / (goldiswapInfo.fsl / goldiswapInfo.supply)).toFixed(4))
+        setRedeemingLocks(redeemingHoney / (goldiswapInfo.fsl / goldiswapInfo.supply))
+      }
+    }
+  }, [redeemingHoney])
 
   return (
     <div className="absolute top-[4.6%] left-[15.5%] w-[69%] h-[55%] border-2 border-black bg-[#EEDCD2]">
@@ -23,10 +213,10 @@ export const SwapBoxMobile = () => {
       <div className="absolute bottom-3 left-0 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
       <div className="absolute top-3 right-0 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
       <div className="absolute bottom-3 right-0 w-6 skew-y-[45deg] border-b-2 border-black"></div>
-      <div className="absolute inset-3 border-2 border-black bg-[#D9C6BA]">
+      <div className={`absolute inset-3 ${txConfirming ? "" : "border-2 border-black"} bg-[#D9C6BA]`}>
         {
           chartOpen ? <ChartMobile /> :
-          txConfirming ? <img src="" alt="" /> :
+          txConfirming ? <img className="w-[100%] h-[100%]" src="/images/bg-transaction-mobile.png" alt="tx" /> :
           // Notification.toggle ? <Notification /> :
           <div className="w-[100%] h-[100%] relative flex flex-col">
             <div className="w-[100%] h-[8%] flex flex-row font-baloo font-semibold border-b-2 border-black">
@@ -70,13 +260,19 @@ export const SwapBoxMobile = () => {
                 <div className="relative h-[100%] w-[100%]">
                   {
                     topAmountLoading ?
-                    <span className=""></span> :
-                    <input 
-                      type="text"
+                    <span className="absolute top-[40%] left-[8%] loader-small"></span> : 
+                    <input
+                      className="absolute top-[20%] h-[60%] left-[5%] w-[90%] focus:outline-none border-none bg-transparent font-semibold font-baloo text-[9vw]"
+                      type="number"
+                      id="number-input"
+                      placeholder="0.00"
+                      value={displayString}
+                      onChange={(e) => handleTopChange(e.target.value)}
                     />
                   }
                 </div>
               </div>
+              <span className="absolute bottom-[47%] right-[3%] font-baloo font-bold text-[3vw] text-[#7F7F7F]">balance: {balancesLoading ? loadingElement() : handleTopBalance()}</span>
             </div>
             <div className="w-[100%] h-[46%]">
               <div className="absolute flex flex-row items-center top-[61%] left-[8%]">
@@ -87,13 +283,19 @@ export const SwapBoxMobile = () => {
                 <div className="relative h-[100%] w-[100%]">
                   {
                     bottomAmountLoading ?
-                    <span className=""></span> :
-                    <input 
-                      type="text"
+                    <span className="absolute top-[40%] left-[8%] loader-small"></span> : 
+                    <input
+                      className="absolute top-[20%] h-[60%] left-[5%] w-[90%] focus:outline-none border-none bg-transparent font-semibold font-baloo text-[9vw]"
+                      type="number"
+                      id="number-input"
+                      placeholder="0.00"
+                      value={bottomDisplayString}
+                      onChange={(e) => handleBottomChange(e.target.value)}
                     />
                   }
                 </div>
               </div>
+              <span className="absolute bottom-[1%] right-[3%] font-baloo font-bold text-[3vw] text-[#7F7F7F]">balance: {balancesLoading ? loadingElement() : handleBottomBalance()}</span>
             </div>
           </div>
         }
