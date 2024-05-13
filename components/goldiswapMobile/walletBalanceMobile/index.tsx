@@ -40,8 +40,8 @@ export const WalletBalanceMobile = () => {
   }
 
   return (
-    <div className="">
-
+    <div className="absolute w-[7.4%] h-[16.2%] top-[12%] left-[84.5%] border-t-2 border-b-2 border-r-2 border-black bg-[#D5A774]">
+      <span className="absolute -rotate-[90deg] text-nowrap text-[3vw] bottom-[41.5%] left-[-130%]">WALLET BALANCE</span>
     </div>
   )
 }
