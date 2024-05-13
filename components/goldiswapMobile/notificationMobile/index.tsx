@@ -12,12 +12,12 @@ export const NotificationMobile = () => {
       <a 
         href={`https://artio.beratrail.io/tx/${notification.hash}`}
         target="_blank"
-        className="h-[11%] w-[50%] mt-[20%] bg-[#E7B941] hover:scale-110 border-2 border-black"
+        className="h-[11%] w-[50%] mt-[20%] bg-[#E7B941] focus:scale-110 border-2 border-black"
       >
         <button className="w-[100%] h-[100%] font-amaticbold text-[5vw]">VIEW TX</button>
       </a>
       <p
-        className="absolute top-[-1%] right-[3%] font-baloo text-[7vw] cursor-pointer hover:scale-125"
+        className="absolute top-[-1%] right-[3%] font-baloo text-[7vw] cursor-pointer focus:scale-125"
         onClick={() => openNotification(false, '', '', '')}
       >
         x
