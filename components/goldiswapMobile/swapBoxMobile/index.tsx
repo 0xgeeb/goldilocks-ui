@@ -3,7 +3,11 @@
 import { useState, useEffect } from "react"
 import { useGoldiswap, useWallet } from "../../../providers"
 import { useGoldiswapMath } from "../../../hooks/useGoldiswapMath"
-import { ChartMobile, NotificationMobile} from "../"
+import {
+  ChartMobile,
+  NotificationMobile,
+  WalletBalanceMobilePopup
+} from "../"
 
 export const SwapBoxMobile = () => {
 
@@ -50,7 +54,8 @@ export const SwapBoxMobile = () => {
     findLocksSellAmount,
     setBuyingLocks,
     redeemingHoney,
-    handleBottomChange
+    handleBottomChange,
+    balanceMobileToggle
   } = useGoldiswap()
 
   const { balancesLoading } = useWallet()
@@ -213,11 +218,18 @@ export const SwapBoxMobile = () => {
       <div className="absolute bottom-3 left-0 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
       <div className="absolute top-3 right-0 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
       <div className="absolute bottom-3 right-0 w-6 skew-y-[45deg] border-b-2 border-black"></div>
+      <span className="z-10 absolute top-[0%] right-[6%] text-[2.2vw] font-baloo font-semibold">
+        **0.3% fee on all buys**
+      </span>
+      <span className="z-10 absolute bottom-[-0.2%] left-[6%] text-[2.2vw] font-baloo font-semibold">
+        target ratio: {handleRatioInfo(goldiswapInfo.targetRatio)}
+      </span>
       <div className={`absolute inset-3 ${txConfirming ? "" : "border-2 border-black"} bg-[#D9C6BA]`}>
         {
           chartOpen ? <ChartMobile /> :
           txConfirming ? <img className="w-[100%] h-[100%]" src="/images/bg-transaction-mobile.png" alt="tx" /> :
           notification.toggle ? <NotificationMobile /> :
+          balanceMobileToggle ? <WalletBalanceMobilePopup /> :
           <div className="w-[100%] h-[100%] relative flex flex-col">
             <div className="w-[100%] h-[8%] flex flex-row font-baloo font-semibold border-b-2 border-black">
               <div

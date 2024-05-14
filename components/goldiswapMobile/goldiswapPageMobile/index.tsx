@@ -1,12 +1,14 @@
 "use client"
 
 import { useGoldiswap, useDesktop } from "../../../providers"
+import { useGoldiswapMath } from "../../../hooks"
 import {
   StatsMobile,
   GoldiswapButtonMobile,
   SwapBoxMobile,
   TogglesMobile,
-  WalletBalanceMobile
+  WalletBalanceMobile,
+  SlippagePopupMobile
 } from "../../goldiswapMobile"
 import {
   NavBarMobile,
@@ -19,49 +21,52 @@ export const GoldiswapPageMobile = () => {
   const {
     chartOpen,
     setChartOpen,
-    activeToggle
+    activeToggle,
+    infoLoading,
+    goldiswapInfo,
+    changeSlippageToggle,
+    slippage
   } = useGoldiswap()
 
   const { navButtonsOpen } = useDesktop()
 
-  // const { floorPrice, marketPrice } = useGoldiswapMath()
+  const { floorPrice, marketPrice } = useGoldiswapMath()
 
-  // const formatAsTokenPrice = (num: number): string => {
-  //   return num.toLocaleString('en-US', { maximumFractionDigits: 6 })
-  // }
+  const formatAsTokenPrice = (num: number): string => {
+    return num.toLocaleString('en-US', { maximumFractionDigits: 6 })
+  }
 
-  // const handleTokenInfo = (num: number) => {
-  //   if(infoLoading) {
-  //     return "-"
-  //   }
-  //   else if(num > 0) {
-  //     return formatAsTokenPrice(num)
-  //   }
-  //   else {
-  //     return "-"
-  //   }
-  // }
+  const handleTokenInfo = (num: number) => {
+    if(infoLoading) {
+      return "-"
+    }
+    else if(num > 0) {
+      return formatAsTokenPrice(num)
+    }
+    else {
+      return "-"
+    }
+  }
 
-  // const insideSlippage = (e: any): boolean => {
-  //   const slipLeft = 0.45
-  //   const slipRight = 0.64
+  const insideSlippage = (e: any): boolean => {
+    const slipLeft = 0.33
+    const slipRight = 0.93
+    const slipUp = 0.32
+    const slipDown = 0.54
 
-  //   if(e.clientX > (window.innerWidth * slipLeft) && e.clientX < (window.innerWidth * slipRight) && e.clientY > (window.innerHeight * 0.32) && e.clientY < (window.innerHeight * 0.54)) {
-  //     return true
-  //   }
-  //   else {
-  //     return false
-  //   }
-  // }
+    if(e.clientX > (window.innerWidth * slipLeft) && e.clientX < (window.innerWidth * slipRight) && e.clientY > (window.innerHeight * slipUp) && e.clientY < (window.innerHeight * slipDown)) {
+      return true
+    }
+    else {
+      return false
+    }
+  }
 
-  // const handlePopups = (e: any) => {
-  //   if(slippage.toggle && !insideSlippage(e)) {
-  //     changeSlippageToggle(false)
-  //   }
-  //   if(redeemPopupToggle) {
-  //     setRedeemPopupToggle(false)
-  //   }
-  // }
+  const handlePopups = (e: any) => {
+    if(slippage.toggle && !insideSlippage(e)) {
+      changeSlippageToggle(false)
+    }
+  }
 
   return (
     <main className="w-screen h-screen">
@@ -70,12 +75,25 @@ export const GoldiswapPageMobile = () => {
       <div className="w-[100%] h-[89%] relative bg-cover bg-[url('/images/bg-goldiswap-mobile.png')]">
         <TogglesMobile />
         <h1 className="absolute top-[-0.25%] right-[69%] text-[#D9C6BA] text-[7vw] font-amaticbold" id="page-title">{activeToggle === 'REDEEM' ? "REDEEM" : "SWAP"}</h1>
-        {/* <div className="absolute top-[9.387%] left-[28.125%] w-[43.75%] h-[2.78%] bg-[#4D0B24] flex flex-row items-center justify-between px-2">
-          <span className="text-white font-baloo mt-1">$LOCKS floor price: ${handleTokenInfo(floorPrice(goldiswapInfo.fsl, goldiswapInfo.supply))}</span>
-          <span className="text-white font-baloo mt-1">$LOCKS market price: ${handleTokenInfo(marketPrice(goldiswapInfo.fsl, goldiswapInfo.psl, goldiswapInfo.supply))}</span>
-        </div> */}
+        {/* todo: put origin-bottom-left on all rotated divs */}
+        <div className="absolute bottom-[40.4%] left-[15.6%] w-[106%] h-[2.3%] bg-[#4D0B24] origin-bottom-left -rotate-[90deg] text-[2.7vw] font-baloo text-white font-semibold flex flex-row items-center justify-between px-2">
+          <div className="h-[100%] w-[40%] flex flex-row items-center justify-between">
+            <span>$LOCKS floor price:</span>
+            <span>${handleTokenInfo(floorPrice(goldiswapInfo.fsl, goldiswapInfo.supply))}</span>
+          </div>
+          <div className="h-[100%] w-[40%] flex flex-row items-center justify-between">
+            <span>$LOCKS market price:</span>
+            <span>${handleTokenInfo(marketPrice(goldiswapInfo.fsl, goldiswapInfo.psl, goldiswapInfo.supply))}</span>
+          </div>
+        </div>
         <WalletBalanceMobile />
-        {/* { slippage.toggle && <SlippagePopup /> } */}
+        <img
+          className="absolute h-5 w-5 top-[6%] right-[9%]"
+          src="/images/icon-settings-mobile.png"
+          alt="settings"
+          onClick={() => changeSlippageToggle(true)}
+        />
+        { slippage.toggle && <SlippagePopupMobile /> }
         <SwapBoxMobile />
         <img className="absolute top-[73.2%] right-[10.5%] -rotate-[90deg] h-[1.27%] w-[8.36%]" src="/images/icon-bearoutline.png" alt="bearoutline" />
         <div 
