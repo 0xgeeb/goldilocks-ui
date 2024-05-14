@@ -41,6 +41,7 @@ export const StatsMobile = () => {
   }
 
   return (
+    //todo: doesnt look good on smaller phones
     <div className="text-[3vw] absolute h-[12%] w-[40%] left-[30%] top-[75%] flex flex-row items-center justify-around text-[#D9C6BA] font-baloo font-semibold">
       <div className="flex flex-col items-end">
         <span>locks supply:</span>

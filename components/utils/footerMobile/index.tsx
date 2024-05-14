@@ -1,6 +1,7 @@
 export const FooterMobile = () => {
 
   return (
+    //todo: doesnt look good on smaller phones
     <div className="absolute top-[88%] left-[20%] h-[9%] w-[65%] flex flex-col items-center justify-around">
       <div className="w-[70%] flex flex-row items-center justify-between">
         <span className="text-[6vw] font-amaticbold text-[#D9C6BA]">ooga booga</span>
