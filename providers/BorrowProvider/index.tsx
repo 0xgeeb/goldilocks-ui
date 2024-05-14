@@ -2,7 +2,7 @@
 
 import { PropsWithChildren, createContext, useContext, useState } from "react"
 import { readContract } from "@wagmi/core"
-import { fallback, formatEther } from "viem"
+import { formatEther } from "viem"
 import { useWallet } from "../../providers"
 import { config } from "../../providers/WagmiProvider"
 import { contracts } from "../../utils/addressi"
@@ -60,7 +60,10 @@ const INITIAL_STATE = {
   refreshBorrowInfo: async () => {},
   
   txConfirming: false,
-  setTxConfirming: (_confirming: boolean) => {}
+  setTxConfirming: (_confirming: boolean) => {},
+
+  balanceMobileToggle: false,
+  setBalanceMobileToggle: (_toggle: boolean) => {}
 }
 
 const BorrowContext = createContext(INITIAL_STATE)
@@ -86,6 +89,7 @@ export const BorrowProvider = (props: PropsWithChildren<{}>) => {
   const [chartOpenState, setChartOpenState] = useState<boolean>(INITIAL_STATE.chartOpen)
   const [infoLoadingState, setInfoLoadingState] = useState<boolean>(INITIAL_STATE.infoLoading)
   const [txConfirmingState, setTxConfirmingState] = useState<boolean>(INITIAL_STATE.txConfirming)
+  const [balanceMobileToggleState, setBalanceMobileToggleState] = useState<boolean>(INITIAL_STATE.balanceMobileToggle)
 
   const [allowanceButtonsState, setAllowanceButtonsState] = useState<boolean>(INITIAL_STATE.allowanceButtons)
 
@@ -244,7 +248,9 @@ export const BorrowProvider = (props: PropsWithChildren<{}>) => {
         openNotification,
         allowanceButtons: allowanceButtonsState,
         setAllowanceButtons: setAllowanceButtonsState,
-        updateAllowance
+        updateAllowance,
+        balanceMobileToggle: balanceMobileToggleState,
+        setBalanceMobileToggle: setBalanceMobileToggleState
       }}
     >
       { children }

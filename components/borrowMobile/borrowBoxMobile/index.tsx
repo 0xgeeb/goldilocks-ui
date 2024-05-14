@@ -1,7 +1,11 @@
 "use client"
 
 import { useBorrow, useWallet } from "../../../providers"
-import { WalletBalanceMobilePopup } from "@/components/goldiswapMobile"
+import { ChartSmallMobile } from "../../utils"
+import { 
+  WalletBalanceMobilePopup,
+  NotificationMobile
+} from "../../borrowMobile"
 
 export const BorrowBoxMobile = () => {
 
@@ -14,6 +18,7 @@ export const BorrowBoxMobile = () => {
     handleBalance,
     txConfirming,
     notification,
+    balanceMobileToggle
   } = useBorrow()
 
   const { balancesLoading } = useWallet()
@@ -30,10 +35,10 @@ export const BorrowBoxMobile = () => {
       <div className="absolute bottom-3 right-0 w-6 skew-y-[45deg] border-b-2 border-black"></div>
       <div className={`absolute inset-3 ${txConfirming ? "" : "border-2 border-black"} bg-[#D9C6BA]`}>
         {
-          chartOpen ? <div></div> :
+          chartOpen ? <ChartSmallMobile /> :
           txConfirming ? <img className="w-[100%] h-[100%]" src="/images/bg-transaction-mobile-small.png" alt="tx" /> :
-          notification.toggle ? <div></div> :
-          true ? <WalletBalanceMobilePopup /> :
+          notification.toggle ? <NotificationMobile /> :
+          balanceMobileToggle ? <WalletBalanceMobilePopup /> :
           <div className="w-[100%] h-[100%] relative flex flex-col">
             <div className="w-[100%] h-[13%] flex flex-row font-baloo font-semibold border-b-2 border-black">
               <div
