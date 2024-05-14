@@ -117,7 +117,10 @@ const INITIAL_STATE = {
   setInfoLoading: (_loading: boolean) => {},
 
   txConfirming: false,
-  setTxConfirming: (_confirming: boolean) => {}
+  setTxConfirming: (_confirming: boolean) => {},
+
+  balanceMobileToggle: false,
+  setBalanceMobileToggle: (_toggle: boolean) => {}
 }
 
 const GoldiswapContext = createContext(INITIAL_STATE)
@@ -154,6 +157,7 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
   const [chartOpenState, setChartOpenState] = useState<boolean>(INITIAL_STATE.chartOpen)
   const [infoLoadingState, setInfoLoadingState] = useState<boolean>(INITIAL_STATE.infoLoading)
   const [txConfirmingState, setTxConfirmingState] = useState<boolean>(INITIAL_STATE.txConfirming)
+  const [balanceMobileToggleState, setBalanceMobileToggleState] = useState<boolean>(INITIAL_STATE.balanceMobileToggle)
 
   const [redeemPopupToggleState, setRedeemPopupToggleState] = useState<boolean>(INITIAL_STATE.redeemPopupToggle)
 
@@ -720,7 +724,9 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
         bottomInputFlag: bottomInputFlagState,
         setBottomInputFlag: setBottomInputFlagState,
         handleBottomChange,
-        debouncedGettingHoney: debouncedGettingHoneyState
+        debouncedGettingHoney: debouncedGettingHoneyState,
+        balanceMobileToggle: balanceMobileToggleState,
+        setBalanceMobileToggle: setBalanceMobileToggleState
       }}
     >
       { children }
