@@ -65,7 +65,10 @@ const INITIAL_STATE = {
   refreshStakeInfo: async () => {},
 
   txConfirming: false,
-  setTxConfirming: (_confirming: boolean) => {}
+  setTxConfirming: (_confirming: boolean) => {},
+
+  balanceMobileToggle: false,
+  setBalanceMobileToggle: (_toggle: boolean) => {}
 }
 
 const StakeContext = createContext(INITIAL_STATE)
@@ -92,6 +95,7 @@ export const StakeProvider = (props: PropsWithChildren<{}>) => {
   const [chartOpenState, setChartOpenState] = useState<boolean>(INITIAL_STATE.chartOpen)
   const [infoLoadingState, setInfoLoadingState] = useState<boolean>(INITIAL_STATE.infoLoading)
   const [txConfirmingState, setTxConfirmingState] = useState<boolean>(INITIAL_STATE.txConfirming)
+  const [balanceMobileToggleState, setBalanceMobileToggleState] = useState<boolean>(INITIAL_STATE.balanceMobileToggle)
 
   const [allowanceButtonsState, setAllowanceButtonsState] = useState<boolean>(INITIAL_STATE.allowanceButtons)
 
@@ -311,7 +315,9 @@ export const StakeProvider = (props: PropsWithChildren<{}>) => {
         handleBalanceLabel,
         allowanceButtons: allowanceButtonsState,
         setAllowanceButtons: setAllowanceButtonsState,
-        updateAllowance
+        updateAllowance,
+        balanceMobileToggle: balanceMobileToggleState,
+        setBalanceMobileToggle: setBalanceMobileToggleState
       }}
     >
       { children }
