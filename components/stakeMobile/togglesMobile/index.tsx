@@ -8,31 +8,31 @@ export const TogglesMobile = () => {
   } = useStake()
 
   return (
-    <>
+    <div className="absolute h-[3.9%] w-[26.7vh] border-r-2 border-l-2 border-b-2 border-black origin-top-left top-[4.6%] left-[15.5%] rotate-[90deg] bg-[#D9C6BA] flex flex-row font-baloo text-[2.5vw]">
       <div
-        className={`absolute w-[13.9%] h-[3.9%] top-[8.1%] left-[15.7%] border-l-2 border-r-2 border-t-2 border-black origin-bottom-left -rotate-[90deg] ${activeToggle === 'CLAIM' ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} focus:bg-[#F3AA8A] cursor-pointer font-baloo text-[2.8vw] flex items-center justify-center`}
+        className={`w-[25%] h-[100%] border-r-2 border-black ${activeToggle === 'CLAIM' ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} focus:bg-[#F3AA8A] cursor-pointer flex items-center justify-center`}
         onClick={() => changeActiveToggle('CLAIM')}
       >
-        CLAIM
+        <span className="scale-[-1]">CLAIM</span>
       </div>
       <div
-        className={`absolute w-[13.9%] h-[3.9%] top-[15.56%] left-[15.7%] border-l-2 border-t-2 border-black origin-bottom-left -rotate-[90deg] ${activeToggle === 'STIR' ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} focus:bg-[#F3AA8A] cursor-pointer font-baloo text-[2.8vw] flex items-center justify-center`}
+        className={`w-[25%] h-[100%] border-r-2 border-black ${activeToggle === 'STIR' ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} focus:bg-[#F3AA8A] cursor-pointer flex items-center justify-center`}
         onClick={() => changeActiveToggle('STIR')}
       >
-        STIR
+        <span className="scale-[-1]">STIR</span>
       </div>
       <div
-        className={`absolute w-[13.9%] h-[3.9%] top-[22.96%] left-[15.7%] border-l-2 border-t-2 border-black origin-bottom-left -rotate-[90deg] ${activeToggle === 'UNSTAKE' ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} focus:bg-[#F3AA8A] cursor-pointer font-baloo text-[2.8vw] flex items-center justify-center`}
+        className={`w-[25%] h-[100%] border-r-2 border-black ${activeToggle === 'UNSTAKE' ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} focus:bg-[#F3AA8A] cursor-pointer flex items-center justify-center`}
         onClick={() => changeActiveToggle('UNSTAKE')}
       >
-        UNSTAKE
+        <span className="scale-[-1]">UNSTAKE</span>
       </div>
       <div
-        className={`absolute w-[13.9%] h-[3.9%] top-[30.36%] left-[15.7%] border-l-2 border-t-2 border-black origin-bottom-left -rotate-[90deg] ${activeToggle === 'STAKE' ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} focus:bg-[#F3AA8A] cursor-pointer font-baloo text-[2.8vw] flex items-center justify-center`}
+        className={`w-[25%] h-[100%] border-r-2 border-black ${activeToggle === 'STAKE' ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} focus:bg-[#F3AA8A] cursor-pointer flex items-center justify-center`}
         onClick={() => changeActiveToggle('STAKE')}
       >
-        STAKE
+        <span className="scale-[-1]">STAKE</span>
       </div>
-    </>
+    </div>
   )
 }

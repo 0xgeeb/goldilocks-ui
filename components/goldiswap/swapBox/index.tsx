@@ -213,19 +213,14 @@ export const SwapBox = () => {
       <div className="absolute bottom-3 left-0 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
       <div className="absolute top-3 right-0 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
       <div className="absolute bottom-3 right-0 w-6 skew-y-[45deg] border-b-2 border-black"></div>
-      <span className="absolute bottom-[23%] left-[-7.5%] -rotate-[90deg] text-[0.8vw] font-baloo font-semibold">**0.3% fee on all buys**</span>
-      <span 
-        className="absolute top-[13%] right-[2.9%] transform -translate-y-1/2 -rotate-[90deg] text-[0.8vw] font-baloo font-semibold"
-        style={{ transformOrigin: 'top right' }}
-      >
-        target ratio: {handleRatioInfo(goldiswapInfo.targetRatio)}
-      </span>
       <div className={`absolute inset-6 ${txConfirming ? "" : "border-2 border-black"} bg-[#D9C6BA]`}>
         {
           chartOpen ? <Chart /> :
           txConfirming ? <img className="w-[100%] h-[100%]" src="/images/bg-transaction.png" alt="tx" /> :
           notification.toggle ? <Notification /> :
           <div className="w-[100%] h-[100%] relative flex flex-col">
+            <span className="absolute top-[1%] right-[-0.4%] origin-top-right -rotate-[90deg] text-[0.7vw] font-baloo font-semibold">target ratio: {handleRatioInfo(goldiswapInfo.targetRatio)}</span>
+            <span className="absolute bottom-[1%] left-[-0.2%] origin-bottom-left -rotate-[90deg] text-[0.7vw] font-baloo font-semibold">**0.3% fee on all buys**</span>
             <div className="flex flex-row absolute top-0 right-0 w-[33.61%] h-[10%] font-baloo font-semibold border-b-2 border-l-2 border-black">
               <div 
                 className="flex items-center justify-center h-[100%] w-[25%] border-r-2 border-black bg-[#DCC2A8] hover:bg-[#F3AA8A] cursor-pointer"

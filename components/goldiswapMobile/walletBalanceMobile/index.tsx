@@ -15,7 +15,7 @@ export const WalletBalanceMobile = () => {
 
   return (
     <div
-      className="absolute -rotate-[90deg] text-[3vw] w-[31.9%] h-[3.7%] top-[18%] right-[-3.8%] border-l-2 border-b-2 border-r-2 border-black bg-[#D5A774] flex items-center justify-center"
+      className="absolute origin-top-right -rotate-[90deg] text-[3vw] w-[31.9%] h-[3.9%] top-[12%] right-[15.5%] border-l-2 border-b-2 border-r-2 border-black bg-[#D5A774] flex items-center justify-center"
       onClick={() => setBalanceMobileToggle(!balanceMobileToggle)}
     >
       <span className="">WALLET BALANCE</span>

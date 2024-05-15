@@ -40,7 +40,7 @@ export const StatsMobile = () => {
   }
 
   return (
-    <div className="text-[3vw] absolute h-[12%] w-[80%] left-[10%] top-[75%] flex flex-row items-center justify-center text-[#D9C6BA] font-baloo font-semibold">
+    <div className="text-[3vw] absolute h-[12%] w-[80%] left-[10%] top-[50%] flex flex-row items-center justify-center text-[#D9C6BA] font-baloo font-semibold">
       <div className="flex flex-col items-end">
         <span>locks supply:</span>
         <span>current fsl:</span>

@@ -75,13 +75,12 @@ export const GoldiswapPageMobile = () => {
       <div className="w-[100%] h-[89%] relative bg-cover bg-[url('/images/bg-goldiswap-mobile.png')]">
         <TogglesMobile />
         <h1 className="absolute top-[-0.25%] right-[69%] text-[#D9C6BA] text-[7vw] font-amaticbold" id="page-title">{activeToggle === 'REDEEM' ? "REDEEM" : "SWAP"}</h1>
-        {/* todo: put origin-bottom-left on all rotated divs */}
-        <div className="absolute bottom-[40.4%] left-[15.6%] w-[106%] h-[2.3%] bg-[#4D0B24] origin-bottom-left -rotate-[90deg] text-[2.7vw] font-baloo text-white font-semibold flex flex-row items-center justify-between px-2">
-          <div className="h-[100%] w-[40%] flex flex-row items-center justify-between">
+        <div className="absolute bottom-[40.4%] left-[15.5%] w-[48.95vh] h-[2.3%] bg-[#4D0B24] origin-bottom-left -rotate-[90deg] text-[2.4vw] font-baloo text-white font-semibold flex flex-row items-center justify-between px-2">
+          <div className="h-[100%] w-[43%] flex flex-row items-center justify-between">
             <span>$LOCKS floor price:</span>
             <span>${handleTokenInfo(floorPrice(goldiswapInfo.fsl, goldiswapInfo.supply))}</span>
           </div>
-          <div className="h-[100%] w-[40%] flex flex-row items-center justify-between">
+          <div className="h-[100%] w-[43%] flex flex-row items-center justify-between">
             <span>$LOCKS market price:</span>
             <span>${handleTokenInfo(marketPrice(goldiswapInfo.fsl, goldiswapInfo.psl, goldiswapInfo.supply))}</span>
           </div>
@@ -95,12 +94,12 @@ export const GoldiswapPageMobile = () => {
         />
         { slippage.toggle && <SlippagePopupMobile /> }
         <SwapBoxMobile />
-        <img className="absolute top-[73.2%] right-[10.5%] -rotate-[90deg] h-[1.27%] w-[8.36%]" src="/images/icon-bearoutline.png" alt="bearoutline" />
+        <img className="absolute bottom-[26%] right-[11.8%] origin-bottom-right -rotate-[90deg] h-[1.27%] w-[8.36%]" src="/images/icon-bearoutline.png" alt="bearoutline" />
         <div 
-          className="absolute h-[12%] w-[13%] top-[67%] text-nowrap right-[0%] border-t-2 border-l-2 border-b-2 border-black bg-[#F3AA8A] font-amaticbold text-[4.5vw] focus:scale-110 cursor-pointer"
+          className="absolute h-[6.21%] w-[23.6%] bottom-[30%] right-[0%] origin-bottom-right -rotate-[90deg] border-t-2 border-l-2 border-r-2 border-black bg-[#F3AA8A] font-amaticbold text-[5vw] focus:scale-110 cursor-pointer flex items-center justify-center"
           onClick={() => setChartOpen(!chartOpen)}
         >
-          <span className="absolute -rotate-[90deg] right-[-21%] bottom-[35%]">THIS IS CHART</span>
+          <span className="">THIS IS CHART</span>
         </div>
         <GoldiswapButtonMobile />
         <StatsMobile />
