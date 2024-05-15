@@ -42,12 +42,13 @@ export const StatsMobile = () => {
 
   return (
     //todo: doesnt look good on smaller phones
-    <div className="text-[3vw] absolute h-[12%] w-[40%] left-[30%] top-[75%] flex flex-row items-center justify-around text-[#D9C6BA] font-baloo font-semibold">
+    <div className="text-[3vw] absolute h-[12%] w-[80%] left-[10%] top-[75%] flex flex-row items-center justify-center text-[#D9C6BA] font-baloo font-semibold">
       <div className="flex flex-col items-end">
         <span>locks supply:</span>
         <span>current fsl:</span>
         <span>current psl:</span>
       </div>
+      <div className="h-[100%] w-[5%]"></div>
       <div className="flex flex-col items-start">
         <span className={handleColors(goldiswapInfo.supply, simInfo.supply)}>{simInfo.toggle ? handleInfo(simInfo.supply) : handleInfo(goldiswapInfo.supply)}</span>
         <span className={handleColors(goldiswapInfo.fsl, simInfo.fsl)}>{simInfo.toggle ? handleInfo(simInfo.fsl) : handleInfo(goldiswapInfo.fsl)}</span>
