@@ -75,7 +75,7 @@ export const GoldiswapPageMobile = () => {
       <div className="w-[100%] h-[89%] relative bg-cover bg-[url('/images/bg-goldiswap-mobile.png')]">
         <TogglesMobile />
         <h1 className="absolute top-[-0.25%] right-[69%] text-[#D9C6BA] text-[7vw] font-amaticbold" id="page-title">{activeToggle === 'REDEEM' ? "REDEEM" : "SWAP"}</h1>
-        <div className="absolute bottom-[40.4%] left-[15.5%] w-[48.95vh] h-[2.3%] bg-[#4D0B24] origin-bottom-left -rotate-[90deg] text-[2.4vw] font-baloo text-white font-semibold flex flex-row items-center justify-between px-2">
+        <div className="absolute bottom-[40.4%] left-[15.5%] w-[48.95vh] h-[2.3%] bg-[#4D0B24] origin-bottom-left -rotate-[90deg] text-[2.2vw] font-baloo text-white font-semibold flex flex-row items-center justify-between px-2">
           <div className="h-[100%] w-[43%] flex flex-row items-center justify-between">
             <span>$LOCKS floor price:</span>
             <span>${handleTokenInfo(floorPrice(goldiswapInfo.fsl, goldiswapInfo.supply))}</span>
