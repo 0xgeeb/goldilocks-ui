@@ -3,7 +3,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit"
 export const NavBarButtons = () => {
 
   return (
-    <div className="absolute z-50 h-[89%] w-[100%] bg-[#E4B19B]">
+    <div className="absolute h-[89%] w-[100%] bg-[#E4B19B]">
       <div className="h-[100%] w-[100%] py-[8%] flex flex-col items-center justify-between">
         <div className="w-[100%] h-[83%] flex flex-col items-center justify-between font-amaticbold text-[8vw]">
           <ConnectButton.Custom>

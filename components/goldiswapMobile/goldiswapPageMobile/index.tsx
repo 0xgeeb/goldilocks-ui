@@ -72,39 +72,42 @@ export const GoldiswapPageMobile = () => {
     <main className="w-screen h-screen">
       <NavBarMobile />
       { navButtonsOpen && <NavBarButtons /> }
-      <div className="w-[100%] h-[89%] relative bg-cover bg-[url('/images/bg-goldiswap-mobile.png')]">
-        <TogglesMobile />
-        <h1 className="absolute top-[-0.25%] right-[69%] text-[#D9C6BA] text-[7vw] font-amaticbold" id="page-title">{activeToggle === 'REDEEM' ? "REDEEM" : "SWAP"}</h1>
-        <div className="absolute bottom-[40.4%] left-[15.5%] w-[48.95vh] h-[2.3%] bg-[#4D0B24] origin-bottom-left -rotate-[90deg] text-[2.2vw] font-baloo text-white font-semibold flex flex-row items-center justify-between px-2">
-          <div className="h-[100%] w-[43%] flex flex-row items-center justify-between">
-            <span>$LOCKS floor price:</span>
-            <span>${handleTokenInfo(floorPrice(goldiswapInfo.fsl, goldiswapInfo.supply))}</span>
+      {
+        !navButtonsOpen &&
+        <div className="w-[100%] h-[89%] relative bg-cover bg-[url('/images/bg-goldiswap-mobile.png')]">
+          <TogglesMobile />
+          <h1 className="absolute top-[-0.25%] right-[69%] text-[#D9C6BA] text-[7vw] font-amaticbold" id="page-title">{activeToggle === 'REDEEM' ? "REDEEM" : "SWAP"}</h1>
+          <div className="absolute bottom-[40.4%] left-[15.5%] w-[48.95vh] h-[2.3%] bg-[#4D0B24] origin-bottom-left -rotate-[90deg] text-[2.2vw] font-baloo text-white font-semibold flex flex-row items-center justify-between px-2">
+            <div className="h-[100%] w-[43%] flex flex-row items-center justify-between">
+              <span>$LOCKS floor price:</span>
+              <span>${handleTokenInfo(floorPrice(goldiswapInfo.fsl, goldiswapInfo.supply))}</span>
+            </div>
+            <div className="h-[100%] w-[43%] flex flex-row items-center justify-between">
+              <span>$LOCKS market price:</span>
+              <span>${handleTokenInfo(marketPrice(goldiswapInfo.fsl, goldiswapInfo.psl, goldiswapInfo.supply))}</span>
+            </div>
           </div>
-          <div className="h-[100%] w-[43%] flex flex-row items-center justify-between">
-            <span>$LOCKS market price:</span>
-            <span>${handleTokenInfo(marketPrice(goldiswapInfo.fsl, goldiswapInfo.psl, goldiswapInfo.supply))}</span>
+          <WalletBalanceMobile />
+          <img
+            className="absolute h-5 w-5 top-[6%] right-[9%]"
+            src="/images/icon-settings-mobile.png"
+            alt="settings"
+            onClick={() => changeSlippageToggle(true)}
+          />
+          { slippage.toggle && <SlippagePopupMobile /> }
+          <SwapBoxMobile />
+          <img className="absolute bottom-[26%] right-[11.8%] origin-bottom-right -rotate-[90deg] h-[1.27%] w-[8.36%]" src="/images/icon-bearoutline.png" alt="bearoutline" />
+          <div 
+            className="absolute h-[6.21%] w-[23.6%] bottom-[30%] right-[0%] origin-bottom-right -rotate-[90deg] border-t-2 border-l-2 border-r-2 border-black bg-[#F3AA8A] font-amaticbold text-[5vw] focus:scale-110 cursor-pointer flex items-center justify-center"
+            onClick={() => setChartOpen(!chartOpen)}
+          >
+            <span className="">THIS IS CHART</span>
           </div>
+          <GoldiswapButtonMobile />
+          <StatsMobile />
+          <FooterMobile />
         </div>
-        <WalletBalanceMobile />
-        <img
-          className="absolute h-5 w-5 top-[6%] right-[9%]"
-          src="/images/icon-settings-mobile.png"
-          alt="settings"
-          onClick={() => changeSlippageToggle(true)}
-        />
-        { slippage.toggle && <SlippagePopupMobile /> }
-        <SwapBoxMobile />
-        <img className="absolute bottom-[26%] right-[11.8%] origin-bottom-right -rotate-[90deg] h-[1.27%] w-[8.36%]" src="/images/icon-bearoutline.png" alt="bearoutline" />
-        <div 
-          className="absolute h-[6.21%] w-[23.6%] bottom-[30%] right-[0%] origin-bottom-right -rotate-[90deg] border-t-2 border-l-2 border-r-2 border-black bg-[#F3AA8A] font-amaticbold text-[5vw] focus:scale-110 cursor-pointer flex items-center justify-center"
-          onClick={() => setChartOpen(!chartOpen)}
-        >
-          <span className="">THIS IS CHART</span>
-        </div>
-        <GoldiswapButtonMobile />
-        <StatsMobile />
-        <FooterMobile />
-      </div>
+      }
     </main>
   )
 }

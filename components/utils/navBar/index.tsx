@@ -4,10 +4,15 @@ export const NavBar = () => {
 
   return (
     <header className="w-[100%] h-[11%] lg:h-[15%] bg-[#EEDCD2] flex flex-row items-center justify-between font-amaticbold text-[2.5vw] lg:text-[2vw] px-[2%] lg:px-[4%]">
-      <div className="w-[30%] lg:w-[18%] flex flex-row items-center hover:opacity-30 cursor-pointer">
-        <img className="w-[30%] lg:w-[37%] h-[70%]" src="/images/logo-goldilocks.png" alt="logo" />
-        <h1 className="text-[3vw] lg:text-[2.4vw]">Goldilocks DAO</h1>
-      </div>
+      <a
+        href="/"
+        className="w-[30%] lg:w-[18%]"
+      >
+        <div className="w-[100%] flex flex-row items-center hover:opacity-30 cursor-pointer">
+          <img className="w-[30%] lg:w-[37%] h-[70%]" src="/images/logo-goldilocks.png" alt="logo" />
+          <h1 className="text-[3vw] lg:text-[2.4vw]">Goldilocks DAO</h1>
+        </div>
+      </a>
       <div className="w-[70%] lg:w-[65.2%] h-[100%] flex flex-row items-center justify-between">
         <a 
           href="/wut"
