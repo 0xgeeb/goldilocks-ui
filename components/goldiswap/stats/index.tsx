@@ -41,7 +41,7 @@ export const Stats = () => {
   }
 
   return (
-    <div className="absolute flex flex-row items-center justify-between w-[45%] top-[78%] left-[27%] text-white font-baloo text-[1.1vw]">
+    <div className="absolute flex flex-row items-center justify-between w-[62%] lg:w-[45%] top-[80%] lg:top-[78%] left-[19%] lg:left-[27%] text-white font-baloo text-[1.7vw] lg:text-[1.1vw]">
       <div className="flex flex-row items-center">
         <span className="mr-2">locks supply:</span>
         <span className={handleColors(goldiswapInfo.supply, simInfo.supply)}>{simInfo.toggle ? handleInfo(simInfo.supply) : handleInfo(goldiswapInfo.supply)}</span>

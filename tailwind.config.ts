@@ -7,9 +7,6 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    screens: {
-
-    },
     extend: {
       fontFamily: {
         amatic: ['var(--font-amatic)'],

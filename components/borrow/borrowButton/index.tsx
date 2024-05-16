@@ -216,14 +216,14 @@ export const BorrowButton = () => {
         allowanceButtons &&
         <div>
           <button
-            className="absolute bg-[#E7B941] h-[8%] w-[16.6%] top-[51.8%] left-[30.9%] border-2 border-black font-amaticbold text-[1.5vw] hover:bg-[#634C43] hover:text-[#E7B941] hover:scale-110"
+            className="absolute bg-[#E7B941] h-[8%] w-[24%] lg:w-[16.6%] top-[55%] lg:top-[51.8%] left-[24%] lg:left-[30.9%] border-2 border-black font-amaticbold text-[2.5vw] lg:text-[1.5vw] hover:bg-[#B35227] hover:text-[#E7B941] hover:scale-110"
             id="left-approve-button"
             onClick={() => handleLeftButtonClick()}
           >
             approve tx
           </button>
           <button
-            className="absolute bg-[#E7B941] h-[8%] w-[16.6%] top-[51.8%] left-[52.5%] border-2 border-black font-amaticbold text-[1.5vw] hover:bg-[#634C43] hover:text-[#E7B941] hover:scale-110"
+            className="absolute bg-[#E7B941] h-[8%] w-[24%] lg:w-[16.6%] top-[55%] lg:top-[51.8%] left-[52%] lg:left-[52.5%] border-2 border-black font-amaticbold text-[2.5vw] lg:text-[1.5vw] hover:bg-[#B35227] hover:text-[#E7B941] hover:scale-110"
             id="right-approve-button"
             onClick={() => handleRightButtonClick()}
           >
@@ -242,7 +242,7 @@ export const BorrowButton = () => {
           }) => {
             return (
               <button 
-                className="absolute h-[8%] w-[16.6%] top-[51.8%] left-[41.6%] bg-[#E7B941] font-amaticbold text-[1.9vw] border-2 border-black hover:bg-[#634C43] hover:text-[#E7B941] hover:scale-110"
+                className="absolute h-[8%] w-[24%] lg:w-[16.6%] top-[55%] lg:top-[51.8%] left-[37%] lg:left-[41.6%] bg-[#E7B941] font-amaticbold text-[3vw] lg:text-[1.9vw] border-2 border-black hover:bg-[#B35227] hover:text-[#E7B941] hover:scale-110"
                 id="borrow-button"
                 onClick={() => {
                   const button = document.getElementById('borrow-button')
