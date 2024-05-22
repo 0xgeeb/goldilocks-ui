@@ -111,7 +111,7 @@ const INITIAL_STATE = {
   handleTopChange: (_input: string) => {},
   handleBottomChange: (_input: string) => {},
 
-  refreshGoldiswapInfo: async() => {},
+  refreshGoldiswapInfo: async () => {},
 
   infoLoading: true,
   setInfoLoading: (_loading: boolean) => {},
