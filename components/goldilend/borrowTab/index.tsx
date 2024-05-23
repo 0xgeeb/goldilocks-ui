@@ -1,4 +1,4 @@
-export const LendBox = () => {
+export const BorrowTab = () => {
 
   return (
     <div></div>

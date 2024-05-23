@@ -5,6 +5,9 @@ import { useWallet } from "../../providers"
 
 const INITIAL_STATE = {
 
+  activeToggle: 'BORROW',
+  changeActiveToggle: (_toggle: string) => {},
+
   refreshGoldilendInfo: async () => {},
 
   infoLoading: true,
@@ -19,7 +22,13 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
 
   const { balance, wallet, isConnected } = useWallet()
 
+  const [activeToggleState, setActiveToggleState] = useState<string>(INITIAL_STATE.activeToggle)
+
   const [infoLoadingState, setInfoLoadingState] = useState<boolean>(INITIAL_STATE.infoLoading)
+
+  const changeActiveToggle = (toggle: string) => {
+    setActiveToggleState(toggle)
+  }
 
   const refreshGoldilendInfo = async () => {
 
@@ -30,7 +39,9 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
       value={{
         infoLoading: infoLoadingState,
         setInfoLoading: setInfoLoadingState,
-        refreshGoldilendInfo
+        refreshGoldilendInfo,
+        activeToggle: activeToggleState,
+        changeActiveToggle
       }}
     >
       { children }
