@@ -2,6 +2,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit"
 
 export const NavBarButtons = () => {
 
+  //todo: needs the new navbar
   return (
     <div className="absolute h-[89%] w-[100%] bg-[#E4B19B]">
       <div className="h-[100%] w-[100%] py-[8%] flex flex-col items-center justify-between">

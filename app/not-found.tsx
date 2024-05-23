@@ -1,5 +1,6 @@
 export default function NotFound() {
-
+  
+  //todo: needs responsiveness, mobile, and new navbar
   return (
     <div className="w-screen h-screen">
       <header className="w-[100%] h-[15%] bg-[#EEDCD2] flex flex-row items-center justify-between font-amaticbold text-[2vw] px-[4%]">
@@ -21,19 +22,7 @@ export default function NotFound() {
             <span>Goldiswap</span>
           </a>
           <a 
-            href="/stake"
-            className="hover:scale-[150%] cursor-pointer"
-          >
-            <span>Stake</span>
-          </a>
-          <a 
-            href="/borrow"
-            className="hover:scale-[150%] cursor-pointer"
-          >
-            <span>Borrow</span>
-          </a>
-          <a 
-            href="/goldilend"
+            href="/goldilend/borrow"
             className="hover:scale-[150%] cursor-pointer"
           >
             <span>Goldilend</span>

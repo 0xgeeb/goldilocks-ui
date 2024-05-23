@@ -68,6 +68,7 @@ export const GoldiswapPageMobile = () => {
     }
   }
 
+  //todo: needs responsiveness on height ?
   return (
     <main className="w-screen h-screen">
       <NavBarMobile />

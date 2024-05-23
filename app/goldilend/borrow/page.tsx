@@ -1,10 +1,10 @@
 import type { Metadata } from "next"
-import { GoldilendPage } from "../../components/goldilend"
+import { GoldilendPage } from "../../../components/goldilend"
 import {
   WagmiProvider,
   WalletProvider,
   GoldilendProvider
-} from "../../providers"
+} from "../../../providers"
 
 export const metadata: Metadata = {
   title: "mf goldilend",

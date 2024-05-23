@@ -1,10 +1,10 @@
 import type { Metadata } from "next"
-import { BorrowPage } from "../../components/borrow"
+import { BorrowPage } from "../../../components/borrow"
 import {
   WagmiProvider,
   WalletProvider,
   BorrowProvider
-} from "../../providers"
+} from "../../../providers"
 
 export const metadata: Metadata = {
   title: 'mf borrowing',

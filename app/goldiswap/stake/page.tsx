@@ -1,10 +1,10 @@
 import type { Metadata } from "next"
-import { StakePage } from "../../components/stake"
+import { StakePage } from "../../../components/stake"
 import {
   WagmiProvider,
   WalletProvider,
   StakeProvider
-} from "../../providers"
+} from "../../../providers"
 
 export const metadata: Metadata = {
   title: "mf staking",

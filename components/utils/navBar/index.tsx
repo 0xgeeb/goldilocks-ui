@@ -1,55 +1,63 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit"
+import { usePathname } from "next/navigation"
 
 export const NavBar = () => {
 
+  const pathname = usePathname()
+
   return (
-    <header className="w-[100%] h-[11%] lg:h-[15%] bg-[#EEDCD2] flex flex-row items-center justify-between font-amaticbold text-[2.5vw] lg:text-[2vw] px-[2%] lg:px-[4%]">
+    <header className="w-[100%] h-[11%] lg:h-[15%] bg-[#EEDCD2] flex flex-row items-center justify-between font-amaticbold px-[2%] lg:px-[4%]">
       <a
         href="/"
-        className="w-[30%] lg:w-[18%]"
+        className="w-[25%] lg:w-[18%]"
       >
         <div className="w-[100%] flex flex-row items-center hover:opacity-30 cursor-pointer">
           <img className="w-[30%] lg:w-[37%] h-[70%]" src="/images/logo-goldilocks.png" alt="logo" />
           <h1 className="text-[3vw] lg:text-[2.4vw]">Goldilocks DAO</h1>
         </div>
       </a>
-      <div className="w-[70%] lg:w-[65.2%] h-[100%] flex flex-row items-center justify-between">
-        <a 
-          href="/wut"
-          className="hover:scale-[150%] cursor-pointer"
-        >
-          <span>Wut is this?</span>
-        </a>
-        <a 
-          href="/goldiswap"
-          className="hover:scale-[150%] cursor-pointer"
-        >
-          <span>Goldiswap</span>
-        </a>
-        <a 
-          href="/stake"
-          className="hover:scale-[150%] cursor-pointer"
-        >
-          <span>Stake</span>
-        </a>
-        <a 
-          href="/borrow"
-          className="hover:scale-[150%] cursor-pointer"
-        >
-          <span>Borrow</span>
-        </a>
-        <a 
-          href="/goldilend"
-          className="hover:scale-[150%] cursor-pointer"
-        >
-          <span>Goldilend</span>
-        </a>
-        <a 
-          href="/goldivaults"
-          className="hover:scale-[150%] cursor-pointer"
-        >
-          <span>Goldivaults</span>
-        </a>
+      <div className="w-[80%] lg:w-[65.2%] h-[100%] flex flex-row items-center justify-between text-[2.8vw] lg:text-[2.2vw]">
+        <a href="/wut" className="hover:scale-[150%] cursor-pointer"><span>Wut is this?</span></a>
+        {
+          pathname === '/goldiswap/swap' ?
+          <>
+            <a className="text-[#DB7200]"><span>Goldiswap</span></a>
+            <a href="/goldiswap/swap" className="hover:scale-[150%] cursor-pointer text-[#DB7200] underline underline-offset-8 text-[2.1vw] lg:text-[1.6vw]"><span>Swap</span></a>
+            <a href="/goldiswap/stake" className="hover:scale-[150%] cursor-pointer text-[2.1vw] lg:text-[1.6vw]"><span>Stake</span></a>
+            <a href="/goldiswap/borrow" className="hover:scale-[150%] cursor-pointer text-[2.1vw] lg:text-[1.6vw]"><span>Borrow</span></a>
+          </> :
+          pathname === '/goldiswap/stake' ?
+          <>
+            <a className="text-[#DB7200]"><span>Goldiswap</span></a>
+            <a href="/goldiswap/swap" className="hover:scale-[150%] cursor-pointer text-[2.1vw] lg:text-[1.6vw]"><span>Swap</span></a>
+            <a href="/goldiswap/stake" className="hover:scale-[150%] cursor-pointer text-[#DB7200] underline underline-offset-8 text-[2.1vw] lg:text-[1.6vw]"><span>Stake</span></a>
+            <a href="/goldiswap/borrow" className="hover:scale-[150%] cursor-pointer text-[2.1vw] lg:text-[1.6vw]"><span>Borrow</span></a>
+          </> :
+          pathname === '/goldiswap/borrow' ?
+          <>
+            <a className="text-[#DB7200]"><span>Goldiswap</span></a>
+            <a href="/goldiswap/swap" className="hover:scale-[150%] cursor-pointer text-[2.1vw] lg:text-[1.6vw]"><span>Swap</span></a>
+            <a href="/goldiswap/stake" className="hover:scale-[150%] cursor-pointer text-[2.1vw] lg:text-[1.6vw]"><span>Stake</span></a>
+            <a href="/goldiswap/borrow" className="hover:scale-[150%] cursor-pointer text-[#DB7200] underline underline-offset-8 text-[2.1vw] lg:text-[1.6vw]"><span>Borrow</span></a>
+          </> :
+          <a href="/goldiswap/swap" className="hover:scale-[150%] cursor-pointer"><span>Goldiswap</span></a>
+        }
+        {
+          pathname === '/goldilend/borrow' ?
+          <>
+            <a className="text-[#DB7200]"><span>Goldilend</span></a>
+            <a href="/goldilend/borrow" className="hover:scale-[150%] cursor-pointer text-[#DB7200] underline underline-offset-8 text-[2.1vw] lg:text-[1.6vw]"><span>Borrow</span></a>
+            <a href="/goldilend/lend" className="hover:scale-[150%] cursor-pointer text-[2.1vw] lg:text-[1.6vw]"><span>Lend</span></a>
+          </> :
+          pathname === '/goldilend/lend' ?
+          <>
+            <a className="text-[#DB7200]"><span>Goldilend</span></a>
+            <a href="/goldilend/borrow" className="hover:scale-[150%] cursor-pointer text-[2.1vw] lg:text-[1.6vw]"><span>Borrow</span></a>
+            <a href="/goldilend/lend" className="hover:scale-[150%] cursor-pointer text-[#DB7200] underline underline-offset-8 text-[2.1vw] lg:text-[1.6vw]"><span>Lend</span></a>
+          </> :
+          <a href="/goldilend/borrow" className="hover:scale-[150%] cursor-pointer"><span>Goldilend</span></a>
+        }
+        <a href="/goldivaults" className="hover:scale-[150%] cursor-pointer"><span>Goldivaults</span></a>
         <ConnectButton.Custom>
           {({
             account,
