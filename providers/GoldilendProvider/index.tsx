@@ -8,6 +8,9 @@ const INITIAL_STATE = {
   activeToggle: 'BORROW',
   changeActiveToggle: (_toggle: string) => {},
 
+  lendActiveToggle: 'LOCK',
+  changeLendActiveToggle: (_toggle: string) => {},
+
   refreshGoldilendInfo: async () => {},
 
   infoLoading: true,
@@ -23,11 +26,16 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
   const { balance, wallet, isConnected } = useWallet()
 
   const [activeToggleState, setActiveToggleState] = useState<string>(INITIAL_STATE.activeToggle)
+  const [lendActiveToggleState, setLendActiveToggleState] = useState<string>(INITIAL_STATE.lendActiveToggle)
 
   const [infoLoadingState, setInfoLoadingState] = useState<boolean>(INITIAL_STATE.infoLoading)
 
   const changeActiveToggle = (toggle: string) => {
     setActiveToggleState(toggle)
+  }
+
+  const changeLendActiveToggle = (toggle: string) => {
+    setLendActiveToggleState(toggle)
   }
 
   const refreshGoldilendInfo = async () => {
@@ -41,7 +49,9 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
         setInfoLoading: setInfoLoadingState,
         refreshGoldilendInfo,
         activeToggle: activeToggleState,
-        changeActiveToggle
+        changeActiveToggle,
+        lendActiveToggle: lendActiveToggleState,
+        changeLendActiveToggle
       }}
     >
       { children }
