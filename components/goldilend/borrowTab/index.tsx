@@ -20,8 +20,25 @@ export const BorrowTab = () => {
           }
         </div>
       </div>
-      <div className="h-[100%] w-[100%] flex flex-col items-center">
-        <h1 className="font-amaticbold text-[3vw] mt-[2%]">create loan</h1>
+      <div className="h-[100%] w-[100%] flex flex-col items-center justify-between py-[2%]">
+        <h1 className="font-amaticbold text-[3vw]">create loan</h1>
+        <div className="w-[65%] flex flex-row items-center justify-between font-baloo font-semibold text-[1vw]">
+          <span>Loan Amount:</span>
+          <span>69</span>
+        </div>
+        <div className="w-[65%] flex flex-row items-center justify-between font-baloo font-semibold text-[1vw]">
+          <span>Repay Deadline:</span>
+          <span>6-9-69</span>
+        </div>
+        <div className="w-[65%] flex flex-row items-center justify-between font-baloo font-semibold text-[1vw]">
+          <span>Interest Rate:</span>
+          <span>69%</span>
+        </div>
+        <div className="w-[65%] flex flex-row items-center justify-between font-baloo font-semibold text-[1vw]">
+          <span>Total Interest Due:</span>
+          <span>69</span>
+        </div>
+        <button className="w-[48%] h-[12%] bg-[#E7B941] border-2 border-black font-amaticbold text-[1.7vw] flex items-center justify-center">create loan</button>
       </div>
     </div>
   )

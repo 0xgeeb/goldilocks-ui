@@ -15,6 +15,9 @@ const INITIAL_STATE = {
 
   infoLoading: true,
   setInfoLoading: (_loading: boolean) => {},
+
+  allowanceButtons: false,
+  setAllowanceButtons: (_bool: boolean) => {},
 }
 
 const GoldilendContext = createContext(INITIAL_STATE)
@@ -28,6 +31,7 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
   const [activeToggleState, setActiveToggleState] = useState<string>(INITIAL_STATE.activeToggle)
   const [lendActiveToggleState, setLendActiveToggleState] = useState<string>(INITIAL_STATE.lendActiveToggle)
 
+  const [allowanceButtonsState, setAllowanceButtonsState] = useState<boolean>(INITIAL_STATE.allowanceButtons)
   const [infoLoadingState, setInfoLoadingState] = useState<boolean>(INITIAL_STATE.infoLoading)
 
   const changeActiveToggle = (toggle: string) => {
@@ -51,7 +55,9 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
         activeToggle: activeToggleState,
         changeActiveToggle,
         lendActiveToggle: lendActiveToggleState,
-        changeLendActiveToggle
+        changeLendActiveToggle,
+        allowanceButtons: allowanceButtonsState,
+        setAllowanceButtons: setAllowanceButtonsState,
       }}
     >
       { children }

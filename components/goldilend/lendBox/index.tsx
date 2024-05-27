@@ -2,9 +2,7 @@ import { useGoldilend } from "../../../providers"
 import {
   LockTab,
   StakeTab,
-  UnstakeTab,
-  ClaimTab,
-  LiquidateTab
+  UnstakeTab
 } from "../"
 
 export const LendBox = () => {
@@ -23,11 +21,7 @@ export const LendBox = () => {
           <LockTab /> :
           lendActiveToggle === 'STAKE' ?
           <StakeTab /> :
-          lendActiveToggle === 'UNSTAKE' ?
-          <UnstakeTab /> :
-          lendActiveToggle === 'CLAIM' ?
-          <ClaimTab /> :
-          <LiquidateTab />
+          <UnstakeTab />
         }
       </div>
     </div>

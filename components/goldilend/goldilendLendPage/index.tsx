@@ -4,7 +4,11 @@ import { useEffect } from "react"
 import { useGoldilend, useDesktop } from "../../../providers"
 import {
   LendToggles,
-  LendBox
+  LendBox,
+  LendButton,
+  Stats,
+  LiquidateTab,
+  ClaimTab
 } from "../"
 import {
   NavBar,
@@ -38,7 +42,17 @@ export const GoldilendLendPage = () => {
         <LendToggles />
         <h1 className="absolute top-[15%] right-[73%] text-[#D9C6BA] text-[7.5vw] font-amaticbold" id="page-title">GOLDILEND</h1>
         <h1 className={`absolute top-[36%] ${lendActiveToggle === 'UNSTAKE' ? "right-[77%]" : lendActiveToggle === 'LIQUIDATE' ? "right-[75.5%]" : lendActiveToggle === 'LOCK' ? "right-[80.5%]" : "right-[80%]"} text-[#E7B941] text-[6vw] font-amaticbold`} id="page-title">{lendActiveToggle}</h1>
-        <LendBox />
+        {
+          lendActiveToggle === 'LIQUIDATE' ?
+          <LiquidateTab /> :
+          lendActiveToggle === 'CLAIM' ?
+          <ClaimTab /> :
+          <>
+            <LendBox />
+            <LendButton />
+            <Stats />
+          </>
+        }
         <Footer />
       </div>
     </main> :
