@@ -9,7 +9,7 @@ export const LendToggles = () => {
 
   return (
     <>
-      <div className="absolute w-[25%] h-[8%] left-[40.5%] top-[3%] flex flex-row items-center justify-between">
+      <div className={`absolute w-[25%] h-[8%] ${lendActiveToggle === 'LIQUIDATE' ? "left-[43.5%]" : "left-[40.5%]"} top-[3%] flex flex-row items-center justify-between`}>
         <div
           className={`font-baloo font-semibold text-[1vw] h-[100%] w-[22.5%] border-2 border-black ${lendActiveToggle === 'LOCK' ? "bg-[#E7B941]" : "bg-[#E2D6CF]"} flex items-center justify-center hover:bg-[#C9E3B9] cursor-pointer`}
           onClick={() => changeLendActiveToggle('LOCK')}
