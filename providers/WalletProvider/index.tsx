@@ -45,8 +45,8 @@ export const WalletProvider = (props: PropsWithChildren<{}>) => {
         args: [address]
       })
       const porridgeBalance = await readContract(config, {
-        address: contracts.porridge.address as `0x${string}`,
-        abi: contracts.porridge.abi,
+        address: contracts.goldilocked.address as `0x${string}`,
+        abi: contracts.goldilocked.abi,
         functionName: 'balanceOf',
         args: [address]
       })
@@ -57,27 +57,27 @@ export const WalletProvider = (props: PropsWithChildren<{}>) => {
         args: [address]
       })
       const stakedBalance = await readContract(config, {
-        address: contracts.porridge.address as `0x${string}`,
-        abi: contracts.porridge.abi,
-        functionName: 'getStaked',
+        address: contracts.goldilocked.address as `0x${string}`,
+        abi: contracts.goldilocked.abi,
+        functionName: 'userStakedLocks',
         args: [address]
       })
       const claimableBalance = await readContract(config, {
-        address: contracts.porridge.address as `0x${string}`,
-        abi: contracts.porridge.abi,
-        functionName: 'getClaimable',
+        address: contracts.goldilocked.address as `0x${string}`,
+        abi: contracts.goldilocked.abi,
+        functionName: 'userClaimablePrg',
         args: [address]
       })
       const lockedBalance = await readContract(config, {
-        address: contracts.borrow.address as `0x${string}`,
-        abi: contracts.borrow.abi,
-        functionName: 'getLocked',
+        address: contracts.goldilocked.address as `0x${string}`,
+        abi: contracts.goldilocked.abi,
+        functionName: 'userLockedLocks',
         args: [address]
       })
       const borrowedBalance = await readContract(config, {
-        address: contracts.borrow.address as `0x${string}`,
-        abi: contracts.borrow.abi,
-        functionName: 'getBorrowed',
+        address: contracts.goldilocked.address as `0x${string}`,
+        abi: contracts.goldilocked.abi,
+        functionName: 'userBorrowedHoney',
         args: [address]
       })
 

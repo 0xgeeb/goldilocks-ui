@@ -129,7 +129,7 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
 
   const { children } = props
 
-  const { balance, wallet, isConnected } = useWallet()
+  const { balance, wallet, isConnected, network } = useWallet()
 
   const { simulateBuyDry, simulateSellDry, floorPrice, marketPrice } = useGoldiswapMath()
 
@@ -610,7 +610,7 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
     const supplyResult = await readContract(config, {
       address: contracts.goldiswap.address as `0x${string}`,
       abi: contracts.goldiswap.abi,
-      functionName: 'supply',
+      functionName: 'totalSupply',
     })
     const ratioResult = await readContract(config, {
       address: contracts.goldiswap.address as `0x${string}`,

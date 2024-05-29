@@ -10,7 +10,7 @@ export const useBorrowTx = () => {
       address: contracts.honey.address as `0x${string}`,
       abi: contracts.honey.abi,
       functionName: 'allowance',
-      args: [wallet, contracts.borrow.address]
+      args: [wallet, contracts.goldilocked.address]
     })
     const allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
 
@@ -28,7 +28,7 @@ export const useBorrowTx = () => {
         address: contracts.honey.address as `0x${string}`,
         abi: contracts.honey.abi,
         functionName: 'approve',
-        args: [contracts.borrow.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
+        args: [contracts.goldilocked.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
       })
       await waitForTransactionReceipt(config, { hash })
     }
@@ -41,8 +41,8 @@ export const useBorrowTx = () => {
   const sendBorrowTx = async (borrowAmt: number): Promise<string> => {
     try {
       const hash = await writeContract(config, {
-        address: contracts.borrow.address as `0x${string}`,
-        abi: contracts.borrow.abi,
+        address: contracts.goldilocked.address as `0x${string}`,
+        abi: contracts.goldilocked.abi,
         functionName: 'borrow',
         args: [parseEther(`${borrowAmt}`)]
       })
@@ -60,8 +60,8 @@ export const useBorrowTx = () => {
   const sendRepayTx = async (repayAmt: number): Promise<string> => {
     try {
       const hash = await writeContract(config, {
-        address: contracts.borrow.address as `0x${string}`,
-        abi: contracts.borrow.abi,
+        address: contracts.goldilocked.address as `0x${string}`,
+        abi: contracts.goldilocked.abi,
         functionName: 'repay',
         args: [parseEther(`${repayAmt}`)]
       })

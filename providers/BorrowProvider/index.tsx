@@ -182,7 +182,7 @@ export const BorrowProvider = (props: PropsWithChildren<{}>) => {
     const supplyResult = await readContract(config, {
       address: contracts.goldiswap.address as `0x${string}`,
       abi: contracts.goldiswap.abi,
-      functionName: 'supply',
+      functionName: 'totalSupply',
     })
     let honeyBorrowAllowanceResult
     if(wallet) {
@@ -190,7 +190,7 @@ export const BorrowProvider = (props: PropsWithChildren<{}>) => {
         address: contracts.honey.address as `0x${string}`,
         abi: contracts.honey.abi,
         functionName: 'allowance',
-        args: [wallet, contracts.borrow.address]
+        args: [wallet, contracts.goldilocked.address]
       })
     }
 

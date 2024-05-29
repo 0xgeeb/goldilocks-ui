@@ -10,7 +10,7 @@ export const Notification = () => {
       <span className="font-baloo font-semibold text-[1.5vw] lg:text-[0.9vw]">{notification.action}</span>
       <span className="font-baloo font-semibold text-[1.5vw] lg:text-[0.9vw] mt-[3%] lg:mt-[1%]">{notification.result}</span>
       <a 
-        href={`https://artio.beratrail.io/tx/${notification.hash}`}
+        href={`https://sepolia.basescan.org/tx/${notification.hash}`}
         target="_blank"
         className="h-[16%] lg:h-[18%] w-[25%] lg:w-[19%] mt-[6%] lg:mt-[3%] bg-[#E7B941] hover:scale-110 border-2 border-black"
       >

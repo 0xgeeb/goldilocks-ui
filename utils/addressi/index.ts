@@ -1,23 +1,18 @@
-import borrowABI from "../abi/Borrow.json"
-import porridgeABI from "../abi/Porridge.json"
-import honeyABI from "../abi/Honey.json"
 import goldiswapABI from "../abi/Goldiswap.json"
+import goldilockedABI from "../abi/Goldilocked.json"
+import honeyABI from "../abi/Honey.json"
 
 export const contracts = {
   goldiswap: {
-    address: '0xd8A4b467d6B653253D0c89CC49EAB6c6A5aB3067',
+    address: '0x508901E24f7055515FDB390ea3564495704936b3',
     abi: goldiswapABI.abi
   },
-  porridge: {
-    address: '0x2A436a4F062bE8744Aa7B1Ba7E2D5b754F97E829',
-    abi: porridgeABI.abi
-  },
-  borrow: {
-    address: '0xc4945574BF4FE1721F7F8D253f91eAdcb5f3C2df',
-    abi: borrowABI.abi,
+  goldilocked: {
+    address: '0xd8A4b467d6B653253D0c89CC49EAB6c6A5aB3067',
+    abi: goldilockedABI.abi
   },
   honey: {
-    address: '0x7EeCA4205fF31f947EdBd49195a7A88E6A91161B',
+    address: '0xD323ba82A0ec287C9D19c63C439898720a93604A',
     abi: honeyABI.abi
   }
 }

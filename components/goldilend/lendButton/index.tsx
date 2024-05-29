@@ -81,12 +81,12 @@ export const LendButton = () => {
                       button && (button.innerHTML = "connect wallet")
                     }
                   }
-                  else if(chain?.name !== "Berachain Artio") {
-                    if(button && button.innerHTML === "where tastenet") {
+                  else if(chain?.name !== "Base Sepolia") {
+                    if(button && button.innerHTML === "where base sepolia") {
                       openChainModal()
                     }
                     else {
-                      button && (button.innerHTML = "where tastenet")
+                      button && (button.innerHTML = "where base sepolia")
                     }
                   }
                   else {

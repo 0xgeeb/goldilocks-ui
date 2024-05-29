@@ -10,7 +10,7 @@ export const NotificationMobile = () => {
       <span className="font-baloo font-semibold text-[3vw] mt-[1%] text-center">{notification.action}</span>
       <span className="font-baloo font-semibold text-[3vw] mt-[5%] text-center">{notification.result}</span>
       <a 
-        href={`https://artio.beratrail.io/tx/${notification.hash}`}
+        href={`https://sepolia.basescan.org/tx/${notification.hash}`}
         target="_blank"
         className="h-[17%] w-[50%] mt-[5%] bg-[#E7B941] focus:scale-110 border-2 border-black"
       >

@@ -14,7 +14,7 @@ export const useStakeTx = () => {
         address: contracts.goldiswap.address as `0x${string}`,
         abi: contracts.goldiswap.abi,
         functionName: 'allowance',
-        args: [wallet, contracts.porridge.address]
+        args: [wallet, contracts.goldilocked.address]
       })
       allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
     }
@@ -23,7 +23,7 @@ export const useStakeTx = () => {
         address: contracts.honey.address as `0x${string}`,
         abi: contracts.honey.abi,
         functionName: 'allowance',
-        args: [wallet, contracts.porridge.address]
+        args: [wallet, contracts.goldilocked.address]
       })
       allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
     }
@@ -43,7 +43,7 @@ export const useStakeTx = () => {
           address: contracts.goldiswap.address as `0x${string}`,
           abi: contracts.goldiswap.abi,
           functionName: 'approve',
-          args: [contracts.porridge.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
+          args: [contracts.goldilocked.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
         })
         await waitForTransactionReceipt(config, { hash })
       }
@@ -58,7 +58,7 @@ export const useStakeTx = () => {
           address: contracts.honey.address as `0x${string}`,
           abi: contracts.honey.abi,
           functionName: 'approve',
-          args: [contracts.porridge.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
+          args: [contracts.goldilocked.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
         })
         await waitForTransactionReceipt(config, { hash })
       }
@@ -72,8 +72,8 @@ export const useStakeTx = () => {
   const sendStakeTx = async (stakeAmt: number): Promise<string> => {
     try {
       const hash = await writeContract(config, {
-        address: contracts.porridge.address as `0x${string}`,
-        abi: contracts.porridge.abi,
+        address: contracts.goldilocked.address as `0x${string}`,
+        abi: contracts.goldilocked.abi,
         functionName: 'stake',
         args: [parseEther(`${stakeAmt}`)]
       })
@@ -91,8 +91,8 @@ export const useStakeTx = () => {
   const sendUnstakeTx = async (unstakeAmt: number): Promise<string> => {
     try {
       const hash = await writeContract(config, {
-        address: contracts.porridge.address as `0x${string}`,
-        abi: contracts.porridge.abi,
+        address: contracts.goldilocked.address as `0x${string}`,
+        abi: contracts.goldilocked.abi,
         functionName: 'unstake',
         args: [parseEther(`${unstakeAmt}`)]
       })
@@ -110,9 +110,9 @@ export const useStakeTx = () => {
   const sendStirTx = async (stirAmt: number): Promise<string> => {
     try {
       const hash = await writeContract(config, {
-        address: contracts.porridge.address as `0x${string}`,
-        abi: contracts.porridge.abi,
-        functionName: 'realize',
+        address: contracts.goldilocked.address as `0x${string}`,
+        abi: contracts.goldilocked.abi,
+        functionName: 'stir',
         args: [parseEther(`${stirAmt}`)]
       })
       const data = await waitForTransactionReceipt(config, { hash })
@@ -131,8 +131,8 @@ export const useStakeTx = () => {
   const sendClaimTx = async (): Promise<string> => {
     try {
       const hash = await writeContract(config, {
-        address: contracts.porridge.address as `0x${string}`,
-        abi: contracts.porridge.abi,
+        address: contracts.goldilocked.address as `0x${string}`,
+        abi: contracts.goldilocked.abi,
         functionName: 'claim',
         args: []
       })
