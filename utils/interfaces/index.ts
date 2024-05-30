@@ -1,5 +1,5 @@
 import React from "../../node_modules/@types/react"
-import { WalletClient } from "viem"
+import { NumberToBytesErrorType, WalletClient } from "viem"
 
 export interface LayoutProps {
   children: React.ReactNode;
@@ -28,6 +28,10 @@ export interface BalanceState {
   claimable: number;
   locked: number;
   borrowed: number;
+  ibgt: number;
+  gibgt: number;
+  lendStaked: number;
+  lendClaimable: number;
 }
 
 export interface WalletInitialState {

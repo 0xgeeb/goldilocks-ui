@@ -16,7 +16,11 @@ const INITIAL_STATE: WalletInitialState = {
     staked: 0,
     claimable: 0,
     locked: 0,
-    borrowed: 0
+    borrowed: 0,
+    ibgt: 0,
+    gibgt: 0,
+    lendStaked: 0,
+    lendClaimable: 0
   },
   wallet: '',
   isConnected: false,
@@ -80,6 +84,30 @@ export const WalletProvider = (props: PropsWithChildren<{}>) => {
         functionName: 'userBorrowedHoney',
         args: [address]
       })
+      const ibgtResult = await readContract(config, {
+        address: contracts.ibgt.address as `0x${string}`,
+        abi: contracts.ibgt.abi,
+        functionName: 'balanceOf',
+        args: [address]
+      })
+      const gibgtResult = await readContract(config, {
+        address: contracts.goldilend.address as `0x${string}`,
+        abi: contracts.goldilend.abi,
+        functionName: 'balanceOf',
+        args: [address]
+      })
+      const stakedResult = await readContract(config, {
+        address: contracts.goldilend.address as `0x${string}`,
+        abi: contracts.goldilend.abi,
+        functionName: 'stakedGiBGT',
+        args: [address]
+      })
+      const claimableResult = await readContract(config, {
+        address: contracts.goldilend.address as `0x${string}`,
+        abi: contracts.goldilend.abi,
+        functionName: 'userClaimablePrg',
+        args: [address]
+      })
 
       const response = {
         locks: parseFloat(formatEther(locksBalance as unknown as bigint)),
@@ -88,7 +116,11 @@ export const WalletProvider = (props: PropsWithChildren<{}>) => {
         staked: parseFloat(formatEther(stakedBalance as unknown as bigint)), 
         claimable: parseFloat(formatEther(claimableBalance as unknown as bigint)),
         locked: parseFloat(formatEther(lockedBalance as unknown as bigint)),
-        borrowed: parseFloat(formatEther(borrowedBalance as unknown as bigint))
+        borrowed: parseFloat(formatEther(borrowedBalance as unknown as bigint)),
+        ibgt: parseFloat(formatEther(ibgtResult as unknown as bigint)),
+        gibgt: parseFloat(formatEther(gibgtResult as unknown as bigint)),
+        lendStaked: parseFloat(formatEther(stakedResult as unknown as bigint)),
+        lendClaimable: parseFloat(formatEther(claimableResult as unknown as bigint))
       }
 
       setBalanceState(response)

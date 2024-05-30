@@ -13,7 +13,8 @@ import {
 import {
   NavBar,
   Footer,
-  Loading
+  Loading,
+  LendWalletBalance
 } from "../../utils"
 
 export const GoldilendLendPage = () => {
@@ -49,6 +50,7 @@ export const GoldilendLendPage = () => {
           <ClaimTab /> :
           <>
             <LendBox />
+            <LendWalletBalance />
             <LendButton />
             <Stats />
           </>

@@ -1,9 +1,20 @@
 "use client"
 
 import { createContext, PropsWithChildren, useContext, useState } from "react"
+import { readContract } from "@wagmi/core"
+import { formatEther } from "viem"
 import { useWallet } from "../../providers"
+import { config } from "../../providers/WagmiProvider"
+import { contracts } from "../../utils/addressi"
 
 const INITIAL_STATE = {
+
+  goldilendInfo: {
+    ibgt: 0,
+    gibgt: 0,
+    staked: 0,
+    claimable: 0
+  },
 
   activeToggle: 'BORROW',
   changeActiveToggle: (_toggle: string) => {},
@@ -28,6 +39,8 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
 
   const { balance, wallet, isConnected } = useWallet()
 
+  const [goldilendInfoState, setGoldilendInfoState] = useState(INITIAL_STATE.goldilendInfo)
+  
   const [activeToggleState, setActiveToggleState] = useState<string>(INITIAL_STATE.activeToggle)
   const [lendActiveToggleState, setLendActiveToggleState] = useState<string>(INITIAL_STATE.lendActiveToggle)
 
@@ -49,6 +62,7 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
   return (
     <GoldilendContext.Provider
       value={{
+        goldilendInfo: goldilendInfoState,
         infoLoading: infoLoadingState,
         setInfoLoading: setInfoLoadingState,
         refreshGoldilendInfo,
