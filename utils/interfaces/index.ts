@@ -42,3 +42,88 @@ export interface WalletInitialState {
   refreshBalances: () => void;
   balancesLoading: boolean;
 }
+
+export interface BeraInfo {
+  name: string;
+  id: number;
+  imageSrc: string;
+  valuation: number;
+  index: number;
+}
+
+export interface PartnerInfo {
+  name: string;
+  id: number;
+  imageSrc: string;
+  boost: number;
+  index: number;
+}
+
+export interface BoostInfo {
+  partnerNFTs: string[];
+  partnerNFTIds: number[];
+  boostMagnitude: number;
+  expiry: number;
+}
+
+export interface LoanInfo {
+  collateralNFTs: string[];
+  collateralNFTIds: number[];
+  borrowedAmount: number;
+  interest: number;
+  duration: number;
+  endDate: number;
+  loanId: number;
+  liquidated: boolean;
+}
+
+export interface GoldilendInitialState {
+  goldilendInfo: {
+    ibgt: number;
+    gibgt: number;
+    staked: number;
+    claimable: number;
+  };
+  lock: number;
+  stake: number;
+  unstake: number;
+  setLock: (_lock: number) => void;
+  setStake: (_stake: number) => void;
+  setUnstake: (_unstake: number) => void;
+
+  displayString: string;
+  setDisplayString: (_displayString: string) => void;
+
+  ownedBeras: BeraInfo[];
+  selectedBeras: BeraInfo[];
+
+  notification: {
+    toggle: boolean;
+    action: string;
+    result: string;
+    hash:string;
+  };
+  openNotification: (
+    _toggle: boolean,
+    _action: string,
+    _result: string,
+    _hash: string
+  ) => void;
+  activeToggle: string;
+  changeActiveToggle: (_toggle: string) => void;
+  lendActiveToggle: string;
+  changeLendActiveToggle: (_toggle: string) => void;
+  refreshGoldilendInfo: () => void;
+  infoLoading: boolean;
+  setInfoLoading: (_loading: boolean) => void;
+  allowanceButtons: boolean;
+  setAllowanceButtons: (_bool: boolean) => void;
+  handlePercentageButtons: (_action: number) => void;
+  handleStakeChange: (_input: string, _tab: string) => void;
+  handleStakeBalance: (_tab: string) => string;
+  txConfirming: boolean;
+  setTxConfirming: (_confirming: boolean) => void;
+  getOwnedBeras: () => void;
+  handleBeraClick: (_bera: BeraInfo) => void;
+  findSelectedBeraIdxs: () => number[];
+}
