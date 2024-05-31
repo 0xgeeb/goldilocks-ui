@@ -7,7 +7,7 @@ export const LendWalletBalance = () => {
 
   const [walletOpen, setWalletOpen] = useState<boolean>(false)
 
-  const { goldilendInfo } = useGoldilend()
+  const { lendActiveToggle } = useGoldilend()
   const { balance, refreshBalances, isConnected } = useWallet()
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export const LendWalletBalance = () => {
   return (
     <>
       <div
-        className={`absolute h-[20%] w-[2%] top-[20%] left-[76%] hover:scale-105 ${walletOpen ? "translate-x-[800%]" : ""} bg-[#D5A774] border-r-2 border-t-2 border-b-2 border-black cursor-pointer transition-transform ease-linear`}
+        className={`absolute ${lendActiveToggle === 'CLAIM' ? "left-[67%]" : "left-[76%]"} h-[20%] w-[2%] top-[20%] hover:scale-105 ${walletOpen ? "translate-x-[800%]" : ""} bg-[#D5A774] border-r-2 border-t-2 border-b-2 border-black cursor-pointer transition-transform ease-linear`}
         onClick={() => setWalletOpen(prev => !prev)}
       >
         <div className="flex flex-row items-center absolute bottom-[88%] right-[20%] font-baloo font-semibold text-[0.8vw] origin-bottom-right -rotate-[90deg] text-nowrap">
@@ -51,7 +51,7 @@ export const LendWalletBalance = () => {
           <span className="ml-2">BALANCE</span>
         </div>
       </div>
-      <div className={`absolute w-[16%] h-[32%] top-[14%] left-[60%] ${walletOpen ? "translate-x-[100%] border-r-2" : ""} font-baloo font-semibold text-[1vw] border-t-2 border-b-2 border-black bg-[#D5A774] bg-opacity-30 flex flex-col items-center justify-center py-[1.5%] px-[3%] text-white transition-transform ease-linear`}>
+      <div className={`absolute ${lendActiveToggle === 'CLAIM' ? "left-[51%]" : "left-[60%]"} w-[16%] h-[32%] top-[14%]  ${walletOpen ? "translate-x-[100%] border-r-2" : ""} font-baloo font-semibold text-[1vw] border-t-2 border-b-2 border-black bg-[#D5A774] bg-opacity-30 flex flex-col items-center justify-center py-[1.5%] px-[3%] text-white transition-transform ease-linear`}>
         <div className="flex flex-row items-center justify-between w-[100%]">
           <span className="">ibgt balance:</span>
           <span className="">{handleInfo(balance.ibgt)}</span>
@@ -63,6 +63,10 @@ export const LendWalletBalance = () => {
         <div className="flex flex-row items-center justify-between w-[100%]">
           <span className="">staked gibgt:</span>
           <span className="">{handleInfo(balance.lendStaked)}</span>
+        </div>
+        <div className="flex flex-row items-center justify-between w-[100%]">
+          <span className="">claimable:</span>
+          <span className="">{handleInfoClaimable(balance.lendClaimable)}</span>
         </div>
       </div>
     </>

@@ -33,8 +33,7 @@ export const LendButton = () => {
     sendUnstakeTx
   } = useGoldilendTx()
 
-  const { 
-    isConnected, 
+  const {
     balance,
     wallet,
     refreshBalances

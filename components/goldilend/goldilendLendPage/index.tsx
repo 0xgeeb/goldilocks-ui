@@ -47,7 +47,10 @@ export const GoldilendLendPage = () => {
           lendActiveToggle === 'LIQUIDATE' ?
           <LiquidateTab /> :
           lendActiveToggle === 'CLAIM' ?
-          <ClaimTab /> :
+          <>
+            <ClaimTab />
+            <LendWalletBalance />
+          </> :
           <>
             <LendBox />
             <LendWalletBalance />
