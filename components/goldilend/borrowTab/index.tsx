@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { useGoldilend, useWallet } from "../../../providers"
 import { useGoldilendTx } from "../../../hooks"
+import { BorrowNotification } from "../../goldilend"
 import { contracts } from "../../../utils/addressi"
 
 export const BorrowTab = () => {
@@ -23,7 +24,12 @@ export const BorrowTab = () => {
     handleBorrowChange,
     loanExpiration,
     handleLoanDateChange,
-    loanAmount
+    loanAmount,
+    txConfirming,
+    setTxConfirming,
+    notification,
+    changeActiveToggle,
+    openNotification
   } = useGoldilend()
 
   const {
@@ -45,6 +51,10 @@ export const BorrowTab = () => {
 
   const loadingElement = () => {
     return <span className="loader-small mx-auto"></span>
+  }
+
+  const formatAsString = (num: number): string => {
+    return num.toLocaleString('en-US', { maximumFractionDigits: 2 })
   }
 
   const checkDate = (dateString: String): boolean => {
@@ -76,7 +86,8 @@ export const BorrowTab = () => {
     const [month, day, year] = dateParts.map(Number);
     const parsedDate = new Date(year, month - 1, day)
     const timestamp = parsedDate.getTime()
-    const timestampDigits = Math.floor(timestamp / 1000)
+    const timestampDigits = Math.floor(timestamp / 1000000)
+    console.log(timestampDigits)
     return timestampDigits
   }
 
@@ -118,7 +129,7 @@ export const BorrowTab = () => {
     }
     const [bondFlag, bandFlag] = await checkLoanAllowance(wallet)
     if((bondFlag || !checkSelected("BondBera")) && (bandFlag || !checkSelected("BandBera"))) {
-      button && (button.innerHTML = "create loan")
+      borrowTxFlow(button)
     }
     else {
       button && (button.innerHTML = "approving...")
@@ -132,7 +143,41 @@ export const BorrowTab = () => {
     }
   }
 
+  const borrowTxFlow = async (button: HTMLElement | null) => {
+    setTxConfirming(true)
+    if(button) {
+      button.innerHTML = "confirming..."
+      button.style.backgroundColor = "#4D0B24"
+      button.style.color = "#E7B941"
+    }
+    const borrowTx = await sendBorrowTx(loanAmount, selectedBeras, parseDate(loanExpiration))
+    if(borrowTx.substring(0, 2) === '0x') {
+      setTxConfirming(false)
+      openNotification(
+        true,
+        "You've successfully created a loan",
+        `You borrowed ${formatAsString(loanAmount)} iBGT against your beras`,
+        borrowTx
+      )
+      changeActiveToggle('BORROW')
+      setTimeout(() => {
+        openNotification(false, '', '', '')
+      }, 10000)
+    }
+    else {
+      if(button) {
+        button.innerHTML = "redeem"
+        button.style.backgroundColor = "#E7B941"
+        button.style.color = "black"
+      }
+      changeActiveToggle('BORROW')
+      setTxConfirming(false)
+    }
+  }
+
   return (
+    txConfirming ? <img className="w-[100%] h-[100%]" src="/images/bg-transaction.png" alt="tx" /> :
+    notification.toggle ? <BorrowNotification /> :
     <div className="w-[100%] h-[100%] flex flex-row">
       <div className="h-[100%] w-[100%] px-[0%] border-r-2 border-black flex flex-col items-center">
         <h1 className="font-amaticbold text-[3vw] mt-[2%]">select collateral</h1>

@@ -152,6 +152,9 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
 
   const changeActiveToggle = (toggle: string) => {
     setSelectedBerasState([])
+    setBorrowDisplayStringState('')
+    setLoanExpirationState('')
+    setLoanAmountState(0)
     setActiveToggleState(toggle)
   }
 
