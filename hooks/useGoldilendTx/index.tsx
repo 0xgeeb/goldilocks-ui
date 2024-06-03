@@ -2,6 +2,7 @@ import { readContract, writeContract, waitForTransactionReceipt} from "@wagmi/co
 import { parseEther, formatEther } from "viem"
 import { config } from "../../providers/WagmiProvider"
 import { contracts } from "../../utils/addressi"
+import { BeraInfo, LoanInfo, PartnerInfo } from "../../utils/interfaces"
 
 export const useGoldilendTx = () => {
 
@@ -36,6 +37,79 @@ export const useGoldilendTx = () => {
     }
     else {
       return true
+    }
+  }
+
+  const checkBoostAllowance = async (wallet: string): Promise<boolean[]> => {
+    const honeycombAllApproved = await readContract(config, {
+      address: contracts.honeycomb.address as `0x${string}`,
+      abi: contracts.honeycomb.abi,
+      functionName: 'isApprovedForAll',
+      args: [wallet, contracts.goldilend.address]
+    })
+    const beradromeAllApproved = await readContract(config, {
+      address: contracts.beradrome.address as `0x${string}`,
+      abi: contracts.beradrome.abi,
+      functionName: 'isApprovedForAll',
+      args: [wallet, contracts.goldilend.address]
+    })
+    
+    const hcAA = honeycombAllApproved as unknown as boolean
+    const bdAA = beradromeAllApproved as unknown as boolean
+
+    return [hcAA, bdAA]
+  }
+
+  const checkLoanAllowance = async (wallet: string): Promise<boolean[]> => {
+    const bondbearAllApproved = await readContract(config, {
+      address: contracts.bondbear.address as `0x${string}`,
+      abi: contracts.bondbear.abi,
+      functionName: 'isApprovedForAll',
+      args: [wallet, contracts.goldilend.address]
+    })
+    const bandbearAllApproved = await readContract(config, {
+      address: contracts.bandbear.address as `0x${string}`,
+      abi: contracts.bandbear.abi,
+      functionName: 'isApprovedForAll',
+      args: [wallet, contracts.goldilend.address]
+    })
+    
+    const boAA = bondbearAllApproved as unknown as boolean
+    const baAA = bandbearAllApproved as unknown as boolean
+
+    return [boAA, baAA]
+  }
+
+  const checkRepayAllowance = async (amt: number, wallet: string): Promise<boolean> => {
+    const beraAllowance = await readContract(config, {
+      address: contracts.ibgt.address as `0x${string}`,
+      abi: contracts.ibgt.abi,
+      functionName: 'allowance',
+      args: [wallet, contracts.goldilend.address]
+    })
+    const allowanceNum = parseFloat(formatEther(beraAllowance as unknown as bigint))
+  
+    if(amt > allowanceNum) {
+      return false
+    }
+    else {
+      return true
+    }
+  }
+
+  const sendGoldilendNFTApproveTx = async (nft: string) => {
+    try {
+      const hash = await writeContract(config, {
+        address: nft as `0x${string}`,
+        abi: contracts.bondbear.abi,
+        functionName: 'setApprovalForAll',
+        args: [contracts.goldilend.address, true]
+      })
+      await waitForTransactionReceipt(config, { hash })
+    }
+    catch (e) {
+      console.log('user denied tx')
+      console.log('or: ', e)
     }
   }
   
@@ -146,16 +220,165 @@ export const useGoldilendTx = () => {
     return ''
   }
 
+  const sendBoostTx = async (selectedPartners: PartnerInfo[], expiry: number): Promise<string> => {
+    if(selectedPartners.length == 1) {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.goldilend.address as `0x${string}`,
+          abi: contracts.goldilend.abi,
+          functionName: 'boost',
+          args: [selectedPartners[0].name === "HoneyComb" ? contracts.honeycomb.address : contracts.beradrome.address, selectedPartners[0].id, expiry]
+        })
+        const data = await waitForTransactionReceipt(config, { hash })
+        return data.transactionHash
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+    else {
+      let nfts: string[] = []
+      let ids: number[] = []
+      for(let i = 0; i < selectedPartners.length; i++) {
+        nfts.push(selectedPartners[i].name === "HoneyComb" ? contracts.honeycomb.address : contracts.beradrome.address)
+        ids.push(selectedPartners[i].id)
+      }
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.goldilend.address as `0x${string}`,
+          abi: contracts.goldilend.abi,
+          functionName: 'boost',
+          args: [nfts, ids, expiry]
+        })
+        const data = await waitForTransactionReceipt(config, { hash })
+        return data.transactionHash
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+
+    return ''
+  }
+
+  const sendWithdrawBoostTx = async (): Promise<string> => {
+    try {
+      const hash = await writeContract(config, {
+        address: contracts.goldilend.address as `0x${string}`,
+        abi: contracts.goldilend.abi,
+        functionName: 'withdrawBoost',
+        args: []
+      })
+      const data = await waitForTransactionReceipt(config, { hash })
+      return data.transactionHash
+    }
+    catch (e) {
+      console.log('user denied tx')
+      console.log('or: ', e)
+    }
+
+    return ''
+  }
+
+  const sendBorrowTx = async (loanAmt: number, selectedBeras: BeraInfo[], duration: number): Promise<string> => {
+    if(selectedBeras.length == 1) {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.goldilend.address as `0x${string}`,
+          abi: contracts.goldilend.abi,
+          functionName: 'borrow',
+          args: [parseEther(`${loanAmt}`), duration, selectedBeras[0].name === 'BondBera' ? contracts.bondbear.address : contracts.bandbear.address, selectedBeras[0].id]
+        })
+        const data = await waitForTransactionReceipt(config, { hash })
+        return data.transactionHash
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+    else {
+      let nfts: string[] = []
+      let ids: number[] = []
+      for(let i = 0; i < selectedBeras.length; i++) {
+        nfts.push(selectedBeras[i].name === 'BondBera' ? contracts.bondbear.address : contracts.bandbear.address)
+        ids.push(selectedBeras[i].id)
+      }
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.goldilend.address as `0x${string}`,
+          abi: contracts.goldilend.abi,
+          functionName: 'borrow',
+          args: [parseEther(`${loanAmt}`), duration, nfts, ids]
+        })
+        const data = await waitForTransactionReceipt(config, { hash })
+        return data.transactionHash
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+
+    return ''
+  }
+
+  const sendRepayTx = async (repayAmt: number, loanId: number, maxToggle: boolean, wallet: string): Promise<string> => {
+    const loan = await readContract(config, {
+      address: contracts.goldilend.address as `0x${string}`,
+      abi: contracts.goldilend.abi,
+      functionName: 'lookupLoan',
+      args: [wallet, loanId]
+    })
+    const userLoan = loan as unknown as LoanInfo
+    try {
+      const hash = await writeContract(config, {
+        address: contracts.goldilend.address as `0x${string}`,
+        abi: contracts.goldilend.abi,
+        functionName: 'repay',
+        args: [maxToggle ? userLoan.borrowedAmount.toString() : parseEther(`${repayAmt}`), loanId]
+      })
+      const data = await waitForTransactionReceipt(config, { hash })
+      return data.transactionHash
+    }
+    catch (e) {
+      console.log('user denied tx')
+      console.log('or: ', e)
+    }
+    
+    return ''
+  }
+
+  const sendLiquidateTx = async (addy: string, id: number): Promise<string> => {
+    try {
+      const hash = await writeContract(config, {
+        address: contracts.goldilend.address as `0x${string}`,
+        abi: contracts.goldilend.abi,
+        functionName: 'liquidate',
+        args: [addy, id]
+      })
+      const data = await waitForTransactionReceipt(config, { hash })
+      return data.transactionHash
+    }
+    catch (e) {
+      console.log('user denied tx')
+      console.log('or: ', e)
+    }
+    
+    return ''
+  }
+
   return { 
-    // checkBoostAllowance,
-    // checkLoanAllowance,
-    // sendGoldilendNFTApproveTx,
-    // sendBoostTx,
-    // sendExtendBoostTx,
-    // sendWithdrawBoostTx,
-    // sendBorrowTx,
-    // sendRepayTx,
-    // checkRepayAllowance,
+    checkBoostAllowance,
+    checkLoanAllowance,
+    sendGoldilendNFTApproveTx,
+    sendBoostTx,
+    sendWithdrawBoostTx,
+    sendBorrowTx,
+    sendRepayTx,
+    checkRepayAllowance,
     checkLockAllowance,
     checkStakeAllowance,
     sendiBGTApproveTx,
@@ -164,6 +387,6 @@ export const useGoldilendTx = () => {
     sendStakeTx,
     sendUnstakeTx,
     sendClaimTx,
-    // sendLiquidateTx
+    sendLiquidateTx
   }
 }

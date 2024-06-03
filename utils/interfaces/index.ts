@@ -1,5 +1,4 @@
 import React from "../../node_modules/@types/react"
-import { NumberToBytesErrorType, WalletClient } from "viem"
 
 export interface LayoutProps {
   children: React.ReactNode;
@@ -87,16 +86,16 @@ export interface GoldilendInitialState {
   lock: number;
   stake: number;
   unstake: number;
+  loanAmount: number;
+  borrowLimit: number;
   setLock: (_lock: number) => void;
   setStake: (_stake: number) => void;
   setUnstake: (_unstake: number) => void;
-
   displayString: string;
+  borrowDisplayString: string;
   setDisplayString: (_displayString: string) => void;
-
   ownedBeras: BeraInfo[];
   selectedBeras: BeraInfo[];
-
   notification: {
     toggle: boolean;
     action: string;
@@ -126,4 +125,8 @@ export interface GoldilendInitialState {
   getOwnedBeras: () => void;
   handleBeraClick: (_bera: BeraInfo) => void;
   findSelectedBeraIdxs: () => number[];
+  updateBorrowLimit: () => void;
+  handleBorrowChange: (_input: string) => void;
+  handleLoanDateChange: (_input: string) => void;
+  loanExpiration: string;
 }
