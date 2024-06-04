@@ -6,7 +6,7 @@ import { formatEther } from "viem"
 import { useWallet } from "../../providers"
 import { config } from "../../providers/WagmiProvider"
 import { contracts } from "../../utils/addressi"
-import { GoldilendInitialState, BeraInfo, PartnerInfo, LoanInfo } from "../../utils/interfaces"
+import { GoldilendInitialState, BeraInfo, PartnerInfo, LoanInfo, LoanData } from "../../utils/interfaces"
 
 const INITIAL_STATE: GoldilendInitialState = {
 
@@ -75,7 +75,18 @@ const INITIAL_STATE: GoldilendInitialState = {
     },
   ],
   selectedBeras: [],
-  userLoans: [],
+  userLoans: [
+    {
+      collateralNFTs: ['0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad'],
+      collateralNFTIds: [2, 3],
+      borrowedAmount: 69.5015,
+      interest: 0.5015,
+      duration: 1725854,
+      endDate: 1719240812,
+      loanId: 2,
+      liquidated: false
+    }
+  ],
 
   notification: {
     toggle: false,
@@ -90,7 +101,7 @@ const INITIAL_STATE: GoldilendInitialState = {
     _hash: string
   ) => {},
 
-  activeToggle: 'BORROW',
+  activeToggle: 'REPAY',
   changeActiveToggle: (_toggle: string) => {},
 
   lendActiveToggle: 'LOCK',
@@ -100,6 +111,9 @@ const INITIAL_STATE: GoldilendInitialState = {
 
   infoLoading: true,
   setInfoLoading: (_loading: boolean) => {},
+
+  loansLoading: true,
+  setLoansLoading: (_loading: boolean) => {},
 
   allowanceButtons: false,
   setAllowanceButtons: (_bool: boolean) => {},
@@ -114,6 +128,7 @@ const INITIAL_STATE: GoldilendInitialState = {
 
   handleBeraClick: (_bera: BeraInfo) => {},
   findSelectedBeraIdxs: () => [],
+  findLoans: () => {},
   updateBorrowLimit: () => {},
   handleBorrowChange: (_input: string) => {},
   handleLoanDateChange: (_input: string) => {},
@@ -146,6 +161,7 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
 
   const [allowanceButtonsState, setAllowanceButtonsState] = useState<boolean>(INITIAL_STATE.allowanceButtons)
   const [infoLoadingState, setInfoLoadingState] = useState<boolean>(INITIAL_STATE.infoLoading)
+  const [loansLoadingState, setLoansLoadingState] = useState<boolean>(INITIAL_STATE.loansLoading)
   const [txConfirmingState, setTxConfirmingState] = useState<boolean>(INITIAL_STATE.txConfirming)
 
   const changeActiveToggle = (toggle: string) => {
@@ -295,11 +311,10 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
   }
 
   const getOwnedBeras = async () => {
-    // console.log('boutta fetch')
     // const options = { method: 'GET', headers: {accept: 'application/json'} }
+    //todo: env and use wallet
     // const response = await fetch('https://base-sepolia.g.alchemy.com/nft/v3/XgNYMjOtB41dpMK9FvXg9seQVdFIzqsA/getNFTsForOwner?owner=0x895614c89beC7D11454312f740854d08CbF57A78&withMetadata=true&pageSize=100', options)
     // const data = await response.json()
-    // console.log(data)
 
     // let beraIndex = 0
     // for(const nft of data.ownedNfts) {
@@ -326,8 +341,6 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
     //     beraIndex++
     //   }
     // }
-
-    // console.log('done')
   }
 
   const handleLoanDateChange = (input: string) => {
@@ -336,16 +349,32 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
 
   //todo: caps out at 20 loans
   const findLoans = async () => {
-    const userLoans: LoanInfo[] = []
-    // for(let i = 0; i < 20; i++) {
-    //   console.log('findingloans', i)
-      const loanData = await readContract(config, {
-        address: contracts.goldilend.address as `0x${string}`,
-        abi: contracts.goldilend.abi,
-        functionName: 'lookupLoan',
-        args: [wallet, 0]
-      })
-      console.log(loanData)
+    // if(wallet) {
+    //   const userLoans: LoanInfo[] = []
+    //   for(let i = 1; i < 20; i++) {
+    //     const loan = await readContract(config, {
+    //       address: contracts.goldilend.address as `0x${string}`,
+    //       abi: contracts.goldilend.abi,
+    //       functionName: 'lookupLoan',
+    //       args: [wallet, i]
+    //     })
+    //     const loanData = loan as unknown as LoanData
+    //     if(loanData.collateralNFTIds.length == 0) {
+    //       break
+    //     }
+    //     const userLoan = {
+    //       collateralNFTs: loanData.collateralNFTs,
+    //       collateralNFTIds: loanData.collateralNFTIds.map(id => parseInt(id.toString(), 16)),
+    //       borrowedAmount: parseFloat(formatEther(loanData.borrowedAmount)),
+    //       interest: parseFloat(formatEther(loanData.interest)),
+    //       duration: Number(loanData.duration),
+    //       endDate: Number(loanData.endDate),
+    //       loanId: parseInt(loanData.loanId.toString(), 16),
+    //       liquidated: loanData.liquidated
+    //     }
+    //     userLoans.push(userLoan)
+    //   }
+    //   setUserLoansState(userLoans)
     // }
   }
 
@@ -354,9 +383,6 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
   }
 
   const refreshGoldilendInfo = async () => {
-    refreshBalances()
-    console.log(wallet)
-    console.log(balance)
     // getOwnedBeras()
     // findLoans()
     // findBoosts()
@@ -410,7 +436,10 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
         borrowDisplayString: borrowDisplayStringState,
         handleBorrowChange,
         handleLoanDateChange,
-        loanExpiration: loanExpirationState
+        loanExpiration: loanExpirationState,
+        loansLoading: loansLoadingState,
+        setLoansLoading: setLoansLoadingState,
+        findLoans
       }}
     >
       { children }

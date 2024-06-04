@@ -76,6 +76,17 @@ export interface LoanInfo {
   liquidated: boolean;
 }
 
+export interface LoanData {
+  collateralNFTs: string[];
+  collateralNFTIds: bigint[];
+  borrowedAmount: bigint;
+  interest: bigint;
+  duration: bigint;
+  endDate: bigint;
+  loanId: bigint;
+  liquidated: boolean;
+}
+
 export interface GoldilendInitialState {
   goldilendInfo: {
 
@@ -113,6 +124,8 @@ export interface GoldilendInitialState {
   refreshGoldilendInfo: () => void;
   infoLoading: boolean;
   setInfoLoading: (_loading: boolean) => void;
+  loansLoading: boolean;
+  setLoansLoading: (_loading: boolean) => void;
   allowanceButtons: boolean;
   setAllowanceButtons: (_bool: boolean) => void;
   handlePercentageButtons: (_action: number) => void;
@@ -126,4 +139,5 @@ export interface GoldilendInitialState {
   handleBorrowChange: (_input: string) => void;
   handleLoanDateChange: (_input: string) => void;
   loanExpiration: string;
+  findLoans: () => void;
 }
