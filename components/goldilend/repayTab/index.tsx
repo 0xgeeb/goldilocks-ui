@@ -1,4 +1,16 @@
+"use client"
+
+import { useState } from "react"
+import { ConnectButton } from "@rainbow-me/rainbowkit"
+import { useGoldilend, useNotification, useWallet } from "../../../providers"
+import { useGoldilendTx } from "../../../hooks"
+import { contracts } from "../../../utils/addressi"
+
 export const RepayTab = () => {
+
+  const {
+    infoLoading
+  } = useGoldilend()
 
   return (
     <div className="h-[100%] w-[100%] flex flex-col">

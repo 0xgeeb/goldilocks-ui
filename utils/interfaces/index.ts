@@ -78,10 +78,7 @@ export interface LoanInfo {
 
 export interface GoldilendInitialState {
   goldilendInfo: {
-    ibgt: number;
-    gibgt: number;
-    staked: number;
-    claimable: number;
+
   };
   lock: number;
   stake: number;
@@ -95,6 +92,7 @@ export interface GoldilendInitialState {
   borrowDisplayString: string;
   setDisplayString: (_displayString: string) => void;
   ownedBeras: BeraInfo[];
+  userLoans: LoanInfo[];
   selectedBeras: BeraInfo[];
   notification: {
     toggle: boolean;
@@ -122,7 +120,6 @@ export interface GoldilendInitialState {
   handleStakeBalance: (_tab: string) => string;
   txConfirming: boolean;
   setTxConfirming: (_confirming: boolean) => void;
-  getOwnedBeras: () => void;
   handleBeraClick: (_bera: BeraInfo) => void;
   findSelectedBeraIdxs: () => number[];
   updateBorrowLimit: () => void;

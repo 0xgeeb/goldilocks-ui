@@ -44,9 +44,5 @@ export const contracts = {
   honeycomb: {
     address: '0x7701F54182C55091a8a78a51c22d1899736113D2',
     abi: honeycombABI.abi
-  },
-  ibgt: {
-    address: '0xe2f6eF50fD232c7c9698F2f4CaE44A6D80AaFdEE',
-    abi: honeyABI.abi
   }
 }

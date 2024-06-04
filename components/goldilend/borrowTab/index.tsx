@@ -1,5 +1,6 @@
 "use client"
 
+import { ConnectButton } from "@rainbow-me/rainbowkit"
 import { useState, useEffect } from "react"
 import { useGoldilend, useWallet } from "../../../providers"
 import { useGoldilendTx } from "../../../hooks"
@@ -11,7 +12,6 @@ export const BorrowTab = () => {
   const [currentIndex, setCurrentIndex] = useState<number>(0)
 
   const {
-    getOwnedBeras,
     ownedBeras,
     handleBeraClick,
     infoLoading,
@@ -38,12 +38,7 @@ export const BorrowTab = () => {
     sendBorrowTx
   } = useGoldilendTx()
 
-  const { wallet, isConnected } = useWallet()
-
-  useEffect(() => {
-    getOwnedBeras()
-    setInfoLoading(false)
-  }, [isConnected])
+  const { wallet } = useWallet()
 
   useEffect(() => {
     updateBorrowLimit()
@@ -116,7 +111,7 @@ export const BorrowTab = () => {
   const handleButtonClick = async () => {
     const button = document.getElementById('borrow-button')
     if(loanAmount == 0) {
-      button && (button.innerHTML = "no loan amount")
+      button && (button.innerHTML = "no loan")
       return
     }
     if(!checkDate(loanExpiration)) {
@@ -156,7 +151,7 @@ export const BorrowTab = () => {
       openNotification(
         true,
         "You've successfully created a loan",
-        `You borrowed ${formatAsString(loanAmount)} iBGT against your beras`,
+        `You borrowed ${formatAsString(loanAmount)} iBGT against your bera${selectedBeras.length > 1 ? "s" : ""}`,
         borrowTx
       )
       changeActiveToggle('BORROW')
@@ -166,7 +161,7 @@ export const BorrowTab = () => {
     }
     else {
       if(button) {
-        button.innerHTML = "redeem"
+        button.innerHTML = "create loan"
         button.style.backgroundColor = "#E7B941"
         button.style.color = "black"
       }
@@ -253,13 +248,46 @@ export const BorrowTab = () => {
           <span>Total Amount to Repay:</span>
           <span>{loanAmount} iBGT</span>
         </div>
-        <button
-          className="w-[48%] h-[12%] bg-[#E7B941] border-2 border-black font-amaticbold text-[1.7vw] flex items-center justify-center hover:bg-[#C9E3B9] hover:scale-110"
-          id="borrow-button"
-          onClick={() => handleButtonClick()}
-        >
-          create loan
-        </button>
+        <ConnectButton.Custom>
+          {({
+            account,
+            chain,
+            openChainModal,
+            openConnectModal
+          }) => {
+            return (
+              <button
+                className="w-[48%] h-[12%] bg-[#E7B941] border-2 border-black font-amaticbold text-[1.7vw] flex items-center justify-center hover:bg-[#C9E3B9] hover:scale-110"
+                id="borrow-button"
+                onClick={() => {
+                  const button = document.getElementById('borrow-button')
+                  
+                  if(!account) {
+                    if(button && button.innerHTML === "connect wallet") {
+                      openConnectModal()
+                    }
+                    else {
+                      button && (button.innerHTML = "connect wallet")
+                    }
+                  }
+                  else if(chain?.name !== "Base Sepolia") {
+                    if(button && button.innerHTML === "where base sepolia") {
+                      openChainModal()
+                    }
+                    else {
+                      button && (button.innerHTML = "where base sepolia")
+                    }
+                  }
+                  else {
+                    handleButtonClick()
+                  }
+                }}
+              >
+                create loan
+              </button>
+            )
+          }}
+        </ConnectButton.Custom>
       </div>
     </div>
   )

@@ -6,15 +6,12 @@ import { formatEther } from "viem"
 import { useWallet } from "../../providers"
 import { config } from "../../providers/WagmiProvider"
 import { contracts } from "../../utils/addressi"
-import { GoldilendInitialState, BeraInfo } from "../../utils/interfaces"
+import { GoldilendInitialState, BeraInfo, PartnerInfo, LoanInfo } from "../../utils/interfaces"
 
 const INITIAL_STATE: GoldilendInitialState = {
 
   goldilendInfo: {
-    ibgt: 0,
-    gibgt: 0,
-    staked: 0,
-    claimable: 0
+
   },
 
   lock: 0,
@@ -78,6 +75,7 @@ const INITIAL_STATE: GoldilendInitialState = {
     },
   ],
   selectedBeras: [],
+  userLoans: [],
 
   notification: {
     toggle: false,
@@ -114,7 +112,6 @@ const INITIAL_STATE: GoldilendInitialState = {
   txConfirming: false,
   setTxConfirming: (_confirming: boolean) => {},
 
-  getOwnedBeras: () => {},
   handleBeraClick: (_bera: BeraInfo) => {},
   findSelectedBeraIdxs: () => [],
   updateBorrowLimit: () => {},
@@ -128,7 +125,7 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
 
   const { children } = props
 
-  const { balance, wallet, isConnected } = useWallet()
+  const { balance, wallet, isConnected, refreshBalances } = useWallet()
 
   const [goldilendInfoState, setGoldilendInfoState] = useState(INITIAL_STATE.goldilendInfo)
   const [notificationState, setNotificationState] = useState(INITIAL_STATE.notification)
@@ -141,6 +138,7 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
   const [unstakeState, setUnstakeState] = useState<number>(INITIAL_STATE.unstake)
   const [ownedBerasState, setOwnedBerasState] = useState<BeraInfo[]>(INITIAL_STATE.ownedBeras)
   const [selectedBerasState, setSelectedBerasState] = useState<BeraInfo[]>([])
+  const [userLoansState, setUserLoansState] = useState<LoanInfo[]>(INITIAL_STATE.userLoans)
   const [activeToggleState, setActiveToggleState] = useState<string>(INITIAL_STATE.activeToggle)
   const [lendActiveToggleState, setLendActiveToggleState] = useState<string>(INITIAL_STATE.lendActiveToggle)
   const [loanAmountState, setLoanAmountState] = useState<number>(INITIAL_STATE.loanAmount)
@@ -336,8 +334,32 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
     setLoanExpirationState(input)
   }
 
-  const refreshGoldilendInfo = async () => {
+  //todo: caps out at 20 loans
+  const findLoans = async () => {
+    const userLoans: LoanInfo[] = []
+    // for(let i = 0; i < 20; i++) {
+    //   console.log('findingloans', i)
+      const loanData = await readContract(config, {
+        address: contracts.goldilend.address as `0x${string}`,
+        abi: contracts.goldilend.abi,
+        functionName: 'lookupLoan',
+        args: [wallet, 0]
+      })
+      console.log(loanData)
+    // }
+  }
 
+  const findBoosts = async () => {
+
+  }
+
+  const refreshGoldilendInfo = async () => {
+    refreshBalances()
+    console.log(wallet)
+    console.log(balance)
+    // getOwnedBeras()
+    // findLoans()
+    // findBoosts()
   }
 
   const openNotification = (toggle: boolean, action: string, result: string, hash: string) => {
@@ -379,7 +401,7 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
         openNotification,
         selectedBeras: selectedBerasState,
         ownedBeras: ownedBerasState,
-        getOwnedBeras,
+        userLoans: userLoansState,
         handleBeraClick,
         findSelectedBeraIdxs,
         borrowLimit: borrowLimitState,
