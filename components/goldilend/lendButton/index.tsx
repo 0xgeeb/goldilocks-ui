@@ -215,7 +215,8 @@ export const LendButton = () => {
     }
   }
 
-  
+
+  //todo: fix update allowances here
   const handleLeftButtonClick = async () => {
     const swapButton = document.getElementById('lend-button')
     const leftButton = document.getElementById('left-approve-button')

@@ -31,61 +31,81 @@ const INITIAL_STATE: GoldilendInitialState = {
   borrowLimit: 0,
 
   ownedBeras: [
-    {
-      name: "BondBera",
-      id: 1,
-      imageSrc: "https://ipfs.io/ipfs/QmSaVWb15oQ1HcsUjGGkjwHQ1mxJBYeivtBCgHHHiVLt7w",
-      valuation: 50,
-      index: 0
-    },
-    {
-      name: "BondBera",
-      id: 2,
-      imageSrc: "https://ipfs.io/ipfs/QmSaVWb15oQ1HcsUjGGkjwHQ1mxJBYeivtBCgHHHiVLt7w",
-      valuation: 50,
-      index: 1
-    },
-    {
-      name: "BandBera",
-      id: 1,
-      imageSrc: "https://ipfs.io/ipfs/QmNWggx9vvBVEHZc6xwWkdyymoKuXCYrJ3zQwwKzocDxRt",
-      valuation: 50,
-      index: 2
-    },
-    {
-      name: "BandBera",
-      id: 2,
-      imageSrc: "https://ipfs.io/ipfs/QmNWggx9vvBVEHZc6xwWkdyymoKuXCYrJ3zQwwKzocDxRt",
-      valuation: 50,
-      index: 3
-    },
-    {
-      name: "BondBera",
-      id: 3,
-      imageSrc: "https://ipfs.io/ipfs/QmSaVWb15oQ1HcsUjGGkjwHQ1mxJBYeivtBCgHHHiVLt7w",
-      valuation: 50,
-      index: 4
-    },
-    {
-      name: "BandBera",
-      id: 3,
-      imageSrc: "https://ipfs.io/ipfs/QmNWggx9vvBVEHZc6xwWkdyymoKuXCYrJ3zQwwKzocDxRt",
-      valuation: 50,
-      index: 5
-    },
+    // {
+    //   name: "BondBera",
+    //   id: 1,
+    //   imageSrc: "https://ipfs.io/ipfs/QmSaVWb15oQ1HcsUjGGkjwHQ1mxJBYeivtBCgHHHiVLt7w",
+    //   valuation: 50,
+    //   index: 0
+    // },
+    // {
+    //   name: "BondBera",
+    //   id: 2,
+    //   imageSrc: "https://ipfs.io/ipfs/QmSaVWb15oQ1HcsUjGGkjwHQ1mxJBYeivtBCgHHHiVLt7w",
+    //   valuation: 50,
+    //   index: 1
+    // },
+    // {
+    //   name: "BandBera",
+    //   id: 1,
+    //   imageSrc: "https://ipfs.io/ipfs/QmNWggx9vvBVEHZc6xwWkdyymoKuXCYrJ3zQwwKzocDxRt",
+    //   valuation: 50,
+    //   index: 2
+    // },
+    // {
+    //   name: "BandBera",
+    //   id: 2,
+    //   imageSrc: "https://ipfs.io/ipfs/QmNWggx9vvBVEHZc6xwWkdyymoKuXCYrJ3zQwwKzocDxRt",
+    //   valuation: 50,
+    //   index: 3
+    // },
+    // {
+    //   name: "BondBera",
+    //   id: 3,
+    //   imageSrc: "https://ipfs.io/ipfs/QmSaVWb15oQ1HcsUjGGkjwHQ1mxJBYeivtBCgHHHiVLt7w",
+    //   valuation: 50,
+    //   index: 4
+    // },
+    // {
+    //   name: "BandBera",
+    //   id: 3,
+    //   imageSrc: "https://ipfs.io/ipfs/QmNWggx9vvBVEHZc6xwWkdyymoKuXCYrJ3zQwwKzocDxRt",
+    //   valuation: 50,
+    //   index: 5
+    // },
   ],
   selectedBeras: [],
   userLoans: [
-    {
-      collateralNFTs: ['0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad'],
-      collateralNFTIds: [2, 3],
-      borrowedAmount: 69.5015,
-      interest: 0.5015,
-      duration: 1725854,
-      endDate: 1719240812,
-      loanId: 2,
-      liquidated: false
-    }
+    // {
+    //   collateralNFTs: ['0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad'],
+    //   collateralNFTIds: [2, 3],
+    //   borrowedAmount: 45678546,
+    //   interest: 0.5015,
+    //   duration: 1725854,
+    //   endDate: 1719240812,
+    //   loanId: 5,
+    //   liquidated: false
+    // },
+    // {
+    //   collateralNFTs: ['0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad'],
+    //   collateralNFTIds: [2, 3],
+    //   borrowedAmount: 69.5015,
+    //   interest: 0.5015,
+    //   duration: 1725854,
+    //   endDate: 1719240812,
+    //   loanId: 6,
+    //   liquidated: false
+    // },
+    // {
+    //   collateralNFTs: ['0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad'],
+    //   collateralNFTIds: [2, 3],
+    //   borrowedAmount: 2,
+    //   interest: 0.5015,
+    //   duration: 1725854,
+    //   endDate: 1719240812,
+    //   loanId: 2,
+    //   liquidated: false
+    // }
   ],
 
   notification: {
@@ -101,7 +121,7 @@ const INITIAL_STATE: GoldilendInitialState = {
     _hash: string
   ) => {},
 
-  activeToggle: 'REPAY',
+  activeToggle: 'BORROW',
   changeActiveToggle: (_toggle: string) => {},
 
   lendActiveToggle: 'LOCK',
@@ -128,6 +148,7 @@ const INITIAL_STATE: GoldilendInitialState = {
 
   handleBeraClick: (_bera: BeraInfo) => {},
   findSelectedBeraIdxs: () => [],
+  findBeras: () => {},
   findLoans: () => {},
   updateBorrowLimit: () => {},
   handleBorrowChange: (_input: string) => {},
@@ -310,37 +331,40 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
     return idxArray
   }
 
-  const getOwnedBeras = async () => {
-    // const options = { method: 'GET', headers: {accept: 'application/json'} }
-    //todo: env and use wallet
-    // const response = await fetch('https://base-sepolia.g.alchemy.com/nft/v3/XgNYMjOtB41dpMK9FvXg9seQVdFIzqsA/getNFTsForOwner?owner=0x895614c89beC7D11454312f740854d08CbF57A78&withMetadata=true&pageSize=100', options)
-    // const data = await response.json()
-
-    // let beraIndex = 0
-    // for(const nft of data.ownedNfts) {
-    //   if(nft.contract.address === '0x8172BDB659837F321bF7Da8941d8E12a62a72d6a') {
-    //     const bondInfo  = {
-    //       name: "BondBera",
-    //       id: nft.tokenId,
-    //       imageSrc: "https://ipfs.io/ipfs/QmSaVWb15oQ1HcsUjGGkjwHQ1mxJBYeivtBCgHHHiVLt7w",
-    //       valuation: 50,
-    //       index: beraIndex
-    //     }
-    //     setOwnedBerasState(curr => [...curr, bondInfo])
-    //     beraIndex++
-    //   }
-    //   if(nft.contract.address === '0xB1195a6cdB7ef8fB22671bd8321727dBB6DDDe03') {
-    //     const bandInfo  = {
-    //       name: "BandBera",
-    //       id: nft.tokenId,
-    //       imageSrc: "https://ipfs.io/ipfs/QmNWggx9vvBVEHZc6xwWkdyymoKuXCYrJ3zQwwKzocDxRt",
-    //       valuation: 50,
-    //       index: beraIndex
-    //     }
-    //     setOwnedBerasState(curr => [...curr, bandInfo])
-    //     beraIndex++
-    //   }
-    // }
+  const findBeras = async () => {
+    if(wallet) {
+      console.log('finding beras with wallet')
+      const options = { method: 'GET', headers: {accept: 'application/json'} }
+      // todo: env
+      const response = await fetch(`https://base-sepolia.g.alchemy.com/nft/v3/XgNYMjOtB41dpMK9FvXg9seQVdFIzqsA/getNFTsForOwner?owner=${wallet}&withMetadata=true&pageSize=100`, options)
+      const data = await response.json()
+  
+      let beraIndex = 0
+      for(const nft of data.ownedNfts) {
+        if(nft.contract.address === '0x8172BDB659837F321bF7Da8941d8E12a62a72d6a') {
+          const bondInfo  = {
+            name: "BondBera",
+            id: nft.tokenId,
+            imageSrc: "https://ipfs.io/ipfs/QmSaVWb15oQ1HcsUjGGkjwHQ1mxJBYeivtBCgHHHiVLt7w",
+            valuation: 50,
+            index: beraIndex
+          }
+          setOwnedBerasState(curr => [...curr, bondInfo])
+          beraIndex++
+        }
+        if(nft.contract.address === '0xB1195a6cdB7ef8fB22671bd8321727dBB6DDDe03') {
+          const bandInfo  = {
+            name: "BandBera",
+            id: nft.tokenId,
+            imageSrc: "https://ipfs.io/ipfs/QmNWggx9vvBVEHZc6xwWkdyymoKuXCYrJ3zQwwKzocDxRt",
+            valuation: 50,
+            index: beraIndex
+          }
+          setOwnedBerasState(curr => [...curr, bandInfo])
+          beraIndex++
+        }
+      }
+    }
   }
 
   const handleLoanDateChange = (input: string) => {
@@ -349,33 +373,34 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
 
   //todo: caps out at 20 loans
   const findLoans = async () => {
-    // if(wallet) {
-    //   const userLoans: LoanInfo[] = []
-    //   for(let i = 1; i < 20; i++) {
-    //     const loan = await readContract(config, {
-    //       address: contracts.goldilend.address as `0x${string}`,
-    //       abi: contracts.goldilend.abi,
-    //       functionName: 'lookupLoan',
-    //       args: [wallet, i]
-    //     })
-    //     const loanData = loan as unknown as LoanData
-    //     if(loanData.collateralNFTIds.length == 0) {
-    //       break
-    //     }
-    //     const userLoan = {
-    //       collateralNFTs: loanData.collateralNFTs,
-    //       collateralNFTIds: loanData.collateralNFTIds.map(id => parseInt(id.toString(), 16)),
-    //       borrowedAmount: parseFloat(formatEther(loanData.borrowedAmount)),
-    //       interest: parseFloat(formatEther(loanData.interest)),
-    //       duration: Number(loanData.duration),
-    //       endDate: Number(loanData.endDate),
-    //       loanId: parseInt(loanData.loanId.toString(), 16),
-    //       liquidated: loanData.liquidated
-    //     }
-    //     userLoans.push(userLoan)
-    //   }
-    //   setUserLoansState(userLoans)
-    // }
+    if(wallet) {
+      console.log('finding loans with wallet')
+      const userLoans: LoanInfo[] = []
+      for(let i = 1; i < 20; i++) {
+        const loan = await readContract(config, {
+          address: contracts.goldilend.address as `0x${string}`,
+          abi: contracts.goldilend.abi,
+          functionName: 'lookupLoan',
+          args: [wallet, i]
+        })
+        const loanData = loan as unknown as LoanData
+        if(loanData.collateralNFTIds.length == 0) {
+          break
+        }
+        const userLoan = {
+          collateralNFTs: loanData.collateralNFTs,
+          collateralNFTIds: loanData.collateralNFTIds.map(id => parseInt(id.toString(), 16)),
+          borrowedAmount: parseFloat(formatEther(loanData.borrowedAmount)),
+          interest: parseFloat(formatEther(loanData.interest)),
+          duration: Number(loanData.duration),
+          endDate: Number(loanData.endDate),
+          loanId: parseInt(loanData.loanId.toString(), 16),
+          liquidated: loanData.liquidated
+        }
+        userLoans.push(userLoan)
+      }
+      setUserLoansState(userLoans)
+    }
   }
 
   const findBoosts = async () => {
@@ -439,7 +464,8 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
         loanExpiration: loanExpirationState,
         loansLoading: loansLoadingState,
         setLoansLoading: setLoansLoadingState,
-        findLoans
+        findLoans,
+        findBeras
       }}
     >
       { children }

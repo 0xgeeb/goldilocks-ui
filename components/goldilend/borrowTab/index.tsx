@@ -29,7 +29,8 @@ export const BorrowTab = () => {
     setTxConfirming,
     notification,
     changeActiveToggle,
-    openNotification
+    openNotification,
+    findBeras
   } = useGoldilend()
 
   const {
@@ -38,7 +39,13 @@ export const BorrowTab = () => {
     sendBorrowTx
   } = useGoldilendTx()
 
-  const { wallet } = useWallet()
+  const { wallet, refreshBalances, isConnected } = useWallet()
+
+  useEffect(() => {
+    refreshBalances()
+    findBeras(),
+    setInfoLoading(false)
+  }, [isConnected])
 
   useEffect(() => {
     updateBorrowLimit()

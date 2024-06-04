@@ -81,13 +81,13 @@ export const useGoldilendTx = () => {
   }
 
   const checkRepayAllowance = async (amt: number, wallet: string): Promise<boolean> => {
-    const beraAllowance = await readContract(config, {
+    const ibgtAllowance = await readContract(config, {
       address: contracts.ibgt.address as `0x${string}`,
       abi: contracts.ibgt.abi,
       functionName: 'allowance',
       args: [wallet, contracts.goldilend.address]
     })
-    const allowanceNum = parseFloat(formatEther(beraAllowance as unknown as bigint))
+    const allowanceNum = parseFloat(formatEther(ibgtAllowance as unknown as bigint))
   
     if(amt > allowanceNum) {
       return false

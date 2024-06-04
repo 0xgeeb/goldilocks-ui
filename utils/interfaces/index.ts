@@ -140,4 +140,5 @@ export interface GoldilendInitialState {
   handleLoanDateChange: (_input: string) => void;
   loanExpiration: string;
   findLoans: () => void;
+  findBeras: () => void;
 }

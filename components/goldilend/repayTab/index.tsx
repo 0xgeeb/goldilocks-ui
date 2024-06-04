@@ -4,19 +4,40 @@ import { useState, useEffect } from "react"
 import { ConnectButton } from "@rainbow-me/rainbowkit"
 import { useGoldilend, useNotification, useWallet } from "../../../providers"
 import { useGoldilendTx } from "../../../hooks"
+import { BorrowNotification } from "../../goldilend"
 import { contracts } from "../../../utils/addressi"
 
+type InputValuesType = {
+  [key: number]: string;
+}
+
 export const RepayTab = () => {
+
+  const [inputValues, setInputValues] = useState<InputValuesType>({})
 
   const {
     loansLoading,
     userLoans,
     findLoans,
-    setLoansLoading
+    setLoansLoading,
+    allowanceButtons,
+    setAllowanceButtons,
+    txConfirming,
+    setTxConfirming,
+    notification,
+    openNotification
   } = useGoldilend()
 
+  const {
+    checkRepayAllowance,
+    sendRepayTx,
+    sendiBGTApproveTx
+  } = useGoldilendTx()
+
+  const { wallet, balance, refreshBalances, isConnected } = useWallet()
+
   const loadingElement = () => {
-    return <span className="loader-small mx-auto"></span>
+    return <span className="loader-small mx-auto my-auto"></span>
   }
 
   const formatDate = (timestamp: number): string => {
@@ -31,12 +52,135 @@ export const RepayTab = () => {
     return num.toLocaleString('en-US', { maximumFractionDigits: 2 })
   }
 
+  const formatAsString = (num: number): string => {
+    return num.toLocaleString('en-US', { maximumFractionDigits: 2 })
+  }
+
+  const handleInputChange = (loanId: number, value: string) => {
+    setInputValues(prev => ({
+      ...prev,
+      [loanId]: value
+    }))
+  }
+
+  const handleMaxClick = (loanId: number, amt: number) => {
+    setInputValues(prev => ({
+      ...prev,
+      [loanId]: amt.toString()
+    }))
+  }
+
+  const refreshInfo = () => {
+    const newValues: InputValuesType = {}
+    Object.keys(inputValues).forEach(key => {
+      newValues[parseInt(key)] = '0'
+    })
+    setInputValues(newValues)
+    findLoans()
+  }
+
+  const handleButtonClick = async (loanId: number, amt: number, borrowedAmt: number) => {
+    console.log('hello')
+    const button = document.getElementById('repay-button')
+    if(amt == 0) {
+      console.log('no amt')
+      button && (button.innerHTML = "no amount")
+      return
+    }
+    if(amt > balance.ibgt) {
+      console.log('ibgt')
+      button && (button.innerHTML = "no balance")
+      return
+    }
+    else {
+      console.log('checking allowance')
+      const sufficientAllowance: boolean | void = await checkRepayAllowance(amt, wallet)
+      if(sufficientAllowance) {
+        setTxConfirming(true)
+        if(button) {
+          button.innerHTML = "confirming..."
+        }
+        const repayTx = await sendRepayTx(amt, loanId, amt == borrowedAmt, wallet)
+        if(repayTx.substring(0, 2) === '0x') {
+          setTxConfirming(false)
+          openNotification(
+            true,
+            "You've successfully repaid your loan",
+            `You repaid ${formatAsString(amt)} iBGT`,
+            repayTx
+          )
+          if(button) {
+            button.innerHTML = "REPAY LOAN"
+            button.style.backgroundColor = "#E7B941"
+            button.style.color = "black"
+          }
+          refreshInfo()
+          setTimeout(() => {
+            openNotification(false, '', '', '')
+          }, 10000)
+        }
+        else {
+          if(button) {
+            button.innerHTML = "REPAY LOAN"
+            button.style.backgroundColor = "#E7B941"
+            button.style.color = "black"
+          }
+          refreshInfo()
+          setTxConfirming(false)
+        }
+      }
+      else {
+        setAllowanceButtons(true)
+      }
+    }
+  }
+
+  //todo: fix update allowance here
+  const handleLeftButtonClick = async (amt: number) => {
+    const swapButton = document.getElementById('repay-button')
+    const leftButton = document.getElementById('left-approve-button')
+    const rightButton = document.getElementById('right-approve-button')
+    if(leftButton) {
+      leftButton.innerHTML = "approving..."
+      leftButton.style.backgroundColor = "#E7B941"
+    }
+    if(rightButton) {
+      rightButton.innerHTML = "approving..."
+      rightButton.style.backgroundColor = "#E7B941"
+    }
+    await sendiBGTApproveTx(amt, false)
+    // updateAllowance(honeyBuy + 0.01)
+    swapButton && (swapButton.innerHTML = "REPAY LOAN")
+    setAllowanceButtons(false)
+  }
+  
+  const handleRightButtonClick = async () => {
+    const swapButton = document.getElementById('repay-button')
+    const rightButton = document.getElementById('right-approve-button')
+    const leftButton = document.getElementById('left-approve-button')
+    if(leftButton) {
+      leftButton.innerHTML = "approving..."
+      leftButton.style.backgroundColor = "#E7B941"
+    }
+    if(rightButton) {
+      rightButton.innerHTML = "approving..."
+      rightButton.style.backgroundColor = "#E7B941"
+    }
+    await sendiBGTApproveTx(0, true)
+    // updateAllowance(100000000)
+    swapButton && (swapButton.innerHTML = "REPAY LOAN")
+    setAllowanceButtons(false)
+  }
+
   useEffect(() => {
     findLoans()
+    refreshBalances()
     setLoansLoading(false)
-  }, [])
+  }, [isConnected])
 
   return (
+    txConfirming ? <img className="w-[100%] h-[100%]" src="/images/bg-transaction.png" alt="tx" /> :
+    notification.toggle ? <BorrowNotification /> :
     <div className="h-[100%] w-[100%] flex flex-col">
       <div className="w-[100%] h-[15%] border-b-2 border-black">
         <h1 className="font-amaticbold ml-[4%] text-[2.3vw]">my loans</h1>
@@ -69,27 +213,97 @@ export const RepayTab = () => {
               <h1 className="text-[#9C4924] my-[2%]">Collateral</h1>
               <div className="w-[90%] h-[65%] overflow-x-auto flex flex-row items-center justify-around" id="hide-scrollbar">
                 {
-                  loan.collateralNFTs.map((nft) => (
+                  loan.collateralNFTs.map((nft, index) => (
                     <img
                       className="h-[100%] w-[30%] mr-[5%]  border-2 border-black"
                       src={nft === contracts.bondbear.address ? 'https://ipfs.io/ipfs/QmSaVWb15oQ1HcsUjGGkjwHQ1mxJBYeivtBCgHHHiVLt7w' : 'https://ipfs.io/ipfs/QmNWggx9vvBVEHZc6xwWkdyymoKuXCYrJ3zQwwKzocDxRt'}
                       alt="collateral"
-                      key={nft}
+                      key={index}
                     />
                   ))
                 }
               </div>
             </div>
             <div className="h-[100%] w-[23%] flex flex-col relative">
-                <div className="bg-[#CC8634] absolute top-[20%] left-[5%] h-[30%] w-[25%] cursor-pointer hover:scale-110 text-[0.9vw] border-t-2 border-b-2 border-l-2 border-black flex items-center justify-center">
-                  MAX
+              <div
+                className="bg-[#CC8634] absolute top-[20%] left-[1%] h-[30%] w-[25%] cursor-pointer hover:scale-110 text-[0.9vw] border-t-2 border-b-2 border-l-2 border-black flex items-center justify-center"
+                onClick={() => handleMaxClick(loan.loanId, loan.borrowedAmount)}
+              >
+                MAX
+              </div>
+              <div className="top-[20%] left-[26%] h-[30%] w-[69%] absolute bg-white border-2 border-black flex flex-row items-center justify-between">
+                <input
+                  className="h-[100%] w-[70%] pl-[5%] text-[1.3vw] focus:outline-none"
+                  type="text"
+                  id="number-input"
+                  placeholder="0.00"
+                  value={inputValues[loan.loanId] || ''}
+                  onChange={(e) => handleInputChange(loan.loanId, e.target.value)}
+                />
+                <span className="text-[0.8vw] text-[#7B7876] mr-[1%]">iBGT</span>
+              </div>
+              {
+                allowanceButtons &&
+                <div>
+                  <button
+                    className="top-[60%] left-[1%] h-[30%] w-[42%] absolute border-2 border-black bg-[#E7B941] text-[0.7vw] hover:scale-110"
+                    id="left-approve-button"
+                    onClick={() => handleLeftButtonClick(parseFloat(inputValues[loan.loanId]))}
+                  >
+                    approve tx
+                  </button>
+                  <button
+                    className="top-[60%] left-[53%] h-[30%] w-[42%] absolute border-2 border-black bg-[#E7B941] text-[0.7vw] hover:scale-110"
+                    id="right-approve-button"
+                    onClick={() => handleRightButtonClick()}
+                  >
+                    approve infinite
+                  </button>
                 </div>
-                <div className="top-[20%] left-[30%] h-[30%] w-[65%] absolute bg-white border-2 border-black">
-
-                </div>
-                <button className="top-[60%] left-[30%] h-[30%] w-[65%] absolute border-2 border-black bg-[#E7B941] text-[0.9vw]">
-                  REPAY LOAN
-                </button>
+              }
+              {
+                !allowanceButtons &&
+                <ConnectButton.Custom>
+                  {({
+                    account,
+                    chain,
+                    openChainModal,
+                    openConnectModal
+                  }) => {
+                    return (
+                      <button
+                        className="top-[60%] left-[30%] h-[30%] w-[65%] absolute border-2 border-black bg-[#E7B941] text-[0.9vw] hover:scale-110"
+                        id="repay-button"
+                        onClick={() => {
+                          const button = document.getElementById('repay-button')
+                          
+                          if(!account) {
+                            if(button && button.innerHTML === "connect wallet") {
+                              openConnectModal()
+                            }
+                            else {
+                              button && (button.innerHTML = "connect wallet")
+                            }
+                          }
+                          else if(chain?.name !== "Base Sepolia") {
+                            if(button && button.innerHTML === "where base sepolia") {
+                              openChainModal()
+                            }
+                            else {
+                              button && (button.innerHTML = "where base sepolia")
+                            }
+                          }
+                          else {
+                            handleButtonClick(loan.loanId, parseFloat(inputValues[loan.loanId]), loan.borrowedAmount)
+                          }
+                        }}
+                      >
+                        REPAY LOAN
+                      </button>
+                    )
+                  }}
+                </ConnectButton.Custom>
+              }
             </div>
           </div>
         ))
