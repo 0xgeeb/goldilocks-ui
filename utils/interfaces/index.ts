@@ -87,6 +87,13 @@ export interface LoanData {
   liquidated: boolean;
 }
 
+export interface BoostData {
+  partnerNFTs: string[];
+  partnerNFTIds: bigint[];
+  boostMagnitude: bigint;
+  expiry: bigint;
+}
+
 export interface GoldilendInitialState {
   goldilendInfo: {
 
@@ -103,8 +110,11 @@ export interface GoldilendInitialState {
   borrowDisplayString: string;
   setDisplayString: (_displayString: string) => void;
   ownedBeras: BeraInfo[];
-  userLoans: LoanInfo[];
   selectedBeras: BeraInfo[];
+  ownedPartners: PartnerInfo[];
+  selectedPartners: PartnerInfo[];
+  userLoans: LoanInfo[];
+  userBoost: BoostInfo;
   notification: {
     toggle: boolean;
     action: string;
@@ -141,4 +151,6 @@ export interface GoldilendInitialState {
   loanExpiration: string;
   findLoans: () => void;
   findBeras: () => void;
+  findBoost: () => void;
+  findPartners: () => void;
 }

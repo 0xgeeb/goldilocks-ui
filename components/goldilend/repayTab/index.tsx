@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { ConnectButton } from "@rainbow-me/rainbowkit"
-import { useGoldilend, useNotification, useWallet } from "../../../providers"
+import { useGoldilend, useWallet } from "../../../providers"
 import { useGoldilendTx } from "../../../hooks"
 import { BorrowNotification } from "../../goldilend"
 import { contracts } from "../../../utils/addressi"
@@ -205,8 +205,8 @@ export const RepayTab = () => {
                 <span>{formatNum(loan.borrowedAmount)} iBGT</span>
               </div>
               <div className="w-[100%] flex flex-row items-center justify-between">
-                <span>days left:</span>
-                <span>9 days</span>
+                <span>expiration date:</span>
+                <span>{formatDate(loan.endDate)}</span>
               </div>
             </div>
             <div className="h-[100%] w-[35%] flex flex-col items-center">

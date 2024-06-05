@@ -88,9 +88,8 @@ export const BorrowTab = () => {
     const [month, day, year] = dateParts.map(Number);
     const parsedDate = new Date(year, month - 1, day)
     const timestamp = parsedDate.getTime()
-    const timestampDigits = Math.floor(timestamp / 1000000)
-    console.log(timestampDigits)
-    return timestampDigits
+    const currentTimestamp = Date.now()
+    return Math.floor((timestamp - currentTimestamp) / 1000)
   }
 
   const nextImages = () => {

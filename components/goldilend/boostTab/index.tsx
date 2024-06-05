@@ -1,10 +1,28 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { ConnectButton } from "@rainbow-me/rainbowkit"
+import { useGoldilend, useWallet } from "../../../providers"
+import { useGoldilendTx } from "../../../hooks"
+import { BorrowNotification } from "../../goldilend"
+import { contracts } from "../../../utils/addressi"
 
 export const BoostTab = () => {
 
   const [array, setArray] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13])
+
+  const {
+    infoLoading,
+    findBoost,
+    findPartners
+  } = useGoldilend()
+
+  const { isConnected } = useWallet()
+
+  useEffect(() => {
+    findPartners
+    findBoost()
+  }, [isConnected])
 
   return (
     <div className="w-[100%] h-[100%] flex flex-row">

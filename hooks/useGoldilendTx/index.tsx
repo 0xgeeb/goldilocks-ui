@@ -1,5 +1,5 @@
 import { readContract, writeContract, waitForTransactionReceipt} from "@wagmi/core"
-import { parseEther, formatEther } from "viem"
+import { parseEther, formatEther, parseAbi } from "viem"
 import { config } from "../../providers/WagmiProvider"
 import { contracts } from "../../utils/addressi"
 import { BeraInfo, LoanInfo, PartnerInfo } from "../../utils/interfaces"
@@ -283,13 +283,17 @@ export const useGoldilendTx = () => {
   }
 
   const sendBorrowTx = async (loanAmt: number, selectedBeras: BeraInfo[], duration: number): Promise<string> => {
+    const bond = contracts.bondbear.address as `0x${string}`
+    const band = contracts.bandbear.address as `0x${string}`
     if(selectedBeras.length == 1) {
       try {
         const hash = await writeContract(config, {
           address: contracts.goldilend.address as `0x${string}`,
-          abi: contracts.goldilend.abi,
+          abi: parseAbi([
+            'function borrow(uint256, uint256, address, uint256)'
+          ]),
           functionName: 'borrow',
-          args: [parseEther(`${loanAmt}`), duration, selectedBeras[0].name === 'BondBera' ? contracts.bondbear.address : contracts.bandbear.address, selectedBeras[0].id]
+          args: [parseEther(`${loanAmt}`), BigInt(duration), selectedBeras[0].name === 'BondBera' ? bond : band, BigInt(selectedBeras[0].id)]
         })
         const data = await waitForTransactionReceipt(config, { hash })
         return data.transactionHash
