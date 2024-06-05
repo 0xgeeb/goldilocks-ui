@@ -181,7 +181,7 @@ export const RepayTab = () => {
   return (
     txConfirming ? <img className="w-[100%] h-[100%]" src="/images/bg-transaction.png" alt="tx" /> :
     notification.toggle ? <BorrowNotification /> :
-    <div className="h-[100%] w-[100%] flex flex-col">
+    <div className="h-[100%] w-[100%] flex flex-col overflow-y-auto" id="hide-scrollbar">
       <div className="w-[100%] h-[15%] border-b-2 border-black">
         <h1 className="font-amaticbold ml-[4%] text-[2.3vw]">my loans</h1>
       </div>
