@@ -220,14 +220,14 @@ export const useGoldilendTx = () => {
     return ''
   }
 
-  const sendBoostTx = async (selectedPartners: PartnerInfo[], expiry: number): Promise<string> => {
+  const sendBoostTx = async (selectedPartners: PartnerInfo[]): Promise<string> => {
     if(selectedPartners.length == 1) {
       try {
         const hash = await writeContract(config, {
           address: contracts.goldilend.address as `0x${string}`,
           abi: contracts.goldilend.abi,
           functionName: 'boost',
-          args: [selectedPartners[0].name === "HoneyComb" ? contracts.honeycomb.address : contracts.beradrome.address, selectedPartners[0].id, expiry]
+          args: [selectedPartners[0].name === "HoneyComb" ? contracts.honeycomb.address : contracts.beradrome.address, selectedPartners[0].id]
         })
         const data = await waitForTransactionReceipt(config, { hash })
         return data.transactionHash
@@ -238,18 +238,22 @@ export const useGoldilendTx = () => {
       }
     }
     else {
-      let nfts: string[] = []
-      let ids: number[] = []
+      const hc = contracts.honeycomb.address as `0x${string}`
+      const drome = contracts.beradrome.address as `0x${string}`
+      let nfts: `0x${string}`[] = []
+      let ids: bigint[] = []
       for(let i = 0; i < selectedPartners.length; i++) {
-        nfts.push(selectedPartners[i].name === "HoneyComb" ? contracts.honeycomb.address : contracts.beradrome.address)
-        ids.push(selectedPartners[i].id)
+        nfts.push(selectedPartners[i].name === "HoneyComb" ? hc : drome)
+        ids.push(BigInt(selectedPartners[i].id))
       }
       try {
         const hash = await writeContract(config, {
           address: contracts.goldilend.address as `0x${string}`,
-          abi: contracts.goldilend.abi,
+          abi: parseAbi([
+            'function boost(address[], uint256[])'
+          ]),
           functionName: 'boost',
-          args: [nfts, ids, expiry]
+          args: [nfts, ids]
         })
         const data = await waitForTransactionReceipt(config, { hash })
         return data.transactionHash

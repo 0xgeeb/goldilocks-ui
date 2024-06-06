@@ -33,6 +33,7 @@ const INITIAL_STATE: GoldilendInitialState = {
   setDisplayString: (_displayString: string) => {},
   loanAmount: 0,
   borrowLimit: 0,
+  boostMag: 0,
   ownedBeras: [
     // {
     //   name: "BondBera",
@@ -147,12 +148,15 @@ const INITIAL_STATE: GoldilendInitialState = {
   txConfirming: false,
   setTxConfirming: (_confirming: boolean) => {},
   handleBeraClick: (_bera: BeraInfo) => {},
+  handlePartnerClick: (_partner: PartnerInfo) => {},
   findSelectedBeraIdxs: () => [],
+  findSelectedPartnerIdxs: () => [],
   findBeras: () => {},
   findLoans: () => {},
   findBoost: () => {},
   findPartners: () => {},
   updateBorrowLimit: () => {},
+  updateBoostMag: () => {},
   handleBorrowChange: (_input: string) => {},
   handleLoanDateChange: (_input: string) => {},
 }
@@ -184,6 +188,7 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
   const [lendActiveToggleState, setLendActiveToggleState] = useState<string>(INITIAL_STATE.lendActiveToggle)
   const [loanAmountState, setLoanAmountState] = useState<number>(INITIAL_STATE.loanAmount)
   const [borrowLimitState, setBorrowLimitState] = useState<number>(INITIAL_STATE.borrowLimit)
+  const [boostMagState, setBoostMagState] = useState<number>(INITIAL_STATE.boostMag)
 
   const [allowanceButtonsState, setAllowanceButtonsState] = useState<boolean>(INITIAL_STATE.allowanceButtons)
   const [infoLoadingState, setInfoLoadingState] = useState<boolean>(INITIAL_STATE.infoLoading)
@@ -192,6 +197,9 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
 
   const changeActiveToggle = (toggle: string) => {
     setSelectedBerasState([])
+    setSelectedPartnersState([])
+    setOwnedBerasState([])
+    setOwnedPartnersState([])
     setBorrowDisplayStringState('')
     setLoanExpirationState('')
     setLoanAmountState(0)
@@ -291,6 +299,14 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
     setBorrowLimitState(limit)
   }
 
+  const updateBoostMag = () => {
+    let mag = 0
+    selectedPartnersState.forEach((partner) => {
+      mag += partner.boost
+    })
+    setBoostMagState(mag)
+  }
+
   const handleStakeChange = (input: string, tab: string) => {
     setDisplayStringState(input)
     if(tab === 'LOCK') {
@@ -328,12 +344,30 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
     }
   }
 
+  const findSelectedPartnerIdxs = (): number[] => {
+    let idxArray: number[] = []
+    selectedPartnersState.forEach((selectedPartner) => {
+      idxArray.push(selectedPartner.index)
+    })
+    return idxArray
+  }
+
   const findSelectedBeraIdxs = (): number[] => {
     let idxArray: number[] = []
     selectedBerasState.forEach((selectedBera) => {
       idxArray.push(selectedBera.index)
     })
     return idxArray
+  }
+
+  const handlePartnerClick = (partner: PartnerInfo) => {
+    const idxArray: number[] = findSelectedPartnerIdxs()
+    if(idxArray.includes(partner.index)) {
+      setSelectedPartnersState(prev => prev.filter(partnerf => partnerf.index !== partner.index))
+    }
+    else {
+      setSelectedPartnersState(prev => [...prev, partner])
+    }
   }
 
   const findBeras = async () => {
@@ -427,38 +461,38 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
   }
 
   const findPartners = async () => {
-    // if(wallet) {
-    //   const options = { method: 'GET', headers: {accept: 'application/json'} }
-    //   // todo: env
-    //   const response = await fetch(`https://base-sepolia.g.alchemy.com/nft/v3/XgNYMjOtB41dpMK9FvXg9seQVdFIzqsA/getNFTsForOwner?owner=${wallet}&withMetadata=true&pageSize=100`, options)
-    //   const data = await response.json()
+    if(wallet) {
+      const options = { method: 'GET', headers: {accept: 'application/json'} }
+      // todo: env
+      const response = await fetch(`https://base-sepolia.g.alchemy.com/nft/v3/XgNYMjOtB41dpMK9FvXg9seQVdFIzqsA/getNFTsForOwner?owner=${wallet}&withMetadata=true&pageSize=100`, options)
+      const data = await response.json()
   
-    //   let partnerIndex = 0
-    //   for(const nft of data.ownedNfts) {
-    //     if(nft.contract.address === '0x8172BDB659837F321bF7Da8941d8E12a62a72d6a') {
-    //       const bondInfo  = {
-    //         name: "BondBera",
-    //         id: nft.tokenId,
-    //         imageSrc: "https://ipfs.io/ipfs/QmSaVWb15oQ1HcsUjGGkjwHQ1mxJBYeivtBCgHHHiVLt7w",
-    //         valuation: 50,
-    //         index: partnerIndex
-    //       }
-    //       setOwnedBerasState(curr => [...curr, bondInfo])
-    //       partnerIndex++
-    //     }
-    //     if(nft.contract.address === '0xB1195a6cdB7ef8fB22671bd8321727dBB6DDDe03') {
-    //       const bandInfo  = {
-    //         name: "BandBera",
-    //         id: nft.tokenId,
-    //         imageSrc: "https://ipfs.io/ipfs/QmNWggx9vvBVEHZc6xwWkdyymoKuXCYrJ3zQwwKzocDxRt",
-    //         valuation: 50,
-    //         index: partnerIndex
-    //       }
-    //       setOwnedBerasState(curr => [...curr, bandInfo])
-    //       partnerIndex++
-    //     }
-    //   }
-    // }
+      let partnerIndex = 0
+      for(const nft of data.ownedNfts) {
+        if(nft.contract.address === contracts.beradrome.address) {
+          const dromeInfo  = {
+            name: "Beradrome",
+            id: nft.tokenId,
+            imageSrc: "https://ipfs.io/ipfs/QmYhKPJVDZDRDpJAJ2TyCXK981B4pvtPcjrKgN256U4Cok/73.png",
+            boost: 9,
+            index: partnerIndex
+          }
+          setOwnedPartnersState(curr => [...curr, dromeInfo])
+          partnerIndex++
+        }
+        if(nft.contract.address === contracts.honeycomb.address) {
+          const combInfo  = {
+            name: "HoneyComb",
+            id: nft.tokenId,
+            imageSrc: "https://ipfs.io/ipfs/QmTffyDuYgSyFAgispVjuVaTsKnC5vVs7FFq1YkGde4ZX5",
+            boost: 6,
+            index: partnerIndex
+          }
+          setOwnedPartnersState(curr => [...curr, combInfo])
+          partnerIndex++
+        }
+      }
+    }
   }
 
   const refreshGoldilendInfo = async () => {
@@ -508,8 +542,10 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
         handleBeraClick,
         findSelectedBeraIdxs,
         borrowLimit: borrowLimitState,
+        boostMag: boostMagState,
         loanAmount: loanAmountState,
         updateBorrowLimit,
+        updateBoostMag,
         borrowDisplayString: borrowDisplayStringState,
         handleBorrowChange,
         handleLoanDateChange,
@@ -522,7 +558,9 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
         findPartners,
         userBoost: userBoostState,
         selectedPartners: selectedPartnersState,
-        ownedPartners: ownedPartnersState
+        ownedPartners: ownedPartnersState,
+        findSelectedPartnerIdxs,
+        handlePartnerClick
       }}
     >
       { children }

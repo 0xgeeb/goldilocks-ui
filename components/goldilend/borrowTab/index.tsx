@@ -148,8 +148,6 @@ export const BorrowTab = () => {
     setTxConfirming(true)
     if(button) {
       button.innerHTML = "confirming..."
-      button.style.backgroundColor = "#4D0B24"
-      button.style.color = "#E7B941"
     }
     const borrowTx = await sendBorrowTx(loanAmount, selectedBeras, parseDate(loanExpiration))
     if(borrowTx.substring(0, 2) === '0x') {
@@ -161,6 +159,7 @@ export const BorrowTab = () => {
         borrowTx
       )
       changeActiveToggle('BORROW')
+      findBeras()
       setTimeout(() => {
         openNotification(false, '', '', '')
       }, 10000)
@@ -172,6 +171,7 @@ export const BorrowTab = () => {
         button.style.color = "black"
       }
       changeActiveToggle('BORROW')
+      findBeras()
       setTxConfirming(false)
     }
   }

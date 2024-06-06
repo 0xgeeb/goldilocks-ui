@@ -110,7 +110,7 @@ export const BorrowButton = () => {
       button && (button.innerHTML = "repay")
       return
     }
-    if(repay > balance.borrowed) {
+    if(repay > balance.borrowed || repay > balance.honey) {
       button && (button.innerHTML = "insufficient balance")
       return
     }

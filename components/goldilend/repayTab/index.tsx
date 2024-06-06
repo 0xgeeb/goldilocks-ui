@@ -16,10 +16,10 @@ export const RepayTab = () => {
   const [inputValues, setInputValues] = useState<InputValuesType>({})
 
   const {
-    loansLoading,
+    infoLoading,
     userLoans,
     findLoans,
-    setLoansLoading,
+    setInfoLoading,
     allowanceButtons,
     setAllowanceButtons,
     txConfirming,
@@ -35,6 +35,12 @@ export const RepayTab = () => {
   } = useGoldilendTx()
 
   const { wallet, balance, refreshBalances, isConnected } = useWallet()
+
+  useEffect(() => {
+    findLoans()
+    refreshBalances()
+    setInfoLoading(false)
+  }, [isConnected])
 
   const loadingElement = () => {
     return <span className="loader-small mx-auto my-auto"></span>
@@ -80,20 +86,16 @@ export const RepayTab = () => {
   }
 
   const handleButtonClick = async (loanId: number, amt: number, borrowedAmt: number) => {
-    console.log('hello')
     const button = document.getElementById('repay-button')
     if(amt == 0) {
-      console.log('no amt')
       button && (button.innerHTML = "no amount")
       return
     }
     if(amt > balance.ibgt) {
-      console.log('ibgt')
       button && (button.innerHTML = "no balance")
       return
     }
     else {
-      console.log('checking allowance')
       const sufficientAllowance: boolean | void = await checkRepayAllowance(amt, wallet)
       if(sufficientAllowance) {
         setTxConfirming(true)
@@ -172,12 +174,6 @@ export const RepayTab = () => {
     setAllowanceButtons(false)
   }
 
-  useEffect(() => {
-    findLoans()
-    refreshBalances()
-    setLoansLoading(false)
-  }, [isConnected])
-
   return (
     txConfirming ? <img className="w-[100%] h-[100%]" src="/images/bg-transaction.png" alt="tx" /> :
     notification.toggle ? <BorrowNotification /> :
@@ -186,7 +182,7 @@ export const RepayTab = () => {
         <h1 className="font-amaticbold ml-[4%] text-[2.3vw]">my loans</h1>
       </div>
       {
-        loansLoading ?
+        infoLoading ?
         loadingElement() :
         userLoans.map((loan, index) => (
           <div className="w-[100%] h-[28%] font-baloo font-semibold border-b-2 border-black flex flex-row items-center relative" key={index}>
