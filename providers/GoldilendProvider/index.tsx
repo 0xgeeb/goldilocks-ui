@@ -87,7 +87,7 @@ const INITIAL_STATE: GoldilendInitialState = {
     //   interest: 0.5015,
     //   duration: 1725854,
     //   endDate: 1719240812,
-    //   loanId: 5,
+    //   loanId: 1,
     //   liquidated: false
     // },
     // {
@@ -97,7 +97,7 @@ const INITIAL_STATE: GoldilendInitialState = {
     //   interest: 0.5015,
     //   duration: 1725854,
     //   endDate: 1719240812,
-    //   loanId: 6,
+    //   loanId: 2,
     //   liquidated: false
     // },
     // {
@@ -107,7 +107,17 @@ const INITIAL_STATE: GoldilendInitialState = {
     //   interest: 0.5015,
     //   duration: 1725854,
     //   endDate: 1719240812,
-    //   loanId: 2,
+    //   loanId: 3,
+    //   liquidated: false
+    // },
+    // {
+    //   collateralNFTs: ['0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad'],
+    //   collateralNFTIds: [2, 3],
+    //   borrowedAmount: 2,
+    //   interest: 0.5015,
+    //   duration: 1725854,
+    //   endDate: 1719240812,
+    //   loanId: 4,
     //   liquidated: false
     // }
   ],
@@ -119,6 +129,18 @@ const INITIAL_STATE: GoldilendInitialState = {
     boostMagnitude: 0,
     expiry: 0
   },
+  liquidatableLoans: [
+    // {
+    //   collateralNFTs: ['0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad'],
+    //   collateralNFTIds: [2, 3],
+    //   borrowedAmount: 2,
+    //   interest: 0.5015,
+    //   duration: 1725854,
+    //   endDate: 1719240812,
+    //   loanId: 2,
+    //   liquidated: false
+    // }
+  ],
   notification: {
     toggle: false,
     action: '',
@@ -131,7 +153,7 @@ const INITIAL_STATE: GoldilendInitialState = {
     _result: string,
     _hash: string
   ) => {},
-  activeToggle: 'BORROW',
+  activeToggle: 'REPAY',
   changeActiveToggle: (_toggle: string) => {},
   lendActiveToggle: 'LOCK',
   changeLendActiveToggle: (_toggle: string) => {},
@@ -154,6 +176,7 @@ const INITIAL_STATE: GoldilendInitialState = {
   findBeras: () => {},
   findLoans: () => {},
   findBoost: () => {},
+  findLiquidatableLoans: () => {},
   findPartners: () => {},
   updateBorrowLimit: () => {},
   updateBoostMag: () => {},
@@ -183,6 +206,7 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
   const [ownedPartnersState, setOwnedPartnersState] = useState<PartnerInfo[]>(INITIAL_STATE.ownedPartners)
   const [selectedPartnersState, setSelectedPartnersState] = useState<PartnerInfo[]>([])
   const [userLoansState, setUserLoansState] = useState<LoanInfo[]>(INITIAL_STATE.userLoans)
+  const [liquidatableLoansState, setLiquidatableLoansState] = useState<LoanInfo[]>(INITIAL_STATE.liquidatableLoans)
   const [userBoostState, setUserBoostState] = useState<BoostInfo>(INITIAL_STATE.userBoost)
   const [activeToggleState, setActiveToggleState] = useState<string>(INITIAL_STATE.activeToggle)
   const [lendActiveToggleState, setLendActiveToggleState] = useState<string>(INITIAL_STATE.lendActiveToggle)
@@ -495,6 +519,11 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
     }
   }
 
+  //todo: need indexer for this
+  const findLiquidatableLoans = () => {
+
+  }
+
   const refreshGoldilendInfo = async () => {
 
   }
@@ -555,12 +584,14 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
         findLoans,
         findBeras,
         findBoost,
+        findLiquidatableLoans,
         findPartners,
         userBoost: userBoostState,
         selectedPartners: selectedPartnersState,
         ownedPartners: ownedPartnersState,
         findSelectedPartnerIdxs,
-        handlePartnerClick
+        handlePartnerClick,
+        liquidatableLoans: liquidatableLoansState
       }}
     >
       { children }

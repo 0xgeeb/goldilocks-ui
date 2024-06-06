@@ -186,6 +186,24 @@ export const RepayTab = () => {
         loadingElement() :
         userLoans.map((loan, index) => (
           <div className="w-[100%] h-[28%] font-baloo font-semibold border-b-2 border-black flex flex-row items-center relative" key={index}>
+            {
+              loan.borrowedAmount == 0 &&
+              <div className="rotate-[16deg] absolute right-0 w-[30%] h-[25%] bg-[#79AF45] border-2 border-black flex items-center justify-center text-[1.1vw] z-30">
+                REPAID
+              </div>
+            }
+            {
+              loan.endDate < Math.floor(Date.now() / 1000) &&
+              <div className="rotate-[16deg] absolute right-0 w-[30%] h-[25%] bg-[#CC7E16] border-2 border-black flex items-center justify-center text-[1.1vw] z-30">
+                EXPIRED
+              </div>
+            }
+            {
+              loan.liquidated &&
+              <div className="rotate-[16deg] absolute right-0 w-[30%] h-[25%] bg-[#B11614] border-2 border-black flex items-center justify-center text-[1.1vw] z-30">
+                LIQUIDATED
+              </div>
+            }
             <h1 className="absolute text-[1vw] top-[2%] left-[1%]">Loan {loan.loanId}</h1>
             <div className="h-[50%] w-[35%] px-[3%] flex flex-col justify-center text-[0.8vw] ml-[7%]">
               <div className="w-[100%] flex flex-row items-center justify-between">

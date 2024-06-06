@@ -116,6 +116,7 @@ export interface GoldilendInitialState {
   selectedPartners: PartnerInfo[];
   userLoans: LoanInfo[];
   userBoost: BoostInfo;
+  liquidatableLoans: LoanInfo[];
   notification: {
     toggle: boolean;
     action: string;
@@ -157,4 +158,5 @@ export interface GoldilendInitialState {
   findBeras: () => void;
   findBoost: () => void;
   findPartners: () => void;
+  findLiquidatableLoans: () => void;
 }
