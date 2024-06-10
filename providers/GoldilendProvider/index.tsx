@@ -169,6 +169,10 @@ const INITIAL_STATE: GoldilendInitialState = {
   handleStakeBalance: (_tab: string) => '',
   txConfirming: false,
   setTxConfirming: (_confirming: boolean) => {},
+  chartOpen: false,
+  setChartOpen: (_open: boolean) => {},
+  balanceMobileToggle: false,
+  setBalanceMobileToggle: (_toggle: boolean) => {},
   handleBeraClick: (_bera: BeraInfo) => {},
   handlePartnerClick: (_partner: PartnerInfo) => {},
   findSelectedBeraIdxs: () => [],
@@ -218,6 +222,8 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
   const [infoLoadingState, setInfoLoadingState] = useState<boolean>(INITIAL_STATE.infoLoading)
   const [loansLoadingState, setLoansLoadingState] = useState<boolean>(INITIAL_STATE.loansLoading)
   const [txConfirmingState, setTxConfirmingState] = useState<boolean>(INITIAL_STATE.txConfirming)
+  const [chartOpenState, setChartOpenState] = useState<boolean>(INITIAL_STATE.chartOpen)
+  const [balanceMobileToggleState, setBalanceMobileToggleState] = useState<boolean>(INITIAL_STATE.balanceMobileToggle)
 
   const changeActiveToggle = (toggle: string) => {
     setSelectedBerasState([])
@@ -591,7 +597,11 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
         ownedPartners: ownedPartnersState,
         findSelectedPartnerIdxs,
         handlePartnerClick,
-        liquidatableLoans: liquidatableLoansState
+        liquidatableLoans: liquidatableLoansState,
+        chartOpen: chartOpenState,
+        setChartOpen: setChartOpenState,
+        balanceMobileToggle: balanceMobileToggleState,
+        setBalanceMobileToggle: setBalanceMobileToggleState
       }}
     >
       { children }

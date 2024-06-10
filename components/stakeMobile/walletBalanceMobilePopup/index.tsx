@@ -1,8 +1,8 @@
-import { useBorrow, useWallet } from "../../../providers"
+import { useStake, useWallet } from "../../../providers"
 
 export const WalletBalanceMobilePopup = () => {
 
-  const { setBalanceMobileToggle } = useBorrow()
+  const { setBalanceMobileToggle } = useStake()
 
   const { balance } = useWallet()
 

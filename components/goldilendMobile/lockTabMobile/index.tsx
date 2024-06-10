@@ -1,4 +1,5 @@
 import { useGoldilend, useWallet } from "../../../providers"
+import { LendWalletBalanceMobilePopup } from "../../utils"
 
 export const LockTabMobile = () => {
 
@@ -9,7 +10,8 @@ export const LockTabMobile = () => {
     displayString,
     handleStakeChange,
     lendActiveToggle,
-    handleStakeBalance
+    handleStakeBalance,
+    balanceMobileToggle
   } = useGoldilend()
 
   const { balancesLoading } = useWallet()
@@ -21,7 +23,7 @@ export const LockTabMobile = () => {
   return (
     txConfirming ? <img className="w-[100%] h-[100%]" src="/images/bg-transaction-mobile-small.png" alt="tx" /> :
     // notification.toggle ? <NotificationMobile /> :
-    // balanceMobileToggle ? <WalletBalanceMobilePopup /> :
+    balanceMobileToggle ? <LendWalletBalanceMobilePopup /> :
     <div className="w-[100%] h-[100%] relative flex flex-col">
       <div className="w-[100%] h-[13%] flex flex-row font-baloo font-semibold border-b-2 border-black">
         <div
@@ -51,12 +53,12 @@ export const LockTabMobile = () => {
       </div>
       <div className="absolute flex flex-row top-[20%] left-[8%] items-center">
       <img className="h-8 w-8" src="/images/logo-gibgt.png" alt="coinlogo" />
-        <h1 className="font-baloo font-semibold text-[1.8vw] ml-2 lg:ml-3">iBGT</h1>
+        <h1 className="font-baloo font-semibold text-[8vw] ml-2 lg:ml-3">iBGT</h1>
       </div>
       <div className="absolute h-[30%] w-[84%] top-[43%] left-[8%] border-2 border-black bg-white">
         <div className="relative h-[100%] w-[100%]">
           <input
-            className="absolute top-[12%] left-[7%] w-[90%] focus:outline-none border-none bg-transparent font-semibold font-baloo text-[8vw]"
+            className="absolute top-[18%] left-[5%] w-[90%] focus:outline-none border-none bg-transparent font-semibold font-baloo text-[8vw]"
             type="number"
             id="number-input"
             placeholder="0.00"
@@ -65,7 +67,7 @@ export const LockTabMobile = () => {
           />
         </div>
       </div>
-      <span className="absolute bottom-0 right-[3%] font-baloo font-bold text-[0.9vw] text-[#7F7F7F]">{lendActiveToggle === "UNSTAKE" ? "staked gibgt" : "balance"}: { balancesLoading ? loadingElement() : handleStakeBalance('LOCK') }</span>
+      <span className="absolute bottom-[2%] right-[3%] font-baloo font-bold text-[4vw] text-[#7F7F7F]">{lendActiveToggle === "UNSTAKE" ? "staked gibgt" : "balance"}: { balancesLoading ? loadingElement() : handleStakeBalance('LOCK') }</span>
     </div>
   )
 }

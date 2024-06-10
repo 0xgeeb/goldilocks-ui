@@ -145,6 +145,10 @@ export interface GoldilendInitialState {
   handleStakeBalance: (_tab: string) => string;
   txConfirming: boolean;
   setTxConfirming: (_confirming: boolean) => void;
+  chartOpen: boolean;
+  setChartOpen: (_open: boolean) => void;
+  balanceMobileToggle: boolean;
+  setBalanceMobileToggle: (_toggle: boolean) => void;
   handleBeraClick: (_bera: BeraInfo) => void;
   handlePartnerClick: (_partner: PartnerInfo) => void;
   findSelectedBeraIdxs: () => number[];
