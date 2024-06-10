@@ -5,7 +5,7 @@ export const HomePage = () => {
   return (
     // isDesktop ?
     <main className="w-screen h-screen">
-      <header className="w-[100%] h-[11%] lg:h-[15%] bg-[#EEDCD2] flex flex-row items-center justify-between font-amaticbold px-[2%] lg:px-[4%]">
+      <header className="w-[100%] h-[11%] lg:h-[15%] bg-[#EEDCD2] flex flex-row items-center justify-between font-amaticbold px-[4%]">
         <a
           href="/"
           className="w-[25%] lg:w-[18%]"
@@ -15,7 +15,7 @@ export const HomePage = () => {
             <h1 className="text-[3vw] lg:text-[2.4vw]">Goldilocks DAO</h1>
           </div>
         </a>
-        <div className="w-[80%] lg:w-[45%] h-[100%] flex flex-row items-center justify-between text-[2.8vw] lg:text-[2.2vw]">
+        <div className="w-[55%] lg:w-[45%] h-[100%] flex flex-row items-center justify-between text-[3vw] lg:text-[2.2vw]">
           <a href="/wut" className="hover:scale-[150%] cursor-pointer"><span>Wut is this?</span></a>
           <a href="/goldiswap/swap" className="hover:scale-[150%] cursor-pointer"><span>Goldiswap</span></a>
           <a href="/goldilend/borrow" className="hover:scale-[150%] cursor-pointer"><span>Goldilend</span></a>
