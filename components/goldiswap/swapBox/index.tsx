@@ -219,8 +219,8 @@ export const SwapBox = () => {
           txConfirming ? <img className="w-[100%] h-[100%]" src="/images/bg-transaction.png" alt="tx" /> :
           notification.toggle ? <Notification /> :
           <div className="w-[100%] h-[100%] relative flex flex-col">
-            <span className="absolute top-[1%] right-[-0.9%] lg:right-[-0.4%] origin-top-right -rotate-[90deg] text-[1.3vw] lg:text-[0.7vw] font-baloo font-semibold">target ratio: {handleRatioInfo(goldiswapInfo.targetRatio)}</span>
-            <span className="absolute bottom-[1%] left-[-0.8%] lg:left-[-0.2%] origin-bottom-left -rotate-[90deg] text-[1.3vw] lg:text-[0.7vw] font-baloo font-semibold">**0.3% fee on all buys**</span>
+            {/* <span className="absolute top-[1%] right-[-0.9%] lg:right-[-0.4%] origin-top-right -rotate-[90deg] text-[1.3vw] lg:text-[0.7vw] font-baloo font-semibold">target ratio: {handleRatioInfo(goldiswapInfo.targetRatio)}</span>
+            <span className="absolute bottom-[1%] left-[-0.8%] lg:left-[-0.2%] origin-bottom-left -rotate-[90deg] text-[1.3vw] lg:text-[0.7vw] font-baloo font-semibold">**0.3% fee on all buys**</span> */}
             <div className="flex flex-row absolute top-0 right-0 w-[40%] lg:w-[33.61%] h-[10%] font-baloo font-semibold border-b-2 border-l-2 border-black">
               <div 
                 className="flex items-center justify-center h-[100%] w-[25%] border-r-2 border-black bg-[#DCC2A8] hover:bg-[#F3AA8A] cursor-pointer"

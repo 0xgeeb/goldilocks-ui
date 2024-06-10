@@ -44,7 +44,6 @@ export const SwapBoxMobile = () => {
     notification,
     setGettingHoney,
     setRedeemingHoney,
-    changeSlippageToggle,
     topInputFlag,
     bottomInputFlag,
     setTopInputFlag,
@@ -218,12 +217,12 @@ export const SwapBoxMobile = () => {
       <div className="absolute bottom-3 left-0 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
       <div className="absolute top-3 right-0 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
       <div className="absolute bottom-3 right-0 w-6 skew-y-[45deg] border-b-2 border-black"></div>
-      <span className="z-10 absolute top-[0%] right-[6%] text-[2.2vw] font-baloo font-semibold">
+      {/* <span className="z-10 absolute top-[0%] right-[6%] text-[2.2vw] font-baloo font-semibold">
         **0.3% fee on all buys**
       </span>
       <span className="z-10 absolute bottom-[-0.2%] left-[6%] text-[2.2vw] font-baloo font-semibold">
         target ratio: {handleRatioInfo(goldiswapInfo.targetRatio)}
-      </span>
+      </span> */}
       <div className={`absolute inset-3 ${txConfirming ? "" : "border-2 border-black"} bg-[#D9C6BA]`}>
         {
           chartOpen ? <ChartMobile /> :
