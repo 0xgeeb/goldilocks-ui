@@ -1,4 +1,5 @@
 import { useBorrow } from "../../../providers"
+import { useGoldiswapMath } from "../../../hooks"
 
 export const StatsMobile = () => {
 
@@ -6,6 +7,12 @@ export const StatsMobile = () => {
     borrowInfo,
     infoLoading
   } = useBorrow()
+
+  const { floorPrice, marketPrice } = useGoldiswapMath()
+
+  const formatAsPrice = (num: number): string => {
+    return num.toLocaleString('en-US', { maximumFractionDigits: 5 })
+  }
 
   const loadingElement = () => {
     return <span className="loader-small ml-3 mt-2"></span>
@@ -27,6 +34,18 @@ export const StatsMobile = () => {
     }
   }
 
+  const handlePrice = (num: number) => {
+    if(infoLoading) {
+      return loadingElement()
+    }
+    else if(num > 0) {
+      return formatAsPrice(num)
+    }
+    else {
+      return "-"
+    }
+  }
+
   const handleColors = (num1: number, num2: number): string => {
     if(num1 > num2) {
       return 'text-red-600'
@@ -40,17 +59,23 @@ export const StatsMobile = () => {
   }
 
   return (
-    <div className="text-[3vw] absolute h-[12%] w-[80%] left-[10%] top-[50%] flex flex-row items-center justify-center text-[#D9C6BA] font-baloo font-semibold">
+    <div className="text-[3.3vw] absolute h-[15%] w-[80%] left-[10%] top-[52.5%] flex flex-row items-center justify-center text-[#D9C6BA] font-baloo font-semibold">
       <div className="flex flex-col items-end">
         <span>locks supply:</span>
         <span>current fsl:</span>
         <span>current psl:</span>
+        <span>floor price:</span>
+        <span>market price:</span>
+        <span>target ratio:</span>
       </div>
       <div className="h-[100%] w-[5%]"></div>
       <div className="flex flex-col items-start">
         <span className={handleColors(borrowInfo.supply, borrowInfo.supply)}>{handleInfo(borrowInfo.supply)}</span>
         <span className={handleColors(borrowInfo.fsl, borrowInfo.fsl)}>{handleInfo(borrowInfo.fsl)}</span>
         <span className={handleColors(borrowInfo.psl, borrowInfo.psl)}>{handleInfo(borrowInfo.psl)}</span>
+        <span className={handleColors(floorPrice(borrowInfo.fsl, borrowInfo.supply), floorPrice(borrowInfo.fsl, borrowInfo.supply))}>${handlePrice(floorPrice(borrowInfo.fsl, borrowInfo.supply))}</span>
+        <span className={handleColors(marketPrice(borrowInfo.fsl, borrowInfo.psl, borrowInfo.supply), marketPrice(borrowInfo.fsl, borrowInfo.psl, borrowInfo.supply))}>${handlePrice(marketPrice(borrowInfo.fsl, borrowInfo.psl, borrowInfo.supply))}</span>
+        <span className={handleColors(borrowInfo.targetRatio, borrowInfo.targetRatio)}>{handlePrice(borrowInfo.targetRatio)}%</span>
       </div>
     </div>
   )

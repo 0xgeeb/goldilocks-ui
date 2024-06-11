@@ -22,13 +22,19 @@ const INITIAL_STATE = {
     toggle: false,
     fsl: 0,
     psl: 0,
-    supply: 0
+    supply: 0,
+    floor: 0,
+    market: 0,
+    targetRatio: 0
   },
   setSimInfo: (
     _toggle: boolean,
     _fsl: number,
     _psl: number,
-    _supply: number
+    _supply: number,
+    _floor: number,
+    _market: number,
+    _targetRatio: number
   ) => {},
 
   slippage: {
@@ -460,6 +466,9 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
       fsl: _fsl,
       psl: _psl,
       supply: _supply,
+      floor: floorPrice(_fsl + _tax, _supply),
+      market: marketPrice(_fsl + _tax, _psl, _supply),
+      targetRatio: goldiswapInfoState.targetRatio
     }
     
     setSimInfoState(response)
@@ -499,6 +508,9 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
       fsl: _fsl + _tax,
       psl: _psl,
       supply: _supply,
+      floor: floorPrice(_fsl + _tax, _supply),
+      market: marketPrice(_fsl + _tax, _psl, _supply),
+      targetRatio: goldiswapInfoState.targetRatio
     }
     
     setSimInfoState(response)
@@ -511,7 +523,10 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
       toggle: true,
       fsl: goldiswapInfoState.fsl - rawTotal,
       psl: goldiswapInfoState.psl,
-      supply: goldiswapInfoState.supply - redeemingLocksState
+      supply: goldiswapInfoState.supply - redeemingLocksState,
+      floor: floorPrice(goldiswapInfoState.fsl - rawTotal, goldiswapInfoState.supply - redeemingLocksState),
+      market: marketPrice(goldiswapInfoState.fsl - rawTotal, goldiswapInfoState.psl, goldiswapInfoState.supply - redeemingLocksState),
+      targetRatio: goldiswapInfoState.targetRatio
     }
 
     setSimInfoState(response)
@@ -528,7 +543,10 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
         toggle: true,
         fsl: newFsl,
         psl: newPsl,
-        supply: _supply
+        supply: _supply,
+        floor: floorPrice(newFsl, _supply),
+        market: marketPrice(newFsl, newPsl, _supply),
+        targetRatio: simInfoState.targetRatio + (simInfoState.targetRatio / 50)
       }
 
       setSimInfoState(response)
@@ -640,14 +658,25 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
       fsl: parseFloat(formatEther(fslResult as unknown as bigint)),
       psl: parseFloat(formatEther(pslResult as unknown as bigint)),
       supply: parseFloat(formatEther(supplyResult as unknown as bigint)),
+      floor: floorPrice(parseFloat(formatEther(fslResult as unknown as bigint)), parseFloat(formatEther(supplyResult as unknown as bigint))),
+      market: marketPrice(parseFloat(formatEther(fslResult as unknown as bigint)), parseFloat(formatEther(pslResult as unknown as bigint)), parseFloat(formatEther(supplyResult as unknown as bigint))),
+      targetRatio: parseFloat(formatEther(ratioResult as unknown as bigint))
     }
 
     setGoldiswapInfoState(response)
     setSimInfoState(simResponse)
   }
 
-  const setSimInfo = (toggle: boolean, fsl: number, psl: number, supply: number) => {
-    setSimInfoState({ toggle, fsl, psl, supply })
+  const setSimInfo = (
+    toggle: boolean,
+    fsl: number,
+    psl: number,
+    supply: number,
+    floor: number,
+    market: number,
+    targetRatio: number
+  ) => {
+    setSimInfoState({ toggle, fsl, psl, supply, floor, market, targetRatio })
   }
 
   const updateAllowance = (newAllowance: number) => {

@@ -308,14 +308,14 @@ export const GoldiswapButtonMobile = () => {
       allowanceButtons &&
       <div>
         <button
-          className="absolute bg-[#E7B941] h-[8%] w-[23%] top-[64.8%] left-[23%] border-2 border-black font-amaticbold text-[5vw] focus:bg-[#4D0B24] focus:text-[#E7B941] focus:scale-110"
+          className="absolute bg-[#E7B941] h-[8%] w-[23%] top-[62%] left-[23%] border-2 border-black font-amaticbold text-[5vw] focus:bg-[#4D0B24] focus:text-[#E7B941] focus:scale-110"
           id="left-approve-button"
           onClick={() => handleLeftButtonClick()}
         >
           approve tx
         </button>
         <button
-          className="absolute bg-[#E7B941] h-[8%] w-[23%] top-[64.8%] left-[54%] border-2 border-black font-amaticbold text-[5vw] focus:bg-[#4D0B24] focus:text-[#E7B941] focus:scale-110"
+          className="absolute bg-[#E7B941] h-[8%] w-[23%] top-[62%] left-[54%] border-2 border-black font-amaticbold text-[5vw] focus:bg-[#4D0B24] focus:text-[#E7B941] focus:scale-110"
           id="right-approve-button"
           onClick={() => handleRightButtonClick()}
         >
@@ -334,7 +334,7 @@ export const GoldiswapButtonMobile = () => {
         }) => {
           return (
             <button 
-              className="absolute h-[8%] w-[54%] top-[64.8%] left-[23%] bg-[#E7B941] font-amaticbold flex items-center justify-center text-[9vw] border-2 border-black focus:bg-[#4D0B24] focus:text-[#E7B941] focus:scale-110"
+              className="absolute h-[8%] w-[54%] top-[62%] left-[23%] bg-[#E7B941] font-amaticbold flex items-center justify-center text-[9vw] border-2 border-black focus:bg-[#4D0B24] focus:text-[#E7B941] focus:scale-110"
               id="swap-button"
               onClick={() => {
                 const button = document.getElementById('swap-button')

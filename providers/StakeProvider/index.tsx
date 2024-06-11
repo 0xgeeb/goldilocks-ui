@@ -14,7 +14,8 @@ const INITIAL_STATE = {
     psl: 0,
     supply: 0,
     locksPrgAllowance: 0,
-    honeyPrgAllowance: 0
+    honeyPrgAllowance: 0,
+    targetRatio: 0
   },
 
   notification: {
@@ -232,6 +233,11 @@ export const StakeProvider = (props: PropsWithChildren<{}>) => {
       abi: contracts.goldiswap.abi,
       functionName: 'totalSupply',
     })
+    const ratioResult = await readContract(config, {
+      address: contracts.goldiswap.address as `0x${string}`,
+      abi: contracts.goldiswap.abi,
+      functionName: 'targetRatio',
+    })
     let locksPrgAllowanceResult
     let honeyPrgAllowanceResult
     if(wallet) {
@@ -254,7 +260,8 @@ export const StakeProvider = (props: PropsWithChildren<{}>) => {
       psl: parseFloat(formatEther(pslResult as unknown as bigint)),
       supply: parseFloat(formatEther(supplyResult as unknown as bigint)),
       locksPrgAllowance: wallet ? parseFloat(formatEther(locksPrgAllowanceResult as unknown as bigint)) : 0,
-      honeyPrgAllowance: wallet ? parseFloat(formatEther(honeyPrgAllowanceResult as unknown as bigint)) : 0
+      honeyPrgAllowance: wallet ? parseFloat(formatEther(honeyPrgAllowanceResult as unknown as bigint)) : 0,
+      targetRatio: parseFloat(formatEther(ratioResult as unknown as bigint))
     }
 
     setStakeInfoState(response)
