@@ -33,20 +33,23 @@ export const LendWalletBalanceMobilePopup = () => {
   }
 
   return (
-    <div className="w-[100%] h-[100%] bg-[#D5A774] flex flex-col items-center relative pt-[13%] pb-[2%] px-[5%] font-baloo font-semibold text-[2.3vw]">
+    <div className="w-[100%] h-[100%] bg-[#D5A774] flex flex-col items-center relative pt-[13%] pb-[2%] px-[5%] font-baloo font-semibold text-[4vw]">
       <div className="w-[100%] h-[100%] flex flex-col justify-around">
       <div className="flex flex-row items-center justify-between w-[100%]">
           <span className="">ibgt balance:</span>
           <span className="">{handleInfo(balance.ibgt)}</span>
         </div>
+        <div className="w-[100%] border-t-2 border-black"></div>
         <div className="flex flex-row items-center justify-between w-[100%]">
           <span className="">gibgt balance:</span>
           <span className="">{handleInfo(balance.gibgt)}</span>
         </div>
+        <div className="w-[100%] border-t-2 border-black"></div>
         <div className="flex flex-row items-center justify-between w-[100%]">
           <span className="">staked gibgt:</span>
           <span className="">{handleInfo(balance.lendStaked)}</span>
         </div>
+        <div className="w-[100%] border-t-2 border-black"></div>
         <div className="flex flex-row items-center justify-between w-[100%]">
           <span className="">claimable:</span>
           <span className="">{handleInfoClaimable(balance.lendClaimable)}</span>
@@ -54,7 +57,7 @@ export const LendWalletBalanceMobilePopup = () => {
         <div className="w-[100%] border-t-2 border-black"></div>
       </div>
       <p
-        className="absolute top-[-2%] right-[2%] font-baloo text-[7vw] cursor-pointer focus:scale-125"
+        className="absolute top-[-2%] right-[2%] font-baloo text-[6vw] cursor-pointer focus:scale-125"
         onClick={() => setBalanceMobileToggle(false)}
       >
         x

@@ -1,4 +1,5 @@
 import { useGoldilend, useWallet } from "../../../providers"
+import { LendNotificationMobile } from "../"
 import { LendWalletBalanceMobilePopup } from "../../utils"
 
 export const LockTabMobile = () => {
@@ -22,7 +23,7 @@ export const LockTabMobile = () => {
 
   return (
     txConfirming ? <img className="w-[100%] h-[100%]" src="/images/bg-transaction-mobile-small.png" alt="tx" /> :
-    // notification.toggle ? <NotificationMobile /> :
+    notification.toggle ? <LendNotificationMobile /> :
     balanceMobileToggle ? <LendWalletBalanceMobilePopup /> :
     <div className="w-[100%] h-[100%] relative flex flex-col">
       <div className="w-[100%] h-[13%] flex flex-row font-baloo font-semibold border-b-2 border-black">

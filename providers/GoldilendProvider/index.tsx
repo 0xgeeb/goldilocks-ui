@@ -153,7 +153,7 @@ const INITIAL_STATE: GoldilendInitialState = {
     _result: string,
     _hash: string
   ) => {},
-  activeToggle: 'REPAY',
+  activeToggle: 'BORROW',
   changeActiveToggle: (_toggle: string) => {},
   lendActiveToggle: 'LOCK',
   changeLendActiveToggle: (_toggle: string) => {},
