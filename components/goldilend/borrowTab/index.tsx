@@ -158,6 +158,11 @@ export const BorrowTab = () => {
         `You borrowed ${formatAsString(loanAmount)} iBGT against your bera${selectedBeras.length > 1 ? "s" : ""}`,
         borrowTx
       )
+      if(button) {
+        button.innerHTML = "create loan"
+        button.style.backgroundColor = "#E7B941"
+        button.style.color = "black"
+      }
       changeActiveToggle('BORROW')
       findBeras()
       setTimeout(() => {

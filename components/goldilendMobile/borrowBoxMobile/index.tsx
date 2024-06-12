@@ -22,8 +22,6 @@ export const BorrowBoxMobile = () => {
         {
           activeToggle === 'BORROW' ?
           <BorrowTabMobile /> :
-          activeToggle === 'REPAY' ?
-          <RepayTabMobile /> :
           <BoostTabMobile />
         }
       </div>

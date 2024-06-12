@@ -169,6 +169,8 @@ const INITIAL_STATE: GoldilendInitialState = {
   handleStakeBalance: (_tab: string) => '',
   txConfirming: false,
   setTxConfirming: (_confirming: boolean) => {},
+  selectScreen: true,
+  setSelectScreen: (_screen: boolean) => {},
   chartOpen: false,
   setChartOpen: (_open: boolean) => {},
   balanceMobileToggle: false,
@@ -224,6 +226,7 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
   const [txConfirmingState, setTxConfirmingState] = useState<boolean>(INITIAL_STATE.txConfirming)
   const [chartOpenState, setChartOpenState] = useState<boolean>(INITIAL_STATE.chartOpen)
   const [balanceMobileToggleState, setBalanceMobileToggleState] = useState<boolean>(INITIAL_STATE.balanceMobileToggle)
+  const [selectScreenState, setSelectScreenState] = useState<boolean>(INITIAL_STATE.selectScreen)
 
   const changeActiveToggle = (toggle: string) => {
     setSelectedBerasState([])
@@ -569,6 +572,8 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
         handleStakeBalance,
         txConfirming: txConfirmingState,
         setTxConfirming: setTxConfirmingState,
+        selectScreen: selectScreenState,
+        setSelectScreen: setSelectScreenState,
         notification: notificationState,
         openNotification,
         selectedBeras: selectedBerasState,

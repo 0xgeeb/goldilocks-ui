@@ -149,6 +149,9 @@ export const BoostTab = () => {
         withdrawBoostTx
       )
       refreshInfo()
+      if(button) {
+        button.innerHTML = "withdraw boost"
+      }
       setTimeout(() => {
         openNotification(false, '', '', '')
       }, 10000)

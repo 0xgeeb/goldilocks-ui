@@ -3,7 +3,9 @@
 import { useGoldilend, useDesktop } from "../../../providers"
 import {
   TogglesMobile,
-  BorrowBoxMobile
+  BorrowBoxMobile,
+  RepayTabMobile,
+  BorrowButtonMobile
 } from ".."
 import {
   NavBarMobile,
@@ -26,7 +28,14 @@ export const GoldilendPageMobile = () => {
           <TogglesMobile />
           <h1 className="absolute top-[0%] left-[13%] text-[#D9C6BA] text-[9vw] font-amaticbold" id="page-title">Goldilend</h1>
           <h1 className="absolute top-[0%] left-[44%] text-[#E7B941] text-[9vw] font-amaticbold" id="page-title">{activeToggle}</h1>
-          <BorrowBoxMobile />
+          {
+            activeToggle === 'REPAY' ?
+            <RepayTabMobile /> :
+            <>
+              <BorrowBoxMobile />
+              <BorrowButtonMobile />
+            </>
+          }
           <FooterMobile />
         </div>
       }
