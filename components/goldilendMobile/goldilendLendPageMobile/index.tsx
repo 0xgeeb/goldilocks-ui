@@ -5,7 +5,9 @@ import {
   LendTogglesMobile,
   LendBoxMobile,
   LendButtonMobile,
-  StatsMobile
+  StatsMobile,
+  ClaimTabMobile,
+  LiquidateTabMobile
 } from ".."
 import {
   NavBarMobile,
@@ -32,10 +34,21 @@ export const GoldilendLendPageMobile = () => {
           <LendTogglesMobile />
           <h1 className="absolute top-[0%] left-[13%] text-[#D9C6BA] text-[9vw] font-amaticbold" id="page-title">Goldilend</h1>
           <h1 className="absolute top-[0%] left-[44%] text-[#E7B941] text-[9vw] font-amaticbold" id="page-title">{lendActiveToggle}</h1>
-          <LendWalletBalanceMobile />
-          <LendBoxMobile />
-          <LendButtonMobile />
-          <StatsMobile />
+          {
+            lendActiveToggle === 'LIQUIDATE' ?
+            <LiquidateTabMobile /> :
+            lendActiveToggle === 'CLAIM' ?
+            <>
+              <ClaimTabMobile />
+              <LendWalletBalanceMobile />
+            </> :
+            <>
+              <LendBoxMobile />
+              <LendWalletBalanceMobile />
+              <LendButtonMobile />
+              <StatsMobile />
+            </>
+          }
           <FooterMobile />
         </div>
       }
