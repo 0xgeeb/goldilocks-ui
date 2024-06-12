@@ -5,6 +5,7 @@ import {
 } from "../../../providers"
 import { LendNotificationMobile } from "../"
 import { useGoldilendTx } from "../../../hooks"
+import { LendWalletBalanceMobilePopup } from "../../utils"
 
 export const ClaimTabMobile = () => {
 
@@ -13,7 +14,8 @@ export const ClaimTabMobile = () => {
     setTxConfirming,
     notification,
     openNotification,
-    infoLoading
+    infoLoading,
+    balanceMobileToggle
   } = useGoldilend()
 
   const { balance, refreshBalances } = useWallet()
@@ -82,90 +84,93 @@ export const ClaimTabMobile = () => {
   }
 
   return (
-    <div className="absolute top-[7.5%] left-[15.5%] h-[70%] w-[69%] border-2 border-black bg-[#EEDCD2] z-20">
-      <div className="absolute top-3 left-0 w-6 skew-y-[45deg] border-b-2 border-black"></div>
-      <div className="absolute bottom-3 left-0 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
-      <div className="absolute top-3 right-0 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
-      <div className="absolute bottom-3 right-0 w-6 skew-y-[45deg] border-b-2 border-black"></div>
-      <div className={`absolute inset-3 ${txConfirming ? "border-l-2 border-r-2 border-black" : "border-2 border-black"} bg-[#D9C6BA]`}>
-        {
-          txConfirming ? <img className="w-[100%] h-[100%]" src="/images/bg-transaction-mobile.png" alt="tx" /> :
-          notification.toggle ? <LendNotificationMobile /> :
-          <div className="relative w-[100%] h-[100%] flex flex-col items-center font-baloo font-semibold">
-            <h1 className="font-amaticbold text-[4vw] mt-[4%]">claim yield</h1>
-            <div className="w-[70%] h-[15%] mt-[5%] flex flex-col justify-between">
-              <span className="text-[#9C4924]">Porridge Yield</span>
-              <div className="w-[100%] flex flex-row justify-between">
-                <span>Current Porridge Balance:</span>
-                <span>{handleInfo(balance.prg)}</span>
+    <>
+      <div className="absolute top-[7.5%] left-[15.5%] h-[55%] w-[69%] border-2 border-black bg-[#EEDCD2] z-20">
+        <div className="absolute top-3 left-0 w-6 skew-y-[45deg] border-b-2 border-black"></div>
+        <div className="absolute bottom-3 left-0 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
+        <div className="absolute top-3 right-0 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
+        <div className="absolute bottom-3 right-0 w-6 skew-y-[45deg] border-b-2 border-black"></div>
+        <div className={`absolute inset-3 ${txConfirming ? "border-l-2 border-r-2 border-black" : "border-2 border-black"} bg-[#D9C6BA]`}>
+          {
+            txConfirming ? <img className="w-[100%] h-[100%]" src="/images/bg-transaction-mobile.png" alt="tx" /> :
+            notification.toggle ? <LendNotificationMobile /> :
+            balanceMobileToggle ? <LendWalletBalanceMobilePopup /> :
+            <div className="relative w-[100%] h-[100%] px-[4%] flex flex-col items-center font-baloo font-semibold">
+              <h1 className="font-amaticbold text-[14vw]">claim yield</h1>
+              <div className="flex flex-col justify-between w-[100%] mt-[10%]">
+                <span className="text-[#9C4924] text-[4.5vw]">Porridge Yield</span>
+                <div className="w-[100%] flex flex-row justify-between text-[3.5vw] mt-[2%]">
+                  <span>$PRG balance:</span>
+                  <span>{handleInfo(balance.prg)}</span>
+                </div>
+                <div className="w-[100%] flex flex-row justify-between text-[3.5vw]">
+                  <span>claimable $PRG:</span>
+                  <span>{handleInfo(balance.lendClaimable)}</span>
+                </div>
               </div>
-              <div className="w-[100%] flex flex-row justify-between">
-                <span>Available Porridge to Claim:</span>
-                <span>{handleInfo(balance.lendClaimable)}</span>
+              <div className="flex flex-col justify-between w-[100%] mt-[15%]">
+                <span className="text-[#9C4924] text-[4.5vw]">Infrared iBGT Staking Yield</span>
+                <div className="w-[100%] flex flex-row justify-between text-[3.5vw]">
+                  <span>wif:</span>
+                  <span>69.00</span>
+                </div>
+                <div className="w-[100%] flex flex-row justify-between text-[3.5vw]">
+                  <span>boden:</span>
+                  <span>69.00</span>
+                </div>
+                <div className="w-[100%] flex flex-row justify-between text-[3.5vw]">
+                  <span>jenner:</span>
+                  <span>69.00</span>
+                </div>
+                <div className="w-[100%] flex flex-row justify-between text-[3.5vw]">
+                  <span>bera:</span>
+                  <span>69.00</span>
+                </div>
               </div>
             </div>
-            <div className="w-[70%] mt-[8%] flex flex-col justify-between">
-              <span className="text-[#9C4924]">Infrared iBGT Staking Yield</span>
-              <div className="w-[100%] flex flex-row justify-between">
-                <span>wif:</span>
-                <span>69.00</span>
-              </div>
-              <div className="w-[100%] flex flex-row justify-between">
-                <span>boden:</span>
-                <span>69.00</span>
-              </div>
-              <div className="w-[100%] flex flex-row justify-between">
-                <span>jenner:</span>
-                <span>69.00</span>
-              </div>
-              <div className="w-[100%] flex flex-row justify-between">
-                <span>bera:</span>
-                <span>69.00</span>
-              </div>
-            </div>
-            <ConnectButton.Custom>
-              {({
-                account,
-                chain,
-                openChainModal,
-                openConnectModal
-              }) => {
-                return (
-                  <button 
-                    className="mt-[7%] h-[12%] w-[60%] bg-[#E7B941] font-amaticbold text-[1.9vw] border-2 border-black hover:bg-[#C9E3B9] hover:scale-110 flex items-center justify-center"
-                    id="claim-button"
-                    onClick={() => {
-                      const button = document.getElementById('lend-button')
-                      
-                      if(!account) {
-                        if(button && button.innerHTML === "connect wallet") {
-                          openConnectModal()
-                        }
-                        else {
-                          button && (button.innerHTML = "connect wallet")
-                        }
-                      }
-                      else if(chain?.name !== "Base Sepolia") {
-                        if(button && button.innerHTML === "where base sepolia") {
-                          openChainModal()
-                        }
-                        else {
-                          button && (button.innerHTML = "where base sepolia")
-                        }
-                      }
-                      else {
-                        claimTxFlow()
-                      }
-                    }}
-                  >
-                    claim yield
-                  </button>
-                )
-              }}
-            </ConnectButton.Custom>
-          </div>
-        }
+          }
+        </div>
       </div>
-    </div>
+      <ConnectButton.Custom>
+        {({
+          account,
+          chain,
+          openChainModal,
+          openConnectModal
+        }) => {
+          return (
+            <button 
+              className="absolute top-[67.5%] left-[22.5%] h-[7.5%] w-[55%] bg-[#E7B941] font-amaticbold text-[9vw] border-2 border-black hover:bg-[#C9E3B9] hover:scale-110 flex items-center justify-center"
+              id="claim-button"
+              onClick={() => {
+                const button = document.getElementById('claim-button')
+                
+                if(!account) {
+                  if(button && button.innerHTML === "connect wallet") {
+                    openConnectModal()
+                  }
+                  else {
+                    button && (button.innerHTML = "connect wallet")
+                  }
+                }
+                else if(chain?.name !== "Base Sepolia") {
+                  if(button && button.innerHTML === "where base sepolia") {
+                    openChainModal()
+                  }
+                  else {
+                    button && (button.innerHTML = "where base sepolia")
+                  }
+                }
+                else {
+                  claimTxFlow()
+                }
+              }}
+            >
+              claim yield
+            </button>
+          )
+        }}
+      </ConnectButton.Custom>
+    </>
   )
 }
