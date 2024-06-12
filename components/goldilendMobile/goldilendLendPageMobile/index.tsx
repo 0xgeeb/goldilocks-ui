@@ -18,10 +18,7 @@ import {
 
 export const GoldilendLendPageMobile = () => {
 
-  const {
-    lendActiveToggle
-  } = useGoldilend()
-
+  const { lendActiveToggle } = useGoldilend()
   const { navButtonsOpen } = useDesktop()
 
   return (

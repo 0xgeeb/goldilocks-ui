@@ -2,6 +2,7 @@
 
 import { useEffect } from "react"
 import { useGoldilend, useDesktop } from "../../../providers"
+import { GoldilendPageMobile } from "../../goldilendMobile"
 import {
   Toggles,
   BorrowBox
@@ -42,6 +43,6 @@ export const GoldilendPage = () => {
         <Footer />
       </div>
     </main> :
-    <div>where the hell is the mobile page</div>
+    <GoldilendPageMobile />
   )
 }
