@@ -178,6 +178,11 @@ export const BoostTab = () => {
         `You created a boost with a magnitude of ${formatAsString(boostMag)}`,
         boostTx
       )
+      if(button) {
+        button.innerHTML = "create boost"
+        button.style.backgroundColor = "#E7B941"
+        button.style.color = "black"
+      }
       refreshInfo()
       setTimeout(() => {
         openNotification(false, '', '', '')
@@ -185,7 +190,7 @@ export const BoostTab = () => {
     }
     else {
       if(button) {
-        button.innerHTML = "create loan"
+        button.innerHTML = "create boost"
         button.style.backgroundColor = "#E7B941"
         button.style.color = "black"
       }

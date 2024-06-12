@@ -16,10 +16,12 @@ export const BorrowButtonMobile = () => {
     openNotification,
     findBeras,
     selectScreen,
-    setSelectScreen
+    setSelectScreen,
+    activeToggle,
+    selectedPartners
   } = useGoldilend()
 
-  const { wallet, refreshBalances, isConnected } = useWallet()
+  const { wallet } = useWallet()
 
   const {
     checkLoanAllowance,
@@ -76,40 +78,55 @@ export const BorrowButtonMobile = () => {
 
   const handleButtonClick = async () => {
     const button = document.getElementById('borrow-button')
-    if(selectScreen) {
-      if(selectedBeras.length == 0) {
-        button && (button.innerHTML = "no beras")
-        return
-      }
-      button && (button.innerHTML = "create loan")
-      setSelectScreen(false)
-    }
-    else {
-      if(loanAmount == 0) {
-        button && (button.innerHTML = "no loan")
-        return
-      }
-      if(!checkDate(loanExpiration)) {
-        button && (button.innerHTML = "invalid expiration")
-        return
-      }
-      if(selectedBeras.length == 0) {
-        button && (button.innerHTML = "no collateral")
-        return
-      }
-      const [bondFlag, bandFlag] = await checkLoanAllowance(wallet)
-      if((bondFlag || !checkSelected("BondBera")) && (bandFlag || !checkSelected("BandBera"))) {
-        borrowTxFlow(button)
-      }
-      else {
-        button && (button.innerHTML = "approving...")
-        if(!bondFlag && checkSelected('BondBera')) {
-          await sendGoldilendNFTApproveTx(contracts.bondbear.address)
-        }
-        if(!bandFlag && checkSelected('BandBera')) {
-          await sendGoldilendNFTApproveTx(contracts.bandbear.address)
+    if(activeToggle === 'BORROW') {
+      if(selectScreen) {
+        if(selectedBeras.length == 0) {
+          button && (button.innerHTML = "no beras")
+          return
         }
         button && (button.innerHTML = "create loan")
+        setSelectScreen(false)
+      }
+      else {
+        if(loanAmount == 0) {
+          button && (button.innerHTML = "no loan")
+          return
+        }
+        if(!checkDate(loanExpiration)) {
+          button && (button.innerHTML = "invalid expiration")
+          return
+        }
+        if(selectedBeras.length == 0) {
+          button && (button.innerHTML = "no collateral")
+          return
+        }
+        const [bondFlag, bandFlag] = await checkLoanAllowance(wallet)
+        if((bondFlag || !checkSelected("BondBera")) && (bandFlag || !checkSelected("BandBera"))) {
+          borrowTxFlow(button)
+        }
+        else {
+          button && (button.innerHTML = "approving...")
+          if(!bondFlag && checkSelected('BondBera')) {
+            await sendGoldilendNFTApproveTx(contracts.bondbear.address)
+          }
+          if(!bandFlag && checkSelected('BandBera')) {
+            await sendGoldilendNFTApproveTx(contracts.bandbear.address)
+          }
+          button && (button.innerHTML = "create loan")
+        }
+      }
+    }
+    else {
+      if(selectScreen) {
+        if(selectedPartners.length == 0) {
+          button && (button.innerHTML = "no nfts")
+          return
+        }
+        button && (button.innerHTML = "create boost")
+        setSelectScreen(false)
+      }
+      else {
+
       }
     }
   }
@@ -151,6 +168,15 @@ export const BorrowButtonMobile = () => {
     }
   }
 
+  const renderButton = (): string => {
+    if(activeToggle === 'BORROW') {
+      return 'create loan'
+    }
+    else {
+      return 'create boost'
+    }
+  }
+
   return (
     <ConnectButton.Custom>
       {({
@@ -187,7 +213,7 @@ export const BorrowButtonMobile = () => {
               }
             }}
           >
-            create loan
+            { renderButton() }
           </button>
         )
       }}

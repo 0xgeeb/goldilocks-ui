@@ -1,7 +1,6 @@
 import { useGoldilend } from "../../../providers"
 import {
   BorrowTabMobile,
-  RepayTabMobile,
   BoostTabMobile
 } from "../"
 
