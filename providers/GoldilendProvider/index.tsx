@@ -80,66 +80,36 @@ const INITIAL_STATE: GoldilendInitialState = {
   ],
   selectedBeras: [],
   userLoans: [
-    {
-      collateralNFTs: ['0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad'],
-      collateralNFTIds: [2, 3],
-      borrowedAmount: 45678546,
-      interest: 0.5015,
-      duration: 1725854,
-      endDate: 1719240812,
-      loanId: 1,
-      liquidated: false
-    },
-    {
-      collateralNFTs: ['0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad'],
-      collateralNFTIds: [2, 3],
-      borrowedAmount: 69.5015,
-      interest: 0.5015,
-      duration: 1725854,
-      endDate: 1719240812,
-      loanId: 2,
-      liquidated: false
-    },
-    {
-      collateralNFTs: ['0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad'],
-      collateralNFTIds: [2, 3],
-      borrowedAmount: 2,
-      interest: 0.5015,
-      duration: 1725854,
-      endDate: 1719240812,
-      loanId: 3,
-      liquidated: false
-    },
-    {
-      collateralNFTs: ['0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad'],
-      collateralNFTIds: [2, 3],
-      borrowedAmount: 2,
-      interest: 0.5015,
-      duration: 1725854,
-      endDate: 1719240812,
-      loanId: 4,
-      liquidated: false
-    },
-    {
-      collateralNFTs: ['0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad'],
-      collateralNFTIds: [2, 3],
-      borrowedAmount: 2,
-      interest: 0.5015,
-      duration: 1725854,
-      endDate: 1719240812,
-      loanId: 5,
-      liquidated: false
-    },
-    {
-      collateralNFTs: ['0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad'],
-      collateralNFTIds: [2, 3],
-      borrowedAmount: 2,
-      interest: 0.5015,
-      duration: 1725854,
-      endDate: 1719240812,
-      loanId: 6,
-      liquidated: false
-    },
+    // {
+    //   collateralNFTs: ['0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad'],
+    //   collateralNFTIds: [2, 3],
+    //   borrowedAmount: 45678546,
+    //   interest: 0.5015,
+    //   duration: 1725854,
+    //   endDate: 1719240812,
+    //   loanId: 1,
+    //   liquidated: false
+    // },
+    // {
+    //   collateralNFTs: ['0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad'],
+    //   collateralNFTIds: [2, 3],
+    //   borrowedAmount: 69.5015,
+    //   interest: 0.5015,
+    //   duration: 1725854,
+    //   endDate: 1719240812,
+    //   loanId: 2,
+    //   liquidated: false
+    // },
+    // {
+    //   collateralNFTs: ['0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad'],
+    //   collateralNFTIds: [2, 3],
+    //   borrowedAmount: 2,
+    //   interest: 0.5015,
+    //   duration: 1725854,
+    //   endDate: 1719240812,
+    //   loanId: 3,
+    //   liquidated: false
+    // }
   ],
   ownedPartners: [],
   selectedPartners: [],
@@ -173,7 +143,7 @@ const INITIAL_STATE: GoldilendInitialState = {
     _result: string,
     _hash: string
   ) => {},
-  activeToggle: 'REPAY',
+  activeToggle: 'BORROW',
   changeActiveToggle: (_toggle: string) => {},
   lendActiveToggle: 'LOCK',
   changeLendActiveToggle: (_toggle: string) => {},
@@ -464,33 +434,33 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
 
   //todo: caps out at 20 loans
   const findLoans = async () => {
-    // if(wallet) {
-    //   const userLoans: LoanInfo[] = []
-    //   for(let i = 1; i < 20; i++) {
-    //     const loan = await readContract(config, {
-    //       address: contracts.goldilend.address as `0x${string}`,
-    //       abi: contracts.goldilend.abi,
-    //       functionName: 'lookupLoan',
-    //       args: [wallet, i]
-    //     })
-    //     const loanData = loan as unknown as LoanData
-    //     if(loanData.collateralNFTIds.length == 0) {
-    //       break
-    //     }
-    //     const userLoan = {
-    //       collateralNFTs: loanData.collateralNFTs,
-    //       collateralNFTIds: loanData.collateralNFTIds.map(id => parseInt(id.toString(), 16)),
-    //       borrowedAmount: parseFloat(formatEther(loanData.borrowedAmount)),
-    //       interest: parseFloat(formatEther(loanData.interest)),
-    //       duration: Number(loanData.duration),
-    //       endDate: Number(loanData.endDate),
-    //       loanId: parseInt(loanData.loanId.toString(), 16),
-    //       liquidated: loanData.liquidated
-    //     }
-    //     userLoans.push(userLoan)
-    //   }
-    //   setUserLoansState(userLoans)
-    // }
+    if(wallet) {
+      const userLoans: LoanInfo[] = []
+      for(let i = 1; i < 20; i++) {
+        const loan = await readContract(config, {
+          address: contracts.goldilend.address as `0x${string}`,
+          abi: contracts.goldilend.abi,
+          functionName: 'lookupLoan',
+          args: [wallet, i]
+        })
+        const loanData = loan as unknown as LoanData
+        if(loanData.collateralNFTIds.length == 0) {
+          break
+        }
+        const userLoan = {
+          collateralNFTs: loanData.collateralNFTs,
+          collateralNFTIds: loanData.collateralNFTIds.map(id => parseInt(id.toString(), 16)),
+          borrowedAmount: parseFloat(formatEther(loanData.borrowedAmount)),
+          interest: parseFloat(formatEther(loanData.interest)),
+          duration: Number(loanData.duration),
+          endDate: Number(loanData.endDate),
+          loanId: parseInt(loanData.loanId.toString(), 16),
+          liquidated: loanData.liquidated
+        }
+        userLoans.push(userLoan)
+      }
+      setUserLoansState(userLoans)
+    }
   }
 
   const findBoost = async () => {

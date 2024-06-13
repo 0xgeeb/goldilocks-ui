@@ -274,11 +274,11 @@ export const BorrowButtonMobile = () => {
       return 'create loan'
     }
     else {
-      if(selectedPartners.length > 0) {
-        return 'create boost'
+      if(userBoost.partnerNFTs.length > 0 && selectedPartners.length == 0) {
+        return 'my boost'
       }
       else {
-        return 'my boost'
+        return 'create boost'
       }
     }
   }

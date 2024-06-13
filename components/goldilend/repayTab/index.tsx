@@ -11,17 +11,20 @@ type InputValuesType = {
   [key: number]: string;
 }
 
+type AllowanceFlagsType = {
+  [key: number]: boolean;
+}
+
 export const RepayTab = () => {
 
   const [inputValues, setInputValues] = useState<InputValuesType>({})
+  const [allowanceFlags, setAllowanceFlags] = useState<AllowanceFlagsType>({})
 
   const {
     infoLoading,
     userLoans,
     findLoans,
     setInfoLoading,
-    allowanceButtons,
-    setAllowanceButtons,
     txConfirming,
     setTxConfirming,
     notification,
@@ -76,6 +79,13 @@ export const RepayTab = () => {
     }))
   }
 
+  const handleAllowanceChange = (loanId: number, flag: boolean) => {
+    setAllowanceFlags(prev => ({
+      ...prev,
+      [loanId]: flag
+    }))
+  }
+
   const refreshInfo = () => {
     const newValues: InputValuesType = {}
     Object.keys(inputValues).forEach(key => {
@@ -86,7 +96,7 @@ export const RepayTab = () => {
   }
 
   const handleButtonClick = async (loanId: number, amt: number, borrowedAmt: number) => {
-    const button = document.getElementById('repay-button')
+    const button = document.getElementById('repay-button' + loanId)
     if(amt == 0) {
       button && (button.innerHTML = "no amount")
       return
@@ -132,16 +142,17 @@ export const RepayTab = () => {
         }
       }
       else {
-        setAllowanceButtons(true)
+        // setAllowanceButtons(true)
+        handleAllowanceChange(loanId, true)
       }
     }
   }
 
   //todo: fix update allowance here
-  const handleLeftButtonClick = async (amt: number) => {
-    const swapButton = document.getElementById('repay-button')
-    const leftButton = document.getElementById('left-approve-button')
-    const rightButton = document.getElementById('right-approve-button')
+  const handleLeftButtonClick = async (amt: number, loanId: number) => {
+    const swapButton = document.getElementById('repay-button' + loanId)
+    const leftButton = document.getElementById('left-approve-button' + loanId)
+    const rightButton = document.getElementById('right-approve-button' + loanId)
     if(leftButton) {
       leftButton.innerHTML = "approving..."
       leftButton.style.backgroundColor = "#E7B941"
@@ -153,13 +164,14 @@ export const RepayTab = () => {
     await sendiBGTApproveTx(amt, false)
     // updateAllowance(honeyBuy + 0.01)
     swapButton && (swapButton.innerHTML = "REPAY LOAN")
-    setAllowanceButtons(false)
+    // setAllowanceButtons(false)
+    handleAllowanceChange(loanId, false)
   }
   
-  const handleRightButtonClick = async () => {
-    const swapButton = document.getElementById('repay-button')
-    const rightButton = document.getElementById('right-approve-button')
-    const leftButton = document.getElementById('left-approve-button')
+  const handleRightButtonClick = async (loanId: number) => {
+    const swapButton = document.getElementById('repay-button' + loanId)
+    const leftButton = document.getElementById('left-approve-button' + loanId)
+    const rightButton = document.getElementById('right-approve-button' + loanId)
     if(leftButton) {
       leftButton.innerHTML = "approving..."
       leftButton.style.backgroundColor = "#E7B941"
@@ -171,7 +183,8 @@ export const RepayTab = () => {
     await sendiBGTApproveTx(0, true)
     // updateAllowance(100000000)
     swapButton && (swapButton.innerHTML = "REPAY LOAN")
-    setAllowanceButtons(false)
+    // setAllowanceButtons(false)
+    handleAllowanceChange(loanId, false)
   }
 
   return (
@@ -257,26 +270,26 @@ export const RepayTab = () => {
                 <span className="text-[0.8vw] text-[#7B7876] mr-[1%]">iBGT</span>
               </div>
               {
-                allowanceButtons &&
+                allowanceFlags[loan.loanId] &&
                 <div>
                   <button
                     className="top-[60%] left-[1%] h-[30%] w-[42%] absolute border-2 border-black bg-[#E7B941] text-[0.7vw] hover:scale-110"
-                    id="left-approve-button"
-                    onClick={() => handleLeftButtonClick(parseFloat(inputValues[loan.loanId]))}
+                    id={`left-approve-button${loan.loanId}`}
+                          onClick={() => handleLeftButtonClick(parseFloat(inputValues[loan.loanId]), loan.loanId)}
                   >
                     approve tx
                   </button>
                   <button
                     className="top-[60%] left-[53%] h-[30%] w-[42%] absolute border-2 border-black bg-[#E7B941] text-[0.7vw] hover:scale-110"
-                    id="right-approve-button"
-                    onClick={() => handleRightButtonClick()}
+                    id={`right-approve-button${loan.loanId}`}
+                    onClick={() => handleRightButtonClick(loan.loanId)}
                   >
                     approve infinite
                   </button>
                 </div>
               }
               {
-                !allowanceButtons &&
+                !allowanceFlags[loan.loanId] &&
                 <ConnectButton.Custom>
                   {({
                     account,
@@ -287,9 +300,9 @@ export const RepayTab = () => {
                     return (
                       <button
                         className="top-[60%] left-[30%] h-[30%] w-[65%] absolute border-2 border-black bg-[#E7B941] text-[0.9vw] hover:scale-110"
-                        id="repay-button"
+                        id={`repay-button${loan.loanId}`}
                         onClick={() => {
-                          const button = document.getElementById('repay-button')
+                          const button = document.getElementById('repay-button' + loan.loanId)
                           
                           if(!account) {
                             if(button && button.innerHTML === "connect wallet") {

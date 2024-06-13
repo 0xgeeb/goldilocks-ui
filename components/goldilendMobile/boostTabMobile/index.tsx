@@ -55,7 +55,7 @@ export const BoostTabMobile = () => {
       {
         selectScreen &&
         <div className="h-[100%] w-[100%] flex flex-col items-center">
-          <h1 className="font-amaticbold text-[10vw] mt-[5%]" onClick={() => console.log(userBoost)}>select partner nfts</h1>
+          <h1 className="font-amaticbold text-[10vw] mt-[5%]">select partner nfts</h1>
           <div className="flex flex-wrap overflow-y-auto w-[95%] h-[80%]" id="hide-scrollbar">
             {
               infoLoading ? loadingElement() :
@@ -133,12 +133,12 @@ export const BoostTabMobile = () => {
                         {
                           partner === contracts.beradrome.address ?
                           <img
-                            className="ml-[5%] h-[100%] w-[90%] border-2 border-black hover:scale-110 hover:cursor-pointer"
+                            className="ml-[5%] h-[100%] w-[90%] border-2 border-black"
                             src="https://ipfs.io/ipfs/QmYhKPJVDZDRDpJAJ2TyCXK981B4pvtPcjrKgN256U4Cok/73.png"
                             alt="partner"
                           /> :
                           <video
-                            className="ml-[5%] h-[100%] w-[90%] hover:scale-110 hover:cursor-pointer"
+                            className="ml-[5%] h-[100%] w-[90%]"
                             autoPlay
                             loop
                             muted
