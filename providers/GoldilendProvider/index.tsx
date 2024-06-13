@@ -120,16 +120,66 @@ const INITIAL_STATE: GoldilendInitialState = {
     expiry: 0
   },
   liquidatableLoans: [
-    // {
-    //   collateralNFTs: ['0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad'],
-    //   collateralNFTIds: [2, 3],
-    //   borrowedAmount: 2,
-    //   interest: 0.5015,
-    //   duration: 1725854,
-    //   endDate: 1719240812,
-    //   loanId: 2,
-    //   liquidated: false
-    // }
+    {
+      collateralNFTs: ['0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad', '0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad', '0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad'],
+      collateralNFTIds: [2, 3],
+      borrowedAmount: 2,
+      interest: 0.5015,
+      duration: 1725854,
+      endDate: 1719240812,
+      loanId: 1,
+      liquidated: false
+    },
+    {
+      collateralNFTs: ['0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad'],
+      collateralNFTIds: [2, 3],
+      borrowedAmount: 2,
+      interest: 0.5015,
+      duration: 1725854,
+      endDate: 1719240812,
+      loanId: 2,
+      liquidated: false
+    },
+    {
+      collateralNFTs: ['0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad'],
+      collateralNFTIds: [2, 3],
+      borrowedAmount: 2,
+      interest: 0.5015,
+      duration: 1725854,
+      endDate: 1719240812,
+      loanId: 3,
+      liquidated: false
+    },
+    {
+      collateralNFTs: ['0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad'],
+      collateralNFTIds: [2, 3],
+      borrowedAmount: 2,
+      interest: 0.5015,
+      duration: 1725854,
+      endDate: 1719240812,
+      loanId: 4,
+      liquidated: false
+    },
+    {
+      collateralNFTs: ['0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad'],
+      collateralNFTIds: [2, 3],
+      borrowedAmount: 2,
+      interest: 0.5015,
+      duration: 1725854,
+      endDate: 1719240812,
+      loanId: 5,
+      liquidated: false
+    },
+    {
+      collateralNFTs: ['0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad'],
+      collateralNFTIds: [2, 3],
+      borrowedAmount: 2,
+      interest: 0.5015,
+      duration: 1725854,
+      endDate: 1719240812,
+      loanId: 6,
+      liquidated: false
+    },
   ],
   notification: {
     toggle: false,
@@ -145,7 +195,7 @@ const INITIAL_STATE: GoldilendInitialState = {
   ) => {},
   activeToggle: 'BORROW',
   changeActiveToggle: (_toggle: string) => {},
-  lendActiveToggle: 'LOCK',
+  lendActiveToggle: 'LIQUIDATE',
   changeLendActiveToggle: (_toggle: string) => {},
   refreshGoldilendInfo: async () => {},
   infoLoading: true,

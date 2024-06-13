@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useEffect } from "react"
 import { ConnectButton } from "@rainbow-me/rainbowkit"
 import { useGoldilend, useWallet } from "../../../providers"
 import { useGoldilendTx } from "../../../hooks"

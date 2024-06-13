@@ -5,7 +5,6 @@ import { ConnectButton } from "@rainbow-me/rainbowkit"
 import { LendNotificationMobile } from "../../goldilendMobile"
 import { useGoldilend, useWallet } from "../../../providers"
 import { useGoldilendTx } from "../../../hooks"
-import { BorrowNotification } from "../../goldilend"
 import { contracts } from "../../../utils/addressi"
 
 type InputValuesType = {
