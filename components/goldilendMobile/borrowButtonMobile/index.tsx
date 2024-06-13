@@ -18,7 +18,10 @@ export const BorrowButtonMobile = () => {
     selectScreen,
     setSelectScreen,
     activeToggle,
-    selectedPartners
+    selectedPartners,
+    boostMag,
+    findPartners,
+    userBoost
   } = useGoldilend()
 
   const { wallet } = useWallet()
@@ -26,11 +29,19 @@ export const BorrowButtonMobile = () => {
   const {
     checkLoanAllowance,
     sendGoldilendNFTApproveTx,
-    sendBorrowTx
+    sendBorrowTx,
+    checkBoostAllowance,
+    sendBoostTx,
+    sendWithdrawBoostTx
   } = useGoldilendTx()
 
   const formatAsString = (num: number): string => {
     return num.toLocaleString('en-US', { maximumFractionDigits: 2 })
+  }
+
+  const refreshInfo = () => {
+    changeActiveToggle('BOOST')
+    findPartners()
   }
 
   const checkSelected = (beraName: string): boolean => {
@@ -39,7 +50,15 @@ export const BorrowButtonMobile = () => {
         return true
       }
     }
-    
+    return false
+  }
+
+  const checkSelectedPartners = (partnerName: string): boolean => {
+    for(let i = 0; i < selectedPartners.length; i++) {
+      if(selectedPartners[i].name === partnerName) {
+        return true
+      }
+    }  
     return false
   }
 
@@ -118,16 +137,98 @@ export const BorrowButtonMobile = () => {
     }
     else {
       if(selectScreen) {
-        if(selectedPartners.length == 0) {
-          button && (button.innerHTML = "no nfts")
-          return
-        }
-        button && (button.innerHTML = "create boost")
         setSelectScreen(false)
       }
       else {
-
+        if(selectedPartners.length == 0) {
+          button && (button.innerHTML = "no boost")
+          return
+        }
+        const [combFlag, dromeFlag] = await checkBoostAllowance(wallet)
+        if((combFlag || !checkSelectedPartners("HoneyComb")) && (dromeFlag || !checkSelectedPartners("Beradrome"))) {
+          boostTxFlow(button)
+        }
+        else {
+          button && (button.innerHTML = "approving...")
+          if(!combFlag && checkSelectedPartners('HoneyComb')) {
+            await sendGoldilendNFTApproveTx(contracts.honeycomb.address)
+          }
+          if(!dromeFlag && checkSelectedPartners('Beradrome')) {
+            await sendGoldilendNFTApproveTx(contracts.beradrome.address)
+          }
+          button && (button.innerHTML = "create boost")
+        }
       }
+    }
+  }
+
+  const handleWithdrawButtonClick = async () => {
+    const button = document.getElementById('borrow-button-withdraw')
+    if(userBoost.expiry > Math.floor(Date.now() / 1000)) {
+      button && (button.innerHTML = "not expired")
+      return
+    }
+    setTxConfirming(true)
+    if(button) {
+      button.innerHTML = "confirming..."
+    }
+    const withdrawBoostTx = await sendWithdrawBoostTx()
+    if(withdrawBoostTx.substring(0, 2) === '0x') {
+      setTxConfirming(false)
+      openNotification(
+        true,
+        "You've successfully withdrew your boost",
+        ``,
+        withdrawBoostTx
+      )
+      refreshInfo()
+      if(button) {
+        button.innerHTML = "withdraw boost"
+      }
+      setTimeout(() => {
+        openNotification(false, '', '', '')
+      }, 10000)
+    }
+    else {
+      if(button) {
+        button.innerHTML = "withdraw boost"
+      }
+      setTxConfirming(false)
+    }
+  }
+
+  const boostTxFlow = async (button: HTMLElement | null) => {
+    setTxConfirming(true)
+    if(button) {
+      button.innerHTML = "confirming..."
+    }
+    const boostTx = await sendBoostTx(selectedPartners)
+    if(boostTx.substring(0, 2) === '0x') {
+      setTxConfirming(false)
+      openNotification(
+        true,
+        "You've successfully created a boost",
+        `You created a boost with a magnitude of ${formatAsString(boostMag)}`,
+        boostTx
+      )
+      if(button) {
+        button.innerHTML = "create boost"
+        button.style.backgroundColor = "#E7B941"
+        button.style.color = "black"
+      }
+      refreshInfo()
+      setTimeout(() => {
+        openNotification(false, '', '', '')
+      }, 10000)
+    }
+    else {
+      if(button) {
+        button.innerHTML = "create boost"
+        button.style.backgroundColor = "#E7B941"
+        button.style.color = "black"
+      }
+      refreshInfo()
+      setTxConfirming(false)
     }
   }
 
@@ -173,11 +274,99 @@ export const BorrowButtonMobile = () => {
       return 'create loan'
     }
     else {
-      return 'create boost'
+      if(selectedPartners.length > 0) {
+        return 'create boost'
+      }
+      else {
+        return 'my boost'
+      }
     }
   }
 
   return (
+    (activeToggle === 'BOOST' && selectScreen == false && userBoost.partnerNFTs.length > 1) ?
+    <>
+      <ConnectButton.Custom>
+        {({
+          account,
+          chain,
+          openChainModal,
+          openConnectModal
+        }) => {
+          return (
+            <button
+              className="absolute top-[67.5%] left-[22.5%] h-[7.5%] w-[55%] bg-[#E7B941] border-2 border-black font-amaticbold text-[9vw] flex items-center justify-center hover:bg-[#C9E3B9] hover:scale-110"
+              id="borrow-button"
+              onClick={() => {
+                const button = document.getElementById('borrow-button')
+                
+                if(!account) {
+                  if(button && button.innerHTML === "connect wallet") {
+                    openConnectModal()
+                  }
+                  else {
+                    button && (button.innerHTML = "connect wallet")
+                  }
+                }
+                else if(chain?.name !== "Base Sepolia") {
+                  if(button && button.innerHTML === "where base sepolia") {
+                    openChainModal()
+                  }
+                  else {
+                    button && (button.innerHTML = "where base sepolia")
+                  }
+                }
+                else {
+                  handleButtonClick()
+                }
+              }}
+            >
+              add to boost
+            </button>
+          )
+        }}
+      </ConnectButton.Custom>
+      <ConnectButton.Custom>
+        {({
+          account,
+          chain,
+          openChainModal,
+          openConnectModal
+        }) => {
+          return (
+            <button
+              className="absolute top-[77.5%] left-[22.5%] h-[7.5%] w-[55%] bg-[#E7B941] border-2 border-black font-amaticbold text-[9vw] flex items-center justify-center hover:bg-[#C9E3B9] hover:scale-110"
+              id="borrow-button-withdraw"
+              onClick={() => {
+                const button = document.getElementById('borrow-button-withdraw')
+                
+                if(!account) {
+                  if(button && button.innerHTML === "connect wallet") {
+                    openConnectModal()
+                  }
+                  else {
+                    button && (button.innerHTML = "connect wallet")
+                  }
+                }
+                else if(chain?.name !== "Base Sepolia") {
+                  if(button && button.innerHTML === "where base sepolia") {
+                    openChainModal()
+                  }
+                  else {
+                    button && (button.innerHTML = "where base sepolia")
+                  }
+                }
+                else {
+                  handleWithdrawButtonClick()
+                }
+              }}
+            >
+              withdraw boost
+            </button>
+          )
+        }}
+      </ConnectButton.Custom>
+    </> :
     <ConnectButton.Custom>
       {({
         account,
