@@ -185,25 +185,21 @@ export const RepayTabMobile = () => {
         {
           txConfirming ? <img className="w-[100%] h-[100%]" src="/images/bg-transaction-mobile.png" alt="tx" /> :
           notification.toggle ? <LendNotificationMobile /> :
-          <div className="h-[100%] w-[100%] flex flex-col">
+          <div className="h-[100%] w-[100%] overflow-y-auto flex flex-wrap" id="hide-scrollbar">
             <div className="w-[100%] h-[10%] border-b-2 border-black">
               <h1 className="font-amaticbold ml-[4%] text-[7vw]">my loans</h1>
             </div>
-            <div className="w-[100%] h-[90%] flex flex-col overflow-y-auto" id="hide-scrollbar">
-              {
-                infoLoading ? loadingElement() :
-                userLoans.map((loan, index) => (
-                  <div className="w-[100%] h-[40%] border-b-2 border-black flex flex-row items-center relative" key={index}>
-                    <h1>hello</h1>
-                    <h1>hello</h1>
-                    <h1>hello</h1>
-                    <h1>hello</h1>
-                    <h1>hello</h1>
-                    <h1>hello</h1>
-                  </div>
-                ))
-              }
-            </div>
+            {
+              infoLoading ? loadingElement() :
+              userLoans.map((loan, index) => (
+                <div
+                  className="w-[100%] h-[70%] border-b-2 border-black flex flex-row items-center relative"
+                  key={index}
+                >
+                  <h1 className="w-[100%] h-[100%]">hello</h1>
+                </div>
+              ))
+            }
           </div>
         }
       </div>
