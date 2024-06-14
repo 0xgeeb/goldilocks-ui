@@ -1,13 +1,23 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { useDesktop } from "../../../providers"
+import { Loading } from "../../utils"
 import { HomePageMobile } from "../"
 
 export const HomePage = () => {
   
+  const [pageLoading, setPageLoading] = useState<boolean>(true)
+
   const { isDesktop } = useDesktop()
+
+  useEffect(() => {
+    setPageLoading(false)
+  }, [])
   
   return (
+    pageLoading ?
+    <Loading /> :
     isDesktop ?
     <main className="flex flex-col min-h-screen overflow-hidden">
       <div className="h-[100vh] w-[100vw]">

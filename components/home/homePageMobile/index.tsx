@@ -16,7 +16,7 @@ export const HomePageMobile = () => {
         navButtonsOpen && 
         <div className="z-50 absolute top-[11%] h-[89%] w-[100%] bg-[#E4B19B]">
           <div className="h-[100%] w-[100%] py-[8%] flex flex-col items-center justify-between">
-            <div className="w-[100%] h-[90%] flex flex-col items-center justify-between font-amaticbold text-[11vw]">
+            <div className="w-[100%] h-[80%] flex flex-col items-center justify-between font-amaticbold text-[11vw]">
               <a href="/wut" className="hover:scale-[150%] cursor-pointer"><span>Wut Is This?</span></a>
               <a href="/goldiswap/swap" className="hover:scale-[150%] cursor-pointer"><span>Goldiswap</span></a>
               <a href="/goldilend/borrow" className="hover:scale-[150%] cursor-pointer"><span>Goldilend</span></a>
@@ -34,15 +34,28 @@ export const HomePageMobile = () => {
       }
       <div className="h-[100vh] w-[100vw]">
         <NavBarMobile />
-        
+        <div className="w-[100%] h-[69%] bg-cover bg-bottom bg-[url('/images/bg-home-mobile.png')]">
+
+        </div>
+        <div className="w-[100%] h-[20%] bg-black flex items-center justify-center">
+          <img className="w-[10%] animate-bounce" src="/images/icon-arrows.png" alt="arrows" />
+        </div>
       </div>
       {
         !navButtonsOpen &&
         <div className="w-[100vw] bg-black flex flex-col items-center relative">
-
+          <div className="w-[100%] flex flex-col items-center font-amatic my-[5%]">
+            <h1 className="text-[14vw] font-amaticbold text-[#FFCD00]">"Show me the honey"</h1>
+            <div className="flex flex-row items-center justify-center w-[100%] mt-[5%]">
+              <h2 className="text-[#FFCD00] text-[6vw]">Henlo, welcome to </h2>
+              <h2 className="text-[#FFCD00] text-[7vw] mx-[1%] font-amaticbold">GOLDILOCKS.</h2>
+              </div>
+            <h2 className="text-[#FFCD00] text-[6vw]"> novel defi infrastructure on berachain</h2>
+            <h2 className="text-[#FFCD00] text-[6vw]">check out our three products</h2>
+          </div>
         </div>
       }
-      <FooterMobile />
+      {/* <FooterMobile /> */}
     </main>
   )
 }
