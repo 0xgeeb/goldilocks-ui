@@ -186,7 +186,7 @@ export const BorrowTab = () => {
     notification.toggle ? <BorrowNotification /> :
     <div className="w-[100%] h-[100%] flex flex-row">
       <div className="h-[100%] w-[100%] px-[0%] border-r-2 border-black flex flex-col items-center">
-        <h1 className="font-amaticbold text-[3vw] mt-[2%]">select collateral</h1>
+        <h1 className="font-amaticbold text-[5vw] xl:text-[3vw] mt-[2%]">select collateral</h1>
         <div className="flex flex-wrap overflow-y-auto w-[85%] h-[80%]" id="hide-scrollbar">
         {
             infoLoading ? loadingElement() :
@@ -204,7 +204,7 @@ export const BorrowTab = () => {
         </div>
       </div>
       <div className="h-[100%] w-[100%] flex flex-col items-center justify-between py-[1%]">
-        <h1 className="font-amaticbold text-[2.5vw]">create loan</h1>
+        <h1 className="font-amaticbold text-[5vw] xl:text-[2.5vw]">create loan</h1>
         <div className="w-[90%] h-[25%] flex flex-row items-start justify-between relative">
           <span className="absolute top-[-20%] left-[3%] font-baloo font-semibold">Collateral:</span>
           <div className="text-[2vw] cursor-pointer hover:scale-125" onClick={() => prevImages()}>&lt;</div>
