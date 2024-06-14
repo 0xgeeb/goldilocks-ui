@@ -34,10 +34,13 @@ export const HomePageMobile = () => {
       }
       <div className="h-[100vh] w-[100vw]">
         <NavBarMobile />
+        
       </div>
       {
         !navButtonsOpen &&
-        <div></div>
+        <div className="w-[100vw] bg-black flex flex-col items-center relative">
+
+        </div>
       }
       <FooterMobile />
     </main>
