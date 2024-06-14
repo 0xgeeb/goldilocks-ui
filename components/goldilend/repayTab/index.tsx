@@ -192,7 +192,7 @@ export const RepayTab = () => {
     notification.toggle ? <BorrowNotification /> :
     <div className="h-[100%] w-[100%] flex flex-col overflow-y-auto" id="hide-scrollbar">
       <div className="w-[100%] h-[15%] border-b-2 border-black">
-        <h1 className="font-amaticbold ml-[4%] text-[2.3vw]">my loans</h1>
+        <h1 className="font-amaticbold ml-[4%] text-[5vw] xl:text-[2.3vw]">my loans</h1>
       </div>
       {
         infoLoading ?
@@ -201,24 +201,24 @@ export const RepayTab = () => {
           <div className="w-[100%] h-[28%] font-baloo font-semibold border-b-2 border-black flex flex-row items-center relative" key={index}>
             {
               loan.borrowedAmount == 0 &&
-              <div className="rotate-[16deg] absolute right-0 w-[30%] h-[25%] bg-[#79AF45] border-2 border-black flex items-center justify-center text-[1.1vw] z-30">
+              <div className="rotate-[16deg] absolute right-0 w-[30%] h-[25%] bg-[#79AF45] border-2 border-black flex items-center justify-center text-[2vw] xl:text-[1.1vw] z-30">
                 REPAID
               </div>
             }
             {
               loan.endDate < Math.floor(Date.now() / 1000) &&
-              <div className="rotate-[16deg] absolute right-0 w-[30%] h-[25%] bg-[#CC7E16] border-2 border-black flex items-center justify-center text-[1.1vw] z-30">
+              <div className="rotate-[16deg] absolute right-0 w-[30%] h-[25%] bg-[#CC7E16] border-2 border-black flex items-center justify-center text-[2vw] xl:text-[1.1vw] z-30">
                 EXPIRED
               </div>
             }
             {
               loan.liquidated &&
-              <div className="rotate-[16deg] absolute right-0 w-[30%] h-[25%] bg-[#B11614] border-2 border-black flex items-center justify-center text-[1.1vw] z-30">
+              <div className="rotate-[16deg] absolute right-0 w-[30%] h-[25%] bg-[#B11614] border-2 border-black flex items-center justify-center text-[2vw] xl:text-[1.1vw] z-30">
                 LIQUIDATED
               </div>
             }
-            <h1 className="absolute text-[1vw] top-[2%] left-[1%]">Loan {loan.loanId}</h1>
-            <div className="h-[50%] w-[35%] px-[3%] flex flex-col justify-center text-[0.8vw] ml-[7%]">
+            <h1 className="absolute text-[2vw] xl:text-[1vw] top-[2%] left-[1%]">Loan {loan.loanId}</h1>
+            <div className="h-[50%] w-[35%] px-[3%] flex flex-col justify-center text-[1.5vw] xl:text-[0.8vw] ml-[7%]">
               <div className="w-[100%] flex flex-row items-center justify-between">
                 <span>total amount to repay:</span>
                 <span>{formatNum(loan.borrowedAmount)} iBGT</span>
@@ -237,7 +237,7 @@ export const RepayTab = () => {
               </div>
             </div>
             <div className="h-[100%] w-[35%] flex flex-col items-center">
-              <h1 className="text-[#9C4924] my-[2%]">Collateral</h1>
+              <h1 className="text-[#9C4924] text-[1.2vw] xl:text-[0.8vw] my-[2%]">Collateral</h1>
               <div className="w-[90%] h-[65%] overflow-x-auto flex flex-row items-center justify-around" id="hide-scrollbar">
                 {
                   loan.collateralNFTs.map((nft, index) => (
@@ -253,34 +253,34 @@ export const RepayTab = () => {
             </div>
             <div className="h-[100%] w-[23%] flex flex-col relative">
               <div
-                className="bg-[#CC8634] absolute top-[20%] left-[1%] h-[30%] w-[25%] cursor-pointer hover:scale-110 text-[0.9vw] border-t-2 border-b-2 border-l-2 border-black flex items-center justify-center"
+                className="bg-[#CC8634] absolute top-[20%] left-[1%] h-[30%] w-[25%] cursor-pointer hover:scale-110 text-[2vw] xl:text-[0.9vw] border-t-2 border-b-2 border-l-2 border-black flex items-center justify-center"
                 onClick={() => handleMaxClick(loan.loanId, loan.borrowedAmount)}
               >
                 MAX
               </div>
               <div className="top-[20%] left-[26%] h-[30%] w-[69%] absolute bg-white border-2 border-black flex flex-row items-center justify-between">
                 <input
-                  className="h-[100%] w-[70%] pl-[5%] text-[1.3vw] focus:outline-none"
+                  className="h-[100%] w-[70%] pl-[5%] text-[2.2vw] xl:text-[1.3vw] focus:outline-none"
                   type="text"
                   id="number-input"
                   placeholder="0.00"
                   value={inputValues[loan.loanId] || ''}
                   onChange={(e) => handleInputChange(loan.loanId, e.target.value)}
                 />
-                <span className="text-[0.8vw] text-[#7B7876] mr-[1%]">iBGT</span>
+                <span className="text-[1.5vw] xl:text-[0.8vw] text-[#7B7876] mr-[1%]">iBGT</span>
               </div>
               {
                 allowanceFlags[loan.loanId] &&
                 <div>
                   <button
-                    className="top-[60%] left-[1%] h-[30%] w-[42%] absolute border-2 border-black bg-[#E7B941] text-[0.7vw] hover:scale-110"
+                    className="top-[60%] left-[1%] h-[30%] w-[42%] absolute border-2 border-black bg-[#E7B941] text-[1.2vw] xl:text-[0.7vw] hover:scale-110"
                     id={`left-approve-button${loan.loanId}`}
-                          onClick={() => handleLeftButtonClick(parseFloat(inputValues[loan.loanId]), loan.loanId)}
+                    onClick={() => handleLeftButtonClick(parseFloat(inputValues[loan.loanId]), loan.loanId)}
                   >
                     approve tx
                   </button>
                   <button
-                    className="top-[60%] left-[53%] h-[30%] w-[42%] absolute border-2 border-black bg-[#E7B941] text-[0.7vw] hover:scale-110"
+                    className="top-[60%] left-[53%] h-[30%] w-[42%] absolute border-2 border-black bg-[#E7B941] text-[1.2vw] xl:text-[0.7vw] hover:scale-110"
                     id={`right-approve-button${loan.loanId}`}
                     onClick={() => handleRightButtonClick(loan.loanId)}
                   >
@@ -299,7 +299,7 @@ export const RepayTab = () => {
                   }) => {
                     return (
                       <button
-                        className="top-[60%] left-[30%] h-[30%] w-[65%] absolute border-2 border-black bg-[#E7B941] text-[0.9vw] hover:scale-110"
+                        className="top-[60%] left-[30%] h-[30%] w-[65%] absolute border-2 border-black bg-[#E7B941] text-[1.8vw] xl:text-[0.9vw] hover:scale-110"
                         id={`repay-button${loan.loanId}`}
                         onClick={() => {
                           const button = document.getElementById('repay-button' + loan.loanId)

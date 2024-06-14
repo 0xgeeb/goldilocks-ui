@@ -187,11 +187,11 @@ export const BorrowTab = () => {
     <div className="w-[100%] h-[100%] flex flex-row">
       <div className="h-[100%] w-[100%] px-[0%] border-r-2 border-black flex flex-col items-center">
         <h1 className="font-amaticbold text-[5vw] xl:text-[3vw] mt-[2%]">select collateral</h1>
-        <div className="flex flex-wrap overflow-y-auto w-[85%] h-[80%]" id="hide-scrollbar">
-        {
+        <div className="flex flex-wrap overflow-y-auto w-[85%] h-[80%] py-[2%]" id="hide-scrollbar">
+          {
             infoLoading ? loadingElement() :
             ownedBeras.map((bera, index) => (
-              <div key={index} className="h-[45%] w-[50%] py-2">
+              <div key={index} className="h-[40%] xl:h-[45%] w-[50%] py-2">
                 <img
                   className={`ml-[5%] h-[100%] w-[90%] border-2 border-black hover:scale-110 hover:cursor-pointer ${findSelectedBeraIdxs().includes(bera.index) ? "border-4 border-black" : "opacity-75"}`}
                   onClick={() => handleBeraClick(bera)}
@@ -206,12 +206,12 @@ export const BorrowTab = () => {
       <div className="h-[100%] w-[100%] flex flex-col items-center justify-between py-[1%]">
         <h1 className="font-amaticbold text-[5vw] xl:text-[2.5vw]">create loan</h1>
         <div className="w-[90%] h-[25%] flex flex-row items-start justify-between relative">
-          <span className="absolute top-[-20%] left-[3%] font-baloo font-semibold">Collateral:</span>
-          <div className="text-[2vw] cursor-pointer hover:scale-125" onClick={() => prevImages()}>&lt;</div>
+          <span className="text-[2vw] xl:text-[0.8vw] absolute top-[-20%] left-[3%] font-baloo font-semibold">Collateral:</span>
+          <div className="text-[4vw] xl:text-[2vw] cursor-pointer hover:scale-125 mt-[3%]" onClick={() => prevImages()}>&lt;</div>
           {
             selectedBeras.slice(currentIndex, currentIndex + 4).map((bera, index) => (
               <img
-                className="h-[70%] w-[20%] border-2 border-black"
+                className="mt-[2.5%] xl:mt-0 h-[50%] xl:h-[70%] w-[20%] border-2 border-black"
                 onClick={() => handleBeraClick(bera)}
                 src={bera.imageSrc}
                 alt="selectedbera"
@@ -219,13 +219,13 @@ export const BorrowTab = () => {
               />
             ))
           }
-          <div className="text-[2vw] cursor-pointer hover:scale-125" onClick={() => nextImages()}>&gt;</div>
-          <div className="absolute w-[60%] bottom-[5%] left-[20%] flex flex-row items-center justify-between font-baloo font-semibold">
+          <div className="text-[4vw] xl:text-[2vw] cursor-pointer hover:scale-125 mt-[3%]" onClick={() => nextImages()}>&gt;</div>
+          <div className="text-[2vw] xl:text-[0.8vw] absolute w-[60%] bottom-[5%] left-[20%] flex flex-row items-center justify-between font-baloo font-semibold">
             <span>borrow limit:</span>
             <span>{borrowLimit > 0 ? borrowLimit : "0.00"} iBGT</span>
           </div>
         </div>
-        <div className="w-[65%] flex flex-row items-center justify-between font-baloo font-semibold text-[1vw]">
+        <div className="w-[90%] flex flex-row items-center justify-between font-baloo font-semibold text-[1.8vw] xl:text-[1vw]">
           <span>Loan Amount:</span>
           <input
             className="w-[50%] pl-2 focus:outline-none border-2 border-black bg-white"
@@ -236,7 +236,7 @@ export const BorrowTab = () => {
             onChange={(e) => handleBorrowChange(e.target.value)}
           />
         </div>
-        <div className="w-[65%] flex flex-row items-center justify-between font-baloo font-semibold text-[1vw]">
+        <div className="w-[90%] flex flex-row items-center justify-between font-baloo font-semibold text-[1.8vw] xl:text-[1vw]">
           <span>Repay Deadline:</span>
           <input
             className="w-[50%] pl-2 focus:outline-none border-2 border-black bg-white"
@@ -247,15 +247,15 @@ export const BorrowTab = () => {
             onChange={(e) => handleLoanDateChange(e.target.value)}
           />
         </div>
-        <div className="w-[65%] flex flex-row items-center justify-between font-baloo font-semibold text-[1vw]">
+        <div className="w-[90%] flex flex-row items-center justify-between font-baloo font-semibold text-[1.8vw] xl:text-[1vw]">
           <span>Interest Rate:</span>
           <span>69%</span>
         </div>
-        <div className="w-[65%] flex flex-row items-center justify-between font-baloo font-semibold text-[1vw]">
+        <div className="w-[90%] flex flex-row items-center justify-between font-baloo font-semibold text-[1.8vw] xl:text-[1vw]">
           <span>Total Interest Due:</span>
           <span>69</span>
         </div>
-        <div className="w-[60%] px-2 flex flex-row items-center justify-between font-baloo font-semibold text-[0.8vw] bg-[#EFD9CA]">
+        <div className="w-[85%] px-2 flex flex-row items-center justify-between font-baloo font-semibold text-[1.6vw] xl:text-[0.8vw] bg-[#EFD9CA]">
           <span>Total Amount to Repay:</span>
           <span>{loanAmount} iBGT</span>
         </div>
@@ -268,7 +268,7 @@ export const BorrowTab = () => {
           }) => {
             return (
               <button
-                className="w-[48%] h-[12%] bg-[#E7B941] border-2 border-black font-amaticbold text-[1.7vw] flex items-center justify-center hover:bg-[#C9E3B9] hover:scale-110"
+                className="w-[48%] h-[12%] bg-[#E7B941] border-2 border-black font-amaticbold text-[4vw] xl:text-[1.7vw] flex items-center justify-center hover:bg-[#C9E3B9] hover:scale-110"
                 id="borrow-button"
                 onClick={() => {
                   const button = document.getElementById('borrow-button')

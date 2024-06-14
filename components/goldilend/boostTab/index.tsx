@@ -204,7 +204,7 @@ export const BoostTab = () => {
     notification.toggle ? <BorrowNotification /> :
     <div className="w-[100%] h-[100%] flex flex-row">
       <div className="h-[100%] w-[100%] px-[0%] border-r-2 border-black flex flex-col items-center">
-        <h1 className="font-amaticbold text-[3vw] mt-[2%]">select partner nfts</h1>
+        <h1 className="font-amaticbold text-[6vw] xl:text-[3vw] mt-[2%]">select partner nfts</h1>
         <div className="flex flex-wrap overflow-y-auto w-[85%] h-[80%]" id="hide-scrollbar">
         {
             infoLoading ? loadingElement() :
@@ -390,22 +390,22 @@ export const BoostTab = () => {
             </ConnectButton.Custom>
           </> :
           <>
-            <h1 className="font-amaticbold text-[5vw] my-[8%]">create boost</h1>
+            <h1 className="font-amaticbold text-[10vw] xl:text-[5vw] my-[8%]">create boost</h1>
             <div className="w-[90%] h-[25%] flex flex-row items-start justify-between relative">
-              <span className="absolute top-[-20%] left-[3%] font-baloo font-semibold">Selected Partner NFTs:</span>
-              <div className="text-[2vw] cursor-pointer hover:scale-125" onClick={() => prevImages()}>&lt;</div>
+              <span className="absolute top-[-20%] left-[3%] font-baloo font-semibold text-[2vw] xl:text-[1vw]">Selected Partner NFTs:</span>
+              <div className="text-[3vw] xl:text-[2vw] cursor-pointer hover:scale-125 mt-[3%]" onClick={() => prevImages()}>&lt;</div>
               {
                 selectedPartners.slice(currentIndex, currentIndex + 4).map((partner, index) => (
                   partner.name === 'Beradrome' ?
                   <img
-                    className="h-[70%] w-[20%] border-2 border-black"
+                    className="h-[50%] xl:h-[70%] w-[20%] border-2 border-black"
                     onClick={() => handlePartnerClick(partner)}
                     src={partner.imageSrc}
                     alt="selectedpartner"
                     key={index}
                   /> :
                   <video
-                    className="h-[70%] w-[20%] border-2 border-black"
+                    className="h-[50%] xl:h-[70%] w-[20%] border-2 border-black"
                     onClick={() => handlePartnerClick(partner)}
                     key={index}
                     autoPlay
@@ -416,9 +416,9 @@ export const BoostTab = () => {
                   </video>
                 ))
               }
-              <div className="text-[2vw] cursor-pointer hover:scale-125" onClick={() => nextImages()}>&gt;</div>
+              <div className="text-[3vw] xl:text-[2vw] cursor-pointer hover:scale-125 mt-[3%]" onClick={() => nextImages()}>&gt;</div>
             </div>
-            <h1 className="text-[1.7vw] font-baloo font-semibold text-[#9C4924]">Boost Amount: {boostMag}%</h1>
+            <h1 className="text-[3vw] xl:text-[1.7vw] font-baloo font-semibold text-[#9C4924]">Boost Amount: {boostMag}%</h1>
             <ConnectButton.Custom>
               {({
                 account,
@@ -428,7 +428,7 @@ export const BoostTab = () => {
               }) => {
                 return (
                   <button
-                    className="h-[12.5%] w-[45%] border-2 border-black bg-[#E7B941] mt-[4%] font-amaticbold text-[1.5vw] hover:scale-110"
+                    className="h-[12.5%] w-[45%] border-2 border-black bg-[#E7B941] mt-[4%] font-amaticbold text-[4vw] xl:text-[1.5vw] hover:scale-110"
                     id="boost-button"
                     onClick={() => {
                       const button = document.getElementById('boost-button')
