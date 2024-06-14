@@ -28,9 +28,10 @@ export const HomePage = () => {
             <a href="/goldivaults" className="hover:scale-[150%] cursor-pointer"><span>Goldivaults</span></a>
           </div>
         </header>
-        <div className="w-[100%] h-[89%] lg:h-[85%] bg-[url('/images/bg-home.png')] relative">
+        <div className="w-[100%] h-[86%] lg:h-[82%] bg-cover bg-[url('/images/bg-home.png')] relative">
 
         </div>
+        <div className="w-[100%] h-[3%] bg-black"></div>
       </div>
       <div className="w-[100vw] bg-black flex flex-col items-center relative">
         <div className="h-[65vh] w-[100%] flex flex-col items-center justify-between font-amatic my-[5%]">
@@ -88,6 +89,7 @@ export const HomePage = () => {
             ENTER
           </div></a>
         </div>
+        <div className="w-[100%] h-[15vh] bg-black"></div>
         <img className="absolute h-10 w-10 bottom-[0.5%] left-[1%] cursor-pointer hover:animate-spin" src="/images/icon-share.png" alt="share" />
         <div className="absolute bottom-[0.5%] right-[1%] flex flex-row items-center text-[#D9C6BA]">
           <span className="font-amatic text-[2.4vw] lg:text-[1.7vw] 2xl:text-[1.3vw] mr-3 2xl:mr-6">OOGA BOOGA</span>
