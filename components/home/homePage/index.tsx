@@ -65,9 +65,10 @@ export const HomePage = () => {
             </div>
           </div>
           <a className="h-[15%] w-[20%] border-2 border-[#FFCD00] mb-[6%] hover:scale-110  hover:bg-[#FFCD00] hover:text-black cursor-pointer" href="/goldiswap/swap">
-          <div className="flex items-center justify-center text-[2vw]">
-            ENTER
-          </div></a>
+            <div className="flex items-center justify-center text-[2vw]">
+              ENTER
+            </div>
+          </a>
         </div>
         <div className="w-[85vw] flex flex-row items-center justify-between text-[#FFCD00] font-amatic my-[5%]">
           <h1 className="text-[6vw] font-amaticbold mb-[6%]">GOLDILEND</h1>
@@ -80,9 +81,10 @@ export const HomePage = () => {
             </div>
           </div>
           <a className="h-[15%] w-[20%] border-2 border-[#FFCD00] mb-[6%] hover:scale-110  hover:bg-[#FFCD00] hover:text-black cursor-pointer" href="/goldilend/borrow">
-          <div className="flex items-center justify-center text-[2vw]">
-            ENTER
-          </div></a>
+            <div className="flex items-center justify-center text-[2vw]">
+              ENTER
+            </div>
+          </a>
         </div>
         <div className="w-[85vw] flex flex-row items-center justify-between text-[#FFCD00] font-amatic my-[5%]">
           <h1 className="text-[6vw] font-amaticbold mb-[6%]">GOLDIVAULTS</h1>
@@ -95,9 +97,10 @@ export const HomePage = () => {
             </div>
           </div>
           <a className="h-[15%] w-[20%] border-2 border-[#FFCD00] mb-[6%] hover:scale-110  hover:bg-[#FFCD00] hover:text-black cursor-pointer" href="/goldivaults">
-          <div className="flex items-center justify-center text-[2vw]">
-            ENTER
-          </div></a>
+            <div className="flex items-center justify-center text-[2vw]">
+              ENTER
+            </div>
+          </a>
         </div>
         <div className="w-[100%] h-[15vh] bg-black"></div>
         <img className="absolute h-10 w-10 bottom-[0.5%] left-[1%] cursor-pointer hover:animate-spin" src="/images/icon-share.png" alt="share" />
