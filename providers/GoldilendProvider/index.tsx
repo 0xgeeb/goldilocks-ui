@@ -455,7 +455,7 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
         })
         const loanData = loan as unknown as LoanData
         if(loanData.collateralNFTIds.length == 0) {
-          break
+          continue
         }
         const userLoan = {
           collateralNFTs: loanData.collateralNFTs,
