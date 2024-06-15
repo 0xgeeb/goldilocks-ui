@@ -39,7 +39,7 @@ export const Stats = () => {
   }
 
   return (
-    <div className="absolute flex flex-row items-center justify-between w-[55%] top-[83%] left-[25.5%] text-white font-baloo text-[1.1vw]">
+    <div className="absolute flex flex-row items-center justify-between w-[90%] xl:w-[55%] top-[80%] xl:top-[83%] left-[5%] xl:left-[25.5%] text-white font-baloo text-[2vw] xl:text-[1.1vw]">
       <div className="flex flex-row items-center">
         <span className="mr-2">total iBGT locked:</span>
         <span>{handleInfo(69000000)}</span>

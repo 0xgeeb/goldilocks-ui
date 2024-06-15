@@ -287,14 +287,14 @@ export const LendButton = () => {
         allowanceButtons &&
         <div>
           <button
-            className="absolute bg-[#E7B941] h-[8%] w-[16.6%] top-[59%] left-[33.9%] border-2 border-black font-amaticbold text-[1.5vw] hover:bg-[#C9E3B9] hover:scale-110"
+            className="absolute bg-[#E7B941] h-[8%] w-[22%] xl:w-[16.6%] top-[61%] xl:top-[59%] left-[19.5%] xl:left-[33.9%] border-2 border-black font-amaticbold text-[3.5vw] xl:text-[1.5vw] hover:bg-[#C9E3B9] hover:scale-110"
             id="left-approve-button"
             onClick={() => handleLeftButtonClick()}
           >
             approve tx
           </button>
           <button
-            className="absolute bg-[#E7B941] h-[8%] w-[16.6%] top-[59%] left-[55.5%] border-2 border-black font-amaticbold text-[1.5vw] hover:bg-[#C9E3B9] hover:scale-110"
+            className="absolute bg-[#E7B941] h-[8%] w-[22%] xl:w-[16.6%] top-[61%] xl:top-[59%] left-[47.5%] xl:left-[55.5%] border-2 border-black font-amaticbold text-[3.5vw] xl:text-[1.5vw] hover:bg-[#C9E3B9] hover:scale-110"
             id="right-approve-button"
             onClick={() => handleRightButtonClick()}
           >
@@ -313,7 +313,7 @@ export const LendButton = () => {
           }) => {
             return (
               <button 
-                className="absolute h-[8%] w-[16.6%] top-[59%] left-[44.7%] bg-[#E7B941] font-amaticbold text-[1.9vw] border-2 border-black hover:bg-[#C9E3B9] hover:scale-110"
+                className="absolute h-[8%] w-[22%] xl:w-[16.6%] top-[61%] xl:top-[59%] left-[33%] xl:left-[44.7%] bg-[#E7B941] font-amaticbold text-[4vw] xl:text-[1.9vw] border-2 border-black hover:bg-[#C9E3B9] hover:scale-110"
                 id="lend-button"
                 onClick={() => {
                   const button = document.getElementById('lend-button')

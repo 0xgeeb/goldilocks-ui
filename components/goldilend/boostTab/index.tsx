@@ -244,10 +244,10 @@ export const BoostTab = () => {
           infoLoading ? loadingElement() :
           userBoost.partnerNFTs.length > 0 ?
           <>
-            <h1 className="font-amaticbold text-[4vw] my-[4%]">my boost</h1>
+            <h1 className="font-amaticbold text-[9vw] xl:text-[4vw] mt-[4%] mb-[4%] xl:mb-[2%]">my boost</h1>
             <div className="w-[90%] h-[25%] flex flex-row items-start justify-between relative">
               <span
-                className="absolute top-[-20%] left-[3%] font-baloo font-semibold cursor-pointer hover:scale-125"
+                className="absolute top-[-20%] left-[3%] text-[2vw] xl:text-[1vw] font-baloo font-semibold cursor-pointer hover:scale-125"
                 onClick={() => setBoostedPartners(!boostedPartners)}
               >
                 {boostedPartners ? "Currently Boosted NFTs:" : "Selected Partner NFTs:"}
@@ -255,18 +255,18 @@ export const BoostTab = () => {
               {
                 boostedPartners ?
                 <>
-                  <div className="text-[2vw] cursor-pointer hover:scale-125" onClick={() => prevBoostImages()}>&lt;</div>
+                  <div className="text-[3vw] xl:text-[2vw] cursor-pointer hover:scale-125 mt-[3%]" onClick={() => prevBoostImages()}>&lt;</div>
                   {
                     userBoost.partnerNFTs.slice(currentBoostIndex, currentBoostIndex + 4).map((partner, index) => (
                       partner === contracts.beradrome.address ?
                       <img
-                        className="h-[70%] w-[20%] border-2 border-black"
+                        className="h-[50%] xl:h-[70%] w-[20%] border-2 border-black"
                         src="https://ipfs.io/ipfs/QmYhKPJVDZDRDpJAJ2TyCXK981B4pvtPcjrKgN256U4Cok/73.png"
                         alt="selectedpartner"
                         key={index}
                         /> :
                         <video
-                        className="h-[70%] w-[20%] border-2 border-black"
+                        className="h-[50%] xl:h-[70%] w-[20%] border-2 border-black"
                         key={index}
                         autoPlay
                         loop
@@ -276,22 +276,22 @@ export const BoostTab = () => {
                       </video>
                     ))
                   }
-                  <div className="text-[2vw] cursor-pointer hover:scale-125" onClick={() => nextBoostImages()}>&gt;</div>
+                  <div className="text-[3vw] xl:text-[2vw] cursor-pointer hover:scale-125 mt-[3%]" onClick={() => nextBoostImages()}>&gt;</div>
                 </> :
                 <>
-                  <div className="text-[2vw] cursor-pointer hover:scale-125" onClick={() => prevImages()}>&lt;</div>
+                  <div className="text-[3vw] xl:text-[2vw] cursor-pointer hover:scale-125 mt-[3%]" onClick={() => prevImages()}>&lt;</div>
                   {
                     selectedPartners.slice(currentIndex, currentIndex + 4).map((partner, index) => (
                       partner.name === 'Beradrome' ?
                       <img
-                        className="h-[70%] w-[20%] border-2 border-black"
+                        className="h-[50%] xl:h-[70%] w-[20%] border-2 border-black"
                         onClick={() => handlePartnerClick(partner)}
                         src={partner.imageSrc}
                         alt="selectedpartner"
                         key={index}
                         /> :
                         <video
-                        className="h-[70%] w-[20%] border-2 border-black"
+                        className="h-[50%] xl:h-[70%] w-[20%] border-2 border-black"
                         onClick={() => handlePartnerClick(partner)}
                         key={index}
                         autoPlay
@@ -302,12 +302,12 @@ export const BoostTab = () => {
                       </video>
                     ))
                   }
-                  <div className="text-[2vw] cursor-pointer hover:scale-125" onClick={() => nextImages()}>&gt;</div>
+                  <div className="text-[3vw] xl:text-[2vw] cursor-pointer hover:scale-125 mt-[3%]" onClick={() => nextImages()}>&gt;</div>
                 </>
               }
             </div>
-            <h1 className="text-[1.3vw] font-baloo font-semibold text-[#9C4924]">{selectedPartners.length > 0 && "New"} Boost Amount: {userBoost.boostMagnitude + boostMag}%</h1>
-            <h1 className="text-[1.3vw] font-baloo font-semibold text-[#9C4924]">Expiry: {formatDate(userBoost.expiry)}</h1>
+            <h1 className="text-[3vw] xl:text-[1.3vw] font-baloo font-semibold text-[#9C4924]">{selectedPartners.length > 0 && "New"} Boost Amount: {userBoost.boostMagnitude + boostMag}%</h1>
+            <h1 className="text-[3vw] xl:text-[1.3vw] font-baloo font-semibold text-[#9C4924]">Expiry: {formatDate(userBoost.expiry)}</h1>
             <ConnectButton.Custom>
               {({
                 account,
@@ -317,7 +317,7 @@ export const BoostTab = () => {
               }) => {
                 return (
                   <button
-                    className="h-[10%] w-[50%] border-2 border-black bg-[#E7B941] mt-[4%] font-amaticbold text-[1.5vw] hover:scale-110"
+                    className="h-[10%] w-[50%] border-2 border-black bg-[#E7B941] mt-[4%] font-amaticbold text-[3.5vw] xl:text-[1.5vw] hover:scale-110"
                     id="boost-button-add"
                     onClick={() => {
                       const button = document.getElementById('boost-button-add')
@@ -357,7 +357,7 @@ export const BoostTab = () => {
               }) => {
                 return (
                   <button
-                    className="h-[10%] w-[50%] border-2 border-black text-[#E7B941] bg-[#9C4924] mt-[4%] font-amaticbold text-[1.5vw] hover:scale-110"
+                    className="h-[10%] w-[50%] border-2 border-black text-[#E7B941] bg-[#9C4924] mt-[4%] font-amaticbold text-[3.5vw] xl:text-[1.5vw] hover:scale-110"
                     id="boost-button-withdraw"
                     onClick={() => {
                       const button = document.getElementById('boost-button-withdraw')

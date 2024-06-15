@@ -140,7 +140,7 @@ export const LiquidateTab = () => {
   }
 
   return (
-    <div className="absolute top-[14%] left-[30%] h-[70%] w-[52%] border-2 border-black bg-[#EEDCD2]">
+    <div className="absolute top-[14%] left-[10%] xl:left-[30%] h-[70%] w-[80%] xl:w-[52%] border-2 border-black bg-[#EEDCD2]">
       <div className="absolute top-4 left-0 w-8 skew-y-[45deg] border-b-2 border-black"></div>
       <div className="absolute bottom-4 left-0 w-8 -skew-y-[45deg] border-b-2 border-black"></div>
       <div className="absolute top-4 right-0 w-8 -skew-y-[45deg] border-b-2 border-black"></div>
@@ -149,17 +149,17 @@ export const LiquidateTab = () => {
         {
           txConfirming ? <img className="w-[100%] h-[100%]" src="/images/bg-transaction.png" alt="tx" /> :
           notification.toggle ? <BorrowNotification /> :
-          <div className="h-[100%] w-[100%] flex flex-col overflow-y-auto" id="hide-scrollbar">
+          <div className="h-[100%] w-[100%] flex flex-col flex-wrap overflow-y-auto" id="hide-scrollbar">
             <div className="w-[100%] h-[15%] border-b-2 border-black">
-              <h1 className="font-amaticbold ml-[4%] text-[2.3vw]">liquidate loans</h1>
+              <h1 className="font-amaticbold ml-[4%] text-[5vw] xl:text-[2.3vw]">liquidate loans</h1>
             </div>
             {
               infoLoading ?
               loadingElement() :
               liquidatableLoans.map((loan, index) => (
                 <div className="w-[100%] h-[28%] font-baloo font-semibold border-b-2 border-black flex flex-row items-center relative" key={index}>
-                  <h1 className="absolute text-[1vw] top-[2%] left-[1%]">Loan {loan.loanId}</h1>
-                  <div className="h-[50%] w-[35%] px-[3%] flex flex-col justify-center text-[0.8vw] ml-[7%]">
+                  <h1 className="absolute text-[2vw] xl:text-[1vw] top-[2%] left-[1%]">Loan {loan.loanId}</h1>
+                  <div className="h-[50%] w-[35%] px-[3%] flex flex-col justify-center text-[1.5vw] xl:text-[0.8vw] ml-[7%]">
                     <div className="w-[100%] flex flex-row items-center justify-between">
                       <span>liquidation price:</span>
                       <span>{formatNum(loan.borrowedAmount)} iBGT</span>
@@ -174,12 +174,12 @@ export const LiquidateTab = () => {
                     </div>
                   </div>
                   <div className="h-[100%] w-[35%] flex flex-col items-center">
-                    <h1 className="text-[#9C4924] my-[2%]">Collateral</h1>
+                    <h1 className="text-[#9C4924] text-[1.2vw] xl:text-[0.8vw]  my-[2%]">Collateral</h1>
                     <div className="w-[90%] h-[65%] overflow-x-auto flex flex-row items-center justify-around" id="hide-scrollbar">
                       {
                         loan.collateralNFTs.map((nft, index) => (
                           <img
-                            className="h-[100%] w-[30%] mr-[5%]  border-2 border-black"
+                            className="h-[70%] xl:h-[100%] w-[30%] mr-[5%]  border-2 border-black"
                             src={nft === contracts.bondbear.address ? 'https://ipfs.io/ipfs/QmSaVWb15oQ1HcsUjGGkjwHQ1mxJBYeivtBCgHHHiVLt7w' : 'https://ipfs.io/ipfs/QmNWggx9vvBVEHZc6xwWkdyymoKuXCYrJ3zQwwKzocDxRt'}
                             alt="collateral"
                             key={index}
@@ -193,14 +193,14 @@ export const LiquidateTab = () => {
                       allowanceButtons &&
                       <div className="w-[100%] h-[100%] flex flex-row items-center justify-center">
                         <button
-                          className="h-[35%] w-[45%] mr-[5%] border-2 border-black bg-[#E7B941] text-[0.7vw] hover:scale-110"
+                          className="h-[35%] w-[45%] mr-[5%] border-2 border-black bg-[#E7B941] text-[1.2vw] xl:text-[0.7vw] hover:scale-110"
                           id="left-approve-button"
                           onClick={() => handleLeftButtonClick(loan.borrowedAmount)}
                         >
                           approve tx
                         </button>
                         <button
-                          className="h-[35%] w-[45%] border-2 border-black bg-[#E7B941] text-[0.7vw] hover:scale-110"
+                          className="h-[35%] w-[45%] border-2 border-black bg-[#E7B941] text-[1.2vw] xl:text-[0.7vw] hover:scale-110"
                           id="right-approve-button"
                           onClick={() => handleRightButtonClick()}
                         >
@@ -219,7 +219,7 @@ export const LiquidateTab = () => {
                         }) => {
                           return (
                             <button
-                              className="h-[40%] w-[80%] border-2 border-black bg-[#E7B941] text-[1.1vw] hover:scale-110"
+                              className="h-[40%] w-[80%] border-2 border-black bg-[#E7B941] text-[2vw] xl:text-[1.1vw] hover:scale-110"
                               id="liquidate-button"
                               onClick={() => {
                                 const button = document.getElementById('repay-button')
