@@ -15,6 +15,7 @@ const INITIAL_STATE = {
     psl: 0,
     supply: 0,
     targetRatio: 0,
+    lastFloorRaise: 0,
     honeySwapAllowance: 0
   },
 
@@ -635,6 +636,11 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
       abi: contracts.goldiswap.abi,
       functionName: 'targetRatio',
     })
+    const lastFloorRaiseResult = await readContract(config, {
+      address: contracts.goldiswap.address as `0x${string}`,
+      abi: contracts.goldiswap.abi,
+      functionName: 'lastFloorIncrease',
+    })
     let honeySwapAllowanceResult
     if(wallet) {
       honeySwapAllowanceResult = await readContract(config, {
@@ -650,6 +656,7 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
       psl: parseFloat(formatEther(pslResult as unknown as bigint)),
       supply: parseFloat(formatEther(supplyResult as unknown as bigint)),
       targetRatio: parseFloat(formatEther(ratioResult as unknown as bigint)),
+      lastFloorRaise: parseFloat(formatEther(lastFloorRaiseResult as unknown as bigint)),
       honeySwapAllowance: wallet ? parseFloat(formatEther(honeySwapAllowanceResult as unknown as bigint)) : 0
     }
 

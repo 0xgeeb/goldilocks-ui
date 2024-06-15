@@ -63,6 +63,30 @@ export const StakePage = () => {
     }
   }
 
+  const formatDate = (timestamp: number): string => {
+    const ONE_MINUTE = 60
+    const ONE_HOUR = 60 * ONE_MINUTE
+    const ONE_DAY = 24 * ONE_HOUR
+    const ONE_WEEK = 7 * ONE_DAY
+    const now = Date.now()
+    const secondsAgo = (now - timestamp) / 1000
+    if (secondsAgo < ONE_MINUTE) {
+      return 'just now';
+    } else if (secondsAgo < ONE_HOUR) {
+      const minutesAgo = Math.floor(secondsAgo / ONE_MINUTE)
+      return `${minutesAgo} minute${minutesAgo > 1 ? 's' : ''} ago`
+    } else if (secondsAgo < ONE_DAY) {
+      const hoursAgo = Math.floor(secondsAgo / ONE_HOUR)
+      return `${hoursAgo} hour${hoursAgo > 1 ? 's' : ''} ago`
+    } else if (secondsAgo < ONE_WEEK) {
+      const daysAgo = Math.floor(secondsAgo / ONE_DAY)
+      return `${daysAgo} day${daysAgo > 1 ? 's' : ''} ago`
+    } else {
+      const weeksAgo = Math.floor(secondsAgo / ONE_WEEK)
+      return `${weeksAgo} week${weeksAgo > 1 ? 's' : ''} ago`
+    }
+  }
+
   return (
     infoLoading ?
     <Loading /> :
@@ -74,8 +98,8 @@ export const StakePage = () => {
         { stirPopupToggle && <StirPopup /> }
         <h1 className="absolute top-[16%] lg:top-[15.16%] 2xl:top-[12.16%] right-[81%] lg:right-[78.125%] 2xl:right-[75%] text-[#D9C6BA] text-[8vw] font-amaticbold" id="page-title">{activeToggle}</h1>
         <div className="absolute top-[13.22%] lg:top-[12.387%] 2xl:top-[9.387%] left-[20%] lg:left-[25%] 2xl:left-[28.125%] w-[60%] lg:w-[50%] 2xl:w-[43.75%] h-[2.78%] bg-[#B35227] flex flex-row items-center justify-between px-2 text-[1.5vw] lg:text-[0.85vw]">
-          <span className="text-white font-baloo mt-1">$LOCKS floor price: ${handleTokenInfo(floorPrice(stakeInfo.fsl, stakeInfo.supply))}</span>
-          <span className="text-white font-baloo mt-1">$LOCKS market price: ${handleTokenInfo(marketPrice(stakeInfo.fsl, stakeInfo.psl, stakeInfo.supply))}</span>
+          <span className="text-white font-baloo mt-1">FSL/PSL ratio: {handleTokenInfo((stakeInfo.fsl / stakeInfo.psl))}%</span>
+          <span className="text-white font-baloo mt-1">last floor raise: {formatDate(stakeInfo.lastFloorRaise * Math.pow(10, 21))}</span>
         </div>
         <WalletBalance />
         <StakeBox />

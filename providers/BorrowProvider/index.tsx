@@ -14,7 +14,8 @@ const INITIAL_STATE = {
     psl: 0,
     supply: 0,
     honeyBorrowAllowance: 0,
-    targetRatio: 0
+    targetRatio: 0,
+    lastFloorRaise: 0
   },
 
   notification: {
@@ -190,6 +191,11 @@ export const BorrowProvider = (props: PropsWithChildren<{}>) => {
       abi: contracts.goldiswap.abi,
       functionName: 'targetRatio',
     })
+    const lastFloorRaiseResult = await readContract(config, {
+      address: contracts.goldiswap.address as `0x${string}`,
+      abi: contracts.goldiswap.abi,
+      functionName: 'lastFloorIncrease',
+    })
     let honeyBorrowAllowanceResult
     if(wallet) {
       honeyBorrowAllowanceResult = await readContract(config, {
@@ -205,7 +211,8 @@ export const BorrowProvider = (props: PropsWithChildren<{}>) => {
       psl: parseFloat(formatEther(pslResult as unknown as bigint)),
       supply: parseFloat(formatEther(supplyResult as unknown as bigint)),
       honeyBorrowAllowance: wallet ? parseFloat(formatEther(honeyBorrowAllowanceResult as unknown as bigint)) : 0,
-      targetRatio: parseFloat(formatEther(ratioResult as unknown as bigint))
+      targetRatio: parseFloat(formatEther(ratioResult as unknown as bigint)),
+      lastFloorRaise: parseFloat(formatEther(lastFloorRaiseResult as unknown as bigint))
     }
 
     setBorrowInfoState(response)

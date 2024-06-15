@@ -68,6 +68,30 @@ export const GoldiswapPageMobile = () => {
     }
   }
 
+  const formatDate = (timestamp: number): string => {
+    const ONE_MINUTE = 60
+    const ONE_HOUR = 60 * ONE_MINUTE
+    const ONE_DAY = 24 * ONE_HOUR
+    const ONE_WEEK = 7 * ONE_DAY
+    const now = Date.now()
+    const secondsAgo = (now - timestamp) / 1000
+    if (secondsAgo < ONE_MINUTE) {
+      return 'just now';
+    } else if (secondsAgo < ONE_HOUR) {
+      const minutesAgo = Math.floor(secondsAgo / ONE_MINUTE)
+      return `${minutesAgo} minute${minutesAgo > 1 ? 's' : ''} ago`
+    } else if (secondsAgo < ONE_DAY) {
+      const hoursAgo = Math.floor(secondsAgo / ONE_HOUR)
+      return `${hoursAgo} hour${hoursAgo > 1 ? 's' : ''} ago`
+    } else if (secondsAgo < ONE_WEEK) {
+      const daysAgo = Math.floor(secondsAgo / ONE_DAY)
+      return `${daysAgo} day${daysAgo > 1 ? 's' : ''} ago`
+    } else {
+      const weeksAgo = Math.floor(secondsAgo / ONE_WEEK)
+      return `${weeksAgo} week${weeksAgo > 1 ? 's' : ''} ago`
+    }
+  }
+
   //todo: needs responsiveness on height ?
   return (
     <main className="w-screen h-screen">
@@ -78,14 +102,14 @@ export const GoldiswapPageMobile = () => {
         <div className="w-[100%] h-[89%] relative bg-cover bg-[url('/images/bg-goldiswap-mobile.png')]">
           <TogglesMobile />
           <h1 className="absolute top-[-0.25%] right-[69%] text-[#D9C6BA] text-[7vw] font-amaticbold" id="page-title">{activeToggle === 'REDEEM' ? "REDEEM" : "SWAP"}</h1>
-          <div className="absolute bottom-[40.4%] left-[15.5%] w-[48.95vh] h-[2.3%] bg-[#4D0B24] origin-bottom-left -rotate-[90deg] text-[2.2vw] font-baloo text-white font-semibold flex flex-row items-center justify-between px-2">
+          <div className="absolute bottom-[40.4%] left-[15.5%] w-[48.95vh] h-[2.3%] bg-[#4D0B24] origin-bottom-left -rotate-[90deg] text-[3.2vw] font-baloo text-white font-semibold flex flex-row items-center justify-between px-2">
             <div className="h-[100%] w-[43%] flex flex-row items-center justify-between">
-              <span>$LOCKS floor price:</span>
-              <span>${handleTokenInfo(floorPrice(goldiswapInfo.fsl, goldiswapInfo.supply))}</span>
+              <span className="text-white font-baloo mt-1">FSL/PSL ratio:</span>
+              <span className="text-white font-baloo mt-1">{handleTokenInfo((goldiswapInfo.fsl / goldiswapInfo.psl))}%</span>
             </div>
             <div className="h-[100%] w-[43%] flex flex-row items-center justify-between">
-              <span>$LOCKS market price:</span>
-              <span>${handleTokenInfo(marketPrice(goldiswapInfo.fsl, goldiswapInfo.psl, goldiswapInfo.supply))}</span>
+              <span className="text-white font-baloo mt-1">last floor raise:</span>
+              <span className="text-white font-baloo mt-1">{formatDate(goldiswapInfo.lastFloorRaise * Math.pow(10, 21))}</span>
             </div>
           </div>
           <WalletBalanceMobile />
