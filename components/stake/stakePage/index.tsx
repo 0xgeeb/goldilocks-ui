@@ -2,7 +2,6 @@
 
 import { useEffect } from "react"
 import { useStake, useDesktop } from "../../../providers"
-import { useGoldiswapMath } from "../../../hooks"
 import { StakePageMobile } from "../../stakeMobile"
 import { 
   NavBar,
@@ -15,7 +14,8 @@ import {
   StirPopup,
   Stats,
   StakeButton,
-  WalletBalance
+  WalletBalance,
+  UnstakePopup
 } from "../../stake"
 
 export const StakePage = () => {
@@ -29,10 +29,10 @@ export const StakePage = () => {
     setChartOpen,
     stirPopupToggle,
     setStirPopupToggle,
-    activeToggle
+    activeToggle,
+    unstakePopupToggle,
+    setUnstakePopupToggle
   } = useStake()
-
-  const { floorPrice, marketPrice } = useGoldiswapMath()
 
   const { isDesktop } = useDesktop()
 
@@ -60,6 +60,9 @@ export const StakePage = () => {
   const handlePopups = () => {
     if(stirPopupToggle) {
       setStirPopupToggle(false)
+    }
+    if(unstakePopupToggle) {
+      setUnstakePopupToggle(false)
     }
   }
 
@@ -96,6 +99,7 @@ export const StakePage = () => {
       <div className="w-[100%] h-[89%] xl:h-[85%] bg-cover bg-bottom bg-[url('/images/bg-goldiswap.png')] relative">
         <Toggles />
         { stirPopupToggle && <StirPopup /> }
+        { unstakePopupToggle && <UnstakePopup /> }
         <h1 className="absolute top-[16%] lg:top-[15.16%] 2xl:top-[12.16%] right-[81%] lg:right-[78.125%] 2xl:right-[75%] text-[#D9C6BA] text-[8vw] font-amaticbold" id="page-title">{activeToggle}</h1>
         <div className="absolute top-[13.22%] lg:top-[12.387%] 2xl:top-[9.387%] left-[20%] lg:left-[25%] 2xl:left-[28.125%] w-[60%] lg:w-[50%] 2xl:w-[43.75%] h-[2.78%] bg-[#B35227] flex flex-row items-center justify-between px-2 text-[1.5vw] lg:text-[0.85vw]">
           <span className="text-white font-baloo mt-1">FSL/PSL ratio: {handleTokenInfo((stakeInfo.fsl / stakeInfo.psl))}%</span>

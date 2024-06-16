@@ -61,6 +61,7 @@ export const StatsMobile = () => {
   return (
     <div className="text-[3.3vw] absolute h-[15%] w-[80%] left-[10%] top-[52.5%] flex flex-row items-center justify-center text-[#D9C6BA] font-baloo font-semibold">
       <div className="flex flex-col items-end">
+        <span>staking apr:</span>
         <span>locks supply:</span>
         <span>current fsl:</span>
         <span>current psl:</span>
@@ -70,6 +71,7 @@ export const StatsMobile = () => {
       </div>
       <div className="h-[100%] w-[5%]"></div>
       <div className="flex flex-col items-start">
+        <span className={handleColors(stakeInfo.targetRatio, stakeInfo.targetRatio)}>{handleInfo(0.5*((marketPrice(stakeInfo.fsl, stakeInfo.psl, stakeInfo.supply) - floorPrice(stakeInfo.fsl, stakeInfo.supply)) / marketPrice(stakeInfo.fsl, stakeInfo.psl, stakeInfo.supply)))}%</span>
         <span className={handleColors(stakeInfo.supply, stakeInfo.supply)}>{handleInfo(stakeInfo.supply)}</span>
         <span className={handleColors(stakeInfo.fsl, stakeInfo.fsl)}>{handleInfo(stakeInfo.fsl)}</span>
         <span className={handleColors(stakeInfo.psl, stakeInfo.psl)}>{handleInfo(stakeInfo.psl)}</span>

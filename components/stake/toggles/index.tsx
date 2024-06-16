@@ -5,7 +5,8 @@ export const Toggles = () => {
   const {
     activeToggle,
     changeActiveToggle,
-    setStirPopupToggle
+    setStirPopupToggle,
+    setUnstakePopupToggle
   } = useStake()
 
   return (
@@ -17,10 +18,19 @@ export const Toggles = () => {
         <span>STAKE</span>
       </div>
       <div 
-        className={`w-[22%] h-[100%] flex items-center justify-center border-2 border-black ${activeToggle === 'UNSTAKE' ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} hover:bg-[#F3AA8A] cursor-pointer`}
+        className={`w-[22%] h-[100%] relative flex items-center justify-center border-2 border-black ${activeToggle === 'UNSTAKE' ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} hover:bg-[#F3AA8A] cursor-pointer`}
         onClick={() => changeActiveToggle('UNSTAKE')}
       >
-        <span>UNSTAKE</span>
+        <span className="mt-2">UNSTAKE</span>
+        <span 
+          className="absolute top-[2%] right-[2%] text-[0.8vw] xl:text-[0.7vw] rounded-full px-1 border-2 border-black hover:bg-black hover:text-white" 
+          onClick={(e) => {
+            e.stopPropagation()
+            setUnstakePopupToggle(true)
+          }}
+        >
+          ?
+        </span>
       </div>
       <div 
         className={`w-[22%] h-[100%] relative flex items-center justify-center border-2 border-black ${activeToggle === 'STIR' ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} hover:bg-[#F3AA8A] cursor-pointer`}
@@ -28,13 +38,13 @@ export const Toggles = () => {
       >
         <span>STIR</span>
         <span 
-            className="absolute top-[2%] lg:top-[4%] right-[1%] lg:right-[2%] text-[0.8vw] lg:text-[0.7vw] rounded-full px-1 border-2 border-black hover:bg-black hover:text-white" 
-            onClick={(e) => {
-              e.stopPropagation()
-              setStirPopupToggle(true)
-            }}
-          >
-            ?
+          className="absolute top-[2%] right-[2%] text-[0.8vw] xl:text-[0.7vw] rounded-full px-1 border-2 border-black hover:bg-black hover:text-white" 
+          onClick={(e) => {
+            e.stopPropagation()
+            setStirPopupToggle(true)
+          }}
+        >
+          ?
         </span>
       </div>
       <div 

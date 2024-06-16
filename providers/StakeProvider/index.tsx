@@ -55,6 +55,9 @@ const INITIAL_STATE = {
   stirPopupToggle: false,
   setStirPopupToggle: (_bool: boolean) => {},
 
+  unstakePopupToggle: false,
+  setUnstakePopupToggle: (_bool: boolean) => {},
+
   allowanceButtons: false,
   setAllowanceButtons: (_bool: boolean) => {},
   updateAllowance: (_token: string, _newAllowance: number) => {},
@@ -93,6 +96,7 @@ export const StakeProvider = (props: PropsWithChildren<{}>) => {
   const [activeToggleState, setActiveToggleState] = useState<string>(INITIAL_STATE.activeToggle)
   
   const [stirPopupToggleState, setStirPopupToggleState] = useState<boolean>(INITIAL_STATE.stirPopupToggle)
+  const [unstakePopupToggleState, setUnstakePopupToggleState] = useState<boolean>(INITIAL_STATE.unstakePopupToggle)
 
   const [chartOpenState, setChartOpenState] = useState<boolean>(INITIAL_STATE.chartOpen)
   const [infoLoadingState, setInfoLoadingState] = useState<boolean>(INITIAL_STATE.infoLoading)
@@ -117,8 +121,8 @@ export const StakeProvider = (props: PropsWithChildren<{}>) => {
         setStakeState(balance.locks / 4)
       }
       if(activeToggleState === 'UNSTAKE') {
-        setDisplayStringState((balance.staked / 4).toFixed(4))
-        setUnstakeState(balance.staked / 4)
+        setDisplayStringState(((balance.staked - balance.locked) / 4).toFixed(4))
+        setUnstakeState((balance.staked - balance.locked) / 4)
       }
       if(activeToggleState === 'realize') {
         setDisplayStringState((balance.prg / 4).toFixed(4))
@@ -131,8 +135,8 @@ export const StakeProvider = (props: PropsWithChildren<{}>) => {
         setStakeState(balance.locks / 2)
       }
       if(activeToggleState === 'UNSTAKE') {
-        setDisplayStringState((balance.staked / 2).toFixed(4))
-        setUnstakeState(balance.staked / 2)
+        setDisplayStringState(((balance.staked - balance.locked) / 2).toFixed(4))
+        setUnstakeState((balance.staked - balance.locked) / 2)
       }
       if(activeToggleState === 'STIR') {
         setDisplayStringState((balance.prg / 2).toFixed(4))
@@ -145,8 +149,8 @@ export const StakeProvider = (props: PropsWithChildren<{}>) => {
         setStakeState(balance.locks * 0.75)
       }
       if(activeToggleState === 'UNSTAKE') {
-        setDisplayStringState((balance.staked * 0.75).toFixed(4))
-        setUnstakeState(balance.staked * 0.75)
+        setDisplayStringState(((balance.staked - balance.locked) * 0.75).toFixed(4))
+        setUnstakeState((balance.staked - balance.locked) * 0.75)
       }
       if(activeToggleState === 'STIR') {
         setDisplayStringState((balance.prg * 0.75).toFixed(4))
@@ -159,8 +163,8 @@ export const StakeProvider = (props: PropsWithChildren<{}>) => {
         setStakeState(balance.locks - 0.0001)
       }
       if(activeToggleState === 'UNSTAKE') {
-        setDisplayStringState(balance.staked.toFixed(4))
-        setUnstakeState(balance.staked - 0.0001)
+        setDisplayStringState((balance.staked - balance.locked).toFixed(4))
+        setUnstakeState((balance.staked - balance.locked) - 0.0001)
       }
       if(activeToggleState === 'STIR') {
         setDisplayStringState(balance.prg.toFixed(4))
@@ -189,7 +193,7 @@ export const StakeProvider = (props: PropsWithChildren<{}>) => {
       return balance.locks > 0 ? balance.locks.toLocaleString('en-US', { maximumFractionDigits: 4 }) : "0.00"
     }
     if(activeToggleState === "UNSTAKE") {
-      return balance.staked > 0 ? balance.staked.toLocaleString('en-US', { maximumFractionDigits: 4 }) : "0.00"
+      return (balance.staked - balance.locked) > 0 ? (balance.staked - balance.locked).toLocaleString('en-US', { maximumFractionDigits: 4 }) : "0.00"
     }
     if(activeToggleState === "STIR") {
       return balance.prg > 0 ? balance.prg.toLocaleString('en-US', { maximumFractionDigits: 4 }) : "0.00"
@@ -317,6 +321,8 @@ export const StakeProvider = (props: PropsWithChildren<{}>) => {
         setChartOpen: setChartOpenState,
         stirPopupToggle: stirPopupToggleState,
         setStirPopupToggle: setStirPopupToggleState,
+        unstakePopupToggle: unstakePopupToggleState,
+        setUnstakePopupToggle: setUnstakePopupToggleState,
         activeToggle: activeToggleState,
         changeActiveToggle,
         txConfirming: txConfirmingState,

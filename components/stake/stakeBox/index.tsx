@@ -1,6 +1,7 @@
 "use client"
 
 import { useStake, useWallet } from "../../../providers"
+import { useGoldiswapMath } from "../../../hooks"
 import { Notification, Chart } from "../../stake"
 
 export const StakeBox = () => {
@@ -14,13 +15,33 @@ export const StakeBox = () => {
     activeToggle,
     handleChange,
     handleBalance,
-    handleBalanceLabel
+    handleBalanceLabel,
+    infoLoading,
+    stakeInfo,
+    stir
   } = useStake()
 
   const { balancesLoading } = useWallet()
+  const { floorPrice, marketPrice } = useGoldiswapMath()
 
   const loadingElement = () => {
     return <span className="loader-small ml-3"></span>
+  }
+
+  const formatAsString = (num: number): string => {
+    return num.toLocaleString('en-US', { maximumFractionDigits: 2 })
+  }
+
+  const handleInfo = (num: number) => {
+    if(infoLoading) {
+      return loadingElement()
+    }
+    else if(num > 0) {
+      return formatAsString(num)
+    }
+    else {
+      return "-"
+    }
   }
 
   return (
@@ -35,7 +56,9 @@ export const StakeBox = () => {
           txConfirming ? <img className="w-[100%] h-[100%]" src="/images/bg-transaction.png" alt="tx" /> :
           notification.toggle ? <Notification /> :
           <div className="w-[100%] h-[100%] relative flex flex-col">
-            <div className="flex flex-row absolute top-0 right-0 w-[40%] lg:w-[33.61%] h-[14.9%] font-baloo font-semibold border-b-2 border-l-2 border-black">
+            { activeToggle === 'STIR' && <span className="absolute bottom-[0.5%] font-baloo font-semibold left-[1%] z-50 text-[1vw]">$honey cost to stir: {formatAsString(stir * (stakeInfo.fsl / stakeInfo.supply))}</span> }
+            <span className="absolute bottom-[0.5%] font-baloo font-semibold right-[1%] z-50 text-[1vw]">staking apr: {handleInfo(0.5*((marketPrice(stakeInfo.fsl, stakeInfo.psl, stakeInfo.supply) - floorPrice(stakeInfo.fsl, stakeInfo.supply)) / marketPrice(stakeInfo.fsl, stakeInfo.psl, stakeInfo.supply)))}%</span>
+            <div className="flex flex-row absolute top-0 right-0 w-[40%] lg:w-[33.61%] h-[14.9%] text-[1vw] font-baloo font-semibold border-b-2 border-l-2 border-black">
               <div 
                 className="flex items-center justify-center h-[100%] w-[25%] border-r-2 border-black bg-[#DCC2A8] hover:bg-[#F3AA8A] cursor-pointer"
                 onClick={() => handlePercentageButtons(1)}

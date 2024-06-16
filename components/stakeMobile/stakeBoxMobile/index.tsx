@@ -19,13 +19,19 @@ export const StakeBoxMobile = () => {
     handleChange,
     handleBalance,
     handleBalanceLabel,
-    balanceMobileToggle
+    balanceMobileToggle,
+    stir,
+    stakeInfo
   } = useStake()
 
   const { balancesLoading } = useWallet()
 
   const loadingElement = () => {
     return <span className="loader-small ml-3"></span>
+  }
+
+  const formatAsString = (num: number): string => {
+    return num.toLocaleString('en-US', { maximumFractionDigits: 2 })
   }
 
   return (
@@ -84,10 +90,11 @@ export const StakeBoxMobile = () => {
               </div>
             </div>
             <span
-              className="absolute bottom-[5%] right-[5%] font-baloo font-bold text-[3vw] text-[#7F7F7F]"
-            >
+              className="absolute bottom-[9%] right-[2%] font-baloo font-bold text-[3vw] text-[#7F7F7F]"
+              >
               {handleBalanceLabel()}: {balancesLoading ? loadingElement() : handleBalance()}
             </span>
+            { activeToggle === 'STIR' && <span className="absolute bottom-[1%] font-baloo font-semibold right-[2%] z-50 text-[3vw] text-[#7F7F7F]">$honey cost to stir: {formatAsString(stir * (stakeInfo.fsl / stakeInfo.supply))}</span> }
           </div>
         }
       </div>
