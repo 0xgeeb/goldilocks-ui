@@ -1,26 +1,35 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit"
-import {
-  useGoldilend,
-  useWallet
-} from "../../../providers"
-import { LendNotification } from "../../goldilend"
-import { useGoldilendTx } from "../../../hooks"
+import { useStake, useWallet } from "../../../providers"
+import { useStakeTx } from "../../../hooks"
+import { useGoldiswapMath } from "../../../hooks"
+import { Notification, Chart } from "../../stake"
 
 export const ClaimTab = () => {
 
   const {
     txConfirming,
-    setTxConfirming,
+    chartOpen,
     notification,
+    handlePercentageButtons,
+    displayString,
+    activeToggle,
+    handleChange,
+    handleBalance,
+    handleBalanceLabel,
+    infoLoading,
+    stakeInfo,
+    stir,
+    setTxConfirming,
     openNotification,
-    infoLoading
-  } = useGoldilend()
+    refreshStakeInfo
+  } = useStake()
 
-  const { balance, refreshBalances } = useWallet()
-  const { sendClaimTx } = useGoldilendTx()
+  const { balance, balancesLoading, refreshBalances } = useWallet()
+  const { floorPrice, marketPrice } = useGoldiswapMath()
+  const { sendClaimTx } = useStakeTx()
 
   const loadingElement = () => {
-    return <span className="loader-small ml-3 mt-2"></span>
+    return <span className="loader-small ml-3"></span>
   }
 
   const formatAsString = (num: number): string => {
@@ -39,17 +48,24 @@ export const ClaimTab = () => {
     }
   }
 
+  const refreshInfo = () => {
+    refreshBalances()
+    refreshStakeInfo()
+  }
+
   const claimTxFlow = async () => {
     const button = document.getElementById('claim-button')
-    if(balance.lendClaimable == 0) {
-      button && (button.innerHTML = "claim yield")
+
+    if(balance.claimable == 0) {
+      button && (button.innerHTML = "claim")
       return
     }
     else {
       setTxConfirming(true)
       if(button) {
         button.innerHTML = "confirming..."
-        button.style.backgroundColor = "#C9E3B9"
+        button.style.backgroundColor = "#B35227"
+        button.style.color = "#E7B941"
       }
       const claimTx = await sendClaimTx()
       if(claimTx.substring(0, 2) === '0x') {
@@ -57,32 +73,33 @@ export const ClaimTab = () => {
         openNotification(
           true,
           "You've successfully claimed $PRG",
-          `You claimed ${formatAsString(balance.lendClaimable)} Porridge`,
+          `You claimed ${formatAsString(balance.claimable)} Porridge`,
           claimTx
         )
         if(button) {
-          button.innerHTML = "claim yield"
+          button.innerHTML = "claim"
           button.style.backgroundColor = "#E7B941"
           button.style.color = "black"
         }
-        refreshBalances()
+        refreshInfo()
         setTimeout(() => {
           openNotification(false, '', '', '')
         }, 10000)
       }
       else {
         if(button) {
-          button.innerHTML = "claim yield"
+          button.innerHTML = "claim"
           button.style.backgroundColor = "#E7B941"
           button.style.color = "black"
         }
-        setTxConfirming(false)  
+        refreshInfo()
+        setTxConfirming(false)
       }
     }
   }
 
   return (
-    <div className="absolute top-[14%] left-[14%] xl:left-[39%] h-[65%] xl:h-[70%] w-[60%] xl:w-[28%] border-2 border-black bg-[#EEDCD2] z-20">
+    <div className="absolute top-[10.12%] left-[39%] h-[65%] xl:h-[70%] w-[60%] xl:w-[28%] border-2 border-black bg-[#EEDCD2] z-20">
       <div className="absolute top-4 left-0 w-8 skew-y-[45deg] border-b-2 border-black"></div>
       <div className="absolute bottom-4 left-0 w-8 -skew-y-[45deg] border-b-2 border-black"></div>
       <div className="absolute top-4 right-0 w-8 -skew-y-[45deg] border-b-2 border-black"></div>
@@ -91,7 +108,7 @@ export const ClaimTab = () => {
         {
           // chartOpen ? <Chart /> :
           txConfirming ? <img className="w-[100%] h-[100%]" src="/images/bg-transaction.png" alt="tx" /> :
-          notification.toggle ? <LendNotification /> :
+          // notification.toggle ? <LendNotification /> :
           <div className="relative w-[100%] h-[100%] text-[2vw] xl:text-[1vw] flex flex-col items-center font-baloo font-semibold">
             <h1 className="font-amaticbold text-[8vw] xl:text-[4vw]">claim yield</h1>
             <div className="w-[70%] flex flex-col justify-between">
