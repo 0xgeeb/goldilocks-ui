@@ -5,7 +5,6 @@ import { ConnectButton } from "@rainbow-me/rainbowkit"
 import { useGoldilend, useWallet } from "../../../providers"
 import { LendNotificationMobile } from "../../goldilendMobile"
 import { useGoldilendTx } from "../../../hooks"
-import { BorrowNotification } from "../../goldilend"
 import { contracts } from "../../../utils/addressi"
 
 type CollateralFlagsType = {
@@ -196,7 +195,7 @@ export const LiquidateTabMobile = () => {
                         <div key={index} className="h-[45%] ml-[5%] w-[45%] py-2">
                         <img
                           className="ml-[5%] h-[100%] w-[90%] border-2 border-black"
-                          src={nft === contracts.bondbear.address ? 'https://ipfs.io/ipfs/QmSaVWb15oQ1HcsUjGGkjwHQ1mxJBYeivtBCgHHHiVLt7w' : 'https://ipfs.io/ipfs/QmNWggx9vvBVEHZc6xwWkdyymoKuXCYrJ3zQwwKzocDxRt'}
+                          src={nft === contracts.bondbear.address ? '/images/icon-bondbear.png' : '/images/icon-bandbear.png'}
                           alt="bera"
                         />
                       </div>

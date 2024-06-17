@@ -61,24 +61,12 @@ export const BoostTabMobile = () => {
               infoLoading ? loadingElement() :
               ownedPartners.map((partner, index) => (
                 <div key={index} className="h-[45%] w-[50%] py-2">
-                  {
-                    partner.name === 'Beradrome' ?
-                    <img
-                      className={`ml-[5%] h-[100%] w-[90%] border-2 border-black hover:scale-110 hover:cursor-pointer ${findSelectedPartnerIdxs().includes(partner.index) ? "border-4 border-black" : "opacity-75"}`}
-                      onClick={() => handlePartnerClick(partner)}
-                      src={partner.imageSrc}
-                      alt="partner"
-                    /> :
-                    <video
-                      className={`ml-[5%] h-[100%] w-[90%] hover:scale-110 hover:cursor-pointer ${findSelectedPartnerIdxs().includes(partner.index) ? "border-4 border-black" : "opacity-75"}`}
-                      onClick={() => handlePartnerClick(partner)}
-                      autoPlay
-                      loop
-                      muted
-                    >
-                      <source src={partner.imageSrc} type="video/mp4" />
-                    </video>
-                  }
+                  <img
+                    className={`ml-[5%] h-[100%] w-[90%] border-2 border-black hover:scale-110 hover:cursor-pointer ${findSelectedPartnerIdxs().includes(partner.index) ? "border-4 border-black" : "opacity-75"}`}
+                    onClick={() => handlePartnerClick(partner)}
+                    src={partner.name === 'Beradrome' ? "/images/icon-beradrome.png" : "/images/icon-honeycomb.png"}
+                    alt="partner"
+                  />
                 </div>
               ))
             }
@@ -108,44 +96,21 @@ export const BoostTabMobile = () => {
                     selectedPartners.length > 0 ?
                     selectedPartners.map((partner, index) => (
                       <div key={index} className="h-[45%] w-[50%] py-2">
-                        {
-                          partner.name === 'Beradrome' ?
-                          <img
-                            className={`ml-[5%] h-[100%] w-[90%] border-2 border-black hover:scale-110 hover:cursor-pointer ${findSelectedPartnerIdxs().includes(partner.index) ? "border-4 border-black" : "opacity-75"}`}
-                            onClick={() => handlePartnerClick(partner)}
-                            src={partner.imageSrc}
-                            alt="partner"
-                          /> :
-                          <video
-                            className={`ml-[5%] h-[100%] w-[90%] hover:scale-110 hover:cursor-pointer ${findSelectedPartnerIdxs().includes(partner.index) ? "border-4 border-black" : "opacity-75"}`}
-                            onClick={() => handlePartnerClick(partner)}
-                            autoPlay
-                            loop
-                            muted
-                          >
-                            <source src={partner.imageSrc} type="video/mp4" />
-                          </video>
-                        }
+                        <img
+                          className={`ml-[5%] h-[100%] w-[90%] border-2 border-black hover:scale-110 hover:cursor-pointer ${findSelectedPartnerIdxs().includes(partner.index) ? "border-4 border-black" : "opacity-75"}`}
+                          onClick={() => handlePartnerClick(partner)}
+                          src={partner.name === 'Beradrome' ? "/images/icon-beradrome.png" : "/images/icon-honeycomb.png"}
+                          alt="partner"
+                        />
                       </div>
                     )) :
                     userBoost.partnerNFTs.map((partner, index) => (
                       <div key={index} className="h-[45%] w-[50%] py-2">
-                        {
-                          partner === contracts.beradrome.address ?
-                          <img
-                            className="ml-[5%] h-[100%] w-[90%] border-2 border-black"
-                            src="https://ipfs.io/ipfs/QmYhKPJVDZDRDpJAJ2TyCXK981B4pvtPcjrKgN256U4Cok/73.png"
-                            alt="partner"
-                          /> :
-                          <video
-                            className="ml-[5%] h-[100%] w-[90%]"
-                            autoPlay
-                            loop
-                            muted
-                          >
-                            <source src="https://ipfs.io/ipfs/QmTffyDuYgSyFAgispVjuVaTsKnC5vVs7FFq1YkGde4ZX5" type="video/mp4" />
-                          </video>
-                        }
+                        <img
+                          className="ml-[5%] h-[100%] w-[90%] border-2 border-black"
+                          src={partner === contracts.beradrome.address ? "/images/icon-beradrome.png" : "/images/icon-honeycomb.png"}
+                          alt="partner"
+                        />
                       </div>
                     ))
                   }
@@ -166,24 +131,12 @@ export const BoostTabMobile = () => {
                     infoLoading ? loadingElement() :
                     selectedPartners.map((partner, index) => (
                       <div key={index} className="h-[45%] w-[50%] py-2">
-                        {
-                          partner.name === 'Beradrome' ?
-                          <img
-                            className={`ml-[5%] h-[100%] w-[90%] border-2 border-black hover:scale-110 hover:cursor-pointer ${findSelectedPartnerIdxs().includes(partner.index) ? "border-4 border-black" : "opacity-75"}`}
-                            onClick={() => handlePartnerClick(partner)}
-                            src={partner.imageSrc}
-                            alt="partner"
-                          /> :
-                          <video
-                            className={`ml-[5%] h-[100%] w-[90%] hover:scale-110 hover:cursor-pointer ${findSelectedPartnerIdxs().includes(partner.index) ? "border-4 border-black" : "opacity-75"}`}
-                            onClick={() => handlePartnerClick(partner)}
-                            autoPlay
-                            loop
-                            muted
-                          >
-                            <source src={partner.imageSrc} type="video/mp4" />
-                          </video>
-                        }
+                        <img
+                          className={`ml-[5%] h-[100%] w-[90%] border-2 border-black hover:scale-110 hover:cursor-pointer ${findSelectedPartnerIdxs().includes(partner.index) ? "border-4 border-black" : "opacity-75"}`}
+                          onClick={() => handlePartnerClick(partner)}
+                          src={partner.name === 'Beradrome' ? "/images/icon-beradrome.png" : "/images/icon-honeycomb.png"}
+                          alt="partner"
+                        />
                       </div>
                     ))
                   }

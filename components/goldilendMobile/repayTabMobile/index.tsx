@@ -233,7 +233,7 @@ export const RepayTabMobile = () => {
                         <div key={index} className="h-[45%] w-[50%] py-2">
                         <img
                           className="ml-[5%] h-[100%] w-[90%] border-2 border-black"
-                          src={nft === contracts.bondbear.address ? 'https://ipfs.io/ipfs/QmSaVWb15oQ1HcsUjGGkjwHQ1mxJBYeivtBCgHHHiVLt7w' : 'https://ipfs.io/ipfs/QmNWggx9vvBVEHZc6xwWkdyymoKuXCYrJ3zQwwKzocDxRt'}
+                          src={nft === contracts.bondbear.address ? '/images/icon-bondbear.png' : '/images/icon-bandbear.png'}
                           alt="bera"
                         />
                       </div>
