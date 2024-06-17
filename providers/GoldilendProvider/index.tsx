@@ -81,7 +81,7 @@ const INITIAL_STATE: GoldilendInitialState = {
   selectedBeras: [],
   userLoans: [
     // {
-    //   collateralNFTs: ['0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad'],
+    //   collateralNFTs: ['0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad', '0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad', '0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad', '0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad'],
     //   collateralNFTIds: [2, 3],
     //   borrowedAmount: 45678546,
     //   interest: 0.5015,
@@ -90,26 +90,7 @@ const INITIAL_STATE: GoldilendInitialState = {
     //   loanId: 1,
     //   liquidated: false
     // },
-    // {
-    //   collateralNFTs: ['0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad'],
-    //   collateralNFTIds: [2, 3],
-    //   borrowedAmount: 69.5015,
-    //   interest: 0.5015,
-    //   duration: 1725854,
-    //   endDate: 1719240812,
-    //   loanId: 2,
-    //   liquidated: false
-    // },
-    // {
-    //   collateralNFTs: ['0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad'],
-    //   collateralNFTIds: [2, 3],
-    //   borrowedAmount: 2,
-    //   interest: 0.5015,
-    //   duration: 1725854,
-    //   endDate: 1719240812,
-    //   loanId: 3,
-    //   liquidated: false
-    // }
+
   ],
   ownedPartners: [],
   selectedPartners: [],
@@ -120,16 +101,6 @@ const INITIAL_STATE: GoldilendInitialState = {
     expiry: 0
   },
   liquidatableLoans: [
-    // {
-    //   collateralNFTs: ['0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad', '0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad', '0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad'],
-    //   collateralNFTIds: [2, 3],
-    //   borrowedAmount: 2,
-    //   interest: 0.5015,
-    //   duration: 1725854,
-    //   endDate: 1719240812,
-    //   loanId: 1,
-    //   liquidated: false
-    // },
     // {
     //   collateralNFTs: ['0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad'],
     //   collateralNFTIds: [2, 3],

@@ -53,7 +53,7 @@ export const StakeTab = () => {
         <img className="h-8 w-8" src="/images/logo-gibgt.png" alt="coinlogo" />
         <h1 className="font-baloo font-semibold text-[3vw] xl:text-[1.8vw] ml-3 mt-1">GiBGT</h1>
       </div>
-      <div className="absolute h-[36%] w-[65%] xl:w-[55.6%] top-[30%] left-[26%] xl:left-[22%] border-2 border-black bg-white">
+      <div className="absolute h-[36%] w-[65%] xl:w-[55.6%] top-[30%] left-[30%] xl:left-[22%] border-2 border-black bg-white">
         <div className="relative h-[100%] w-[100%]">
           <input
             className="absolute top-[17%] left-[7.5%] xl:left-[5%] w-[90%] focus:outline-none border-none bg-transparent font-bold font-baloo text-[4vw] xl:text-[2vw]"

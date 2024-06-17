@@ -105,7 +105,7 @@ export const GoldiswapPageMobile = () => {
           <div className="absolute bottom-[40.4%] left-[15.5%] w-[48.95vh] h-[2.3%] bg-[#4D0B24] origin-bottom-left -rotate-[90deg] text-[3.2vw] font-baloo text-white font-semibold flex flex-row items-center justify-between px-2">
             <div className="h-[100%] w-[43%] flex flex-row items-center justify-between">
               <span className="text-white font-baloo mt-1">FSL/PSL ratio:</span>
-              <span className="text-white font-baloo mt-1">{handleTokenInfo((goldiswapInfo.fsl / goldiswapInfo.psl))}%</span>
+              <span className="text-white font-baloo mt-1">{handleTokenInfo((goldiswapInfo.psl / goldiswapInfo.fsl))}%</span>
             </div>
             <div className="h-[100%] w-[43%] flex flex-row items-center justify-between">
               <span className="text-white font-baloo mt-1">last floor raise:</span>

@@ -210,30 +210,15 @@ export const BoostTab = () => {
             infoLoading ? loadingElement() :
             ownedPartners.map((partner, index) => (
               <div key={index} className="h-[45%] w-[50%] py-2">
-                {
-                  partner.name === 'Beradrome' ?
-                  <img
-                    className={`ml-[5%] h-[100%] w-[90%] border-2 border-black hover:scale-110 hover:cursor-pointer ${findSelectedPartnerIdxs().includes(partner.index) ? "border-4 border-black" : "opacity-75"}`}
-                    onClick={() => {
-                      setBoostedPartners(false)
-                      handlePartnerClick(partner)
-                    }}
-                    src={partner.imageSrc}
-                    alt="partner"
-                  /> :
-                  <video
-                    className={`ml-[5%] h-[100%] w-[90%] hover:scale-110 hover:cursor-pointer ${findSelectedPartnerIdxs().includes(partner.index) ? "border-4 border-black" : "opacity-75"}`}
-                    onClick={() => {
-                      setBoostedPartners(false)
-                      handlePartnerClick(partner)
-                    }}
-                    autoPlay
-                    loop
-                    muted
-                  >
-                    <source src={partner.imageSrc} type="video/mp4" />
-                  </video>
-                }
+                <img
+                  className={`ml-[5%] h-[100%] w-[90%] border-2 border-black hover:scale-110 hover:cursor-pointer ${findSelectedPartnerIdxs().includes(partner.index) ? "border-4 border-black" : "opacity-75"}`}
+                  onClick={() => {
+                    setBoostedPartners(false)
+                    handlePartnerClick(partner)
+                  }}
+                  src={partner.name === 'Beradrome' ? "/images/icon-beradrome.png" : "/images/icon-honeycomb.png"}
+                  alt="partner"
+                />
               </div>
             ))
           }
@@ -258,22 +243,12 @@ export const BoostTab = () => {
                   <div className="text-[3vw] xl:text-[2vw] cursor-pointer hover:scale-125 mt-[3%]" onClick={() => prevBoostImages()}>&lt;</div>
                   {
                     userBoost.partnerNFTs.slice(currentBoostIndex, currentBoostIndex + 4).map((partner, index) => (
-                      partner === contracts.beradrome.address ?
                       <img
                         className="h-[50%] xl:h-[70%] w-[20%] border-2 border-black"
-                        src="https://ipfs.io/ipfs/QmYhKPJVDZDRDpJAJ2TyCXK981B4pvtPcjrKgN256U4Cok/73.png"
+                        src={partner === contracts.beradrome.address ? "/images/icon-beradrome.png" : "/images/icon-honeycomb.png"}
                         alt="selectedpartner"
                         key={index}
-                        /> :
-                        <video
-                        className="h-[50%] xl:h-[70%] w-[20%] border-2 border-black"
-                        key={index}
-                        autoPlay
-                        loop
-                        muted
-                      >
-                        <source src="https://ipfs.io/ipfs/QmTffyDuYgSyFAgispVjuVaTsKnC5vVs7FFq1YkGde4ZX5" type="video/mp4" />
-                      </video>
+                        /> 
                     ))
                   }
                   <div className="text-[3vw] xl:text-[2vw] cursor-pointer hover:scale-125 mt-[3%]" onClick={() => nextBoostImages()}>&gt;</div>
@@ -282,24 +257,13 @@ export const BoostTab = () => {
                   <div className="text-[3vw] xl:text-[2vw] cursor-pointer hover:scale-125 mt-[3%]" onClick={() => prevImages()}>&lt;</div>
                   {
                     selectedPartners.slice(currentIndex, currentIndex + 4).map((partner, index) => (
-                      partner.name === 'Beradrome' ?
                       <img
-                        className="h-[50%] xl:h-[70%] w-[20%] border-2 border-black"
+                        className="h-[50%] xl:h-[70%] w-[20%] border-2 border-black cursor-pointer hover:scale-110"
                         onClick={() => handlePartnerClick(partner)}
-                        src={partner.imageSrc}
+                        src={partner.name === 'Beradrome' ? "/images/icon-beradrome.png" : "/images/icon-honeycomb.png"}
                         alt="selectedpartner"
                         key={index}
-                        /> :
-                        <video
-                        className="h-[50%] xl:h-[70%] w-[20%] border-2 border-black"
-                        onClick={() => handlePartnerClick(partner)}
-                        key={index}
-                        autoPlay
-                        loop
-                        muted
-                      >
-                        <source src={partner.imageSrc} type="video/mp4" />
-                      </video>
+                        /> 
                     ))
                   }
                   <div className="text-[3vw] xl:text-[2vw] cursor-pointer hover:scale-125 mt-[3%]" onClick={() => nextImages()}>&gt;</div>
@@ -396,24 +360,13 @@ export const BoostTab = () => {
               <div className="text-[3vw] xl:text-[2vw] cursor-pointer hover:scale-125 mt-[3%]" onClick={() => prevImages()}>&lt;</div>
               {
                 selectedPartners.slice(currentIndex, currentIndex + 4).map((partner, index) => (
-                  partner.name === 'Beradrome' ?
                   <img
                     className="h-[50%] xl:h-[70%] w-[20%] border-2 border-black"
                     onClick={() => handlePartnerClick(partner)}
-                    src={partner.imageSrc}
+                    src={partner.name === 'Beradrome' ? "/images/icon-beradrome.png" : "/images/icon-honeycomb.png"}
                     alt="selectedpartner"
                     key={index}
-                  /> :
-                  <video
-                    className="h-[50%] xl:h-[70%] w-[20%] border-2 border-black"
-                    onClick={() => handlePartnerClick(partner)}
-                    key={index}
-                    autoPlay
-                    loop
-                    muted
-                  >
-                    <source src={partner.imageSrc} type="video/mp4" />
-                  </video>
+                  />
                 ))
               }
               <div className="text-[3vw] xl:text-[2vw] cursor-pointer hover:scale-125 mt-[3%]" onClick={() => nextImages()}>&gt;</div>

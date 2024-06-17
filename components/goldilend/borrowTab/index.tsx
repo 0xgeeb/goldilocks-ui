@@ -195,7 +195,7 @@ export const BorrowTab = () => {
                 <img
                   className={`ml-[5%] h-[100%] w-[90%] border-2 border-black hover:scale-110 hover:cursor-pointer ${findSelectedBeraIdxs().includes(bera.index) ? "border-4 border-black" : "opacity-75"}`}
                   onClick={() => handleBeraClick(bera)}
-                  src={bera.imageSrc}
+                  src={bera.name === 'BondBera' ? "/images/icon-bondbear.png" : "/images/icon-bandbear.png"}
                   alt="bera"
                 />
               </div>
@@ -213,7 +213,7 @@ export const BorrowTab = () => {
               <img
                 className="mt-[2.5%] xl:mt-0 h-[50%] xl:h-[70%] w-[20%] border-2 border-black"
                 onClick={() => handleBeraClick(bera)}
-                src={bera.imageSrc}
+                src={bera.name === 'BondBera' ? "/images/icon-bondbear.png" : "/images/icon-bandbear.png"}
                 alt="selectedbera"
                 key={index}
               />
