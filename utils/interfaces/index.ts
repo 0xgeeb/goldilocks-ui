@@ -96,7 +96,7 @@ export interface BoostData {
 
 export interface GoldilendInitialState {
   goldilendInfo: {
-
+    stakedGibgt: number;
   };
   lock: number;
   stake: number;

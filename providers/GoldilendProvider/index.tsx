@@ -17,9 +17,8 @@ import {
 } from "../../utils/interfaces"
 
 const INITIAL_STATE: GoldilendInitialState = {
-
   goldilendInfo: {
-
+    stakedGibgt: 0
   },
   lock: 0,
   stake: 0,
@@ -505,41 +504,18 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
   }
 
   const refreshGoldilendInfo = async () => {
-    // const gibgtResult = await readContract(config, {
-    //   address: contracts.goldilend.address as `0x${string}`,
-    //   abi: contracts.goldilend.abi,
-    //   functionName: 'balanceOf',
-    //   args: [address]
-    // })
-    // const stakedResult = await readContract(config, {
-    //   address: contracts.goldilend.address as `0x${string}`,
-    //   abi: contracts.goldilend.abi,
-    //   functionName: 'stakedGiBGT',
-    //   args: [address]
-    // })
-    // const claimableResult = await readContract(config, {
-    //   address: contracts.goldilend.address as `0x${string}`,
-    //   abi: contracts.goldilend.abi,
-    //   functionName: 'userClaimablePrg',
-    //   args: [address]
-    // })
+    const stakedGibgtResult = await readContract(config, {
+      address: contracts.goldilend.address as `0x${string}`,
+      abi: contracts.goldilend.abi,
+      functionName: 'balanceOf',
+      args: [contracts.goldilend.address]
+    })
 
-    // const response = {
-    //   locks: parseFloat(formatEther(locksBalance as unknown as bigint)),
-    //   prg: parseFloat(formatEther(porridgeBalance as unknown as bigint)),
-    //   honey: parseFloat(formatEther(honeyBalance as unknown as bigint)),
-    //   staked: parseFloat(formatEther(stakedBalance as unknown as bigint)), 
-    //   claimable: parseFloat(formatEther(claimableBalance as unknown as bigint)),
-    //   locked: parseFloat(formatEther(lockedBalance as unknown as bigint)),
-    //   borrowed: parseFloat(formatEther(borrowedBalance as unknown as bigint)),
-    //   ibgt: parseFloat(formatEther(ibgtResult as unknown as bigint)),
-    //   gibgt: parseFloat(formatEther(gibgtResult as unknown as bigint)),
-    //   lendStaked: parseFloat(formatEther(stakedResult as unknown as bigint)),
-    //   lendClaimable: parseFloat(formatEther(claimableResult as unknown as bigint))
-    // }
+    const response = {
+      stakedGibgt: parseFloat(formatEther(stakedGibgtResult as unknown as bigint))
+    }
 
-    // setBalanceState(response)
-  // }
+    setGoldilendInfoState(response)
   }
 
   const openNotification = (toggle: boolean, action: string, result: string, hash: string) => {

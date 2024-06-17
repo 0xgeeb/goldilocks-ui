@@ -3,7 +3,8 @@ import { useGoldilend } from "../../../providers"
 export const Stats = () => {
 
   const {
-    infoLoading
+    infoLoading,
+    goldilendInfo
   } = useGoldilend()
 
   const loadingElement = () => {
@@ -47,7 +48,7 @@ export const Stats = () => {
       </div>
       <div className="flex flex-row items-center">
         <span className="mr-2">total GiBGT staked:</span>
-        <span>{handleInfo(69000000)}</span>
+        <span>{handleInfo(goldilendInfo.stakedGibgt)}</span>
         {/* <span className={handleColors(goldilendInfo.fsl, goldilendInfo.fsl)}>{handleInfo(goldilendInfo.fsl)}</span> */}
       </div>
       <div className="flex flex-row items-center">
