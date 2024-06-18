@@ -59,7 +59,7 @@ export const StatsMobile = () => {
   }
 
   return (
-    <div className="text-[3.3vw] absolute h-[15%] w-[80%] left-[10%] top-[52.5%] flex flex-row items-center justify-center text-[#D9C6BA] font-baloo font-semibold">
+    <div className="text-[3.5vw] absolute w-[90%] left-[5%] top-[60%] flex flex-row items-center justify-center text-[#D9C6BA] font-baloo font-semibold">
       <div className="flex flex-col items-end">
         <span>locks supply:</span>
         <span>current fsl:</span>
@@ -68,7 +68,7 @@ export const StatsMobile = () => {
         <span>market price:</span>
         <span>target ratio:</span>
       </div>
-      <div className="h-[100%] w-[5%]"></div>
+      <div className="h-[100%] w-[7.5%]"></div>
       <div className="flex flex-col items-start">
         <span className={handleColors(borrowInfo.supply, borrowInfo.supply)}>{handleInfo(borrowInfo.supply)}</span>
         <span className={handleColors(borrowInfo.fsl, borrowInfo.fsl)}>{handleInfo(borrowInfo.fsl)}</span>

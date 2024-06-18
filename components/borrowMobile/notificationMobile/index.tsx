@@ -6,15 +6,15 @@ export const NotificationMobile = () => {
 
   return (
     <div className="w-[100%] h-[100%] bg-[#E9D7A9] flex flex-col items-center relative px-[2%]">
-      <h1 className="font-amaticbold text-[10vw] mt-[5%]">SUCCESS!</h1>
-      <span className="font-baloo font-semibold text-[3vw] mt-[1%] text-center">{notification.action}</span>
-      <span className="font-baloo font-semibold text-[3vw] mt-[5%] text-center">{notification.result}</span>
+      <h1 className="font-amaticbold text-[11vw] mt-[15%]">SUCCESS!</h1>
+      <span className="font-baloo font-semibold text-[4vw] mt-[5%] text-center">{notification.action}</span>
+      <span className="font-baloo font-semibold text-[4vw] mt-[1%] text-center">{notification.result}</span>
       <a 
         href={`https://sepolia.basescan.org/tx/${notification.hash}`}
         target="_blank"
-        className="h-[17%] w-[50%] mt-[5%] bg-[#E7B941] focus:scale-110 border-2 border-black"
+        className="h-[17%] w-[50%] mt-[10%] bg-[#E7B941] focus:scale-110 border-2 border-black"
       >
-        <button className="w-[100%] h-[100%] font-amaticbold text-[5vw]">VIEW TX</button>
+        <button className="w-[100%] h-[100%] font-amaticbold text-[6vw]">VIEW TX</button>
       </a>
       <p
         className="absolute top-[-2%] right-[2%] font-baloo text-[7vw] cursor-pointer focus:scale-125"

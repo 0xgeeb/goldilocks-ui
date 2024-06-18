@@ -1,31 +1,20 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit"
 import { useStake, useWallet } from "../../../providers"
 import { useStakeTx } from "../../../hooks"
-import { useGoldiswapMath } from "../../../hooks"
 import { Notification, Chart } from "../../stake"
 
 export const ClaimTab = () => {
 
   const {
     txConfirming,
-    chartOpen,
     notification,
-    handlePercentageButtons,
-    displayString,
-    activeToggle,
-    handleChange,
-    handleBalance,
-    handleBalanceLabel,
     infoLoading,
-    stakeInfo,
-    stir,
     setTxConfirming,
     openNotification,
     refreshStakeInfo
   } = useStake()
 
-  const { balance, balancesLoading, refreshBalances } = useWallet()
-  const { floorPrice, marketPrice } = useGoldiswapMath()
+  const { balance, refreshBalances } = useWallet()
   const { sendClaimTx } = useStakeTx()
 
   const loadingElement = () => {
@@ -99,19 +88,19 @@ export const ClaimTab = () => {
   }
 
   return (
-    <div className="absolute top-[10.12%] left-[39%] h-[65%] xl:h-[70%] w-[60%] xl:w-[28%] border-2 border-black bg-[#EEDCD2] z-20">
+    <div className="absolute top-[10.12%] left-[30%] h-[60%] w-[40%] border-2 border-black bg-[#EEDCD2] z-20">
       <div className="absolute top-4 left-0 w-8 skew-y-[45deg] border-b-2 border-black"></div>
       <div className="absolute bottom-4 left-0 w-8 -skew-y-[45deg] border-b-2 border-black"></div>
       <div className="absolute top-4 right-0 w-8 -skew-y-[45deg] border-b-2 border-black"></div>
       <div className="absolute bottom-4 right-0 w-8 skew-y-[45deg] border-b-2 border-black"></div>
-      <div className={`absolute inset-8 ${txConfirming ? "border-l-2 border-r-2 border-black" : "border-2 border-black"} bg-[#D9C6BA]`}>
+      <div className={`absolute inset-8 ${txConfirming ? "" : "border-2 border-black"} bg-[#D9C6BA]`}>
         {
           // chartOpen ? <Chart /> :
           txConfirming ? <img className="w-[100%] h-[100%]" src="/images/bg-transaction.png" alt="tx" /> :
-          // notification.toggle ? <LendNotification /> :
+          notification.toggle ? <Notification /> :
           <div className="relative w-[100%] h-[100%] text-[2vw] xl:text-[1vw] flex flex-col items-center font-baloo font-semibold">
-            <h1 className="font-amaticbold text-[8vw] xl:text-[4vw]">claim yield</h1>
-            <div className="w-[70%] flex flex-col justify-between">
+            <h1 className="font-amaticbold text-[8vw] xl:text-[4vw] mt-[2%]">claim yield</h1>
+            <div className="w-[70%] flex flex-col justify-between mt-[2%]">
               <span className="text-[#9C4924]">Porridge Yield</span>
               <div className="w-[100%] flex flex-row justify-between">
                 <span>Current Porridge Balance:</span>
@@ -119,26 +108,7 @@ export const ClaimTab = () => {
               </div>
               <div className="w-[100%] flex flex-row justify-between">
                 <span>Available Porridge to Claim:</span>
-                <span>{handleInfo(balance.lendClaimable)}</span>
-              </div>
-            </div>
-            <div className="w-[70%] mt-[2%] flex flex-col justify-between">
-              <span className="text-[#9C4924]">Infrared iBGT Staking Yield</span>
-              <div className="w-[100%] flex flex-row justify-between">
-                <span>wif:</span>
-                <span>69.00</span>
-              </div>
-              <div className="w-[100%] flex flex-row justify-between">
-                <span>boden:</span>
-                <span>69.00</span>
-              </div>
-              <div className="w-[100%] flex flex-row justify-between">
-                <span>jenner:</span>
-                <span>69.00</span>
-              </div>
-              <div className="w-[100%] flex flex-row justify-between">
-                <span>bera:</span>
-                <span>69.00</span>
+                <span>{handleInfo(balance.claimable)}</span>
               </div>
             </div>
             <ConnectButton.Custom>
@@ -150,7 +120,7 @@ export const ClaimTab = () => {
               }) => {
                 return (
                   <button 
-                    className="mt-[7%] h-[12%] w-[40%] xl:w-[60%] bg-[#E7B941] font-amaticbold text-[4vw] xl:text-[1.9vw] border-2 border-black hover:bg-[#C9E3B9] hover:scale-110 flex items-center justify-center"
+                    className="mt-[7%] h-[20%] w-[40%] bg-[#E7B941] font-amaticbold text-[4vw] xl:text-[2vw] border-2 border-black hover:bg-[#C9E3B9] hover:scale-110 flex items-center justify-center"
                     id="claim-button"
                     onClick={() => {
                       const button = document.getElementById('claim-button')

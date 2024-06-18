@@ -33,7 +33,7 @@ export const WalletBalanceMobilePopup = () => {
   }
 
   return (
-    <div className="w-[100%] h-[100%] bg-[#D5A774] flex flex-col items-center relative pt-[13%] pb-[2%] px-[5%] font-baloo font-semibold text-[2.3vw]">
+    <div className="w-[100%] h-[100%] bg-[#D5A774] flex flex-col items-center relative pt-[13%] pb-[2%] px-[5%] font-baloo font-semibold text-[2.8vw]">
       <div className="w-[100%] h-[100%] flex flex-col justify-around">
         <div className="flex flex-row items-center justify-between w-[100%]">
           <span className="">locks balance:</span>

@@ -54,7 +54,7 @@ export const LockTabMobile = () => {
       </div>
       <div className="absolute flex flex-row top-[20%] left-[8%] items-center">
       <img className="h-8 w-8" src="/images/logo-gibgt.png" alt="coinlogo" />
-        <h1 className="font-baloo font-semibold text-[8vw] ml-2 lg:ml-3">iBGT</h1>
+        <h1 className="font-baloo font-semibold text-[8vw] ml-2 xl:ml-3">iBGT</h1>
       </div>
       <div className="absolute h-[30%] w-[84%] top-[43%] left-[8%] border-2 border-black bg-white">
         <div className="relative h-[100%] w-[100%]">
