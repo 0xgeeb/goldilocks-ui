@@ -14,11 +14,11 @@ export const contracts = {
     abi: goldiswapABI.abi
   },
   goldilocked: {
-    address: '0x053c948FB1d8158654eB4e115201B56E1f2e8631',
+    address: '0xA01cB564ecc3F58a4e2bA5fD59d13a6b998de9b8',
     abi: goldilockedABI.abi
   },
   honey: {
-    address: '0x8016269e0c30d897f495470aC464c283bf51A77b',
+    address: '0x0E4aaF1351de4c0264C5c7056Ef3777b41BD8e03',
     abi: honeyABI.abi
   },
   goldilend: {

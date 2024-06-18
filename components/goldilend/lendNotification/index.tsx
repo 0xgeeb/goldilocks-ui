@@ -11,7 +11,7 @@ export const LendNotification = () => {
         <span className="font-baloo font-semibold text-[2vw] xl:text-[0.9vw]">{notification.action}</span>
         <span className="font-baloo font-semibold text-[2vw] xl:text-[0.9vw] mt-[3%] lg:mt-[1%]">{notification.result}</span>
         <a 
-          href={`https://sepolia.basescan.org/tx/${notification.hash}`}
+          href={`https://bartio.beratrail.io/tx/${notification.hash}`}
           target="_blank"
           className={`${lendActiveToggle === 'CLAIM' ? "h-[15%] w-[30%]" : "h-[20%] w-[19%]"} mt-[3%] bg-[#E7B941] hover:scale-110 border-2 border-black`}
         >

@@ -10,7 +10,7 @@ export const LendNotificationMobile = () => {
       <span className="font-baloo font-semibold text-[3.5vw] text-center">{notification.action}</span>
       <span className="font-baloo font-semibold text-[3.5vw] text-center">{notification.result}</span>
       <a 
-        href={`https://sepolia.basescan.org/tx/${notification.hash}`}
+        href={`https://bartio.beratrail.io/tx/${notification.hash}`}
         target="_blank"
         className="h-[17%] w-[50%] bg-[#E7B941] focus:scale-110 border-2 border-black"
       >

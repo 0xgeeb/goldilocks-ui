@@ -3,8 +3,8 @@
 import { PropsWithChildren } from "react"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { WagmiProvider as WagmiClientProvider, http, createConfig } from "wagmi"
-// import { BerachainArtioTestnet } from "../../utils/customChains"
-import { base, baseSepolia } from "wagmi/chains"
+import { BerachainBartioTestnet } from "../../utils/customChains"
+// import { base, baseSepolia } from "wagmi/chains"
 import { RainbowKitProvider, getDefaultConfig } from "@rainbow-me/rainbowkit"
 import "@rainbow-me/rainbowkit/styles.css"
 
@@ -21,10 +21,10 @@ const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_ID as string
 // })
 
 export const config = createConfig({
-  chains: [baseSepolia],
+  chains: [BerachainBartioTestnet],
   ssr: true,
   transports: {
-    [baseSepolia.id]: http()
+    [BerachainBartioTestnet.id]: http()
   }
 })
 

@@ -294,12 +294,12 @@ export const BoostTab = () => {
                           button && (button.innerHTML = "connect wallet")
                         }
                       }
-                      else if(chain?.name !== "Base Sepolia") {
-                        if(button && button.innerHTML === "where base sepolia") {
+                      else if(chain?.name !== "Berachain bArtio") {
+                        if(button && button.innerHTML === "where Berachain bArtio") {
                           openChainModal()
                         }
                         else {
-                          button && (button.innerHTML = "where base sepolia")
+                          button && (button.innerHTML = "where Berachain bArtio")
                         }
                       }
                       else {
@@ -334,12 +334,12 @@ export const BoostTab = () => {
                           button && (button.innerHTML = "connect wallet")
                         }
                       }
-                      else if(chain?.name !== "Base Sepolia") {
-                        if(button && button.innerHTML === "where base sepolia") {
+                      else if(chain?.name !== "Berachain bArtio") {
+                        if(button && button.innerHTML === "where Berachain bArtio") {
                           openChainModal()
                         }
                         else {
-                          button && (button.innerHTML = "where base sepolia")
+                          button && (button.innerHTML = "where Berachain bArtio")
                         }
                       }
                       else {
@@ -394,12 +394,12 @@ export const BoostTab = () => {
                           button && (button.innerHTML = "connect wallet")
                         }
                       }
-                      else if(chain?.name !== "Base Sepolia") {
-                        if(button && button.innerHTML === "where base sepolia") {
+                      else if(chain?.name !== "Berachain bArtio") {
+                        if(button && button.innerHTML === "where Berachain bArtio") {
                           openChainModal()
                         }
                         else {
-                          button && (button.innerHTML = "where base sepolia")
+                          button && (button.innerHTML = "where Berachain bArtio")
                         }
                       }
                       else {
