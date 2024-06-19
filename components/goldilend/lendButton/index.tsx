@@ -71,7 +71,7 @@ export const LendButton = () => {
       return
     }
     if(lock > balance.ibgt) {
-      button && (button.innerHTML = "insufficient balance")
+      button && (button.innerHTML = "not enough")
       return
     }
     else {
@@ -123,7 +123,7 @@ export const LendButton = () => {
       return
     }
     if(stake > balance.gibgt) {
-      button && (button.innerHTML = "insufficient balance")
+      button && (button.innerHTML = "not enough")
       return
     }
     else {
@@ -175,7 +175,7 @@ export const LendButton = () => {
       return
     }
     if(unstake > balance.lendStaked) {
-      button && (button.innerHTML = "insufficient balance")
+      button && (button.innerHTML = "not enough")
       return
     }
     else {

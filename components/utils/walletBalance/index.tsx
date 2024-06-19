@@ -45,12 +45,12 @@ export const WalletBalance = ()=> {
         className={`absolute h-[18%] lg:h-[24%] w-[2%] top-[22%] lg:top-[16.167%] left-[80%] lg:left-[75%] 2xl:left-[71.875%] hover:scale-105 ${walletOpen ? window.innerWidth > 1024 ? "translate-x-[1100%]" : "translate-x-[850%]" : ""} bg-[#D5A774] border-r-2 border-t-2 border-b-2 border-black cursor-pointer transition-transform ease-linear`}
         onClick={() => setWalletOpen(prev => !prev)}
       >
-        <div className="flex flex-row items-center absolute bottom-[81%] lg:bottom-[82%] right-[0%] lg:right-[20%] font-baloo font-semibold text-[1.2vw] lg:text-[0.8vw] origin-bottom-right -rotate-[90deg] text-nowrap">
+        <div className="flex flex-row items-center absolute bottom-[75%] md:bottom-[81%] lg:bottom-[78%] xl:bottom-[86%] 2xl:bottom-[84%] right-[-7.5%] lg:right-[5%] xl:right-[2.5%] 2xl:right-[20%] font-baloo font-semibold text-[1.2vw] lg:text-[1.3vw] 2xl:text-[0.8vw] origin-bottom-right -rotate-[90deg] text-nowrap">
           <span>WALLET</span>
           <span className="ml-2">BALANCE</span>
         </div>
       </div>
-      <div className={`absolute w-[17%] lg:w-[22%] h-[32%] top-[16%] lg:top-[12.167%] left-[63%] lg:left-[53%] 2xl:left-[49.875%] ${walletOpen ? "translate-x-[100%] border-r-2" : ""} font-baloo font-semibold text-[1.2vw] lg:text-[1vw] border-t-2 border-b-2 border-black bg-[#D5A774] bg-opacity-30 flex flex-col justify-between py-[1.5%] px-[0.5%] lg:px-[3%] text-white transition-transform ease-linear`}>
+      <div className={`absolute w-[17%] lg:w-[22%] h-[32%] top-[18%] md:top-[16%] lg:top-[15%] xl:top-[12%] left-[63%] lg:left-[53%] 2xl:left-[49.875%] ${walletOpen ? "translate-x-[100%] border-r-2" : ""} font-baloo font-semibold text-[1.2vw] lg:text-[1vw] border-t-2 border-b-2 border-black bg-[#D5A774] bg-opacity-30 flex flex-col justify-between py-[1.5%] px-[0.5%] lg:px-[3%] text-white transition-transform ease-linear`}>
         <div className="flex flex-row items-center justify-between w-[100%]">
           <span className="">{window.innerWidth > 1024 ? "locks balance:" : "locks"}</span>
           <span className="">{handleInfo(balance.locks)}</span>

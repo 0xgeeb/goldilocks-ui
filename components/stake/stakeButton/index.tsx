@@ -76,7 +76,7 @@ export const StakeButton = () => {
       return
     }
     if(stake > balance.locks) {
-      button && (button.innerHTML = "insufficient balance")
+      button && (button.innerHTML = "not enough")
       return
     }
     else {
@@ -129,11 +129,11 @@ export const StakeButton = () => {
       return
     }
     if(unstake > balance.staked - balance.locked) {
-      button && (button.innerHTML = "insufficient balance")
+      button && (button.innerHTML = "not enough")
       return
     }
     if(unstake > balance.staked) {
-      button && (button.innerHTML = "insufficient balance")
+      button && (button.innerHTML = "not enough")
       return
     }
     else {
@@ -180,7 +180,7 @@ export const StakeButton = () => {
       return
     }
     if(stir > balance.prg) {
-      button && (button.innerHTML = "insufficient balance")
+      button && (button.innerHTML = "not enough")
       return
     }
     else {

@@ -64,7 +64,7 @@ export const BorrowButton = () => {
       return
     }
     if(borrow > (balance.staked - balance.locked) * (borrowInfo.fsl / borrowInfo.supply)) {
-      button && (button.innerHTML = "insufficient balance")
+      button && (button.innerHTML = "not enough")
       return
     }
     else {
@@ -111,7 +111,7 @@ export const BorrowButton = () => {
       return
     }
     if(repay > balance.borrowed || repay > balance.honey) {
-      button && (button.innerHTML = "insufficient balance")
+      button && (button.innerHTML = "not enough")
       return
     }
     else {
