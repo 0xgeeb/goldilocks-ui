@@ -50,7 +50,7 @@ export const WalletBalance = ()=> {
           <span className="ml-2">BALANCE</span>
         </div>
       </div>
-      <div className={`absolute w-[17%] lg:w-[22%] h-[32%] top-[16%] lg:top-[15.167%] 2xl:top-[12.167%] left-[63%] lg:left-[53%] 2xl:left-[49.875%] ${walletOpen ? "translate-x-[100%] border-r-2" : ""} font-baloo font-semibold text-[1.2vw] lg:text-[1vw] border-t-2 border-b-2 border-black bg-[#D5A774] bg-opacity-30 flex flex-col justify-between py-[1.5%] px-[0.5%] lg:px-[3%] text-white transition-transform ease-linear`}>
+      <div className={`absolute w-[17%] lg:w-[22%] h-[32%] top-[18%] md:top-[17%] lg:top-[15%] xl:top-[14%] left-[63%] lg:left-[53%] 2xl:left-[49.875%] ${walletOpen ? "translate-x-[100%] border-r-2" : ""} font-baloo font-semibold text-[1.2vw] lg:text-[1vw] border-t-2 border-b-2 border-black bg-[#D5A774] bg-opacity-30 flex flex-col justify-between py-[1.5%] px-[0.5%] lg:px-[3%] text-white transition-transform ease-linear`}>
         <div className="flex flex-row items-center justify-between w-[100%]">
           <span className="">{window.innerWidth > 1024 ? "locks balance:" : "locks"}</span>
           <span className="">{handleInfo(balance.locks)}</span>

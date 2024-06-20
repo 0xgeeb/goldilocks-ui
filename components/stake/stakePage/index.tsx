@@ -101,20 +101,20 @@ export const StakePage = () => {
         <Toggles />
         { stirPopupToggle && <StirPopup /> }
         { unstakePopupToggle && <UnstakePopup /> }
-        <h1 className="absolute top-[16%] lg:top-[15.16%] 2xl:top-[12.16%] right-[81%] lg:right-[78.125%] 2xl:right-[75%] text-[#D9C6BA] text-[8vw] font-amaticbold" id="page-title">{activeToggle}</h1>
+        <h1 className={`absolute top-[-0.5%] lg:top-[16%] 2xl:top-[12.16%] left-[5%] ${activeToggle === 'UNSTAKE' ? "xl:left-[5%]" : "xl:left-[7.5%]"} text-[#D9C6BA] text-[12vw] md:text-[10vw] lg:text-[8vw] font-amaticbold`} id="page-title">{activeToggle}</h1>
         {
           activeToggle === 'CLAIM' ?
           <ClaimTab /> :
           <>
-            <div className="absolute top-[13.22%] lg:top-[12.387%] 2xl:top-[9.387%] left-[20%] lg:left-[25%] 2xl:left-[28.125%] w-[60%] lg:w-[50%] 2xl:w-[43.75%] h-[2.78%] bg-[#B35227] flex flex-row items-center justify-between px-2 text-[1.5vw] lg:text-[0.85vw]">
+            <div className="absolute top-[15%] md:top-[14%] lg:top-[12%] xl:top-[11%] left-[10%] md:left-[20%] lg:left-[25%] 2xl:left-[28.125%] w-[80%] md:w-[60%] lg:w-[50%] 2xl:w-[43.75%] h-[3%] bg-[#B35227] flex flex-row items-center justify-between px-2 text-[1.5vw] lg:text-[0.85vw]">
               <span className="text-white font-baloo mt-1">PSL/FSL ratio: {handleTokenInfo((stakeInfo.psl / stakeInfo.fsl) * 100)}%</span>
               <span className="text-white font-baloo mt-1">last floor raise: {formatDate(stakeInfo.lastFloorRaise * Math.pow(10, 21))}</span>
             </div>
             <WalletBalance />
             <StakeBox />
-            <img className="absolute top-[49.87%] lg:top-[49.04%] 2xl:top-[46.04%] left-[88%] lg:left-[78.625%] 2xl:left-[75.5%] w-[4%] h-[2%] lg:w-[3%]" src="/images/icon-bearoutline.png" alt="bearoutline" />
+            <img className="absolute top-[68%] md:top-[51%] lg:top-[49%] xl:top-[48%] left-[91%] lg:left-[82%] 2xl:left-[80%] w-[4%] h-[2%] lg:w-[3%]" src="/images/icon-bearoutline.png" alt="bearoutline" />
             <div 
-              className="absolute w-[10%] h-[7%] lg:w-[6%] lg:h-[8%] top-[51.87%] lg:top-[51.04%] 2xl:top-[48.04%] left-[85%] lg:left-[77.125%] 2xl:left-[74%] border-2 border-black bg-[#F3AA8A] flex items-center justify-center font-amaticbold text-[2vw] lg:text-[1.2vw] hover:scale-110 cursor-pointer"
+              className="absolute w-[12%] md:w-[10%] h-[7%] lg:w-[6%] lg:h-[8%] top-[70%] md:top-[53%] lg:top-[51%] xl:top-[50%] left-[87%] lg:left-[80%] 2xl:left-[78%] border-2 border-black bg-[#F3AA8A] flex items-center justify-center font-amaticbold text-[3vw] md:text-[2.25vw] lg:text-[1.5vw] xl:text-[1.2vw] hover:scale-110 cursor-pointer"
               onClick={() => setChartOpen(!chartOpen)}
             >
               THIS IS CHART

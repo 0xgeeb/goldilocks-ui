@@ -88,7 +88,7 @@ export const ClaimTab = () => {
   }
 
   return (
-    <div className="absolute top-[10.12%] left-[30%] h-[60%] w-[40%] border-2 border-black bg-[#EEDCD2] z-20">
+    <div className="absolute top-[15%] md:top-[14%] lg:top-[12%] xl:top-[11%] left-[10%] md:left-[15%] lg:left-[25%] xl:left-[30%] w-[80%] md:w-[70%] lg:w-[50%] xl:w-[40%] h-[60%] border-2 border-black bg-[#EEDCD2] z-20">
       <div className="absolute top-4 left-0 w-8 skew-y-[45deg] border-b-2 border-black"></div>
       <div className="absolute bottom-4 left-0 w-8 -skew-y-[45deg] border-b-2 border-black"></div>
       <div className="absolute top-4 right-0 w-8 -skew-y-[45deg] border-b-2 border-black"></div>
@@ -98,10 +98,10 @@ export const ClaimTab = () => {
           // chartOpen ? <Chart /> :
           txConfirming ? <img className="w-[100%] h-[100%]" src="/images/bg-transaction.png" alt="tx" /> :
           notification.toggle ? <Notification /> :
-          <div className="relative w-[100%] h-[100%] text-[2vw] xl:text-[1vw] flex flex-col items-center font-baloo font-semibold">
-            <h1 className="font-amaticbold text-[8vw] xl:text-[4vw] mt-[2%]">claim yield</h1>
-            <div className="w-[70%] flex flex-col justify-between mt-[2%]">
-              <span className="text-[#9C4924]">Porridge Yield</span>
+          <div className="relative w-[100%] h-[100%] text-[2.5vw] lg:text-[1.5vw] xl:text-[1vw] flex flex-col justify-around items-center font-baloo font-semibold">
+            <div className="w-[70%] md:w-[80%] flex flex-col justify-between">
+              <h1 className="text-center font-amaticbold text-[10vw] lg:text-[7vw] xl:text-[4vw]">claim yield</h1>
+              <span className="text-[#9C4924] text-[3vw] lg:text-[2vw] xl:text-[1.5vw] mt-[2%]">Porridge Yield</span>
               <div className="w-[100%] flex flex-row justify-between">
                 <span>Current Porridge Balance:</span>
                 <span>{handleInfo(balance.prg)}</span>
@@ -120,7 +120,7 @@ export const ClaimTab = () => {
               }) => {
                 return (
                   <button 
-                    className="mt-[7%] h-[20%] w-[40%] bg-[#E7B941] font-amaticbold text-[4vw] xl:text-[2vw] border-2 border-black hover:bg-[#C9E3B9] hover:scale-110 flex items-center justify-center"
+                    className="h-[20%] w-[40%] bg-[#E7B941] font-amaticbold text-[5vw] lg:text-[4vw] xl:text-[2vw] border-2 border-black hover:bg-[#C9E3B9] hover:scale-110 flex items-center justify-center"
                     id="claim-button"
                     onClick={() => {
                       const button = document.getElementById('claim-button')

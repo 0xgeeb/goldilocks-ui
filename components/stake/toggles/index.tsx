@@ -10,20 +10,20 @@ export const Toggles = () => {
   } = useStake()
 
   return (
-    <div className="absolute h-[6%] lg:h-[7.5%] w-[38%] lg:w-[26.27%] top-[2.62%] left-[60%] lg:left-[72.89%] flex flex-row items-center justify-between font-baloo font-semibold text-[1.5vw] lg:text-[1vw]">
+    <div className="absolute h-[8%] xl:h-[7.5%] w-[50%] lg:w-[40%] xl:w-[26%] top-[2.62%] right-[1%] flex flex-row items-center justify-between font-baloo font-semibold text-[2vw] lg:text-[1.75vw] xl:text-[1.25vw] 2xl:text-[1vw]">
       <div 
-        className={`w-[22%] h-[100%] flex items-center justify-center border-2 border-black ${activeToggle === 'STAKE' ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} hover:bg-[#F3AA8A] cursor-pointer`}
+        className={`w-[23%] h-[100%] flex items-center justify-center border-2 border-black ${activeToggle === 'STAKE' ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} hover:bg-[#F3AA8A] cursor-pointer`}
         onClick={() => changeActiveToggle('STAKE')}
       >
         <span>STAKE</span>
       </div>
       <div 
-        className={`w-[22%] h-[100%] relative flex items-center justify-center border-2 border-black ${activeToggle === 'UNSTAKE' ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} hover:bg-[#F3AA8A] cursor-pointer`}
+        className={`w-[23%] h-[100%] relative flex items-center justify-center border-2 border-black ${activeToggle === 'UNSTAKE' ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} hover:bg-[#F3AA8A] cursor-pointer`}
         onClick={() => changeActiveToggle('UNSTAKE')}
       >
-        <span className="mt-2">UNSTAKE</span>
+        <span className="mt-1 xl:mt-2">UNSTAKE</span>
         <span 
-          className="absolute top-[2%] right-[2%] text-[0.8vw] xl:text-[0.7vw] rounded-full px-1 border-2 border-black hover:bg-black hover:text-white" 
+          className="absolute top-[2%] lg:top-[4%] right-[1%] lg:right-[2%] text-[1.5vw] md:text-[1vw] lg:text-[0.8vw] rounded-full px-1 border-2 border-black hover:bg-black hover:text-white" 
           onClick={(e) => {
             e.stopPropagation()
             setUnstakePopupToggle(true)
@@ -33,12 +33,12 @@ export const Toggles = () => {
         </span>
       </div>
       <div 
-        className={`w-[22%] h-[100%] relative flex items-center justify-center border-2 border-black ${activeToggle === 'STIR' ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} hover:bg-[#F3AA8A] cursor-pointer`}
+        className={`w-[23%] h-[100%] relative flex items-center justify-center border-2 border-black ${activeToggle === 'STIR' ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} hover:bg-[#F3AA8A] cursor-pointer`}
         onClick={() => changeActiveToggle('STIR')}
       >
-        <span>STIR</span>
+        <span className="mt-1">STIR</span>
         <span 
-          className="absolute top-[2%] right-[2%] text-[0.8vw] xl:text-[0.7vw] rounded-full px-1 border-2 border-black hover:bg-black hover:text-white" 
+          className="absolute top-[2%] lg:top-[4%] right-[1%] lg:right-[2%] text-[1.5vw] md:text-[1vw] lg:text-[0.8vw] rounded-full px-1 border-2 border-black hover:bg-black hover:text-white" 
           onClick={(e) => {
             e.stopPropagation()
             setStirPopupToggle(true)
@@ -48,7 +48,7 @@ export const Toggles = () => {
         </span>
       </div>
       <div 
-        className={`w-[22%] h-[100%] flex items-center justify-center border-2 border-black ${activeToggle === 'CLAIM' ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} hover:bg-[#F3AA8A] cursor-pointer`}
+        className={`w-[23%] h-[100%] flex items-center justify-center border-2 border-black ${activeToggle === 'CLAIM' ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} hover:bg-[#F3AA8A] cursor-pointer`}
         onClick={() => changeActiveToggle('CLAIM')}
       >
         <span>CLAIM</span>
