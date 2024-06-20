@@ -308,14 +308,14 @@ export const GoldiswapButton = () => {
         allowanceButtons &&
         <div>
           <button
-            className="absolute bg-[#E7B941] h-[8%] w-[24%] lg:w-[16.6%] top-[70%] md:top-[68%] lg:top-[69%] xl:top-[64.8%] left-[24%] lg:left-[30.9%] border-2 border-black font-amaticbold text-[4vw] md:text-[2.75vw] lg:text-[2vw] xl:text-[1.5vw] hover:bg-[#4D0B24] hover:text-[#E7B941] hover:scale-110"
+            className="absolute bg-[#E7B941] h-[8%] w-[24%] lg:w-[16.6%] top-[70%] md:top-[68%] lg:top-[69%] xl:top-[69%] left-[24%] lg:left-[30.9%] border-2 border-black font-amaticbold text-[4vw] md:text-[2.75vw] lg:text-[2vw] xl:text-[1.5vw] hover:bg-[#4D0B24] hover:text-[#E7B941] hover:scale-110"
             id="left-approve-button"
             onClick={() => handleLeftButtonClick()}
           >
             approve tx
           </button>
           <button
-            className="absolute bg-[#E7B941] h-[8%] w-[24%] lg:w-[16.6%] top-[70%] md:top-[68%] lg:top-[69%] xl:top-[64.8%] left-[52%] lg:left-[52.5%] border-2 border-black font-amaticbold text-[4vw] md:text-[2.75vw] lg:text-[2vw] xl:text-[1.5vw] hover:bg-[#4D0B24] hover:text-[#E7B941] hover:scale-110"
+            className="absolute bg-[#E7B941] h-[8%] w-[24%] lg:w-[16.6%] top-[70%] md:top-[68%] lg:top-[69%] xl:top-[69%] left-[52%] lg:left-[52.5%] border-2 border-black font-amaticbold text-[4vw] md:text-[2.75vw] lg:text-[2vw] xl:text-[1.5vw] hover:bg-[#4D0B24] hover:text-[#E7B941] hover:scale-110"
             id="right-approve-button"
             onClick={() => handleRightButtonClick()}
           >
@@ -334,7 +334,7 @@ export const GoldiswapButton = () => {
           }) => {
             return (
               <button 
-                className="absolute h-[8%] w-[36%] md:w-[26%] lg:w-[16.6%] top-[70%] md:top-[68%] lg:top-[69%] xl:top-[64.8%] left-[32%] md:left-[37%] lg:left-[41.6%] bg-[#E7B941] font-amaticbold text-[6vw] md:text-[4vw] lg:text-[3vw] xl:text-[1.9vw] border-2 border-black hover:bg-[#4D0B24] hover:text-[#E7B941] hover:scale-110"
+                className="absolute h-[8%] w-[36%] md:w-[26%] lg:w-[16.6%] top-[70%] md:top-[68%] lg:top-[69%] left-[32%] md:left-[37%] lg:left-[41.6%] bg-[#E7B941] font-amaticbold text-[6vw] md:text-[4vw] lg:text-[3vw] xl:text-[1.9vw] border-2 border-black hover:bg-[#4D0B24] hover:text-[#E7B941] hover:scale-110"
                 id="swap-button"
                 onClick={() => {
                   const button = document.getElementById('swap-button')
