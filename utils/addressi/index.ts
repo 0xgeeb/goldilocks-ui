@@ -22,27 +22,27 @@ export const contracts = {
     abi: honeyABI.abi
   },
   goldilend: {
-    address: '0xfb8283E50c89e367674BC566db3070D9e9Ff2fDd',
+    address: '0x1e30215d6Be6ec48785B7CAA60d31ccaa0186A98',
     abi: goldilendABI.abi
   },
   ibgt: {
-    address: '0xe2f6eF50fD232c7c9698F2f4CaE44A6D80AaFdEE',
+    address: '0xB1195a6cdB7ef8fB22671bd8321727dBB6DDDe03',
     abi: ibgtABI.abi
   },
   bandbear: {
-    address: '0xB1195a6cdB7ef8fB22671bd8321727dBB6DDDe03',
+    address: '0xF21F3139BD4aD005aAba2ef2d6F319058bFA7230',
     abi: bandbearABI.abi
   },
   bondbear: {
-    address: '0x8172BDB659837F321bF7Da8941d8E12a62a72d6a',
+    address: '0x186C96B9c362DBBf4D33C6dAd04127F0238F5499',
     abi: bondbearABI.abi
   },
   beradrome: {
-    address: '0x5371d852e38B72C61DFc7771d225a599d32FE2Ba',
+    address: '0x1FD5270705F2F6b69a57b1eb72901031b1c46752',
     abi: beradromeABI.abi
   },
   honeycomb: {
-    address: '0x7701F54182C55091a8a78a51c22d1899736113D2',
+    address: '0xE4dC8142CEd52C547384032e43379b0514341c22',
     abi: honeycombABI.abi
   }
 }
