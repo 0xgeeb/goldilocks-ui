@@ -44,7 +44,7 @@ export const GoldiswapPage = () => {
   }, [])
 
   const formatAsTokenPrice = (num: number): string => {
-    return num.toLocaleString('en-US', { maximumFractionDigits: 6 })
+    return num.toLocaleString('en-US', { maximumFractionDigits: 2 })
   }
 
   const handleTokenInfo = (num: number) => {
@@ -130,7 +130,7 @@ export const GoldiswapPage = () => {
         { redeemPopupToggle && <RedeemPopup /> }
         <h1 className="absolute top-[-0.5%] lg:top-[16%] 2xl:top-[12.16%] left-[5%] xl:left-[7.5%] 2xl:left-[10%] text-[#D9C6BA] text-[12vw] md:text-[10vw] lg:text-[8vw] font-amaticbold" id="page-title">{activeToggle === 'REDEEM' ? "REDEEM" : "SWAP"}</h1>
         <div className="absolute top-[15%] md:top-[13%] lg:top-[12%] xl:top-[7.12%] left-[10%] md:left-[20%] lg:left-[25%] 2xl:left-[28.125%] w-[80%] md:w-[60%] lg:w-[50%] 2xl:w-[43.75%] h-[3%] bg-[#4D0B24] flex flex-row items-center justify-between px-2 text-[2.25vw] md:text-[1.75vw] lg:text-[1.5vw] xl:text-[0.85vw]">
-          <span className="text-white font-baloo mt-1">PSL/FSL ratio: {handleTokenInfo((goldiswapInfo.psl / goldiswapInfo.fsl))}%</span>
+          <span className="text-white font-baloo mt-1">PSL/FSL ratio: {handleTokenInfo((goldiswapInfo.psl / goldiswapInfo.fsl) * 100)}%</span>
           <span className="text-white font-baloo mt-1">last floor raise: {formatDate(goldiswapInfo.lastFloorRaise * Math.pow(10, 21))}</span>
         </div>
         <WalletBalance />

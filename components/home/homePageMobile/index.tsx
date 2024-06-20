@@ -45,47 +45,49 @@ export const HomePageMobile = () => {
         !navButtonsOpen &&
         <div className="w-[100vw] bg-black flex flex-col items-center relative">
           <div className="w-[100%] flex flex-col items-center font-amatic my-[10%] text-[#FFCD00] text-[7vw]">
-            <h1 className="text-[14vw] font-amaticbold">"Show me the honey"</h1>
             <div className="flex flex-row items-center justify-center w-[100%] mt-[5%]">
               <h2 className="">Henlo, welcome to </h2>
-              <h2 className="mx-[2%] font-amaticbold text-[8vw]">GOLDILOCKS.</h2>
+              <h2 className="mx-[2%] font-amaticbold text-[8vw]">GOLDILOCKS,</h2>
               </div>
             <h2 className=""> novel defi infrastructure on berachain</h2>
-            <h2 className="">check out our three products</h2>
+            <h2 className="">check out our products</h2>
           </div>
-          <div className="w-[100vw] flex flex-col items-center text-[#FFCD00] text-[7vw] font-amatic my-[15%]">
-            <img className="w-[70%]" src="/images/bg-goldiswap-home-mobile.png" alt="goldiswap" />
-            <div className="flex flex-row items-center justify-center w-[100%] mt-[2.5%]">
+          <div className="w-[70vw] flex flex-col items-center text-[#FFCD00] text-[7vw] font-amatic my-[15%]">
+            <img className="w-[100%]" src="/images/bg-goldiswap-home-mobile.png" alt="goldiswap" />
+            <h2 className="mt-2 text-[#FFCD00] text-[6vw]"><span className="text-[#FFCD00] text-[8vw] mx-[2%] font-amaticbold">GOLDISWAP:</span>novel AMM that creates up only price floors and native interest free unliquidatable loans</h2>
+            {/* <div className="flex flex-row items-center justify-center w-[100%] mt-[2.5%]">
               <h2 className="">This one is called </h2>
               <h2 className="mx-[2%] font-amaticbold text-[8vw]">GOLDISWAP</h2>
             </div>
-            <h2 className="text-[6.5vw]">where beras exchange their sweet honeys</h2>
+            <h2 className="text-[6.5vw]">where beras exchange their sweet honeys</h2> */}
             <a className="h-[20%] w-[55%] border-2 border-[#FFCD00] mt-[5%]" href="/goldiswap/swap">
               <div className="flex items-center justify-center text-[8vw]">
                 ENTER
               </div>
             </a>
           </div>
-          <div className="w-[100vw] flex flex-col items-center text-[#FFCD00] text-[7vw] font-amatic my-[15%]">
-            <img className="w-[70%]" src="/images/bg-goldilend-home-mobile.png" alt="goldiswap" />
-            <div className="flex flex-row items-center justify-center w-[100%] mt-[2.5%]">
+          <div className="w-[70vw] flex flex-col items-center text-[#FFCD00] text-[7vw] font-amatic my-[15%]">
+            <img className="w-[100%]" src="/images/bg-goldilend-home-mobile.png" alt="goldiswap" />
+            <h2 className="mt-2 text-[#FFCD00] text-[6vw]"><span className="text-[#FFCD00] text-[8vw] mx-[2%] font-amaticbold">GOLDILEND:</span>NFT lending platform hand crafted for beras</h2>
+            {/* <div className="flex flex-row items-center justify-center w-[100%] mt-[2.5%]">
               <h2 className="">This is </h2>
               <h2 className="mx-[2%] font-amaticbold text-[8vw]">GOLDILEND</h2>
             </div>
-            <h2 className="text-[6.5vw]">where beras borrow against their sweet assets</h2>
+            <h2 className="text-[6.5vw]">where beras borrow against their sweet assets</h2> */}
             <a className="h-[20%] w-[55%] border-2 border-[#FFCD00] mt-[5%]" href="/goldilend/borrow">
               <div className="flex items-center justify-center text-[8vw]">
                 ENTER
               </div>
             </a>
           </div>
-          <div className="w-[100vw] flex flex-col items-center text-[#FFCD00] text-[7vw] font-amatic my-[15%]">
-            <img className="w-[70%]" src="/images/bg-goldivaults-home-mobile.png" alt="goldiswap" />
-            <div className="flex flex-row items-center justify-center w-[100%] mt-[2.5%]">
+          <div className="w-[70vw] flex flex-col items-center text-[#FFCD00] text-[7vw] font-amatic my-[15%]">
+            <img className="w-[100%]" src="/images/bg-goldivaults-home-mobile.png" alt="goldiswap" />
+            <h2 className="mt-2 text-[#FFCD00] text-[6vw]"><span className="text-[#FFCD00] text-[8vw] mx-[2%] font-amaticbold">GOLDIVAULTS:</span>tokenizing yield across Berachain defi</h2>
+            {/* <div className="flex flex-row items-center justify-center w-[100%] mt-[2.5%]">
               <h2 className="">And this is </h2>
               <h2 className="mx-[2%] font-amaticbold text-[8vw]">GOLDIVAULTS</h2>
             </div>
-            <h2 className="text-[6.5vw]">where beras split their tokens</h2>
+            <h2 className="text-[6.5vw]">where beras split their tokens</h2> */}
             <a className="h-[20%] w-[55%] border-2 border-[#FFCD00] mt-[5%]" href="/goldivaults">
               <div className="flex items-center justify-center text-[8vw]">
                 ENTER

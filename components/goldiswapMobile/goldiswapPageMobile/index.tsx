@@ -1,7 +1,6 @@
 "use client"
 
 import { useGoldiswap, useDesktop } from "../../../providers"
-import { useGoldiswapMath } from "../../../hooks"
 import {
   StatsMobile,
   GoldiswapButtonMobile,
@@ -30,10 +29,8 @@ export const GoldiswapPageMobile = () => {
 
   const { navButtonsOpen } = useDesktop()
 
-  const { floorPrice, marketPrice } = useGoldiswapMath()
-
   const formatAsTokenPrice = (num: number): string => {
-    return num.toLocaleString('en-US', { maximumFractionDigits: 6 })
+    return num.toLocaleString('en-US', { maximumFractionDigits: 2 })
   }
 
   const handleTokenInfo = (num: number) => {
@@ -104,8 +101,8 @@ export const GoldiswapPageMobile = () => {
           <h1 className="absolute top-[-0.25%] right-[69%] text-[#D9C6BA] text-[7vw] font-amaticbold" id="page-title">{activeToggle === 'REDEEM' ? "REDEEM" : "SWAP"}</h1>
           <div className="absolute bottom-[40.4%] left-[15.5%] w-[48.95vh] h-[2.3%] bg-[#4D0B24] origin-bottom-left -rotate-[90deg] text-[3.2vw] font-baloo text-white font-semibold flex flex-row items-center justify-between px-2">
             <div className="h-[100%] w-[43%] flex flex-row items-center justify-between">
-              <span className="text-white font-baloo mt-1">FSL/PSL ratio:</span>
-              <span className="text-white font-baloo mt-1">{handleTokenInfo((goldiswapInfo.psl / goldiswapInfo.fsl))}%</span>
+              <span className="text-white font-baloo mt-1">PSL/FSL ratio:</span>
+              <span className="text-white font-baloo mt-1">{handleTokenInfo((goldiswapInfo.psl / goldiswapInfo.fsl) * 100)}%</span>
             </div>
             <div className="h-[100%] w-[43%] flex flex-row items-center justify-between">
               <span className="text-white font-baloo mt-1">last floor raise:</span>

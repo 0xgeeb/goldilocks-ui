@@ -43,7 +43,7 @@ export const StakePage = () => {
   }, [])
 
   const formatAsTokenPrice = (num: number): string => {
-    return num.toLocaleString('en-US', { maximumFractionDigits: 6 })
+    return num.toLocaleString('en-US', { maximumFractionDigits: 2 })
   }
 
   const handleTokenInfo = (num: number) => {
@@ -107,7 +107,7 @@ export const StakePage = () => {
           <ClaimTab /> :
           <>
             <div className="absolute top-[13.22%] lg:top-[12.387%] 2xl:top-[9.387%] left-[20%] lg:left-[25%] 2xl:left-[28.125%] w-[60%] lg:w-[50%] 2xl:w-[43.75%] h-[2.78%] bg-[#B35227] flex flex-row items-center justify-between px-2 text-[1.5vw] lg:text-[0.85vw]">
-              <span className="text-white font-baloo mt-1">FSL/PSL ratio: {handleTokenInfo((stakeInfo.psl / stakeInfo.fsl))}%</span>
+              <span className="text-white font-baloo mt-1">PSL/FSL ratio: {handleTokenInfo((stakeInfo.psl / stakeInfo.fsl) * 100)}%</span>
               <span className="text-white font-baloo mt-1">last floor raise: {formatDate(stakeInfo.lastFloorRaise * Math.pow(10, 21))}</span>
             </div>
             <WalletBalance />
