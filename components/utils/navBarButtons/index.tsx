@@ -39,7 +39,7 @@ export const NavBarButtons = () => {
               )
             }}
           </ConnectButton.Custom>
-          <a href="/wut" className="hover:scale-[150%] cursor-pointer"><span>Wut Is This?</span></a>
+          <a href="https://goldilocks.gitbook.io/docs" target="_blank" className="hover:scale-[150%] cursor-pointer"><span>Wut Is This?</span></a>
           {
             pathname === '/goldiswap/swap' ?
             <>

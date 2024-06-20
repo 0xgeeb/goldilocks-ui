@@ -17,7 +17,7 @@ export const HomePageMobile = () => {
         <div className="z-50 absolute top-[11%] h-[89%] w-[100%] bg-[#E4B19B]">
           <div className="h-[100%] w-[100%] py-[8%] flex flex-col items-center justify-between">
             <div className="w-[100%] h-[80%] flex flex-col items-center justify-between font-amaticbold text-[11vw]">
-              <a href="/wut" className="hover:scale-[150%] cursor-pointer"><span>Wut Is This?</span></a>
+              <a href="https://goldilocks.gitbook.io/docs" target="_blank" className="hover:scale-[150%] cursor-pointer"><span>Wut Is This?</span></a>
               <a href="/goldiswap/swap" className="hover:scale-[150%] cursor-pointer"><span>Goldiswap</span></a>
               <a href="/goldilend/borrow" className="hover:scale-[150%] cursor-pointer"><span>Goldilend</span></a>
               <a href="/goldivaults" className="hover:scale-[150%] cursor-pointer"><span>Goldivaults</span></a>

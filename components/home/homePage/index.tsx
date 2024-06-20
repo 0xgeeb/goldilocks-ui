@@ -32,7 +32,7 @@ export const HomePage = () => {
             </div>
           </a>
           <div className="w-[55%] xl:w-[45%] h-[100%] flex flex-row items-center justify-between text-[3vw] xl:text-[2.2vw]">
-            <a href="/wut" className="hover:scale-[150%] cursor-pointer"><span>Wut is this?</span></a>
+            <a href="https://goldilocks.gitbook.io/docs" target="_blank" className="hover:scale-[150%] cursor-pointer"><span>Wut is this?</span></a>
             <a href="/goldiswap/swap" className="hover:scale-[150%] cursor-pointer"><span>Goldiswap</span></a>
             <a href="/goldilend/borrow" className="hover:scale-[150%] cursor-pointer"><span>Goldilend</span></a>
             <a href="/goldivaults" className="hover:scale-[150%] cursor-pointer"><span>Goldivaults</span></a>
@@ -44,24 +44,23 @@ export const HomePage = () => {
         <div className="w-[100%] h-[3%] bg-black"></div>
       </div>
       <div className="w-[100vw] bg-black flex flex-col items-center relative">
-        <div className="h-[45vh] xl:h-[65vh] w-[100%] flex flex-col items-center justify-between font-amatic my-[5%]">
-          <h1 className="text-[12vw] xl:text-[7vw] font-amaticbold text-[#FFCD00]">"Show me the honey"</h1>
+        <div className="h-[45vh] xl:h-[50vh] w-[100%] flex flex-col items-center justify-between font-amatic my-[5%]">
           <div className="flex flex-row items-center justify-center w-[100%] text-[#FFCD00] text-[4vw] xl:text-[2vw]">
             <h2 className="">Henlo, welcome to </h2>
-            <h2 className="text-[5vw] xl:text-[3vw] mx-[1%] font-amaticbold">GOLDILOCKS.</h2>
+            <h2 className="text-[5vw] xl:text-[3vw] mx-[1%] font-amaticbold">GOLDILOCKS,</h2>
             <h2 className=""> novel defi infrastructure on berachain</h2>
             </div>
-          <h2 className="text-[#FFCD00] mb-[7.5%] xl:mb-0 text-[4vw] xl:text-[2vw]">check out our three products</h2>
+          <h2 className="text-[#FFCD00] mb-[7.5%] xl:mb-0 text-[4vw] xl:text-[2vw]">check out our products</h2>
           <img className="w-[4%] xl:w-[2%] animate-bounce" src="/images/icon-arrows.png" alt="arrows" />
         </div>
         <div className="w-[95vw] xl:w-[85vw] flex flex-row items-center justify-between text-[#FFCD00] font-amatic my-[10%] xl:my-[5%]">
           <h1 className="text-[7vw] xl:text-[6vw] font-amaticbold mb-[12%] xl:mb-[6%]">GOLDISWAP</h1>
           <div className="flex flex-col items-center w-[50%]">
             <img className="w-[100%] mb-[3%]" src="/images/bg-goldiswap-home.png" alt="goldiswap" />
-            <div className="flex flex-row flex-wrap items-center justify-center w-[100%]">
-              <h2 className="text-[#FFCD00] text-[4vw] xl:text-[1.7vw]">This one is called </h2>
-              <h2 className="text-[#FFCD00] text-[5vw] xl:text-[3vw] mx-[2%] font-amaticbold">GOLDISWAP.</h2>
-              <h2 className="text-[#FFCD00] text-[4vw] xl:text-[1.7vw]"> where beras exchange their sweet honeys</h2>
+            <div className="w-[100%]">
+              {/* <h2 className="text-[#FFCD00] text-[4vw] xl:text-[1.7vw]">This one is called </h2> */}
+              {/* <h2 className="text-[#FFCD00] text-center text-[5vw] xl:text-[3vw] mx-[2%] font-amaticbold">GOLDISWAP:</h2> */}
+              <h2 className="text-[#FFCD00] text-[4vw] xl:text-[2vw]"><span className="text-[#FFCD00] text-[5vw] xl:text-[3vw] mx-[2%] font-amaticbold">GOLDISWAP:</span>novel AMM that creates up only price floors and native interest free unliquidatable loans</h2>
             </div>
           </div>
           <a className="h-[15%] w-[20%] border-2 border-[#FFCD00] mb-[12%] xl:mb-[6%] hover:scale-110  hover:bg-[#FFCD00] hover:text-black cursor-pointer" href="/goldiswap/swap">
@@ -74,10 +73,10 @@ export const HomePage = () => {
           <h1 className="text-[7vw] xl:text-[6vw] font-amaticbold mb-[12%] xl:mb-[6%]">GOLDILEND</h1>
           <div className="flex flex-col items-center w-[50%]">
             <img className="w-[100%] mb-[3%]" src="/images/bg-goldilend-home.png" alt="goldilend" />
-            <div className="flex flex-row flex-wrap items-center justify-center w-[100%]">
-              <h2 className="text-[#FFCD00] text-[4vw] xl:text-[1.7vw]">This is </h2>
-              <h2 className="text-[#FFCD00] text-[5vw] xl:text-[3vw] mx-[2%] font-amaticbold">GOLDILEND.</h2>
-              <h2 className="text-[#FFCD00] text-[3.5vw] xl:text-[1.7vw]"> where beras borrow against their sweet assets</h2>
+            <div className="w-[100%]">
+              {/* <h2 className="text-[#FFCD00] text-[4vw] xl:text-[1.7vw]">This is </h2> */}
+              {/* <h2 className="text-[#FFCD00] text-[5vw] xl:text-[3vw] mx-[2%] font-amaticbold">GOLDILEND.</h2> */}
+              <h2 className="text-[#FFCD00] text-[4vw] xl:text-[2vw]"><span className="text-[#FFCD00] text-[5vw] xl:text-[3vw] mx-[2%] font-amaticbold">GOLDILEND:</span>NFT lending platform hand crafted for beras</h2>
             </div>
           </div>
           <a className="h-[15%] w-[20%] border-2 border-[#FFCD00] mb-[12%] xl:mb-[6%] hover:scale-110  hover:bg-[#FFCD00] hover:text-black cursor-pointer" href="/goldilend/borrow">
@@ -90,10 +89,10 @@ export const HomePage = () => {
           <h1 className="text-[6vw] font-amaticbold mb-[12%] xl:mb-[6%]">GOLDIVAULTS</h1>
           <div className="flex flex-col items-center w-[50%]">
             <img className="w-[100%] mb-[3%]" src="/images/bg-goldivaults-home.png" alt="goldivaults" />
-            <div className="flex flex-row flex-wrap items-center justify-center w-[100%]">
-              <h2 className="text-[#FFCD00] text-[4vw] xl:text-[1.7vw]">And this is </h2>
-              <h2 className="text-[#FFCD00] text-[5vw] xl:text-[3vw] mx-[2%] font-amaticbold">GOLDIVAULTS.</h2>
-              <h2 className="text-[#FFCD00] text-[4vw] xl:text-[1.7vw]">where beras split their tokens</h2>
+            <div className="w-[100%]">
+              {/* <h2 className="text-[#FFCD00] text-[4vw] xl:text-[1.7vw]">And this is </h2> */}
+              {/* <h2 className="text-[#FFCD00] text-[5vw] xl:text-[3vw] mx-[2%] font-amaticbold">GOLDIVAULTS.</h2> */}
+              <h2 className="text-[#FFCD00] text-[4vw] xl:text-[2vw]"><span className="text-[#FFCD00] text-[5vw] xl:text-[3vw] mx-[2%] font-amaticbold">GOLDIVAULTS:</span>tokenizing yield across Berachain defi</h2>
             </div>
           </div>
           <a className="h-[15%] w-[20%] border-2 border-[#FFCD00] mb-[12%] xl:mb-[6%] hover:scale-110  hover:bg-[#FFCD00] hover:text-black cursor-pointer" href="/goldivaults">

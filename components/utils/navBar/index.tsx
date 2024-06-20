@@ -17,7 +17,7 @@ export const NavBar = () => {
         </div>
       </a>
       <div className="w-[80%] xl:w-[65.2%] h-[100%] flex flex-row items-center justify-between text-[2.8vw] xl:text-[2.2vw]">
-        <a href="/wut" className="hover:scale-[150%] cursor-pointer"><span>Wut is this?</span></a>
+        <a href="https://goldilocks.gitbook.io/docs" target="_blank" className="hover:scale-[150%] cursor-pointer"><span>Wut is this?</span></a>
         {
           pathname === '/goldiswap/swap' ?
           <>
