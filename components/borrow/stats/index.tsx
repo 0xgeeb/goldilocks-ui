@@ -59,7 +59,7 @@ export const Stats = () => {
   }
   
   return (
-    <div className="absolute flex flex-col items-center justify-between w-[62%] lg:w-[45%] top-[80%] lg:top-[78%] left-[19%] lg:left-[27%] text-white font-baloo text-[1.7vw] lg:text-[1.1vw]">
+    <div className="absolute flex flex-col items-center justify-between w-[90%] md:w-[70%] xl:w-[60%] 2xl:w-[45%] top-[84%] md:top-[82%] xl:top-[80%] left-[5%] md:left-[15%] xl:left-[20%] 2xl:left-[27.5%] text-white font-baloo text-[2.5vw] md:text-[2vw] lg:text-[1.75vw] xl:text-[1.5vw] 2xl:text-[1.1vw]">
       <div className="w-[100%] h-[50%] flex flex-row items-center justify-between">
         <div className="flex flex-row items-center">
           <span className="mr-2">locks supply:</span>

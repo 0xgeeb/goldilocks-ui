@@ -23,7 +23,7 @@ export const BorrowBox = () => {
   }
 
   return (
-    <div className="absolute top-[16%] lg:top-[12.167%] left-[20%] lg:left-[25%] 2xl:left-[28.125%] w-[60%] lg:w-[50%] 2xl:w-[43.75%] h-[35.87%] border-2 border-black bg-[#EEDCD2]">
+    <div className="absolute top-[18%] md:top-[17%] lg:top-[15%] xl:top-[14%] left-[10%] md:left-[20%] lg:left-[25%] 2xl:left-[28.125%] w-[80%] md:w-[60%] lg:w-[50%] 2xl:w-[43.75%] h-[36%] border-2 border-black bg-[#EEDCD2]">
       <div className="absolute top-3 left-0 w-6 skew-y-[45deg] border-b-2 border-black"></div>
       <div className="absolute bottom-3 left-0 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
       <div className="absolute top-3 right-0 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
