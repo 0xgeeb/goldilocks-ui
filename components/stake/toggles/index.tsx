@@ -23,7 +23,7 @@ export const Toggles = () => {
       >
         <span className="mt-1 xl:mt-2">UNSTAKE</span>
         <span 
-          className="absolute top-[2%] lg:top-[4%] right-[1%] lg:right-[2%] text-[1.5vw] md:text-[1vw] lg:text-[0.8vw] rounded-full px-1 border-2 border-black hover:bg-black hover:text-white" 
+          className="absolute top-[2%] xl:top-[3%] right-[1%] lg:right-[2%] text-[1.5vw] md:text-[1vw] lg:text-[0.8vw] rounded-full px-1 border-2 border-black hover:bg-black hover:text-white" 
           onClick={(e) => {
             e.stopPropagation()
             setUnstakePopupToggle(true)
@@ -36,9 +36,9 @@ export const Toggles = () => {
         className={`w-[23%] h-[100%] relative flex items-center justify-center border-2 border-black ${activeToggle === 'STIR' ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} hover:bg-[#F3AA8A] cursor-pointer`}
         onClick={() => changeActiveToggle('STIR')}
       >
-        <span className="mt-1">STIR</span>
+        <span className="mt-1 xl:mt-2">STIR</span>
         <span 
-          className="absolute top-[2%] lg:top-[4%] right-[1%] lg:right-[2%] text-[1.5vw] md:text-[1vw] lg:text-[0.8vw] rounded-full px-1 border-2 border-black hover:bg-black hover:text-white" 
+          className="absolute top-[2%] xl:top-[3%] right-[1%] lg:right-[2%] text-[1.5vw] md:text-[1vw] lg:text-[0.8vw] rounded-full px-1 border-2 border-black hover:bg-black hover:text-white" 
           onClick={(e) => {
             e.stopPropagation()
             setStirPopupToggle(true)
