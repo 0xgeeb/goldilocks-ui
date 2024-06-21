@@ -34,7 +34,7 @@ export const BorrowBox = () => {
           txConfirming ? <img className="w-[100%] h-[100%]" src="/images/bg-transaction.png" alt="tx" /> :
           notification.toggle ? <Notification /> :
           <div className="w-[100%] h-[100%] relative flex flex-col">
-            <div className="flex flex-row absolute top-0 right-0 w-[40%] lg:w-[33.61%] h-[14.9%] font-baloo font-semibold border-b-2 border-l-2 border-black">
+            <div className="flex flex-row absolute top-0 right-0 w-[50%] lg:w-[42%] 2xl:w-[33.61%] h-[15%] text-[2.5vw] md:text-[2vw] lg:text-[1.5vw] xl:text-[1.25vw] 2xl:text-[1vw] font-baloo font-semibold border-b-2 border-l-2 border-black">
               <div 
                 className="flex items-center justify-center h-[100%] w-[25%] border-r-2 border-black bg-[#DCC2A8] hover:bg-[#F3AA8A] cursor-pointer"
                 onClick={() => handlePercentageButtons(1)}
@@ -60,21 +60,21 @@ export const BorrowBox = () => {
                 MAX
               </div>
             </div>
-            <div className="absolute flex flex-row top-[37%] left-[3%] items-center">
-              <img className="h-8 w-8" src="/images/logo-honey.png" alt="coinlogo" />
-              <h1 className="font-baloo font-semibold text-[2.4vw] lg:text-[1.4vw] ml-2 lg:ml-3">HONEY</h1>
+            <div className="absolute flex flex-row top-[37%] left-[1%] sm:left-[2%] xl:left-[3%] items-center">
+              <img className="h-6 md:h-8 w-6 md:w-8" src="/images/logo-honey.png" alt="coinlogo" />
+              <h1 className="font-baloo font-semibold text-[3vw] md:text-[2.4vw] lg:text-[1.4vw] ml-1 lg:ml-3">HONEY</h1>
             </div>
             <div className="absolute h-[35%] lg:h-[32%] w-[60%] lg:w-[55.6%] top-[30%] left-[26%] lg:left-[22%] border-2 border-black bg-white">
               <div className="relative h-[100%] w-[100%]">
                 <input
-                  className="absolute top-[15%] lg:top-[17%] left-[5%] w-[90%] focus:outline-none border-none bg-transparent font-bold font-baloo text-[3.5vw] lg:text-[1.6vw]"
+                  className="absolute top-[15%] xl:top-[17%] left-[5%] w-[90%] focus:outline-none border-none bg-transparent font-bold font-baloo text-[5.5vw] md:text-[4vw] lg:text-[3.5vw] xl:text-[2.5vw] 2xl:text-[2vw]"
                   type="number"
                   id="number-input"
                   placeholder="0.00"
                   value={displayString}
                   onChange={(e) => handleChange(e.target.value)}
                 />
-                <span className="absolute bottom-0 right-[3%] font-baloo font-bold text-[1.5vw] lg:text-[0.9vw] text-[#7F7F7F]">{activeToggle === "BORROW" ? "borrow limit" : "borrowed honey"}: {balancesLoading ? loadingElement() : handleBalance()}</span>
+                <span className="absolute bottom-0 right-[3%] font-baloo font-bold text-[2.5vw] md:text-[1.75vw] lg:text-[1.25vw] xl:text-[0.9vw] text-[#7F7F7F]">{activeToggle === "BORROW" ? "borrow limit" : "borrowed honey"}: {balancesLoading ? loadingElement() : handleBalance()}</span>
               </div>
             </div>
           </div>

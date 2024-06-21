@@ -5,16 +5,16 @@ export const Notification = () => {
   const { notification, openNotification } = useBorrow()
 
   return (
-    <div className="w-[100%] h-[100%] bg-[#E9D7A9] flex flex-col items-center relative">
-      <h1 className="font-amaticbold text-[5vw] lg:text-[2.8vw] mt-[2%] lg:mt-[1%]">SUCCESS!</h1>
-      <span className="font-baloo font-semibold text-[1.5vw] lg:text-[0.9vw]">{notification.action}</span>
-      <span className="font-baloo font-semibold text-[1.5vw] lg:text-[0.9vw] mt-[3%] lg:mt-[1%]">{notification.result}</span>
+    <div className="w-[100%] h-[100%] bg-[#E9D7A9] flex flex-col items-center relative justify-around py-[2%]">
+      <h1 className="font-amaticbold text-[7vw] md:text-[6vw] lg:text-[5vw] xl:text-[3vw]">SUCCESS!</h1>
+      <span className="font-baloo font-semibold text-[2.5vw] md:text-[2.25vw] lg:text-[1.5vw] xl:text-[0.9vw]">{notification.action}</span>
+      <span className="font-baloo font-semibold text-[2.5vw] md:text-[2.25vw] lg:text-[1.5vw] xl:text-[0.9vw]">{notification.result}</span>
       <a 
         href={`https://bartio.beratrail.io/tx/${notification.hash}`}
         target="_blank"
-        className="h-[16%] lg:h-[18%] w-[25%] lg:w-[19%] mt-[6%] lg:mt-[3%] bg-[#E7B941] hover:scale-110 border-2 border-black"
+        className="h-[25%] xl:h-[25%] w-[30%] bg-[#E7B941] hover:scale-110 border-2 border-black"
       >
-        <button className="w-[100%] h-[100%] font-amaticbold text-[2.2vw] lg:text-[1.2vw]">VIEW TX</button>
+        <button className="w-[100%] h-[100%] font-amaticbold text-[4vw] md:text-[3vw] lg:text-[2.5vw] xl:text-[1.5vw]">VIEW TX</button>
       </a>
       <p
         className="absolute top-0 right-[3%] font-baloo text-[3vw] lg:text-[2vw] cursor-pointer hover:scale-125"
