@@ -85,7 +85,7 @@ export const Stats = () => {
         </div>
         <div className="flex flex-row items-center">
           <span className="mr-2">target ratio:</span>
-          <span className={handleColors(borrowInfo.targetRatio, borrowInfo.targetRatio)}>{handlePrice(borrowInfo.targetRatio)}%</span>
+          <span className={handleColors(borrowInfo.targetRatio, borrowInfo.targetRatio)}>{handlePrice(borrowInfo.targetRatio * 100)}%</span>
         </div>
       </div>
     </div>

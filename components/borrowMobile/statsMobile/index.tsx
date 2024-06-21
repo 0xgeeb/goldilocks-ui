@@ -75,7 +75,7 @@ export const StatsMobile = () => {
         <span className={handleColors(borrowInfo.psl, borrowInfo.psl)}>{handleInfo(borrowInfo.psl)}</span>
         <span className={handleColors(floorPrice(borrowInfo.fsl, borrowInfo.supply), floorPrice(borrowInfo.fsl, borrowInfo.supply))}>${handlePrice(floorPrice(borrowInfo.fsl, borrowInfo.supply))}</span>
         <span className={handleColors(marketPrice(borrowInfo.fsl, borrowInfo.psl, borrowInfo.supply), marketPrice(borrowInfo.fsl, borrowInfo.psl, borrowInfo.supply))}>${handlePrice(marketPrice(borrowInfo.fsl, borrowInfo.psl, borrowInfo.supply))}</span>
-        <span className={handleColors(borrowInfo.targetRatio, borrowInfo.targetRatio)}>{handlePrice(borrowInfo.targetRatio)}%</span>
+        <span className={handleColors(borrowInfo.targetRatio, borrowInfo.targetRatio)}>{handlePrice(borrowInfo.targetRatio * 100)}%</span>
       </div>
     </div>
   )

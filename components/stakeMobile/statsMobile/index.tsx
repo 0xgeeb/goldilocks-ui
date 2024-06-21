@@ -71,13 +71,13 @@ export const StatsMobile = () => {
       </div>
       <div className="h-[100%] w-[7.5%]"></div>
       <div className="flex flex-col items-start">
-        <span className={handleColors(stakeInfo.targetRatio, stakeInfo.targetRatio)}>{handleInfo(0.5*((marketPrice(stakeInfo.fsl, stakeInfo.psl, stakeInfo.supply) - floorPrice(stakeInfo.fsl, stakeInfo.supply)) / marketPrice(stakeInfo.fsl, stakeInfo.psl, stakeInfo.supply)))}%</span>
+        <span className={handleColors(stakeInfo.targetRatio, stakeInfo.targetRatio)}>{handleInfo(0.5*((marketPrice(stakeInfo.fsl, stakeInfo.psl, stakeInfo.supply) - floorPrice(stakeInfo.fsl, stakeInfo.supply)) / marketPrice(stakeInfo.fsl, stakeInfo.psl, stakeInfo.supply)) * 100)}%</span>
         <span className={handleColors(stakeInfo.supply, stakeInfo.supply)}>{handleInfo(stakeInfo.supply)}</span>
         <span className={handleColors(stakeInfo.fsl, stakeInfo.fsl)}>{handleInfo(stakeInfo.fsl)}</span>
         <span className={handleColors(stakeInfo.psl, stakeInfo.psl)}>{handleInfo(stakeInfo.psl)}</span>
         <span className={handleColors(floorPrice(stakeInfo.fsl, stakeInfo.supply), floorPrice(stakeInfo.fsl, stakeInfo.supply))}>${handlePrice(floorPrice(stakeInfo.fsl, stakeInfo.supply))}</span>
         <span className={handleColors(marketPrice(stakeInfo.fsl, stakeInfo.psl, stakeInfo.supply), marketPrice(stakeInfo.fsl, stakeInfo.psl, stakeInfo.supply))}>${handlePrice(marketPrice(stakeInfo.fsl, stakeInfo.psl, stakeInfo.supply))}</span>
-        <span className={handleColors(stakeInfo.targetRatio, stakeInfo.targetRatio)}>{handlePrice(stakeInfo.targetRatio)}%</span>
+        <span className={handleColors(stakeInfo.targetRatio, stakeInfo.targetRatio)}>{handlePrice(stakeInfo.targetRatio * 100)}%</span>
       </div>
     </div>
   )

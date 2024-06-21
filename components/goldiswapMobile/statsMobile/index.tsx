@@ -76,7 +76,7 @@ export const StatsMobile = () => {
         <span className={handleColors(goldiswapInfo.psl, simInfo.psl)}>{simInfo.toggle ? handleInfo(simInfo.psl) : handleInfo(goldiswapInfo.psl)}</span>
         <span className={handleColors(floorPrice(goldiswapInfo.fsl, goldiswapInfo.supply), floorPrice(simInfo.fsl, simInfo.supply))}>${simInfo.toggle ? handlePrice(floorPrice(simInfo.fsl, simInfo.supply)) : handlePrice(floorPrice(goldiswapInfo.fsl, goldiswapInfo.supply))}</span>
         <span className={handleColors(marketPrice(goldiswapInfo.fsl, goldiswapInfo.psl, goldiswapInfo.supply), marketPrice(simInfo.fsl, simInfo.psl, simInfo.supply))}>${simInfo.toggle ? handlePrice(marketPrice(simInfo.fsl, simInfo.psl, simInfo.supply)) : handlePrice(marketPrice(goldiswapInfo.fsl, goldiswapInfo.psl, goldiswapInfo.supply))}</span>
-        <span className={handleColors(goldiswapInfo.targetRatio, simInfo.targetRatio)}>{simInfo.toggle ? handlePrice(simInfo.targetRatio) : handlePrice(goldiswapInfo.targetRatio)}%</span>
+        <span className={handleColors(goldiswapInfo.targetRatio, simInfo.targetRatio)}>{simInfo.toggle ? handlePrice(simInfo.targetRatio * 100) : handlePrice(goldiswapInfo.targetRatio * 100)}%</span>
       </div>
     </div>
   )
