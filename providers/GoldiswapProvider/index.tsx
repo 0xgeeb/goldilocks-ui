@@ -358,36 +358,36 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
     }
     return locks * (1 - (slippageState.amount / 100))
   }
-
-  //todo: use optimal algo here
+  
   const findLocksSellAmount = (debouncedValue: number) => {
+    const currentMarket: number = marketPrice(goldiswapInfoState.fsl, goldiswapInfoState.psl, goldiswapInfoState.supply)
     const honey: number = debouncedValue
-    let locks: number = honey / marketPrice(goldiswapInfoState.fsl, goldiswapInfoState.psl, goldiswapInfoState.supply)
+    let locks: number = honey / currentMarket
     let temp: number = 0
     while(parseFloat(temp.toFixed(2)) !== parseFloat(honey.toFixed(2))) {
       temp = simulateSellDry(locks, goldiswapInfoState.fsl, goldiswapInfoState.psl, goldiswapInfoState.supply)
       if(parseFloat(temp.toFixed(2)) > parseFloat(honey.toFixed(2))) {
         const diff = temp - honey
         if(diff > 10000) {
-          locks -= 50000
+          locks -= (10000 * 0.90) / currentMarket
         }
         else if(diff > 1000) {
-          locks -= 25000
+          locks -= (1000 * 0.90) / currentMarket
         }
         else if(diff > 100) {
-          locks -= 5000
+          locks -= (100 * 0.90) / currentMarket
         }
         else if(diff > 10) {
-          locks -= 300
+          locks -= (10 * 0.90) / currentMarket
         }
         else if(diff > 1) {
-          locks -= 25
+          locks -= (1 * 0.90) / currentMarket
         }
         else if(diff > 0.1) {
-          locks -= 5
+          locks -= (0.1 * 0.90) / currentMarket
         }
         else if(diff > 0.01) {
-          locks -= 0.1
+          locks -= (0.01 * 0.90) / currentMarket
         }
         else {
           locks -= 0.05
@@ -396,25 +396,25 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
       else if(parseFloat(temp.toFixed(2)) < parseFloat(honey.toFixed(2))) {
         const diff = honey - temp
         if(diff > 10000) {
-          locks += 50000
+          locks += (10000 * 0.90) / currentMarket
         }
         else if(diff > 1000) {
-          locks += 25000
+          locks += (1000 * 0.90) / currentMarket
         }
         else if(diff > 100) {
-          locks += 5000
+          locks += (100 * 0.90) / currentMarket
         }
         else if(diff > 10) {
-          locks += 300
+          locks += (10 * 0.90) / currentMarket
         }
         else if(diff > 1) {
-          locks += 25
+          locks += (1 * 0.90) / currentMarket
         }
         else if(diff > 0.1) {
-          locks += 5
+          locks += (0.1 * 0.90) / currentMarket
         }
         else if(diff > 0.01) {
-          locks += 0.1
+          locks += (0.01 * 0.90) / currentMarket
         }
         else {
           locks += 0.05
