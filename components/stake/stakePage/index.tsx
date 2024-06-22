@@ -6,6 +6,7 @@ import { StakePageMobile } from "../../stakeMobile"
 import { 
   NavBar,
   Footer,
+  WalletBalance,
   Loading
 } from "../../utils"
 import {
@@ -14,7 +15,6 @@ import {
   StirPopup,
   Stats,
   StakeButton,
-  WalletBalance,
   UnstakePopup,
   ClaimTab
 } from "../../stake"

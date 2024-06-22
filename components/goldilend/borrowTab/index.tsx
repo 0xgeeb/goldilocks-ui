@@ -51,6 +51,12 @@ export const BorrowTab = () => {
     updateBorrowLimit()
   }, [selectedBeras])
 
+  // useEffect(() => {
+  //   if(selectedBeras.length > 0 && borrowAmount > 0 && dateExpiration > 0) {
+  //     getInterestRate()
+  //   }
+  // }, [selectedBeras, borrowAmount, dateExpiration])
+
   const loadingElement = () => {
     return <span className="loader-small mx-auto"></span>
   }

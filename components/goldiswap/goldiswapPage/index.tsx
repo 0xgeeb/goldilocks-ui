@@ -5,7 +5,7 @@ import { useGoldiswap, useDesktop } from "../../../providers"
 import { GoldiswapPageMobile } from "../../goldiswapMobile"
 import { 
   NavBar,
-  WalletBalance,
+  SwapWalletBalance,
   Footer,
   Loading
 } from "../../utils"
@@ -133,12 +133,12 @@ export const GoldiswapPage = () => {
           <span className="text-white font-baloo mt-1">PSL/FSL ratio: {handleTokenInfo((goldiswapInfo.psl / goldiswapInfo.fsl) * 100)}%</span>
           <span className="text-white font-baloo mt-1">last floor raise: {formatDate(goldiswapInfo.lastFloorRaise * Math.pow(10, 21))}</span>
         </div>
-        <WalletBalance />
+        <SwapWalletBalance />
         { slippage.toggle && <SlippagePopup /> }
         <SwapBox />
-        <img className="absolute top-[68%] md:top-[55.87%] lg:top-[53.87%] xl:top-[63.37%] left-[90%] lg:left-[78.625%] 2xl:left-[75.5%] w-[4%] h-[2%] lg:w-[3%]" src="/images/icon-bearoutline.png" alt="bearoutline" />
+        <img className="absolute top-[68%] md:top-[55.87%] lg:top-[53.87%] xl:top-[63.37%] left-[90%] lg:left-[88.625%] 2xl:left-[75.5%] w-[4%] h-[2%] lg:w-[3%]" src="/images/icon-bearoutline.png" alt="bearoutline" />
         <div 
-          className="absolute w-[12%] md:w-[10%] h-[7%] lg:w-[6%] lg:h-[8%] top-[70%] md:top-[57.87%] lg:top-[55.87%] xl:top-[65.37%] left-[87%] lg:left-[77.125%] 2xl:left-[74%] px-1 border-2 border-black bg-[#F3AA8A] flex items-center justify-center font-amaticbold text-center text-[3vw] md:text-[2.25vw] lg:text-[1.5vw] xl:text-[1.2vw] hover:scale-110 cursor-pointer"
+          className="absolute w-[12%] md:w-[10%] h-[7%] lg:w-[6%] lg:h-[8%] top-[70%] md:top-[57.87%] lg:top-[55.87%] xl:top-[65.37%] left-[87%] lg:left-[87.125%] 2xl:left-[74%] px-1 border-2 border-black bg-[#F3AA8A] flex items-center justify-center font-amaticbold text-center text-[3vw] md:text-[2.25vw] lg:text-[1.5vw] xl:text-[1.2vw] hover:scale-110 cursor-pointer"
           onClick={() => setChartOpen(!chartOpen)}
         >
           THIS IS CHART

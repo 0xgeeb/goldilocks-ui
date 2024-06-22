@@ -1,4 +1,5 @@
 export * from './navBar'
+export * from './swapWalletBalance'
 export * from './walletBalance'
 export * from './footer'
 export * from '../goldiswap/chart'
