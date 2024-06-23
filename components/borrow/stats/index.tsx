@@ -74,7 +74,7 @@ export const Stats = () => {
           <span className={handleColors(borrowInfo.psl, borrowInfo.psl)}>{handleInfo(borrowInfo.psl)}</span>
         </div>
       </div>
-      <div className="w-[100%] h-[50%] flex flex-row items-center justify-between mt-[1%]">
+      <div className="w-[100%] h-[50%] flex flex-row items-center justify-between tall:mt-[1%]">
         <div className="flex flex-row items-center">
           <span className="mr-2">floor price:</span>
           <span className={handleColors(floorPrice(borrowInfo.fsl, borrowInfo.supply), floorPrice(borrowInfo.fsl, borrowInfo.supply))}>${handlePrice(floorPrice(borrowInfo.fsl, borrowInfo.supply))}</span>

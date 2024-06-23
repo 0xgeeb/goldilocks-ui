@@ -23,7 +23,7 @@ export const Toggles = () => {
       >
         <span className="mt-1 xl:mt-2">UNSTAKE</span>
         <span 
-          className="absolute top-[2%] xl:top-[3%] right-[1%] lg:right-[2%] text-[1.5vw] md:text-[1vw] lg:text-[0.8vw] rounded-full px-1 border-2 border-black hover:bg-black hover:text-white" 
+          className="absolute top-[2%] xl:top-[3%] right-[1%] lg:right-[2%] text-[1.5vw] md:text-[1vw] lg:text-[0.6vw] tall:lg:text-[0.8vw] rounded-full px-1 border-2 border-black hover:bg-black hover:text-white" 
           onClick={(e) => {
             e.stopPropagation()
             setUnstakePopupToggle(true)
@@ -38,7 +38,7 @@ export const Toggles = () => {
       >
         <span className="mt-1 xl:mt-2">STIR</span>
         <span 
-          className="absolute top-[2%] xl:top-[3%] right-[1%] lg:right-[2%] text-[1.5vw] md:text-[1vw] lg:text-[0.8vw] rounded-full px-1 border-2 border-black hover:bg-black hover:text-white" 
+          className="absolute top-[2%] xl:top-[3%] right-[1%] lg:right-[2%] text-[1.5vw] md:text-[1vw] lg:text-[0.6vw] tall:lg:text-[0.8vw] rounded-full px-1 border-2 border-black hover:bg-black hover:text-white" 
           onClick={(e) => {
             e.stopPropagation()
             setStirPopupToggle(true)

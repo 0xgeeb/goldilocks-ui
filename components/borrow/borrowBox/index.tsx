@@ -67,14 +67,14 @@ export const BorrowBox = () => {
             <div className="absolute h-[35%] lg:h-[32%] w-[60%] lg:w-[55.6%] top-[30%] left-[26%] lg:left-[22%] border-2 border-black bg-white">
               <div className="relative h-[100%] w-[100%]">
                 <input
-                  className="absolute top-[15%] xl:top-[17%] left-[5%] w-[90%] focus:outline-none border-none bg-transparent font-bold font-baloo text-[5.5vw] md:text-[4vw] lg:text-[3.5vw] xl:text-[2.5vw] 2xl:text-[2vw]"
+                  className="absolute top-[7.5%] tall:top-[15%] left-[5%] w-[90%] focus:outline-none border-none bg-transparent font-bold font-baloo text-[4.5vw] md:text-[4vw] lg:text-[3.5vw] xl:text-[2.5vw] 2xl:text-[2vw] tall:text-[5.5vw] tall:md:text-[4vw] tall:lg:text-[3.5vw] tall:xl:text-[2.5vw] tall:2xl:text-[2vw]"
                   type="number"
                   id="number-input"
                   placeholder="0.00"
                   value={displayString}
                   onChange={(e) => handleChange(e.target.value)}
                 />
-                <span className="absolute bottom-0 right-[3%] font-baloo font-bold text-[2.5vw] md:text-[1.75vw] lg:text-[1.25vw] xl:text-[0.9vw] text-[#7F7F7F]">{activeToggle === "BORROW" ? "borrow limit" : "borrowed honey"}: {balancesLoading ? loadingElement() : handleBalance()}</span>
+                <span className="absolute bottom-0 right-[3%] font-baloo font-bold text-[2vw] md:text-[1.75vw] lg:text-[1.25vw] xl:text-[0.9vw] tall:text-[2.5vw] tall:md:text-[1.75vw] tall:lg:text-[1.25vw] tall:xl:text-[0.9vw] text-[#7F7F7F]">{activeToggle === "BORROW" ? "borrow limit" : "borrowed honey"}: {balancesLoading ? loadingElement() : handleBalance()}</span>
               </div>
             </div>
           </div>
