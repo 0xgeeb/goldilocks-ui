@@ -88,7 +88,7 @@ export const StakeBox = () => {
               <img className="h-6 md:h-8 w-6 md:w-8" src={`/images/logo-${activeToggle === "STAKE" || activeToggle === "UNSTAKE" ? "locks" : "porridge"}.png`} alt="coinlogo" />
               <h1 className="font-baloo font-semibold text-[3vw] md:text-[2.4vw] lg:text-[1.4vw] ml-1 lg:ml-3">{activeToggle === "STAKE" || activeToggle === "UNSTAKE" ? "LOCKS" : "PRG"}</h1>
             </div>
-            <div className="absolute h-[35%] lg:h-[32%] w-[60%] lg:w-[55.6%] top-[30%] left-[26%] lg:left-[22%] border-2 border-black bg-white">
+            <div className="absolute h-[45%] lg:h-[40%] tall:h-[35%] tall:lg:h-[32%] w-[60%] lg:w-[55.6%] top-[30%] left-[26%] lg:left-[22%] border-2 border-black bg-white">
               <div className="relative h-[100%] w-[100%]">
                 <input
                   className="absolute top-[1%] tall:top-[15%] left-[5%] w-[90%] focus:outline-none border-none bg-transparent font-bold font-baloo text-[4.5vw] md:text-[4vw] lg:text-[3.5vw] xl:text-[2.5vw] 2xl:text-[2vw] tall:text-[5.5vw] tall:md:text-[4vw] tall:lg:text-[3.5vw] tall:xl:text-[2.5vw] tall:2xl:text-[2vw]"
