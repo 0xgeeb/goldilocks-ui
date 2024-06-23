@@ -5,7 +5,7 @@ export const SlippagePopup = () => {
   const { slippage, changeSlippage, changeSlippageToggle } = useGoldiswap()
 
   return (
-    <div className="bg-[#B95500] border-2 border-black absolute top-[18%] 2xl:top-[18%] left-[30%] xl:left-[38%] 2xl:left-[45%] w-[40%] xl:w-[24%] 2xl:w-[19%] h-[22%] z-50">
+    <div className="bg-[#B95500] border-2 border-black absolute top-[18%] 2xl:top-[18%] left-[30%] xl:left-[38%] 2xl:left-[45%] w-[40%] xl:w-[24%] 2xl:w-[19%] h-[30%] tall:h-[22%] z-50">
       <div className="h-[100%] w-[100%] py-[5%] relative flex flex-col items-center justify-between font-baloo font-semibold">
         <span className="text-white text-[3.5vw] md:text-[2.5vw] xl:text-[1.75vw] 2xl:text-[1.25vw]">Set Slippage:</span>
         <div className="relative bg-white w-[70%] md:w-[60%] h-[60%] border-2 border-black">
