@@ -231,7 +231,7 @@ export const SwapBoxMobile = () => {
           notification.toggle ? <NotificationMobile /> :
           balanceMobileToggle ? <WalletBalanceMobilePopup /> :
           <div className="w-[100%] h-[100%] relative flex flex-col">
-            <div className="w-[100%] h-[8%] flex flex-row font-baloo font-semibold border-b-2 border-black">
+            <div className="w-[100%] h-[8%] flex flex-row font-baloo font-medium border-b-2 border-black">
               <div
                 className="h-[100%] w-[25%] flex items-center justify-center bg-[#DCC2A8] focus:bg-[#F3AA8A] cursor-pointer border-r-2 border-black"
                 onClick={() => handlePercentageButtons(1)}
@@ -265,8 +265,8 @@ export const SwapBoxMobile = () => {
             </div>
             <div className="w-[100%] h-[46%] border-b-2 border-black">
               <div className="absolute flex flex-row items-center top-[15%] left-[8%]">
-                <img className="h-8 w-8" src={`/images/logo-${activeToggle === "BUY" ? "honey" : "locks"}.png`} alt="coinlogo" />
-                <h1 className="font-baloo font-semibold text-[6vw] ml-2">{activeToggle === "BUY" ? "HONEY" : "LOCKS"}</h1>
+                <img className="h-6 tall:h-8 w-6 tall:w-8" src={`/images/logo-${activeToggle === "BUY" ? "honey" : "locks"}.png`} alt="coinlogo" />
+                <h1 className="font-baloo font-medium text-[6vw] ml-2">{activeToggle === "BUY" ? "HONEY" : "LOCKS"}</h1>
               </div>
               <div className="absolute h-[16%] w-[84%] top-[27%] left-[8%] border-2 border-black bg-white">
                 <div className="relative h-[100%] w-[100%]">
@@ -274,7 +274,7 @@ export const SwapBoxMobile = () => {
                     topAmountLoading ?
                     <span className="absolute top-[40%] left-[8%] loader-small"></span> : 
                     <input
-                      className="absolute top-[0%] h-[100%] left-[5%] w-[90%] focus:outline-none border-none bg-transparent font-semibold font-baloo text-[8vw]"
+                      className="absolute top-[0%] h-[100%] left-[5%] w-[90%] focus:outline-none border-none bg-transparent font-medium font-baloo text-[8vw]"
                       type="number"
                       id="number-input"
                       placeholder="0.00"
@@ -288,8 +288,8 @@ export const SwapBoxMobile = () => {
             </div>
             <div className="w-[100%] h-[46%]">
               <div className="absolute flex flex-row items-center top-[61%] left-[8%]">
-                <img className="h-8 w-8" src={`/images/logo-${activeToggle === "BUY" ? "locks" : "honey"}.png`} alt="coinlogo" />
-                <h1 className="font-baloo font-semibold text-[6vw] ml-2">{activeToggle === "BUY" ? "LOCKS" : "HONEY"}</h1>
+                <img className="h-6 tall:h-8 w-6 tall:w-8" src={`/images/logo-${activeToggle === "BUY" ? "locks" : "honey"}.png`} alt="coinlogo" />
+                <h1 className="font-baloo font-medium text-[6vw] ml-2">{activeToggle === "BUY" ? "LOCKS" : "HONEY"}</h1>
               </div>
               <div className="absolute h-[16%] w-[84%] top-[73%] left-[8%] border-2 border-black bg-white">
                 <div className="relative h-[100%] w-[100%]">
@@ -297,7 +297,7 @@ export const SwapBoxMobile = () => {
                     bottomAmountLoading ?
                     <span className="absolute top-[40%] left-[8%] loader-small"></span> : 
                     <input
-                      className="absolute top-[0%] h-[100%] left-[5%] w-[90%] focus:outline-none border-none bg-transparent font-semibold font-baloo text-[8vw]"
+                      className="absolute top-[0%] h-[100%] left-[5%] w-[90%] focus:outline-none border-none bg-transparent font-medium font-baloo text-[8vw]"
                       type="number"
                       id="number-input"
                       placeholder="0.00"
@@ -307,7 +307,7 @@ export const SwapBoxMobile = () => {
                   }
                 </div>
               </div>
-              <span className="absolute bottom-[1%] right-[3%] font-baloo font-bold text-[3vw] text-[#7F7F7F]" onClick={() => console.log(balancesLoading)}>balance: {balancesLoading ? loadingElement() : handleBottomBalance()}</span>
+              <span className="absolute bottom-[1%] right-[3%] font-baloo font-semibold text-[3vw] text-[#7F7F7F]" onClick={() => console.log(balancesLoading)}>balance: {balancesLoading ? loadingElement() : handleBottomBalance()}</span>
             </div>
           </div>
         }

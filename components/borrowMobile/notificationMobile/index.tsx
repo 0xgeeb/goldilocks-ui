@@ -6,7 +6,7 @@ export const NotificationMobile = () => {
 
   return (
     <div className="w-[100%] h-[100%] bg-[#E9D7A9] flex flex-col items-center relative px-[2%]">
-      <h1 className="font-amaticbold text-[11vw] mt-[15%]">SUCCESS!</h1>
+      <h1 className="font-amaticbold text-[11vw] mt-[5%] tall:mt-[15%]">SUCCESS!</h1>
       <span className="font-baloo font-semibold text-[4vw] mt-[5%] text-center">{notification.action}</span>
       <span className="font-baloo font-semibold text-[4vw] mt-[1%] text-center">{notification.result}</span>
       <a 

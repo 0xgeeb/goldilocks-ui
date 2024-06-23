@@ -1,7 +1,7 @@
 export const FooterMobile = () => {
 
   return (
-    <div className="absolute top-[88%] left-[5%] h-[9%] w-[90%] flex flex-col items-center justify-around">
+    <div className="absolute top-[90%] tall:top-[88%] left-[5%] h-[9%] w-[90%] flex flex-col items-center justify-around">
       <div className="w-[50%] flex flex-row items-center justify-between">
         <span className="text-[6vw] font-amaticbold text-[#D9C6BA]">ooga booga</span>
         <div className="flex flex-row items-center justify-end w-[50%]">

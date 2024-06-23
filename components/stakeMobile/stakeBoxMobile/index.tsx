@@ -47,7 +47,7 @@ export const StakeBoxMobile = () => {
           notification.toggle ? <NotificationMobile /> :
           balanceMobileToggle ? <WalletBalanceMobilePopup /> :
           <div className="w-[100%] h-[100%] relative flex flex-col">
-            <div className="w-[100%] h-[13%] flex flex-row font-baloo font-semibold border-b-2 border-black">
+            <div className="w-[100%] h-[13%] flex flex-row font-baloo font-medium border-b-2 border-black">
               <div
                 className="h-[100%] w-[25%] flex items-center justify-center bg-[#DCC2A8] focus:bg-[#F3AA8A] cursor-pointer border-r-2 border-black"
                 onClick={() => handlePercentageButtons(1)}
@@ -75,12 +75,12 @@ export const StakeBoxMobile = () => {
             </div>
             <div className="absolute flex flex-row top-[20%] left-[8%] items-center">
               <img className="h-8 w-8" src={`/images/logo-${activeToggle === "STAKE" || activeToggle === "UNSTAKE" ? "locks" : "porridge"}.png`} alt="coinlogo" />
-              <h1 className="font-baloo font-semibold text-[8vw] ml-2 xl:ml-3">{activeToggle === "STAKE" || activeToggle === "UNSTAKE" ? "LOCKS" : "PRG"}</h1>
+              <h1 className="font-baloo font-medium text-[8vw] ml-2 xl:ml-3">{activeToggle === "STAKE" || activeToggle === "UNSTAKE" ? "LOCKS" : "PRG"}</h1>
             </div>
             <div className="absolute h-[30%] w-[84%] top-[43%] left-[8%] border-2 border-black bg-white">
               <div className="relative h-[100%] w-[100%]">
                 <input
-                  className="absolute top-[18%] left-[5%] w-[90%] focus:outline-none border-none bg-transparent font-semibold font-baloo text-[8vw]"
+                  className="absolute top-[18%] left-[5%] w-[90%] focus:outline-none border-none bg-transparent font-medium font-baloo text-[8vw]"
                   type="number"
                   id="number-input"
                   placeholder="0.00"
@@ -92,7 +92,7 @@ export const StakeBoxMobile = () => {
             <span className="absolute bottom-[2%] right-[3%] font-baloo font-bold text-[4vw] text-[#7F7F7F]">
               {handleBalanceLabel()}: {balancesLoading ? loadingElement() : handleBalance()}
             </span>
-            { activeToggle === 'STIR' && <span className="absolute bottom-[9%] font-baloo font-bold right-[3%] z-50 text-[4vw] text-[#7F7F7F]">$honey cost to stir: {formatAsString(stir * (stakeInfo.fsl / stakeInfo.supply))}</span> }
+            { activeToggle === 'STIR' && <span className="absolute bottom-[9%] font-baloo font-semibold right-[3%] z-50 text-[4vw] text-[#7F7F7F]">$honey cost to stir: {formatAsString(stir * (stakeInfo.fsl / stakeInfo.supply))}</span> }
           </div>
         }
       </div>

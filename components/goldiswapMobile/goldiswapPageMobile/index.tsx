@@ -89,7 +89,6 @@ export const GoldiswapPageMobile = () => {
     }
   }
 
-  //todo: needs responsiveness on height ?
   return (
     <main className="w-screen h-screen">
       <NavBarMobile />
@@ -98,8 +97,8 @@ export const GoldiswapPageMobile = () => {
         !navButtonsOpen &&
         <div className="w-[100%] h-[89%] relative bg-cover bg-[url('/images/bg-goldiswap-mobile.png')]">
           <TogglesMobile />
-          <h1 className="absolute top-[-0.25%] right-[69%] text-[#D9C6BA] text-[7vw] font-amaticbold" id="page-title">{activeToggle === 'REDEEM' ? "REDEEM" : "SWAP"}</h1>
-          <div className="absolute bottom-[40.4%] left-[15.5%] w-[48.95vh] h-[2.3%] bg-[#4D0B24] origin-bottom-left -rotate-[90deg] text-[3.2vw] font-baloo text-white font-semibold flex flex-row items-center justify-between px-2">
+          <h1 className="absolute top-[-0.25%] right-[69%] text-[#D9C6BA] text-[6vw] tall:text-[7vw] font-amaticbold" id="page-title">{activeToggle === 'REDEEM' ? "REDEEM" : "SWAP"}</h1>
+          <div className="absolute bottom-[40.4%] left-[15.5%] w-[48.95vh] h-[2.3%] bg-[#4D0B24] origin-bottom-left -rotate-[90deg] text-[2.75vw] font-baloo text-white font-medium flex flex-row items-center justify-between px-2">
             <div className="h-[100%] w-[43%] flex flex-row items-center justify-between">
               <span className="text-white font-baloo mt-1">PSL/FSL ratio:</span>
               <span className="text-white font-baloo mt-1">{handleTokenInfo((goldiswapInfo.psl / goldiswapInfo.fsl) * 100)}%</span>
@@ -118,9 +117,9 @@ export const GoldiswapPageMobile = () => {
           />
           { slippage.toggle && <SlippagePopupMobile /> }
           <SwapBoxMobile />
-          <img className="absolute bottom-[26%] right-[11.8%] origin-bottom-right -rotate-[90deg] h-[1.27%] w-[8.36%]" src="/images/icon-bearoutline.png" alt="bearoutline" />
+          <img className="absolute bottom-[26%] left-[80%] origin-bottom-right -rotate-[90deg] h-[1.27%] w-[8.36%]" src="/images/icon-bearoutline.png" alt="bearoutline" />
           <div 
-            className="absolute h-[6.21%] w-[23.6%] bottom-[30%] right-[0%] origin-bottom-right -rotate-[90deg] border-t-2 border-l-2 border-r-2 border-black bg-[#F3AA8A] font-amaticbold text-[5vw] focus:scale-110 cursor-pointer flex items-center justify-center"
+            className="absolute h-[12vw] w-[23.6%] bottom-[30%] right-[0%] origin-bottom-right -rotate-[90deg] border-t-2 border-l-2 border-r-2 border-black bg-[#F3AA8A] font-amaticbold text-[5vw] focus:scale-110 cursor-pointer flex items-center justify-center"
             onClick={() => setChartOpen(!chartOpen)}
           >
             <span className="">THIS IS CHART</span>
