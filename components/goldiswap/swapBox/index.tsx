@@ -269,7 +269,7 @@ export const SwapBox = () => {
                     topAmountLoading ?
                     <span className="absolute top-[40%] left-[8%] loader-small"></span> : 
                     <input
-                      className="absolute top-[15%] xl:top-[17%] left-[5%] w-[90%] focus:outline-none border-none bg-transparent font-bold font-baloo text-[5.5vw] md:text-[4vw] lg:text-[3.5vw] xl:text-[2.5vw] 2xl:text-[2vw]"
+                      className="absolute top-[7.5%] tall:top-[15%] left-[5%] w-[90%] focus:outline-none border-none bg-transparent font-bold font-baloo text-[4.5vw] md:text-[4vw] lg:text-[3.5vw] xl:text-[2.5vw] 2xl:text-[2vw] tall:text-[5.5vw] tall:md:text-[4vw] tall:lg:text-[3.5vw] tall:xl:text-[2.5vw] tall:2xl:text-[2vw]"
                       type="number"
                       id="number-input"
                       placeholder="0.00"
@@ -277,7 +277,7 @@ export const SwapBox = () => {
                       onChange={(e) => handleTopChange(e.target.value)}
                     />
                   }
-                  <span className="absolute bottom-0 right-[3%] font-baloo font-bold text-[2.5vw] md:text-[1.75vw] lg:text-[1.25vw] xl:text-[0.9vw] text-[#7F7F7F]">balance: {balancesLoading ? loadingElement() : handleTopBalance()}</span>
+                  <span className="absolute bottom-0 right-[3%] font-baloo font-bold text-[2vw] md:text-[1.75vw] lg:text-[1.25vw] xl:text-[0.9vw] tall:text-[2.5vw] tall:md:text-[1.75vw] tall:lg:text-[1.25vw] tall:xl:text-[0.9vw] text-[#7F7F7F]">balance: {balancesLoading ? loadingElement() : handleTopBalance()}</span>
                 </div>
               </div>
             </div>
@@ -292,7 +292,7 @@ export const SwapBox = () => {
                     bottomAmountLoading ?
                     <span className="absolute top-[40%] left-[8%] loader-small"></span> :
                     <input
-                      className="absolute top-[15%] xl:top-[17%] left-[5%] w-[90%] focus:outline-none border-none bg-transparent font-bold font-baloo text-[5.5vw] md:text-[4vw] lg:text-[3.5vw] xl:text-[2.5vw] 2xl:text-[2vw]"
+                      className="absolute top-[7.5%] tall:top-[15%] left-[5%] w-[90%] focus:outline-none border-none bg-transparent font-bold font-baloo text-[4.5vw] md:text-[4vw] lg:text-[3.5vw] xl:text-[2.5vw] 2xl:text-[2vw] tall:text-[5.5vw] tall:md:text-[4vw] tall:lg:text-[3.5vw] tall:xl:text-[2.5vw] tall:2xl:text-[2vw]"
                       type="number"
                       id="number-input"
                       placeholder="0.00"
@@ -300,7 +300,7 @@ export const SwapBox = () => {
                       onChange={(e) => handleBottomChange(e.target.value)}
                     />
                   }
-                  <span className="absolute bottom-0 right-[3%] font-baloo font-bold text-[2.5vw] md:text-[1.75vw] lg:text-[1.25vw] xl:text-[0.9vw] text-[#7F7F7F]">balance: {balancesLoading ? loadingElement() : handleBottomBalance()}</span>
+                  <span className="absolute bottom-0 right-[3%] font-baloo font-bold text-[2vw] md:text-[1.75vw] lg:text-[1.25vw] xl:text-[0.9vw] tall:text-[2.5vw] tall:md:text-[1.75vw] tall:lg:text-[1.25vw] tall:xl:text-[0.9vw] text-[#7F7F7F]">balance: {balancesLoading ? loadingElement() : handleBottomBalance()}</span>
                 </div>
               </div>
             </div>

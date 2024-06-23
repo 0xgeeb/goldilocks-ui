@@ -12,7 +12,10 @@ const config: Config = {
         amatic: ['var(--font-amatic)'],
         amaticbold: ['var(--font-amaticbold)'],
         baloo: ['var(--font-baloo)']
-      }
+      },
+      screens: {
+        'tall': { 'raw': '(min-height: 800px)' },
+      },
     },
   },
   plugins: [],

@@ -75,7 +75,7 @@ export const Stats = () => {
           <span className={handleColors(goldiswapInfo.psl, simInfo.psl)}>{simInfo.toggle ? handleInfo(simInfo.psl) : handleInfo(goldiswapInfo.psl)}</span>
         </div>
       </div>
-      <div className="w-[100%] h-[50%] flex flex-row items-center justify-between mt-[1%]">
+      <div className="w-[100%] h-[50%] flex flex-row items-center justify-between tall:mt-[1%]">
         <div className="flex flex-row items-center">
           <span className="mr-2">floor price:</span>
           <span className={handleColors(floorPrice(goldiswapInfo.fsl, goldiswapInfo.supply), floorPrice(simInfo.fsl, simInfo.supply))}>${simInfo.toggle ? handlePrice(floorPrice(simInfo.fsl, simInfo.supply)) : handlePrice(floorPrice(goldiswapInfo.fsl, goldiswapInfo.supply))}</span>
