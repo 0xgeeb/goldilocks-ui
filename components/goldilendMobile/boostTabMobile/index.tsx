@@ -115,8 +115,8 @@ export const BoostTabMobile = () => {
                     ))
                   }
                 </div>
-                <h1 className="text-[5vw] font-baloo font-semibold text-[#9C4924]">{selectedPartners.length > 0 ? "New" : ""} Boost Amount: {userBoost.boostMagnitude + boostMag}%</h1>
-                <h1 className="text-[5vw] font-baloo font-semibold text-[#9C4924]">Expiry: {formatDate(userBoost.expiry)}</h1>
+                <h1 className="text-[4.5vw] font-baloo font-semibold text-[#9C4924]">{selectedPartners.length > 0 ? "New" : ""} Boost Amount: {userBoost.boostMagnitude + boostMag}%</h1>
+                <h1 className="text-[4.5vw] font-baloo font-semibold text-[#9C4924]">{selectedPartners.length > 0 ? "New" : ""} Expiry: {selectedPartners.length > 0 ? formatDate(userBoost.expiry + (86400*30)) : formatDate(userBoost.expiry)}</h1>
               </> :
               <>
                 <div
@@ -141,7 +141,8 @@ export const BoostTabMobile = () => {
                     ))
                   }
                 </div>
-                <h1 className="text-[6vw] font-baloo font-semibold text-[#9C4924]">Boost Amount: {boostMag}%</h1>
+                <h1 className="text-[5vw] font-baloo font-semibold text-[#9C4924]">Boost Amount: {boostMag}%</h1>
+                <h1 className="text-[5vw] font-baloo font-semibold text-[#9C4924]">Boost Expiry: {selectedPartners.length > 0 ? formatDate(Math.floor(Date.now() / 1000) + (86400*30)) : "-"}</h1>
               </>
             }
           </div>

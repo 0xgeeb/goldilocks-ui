@@ -374,38 +374,38 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
   }
 
   const findBeras = async () => {
-    if(wallet) {
-      const options = { method: 'GET', headers: {accept: 'application/json'} }
-      // todo: env
-      const response = await fetch(`https://base-sepolia.g.alchemy.com/nft/v3/XgNYMjOtB41dpMK9FvXg9seQVdFIzqsA/getNFTsForOwner?owner=${wallet}&withMetadata=true&pageSize=100`, options)
-      const data = await response.json()
+    // if(wallet) {
+    //   const options = { method: 'GET', headers: {accept: 'application/json'} }
+    //   // todo: env
+    //   const response = await fetch(`https://base-sepolia.g.alchemy.com/nft/v3/XgNYMjOtB41dpMK9FvXg9seQVdFIzqsA/getNFTsForOwner?owner=${wallet}&withMetadata=true&pageSize=100`, options)
+    //   const data = await response.json()
   
-      let beraIndex = 0
-      for(const nft of data.ownedNfts) {
-        if(nft.contract.address === '0x8172BDB659837F321bF7Da8941d8E12a62a72d6a') {
-          const bondInfo  = {
-            name: "BondBera",
-            id: nft.tokenId,
-            imageSrc: "https://ipfs.io/ipfs/QmSaVWb15oQ1HcsUjGGkjwHQ1mxJBYeivtBCgHHHiVLt7w",
-            valuation: 50,
-            index: beraIndex
-          }
-          setOwnedBerasState(curr => [...curr, bondInfo])
-          beraIndex++
-        }
-        if(nft.contract.address === '0xB1195a6cdB7ef8fB22671bd8321727dBB6DDDe03') {
-          const bandInfo  = {
-            name: "BandBera",
-            id: nft.tokenId,
-            imageSrc: "https://ipfs.io/ipfs/QmNWggx9vvBVEHZc6xwWkdyymoKuXCYrJ3zQwwKzocDxRt",
-            valuation: 50,
-            index: beraIndex
-          }
-          setOwnedBerasState(curr => [...curr, bandInfo])
-          beraIndex++
-        }
-      }
-    }
+    //   let beraIndex = 0
+    //   for(const nft of data.ownedNfts) {
+    //     if(nft.contract.address === '0x8172BDB659837F321bF7Da8941d8E12a62a72d6a') {
+    //       const bondInfo  = {
+    //         name: "BondBera",
+    //         id: nft.tokenId,
+    //         imageSrc: "https://ipfs.io/ipfs/QmSaVWb15oQ1HcsUjGGkjwHQ1mxJBYeivtBCgHHHiVLt7w",
+    //         valuation: 50,
+    //         index: beraIndex
+    //       }
+    //       setOwnedBerasState(curr => [...curr, bondInfo])
+    //       beraIndex++
+    //     }
+    //     if(nft.contract.address === '0xB1195a6cdB7ef8fB22671bd8321727dBB6DDDe03') {
+    //       const bandInfo  = {
+    //         name: "BandBera",
+    //         id: nft.tokenId,
+    //         imageSrc: "https://ipfs.io/ipfs/QmNWggx9vvBVEHZc6xwWkdyymoKuXCYrJ3zQwwKzocDxRt",
+    //         valuation: 50,
+    //         index: beraIndex
+    //       }
+    //       setOwnedBerasState(curr => [...curr, bandInfo])
+    //       beraIndex++
+    //     }
+    //   }
+    // }
   }
 
   const handleLoanDateChange = (input: string) => {
@@ -464,38 +464,38 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
   }
 
   const findPartners = async () => {
-    if(wallet) {
-      const options = { method: 'GET', headers: {accept: 'application/json'} }
-      // todo: env
-      const response = await fetch(`https://base-sepolia.g.alchemy.com/nft/v3/XgNYMjOtB41dpMK9FvXg9seQVdFIzqsA/getNFTsForOwner?owner=${wallet}&withMetadata=true&pageSize=100`, options)
-      const data = await response.json()
+    // if(wallet) {
+    //   const options = { method: 'GET', headers: {accept: 'application/json'} }
+    //   // todo: env
+    //   const response = await fetch(`https://base-sepolia.g.alchemy.com/nft/v3/XgNYMjOtB41dpMK9FvXg9seQVdFIzqsA/getNFTsForOwner?owner=${wallet}&withMetadata=true&pageSize=100`, options)
+    //   const data = await response.json()
   
-      let partnerIndex = 0
-      for(const nft of data.ownedNfts) {
-        if(nft.contract.address === contracts.beradrome.address) {
-          const dromeInfo  = {
-            name: "Beradrome",
-            id: nft.tokenId,
-            imageSrc: "https://ipfs.io/ipfs/QmYhKPJVDZDRDpJAJ2TyCXK981B4pvtPcjrKgN256U4Cok/73.png",
-            boost: 9,
-            index: partnerIndex
-          }
-          setOwnedPartnersState(curr => [...curr, dromeInfo])
-          partnerIndex++
-        }
-        if(nft.contract.address === contracts.honeycomb.address) {
-          const combInfo  = {
-            name: "HoneyComb",
-            id: nft.tokenId,
-            imageSrc: "https://ipfs.io/ipfs/QmTffyDuYgSyFAgispVjuVaTsKnC5vVs7FFq1YkGde4ZX5",
-            boost: 6,
-            index: partnerIndex
-          }
-          setOwnedPartnersState(curr => [...curr, combInfo])
-          partnerIndex++
-        }
-      }
-    }
+    //   let partnerIndex = 0
+    //   for(const nft of data.ownedNfts) {
+    //     if(nft.contract.address === contracts.beradrome.address) {
+    //       const dromeInfo  = {
+    //         name: "Beradrome",
+    //         id: nft.tokenId,
+    //         imageSrc: "https://ipfs.io/ipfs/QmYhKPJVDZDRDpJAJ2TyCXK981B4pvtPcjrKgN256U4Cok/73.png",
+    //         boost: 9,
+    //         index: partnerIndex
+    //       }
+    //       setOwnedPartnersState(curr => [...curr, dromeInfo])
+    //       partnerIndex++
+    //     }
+    //     if(nft.contract.address === contracts.honeycomb.address) {
+    //       const combInfo  = {
+    //         name: "HoneyComb",
+    //         id: nft.tokenId,
+    //         imageSrc: "https://ipfs.io/ipfs/QmTffyDuYgSyFAgispVjuVaTsKnC5vVs7FFq1YkGde4ZX5",
+    //         boost: 6,
+    //         index: partnerIndex
+    //       }
+    //       setOwnedPartnersState(curr => [...curr, combInfo])
+    //       partnerIndex++
+    //     }
+    //   }
+    // }
   }
 
   //todo: need indexer for this

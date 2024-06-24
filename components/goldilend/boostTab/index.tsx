@@ -271,7 +271,7 @@ export const BoostTab = () => {
               }
             </div>
             <h1 className="text-[3vw] xl:text-[1.3vw] font-baloo font-semibold text-[#9C4924]">{selectedPartners.length > 0 && "New"} Boost Amount: {userBoost.boostMagnitude + boostMag}%</h1>
-            <h1 className="text-[3vw] xl:text-[1.3vw] font-baloo font-semibold text-[#9C4924]">Expiry: {formatDate(userBoost.expiry)}</h1>
+            <h1 className="text-[3vw] xl:text-[1.3vw] font-baloo font-semibold text-[#9C4924]">{selectedPartners.length > 0 && "New"} Expiry: {selectedPartners.length > 0 ? formatDate(userBoost.expiry + (86400*30)) : formatDate(userBoost.expiry)}</h1>
             <ConnectButton.Custom>
               {({
                 account,
@@ -354,7 +354,7 @@ export const BoostTab = () => {
             </ConnectButton.Custom>
           </> :
           <>
-            <h1 className="font-amaticbold text-[10vw] xl:text-[5vw] my-[8%]">create boost</h1>
+            <h1 className="font-amaticbold text-[9vw] xl:text-[5vw] mt-[4%] mb-[8%]">create boost</h1>
             <div className="w-[90%] h-[25%] flex flex-row items-start justify-between relative">
               <span className="absolute top-[-20%] left-[3%] font-baloo font-semibold text-[2vw] xl:text-[1vw]">Selected Partner NFTs:</span>
               <div className="text-[3vw] xl:text-[2vw] cursor-pointer hover:scale-125 mt-[3%]" onClick={() => prevImages()}>&lt;</div>
@@ -371,7 +371,8 @@ export const BoostTab = () => {
               }
               <div className="text-[3vw] xl:text-[2vw] cursor-pointer hover:scale-125 mt-[3%]" onClick={() => nextImages()}>&gt;</div>
             </div>
-            <h1 className="text-[3vw] xl:text-[1.7vw] font-baloo font-semibold text-[#9C4924]">Boost Amount: {boostMag}%</h1>
+            <h1 className="text-[3vw] xl:text-[1.25vw] font-baloo font-semibold text-[#9C4924]">Boost Amount: {boostMag}%</h1>
+            <h1 className="text-[3vw] xl:text-[1.25vw] font-baloo font-semibold text-[#9C4924]">Boost Expiry: {selectedPartners.length > 0 ? formatDate(Math.floor(Date.now() / 1000) + (86400*30)) : "-"}</h1>
             <ConnectButton.Custom>
               {({
                 account,
@@ -381,7 +382,7 @@ export const BoostTab = () => {
               }) => {
                 return (
                   <button
-                    className="h-[12.5%] w-[45%] border-2 border-black bg-[#E7B941] mt-[4%] font-amaticbold text-[4vw] xl:text-[1.5vw] hover:scale-110"
+                    className="h-[12.5%] w-[45%] border-2 border-black bg-[#E7B941] mt-[2%] font-amaticbold text-[4vw] xl:text-[1.5vw] hover:scale-110"
                     id="boost-button"
                     onClick={() => {
                       const button = document.getElementById('boost-button')
