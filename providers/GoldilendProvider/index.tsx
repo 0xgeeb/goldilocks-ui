@@ -4,6 +4,7 @@ import { createContext, PropsWithChildren, useContext, useState } from "react"
 import { readContract } from "@wagmi/core"
 import { formatEther } from "viem"
 import { useWallet } from "../../providers"
+import { useDebounce } from "../../hooks"
 import { config } from "../../providers/WagmiProvider"
 import { contracts } from "../../utils/addressi"
 import {
@@ -28,11 +29,17 @@ const INITIAL_STATE: GoldilendInitialState = {
   setUnstake: (_unstake: number) => {},
   borrowDisplayString: '',
   loanExpiration: '',
+  debouncedLoanExpiration: '',
   displayString: '',
   setDisplayString: (_displayString: string) => {},
   loanAmount: 0,
+  debouncedLoanAmount: 0,
   borrowLimit: 0,
   boostMag: 0,
+  loanInterest: 0,
+  loanInterestRate: 0,
+  setLoanInterest: (_interest: number) => {},
+  setLoanInterestRate: (_interestRate: number) => {},
   ownedBeras: [
     // {
     //   name: "BondBera",
@@ -158,6 +165,7 @@ const INITIAL_STATE: GoldilendInitialState = {
   updateBoostMag: () => {},
   handleBorrowChange: (_input: string) => {},
   handleLoanDateChange: (_input: string) => {},
+  getInterestRate: () => {}
 }
 
 const GoldilendContext = createContext(INITIAL_STATE)
@@ -174,6 +182,9 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
   const [displayStringState, setDisplayStringState] = useState(INITIAL_STATE.displayString)
   const [borrowDisplayStringState, setBorrowDisplayStringState] = useState(INITIAL_STATE.borrowDisplayString)
   const [loanExpirationState, setLoanExpirationState] = useState(INITIAL_STATE.loanExpiration)
+  const [loanInterestState, setLoanInterestState] = useState(INITIAL_STATE.loanInterest)
+  const [loanInterestRateState, setLoanInterestRateState] = useState(INITIAL_STATE.loanInterestRate)
+  const debouncedLoanExpirationState = useDebounce(loanExpirationState, 1000)
   const [lockState, setLockState] = useState<number>(INITIAL_STATE.lock)
   const [stakeState, setStakeState] = useState<number>(INITIAL_STATE.stake)
   const [unstakeState, setUnstakeState] = useState<number>(INITIAL_STATE.unstake)
@@ -187,6 +198,7 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
   const [activeToggleState, setActiveToggleState] = useState<string>(INITIAL_STATE.activeToggle)
   const [lendActiveToggleState, setLendActiveToggleState] = useState<string>(INITIAL_STATE.lendActiveToggle)
   const [loanAmountState, setLoanAmountState] = useState<number>(INITIAL_STATE.loanAmount)
+  const debouncedLoanAmountState = useDebounce(loanAmountState, 1000)
   const [borrowLimitState, setBorrowLimitState] = useState<number>(INITIAL_STATE.borrowLimit)
   const [boostMagState, setBoostMagState] = useState<number>(INITIAL_STATE.boostMag)
 
@@ -527,6 +539,38 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
     }))
   }
 
+  const getInterestRate = async () => {
+    const dateParts = loanExpirationState.split('-')
+    const [month, day, year] = dateParts.map(Number);
+    const parsedDate = new Date(year, month - 1, day)
+    const timestamp = parsedDate.getTime()
+    const currentTimestamp = Date.now()
+    const loanDuration = Math.floor((timestamp - currentTimestamp) / 1000)
+    const debtResult = await readContract(config, {
+      address: contracts.goldilend.address as `0x${string}`,
+      abi: contracts.goldilend.abi,
+      functionName: 'outstandingDebt',
+      args: []
+    })
+    const debt: number = parseFloat(formatEther(debtResult as unknown as bigint))
+    const poolSizeResult = await readContract(config, {
+      address: contracts.goldilend.address as `0x${string}`,
+      abi: contracts.goldilend.abi,
+      functionName: 'poolSize',
+      args: []
+    })
+    const poolSize: number = parseFloat(formatEther(poolSizeResult as unknown as bigint))
+    const yearSeconds = 31536000
+    const rate = 10
+    const ratio = ((debt + loanAmountState) / poolSize) + 0.50
+    const interestRate = rate + ((10 * rate) * (ratio * (loanDuration / yearSeconds)))
+    const interestAdjusted = (interestRate * loanAmountState) * (loanDuration / yearSeconds)
+    setLoanInterestState(interestAdjusted / 100)
+    
+    const calculatedRate = 10 + ((10 * 10 * (loanDuration / yearSeconds)) * (0.5 + (debt / poolSize)))
+    setLoanInterestRateState(calculatedRate)
+  }
+
   return (
     <GoldilendContext.Provider
       value={{
@@ -564,6 +608,10 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
         findSelectedBeraIdxs,
         borrowLimit: borrowLimitState,
         boostMag: boostMagState,
+        loanInterest: loanInterestState,
+        setLoanInterest: setLoanInterestState,
+        loanInterestRate: loanInterestRateState,
+        setLoanInterestRate: setLoanInterestRateState,
         loanAmount: loanAmountState,
         updateBorrowLimit,
         updateBoostMag,
@@ -587,7 +635,10 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
         chartOpen: chartOpenState,
         setChartOpen: setChartOpenState,
         balanceMobileToggle: balanceMobileToggleState,
-        setBalanceMobileToggle: setBalanceMobileToggleState
+        setBalanceMobileToggle: setBalanceMobileToggleState,
+        getInterestRate,
+        debouncedLoanAmount: debouncedLoanAmountState,
+        debouncedLoanExpiration: debouncedLoanExpirationState
       }}
     >
       { children }

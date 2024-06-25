@@ -26,7 +26,14 @@ export const BorrowTabMobile = () => {
     notification,
     findBeras,
     selectScreen,
-    setSelectScreen
+    setSelectScreen,
+    getInterestRate,
+    debouncedLoanAmount,
+    debouncedLoanExpiration,
+    loanInterest,
+    setLoanInterest,
+    loanInterestRate,
+    setLoanInterestRate
   } = useGoldilend()
 
   const { refreshBalances, isConnected } = useWallet()
@@ -40,6 +47,44 @@ export const BorrowTabMobile = () => {
   useEffect(() => {
     updateBorrowLimit()
   }, [selectedBeras])
+
+  useEffect(() => {
+    if(selectedBeras.length > 0 && debouncedLoanAmount > 0 && checkDate(debouncedLoanExpiration)) {
+      getInterestRate()
+    }
+    else {
+      setLoanInterest(0)
+      setLoanInterestRate(0)
+    }
+  }, [selectedBeras, debouncedLoanAmount, debouncedLoanExpiration])
+
+  const checkDate = (dateString: String): boolean => {
+    const dateParts = dateString.split('-')
+    const [month, day, year] = dateParts.map(Number)
+    const parsedDate = new Date(year, month - 1, day)
+    const timestamp = parsedDate.getTime()
+    const timestampDigits = Math.floor(timestamp / 1000)
+    if(dateParts.length !== 3) {
+      return false
+    }
+    if (isNaN(month) || isNaN(day) || isNaN(year)) {
+      return false
+    }
+    if (isNaN(parsedDate.getTime())) {
+      return false
+    }
+    if(timestampDigits < Math.floor(Date.now() / 1000)) {
+      return false
+    }
+    if(timestampDigits < Math.floor(Date.now() / 1000) + (86400 * 14)) {
+      return false
+    }
+    return true
+  }
+
+  const formatAsString = (num: number): string => {
+    return num.toLocaleString('en-US', { maximumFractionDigits: 2 })
+  }
 
   const loadingElement = () => {
     return <span className="loader-small mx-auto"></span>
@@ -137,15 +182,15 @@ export const BorrowTabMobile = () => {
             </div>
             <div className="w-[95%] text-[3.5vw] flex flex-row items-center justify-between font-baloo font-semibold">
               <span>Interest Rate:</span>
-              <span>69%</span>
+              <span>{formatAsString(loanInterestRate)}%</span>
             </div>
             <div className="w-[95%] text-[3.5vw] flex flex-row items-center justify-between font-baloo font-semibold">
               <span>Total Interest Due:</span>
-              <span>69</span>
+              <span>{formatAsString(loanInterest)}</span>
             </div>
             <div className="w-[90%] text-[3vw] px-2 flex flex-row items-center justify-between font-baloo font-semibold bg-[#EFD9CA]">
               <span>Total Amount to Repay:</span>
-              <span>{loanAmount} iBGT</span>
+              <span>{formatAsString(loanAmount + loanInterest)} iBGT</span>
             </div>
           </div>
         )

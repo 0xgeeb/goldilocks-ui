@@ -30,7 +30,14 @@ export const BorrowTab = () => {
     notification,
     changeActiveToggle,
     openNotification,
-    findBeras
+    findBeras,
+    getInterestRate,
+    debouncedLoanAmount,
+    debouncedLoanExpiration,
+    loanInterest,
+    setLoanInterest,
+    loanInterestRate,
+    setLoanInterestRate
   } = useGoldilend()
 
   const {
@@ -51,11 +58,15 @@ export const BorrowTab = () => {
     updateBorrowLimit()
   }, [selectedBeras])
 
-  // useEffect(() => {
-  //   if(selectedBeras.length > 0 && borrowAmount > 0 && dateExpiration > 0) {
-  //     getInterestRate()
-  //   }
-  // }, [selectedBeras, borrowAmount, dateExpiration])
+  useEffect(() => {
+    if(selectedBeras.length > 0 && debouncedLoanAmount > 0 && checkDate(debouncedLoanExpiration)) {
+      getInterestRate()
+    }
+    else {
+      setLoanInterest(0)
+      setLoanInterestRate(0)
+    }
+  }, [selectedBeras, debouncedLoanAmount, debouncedLoanExpiration])
 
   const loadingElement = () => {
     return <span className="loader-small mx-auto"></span>
@@ -255,15 +266,15 @@ export const BorrowTab = () => {
         </div>
         <div className="w-[90%] flex flex-row items-center justify-between font-baloo font-semibold text-[1.8vw] xl:text-[1vw]">
           <span>Interest Rate:</span>
-          <span>69%</span>
+          <span>{formatAsString(loanInterestRate)}%</span>
         </div>
         <div className="w-[90%] flex flex-row items-center justify-between font-baloo font-semibold text-[1.8vw] xl:text-[1vw]">
           <span>Total Interest Due:</span>
-          <span>69</span>
+          <span>{formatAsString(loanInterest)}</span>
         </div>
         <div className="w-[85%] px-2 flex flex-row items-center justify-between font-baloo font-semibold text-[1.6vw] xl:text-[0.8vw] bg-[#EFD9CA]">
           <span>Total Amount to Repay:</span>
-          <span>{loanAmount} iBGT</span>
+          <span>{formatAsString(loanAmount + loanInterest)} iBGT</span>
         </div>
         <ConnectButton.Custom>
           {({

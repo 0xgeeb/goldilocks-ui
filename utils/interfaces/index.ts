@@ -102,8 +102,13 @@ export interface GoldilendInitialState {
   stake: number;
   unstake: number;
   loanAmount: number;
+  debouncedLoanAmount: number;
   borrowLimit: number;
   boostMag: number;
+  loanInterest: number;
+  setLoanInterest: (_interest: number) => void;
+  loanInterestRate: number;
+  setLoanInterestRate: (_interestRate: number) => void;
   setLock: (_lock: number) => void;
   setStake: (_stake: number) => void;
   setUnstake: (_unstake: number) => void;
@@ -160,9 +165,11 @@ export interface GoldilendInitialState {
   handleBorrowChange: (_input: string) => void;
   handleLoanDateChange: (_input: string) => void;
   loanExpiration: string;
+  debouncedLoanExpiration: string;
   findLoans: () => void;
   findBeras: () => void;
   findBoost: () => void;
   findPartners: () => void;
   findLiquidatableLoans: () => void;
+  getInterestRate: () => void;
 }
