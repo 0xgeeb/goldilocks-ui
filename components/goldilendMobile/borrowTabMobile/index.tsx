@@ -7,6 +7,7 @@ import { LendNotificationMobile } from "../../goldilendMobile"
 export const BorrowTabMobile = () => {
 
   const [currentIndex, setCurrentIndex] = useState<number>(0)
+  const [daysTilExpiration, setDaysTilExpiration] = useState<number>(14)
 
   const {
     ownedBeras,
@@ -102,6 +103,19 @@ export const BorrowTabMobile = () => {
     }
   }
 
+  const sliderValue = ((daysTilExpiration - 7) / (365 - 7)) * 100
+
+  const handleSliderChange = (days: string) => {
+    const daysNum = parseFloat(days)
+    setDaysTilExpiration(daysNum)
+    const currentDate = new Date()
+    currentDate.setDate(currentDate.getDate() + daysNum)
+    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0')
+    const day = currentDate.getDate().toString().padStart(2, '0')
+    const year = currentDate.getFullYear().toString()
+    handleLoanDateChange(`${month}-${day}-${year}`)
+  }
+
   return (
     <>
       {
@@ -179,6 +193,22 @@ export const BorrowTabMobile = () => {
                 value={loanExpiration}
                 onChange={(e) => handleLoanDateChange(e.target.value)}
               />
+            </div>
+            <div className="w-[95%] my-[1%] text-[3.5vw] flex flex-row items-center justify-between font-baloo font-semibold">
+              <div className="h-[100%] w-[70%] bg-[#C09D87] p-2 flex items-center justify-center">
+                <input
+                  className="h-[100%] w-[100%] bg-black"
+                  id="date-slider"
+                  type="range"
+                  min="7"
+                  max="365"
+                  defaultValue="14"
+                  value={daysTilExpiration}
+                  onChange={(e) => handleSliderChange(e.target.value)}
+                  style={{background: `linear-gradient(to right, black ${sliderValue}%, #C09D87 ${sliderValue}%)`}}
+                />
+              </div>
+              <span>{daysTilExpiration} days</span>
             </div>
             <div className="w-[95%] text-[3.5vw] flex flex-row items-center justify-between font-baloo font-semibold">
               <span>Interest Rate:</span>
