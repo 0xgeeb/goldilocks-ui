@@ -69,6 +69,19 @@ export const BorrowTab = () => {
     }
   }, [selectedBeras, debouncedLoanAmount, debouncedLoanExpiration])
 
+  useEffect(() => {
+    if(checkDate(debouncedLoanExpiration)) {
+      const [month, day, year] = debouncedLoanExpiration.split('-').map(Number)
+      const inputDate = new Date(year, month - 1, day)
+      const currentDate = new Date()
+      const timeDifference = inputDate.getTime() - currentDate.getTime()
+      const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24))
+      if(daysDifference >= 7 && daysDifference <= 365) {
+        setDaysTilExpiration(daysDifference)
+      }
+    }
+  }, [debouncedLoanExpiration])
+
   const loadingElement = () => {
     return <span className="loader-small mx-auto"></span>
   }
@@ -281,7 +294,7 @@ export const BorrowTab = () => {
         <div className="w-[90%] my-[1%] flex flex-row items-center justify-between font-baloo font-semibold text-[1.8vw] xl:text-[1vw]">
           <div className="h-[100%] w-[70%] bg-[#C09D87] p-2 flex items-center justify-center">
             <input
-              className="h-[100%] w-[100%] bg-black"
+              className="h-[100%] w-[100%] bg-black hover:cursor-pointer"
               id="date-slider"
               type="range"
               min="7"

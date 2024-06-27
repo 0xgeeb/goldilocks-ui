@@ -52,7 +52,7 @@ export const SwapWalletBalance = ()=> {
   return (
     <>
       <div
-        className={`absolute h-[4%] w-[14%] md:w-[13%] lg:w-[10.5%] xl:w-[10%] top-[45%] lg:top-[43.5%] xl:top-[12%] left-[50%] md:left-[80%] lg:left-[75%] 2xl:left-[71.875%] origin-bottom-left rotate-[90deg] hover:scale-105 ${walletOpen && window.innerWidth > 1280 ? "translate-x-[220%]" : ""} bg-[#D5A774] flex justify-center items-center font-baloo font-semibold text-[1.5vw] lg:text-[1.1vw]  xl:text-[1vw] 2xl:text-[0.8vw] border-r-2 border-l-2 border-t-2 border-black cursor-pointer transition-transform ease-linear`}
+        className={`absolute h-[4%] w-[14%] md:w-[13%] lg:w-[10.5%] xl:w-[10%] top-[45%] lg:top-[43.5%] xl:top-[12%] left-[50%] md:left-[80%] lg:left-[75%] 2xl:left-[71.875%] origin-bottom-left rotate-[90deg] hover:scale-105 ${walletOpen && window.innerWidth >= 1280 ? "translate-x-[220%]" : ""} bg-[#D5A774] flex justify-center items-center font-baloo font-semibold text-[1.5vw] lg:text-[1.1vw]  xl:text-[1vw] 2xl:text-[0.8vw] border-r-2 border-l-2 border-t-2 border-black cursor-pointer transition-transform ease-linear`}
         onClick={() => setWalletOpen(prev => !prev)}
       >
         <span className="scale-[-1]">WALLET BALANCE</span>

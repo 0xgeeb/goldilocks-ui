@@ -227,6 +227,7 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
     setStakeState(0)
     setUnstakeState(0)
     setLendActiveToggleState(toggle)
+    setAllowanceButtonsState(false)
   }
 
   const handlePercentageButtons = (action: number) => {

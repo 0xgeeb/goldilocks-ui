@@ -59,6 +59,19 @@ export const BorrowTabMobile = () => {
     }
   }, [selectedBeras, debouncedLoanAmount, debouncedLoanExpiration])
 
+  useEffect(() => {
+    if(checkDate(debouncedLoanExpiration)) {
+      const [month, day, year] = debouncedLoanExpiration.split('-').map(Number)
+      const inputDate = new Date(year, month - 1, day)
+      const currentDate = new Date()
+      const timeDifference = inputDate.getTime() - currentDate.getTime()
+      const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24))
+      if(daysDifference >= 7 && daysDifference <= 365) {
+        setDaysTilExpiration(daysDifference)
+      }
+    }
+  }, [debouncedLoanExpiration])
+
   const checkDate = (dateString: String): boolean => {
     const dateParts = dateString.split('-')
     const [month, day, year] = dateParts.map(Number)

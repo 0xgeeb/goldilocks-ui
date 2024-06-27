@@ -52,7 +52,7 @@ export const WalletBalance = ()=> {
   return (
     <>
       <div
-        className={`absolute h-[4%] w-[14%] md:w-[13%] lg:w-[10.5%] xl:w-[10%] top-[35%] xl:top-[14%] left-[25%] md:left-[20%] lg:left-[25%] xl:left-[75%] 2xl:left-[71.875%] origin-top-left xl:origin-bottom-left rotate-[90deg] hover:scale-105 ${walletOpen && window.innerWidth > 1280 ? "translate-x-[220%]" : ""} bg-[#D5A774] flex justify-center items-center font-baloo font-semibold text-[1.5vw] lg:text-[1.1vw] xl:text-[1vw] 2xl:text-[0.8vw] border-r-2 border-l-2 border-b-2 xl:border-b-0 xl:border-t-2 border-black cursor-pointer transition-transform ease-linear`}
+        className={`absolute h-[4%] w-[14%] md:w-[13%] lg:w-[10.5%] xl:w-[10%] top-[35%] xl:top-[14%] left-[25%] md:left-[20%] lg:left-[25%] xl:left-[75%] 2xl:left-[71.875%] origin-top-left xl:origin-bottom-left rotate-[90deg] hover:scale-105 ${walletOpen && window.innerWidth >= 1280 ? "translate-x-[220%]" : ""} bg-[#D5A774] flex justify-center items-center font-baloo font-semibold text-[1.5vw] lg:text-[1.1vw] xl:text-[1vw] 2xl:text-[0.8vw] border-r-2 border-l-2 border-b-2 xl:border-b-0 xl:border-t-2 border-black cursor-pointer transition-transform ease-linear`}
         onClick={() => setWalletOpen(prev => !prev)}
       >
         <span className="scale-[-1]">WALLET BALANCE</span>
