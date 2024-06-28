@@ -299,7 +299,6 @@ export const BorrowTab = () => {
               type="range"
               min="7"
               max="365"
-              defaultValue="14"
               value={daysTilExpiration}
               onChange={(e) => handleSliderChange(e.target.value)}
               style={{background: `linear-gradient(to right, black ${sliderValue}%, #C09D87 ${sliderValue}%)`}}
