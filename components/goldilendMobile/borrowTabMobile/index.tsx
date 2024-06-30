@@ -41,7 +41,7 @@ export const BorrowTabMobile = () => {
 
   useEffect(() => {
     refreshBalances()
-    findBeras(),
+    // findBeras(),
     setInfoLoading(false)
   }, [isConnected])
 
