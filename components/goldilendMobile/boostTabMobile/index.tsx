@@ -28,7 +28,7 @@ export const BoostTabMobile = () => {
   const { isConnected, refreshBalances } = useWallet()
 
   useEffect(() => {
-    findPartners()
+    // findPartners()
     findBoost()
     refreshBalances()
     setInfoLoading(false)
