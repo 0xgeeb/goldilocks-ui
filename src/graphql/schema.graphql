@@ -1,0 +1,143 @@
+type Query {
+  bondBera(id: BigInt!, timestamp: Int): BondBera
+  bondBeras(timestamp: Int, where: BondBeraFilter, orderBy: String, orderDirection: String, before: String, after: String, limit: Int): BondBeraPage!
+  bandBera(id: BigInt!, timestamp: Int): BandBera
+  bandBeras(timestamp: Int, where: BandBeraFilter, orderBy: String, orderDirection: String, before: String, after: String, limit: Int): BandBeraPage!
+  beradrome(id: BigInt!, timestamp: Int): Beradrome
+  beradromes(timestamp: Int, where: BeradromeFilter, orderBy: String, orderDirection: String, before: String, after: String, limit: Int): BeradromePage!
+  honeycomb(id: BigInt!, timestamp: Int): Honeycomb
+  honeycombs(timestamp: Int, where: HoneycombFilter, orderBy: String, orderDirection: String, before: String, after: String, limit: Int): HoneycombPage!
+}
+
+type BondBera {
+  id: BigInt!
+  owner: String!
+}
+
+scalar BigInt
+
+type BondBeraPage {
+  items: [BondBera!]!
+  pageInfo: PageInfo!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+input BondBeraFilter {
+  AND: [BondBeraFilter]
+  OR: [BondBeraFilter]
+  id: BigInt
+  id_not: BigInt
+  id_in: [BigInt]
+  id_not_in: [BigInt]
+  id_gt: BigInt
+  id_lt: BigInt
+  id_gte: BigInt
+  id_lte: BigInt
+  owner: String
+  owner_not: String
+  owner_in: [String]
+  owner_not_in: [String]
+  owner_gt: String
+  owner_lt: String
+  owner_gte: String
+  owner_lte: String
+}
+
+type BandBera {
+  id: BigInt!
+  owner: String!
+}
+
+type BandBeraPage {
+  items: [BandBera!]!
+  pageInfo: PageInfo!
+}
+
+input BandBeraFilter {
+  AND: [BandBeraFilter]
+  OR: [BandBeraFilter]
+  id: BigInt
+  id_not: BigInt
+  id_in: [BigInt]
+  id_not_in: [BigInt]
+  id_gt: BigInt
+  id_lt: BigInt
+  id_gte: BigInt
+  id_lte: BigInt
+  owner: String
+  owner_not: String
+  owner_in: [String]
+  owner_not_in: [String]
+  owner_gt: String
+  owner_lt: String
+  owner_gte: String
+  owner_lte: String
+}
+
+type Beradrome {
+  id: BigInt!
+  owner: String!
+}
+
+type BeradromePage {
+  items: [Beradrome!]!
+  pageInfo: PageInfo!
+}
+
+input BeradromeFilter {
+  AND: [BeradromeFilter]
+  OR: [BeradromeFilter]
+  id: BigInt
+  id_not: BigInt
+  id_in: [BigInt]
+  id_not_in: [BigInt]
+  id_gt: BigInt
+  id_lt: BigInt
+  id_gte: BigInt
+  id_lte: BigInt
+  owner: String
+  owner_not: String
+  owner_in: [String]
+  owner_not_in: [String]
+  owner_gt: String
+  owner_lt: String
+  owner_gte: String
+  owner_lte: String
+}
+
+type Honeycomb {
+  id: BigInt!
+  owner: String!
+}
+
+type HoneycombPage {
+  items: [Honeycomb!]!
+  pageInfo: PageInfo!
+}
+
+input HoneycombFilter {
+  AND: [HoneycombFilter]
+  OR: [HoneycombFilter]
+  id: BigInt
+  id_not: BigInt
+  id_in: [BigInt]
+  id_not_in: [BigInt]
+  id_gt: BigInt
+  id_lt: BigInt
+  id_gte: BigInt
+  id_lte: BigInt
+  owner: String
+  owner_not: String
+  owner_in: [String]
+  owner_not_in: [String]
+  owner_gt: String
+  owner_lt: String
+  owner_gte: String
+  owner_lte: String
+}

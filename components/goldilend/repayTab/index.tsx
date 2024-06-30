@@ -39,11 +39,11 @@ export const RepayTab = () => {
 
   const { wallet, balance, refreshBalances, isConnected } = useWallet()
 
-  useEffect(() => {
-    findLoans()
-    refreshBalances()
-    setInfoLoading(false)
-  }, [isConnected])
+  // useEffect(() => {
+  //   findLoans()
+  //   refreshBalances()
+  //   setInfoLoading(false)
+  // }, [isConnected])
 
   const loadingElement = () => {
     return <span className="loader-small mx-auto my-auto"></span>

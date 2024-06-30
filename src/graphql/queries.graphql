@@ -1,0 +1,29 @@
+query BerasOwned($owner: String!) {
+  bondBeras(where: { owner: $owner }, orderDirection: "desc") {
+    items {
+      id
+      owner
+    }
+  }
+  bandBeras(where: { owner: $owner }, orderDirection: "desc") {
+    items {
+      id
+      owner
+    }
+  }
+}
+
+query PartnerNFTsOwned($owner: String!) {
+  beradromes(where: { owner: $owner }, orderDirection: "desc") {
+    items {
+      id
+      owner
+    }
+  }
+  honeycombs(where: { owner: $owner }, orderDirection: "desc") {
+    items {
+      id
+      owner
+    }
+  }
+}

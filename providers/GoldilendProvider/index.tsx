@@ -40,64 +40,9 @@ const INITIAL_STATE: GoldilendInitialState = {
   loanInterestRate: 0,
   setLoanInterest: (_interest: number) => {},
   setLoanInterestRate: (_interestRate: number) => {},
-  ownedBeras: [
-    // {
-    //   name: "BondBera",
-    //   id: 1,
-    //   imageSrc: "https://ipfs.io/ipfs/QmSaVWb15oQ1HcsUjGGkjwHQ1mxJBYeivtBCgHHHiVLt7w",
-    //   valuation: 50,
-    //   index: 0
-    // },
-    // {
-    //   name: "BondBera",
-    //   id: 2,
-    //   imageSrc: "https://ipfs.io/ipfs/QmSaVWb15oQ1HcsUjGGkjwHQ1mxJBYeivtBCgHHHiVLt7w",
-    //   valuation: 50,
-    //   index: 1
-    // },
-    // {
-    //   name: "BandBera",
-    //   id: 1,
-    //   imageSrc: "https://ipfs.io/ipfs/QmNWggx9vvBVEHZc6xwWkdyymoKuXCYrJ3zQwwKzocDxRt",
-    //   valuation: 50,
-    //   index: 2
-    // },
-    // {
-    //   name: "BandBera",
-    //   id: 2,
-    //   imageSrc: "https://ipfs.io/ipfs/QmNWggx9vvBVEHZc6xwWkdyymoKuXCYrJ3zQwwKzocDxRt",
-    //   valuation: 50,
-    //   index: 3
-    // },
-    // {
-    //   name: "BondBera",
-    //   id: 3,
-    //   imageSrc: "https://ipfs.io/ipfs/QmSaVWb15oQ1HcsUjGGkjwHQ1mxJBYeivtBCgHHHiVLt7w",
-    //   valuation: 50,
-    //   index: 4
-    // },
-    // {
-    //   name: "BandBera",
-    //   id: 3,
-    //   imageSrc: "https://ipfs.io/ipfs/QmNWggx9vvBVEHZc6xwWkdyymoKuXCYrJ3zQwwKzocDxRt",
-    //   valuation: 50,
-    //   index: 5
-    // },
-  ],
+  ownedBeras: [],
   selectedBeras: [],
-  userLoans: [
-    // {
-    //   collateralNFTs: ['0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad', '0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad', '0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad', '0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad'],
-    //   collateralNFTIds: [2, 3],
-    //   borrowedAmount: 45678546,
-    //   interest: 0.5015,
-    //   duration: 1725854,
-    //   endDate: 1719240812,
-    //   loanId: 1,
-    //   liquidated: false
-    // },
-
-  ],
+  userLoans: [],
   ownedPartners: [],
   selectedPartners: [],
   userBoost: {
@@ -106,18 +51,7 @@ const INITIAL_STATE: GoldilendInitialState = {
     boostMagnitude: 0,
     expiry: 0
   },
-  liquidatableLoans: [
-    // {
-    //   collateralNFTs: ['0xasdfasdfasdfasdfasfd', '0xasdfasdfasdfasdfsad'],
-    //   collateralNFTIds: [2, 3],
-    //   borrowedAmount: 2,
-    //   interest: 0.5015,
-    //   duration: 1725854,
-    //   endDate: 1719240812,
-    //   loanId: 2,
-    //   liquidated: false
-    // },
-  ],
+  liquidatableLoans: [],
   notification: {
     toggle: false,
     action: '',
@@ -156,16 +90,18 @@ const INITIAL_STATE: GoldilendInitialState = {
   handlePartnerClick: (_partner: PartnerInfo) => {},
   findSelectedBeraIdxs: () => [],
   findSelectedPartnerIdxs: () => [],
-  findBeras: () => {},
+  findBeras: (_beras: any) => {},
   findLoans: () => {},
   findBoost: () => {},
   findLiquidatableLoans: () => {},
-  findPartners: () => {},
+  findPartners: (_partners: any) => {},
   updateBorrowLimit: () => {},
   updateBoostMag: () => {},
   handleBorrowChange: (_input: string) => {},
   handleLoanDateChange: (_input: string) => {},
-  getInterestRate: () => {}
+  getInterestRate: () => {},
+  refetch: false,
+  setRefetch: (_toggle: boolean) => {}
 }
 
 const GoldilendContext = createContext(INITIAL_STATE)
@@ -209,12 +145,11 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
   const [chartOpenState, setChartOpenState] = useState<boolean>(INITIAL_STATE.chartOpen)
   const [balanceMobileToggleState, setBalanceMobileToggleState] = useState<boolean>(INITIAL_STATE.balanceMobileToggle)
   const [selectScreenState, setSelectScreenState] = useState<boolean>(INITIAL_STATE.selectScreen)
+  const [refetchState, setRefetchState] = useState<boolean>(INITIAL_STATE.refetch)
 
   const changeActiveToggle = (toggle: string) => {
     setSelectedBerasState([])
     setSelectedPartnersState([])
-    setOwnedBerasState([])
-    setOwnedPartnersState([])
     setBorrowDisplayStringState('')
     setLoanExpirationState('')
     setLoanAmountState(0)
@@ -386,39 +321,29 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
     }
   }
 
-  const findBeras = async () => {
-    // if(wallet) {
-    //   const options = { method: 'GET', headers: {accept: 'application/json'} }
-    //   // todo: env
-    //   const response = await fetch(`https://base-sepolia.g.alchemy.com/nft/v3/XgNYMjOtB41dpMK9FvXg9seQVdFIzqsA/getNFTsForOwner?owner=${wallet}&withMetadata=true&pageSize=100`, options)
-    //   const data = await response.json()
-  
-    //   let beraIndex = 0
-    //   for(const nft of data.ownedNfts) {
-    //     if(nft.contract.address === '0x8172BDB659837F321bF7Da8941d8E12a62a72d6a') {
-    //       const bondInfo  = {
-    //         name: "BondBera",
-    //         id: nft.tokenId,
-    //         imageSrc: "https://ipfs.io/ipfs/QmSaVWb15oQ1HcsUjGGkjwHQ1mxJBYeivtBCgHHHiVLt7w",
-    //         valuation: 50,
-    //         index: beraIndex
-    //       }
-    //       setOwnedBerasState(curr => [...curr, bondInfo])
-    //       beraIndex++
-    //     }
-    //     if(nft.contract.address === '0xB1195a6cdB7ef8fB22671bd8321727dBB6DDDe03') {
-    //       const bandInfo  = {
-    //         name: "BandBera",
-    //         id: nft.tokenId,
-    //         imageSrc: "https://ipfs.io/ipfs/QmNWggx9vvBVEHZc6xwWkdyymoKuXCYrJ3zQwwKzocDxRt",
-    //         valuation: 50,
-    //         index: beraIndex
-    //       }
-    //       setOwnedBerasState(curr => [...curr, bandInfo])
-    //       beraIndex++
-    //     }
-    //   }
-    // }
+  const findBeras = async (beras: any) => {
+    console.log(beras)
+    let beraIndex = 0
+    for(const bondbera of beras.bondBeras.items) {
+      const bondInfo  = {
+        name: "BondBera",
+        id: bondbera.id,
+        valuation: 50,
+        index: beraIndex
+      }
+      setOwnedBerasState(curr => [...curr, bondInfo])
+      beraIndex++
+    }
+    for(const bandbera of beras.bandBeras.items) {
+      const bandInfo  = {
+        name: "BandBera",
+        id: bandbera.id,
+        valuation: 50,
+        index: beraIndex
+      }
+      setOwnedBerasState(curr => [...curr, bandInfo])
+      beraIndex++
+    }
   }
 
   const handleLoanDateChange = (input: string) => {
@@ -457,6 +382,7 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
   }
 
   const findBoost = async () => {
+    console.log('going to find boost')
     if(wallet) {
       const boost = await readContract(config, {
         address: contracts.goldilend.address as `0x${string}`,
@@ -464,6 +390,7 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
         functionName: 'lookupBoost',
         args: [wallet]
       })
+      console.log(boost)
       const boostData = boost as unknown as BoostData
       const userBoost = {
         partnerNFTs: boostData.partnerNFTs,
@@ -476,39 +403,29 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
     }
   }
 
-  const findPartners = async () => {
-    // if(wallet) {
-    //   const options = { method: 'GET', headers: {accept: 'application/json'} }
-    //   // todo: env
-    //   const response = await fetch(`https://base-sepolia.g.alchemy.com/nft/v3/XgNYMjOtB41dpMK9FvXg9seQVdFIzqsA/getNFTsForOwner?owner=${wallet}&withMetadata=true&pageSize=100`, options)
-    //   const data = await response.json()
-  
-    //   let partnerIndex = 0
-    //   for(const nft of data.ownedNfts) {
-    //     if(nft.contract.address === contracts.beradrome.address) {
-    //       const dromeInfo  = {
-    //         name: "Beradrome",
-    //         id: nft.tokenId,
-    //         imageSrc: "https://ipfs.io/ipfs/QmYhKPJVDZDRDpJAJ2TyCXK981B4pvtPcjrKgN256U4Cok/73.png",
-    //         boost: 9,
-    //         index: partnerIndex
-    //       }
-    //       setOwnedPartnersState(curr => [...curr, dromeInfo])
-    //       partnerIndex++
-    //     }
-    //     if(nft.contract.address === contracts.honeycomb.address) {
-    //       const combInfo  = {
-    //         name: "HoneyComb",
-    //         id: nft.tokenId,
-    //         imageSrc: "https://ipfs.io/ipfs/QmTffyDuYgSyFAgispVjuVaTsKnC5vVs7FFq1YkGde4ZX5",
-    //         boost: 6,
-    //         index: partnerIndex
-    //       }
-    //       setOwnedPartnersState(curr => [...curr, combInfo])
-    //       partnerIndex++
-    //     }
-    //   }
-    // }
+  const findPartners = async (partners: any) => {
+    console.log(partners)
+    let partnerIndex = 0
+    for(const drome of partners.beradromes.items) {
+      const dromeInfo  = {
+        name: "Beradrome",
+        id: drome.id,
+        boost: 9,
+        index: partnerIndex
+      }
+      setOwnedPartnersState(curr => [...curr, dromeInfo])
+      partnerIndex++
+    }
+    for(const honeycomb of partners.honeycombs.items) {
+      const combInfo  = {
+        name: "HoneyComb",
+        id: honeycomb.id,
+        boost: 6,
+        index: partnerIndex
+      }
+      setOwnedPartnersState(curr => [...curr, combInfo])
+      partnerIndex++
+    }
   }
 
   //todo: need indexer for this
@@ -639,7 +556,9 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
         setBalanceMobileToggle: setBalanceMobileToggleState,
         getInterestRate,
         debouncedLoanAmount: debouncedLoanAmountState,
-        debouncedLoanExpiration: debouncedLoanExpirationState
+        debouncedLoanExpiration: debouncedLoanExpirationState,
+        refetch: refetchState,
+        setRefetch: setRefetchState
       }}
     >
       { children }

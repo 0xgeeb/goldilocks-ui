@@ -16,7 +16,6 @@ export const BorrowTab = () => {
     ownedBeras,
     handleBeraClick,
     infoLoading,
-    setInfoLoading,
     findSelectedBeraIdxs,
     selectedBeras,
     borrowLimit,
@@ -31,7 +30,6 @@ export const BorrowTab = () => {
     notification,
     changeActiveToggle,
     openNotification,
-    findBeras,
     getInterestRate,
     debouncedLoanAmount,
     debouncedLoanExpiration,
@@ -47,13 +45,7 @@ export const BorrowTab = () => {
     sendBorrowTx
   } = useGoldilendTx()
 
-  const { wallet, refreshBalances, isConnected } = useWallet()
-
-  useEffect(() => {
-    refreshBalances()
-    findBeras(),
-    setInfoLoading(false)
-  }, [isConnected])
+  const { wallet } = useWallet()
 
   useEffect(() => {
     updateBorrowLimit()
@@ -83,7 +75,7 @@ export const BorrowTab = () => {
   }, [debouncedLoanExpiration])
 
   const loadingElement = () => {
-    return <span className="loader-small mx-auto"></span>
+    return <span className="loader-small mx-auto mt-[10%]"></span>
   }
 
   const formatAsString = (num: number): string => {
@@ -195,7 +187,8 @@ export const BorrowTab = () => {
         button.style.color = "black"
       }
       changeActiveToggle('BORROW')
-      findBeras()
+      // findBeras()
+      //todo: fuk
       setTimeout(() => {
         openNotification(false, '', '', '')
       }, 10000)
@@ -207,7 +200,8 @@ export const BorrowTab = () => {
         button.style.color = "black"
       }
       changeActiveToggle('BORROW')
-      findBeras()
+      // findBeras()
+      //todo: fuk
       setTxConfirming(false)
     }
   }
@@ -234,7 +228,7 @@ export const BorrowTab = () => {
         <div className="flex flex-wrap overflow-y-auto w-[85%] h-[80%] py-[2%]" id="hide-scrollbar">
           {
             infoLoading ? loadingElement() :
-            ownedBeras.map((bera, index) => (
+            ownedBeras?.map((bera, index) => (
               <div key={index} className="h-[40%] xl:h-[45%] w-[50%] py-2">
                 <img
                   className={`ml-[5%] h-[100%] w-[90%] border-2 border-black hover:scale-110 hover:cursor-pointer ${findSelectedBeraIdxs().includes(bera.index) ? "border-4 border-black" : "opacity-75"}`}

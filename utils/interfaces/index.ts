@@ -45,7 +45,6 @@ export interface WalletInitialState {
 export interface BeraInfo {
   name: string;
   id: number;
-  imageSrc: string;
   valuation: number;
   index: number;
 }
@@ -53,7 +52,6 @@ export interface BeraInfo {
 export interface PartnerInfo {
   name: string;
   id: number;
-  imageSrc: string;
   boost: number;
   index: number;
 }
@@ -167,9 +165,11 @@ export interface GoldilendInitialState {
   loanExpiration: string;
   debouncedLoanExpiration: string;
   findLoans: () => void;
-  findBeras: () => void;
+  findBeras: (_beras: any) => void;
   findBoost: () => void;
-  findPartners: () => void;
+  findPartners: (_partners: any) => void;
   findLiquidatableLoans: () => void;
   getInterestRate: () => void;
+  refetch: boolean;
+  setRefetch: (_toggle: boolean) => void;
 }

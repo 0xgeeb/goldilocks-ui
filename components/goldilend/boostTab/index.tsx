@@ -15,9 +15,6 @@ export const BoostTab = () => {
 
   const {
     infoLoading,
-    findBoost,
-    findPartners,
-    setInfoLoading,
     ownedPartners,
     selectedPartners,
     findSelectedPartnerIdxs,
@@ -29,7 +26,8 @@ export const BoostTab = () => {
     setTxConfirming,
     openNotification,
     changeActiveToggle,
-    userBoost
+    userBoost,
+    setRefetch
   } = useGoldilend()
 
   const {
@@ -39,14 +37,7 @@ export const BoostTab = () => {
     sendWithdrawBoostTx
   } = useGoldilendTx()
 
-  const { wallet, isConnected, refreshBalances } = useWallet()
-
-  useEffect(() => {
-    findPartners()
-    findBoost()
-    refreshBalances()
-    setInfoLoading(false)
-  }, [isConnected])
+  const { wallet } = useWallet()
 
   useEffect(() => {
     updateBoostMag()
@@ -104,7 +95,9 @@ export const BoostTab = () => {
 
   const refreshInfo = () => {
     changeActiveToggle('BOOST')
-    findPartners()
+    setRefetch(true)
+    // findPartners()
+    //todo: fix dis
   }
 
   const handleButtonClick = async () => {
