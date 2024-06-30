@@ -41,7 +41,7 @@ export const BorrowButtonMobile = () => {
 
   const refreshInfo = () => {
     changeActiveToggle('BOOST')
-    findPartners()
+    // findPartners()
   }
 
   const checkSelected = (beraName: string): boolean => {
@@ -252,7 +252,7 @@ export const BorrowButtonMobile = () => {
         button.style.color = "black"
       }
       changeActiveToggle('BORROW')
-      findBeras()
+      // findBeras()
       setTimeout(() => {
         openNotification(false, '', '', '')
       }, 10000)
@@ -264,7 +264,8 @@ export const BorrowButtonMobile = () => {
         button.style.color = "black"
       }
       changeActiveToggle('BORROW')
-      findBeras()
+      // findBeras()
+      //todo:
       setTxConfirming(false)
     }
   }
