@@ -25,12 +25,12 @@ export const BorrowFetcher = () => {
     skip
   })
 
-  const { data: partnerData, loading: partnerLoading } = usePartnerNfTsOwnedQuery({
-    variables: {
-      owner: wallet
-    },
-    skip: partnerSkip
-  })
+  // const { data: partnerData, loading: partnerLoading } = usePartnerNfTsOwnedQuery({
+  //   variables: {
+  //     owner: wallet
+  //   },
+  //   skip: partnerSkip
+  // })
 
   useEffect(() => {
     if(!loading && !!data) {
@@ -41,14 +41,14 @@ export const BorrowFetcher = () => {
     }
   }, [data, loading])
 
-  useEffect(() => {
-    if(!partnerLoading && !!partnerData) {
-      console.log('finding partners', partnerData)
-      findPartners(partnerData)
-      setPartnerSkip(true)
-      setInfoLoading(false)
-    }
-  }, [partnerData, partnerLoading])
+  // useEffect(() => {
+  //   if(!partnerLoading && !!partnerData) {
+  //     console.log('finding partners', partnerData)
+  //     findPartners(partnerData)
+  //     setPartnerSkip(true)
+  //     setInfoLoading(false)
+  //   }
+  // }, [partnerData, partnerLoading])
 
   useEffect(() => {
     findBoost()
