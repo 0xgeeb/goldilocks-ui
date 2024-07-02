@@ -238,23 +238,16 @@ export type QueryHoneycombsArgs = {
   where?: InputMaybe<HoneycombFilter>;
 };
 
-export type BerasOwnedQueryVariables = Exact<{
+export type GoldilendNfTsOwnedQueryVariables = Exact<{
   owner: Scalars['String']['input'];
 }>;
 
 
-export type BerasOwnedQuery = { __typename?: 'Query', bondBeras: { __typename?: 'BondBeraPage', items: Array<{ __typename?: 'BondBera', id: any, owner: string }> }, bandBeras: { __typename?: 'BandBeraPage', items: Array<{ __typename?: 'BandBera', id: any, owner: string }> } };
-
-export type PartnerNfTsOwnedQueryVariables = Exact<{
-  owner: Scalars['String']['input'];
-}>;
+export type GoldilendNfTsOwnedQuery = { __typename?: 'Query', bondBeras: { __typename?: 'BondBeraPage', items: Array<{ __typename?: 'BondBera', id: any, owner: string }> }, bandBeras: { __typename?: 'BandBeraPage', items: Array<{ __typename?: 'BandBera', id: any, owner: string }> }, beradromes: { __typename?: 'BeradromePage', items: Array<{ __typename?: 'Beradrome', id: any, owner: string }> }, honeycombs: { __typename?: 'HoneycombPage', items: Array<{ __typename?: 'Honeycomb', id: any, owner: string }> } };
 
 
-export type PartnerNfTsOwnedQuery = { __typename?: 'Query', beradromes: { __typename?: 'BeradromePage', items: Array<{ __typename?: 'Beradrome', id: any, owner: string }> }, honeycombs: { __typename?: 'HoneycombPage', items: Array<{ __typename?: 'Honeycomb', id: any, owner: string }> } };
-
-
-export const BerasOwnedDocument = gql`
-    query BerasOwned($owner: String!) {
+export const GoldilendNfTsOwnedDocument = gql`
+    query GoldilendNFTsOwned($owner: String!) {
   bondBeras(where: {owner: $owner}, orderDirection: "desc") {
     items {
       id
@@ -267,43 +260,6 @@ export const BerasOwnedDocument = gql`
       owner
     }
   }
-}
-    `;
-
-/**
- * __useBerasOwnedQuery__
- *
- * To run a query within a React component, call `useBerasOwnedQuery` and pass it any options that fit your needs.
- * When your component renders, `useBerasOwnedQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useBerasOwnedQuery({
- *   variables: {
- *      owner: // value for 'owner'
- *   },
- * });
- */
-export function useBerasOwnedQuery(baseOptions: Apollo.QueryHookOptions<BerasOwnedQuery, BerasOwnedQueryVariables> & ({ variables: BerasOwnedQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<BerasOwnedQuery, BerasOwnedQueryVariables>(BerasOwnedDocument, options);
-      }
-export function useBerasOwnedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BerasOwnedQuery, BerasOwnedQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<BerasOwnedQuery, BerasOwnedQueryVariables>(BerasOwnedDocument, options);
-        }
-export function useBerasOwnedSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<BerasOwnedQuery, BerasOwnedQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<BerasOwnedQuery, BerasOwnedQueryVariables>(BerasOwnedDocument, options);
-        }
-export type BerasOwnedQueryHookResult = ReturnType<typeof useBerasOwnedQuery>;
-export type BerasOwnedLazyQueryHookResult = ReturnType<typeof useBerasOwnedLazyQuery>;
-export type BerasOwnedSuspenseQueryHookResult = ReturnType<typeof useBerasOwnedSuspenseQuery>;
-export type BerasOwnedQueryResult = Apollo.QueryResult<BerasOwnedQuery, BerasOwnedQueryVariables>;
-export const PartnerNfTsOwnedDocument = gql`
-    query PartnerNFTsOwned($owner: String!) {
   beradromes(where: {owner: $owner}, orderDirection: "desc") {
     items {
       id
@@ -320,34 +276,34 @@ export const PartnerNfTsOwnedDocument = gql`
     `;
 
 /**
- * __usePartnerNfTsOwnedQuery__
+ * __useGoldilendNfTsOwnedQuery__
  *
- * To run a query within a React component, call `usePartnerNfTsOwnedQuery` and pass it any options that fit your needs.
- * When your component renders, `usePartnerNfTsOwnedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGoldilendNfTsOwnedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGoldilendNfTsOwnedQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = usePartnerNfTsOwnedQuery({
+ * const { data, loading, error } = useGoldilendNfTsOwnedQuery({
  *   variables: {
  *      owner: // value for 'owner'
  *   },
  * });
  */
-export function usePartnerNfTsOwnedQuery(baseOptions: Apollo.QueryHookOptions<PartnerNfTsOwnedQuery, PartnerNfTsOwnedQueryVariables> & ({ variables: PartnerNfTsOwnedQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+export function useGoldilendNfTsOwnedQuery(baseOptions: Apollo.QueryHookOptions<GoldilendNfTsOwnedQuery, GoldilendNfTsOwnedQueryVariables> & ({ variables: GoldilendNfTsOwnedQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<PartnerNfTsOwnedQuery, PartnerNfTsOwnedQueryVariables>(PartnerNfTsOwnedDocument, options);
+        return Apollo.useQuery<GoldilendNfTsOwnedQuery, GoldilendNfTsOwnedQueryVariables>(GoldilendNfTsOwnedDocument, options);
       }
-export function usePartnerNfTsOwnedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PartnerNfTsOwnedQuery, PartnerNfTsOwnedQueryVariables>) {
+export function useGoldilendNfTsOwnedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GoldilendNfTsOwnedQuery, GoldilendNfTsOwnedQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<PartnerNfTsOwnedQuery, PartnerNfTsOwnedQueryVariables>(PartnerNfTsOwnedDocument, options);
+          return Apollo.useLazyQuery<GoldilendNfTsOwnedQuery, GoldilendNfTsOwnedQueryVariables>(GoldilendNfTsOwnedDocument, options);
         }
-export function usePartnerNfTsOwnedSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<PartnerNfTsOwnedQuery, PartnerNfTsOwnedQueryVariables>) {
+export function useGoldilendNfTsOwnedSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GoldilendNfTsOwnedQuery, GoldilendNfTsOwnedQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<PartnerNfTsOwnedQuery, PartnerNfTsOwnedQueryVariables>(PartnerNfTsOwnedDocument, options);
+          return Apollo.useSuspenseQuery<GoldilendNfTsOwnedQuery, GoldilendNfTsOwnedQueryVariables>(GoldilendNfTsOwnedDocument, options);
         }
-export type PartnerNfTsOwnedQueryHookResult = ReturnType<typeof usePartnerNfTsOwnedQuery>;
-export type PartnerNfTsOwnedLazyQueryHookResult = ReturnType<typeof usePartnerNfTsOwnedLazyQuery>;
-export type PartnerNfTsOwnedSuspenseQueryHookResult = ReturnType<typeof usePartnerNfTsOwnedSuspenseQuery>;
-export type PartnerNfTsOwnedQueryResult = Apollo.QueryResult<PartnerNfTsOwnedQuery, PartnerNfTsOwnedQueryVariables>;
+export type GoldilendNfTsOwnedQueryHookResult = ReturnType<typeof useGoldilendNfTsOwnedQuery>;
+export type GoldilendNfTsOwnedLazyQueryHookResult = ReturnType<typeof useGoldilendNfTsOwnedLazyQuery>;
+export type GoldilendNfTsOwnedSuspenseQueryHookResult = ReturnType<typeof useGoldilendNfTsOwnedSuspenseQuery>;
+export type GoldilendNfTsOwnedQueryResult = Apollo.QueryResult<GoldilendNfTsOwnedQuery, GoldilendNfTsOwnedQueryVariables>;

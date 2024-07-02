@@ -100,8 +100,8 @@ const INITIAL_STATE: GoldilendInitialState = {
   handleBorrowChange: (_input: string) => {},
   handleLoanDateChange: (_input: string) => {},
   getInterestRate: () => {},
-  refetch: false,
-  setRefetch: (_toggle: boolean) => {}
+  updateOwnedBeras: (_nfts: BeraInfo | BeraInfo[]) => {},
+  updateOwnedPartners: (_nfts: PartnerInfo | PartnerInfo[]) => {}
 }
 
 const GoldilendContext = createContext(INITIAL_STATE)
@@ -145,7 +145,6 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
   const [chartOpenState, setChartOpenState] = useState<boolean>(INITIAL_STATE.chartOpen)
   const [balanceMobileToggleState, setBalanceMobileToggleState] = useState<boolean>(INITIAL_STATE.balanceMobileToggle)
   const [selectScreenState, setSelectScreenState] = useState<boolean>(INITIAL_STATE.selectScreen)
-  const [refetchState, setRefetchState] = useState<boolean>(INITIAL_STATE.refetch)
 
   const changeActiveToggle = (toggle: string) => {
     setSelectedBerasState([])
@@ -321,8 +320,11 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
     }
   }
 
+  const handleLoanDateChange = (input: string) => {
+    setLoanExpirationState(input)
+  }
+
   const findBeras = async (beras: any) => {
-    console.log(beras)
     let beraIndex = 0
     for(const bondbera of beras.bondBeras.items) {
       const bondInfo  = {
@@ -346,8 +348,28 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
     }
   }
 
-  const handleLoanDateChange = (input: string) => {
-    setLoanExpirationState(input)
+  const findPartners = async (partners: any) => {
+    let partnerIndex = 0
+    for(const drome of partners.beradromes.items) {
+      const dromeInfo  = {
+        name: "Beradrome",
+        id: drome.id,
+        boost: 9,
+        index: partnerIndex
+      }
+      setOwnedPartnersState(curr => [...curr, dromeInfo])
+      partnerIndex++
+    }
+    for(const honeycomb of partners.honeycombs.items) {
+      const combInfo  = {
+        name: "HoneyComb",
+        id: honeycomb.id,
+        boost: 6,
+        index: partnerIndex
+      }
+      setOwnedPartnersState(curr => [...curr, combInfo])
+      partnerIndex++
+    }
   }
 
   //todo: caps out at 20 loans
@@ -382,7 +404,6 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
   }
 
   const findBoost = async () => {
-    console.log('going to find boost')
     if(wallet) {
       const boost = await readContract(config, {
         address: contracts.goldilend.address as `0x${string}`,
@@ -390,7 +411,6 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
         functionName: 'lookupBoost',
         args: [wallet]
       })
-      console.log(boost)
       const boostData = boost as unknown as BoostData
       const userBoost = {
         partnerNFTs: boostData.partnerNFTs,
@@ -400,31 +420,6 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
       }
 
       setUserBoostState(userBoost)
-    }
-  }
-
-  const findPartners = async (partners: any) => {
-    console.log(partners)
-    let partnerIndex = 0
-    for(const drome of partners.beradromes.items) {
-      const dromeInfo  = {
-        name: "Beradrome",
-        id: drome.id,
-        boost: 9,
-        index: partnerIndex
-      }
-      setOwnedPartnersState(curr => [...curr, dromeInfo])
-      partnerIndex++
-    }
-    for(const honeycomb of partners.honeycombs.items) {
-      const combInfo  = {
-        name: "HoneyComb",
-        id: honeycomb.id,
-        boost: 6,
-        index: partnerIndex
-      }
-      setOwnedPartnersState(curr => [...curr, combInfo])
-      partnerIndex++
     }
   }
 
@@ -487,6 +482,24 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
     
     const calculatedRate = 10 + ((10 * 10 * (loanDuration / yearSeconds)) * (0.5 + (debt / poolSize)))
     setLoanInterestRateState(calculatedRate)
+  }
+
+  const updateOwnedBeras = (nfts: BeraInfo | BeraInfo[]) => {
+    if(Array.isArray(nfts)) {
+      setOwnedBerasState(prevState => prevState.filter(bera => !nfts.includes(bera)))
+    }
+    else {
+      setOwnedBerasState(prevState => prevState.filter(bera => bera !== nfts))
+    }
+  }
+
+  const updateOwnedPartners = (nfts: PartnerInfo | PartnerInfo[]) => {
+    if(Array.isArray(nfts)) {
+      setOwnedPartnersState(prevState => prevState.filter(partner => !nfts.includes(partner)))
+    }
+    else {
+      setOwnedPartnersState(prevState => prevState.filter(partner => partner !== nfts))
+    }
   }
 
   return (
@@ -557,8 +570,8 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
         getInterestRate,
         debouncedLoanAmount: debouncedLoanAmountState,
         debouncedLoanExpiration: debouncedLoanExpirationState,
-        refetch: refetchState,
-        setRefetch: setRefetchState
+        updateOwnedBeras,
+        updateOwnedPartners
       }}
     >
       { children }

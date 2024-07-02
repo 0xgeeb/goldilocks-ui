@@ -1,13 +1,12 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useBerasOwnedQuery, usePartnerNfTsOwnedQuery } from "../../../src/graphql/generated/queries"
+import { useGoldilendNfTsOwnedQuery } from "../../../src/graphql/generated/queries"
 import { useWallet, useGoldilend } from "../../../providers"
 
 export const BorrowFetcher = () => {
 
   const [skip, setSkip] = useState<boolean>(false)
-  const [partnerSkip, setPartnerSkip] = useState<boolean>(false)
 
   const {
     findBeras,
@@ -18,37 +17,21 @@ export const BorrowFetcher = () => {
 
   const { wallet, isConnected } = useWallet()
   
-  const { data, loading } = useBerasOwnedQuery({
+  const { data, loading } = useGoldilendNfTsOwnedQuery({
     variables: {
       owner: wallet
     },
     skip
   })
 
-  // const { data: partnerData, loading: partnerLoading } = usePartnerNfTsOwnedQuery({
-  //   variables: {
-  //     owner: wallet
-  //   },
-  //   skip: partnerSkip
-  // })
-
   useEffect(() => {
     if(!loading && !!data) {
-      console.log('finding beras', data)
       findBeras(data)
+      findPartners(data)
       setSkip(true)
       setInfoLoading(false)
     }
   }, [data, loading])
-
-  // useEffect(() => {
-  //   if(!partnerLoading && !!partnerData) {
-  //     console.log('finding partners', partnerData)
-  //     findPartners(partnerData)
-  //     setPartnerSkip(true)
-  //     setInfoLoading(false)
-  //   }
-  // }, [partnerData, partnerLoading])
 
   useEffect(() => {
     findBoost()

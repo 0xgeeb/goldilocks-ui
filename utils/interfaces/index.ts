@@ -170,6 +170,6 @@ export interface GoldilendInitialState {
   findPartners: (_partners: any) => void;
   findLiquidatableLoans: () => void;
   getInterestRate: () => void;
-  refetch: boolean;
-  setRefetch: (_toggle: boolean) => void;
+  updateOwnedBeras: (_nfts: BeraInfo | BeraInfo[]) => void;
+  updateOwnedPartners: (_nfts: PartnerInfo | PartnerInfo[]) => void;
 }

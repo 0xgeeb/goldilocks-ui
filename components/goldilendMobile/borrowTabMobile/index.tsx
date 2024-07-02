@@ -25,7 +25,6 @@ export const BorrowTabMobile = () => {
     loanAmount,
     txConfirming,
     notification,
-    findBeras,
     selectScreen,
     setSelectScreen,
     getInterestRate,
@@ -37,13 +36,7 @@ export const BorrowTabMobile = () => {
     setLoanInterestRate
   } = useGoldilend()
 
-  const { refreshBalances, isConnected } = useWallet()
-
-  useEffect(() => {
-    refreshBalances()
-    // findBeras(),
-    setInfoLoading(false)
-  }, [isConnected])
+  const { wallet, isConnected } = useWallet()
 
   useEffect(() => {
     updateBorrowLimit()
@@ -101,7 +94,7 @@ export const BorrowTabMobile = () => {
   }
 
   const loadingElement = () => {
-    return <span className="loader-small mx-auto"></span>
+    return <span className="loader-small mx-auto mt-[10%]"></span>
   }
 
   const nextImages = () => {
@@ -137,19 +130,24 @@ export const BorrowTabMobile = () => {
           <h1 className="font-amaticbold text-[10vw] mt-[5%]">select collateral</h1>
           <div className="flex flex-wrap overflow-y-auto w-[95%] h-[80%]" id="hide-scrollbar">
             {
-                infoLoading ? loadingElement() :
-                ownedBeras.map((bera, index) => (
-                  <div key={index} className="h-[45%] w-[50%] py-2">
-                    <img
-                      className={`ml-[5%] h-[100%] w-[90%] border-2 border-black hover:scale-110 hover:cursor-pointer ${findSelectedBeraIdxs().includes(bera.index) ? "border-4 border-black" : "opacity-75"}`}
-                      onClick={() => handleBeraClick(bera)}
-                      src={bera.name === 'BondBera' ? "/images/icon-bondbear.png" : "/images/icon-bandbear.png"}
-                      alt="bera"
-                    />
-                  </div>
-                ))
-              }
-            </div>
+              (!isConnected || ownedBeras.length == 0) ? 
+              <div className="w-[100%] h-[100%] flex flex-col items-center opacity-50">
+                <img className="w-[70%] my-[10%]" src="/images/icon-not-found.png" alt="not-found" />
+                <h1 className="font-amaticbold text-[8vw]">no beras</h1>
+              </div> :
+              infoLoading ? loadingElement() :
+              ownedBeras.map((bera, index) => (
+                <div key={index} className="h-[45%] w-[50%] py-2">
+                  <img
+                    className={`ml-[5%] h-[100%] w-[90%] border-2 border-black hover:scale-110 hover:cursor-pointer ${findSelectedBeraIdxs().includes(bera.index) ? "border-4 border-black" : "opacity-75"}`}
+                    onClick={() => handleBeraClick(bera)}
+                    src={bera.name === 'BondBera' ? "/images/icon-bondbear.png" : "/images/icon-bandbear.png"}
+                    alt="bera"
+                  />
+                </div>
+              ))
+            }
+          </div>
         </div>
       }
       {

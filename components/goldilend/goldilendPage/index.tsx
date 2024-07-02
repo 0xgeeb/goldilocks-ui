@@ -54,7 +54,6 @@ export const GoldilendPage = () => {
               <Footer />
             </div>
           </main> :
-          //todo: do balances to mobile
         <GoldilendPageMobile />
       }
     </ApolloProvider>

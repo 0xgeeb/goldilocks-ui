@@ -27,7 +27,8 @@ export const BoostTab = () => {
     openNotification,
     changeActiveToggle,
     userBoost,
-    setRefetch
+    updateOwnedPartners,
+    findBoost
   } = useGoldilend()
 
   const {
@@ -37,14 +38,14 @@ export const BoostTab = () => {
     sendWithdrawBoostTx
   } = useGoldilendTx()
 
-  const { wallet } = useWallet()
+  const { wallet, isConnected } = useWallet()
 
   useEffect(() => {
     updateBoostMag()
   }, [selectedPartners])
 
   const loadingElement = () => {
-    return <span className="loader-small mx-auto"></span>
+    return <span className="loader-small m-auto"></span>
   }
 
   const formatAsString = (num: number): string => {
@@ -93,13 +94,6 @@ export const BoostTab = () => {
     return `${month}-${day}-${year}`
   }
 
-  const refreshInfo = () => {
-    changeActiveToggle('BOOST')
-    setRefetch(true)
-    // findPartners()
-    //todo: fix dis
-  }
-
   const handleButtonClick = async () => {
     const button = document.getElementById('boost-button')
     if(selectedPartners.length == 0) {
@@ -141,18 +135,15 @@ export const BoostTab = () => {
         ``,
         withdrawBoostTx
       )
-      refreshInfo()
-      if(button) {
-        button.innerHTML = "withdraw boost"
-      }
+      button && (button.innerHTML = "withdraw boost")
+      changeActiveToggle('BOOST')
       setTimeout(() => {
         openNotification(false, '', '', '')
       }, 10000)
     }
     else {
-      if(button) {
-        button.innerHTML = "withdraw boost"
-      }
+      button && (button.innerHTML = "withdraw boost")
+      changeActiveToggle('BOOST')
       setTxConfirming(false)
     }
   }
@@ -171,23 +162,17 @@ export const BoostTab = () => {
         `You created a boost with a magnitude of ${formatAsString(boostMag)}`,
         boostTx
       )
-      if(button) {
-        button.innerHTML = "create boost"
-        button.style.backgroundColor = "#E7B941"
-        button.style.color = "black"
-      }
-      refreshInfo()
+      button && (button.innerHTML = "create boost")
+      updateOwnedPartners(selectedPartners)
+      findBoost()
+      changeActiveToggle('BOOST')
       setTimeout(() => {
         openNotification(false, '', '', '')
       }, 10000)
     }
     else {
-      if(button) {
-        button.innerHTML = "create boost"
-        button.style.backgroundColor = "#E7B941"
-        button.style.color = "black"
-      }
-      refreshInfo()
+      button && (button.innerHTML = "create boost")
+      changeActiveToggle('BOOST')
       setTxConfirming(false)
     }
   }
@@ -199,7 +184,12 @@ export const BoostTab = () => {
       <div className="h-[100%] w-[100%] px-[0%] border-r-2 border-black flex flex-col items-center">
         <h1 className="font-amaticbold text-[6vw] xl:text-[3vw] mt-[2%]">select partner nfts</h1>
         <div className="flex flex-wrap overflow-y-auto w-[85%] h-[80%]" id="hide-scrollbar">
-        {
+          {
+            (!isConnected || ownedPartners.length == 0) ? 
+            <div className="w-[100%] h-[100%] flex flex-col items-center opacity-50">
+              <img className="w-[70%] my-[5%]" src="/images/icon-not-found.png" alt="not-found" />
+              <h1 className="font-amaticbold text-[3vw]">no partners</h1>
+            </div> :
             infoLoading ? loadingElement() :
             ownedPartners.map((partner, index) => (
               <div key={index} className="h-[45%] w-[50%] py-2">
@@ -219,7 +209,7 @@ export const BoostTab = () => {
       </div>
       <div className="h-[100%] w-[100%] flex flex-col items-center">
         {
-          infoLoading ? loadingElement() :
+          (infoLoading && isConnected) ? loadingElement() :
           userBoost.partnerNFTs.length > 0 ?
           <>
             <h1 className="font-amaticbold text-[9vw] xl:text-[4vw] mt-[4%] mb-[4%] xl:mb-[2%]">my boost</h1>

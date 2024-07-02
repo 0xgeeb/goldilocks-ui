@@ -36,7 +36,8 @@ export const BorrowTab = () => {
     loanInterest,
     setLoanInterest,
     loanInterestRate,
-    setLoanInterestRate
+    setLoanInterestRate,
+    updateOwnedBeras
   } = useGoldilend()
 
   const {
@@ -45,7 +46,7 @@ export const BorrowTab = () => {
     sendBorrowTx
   } = useGoldilendTx()
 
-  const { wallet } = useWallet()
+  const { wallet, isConnected } = useWallet()
 
   useEffect(() => {
     updateBorrowLimit()
@@ -181,27 +182,18 @@ export const BorrowTab = () => {
         `You borrowed ${formatAsString(loanAmount)} iBGT against your bera${selectedBeras.length > 1 ? "s" : ""}`,
         borrowTx
       )
-      if(button) {
-        button.innerHTML = "create loan"
-        button.style.backgroundColor = "#E7B941"
-        button.style.color = "black"
-      }
+      button && (button.innerHTML = "create loan")
+      updateOwnedBeras(selectedBeras)
       changeActiveToggle('BORROW')
-      // findBeras()
-      //todo: fuk
+      setDaysTilExpiration(14)
       setTimeout(() => {
         openNotification(false, '', '', '')
       }, 10000)
     }
     else {
-      if(button) {
-        button.innerHTML = "create loan"
-        button.style.backgroundColor = "#E7B941"
-        button.style.color = "black"
-      }
+      button && (button.innerHTML = "create loan")
       changeActiveToggle('BORROW')
-      // findBeras()
-      //todo: fuk
+      setDaysTilExpiration(14)
       setTxConfirming(false)
     }
   }
@@ -227,8 +219,13 @@ export const BorrowTab = () => {
         <h1 className="font-amaticbold text-[5vw] xl:text-[3vw] mt-[2%]">select collateral</h1>
         <div className="flex flex-wrap overflow-y-auto w-[85%] h-[80%] py-[2%]" id="hide-scrollbar">
           {
+            (!isConnected || ownedBeras.length == 0) ? 
+            <div className="w-[100%] h-[100%] flex flex-col items-center opacity-50">
+              <img className="w-[70%] my-[5%]" src="/images/icon-not-found.png" alt="not-found" />
+              <h1 className="font-amaticbold text-[3vw]">no beras</h1>
+            </div> :
             infoLoading ? loadingElement() :
-            ownedBeras?.map((bera, index) => (
+            ownedBeras.map((bera, index) => (
               <div key={index} className="h-[40%] xl:h-[45%] w-[50%] py-2">
                 <img
                   className={`ml-[5%] h-[100%] w-[90%] border-2 border-black hover:scale-110 hover:cursor-pointer ${findSelectedBeraIdxs().includes(bera.index) ? "border-4 border-black" : "opacity-75"}`}

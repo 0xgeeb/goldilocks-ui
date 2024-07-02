@@ -14,14 +14,15 @@ export const BorrowButtonMobile = () => {
     setTxConfirming,
     changeActiveToggle,
     openNotification,
-    findBeras,
     selectScreen,
     setSelectScreen,
     activeToggle,
     selectedPartners,
     boostMag,
-    findPartners,
-    userBoost
+    userBoost,
+    updateOwnedBeras,
+    updateOwnedPartners,
+    findBoost
   } = useGoldilend()
 
   const { wallet } = useWallet()
@@ -37,11 +38,6 @@ export const BorrowButtonMobile = () => {
 
   const formatAsString = (num: number): string => {
     return num.toLocaleString('en-US', { maximumFractionDigits: 2 })
-  }
-
-  const refreshInfo = () => {
-    changeActiveToggle('BOOST')
-    // findPartners()
   }
 
   const checkSelected = (beraName: string): boolean => {
@@ -181,18 +177,15 @@ export const BorrowButtonMobile = () => {
         ``,
         withdrawBoostTx
       )
-      refreshInfo()
-      if(button) {
-        button.innerHTML = "withdraw boost"
-      }
+      button && (button.innerHTML = "withdraw boost")
+      changeActiveToggle('BOOST')
       setTimeout(() => {
         openNotification(false, '', '', '')
       }, 10000)
     }
     else {
-      if(button) {
-        button.innerHTML = "withdraw boost"
-      }
+      button && (button.innerHTML = "withdraw boost")
+      changeActiveToggle('BOOST')
       setTxConfirming(false)
     }
   }
@@ -211,23 +204,17 @@ export const BorrowButtonMobile = () => {
         `You created a boost with a magnitude of ${formatAsString(boostMag)}`,
         boostTx
       )
-      if(button) {
-        button.innerHTML = "create boost"
-        button.style.backgroundColor = "#E7B941"
-        button.style.color = "black"
-      }
-      refreshInfo()
+      button && (button.innerHTML = "create boost")
+      updateOwnedPartners(selectedPartners)
+      findBoost()
+      changeActiveToggle('BOOST')
       setTimeout(() => {
         openNotification(false, '', '', '')
       }, 10000)
     }
     else {
-      if(button) {
-        button.innerHTML = "create boost"
-        button.style.backgroundColor = "#E7B941"
-        button.style.color = "black"
-      }
-      refreshInfo()
+      button && (button.innerHTML = "create boost")
+      changeActiveToggle('BOOST')
       setTxConfirming(false)
     }
   }
@@ -246,26 +233,16 @@ export const BorrowButtonMobile = () => {
         `You borrowed ${formatAsString(loanAmount)} iBGT against your bera${selectedBeras.length > 1 ? "s" : ""}`,
         borrowTx
       )
-      if(button) {
-        button.innerHTML = "create loan"
-        button.style.backgroundColor = "#E7B941"
-        button.style.color = "black"
-      }
+      button && (button.innerHTML = "create loan")
+      updateOwnedBeras(selectedBeras)
       changeActiveToggle('BORROW')
-      // findBeras()
       setTimeout(() => {
         openNotification(false, '', '', '')
       }, 10000)
     }
     else {
-      if(button) {
-        button.innerHTML = "create loan"
-        button.style.backgroundColor = "#E7B941"
-        button.style.color = "black"
-      }
+      button && (button.innerHTML = "create loan")
       changeActiveToggle('BORROW')
-      // findBeras()
-      //todo:
       setTxConfirming(false)
     }
   }

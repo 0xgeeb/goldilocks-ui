@@ -1,4 +1,4 @@
-query BerasOwned($owner: String!) {
+query GoldilendNFTsOwned($owner: String!) {
   bondBeras(where: { owner: $owner }, orderDirection: "desc") {
     items {
       id
@@ -11,9 +11,6 @@ query BerasOwned($owner: String!) {
       owner
     }
   }
-}
-
-query PartnerNFTsOwned($owner: String!) {
   beradromes(where: { owner: $owner }, orderDirection: "desc") {
     items {
       id

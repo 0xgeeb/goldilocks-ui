@@ -7,6 +7,7 @@ import {
   RepayTabMobile,
   BorrowButtonMobile
 } from ".."
+import { BorrowFetcher } from "../../goldilend"
 import {
   NavBarMobile,
   NavBarButtons,
@@ -36,6 +37,7 @@ export const GoldilendPageMobile = () => {
               <BorrowButtonMobile />
             </>
           }
+          <BorrowFetcher />
           <FooterMobile />
         </div>
       }
