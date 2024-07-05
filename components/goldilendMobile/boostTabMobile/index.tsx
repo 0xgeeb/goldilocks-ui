@@ -48,12 +48,12 @@ export const BoostTabMobile = () => {
           <h1 className="font-amaticbold text-[10vw] mt-[5%]">select partner nfts</h1>
           <div className="flex flex-wrap overflow-y-auto w-[95%] h-[80%]" id="hide-scrollbar">
             {
+              infoLoading ? loadingElement() :
               (!isConnected || ownedPartners.length == 0) ? 
               <div className="w-[100%] h-[100%] flex flex-col items-center opacity-50">
                 <img className="w-[70%] my-[10%]" src="/images/icon-not-found.png" alt="not-found" />
                 <h1 className="font-amaticbold text-[8vw]">no partners</h1>
               </div> :
-              infoLoading ? loadingElement() :
               ownedPartners.map((partner, index) => (
                 <div key={index} className="h-[45%] w-[50%] py-2">
                   <img

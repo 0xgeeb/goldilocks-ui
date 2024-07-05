@@ -453,6 +453,7 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
   }
 
   const getInterestRate = async () => {
+    console.log(userBoostState)
     const dateParts = loanExpirationState.split('-')
     const [month, day, year] = dateParts.map(Number);
     const parsedDate = new Date(year, month - 1, day)
@@ -478,7 +479,17 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
     const ratio = ((debt + loanAmountState) / poolSize) + 0.50
     const interestRate = rate + ((10 * rate) * (ratio * (loanDuration / yearSeconds)))
     const interestAdjusted = (interestRate * loanAmountState) * (loanDuration / yearSeconds)
-    setLoanInterestState(interestAdjusted / 100)
+    if(userBoostState.partnerNFTs.length > 0) {
+      let discount = 500
+      if(userBoostState.boostMagnitude < discount) {
+        discount = 1000 - userBoostState.boostMagnitude
+      }
+      const interest = interestAdjusted * discount / 1000
+      setLoanInterestState(interest / 100)
+    }
+    else {
+      setLoanInterestState(interestAdjusted / 100)
+    }
     
     const calculatedRate = 10 + ((10 * 10 * (loanDuration / yearSeconds)) * (0.5 + (debt / poolSize)))
     setLoanInterestRateState(calculatedRate)

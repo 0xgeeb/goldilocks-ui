@@ -219,12 +219,12 @@ export const BorrowTab = () => {
         <h1 className="font-amaticbold text-[5vw] xl:text-[3vw] mt-[2%]">select collateral</h1>
         <div className="flex flex-wrap overflow-y-auto w-[85%] h-[80%] py-[2%]" id="hide-scrollbar">
           {
+            infoLoading ? loadingElement() :
             (!isConnected || ownedBeras.length == 0) ? 
             <div className="w-[100%] h-[100%] flex flex-col items-center opacity-50">
               <img className="w-[70%] my-[5%]" src="/images/icon-not-found.png" alt="not-found" />
               <h1 className="font-amaticbold text-[3vw]">no beras</h1>
             </div> :
-            infoLoading ? loadingElement() :
             ownedBeras.map((bera, index) => (
               <div key={index} className="h-[40%] xl:h-[45%] w-[50%] py-2">
                 <img
