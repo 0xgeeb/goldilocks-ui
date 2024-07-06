@@ -96,6 +96,7 @@ export interface GoldilendInitialState {
   goldilendInfo: {
     stakedGibgt: number;
   };
+  ibgtBalance: number;
   lock: number;
   stake: number;
   unstake: number;
@@ -137,6 +138,7 @@ export interface GoldilendInitialState {
   lendActiveToggle: string;
   changeLendActiveToggle: (_toggle: string) => void;
   refreshGoldilendInfo: () => void;
+  getGoldilendBorrowInfo: () => void;
   infoLoading: boolean;
   setInfoLoading: (_loading: boolean) => void;
   loansLoading: boolean;

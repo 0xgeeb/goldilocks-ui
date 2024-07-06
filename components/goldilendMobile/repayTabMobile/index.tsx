@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { ConnectButton } from "@rainbow-me/rainbowkit"
 import { LendNotificationMobile } from "../../goldilendMobile"
 import { useGoldilend, useWallet } from "../../../providers"
@@ -29,11 +29,12 @@ export const RepayTabMobile = () => {
     infoLoading,
     userLoans,
     findLoans,
-    setInfoLoading,
     txConfirming,
     setTxConfirming,
     notification,
-    openNotification
+    openNotification,
+    ibgtBalance,
+    getGoldilendBorrowInfo
   } = useGoldilend()
 
   const {
@@ -42,13 +43,7 @@ export const RepayTabMobile = () => {
     sendiBGTApproveTx
   } = useGoldilendTx()
 
-  const { wallet, balance, refreshBalances, isConnected } = useWallet()
-
-  useEffect(() => {
-    findLoans()
-    refreshBalances()
-    setInfoLoading(false)
-  }, [isConnected])
+  const { wallet, isConnected } = useWallet()
 
   const loadingElement = () => {
     return <span className="loader-small mx-auto my-auto"></span>
@@ -105,6 +100,7 @@ export const RepayTabMobile = () => {
     })
     setInputValues(newValues)
     findLoans()
+    getGoldilendBorrowInfo()
   }
 
   const handleButtonClick = async (loanId: number, amt: number, borrowedAmt: number) => {
@@ -113,7 +109,7 @@ export const RepayTabMobile = () => {
       button && (button.innerHTML = "no amount")
       return
     }
-    if(amt > balance.ibgt) {
+    if(amt > ibgtBalance) {
       button && (button.innerHTML = "no balance")
       return
     }

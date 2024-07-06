@@ -13,7 +13,8 @@ export const BorrowFetcher = () => {
     findPartners,
     findBoost,
     findLoans,
-    setInfoLoading
+    setInfoLoading,
+    getGoldilendBorrowInfo
   } = useGoldilend()
 
   const { wallet, isConnected } = useWallet()
@@ -37,6 +38,7 @@ export const BorrowFetcher = () => {
   useEffect(() => {
     findBoost()
     findLoans()
+    getGoldilendBorrowInfo()
   }, [wallet, isConnected])
 
   return null

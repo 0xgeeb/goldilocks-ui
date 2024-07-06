@@ -21,6 +21,7 @@ const INITIAL_STATE: GoldilendInitialState = {
   goldilendInfo: {
     stakedGibgt: 0
   },
+  ibgtBalance: 0,
   lock: 0,
   stake: 0,
   unstake: 0,
@@ -69,6 +70,7 @@ const INITIAL_STATE: GoldilendInitialState = {
   lendActiveToggle: 'LOCK',
   changeLendActiveToggle: (_toggle: string) => {},
   refreshGoldilendInfo: async () => {},
+  getGoldilendBorrowInfo: async () => {},
   infoLoading: true,
   setInfoLoading: (_loading: boolean) => {},
   loansLoading: true,
@@ -110,9 +112,10 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
 
   const { children } = props
 
-  const { balance, wallet, isConnected, refreshBalances } = useWallet()
+  const { balance, wallet, isConnected } = useWallet()
 
   const [goldilendInfoState, setGoldilendInfoState] = useState(INITIAL_STATE.goldilendInfo)
+  const [ibgtBalanceState, setibgtBalanceState] = useState(INITIAL_STATE.ibgtBalance)
   const [notificationState, setNotificationState] = useState(INITIAL_STATE.notification)
   
   const [displayStringState, setDisplayStringState] = useState(INITIAL_STATE.displayString)
@@ -443,6 +446,18 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
     setGoldilendInfoState(response)
   }
 
+  const getGoldilendBorrowInfo = async () => {
+    if(wallet) {
+      const ibgtBalance = await readContract(config, {
+        address: contracts.ibgt.address as `0x${string}`,
+        abi: contracts.ibgt.abi,
+        functionName: 'balanceOf',
+        args: [wallet]
+      })
+      setibgtBalanceState(parseFloat(formatEther(ibgtBalance as unknown as bigint)))
+    }
+  }
+
   const openNotification = (toggle: boolean, action: string, result: string, hash: string) => {
     setNotificationState(prevState => ({
       toggle,
@@ -517,11 +532,13 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
     <GoldilendContext.Provider
       value={{
         goldilendInfo: goldilendInfoState,
+        ibgtBalance: ibgtBalanceState,
         infoLoading: infoLoadingState,
         displayString: displayStringState,
         setDisplayString: setDisplayStringState,
         setInfoLoading: setInfoLoadingState,
         refreshGoldilendInfo,
+        getGoldilendBorrowInfo,
         activeToggle: activeToggleState,
         changeActiveToggle,
         lendActiveToggle: lendActiveToggleState,
