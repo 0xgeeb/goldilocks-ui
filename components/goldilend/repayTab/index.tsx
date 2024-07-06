@@ -195,8 +195,12 @@ export const RepayTab = () => {
         <h1 className="font-amaticbold ml-[4%] text-[5vw] xl:text-[2.3vw]">my loans</h1>
       </div>
       {
-        infoLoading ?
-        loadingElement() :
+        (infoLoading && isConnected) ? loadingElement() :
+        (!isConnected || userLoans.length == 0) ? 
+        <div className="w-[100%] h-[100%] flex flex-col items-center opacity-50">
+          <img className="h-[40%] my-[5%]" src="/images/icon-not-found.png" alt="not-found" />
+          <h1 className="font-amaticbold text-[3vw]">no loans</h1>
+        </div> :
         userLoans.map((loan, index) => (
           <div className="w-[100%] py-[2%] font-baloo font-semibold border-b-2 border-black flex flex-row items-center relative" key={index}>
             {

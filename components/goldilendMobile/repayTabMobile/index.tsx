@@ -214,7 +214,12 @@ export const RepayTabMobile = () => {
               <h1 className="font-amaticbold ml-[4%] text-[7vw]">my loans</h1>
             </div>
             {
-              infoLoading ? loadingElement() :
+              (infoLoading && isConnected) ? loadingElement() :
+              (!isConnected || userLoans.length == 0) ? 
+              <div className="w-[100%] h-[100%] flex flex-col items-center opacity-50">
+                <img className="h-[40%] my-[10%]" src="/images/icon-not-found.png" alt="not-found" />
+                <h1 className="font-amaticbold text-[8vw]">no loans</h1>
+              </div> :
               userLoans.map((loan, index) => (
                 collateralFlags[loan.loanId] ?
                 <div className="w-[100%] h-[50%] p-[3%] font-baloo font-semibold border-b-2 border-black flex flex-col" key={index}>
