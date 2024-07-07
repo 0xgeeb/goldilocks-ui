@@ -375,30 +375,26 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
     }
   }
 
-  //todo: caps out at 20 loans
   const findLoans = async () => {
     if(wallet) {
-      const userLoans: LoanInfo[] = []
-      for(let i = 1; i < 20; i++) {
-        const loan = await readContract(config, {
-          address: contracts.goldilend.address as `0x${string}`,
-          abi: contracts.goldilend.abi,
-          functionName: 'lookupLoan',
-          args: [wallet, i]
-        })
-        const loanData = loan as unknown as LoanData
-        if(loanData.collateralNFTIds.length == 0) {
-          continue
-        }
+      let userLoans: LoanInfo[] = []
+      const loans = await readContract(config, {
+        address: contracts.goldilend.address as `0x${string}`,
+        abi: contracts.goldilend.abi,
+        functionName: 'lookupLoans',
+        args: [wallet]
+      })
+      const loansData = loans as unknown as LoanData[]
+      for(let i = 0; i < loansData.length; i++) {
         const userLoan = {
-          collateralNFTs: loanData.collateralNFTs,
-          collateralNFTIds: loanData.collateralNFTIds.map(id => parseInt(id.toString(), 16)),
-          borrowedAmount: parseFloat(formatEther(loanData.borrowedAmount)),
-          interest: parseFloat(formatEther(loanData.interest)),
-          duration: Number(loanData.duration),
-          endDate: Number(loanData.endDate),
-          loanId: parseInt(loanData.loanId.toString(), 16),
-          liquidated: loanData.liquidated
+          collateralNFTs: loansData[i].collateralNFTs,
+          collateralNFTIds: loansData[i].collateralNFTIds.map(id => parseInt(id.toString(), 16)),
+          borrowedAmount: parseFloat(formatEther(loansData[i].borrowedAmount)),
+          interest: parseFloat(formatEther(loansData[i].interest)),
+          duration: Number(loansData[i].duration),
+          endDate: Number(loansData[i].endDate),
+          loanId: parseInt(loansData[i].loanId.toString(), 16),
+          liquidated: loansData[i].liquidated
         }
         userLoans.push(userLoan)
       }
@@ -468,7 +464,6 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
   }
 
   const getInterestRate = async () => {
-    console.log(userBoostState)
     const dateParts = loanExpirationState.split('-')
     const [month, day, year] = dateParts.map(Number);
     const parsedDate = new Date(year, month - 1, day)

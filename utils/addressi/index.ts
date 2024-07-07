@@ -1,7 +1,7 @@
 import goldiswapABI from "../abi/Goldiswap.json"
 import goldilockedABI from "../abi/Goldilocked.json"
 import honeyABI from "../abi/Honey.json"
-import goldilendABI from "../abi/Goldilend1.json"
+import goldilendABI from "../abi/Goldilend.json"
 import ibgtABI from "../abi/IBGT.json"
 import bandbearABI from "../abi/BandBear.json"
 import bondbearABI from "../abi/BondBear.json"
@@ -22,7 +22,7 @@ export const contracts = {
     abi: honeyABI.abi
   },
   goldilend: {
-    address: '0x1e30215d6Be6ec48785B7CAA60d31ccaa0186A98',
+    address: '0xFb1dbBe43c0A4A4044A00b795B580E52a172BBCe',
     abi: goldilendABI.abi
   },
   ibgt: {
