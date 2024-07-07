@@ -356,7 +356,7 @@ export const BorrowButtonMobile = () => {
       }) => {
         return (
           <button
-            className="absolute top-[67.5%] left-[22.5%] h-[7.5%] w-[55%] bg-[#E7B941] border-2 border-black font-amaticbold text-[9vw] flex items-center justify-center hover:bg-[#C9E3B9] hover:scale-110"
+            className="absolute top-[75%] tall:top-[67.5%] left-[22.5%] h-[7.5%] w-[55%] bg-[#E7B941] border-2 border-black font-amaticbold text-[9vw] flex items-center justify-center hover:bg-[#C9E3B9] hover:scale-110"
             id="borrow-button"
             onClick={() => {
               const button = document.getElementById('borrow-button')
