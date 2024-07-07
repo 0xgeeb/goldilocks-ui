@@ -37,7 +37,8 @@ export const BorrowTab = () => {
     setLoanInterest,
     loanInterestRate,
     setLoanInterestRate,
-    updateOwnedBeras
+    updateOwnedBeras,
+    findLoans
   } = useGoldilend()
 
   const {
@@ -184,6 +185,7 @@ export const BorrowTab = () => {
       )
       button && (button.innerHTML = "create loan")
       updateOwnedBeras(selectedBeras)
+      findLoans()
       changeActiveToggle('BORROW')
       setDaysTilExpiration(14)
       setTimeout(() => {

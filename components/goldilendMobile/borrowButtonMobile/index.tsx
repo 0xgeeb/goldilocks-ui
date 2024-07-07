@@ -22,7 +22,8 @@ export const BorrowButtonMobile = () => {
     userBoost,
     updateOwnedBeras,
     updateOwnedPartners,
-    findBoost
+    findBoost,
+    findLoans
   } = useGoldilend()
 
   const { wallet } = useWallet()
@@ -235,6 +236,7 @@ export const BorrowButtonMobile = () => {
       )
       button && (button.innerHTML = "create loan")
       updateOwnedBeras(selectedBeras)
+      findLoans()
       changeActiveToggle('BORROW')
       setTimeout(() => {
         openNotification(false, '', '', '')

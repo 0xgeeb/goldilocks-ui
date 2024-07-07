@@ -13,7 +13,6 @@ export const BorrowTabMobile = () => {
     ownedBeras,
     handleBeraClick,
     infoLoading,
-    setInfoLoading,
     findSelectedBeraIdxs,
     selectedBeras,
     borrowLimit,
@@ -36,7 +35,7 @@ export const BorrowTabMobile = () => {
     setLoanInterestRate
   } = useGoldilend()
 
-  const { wallet, isConnected } = useWallet()
+  const { isConnected } = useWallet()
 
   useEffect(() => {
     updateBorrowLimit()
