@@ -1,3 +1,6 @@
+"use client"
+
+import { useEffect } from "react"
 import { ConnectButton } from "@rainbow-me/rainbowkit"
 import {
   useGoldilend,
@@ -13,11 +16,17 @@ export const ClaimTab = () => {
     setTxConfirming,
     notification,
     openNotification,
-    infoLoading
+    infoLoading,
+    findBoost,
+    userBoost
   } = useGoldilend()
 
-  const { balance, refreshBalances } = useWallet()
+  const { balance, refreshBalances, isConnected } = useWallet()
   const { sendClaimTx } = useGoldilendTx()
+
+  useEffect(() => {
+    findBoost()
+  }, [isConnected])
 
   const loadingElement = () => {
     return <span className="loader-small ml-3 mt-2"></span>
@@ -33,6 +42,25 @@ export const ClaimTab = () => {
     }
     else if(num > 0) {
       return formatAsString(num)
+    }
+    else {
+      return "-"
+    }
+  }
+
+  const handleInfoClaimable = (num: number) => {
+    if(infoLoading) {
+      return loadingElement()
+    }
+    else if(num > 0) {
+      if(userBoost.partnerNFTs.length > 0) {
+        const prgBoost = userBoost.boostMagnitude < 500 ? userBoost.boostMagnitude : 500
+        let boostedNum = num * (1000 + prgBoost) / 1000
+        return formatAsString(boostedNum)
+      }
+      else {
+        return formatAsString(num)
+      }
     }
     else {
       return "-"
@@ -102,7 +130,7 @@ export const ClaimTab = () => {
               </div>
               <div className="w-[100%] flex flex-row justify-between">
                 <span>Available Porridge to Claim:</span>
-                <span>{handleInfo(balance.lendClaimable)}</span>
+                <span>{handleInfoClaimable(balance.lendClaimable)}</span>
               </div>
             </div>
             <div className="w-[70%] mt-[2%] flex flex-col justify-between">
@@ -113,10 +141,6 @@ export const ClaimTab = () => {
               </div>
               <div className="w-[100%] flex flex-row justify-between">
                 <span>boden:</span>
-                <span>69.00</span>
-              </div>
-              <div className="w-[100%] flex flex-row justify-between">
-                <span>jenner:</span>
                 <span>69.00</span>
               </div>
               <div className="w-[100%] flex flex-row justify-between">
