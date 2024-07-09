@@ -203,7 +203,7 @@ export const LiquidateTabMobile = () => {
                     }
                   </div>
                 </div> :
-                <div className="w-[100%] h-[40%] p-[3%] font-baloo font-semibold border-b-2 border-black flex flex-col relative" key={index}>
+                <div className="w-[100%] h-[50%] tall:h-[40%] p-[3%] font-baloo font-semibold border-b-2 border-black flex flex-col relative" key={index}>
                   {
                     loan.borrowedAmount == 0 &&
                     <div className="rotate-[26deg] text-[8vw] absolute top-[35%] right-[5%] w-[90%] h-[15%] bg-[#79AF45] border-2 border-black flex items-center justify-center z-30">

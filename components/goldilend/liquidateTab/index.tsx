@@ -158,7 +158,7 @@ export const LiquidateTab = () => {
               loadingElement() :
               liquidatableLoans.map((loan, index) => (
                 <div className="w-[100%] py-[2%] font-baloo font-semibold border-b-2 border-black flex flex-row items-center relative" key={index}>
-                  <h1 className="absolute text-[2vw] xl:text-[1vw] top-[2%] left-[1%]">Loan {loan.loanId}</h1>
+                  <h1 className="absolute text-[1.5vw] xl:text-[1vw] top-[2%] left-[1%]">Loan {loan.loanId}</h1>
                   <div className="h-[50%] w-[40%] px-[3%] flex flex-col justify-center text-[1.5vw] xl:text-[0.8vw] ml-[7%]">
                     <div className="w-[100%] flex flex-row items-center justify-between">
                       <span>liquidation price:</span>
