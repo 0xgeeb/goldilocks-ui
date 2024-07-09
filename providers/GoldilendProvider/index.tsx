@@ -67,7 +67,7 @@ const INITIAL_STATE: GoldilendInitialState = {
   ) => {},
   activeToggle: 'BORROW',
   changeActiveToggle: (_toggle: string) => {},
-  lendActiveToggle: 'LOCK',
+  lendActiveToggle: 'CLAIM',
   changeLendActiveToggle: (_toggle: string) => {},
   refreshGoldilendInfo: async () => {},
   getGoldilendBorrowInfo: async () => {},

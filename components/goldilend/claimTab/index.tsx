@@ -120,9 +120,9 @@ export const ClaimTab = () => {
           // chartOpen ? <Chart /> :
           txConfirming ? <img className="w-[100%] h-[100%]" src="/images/bg-transaction.png" alt="tx" /> :
           notification.toggle ? <LendNotification /> :
-          <div className="relative w-[100%] h-[100%] text-[2vw] xl:text-[1vw] flex flex-col items-center font-baloo font-semibold">
-            <h1 className="font-amaticbold text-[8vw] xl:text-[4vw]">claim yield</h1>
-            <div className="w-[70%] flex flex-col justify-between">
+          <div className="relative w-[100%] h-[100%] text-[2vw] lg:text-[1.5vw] xl:text-[1vw] flex flex-col items-center font-baloo font-semibold">
+            <h1 className="font-amaticbold text-[8vw] lg:text-[6vw] xl:text-[4vw]">claim yield</h1>
+            <div className="w-[80%] flex flex-col justify-between">
               <span className="text-[#9C4924]">Porridge Yield</span>
               <div className="w-[100%] flex flex-row justify-between">
                 <span>Current Porridge Balance:</span>
@@ -133,7 +133,7 @@ export const ClaimTab = () => {
                 <span>{handleInfoClaimable(balance.lendClaimable)}</span>
               </div>
             </div>
-            <div className="w-[70%] mt-[2%] flex flex-col justify-between">
+            <div className="w-[80%] mt-[2%] flex flex-col justify-between">
               <span className="text-[#9C4924]">Infrared iBGT Staking Yield</span>
               <div className="w-[100%] flex flex-row justify-between">
                 <span>wif:</span>
