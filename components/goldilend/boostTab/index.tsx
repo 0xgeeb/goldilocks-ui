@@ -337,7 +337,7 @@ export const BoostTab = () => {
             </ConnectButton.Custom>
           </> :
           <>
-            <h1 className="font-amaticbold text-[9vw] xl:text-[5vw] mt-[4%] mb-[8%]">create boost</h1>
+            <h1 className="font-amaticbold text-[9vw] lg:text-[7vw] xl:text-[5vw] mt-[4%] mb-[8%]">create boost</h1>
             <div className="w-[90%] h-[25%] flex flex-row items-start justify-between relative">
               <span className="absolute top-[-20%] left-[3%] font-baloo font-semibold text-[2vw] xl:text-[1vw]">Selected Partner NFTs:</span>
               <div className="text-[3vw] xl:text-[2vw] cursor-pointer hover:scale-125 mt-[3%]" onClick={() => prevImages()}>&lt;</div>

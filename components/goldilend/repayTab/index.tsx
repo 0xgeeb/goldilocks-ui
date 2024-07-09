@@ -220,12 +220,12 @@ export const RepayTab = () => {
             <h1 className="absolute text-[2vw] xl:text-[1vw] top-[2%] left-[1%]">Loan {loan.loanId}</h1>
             <div className="h-[50%] w-[40%] px-[3%] flex flex-col justify-center text-[1.5vw] xl:text-[0.8vw] ml-[7%]">
               <div className="w-[100%] flex flex-row items-center justify-between">
-                <span>amount to repay:</span>
+                <span>total amount to repay:</span>
                 <span>{formatNum(loan.borrowedAmount)} iBGT</span>
               </div>
               <div className="w-[100%] flex flex-row items-center justify-between">
-                <span>amount outstanding:</span>
-                <span>{formatNum(loan.borrowedAmount)} iBGT</span>
+                <span>interest:</span>
+                <span>{formatNum(loan.interest)} iBGT</span>
               </div>
               <div className="w-[100%] flex flex-row items-center justify-between">
                 <span>expiration date:</span>

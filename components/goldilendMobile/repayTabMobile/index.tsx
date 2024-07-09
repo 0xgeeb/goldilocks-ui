@@ -272,12 +272,12 @@ export const RepayTabMobile = () => {
                   </div>
                   <div className="w-[100%] mt-[3%] text-[3vw] flex flex-col">
                     <div className="w-[100%] flex flex-row items-center justify-between">
-                      <span>amount to repay:</span>
+                      <span>total amount to repay:</span>
                       <span>{formatNum(loan.borrowedAmount)} iBGT</span>
                     </div>
                     <div className="w-[100%] flex flex-row items-center justify-between">
-                      <span>amount outstanding:</span>
-                      <span>{formatNum(loan.borrowedAmount)} iBGT</span>
+                      <span>interest:</span>
+                      <span>{formatNum(loan.interest)} iBGT</span>
                     </div>
                     <div className="w-[100%] flex flex-row items-center justify-between">
                       <span>expiration date:</span>
