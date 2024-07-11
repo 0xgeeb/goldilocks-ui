@@ -1,3 +1,6 @@
+"use client"
+
+import { useState } from "react"
 import { ConnectButton } from "@rainbow-me/rainbowkit"
 import {
   useGoldiswap,
@@ -48,6 +51,8 @@ export const GoldiswapButton = () => {
     sendRedeemTx
   } = useGoldiswapTx()
 
+  const [buttonLoadingColor, setButtonLoadingColor] = useState<boolean>(false)
+
   const formatAsString = (num: number): string => {
     return num.toLocaleString('en-US', { maximumFractionDigits: 2 })
   }
@@ -93,8 +98,7 @@ export const GoldiswapButton = () => {
         setTxConfirming(true)
         if(button) {
           button.innerHTML = "confirming..."
-          button.style.backgroundColor = "#4D0B24"
-          button.style.color = "#E7B941"
+          setButtonLoadingColor(true)
         }
         const buyTx = await sendBuyTx(buyingLocks, honeyBuy)
         if(buyTx === 'slippage') {
@@ -103,8 +107,7 @@ export const GoldiswapButton = () => {
           setTimeout(() => {
             if(button) {
               button.innerHTML = "buy"
-              button.style.backgroundColor = "#E7B941"
-              button.style.color = "black"
+              setButtonLoadingColor(false)
             }
           }, 3000)
         }
@@ -118,8 +121,7 @@ export const GoldiswapButton = () => {
           )
           if(button) {
             button.innerHTML = "buy"
-            button.style.backgroundColor = "#E7B941"
-            button.style.color = "black"
+            setButtonLoadingColor(false)
           }
           refreshInfo()
           setTimeout(() => {
@@ -129,8 +131,7 @@ export const GoldiswapButton = () => {
         else {
           if(button) {
             button.innerHTML = "buy"
-            button.style.backgroundColor = "#E7B941"
-            button.style.color = "black"
+            setButtonLoadingColor(false)
           }
           refreshInfo()
           setTxConfirming(false)
@@ -334,7 +335,7 @@ export const GoldiswapButton = () => {
           }) => {
             return (
               <button 
-                className="absolute h-[8%] w-[36%] md:w-[26%] lg:w-[16.6%] top-[70%] md:top-[68%] lg:top-[69%] left-[32%] md:left-[37%] lg:left-[41.6%] bg-[#E7B941] font-amaticbold text-[5vw] md:text-[4vw] lg:text-[3vw] xl:text-[2.25vw] 2xl:text-[1.9vw] tall:text-[6vw] tall:md:text-[4vw] tall:lg:text-[3vw] tall:xl:text-[2.5vw] tall:2xl:text-[1.9vw] border-2 border-black hover:bg-[#4D0B24] hover:text-[#E7B941] hover:scale-110"
+                className={`absolute h-[8%] w-[36%] md:w-[26%] lg:w-[16.6%] top-[70%] md:top-[68%] lg:top-[69%] left-[32%] md:left-[37%] lg:left-[41.6%] ${buttonLoadingColor ? "bg-[#4D0B24] text-[#E7B941]" : "bg-[#E7B941] text-black"} hover:bg-[#4D0B24] hover:text-[#E7B941] font-amaticbold text-[5vw] md:text-[4vw] lg:text-[3vw] xl:text-[2.25vw] 2xl:text-[1.9vw] tall:text-[6vw] tall:md:text-[4vw] tall:lg:text-[3vw] tall:xl:text-[2.5vw] tall:2xl:text-[1.9vw] border-2 border-black hover:scale-110`}
                 id="swap-button"
                 onClick={() => {
                   const button = document.getElementById('swap-button')
