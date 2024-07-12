@@ -156,8 +156,7 @@ export const GoldiswapButton = () => {
       setTxConfirming(true)
       if(button) {
         button.innerHTML = "confirming..."
-        button.style.backgroundColor = "#4D0B24"
-        button.style.color = "#E7B941"
+        setButtonLoadingColor(true)
       }
       const sellTx = await sendSellTx(sellingLocks, gettingHoney)
       if(sellTx === 'slippage') {
@@ -166,8 +165,7 @@ export const GoldiswapButton = () => {
         setTimeout(() => {
           if(button) {
             button.innerHTML = "sell"
-            button.style.backgroundColor = "#E7B941"
-            button.style.color = "black"
+            setButtonLoadingColor(false)
           }
         }, 3000)
       }
@@ -181,8 +179,7 @@ export const GoldiswapButton = () => {
         )
         if(button) {
           button.innerHTML = "sell"
-          button.style.backgroundColor = "#E7B941"
-          button.style.color = "black"
+          setButtonLoadingColor(false)
         }
         refreshInfo()
         setTimeout(() => {
@@ -192,8 +189,7 @@ export const GoldiswapButton = () => {
       else {
         if(button) {
           button.innerHTML = "sell"
-          button.style.backgroundColor = "#E7B941"
-          button.style.color = "black"
+          setButtonLoadingColor(false)
         }
         refreshInfo()
         setTxConfirming(false)
@@ -214,8 +210,7 @@ export const GoldiswapButton = () => {
       setTxConfirming(true)
       if(button) {
         button.innerHTML = "confirming..."
-        button.style.backgroundColor = "#4D0B24"
-        button.style.color = "#E7B941"
+        setButtonLoadingColor(true)
       }
       const redeemTx = await sendRedeemTx(redeemingLocks)
       if(redeemTx.substring(0, 2) === '0x') {
@@ -228,8 +223,7 @@ export const GoldiswapButton = () => {
         )
         if(button) {
           button.innerHTML = "redeem"
-          button.style.backgroundColor = "#E7B941"
-          button.style.color = "black"
+          setButtonLoadingColor(false)
         }
         refreshInfo()
         setTimeout(() => {
@@ -239,8 +233,7 @@ export const GoldiswapButton = () => {
       else {
         if(button) {
           button.innerHTML = "redeem"
-          button.style.backgroundColor = "#E7B941"
-          button.style.color = "black"
+          setButtonLoadingColor(false)
         }
         refreshInfo()
         setTxConfirming(false)
