@@ -24,3 +24,154 @@ query GoldilendNFTsOwned($owner: String!) {
     }
   }
 }
+
+query GetDailyEndPrices(
+  $firstStart: BigInt
+  $firstEnd: BigInt
+  $secondStart: BigInt
+  $secondEnd: BigInt
+  $thirdStart: BigInt
+  $thirdEnd: BigInt
+  $fourthStart: BigInt
+  $fourthEnd: BigInt
+  $fifthStart: BigInt
+  $fifthEnd: BigInt
+  $sixthStart: BigInt
+  $sixthEnd: BigInt
+  $seventhStart: BigInt
+  $seventhEnd: BigInt
+) {
+	firstDay: goldiswapTxes(
+    where: {
+    	AND: [
+     		{ timestamp_gte: $firstStart },
+     		{ timestamp_lt: $firstEnd }
+    	]
+    },
+    orderBy: "timestamp",
+    orderDirection: "desc",
+    limit: 1
+  ) {
+    items {
+      txType
+      fsl
+      psl
+      supply
+      timestamp
+    }
+  }
+	secondDay: goldiswapTxes(
+    where: {
+    	AND: [
+     		{ timestamp_gte: $secondStart },
+     		{ timestamp_lt: $secondEnd }
+    	]
+    },
+    orderBy: "timestamp",
+    orderDirection: "desc",
+    limit: 1
+  ) {
+    items {
+      txType
+      fsl
+      psl
+      supply
+      timestamp
+    }
+  }
+  thirdDay: goldiswapTxes(
+    where: {
+    	AND: [
+     		{ timestamp_gte: $thirdStart },
+     		{ timestamp_lt: $thirdEnd }
+    	]
+    },
+    orderBy: "timestamp",
+    orderDirection: "desc",
+    limit: 1
+  ) {
+    items {
+      txType
+      fsl
+      psl
+      supply
+      timestamp
+    }
+  }
+  fourthDay: goldiswapTxes(
+    where: {
+    	AND: [
+     		{ timestamp_gte: $fourthStart },
+     		{ timestamp_lt: $fourthEnd }
+    	]
+    },
+    orderBy: "timestamp",
+    orderDirection: "desc",
+    limit: 1
+  ) {
+    items {
+      txType
+      fsl
+      psl
+      supply
+      timestamp
+    }
+  }
+  fifthDay: goldiswapTxes(
+    where: {
+    	AND: [
+     		{ timestamp_gte: $fifthStart },
+     		{ timestamp_lt: $fifthEnd }
+    	]
+    },
+    orderBy: "timestamp",
+    orderDirection: "desc",
+    limit: 1
+  ) {
+    items {
+      txType
+      fsl
+      psl
+      supply
+      timestamp
+    }
+  }
+  sixthDay: goldiswapTxes(
+    where: {
+    	AND: [
+     		{ timestamp_gte: $sixthStart },
+     		{ timestamp_lt: $sixthEnd }
+    	]
+    },
+    orderBy: "timestamp",
+    orderDirection: "desc",
+    limit: 1
+  ) {
+    items {
+      txType
+      fsl
+      psl
+      supply
+      timestamp
+    }
+  }
+  seventhDay: goldiswapTxes(
+    where: {
+    	AND: [
+     		{ timestamp_gte: $seventhStart },
+     		{ timestamp_lt: $seventhEnd }
+    	]
+    },
+    orderBy: "timestamp",
+    orderDirection: "desc",
+    limit: 1
+  ) {
+    items {
+      txType
+      fsl
+      psl
+      supply
+      timestamp
+    }
+  }
+}

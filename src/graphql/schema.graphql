@@ -7,6 +7,8 @@ type Query {
   beradromes(timestamp: Int, where: BeradromeFilter, orderBy: String, orderDirection: String, before: String, after: String, limit: Int): BeradromePage!
   honeycomb(id: BigInt!, timestamp: Int): Honeycomb
   honeycombs(timestamp: Int, where: HoneycombFilter, orderBy: String, orderDirection: String, before: String, after: String, limit: Int): HoneycombPage!
+  goldiswapTx(id: String!, timestamp: Int): GoldiswapTx
+  goldiswapTxes(timestamp: Int, where: GoldiswapTxFilter, orderBy: String, orderDirection: String, before: String, after: String, limit: Int): GoldiswapTxPage!
 }
 
 type BondBera {
@@ -140,4 +142,75 @@ input HoneycombFilter {
   owner_lt: String
   owner_gte: String
   owner_lte: String
+}
+
+type GoldiswapTx {
+  id: String!
+  txType: String!
+  fsl: BigInt!
+  psl: BigInt!
+  supply: BigInt!
+  timestamp: BigInt!
+}
+
+type GoldiswapTxPage {
+  items: [GoldiswapTx!]!
+  pageInfo: PageInfo!
+}
+
+input GoldiswapTxFilter {
+  AND: [GoldiswapTxFilter]
+  OR: [GoldiswapTxFilter]
+  id: String
+  id_not: String
+  id_in: [String]
+  id_not_in: [String]
+  id_contains: String
+  id_not_contains: String
+  id_starts_with: String
+  id_ends_with: String
+  id_not_starts_with: String
+  id_not_ends_with: String
+  txType: String
+  txType_not: String
+  txType_in: [String]
+  txType_not_in: [String]
+  txType_contains: String
+  txType_not_contains: String
+  txType_starts_with: String
+  txType_ends_with: String
+  txType_not_starts_with: String
+  txType_not_ends_with: String
+  fsl: BigInt
+  fsl_not: BigInt
+  fsl_in: [BigInt]
+  fsl_not_in: [BigInt]
+  fsl_gt: BigInt
+  fsl_lt: BigInt
+  fsl_gte: BigInt
+  fsl_lte: BigInt
+  psl: BigInt
+  psl_not: BigInt
+  psl_in: [BigInt]
+  psl_not_in: [BigInt]
+  psl_gt: BigInt
+  psl_lt: BigInt
+  psl_gte: BigInt
+  psl_lte: BigInt
+  supply: BigInt
+  supply_not: BigInt
+  supply_in: [BigInt]
+  supply_not_in: [BigInt]
+  supply_gt: BigInt
+  supply_lt: BigInt
+  supply_gte: BigInt
+  supply_lte: BigInt
+  timestamp: BigInt
+  timestamp_not: BigInt
+  timestamp_in: [BigInt]
+  timestamp_not_in: [BigInt]
+  timestamp_gt: BigInt
+  timestamp_lt: BigInt
+  timestamp_gte: BigInt
+  timestamp_lte: BigInt
 }

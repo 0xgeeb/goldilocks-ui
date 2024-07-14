@@ -672,6 +672,7 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
 
     setGoldiswapInfoState(response)
     setSimInfoState(simResponse)
+    setInfoLoadingState(false)
   }
 
   const setSimInfo = (

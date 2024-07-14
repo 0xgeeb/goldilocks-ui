@@ -12,7 +12,8 @@ import {
 import {
   NavBarMobile,
   NavBarButtons,
-  FooterMobile
+  FooterMobile,
+  LocksFetcher
 } from "../../utils"
 
 export const GoldiswapPageMobile = () => {
@@ -127,6 +128,7 @@ export const GoldiswapPageMobile = () => {
           <GoldiswapButtonMobile />
           <StatsMobile />
           <FooterMobile />
+          <LocksFetcher />
         </div>
       }
     </main>
