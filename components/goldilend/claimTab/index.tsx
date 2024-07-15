@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect } from "react"
+import { useState, useEffect } from "react"
 import { ConnectButton } from "@rainbow-me/rainbowkit"
 import {
   useGoldilend,
@@ -24,9 +24,12 @@ export const ClaimTab = () => {
   const { balance, refreshBalances, isConnected } = useWallet()
   const { sendClaimTx } = useGoldilendTx()
 
+  //todo: bad change dis
   useEffect(() => {
     findBoost()
   }, [isConnected])
+
+  const [buttonLoadingColor, setButtonLoadingColor] = useState<boolean>(false)
 
   const loadingElement = () => {
     return <span className="loader-small ml-3 mt-2"></span>
@@ -77,7 +80,7 @@ export const ClaimTab = () => {
       setTxConfirming(true)
       if(button) {
         button.innerHTML = "confirming..."
-        button.style.backgroundColor = "#C9E3B9"
+        setButtonLoadingColor(true)
       }
       const claimTx = await sendClaimTx()
       if(claimTx.substring(0, 2) === '0x') {
@@ -90,8 +93,7 @@ export const ClaimTab = () => {
         )
         if(button) {
           button.innerHTML = "claim yield"
-          button.style.backgroundColor = "#E7B941"
-          button.style.color = "black"
+          setButtonLoadingColor(false)
         }
         refreshBalances()
         setTimeout(() => {
@@ -101,8 +103,7 @@ export const ClaimTab = () => {
       else {
         if(button) {
           button.innerHTML = "claim yield"
-          button.style.backgroundColor = "#E7B941"
-          button.style.color = "black"
+          setButtonLoadingColor(false)
         }
         setTxConfirming(false)  
       }
@@ -157,7 +158,7 @@ export const ClaimTab = () => {
               }) => {
                 return (
                   <button 
-                    className="mt-[7%] h-[12%] w-[40%] xl:w-[60%] bg-[#E7B941] font-amaticbold text-[4vw] xl:text-[1.9vw] border-2 border-black hover:bg-[#C9E3B9] hover:scale-110 flex items-center justify-center"
+                    className={`mt-[7%] h-[12%] w-[40%] xl:w-[60%] ${buttonLoadingColor ? "bg-[#C9E3B9] text-black" : "bg-[#E7B941] text-black"} hover:bg-[#C9E3B9] hover:text-black font-amaticbold text-[4vw] xl:text-[1.9vw] border-2 border-black hover:scale-110 flex items-center justify-center`}
                     id="claim-button"
                     onClick={() => {
                       const button = document.getElementById('claim-button')

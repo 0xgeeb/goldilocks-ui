@@ -414,7 +414,7 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
       const userBoost = {
         partnerNFTs: boostData.partnerNFTs,
         partnerNFTIds: boostData.partnerNFTIds.map(id => parseInt(id.toString(), 16)),
-        boostMagnitude: parseInt(boostData.boostMagnitude.toString(), 16),
+        boostMagnitude: Number(boostData.boostMagnitude),
         expiry: Number(boostData.expiry)
       }
 

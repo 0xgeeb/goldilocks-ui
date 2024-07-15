@@ -12,6 +12,7 @@ export const BoostTab = () => {
   const [currentIndex, setCurrentIndex] = useState<number>(0)
   const [boostedPartners, setBoostedPartners] = useState<boolean>(true)
   const [currentBoostIndex, setCurrentBoostIndex] = useState<number>(0)
+  const [buttonLoadingColor, setButtonLoadingColor] = useState<boolean>(false)
 
   const {
     infoLoading,
@@ -94,8 +95,8 @@ export const BoostTab = () => {
     return `${month}-${day}-${year}`
   }
 
-  const handleButtonClick = async () => {
-    const button = document.getElementById('boost-button')
+  const handleButtonClick = async (toggle: string) => {
+    const button = document.getElementById(toggle === 'boost' ? 'boost-button' : 'boost-button-add')
     if(selectedPartners.length == 0) {
       button && (button.innerHTML = "no boost")
       return
@@ -106,6 +107,7 @@ export const BoostTab = () => {
     }
     else {
       button && (button.innerHTML = "approving...")
+      setButtonLoadingColor(true)
       if(!combFlag && checkSelected('HoneyComb')) {
         await sendGoldilendNFTApproveTx(contracts.honeycomb.address)
       }
@@ -113,6 +115,7 @@ export const BoostTab = () => {
         await sendGoldilendNFTApproveTx(contracts.beradrome.address)
       }
       button && (button.innerHTML = "create boost")
+      setButtonLoadingColor(false)
     }
   }
 
@@ -125,6 +128,7 @@ export const BoostTab = () => {
     setTxConfirming(true)
     if(button) {
       button.innerHTML = "confirming..."
+      setButtonLoadingColor(true)
     }
     const withdrawBoostTx = await sendWithdrawBoostTx()
     if(withdrawBoostTx.substring(0, 2) === '0x') {
@@ -136,6 +140,7 @@ export const BoostTab = () => {
         withdrawBoostTx
       )
       button && (button.innerHTML = "withdraw boost")
+      setButtonLoadingColor(false)
       changeActiveToggle('BOOST')
       setTimeout(() => {
         openNotification(false, '', '', '')
@@ -143,6 +148,7 @@ export const BoostTab = () => {
     }
     else {
       button && (button.innerHTML = "withdraw boost")
+      setButtonLoadingColor(false)
       changeActiveToggle('BOOST')
       setTxConfirming(false)
     }
@@ -152,6 +158,7 @@ export const BoostTab = () => {
     setTxConfirming(true)
     if(button) {
       button.innerHTML = "confirming..."
+      setButtonLoadingColor(true)
     }
     const boostTx = await sendBoostTx(selectedPartners)
     if(boostTx.substring(0, 2) === '0x') {
@@ -163,6 +170,7 @@ export const BoostTab = () => {
         boostTx
       )
       button && (button.innerHTML = "create boost")
+      setButtonLoadingColor(false)
       updateOwnedPartners(selectedPartners)
       findBoost()
       changeActiveToggle('BOOST')
@@ -172,6 +180,7 @@ export const BoostTab = () => {
     }
     else {
       button && (button.innerHTML = "create boost")
+      setButtonLoadingColor(false)
       changeActiveToggle('BOOST')
       setTxConfirming(false)
     }
@@ -264,7 +273,7 @@ export const BoostTab = () => {
               }) => {
                 return (
                   <button
-                    className="h-[10%] w-[50%] border-2 border-black bg-[#E7B941] mt-[4%] font-amaticbold text-[3.5vw] xl:text-[1.5vw] hover:scale-110"
+                    className={`h-[10%] w-[50%] border-2 border-black ${buttonLoadingColor ? "bg-[#C9E3B9] text-black" : "bg-[#E7B941] text-black"} hover:bg-[#C9E3B9] hover:text-black mt-[4%] font-amaticbold text-[3.5vw] xl:text-[1.5vw] hover:scale-110`}
                     id="boost-button-add"
                     onClick={() => {
                       const button = document.getElementById('boost-button-add')
@@ -286,7 +295,7 @@ export const BoostTab = () => {
                         }
                       }
                       else {
-                        handleButtonClick()
+                        handleButtonClick("add")
                       }
                     }}
                   >
@@ -304,7 +313,7 @@ export const BoostTab = () => {
               }) => {
                 return (
                   <button
-                    className="h-[10%] w-[50%] border-2 border-black text-[#E7B941] bg-[#9C4924] mt-[4%] font-amaticbold text-[3.5vw] xl:text-[1.5vw] hover:scale-110"
+                    className={`h-[10%] w-[50%] border-2 border-black ${buttonLoadingColor ? "bg-[#C9E3B9] text-black" : "bg-[#9C4924] text-[#E7B941]"} hover:bg-[#C9E3B9] hover:text-black mt-[4%] font-amaticbold text-[3.5vw] xl:text-[1.5vw] hover:scale-110`}
                     id="boost-button-withdraw"
                     onClick={() => {
                       const button = document.getElementById('boost-button-withdraw')
@@ -365,7 +374,7 @@ export const BoostTab = () => {
               }) => {
                 return (
                   <button
-                    className="h-[12.5%] w-[45%] border-2 border-black bg-[#E7B941] mt-[2%] font-amaticbold text-[4vw] xl:text-[1.5vw] hover:scale-110"
+                    className={`h-[12.5%] w-[45%] border-2 border-black ${buttonLoadingColor ? "bg-[#C9E3B9] text-black" : "bg-[#E7B941] text-black"} hover:bg-[#C9E3B9] hover:text-black mt-[2%] font-amaticbold text-[4vw] xl:text-[1.5vw] hover:scale-110`}
                     id="boost-button"
                     onClick={() => {
                       const button = document.getElementById('boost-button')
@@ -387,7 +396,7 @@ export const BoostTab = () => {
                         }
                       }
                       else {
-                        handleButtonClick()
+                        handleButtonClick("boost")
                       }
                     }}
                   >

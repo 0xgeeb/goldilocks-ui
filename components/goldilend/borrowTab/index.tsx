@@ -11,6 +11,7 @@ export const BorrowTab = () => {
 
   const [currentIndex, setCurrentIndex] = useState<number>(0)
   const [daysTilExpiration, setDaysTilExpiration] = useState<number>(14)
+  const [buttonLoadingColor, setButtonLoadingColor] = useState<boolean>(false)
 
   const {
     ownedBeras,
@@ -159,6 +160,7 @@ export const BorrowTab = () => {
     }
     else {
       button && (button.innerHTML = "approving...")
+      setButtonLoadingColor(true)
       if(!bondFlag && checkSelected('BondBera')) {
         await sendGoldilendNFTApproveTx(contracts.bondbear.address)
       }
@@ -166,6 +168,7 @@ export const BorrowTab = () => {
         await sendGoldilendNFTApproveTx(contracts.bandbear.address)
       }
       button && (button.innerHTML = "create loan")
+      setButtonLoadingColor(false)
     }
   }
 
@@ -173,6 +176,7 @@ export const BorrowTab = () => {
     setTxConfirming(true)
     if(button) {
       button.innerHTML = "confirming..."
+      setButtonLoadingColor(true)
     }
     const borrowTx = await sendBorrowTx(loanAmount, selectedBeras, parseDate(loanExpiration))
     if(borrowTx.substring(0, 2) === '0x') {
@@ -184,6 +188,7 @@ export const BorrowTab = () => {
         borrowTx
       )
       button && (button.innerHTML = "create loan")
+      setButtonLoadingColor(false)
       updateOwnedBeras(selectedBeras)
       findLoans()
       changeActiveToggle('BORROW')
@@ -194,6 +199,7 @@ export const BorrowTab = () => {
     }
     else {
       button && (button.innerHTML = "create loan")
+      setButtonLoadingColor(false)
       changeActiveToggle('BORROW')
       setDaysTilExpiration(14)
       setTxConfirming(false)
@@ -320,7 +326,7 @@ export const BorrowTab = () => {
           }) => {
             return (
               <button
-                className="w-[48%] h-[12%] bg-[#E7B941] border-2 border-black font-amaticbold text-[4vw] xl:text-[1.7vw] flex items-center justify-center hover:bg-[#C9E3B9] hover:scale-110"
+                className={`w-[48%] h-[12%] ${buttonLoadingColor ? "bg-[#C9E3B9] text-black" : "bg-[#E7B941] text-black"} hover:bg-[#C9E3B9] hover:text-black border-2 border-black font-amaticbold text-[4vw] xl:text-[1.7vw] flex items-center justify-center hover:scale-110`}
                 id="borrow-button"
                 onClick={() => {
                   const button = document.getElementById('borrow-button')

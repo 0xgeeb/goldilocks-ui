@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect } from "react"
+import { useState, useEffect } from "react"
 import { ConnectButton } from "@rainbow-me/rainbowkit"
 import { useGoldilend, useWallet } from "../../../providers"
 import { useGoldilendTx } from "../../../hooks"
@@ -30,11 +30,14 @@ export const LiquidateTab = () => {
 
   const { wallet, balance, refreshBalances, isConnected } = useWallet()
 
+  //todo: fix dis
   useEffect(() => {
     findLiquidatableLoans()
     refreshBalances()
     setInfoLoading(false)
   }, [isConnected])
+
+  const [buttonLoadingColor, setButtonLoadingColor] = useState<boolean>(false)
 
   const loadingElement = () => {
     return <span className="loader-small mx-auto my-auto"></span>
@@ -72,6 +75,7 @@ export const LiquidateTab = () => {
         setTxConfirming(true)
         if(button) {
           button.innerHTML = "confirming..."
+          setButtonLoadingColor(true)
         }
         const liquidateTx = await sendLiquidateTx('', loanId)
         if(liquidateTx.substring(0, 2) === '0x') {
@@ -84,8 +88,7 @@ export const LiquidateTab = () => {
           )
           if(button) {
             button.innerHTML = "LIQUIDATE"
-            button.style.backgroundColor = "#E7B941"
-            button.style.color = "black"
+            setButtonLoadingColor(false)
           }
           setTimeout(() => {
             openNotification(false, '', '', '')
@@ -94,8 +97,7 @@ export const LiquidateTab = () => {
         else {
           if(button) {
             button.innerHTML = "LIQUIDATE"
-            button.style.backgroundColor = "#E7B941"
-            button.style.color = "black"
+            setButtonLoadingColor(false)
           }
           setTxConfirming(false)
         }
@@ -113,9 +115,11 @@ export const LiquidateTab = () => {
     const rightButton = document.getElementById('right-approve-button')
     if(leftButton) {
       leftButton.innerHTML = "approving..."
+      leftButton.style.backgroundColor = "#C9E3B9"
     }
     if(rightButton) {
       rightButton.innerHTML = "approving..."
+      rightButton.style.backgroundColor = "#C9E3B9"
     }
     await sendiBGTApproveTx(amt, false)
     // updateAllowance(honeyBuy + 0.01)
@@ -129,9 +133,11 @@ export const LiquidateTab = () => {
     const leftButton = document.getElementById('left-approve-button')
     if(leftButton) {
       leftButton.innerHTML = "approving..."
+      leftButton.style.backgroundColor = "#C9E3B9"
     }
     if(rightButton) {
       rightButton.innerHTML = "approving..."
+      rightButton.style.backgroundColor = "#C9E3B9"
     }
     await sendiBGTApproveTx(0, true)
     // updateAllowance(100000000)
@@ -193,14 +199,14 @@ export const LiquidateTab = () => {
                       allowanceButtons &&
                       <div className="w-[100%] h-[100%] flex flex-row items-center justify-center">
                         <button
-                          className="h-[50%] w-[45%] mr-[5%] border-2 border-black bg-[#E7B941] text-[1.2vw] xl:text-[0.7vw] hover:scale-110"
+                          className="h-[50%] w-[45%] mr-[5%] border-2 border-black bg-[#E7B941] hover:bg-[#C9E3B9] text-[1.2vw] xl:text-[0.7vw] hover:scale-110"
                           id="left-approve-button"
                           onClick={() => handleLeftButtonClick(loan.borrowedAmount)}
                         >
                           approve tx
                         </button>
                         <button
-                          className="h-[50%] w-[45%] border-2 border-black bg-[#E7B941] text-[1.2vw] xl:text-[0.7vw] hover:scale-110"
+                          className="h-[50%] w-[45%] border-2 border-black bg-[#E7B941] hover:bg-[#C9E3B9] text-[1.2vw] xl:text-[0.7vw] hover:scale-110"
                           id="right-approve-button"
                           onClick={() => handleRightButtonClick()}
                         >
@@ -219,7 +225,7 @@ export const LiquidateTab = () => {
                         }) => {
                           return (
                             <button
-                              className="h-[50%] w-[80%] border-2 border-black bg-[#E7B941] text-[2vw] xl:text-[1.1vw] hover:scale-110"
+                              className={`h-[50%] w-[80%] border-2 border-black ${buttonLoadingColor ? "bg-[#C9E3B9] text-black" : "bg-[#E7B941] text-black"} hover:bg-[#C9E3B9] hover:text-black text-[2vw] xl:text-[1.1vw] hover:scale-110`}
                               id="liquidate-button"
                               onClick={() => {
                                 const button = document.getElementById('repay-button')

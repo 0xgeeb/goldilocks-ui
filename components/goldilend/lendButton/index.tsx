@@ -1,3 +1,6 @@
+"use client"
+
+import { useState } from "react"
 import { ConnectButton } from "@rainbow-me/rainbowkit"
 import {
   useGoldilend,
@@ -38,6 +41,8 @@ export const LendButton = () => {
     wallet,
     refreshBalances
   } = useWallet()
+
+  const [buttonLoadingColor, setButtonLoadingColor] = useState<boolean>(false)
 
   const formatAsString = (num: number): string => {
     return num.toLocaleString('en-US', { maximumFractionDigits: 2 })
@@ -80,7 +85,7 @@ export const LendButton = () => {
         setTxConfirming(true)
         if(button) {
           button.innerHTML = "confirming..."
-          button.style.backgroundColor = "#C9E3B9"
+          setButtonLoadingColor(true)
         }
         const lockTx = await sendLockTx(lock)
         if(lockTx.substring(0, 2) === '0x') {
@@ -93,8 +98,7 @@ export const LendButton = () => {
           )
           if(button) {
             button.innerHTML = "lock"
-            button.style.backgroundColor = "#E7B941"
-            button.style.color = "black"
+            setButtonLoadingColor(false)
           }
           refreshInfo()
           setTimeout(() => {
@@ -104,8 +108,7 @@ export const LendButton = () => {
         else {
           if(button) {
             button.innerHTML = "lock"
-            button.style.backgroundColor = "#E7B941"
-            button.style.color = "black"
+            setButtonLoadingColor(false)
           }
           refreshInfo()
           setTxConfirming(false)
@@ -132,7 +135,7 @@ export const LendButton = () => {
         setTxConfirming(true)
         if(button) {
           button.innerHTML = "confirming..."
-          button.style.backgroundColor = "#C9E3B9"
+          setButtonLoadingColor(true)
         }
         const stakeTx = await sendStakeTx(stake)
         if(stakeTx.substring(0, 2) === '0x') {
@@ -145,8 +148,7 @@ export const LendButton = () => {
           )
           if(button) {
             button.innerHTML = "stake"
-            button.style.backgroundColor = "#E7B941"
-            button.style.color = "black"
+            setButtonLoadingColor(false)
           }
           refreshInfo()
           setTimeout(() => {
@@ -156,8 +158,7 @@ export const LendButton = () => {
         else {
           if(button) {
             button.innerHTML = "stake"
-            button.style.backgroundColor = "#E7B941"
-            button.style.color = "black"
+            setButtonLoadingColor(false)
           }
           refreshInfo()
           setTxConfirming(false)
@@ -182,7 +183,7 @@ export const LendButton = () => {
       setTxConfirming(true)
       if(button) {
         button.innerHTML = "confirming..."
-        button.style.backgroundColor = "#C9E3B9"
+        setButtonLoadingColor(true)
       }
       const unstakeTx = await sendUnstakeTx(unstake)
       if(unstakeTx.substring(0, 2) === '0x') {
@@ -195,8 +196,7 @@ export const LendButton = () => {
         )
         if(button) {
           button.innerHTML = "unstake"
-          button.style.backgroundColor = "#E7B941"
-          button.style.color = "black"
+          setButtonLoadingColor(false)
         }
         refreshInfo()
         setTimeout(() => {
@@ -206,8 +206,7 @@ export const LendButton = () => {
       else {
         if(button) {
           button.innerHTML = "unstake"
-          button.style.backgroundColor = "#E7B941"
-          button.style.color = "black"
+          setButtonLoadingColor(false)
         }
         refreshInfo()
         setTxConfirming(false)
@@ -287,14 +286,14 @@ export const LendButton = () => {
         allowanceButtons &&
         <div>
           <button
-            className="absolute bg-[#E7B941] h-[8%] w-[22%] xl:w-[16.6%] top-[61%] xl:top-[59%] left-[19.5%] xl:left-[33.9%] border-2 border-black font-amaticbold text-[3.5vw] xl:text-[1.5vw] hover:bg-[#C9E3B9] hover:scale-110"
+            className="absolute bg-[#E7B941] h-[8%] w-[22%] xl:w-[16.6%] top-[61%] xl:top-[59%] left-[19.5%] xl:left-[33.9%] border-2 border-black font-amaticbold text-[3.5vw] xl:text-[1.5vw] hover:bg-[#C9E3B9] hover:text-black hover:scale-110"
             id="left-approve-button"
             onClick={() => handleLeftButtonClick()}
           >
             approve tx
           </button>
           <button
-            className="absolute bg-[#E7B941] h-[8%] w-[22%] xl:w-[16.6%] top-[61%] xl:top-[59%] left-[47.5%] xl:left-[55.5%] border-2 border-black font-amaticbold text-[3.5vw] xl:text-[1.5vw] hover:bg-[#C9E3B9] hover:scale-110"
+            className="absolute bg-[#E7B941] h-[8%] w-[22%] xl:w-[16.6%] top-[61%] xl:top-[59%] left-[47.5%] xl:left-[55.5%] border-2 border-black font-amaticbold text-[3.5vw] xl:text-[1.5vw] hover:bg-[#C9E3B9] hover:text-black hover:scale-110"
             id="right-approve-button"
             onClick={() => handleRightButtonClick()}
           >
@@ -313,7 +312,7 @@ export const LendButton = () => {
           }) => {
             return (
               <button 
-                className="absolute h-[8%] w-[22%] xl:w-[16.6%] top-[61%] xl:top-[59%] left-[33%] xl:left-[44.7%] bg-[#E7B941] font-amaticbold text-[4vw] xl:text-[1.9vw] border-2 border-black hover:bg-[#C9E3B9] hover:scale-110"
+                className={`absolute h-[8%] w-[22%] xl:w-[16.6%] top-[61%] xl:top-[59%] left-[33%] xl:left-[44.7%] ${buttonLoadingColor ? "bg-[#C9E3B9] text-black" : " bg-[#E7B941] text-black"} hover:bg-[#C9E3B9] hover:text-black font-amaticbold text-[4vw] xl:text-[1.9vw] border-2 border-black hover:scale-110`}
                 id="lend-button"
                 onClick={() => {
                   const button = document.getElementById('lend-button')

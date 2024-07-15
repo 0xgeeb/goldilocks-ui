@@ -1,3 +1,6 @@
+"use client"
+
+import { useState } from "react"
 import { ConnectButton } from "@rainbow-me/rainbowkit"
 import {
   useStake,
@@ -40,6 +43,8 @@ export const StakeButton = () => {
     sendStirTx,
     sendClaimTx
   } = useStakeTx()
+
+  const [buttonLoadingColor, setButtonLoadingColor] = useState<boolean>(false)
 
   const formatAsString = (num: number): string => {
     return num.toLocaleString('en-US', { maximumFractionDigits: 2 })
@@ -85,8 +90,7 @@ export const StakeButton = () => {
         setTxConfirming(true)
         if(button) {
           button.innerHTML = "confirming..."
-          button.style.backgroundColor = "#B35227"
-          button.style.color = "#E7B941"
+          setButtonLoadingColor(true)
         }
         const stakeTx = await sendStakeTx(stake)
         if(stakeTx.substring(0, 2) === '0x') {
@@ -99,8 +103,7 @@ export const StakeButton = () => {
           )
           if(button) {
             button.innerHTML = "stake"
-            button.style.backgroundColor = "#E7B941"
-            button.style.color = "black"
+            setButtonLoadingColor(false)
           }
           refreshInfo()
           setTimeout(() => {
@@ -110,8 +113,7 @@ export const StakeButton = () => {
         else {
           if(button) {
             button.innerHTML = "stake"
-            button.style.backgroundColor = "#E7B941"
-            button.style.color = "black"
+            setButtonLoadingColor(false)
           }
           refreshInfo()
           setTxConfirming(false)
@@ -140,8 +142,7 @@ export const StakeButton = () => {
       setTxConfirming(true)
       if(button) {
         button.innerHTML = "confirming..."
-        button.style.backgroundColor = "#B35227"
-        button.style.color = "#E7B941"
+        setButtonLoadingColor(true)
       }
       const unstakeTx = await sendUnstakeTx(unstake)
       if(unstakeTx.substring(0, 2) === '0x') {
@@ -154,8 +155,7 @@ export const StakeButton = () => {
         )
         if(button) {
           button.innerHTML = "unstake"
-          button.style.backgroundColor = "#E7B941"
-          button.style.color = "black"
+          setButtonLoadingColor(false)
         }
         refreshInfo()
         setTimeout(() => {
@@ -165,8 +165,7 @@ export const StakeButton = () => {
       else {
         if(button) {
           button.innerHTML = "unstake"
-          button.style.backgroundColor = "#E7B941"
-          button.style.color = "black"
+          setButtonLoadingColor(false)
         }
         refreshInfo()
         setTxConfirming(false)
@@ -189,8 +188,7 @@ export const StakeButton = () => {
         setTxConfirming(true)
         if(button) {
           button.innerHTML = "confirming..."
-          button.style.backgroundColor = "#B35227"
-          button.style.color = "#E7B941"
+          setButtonLoadingColor(true)
         }
         const stirTx = await sendStirTx(stir)
         if(stirTx === 'balance') {
@@ -209,8 +207,7 @@ export const StakeButton = () => {
           )
           if(button) {
             button.innerHTML = "stir"
-            button.style.backgroundColor = "#E7B941"
-            button.style.color = "black"
+            setButtonLoadingColor(false)
           }
           refreshInfo()
           setTimeout(() => {
@@ -220,8 +217,7 @@ export const StakeButton = () => {
         else {
           if(button) {
             button.innerHTML = "stir"
-            button.style.backgroundColor = "#E7B941"
-            button.style.color = "black"
+            setButtonLoadingColor(false)
           }
           refreshInfo()
           setTxConfirming(false)
@@ -242,8 +238,7 @@ export const StakeButton = () => {
       setTxConfirming(true)
       if(button) {
         button.innerHTML = "confirming..."
-        button.style.backgroundColor = "#B35227"
-        button.style.color = "#E7B941"
+        setButtonLoadingColor(true)
       }
       const claimTx = await sendClaimTx()
       if(claimTx.substring(0, 2) === '0x') {
@@ -256,8 +251,7 @@ export const StakeButton = () => {
         )
         if(button) {
           button.innerHTML = "claim"
-          button.style.backgroundColor = "#E7B941"
-          button.style.color = "black"
+          setButtonLoadingColor(false)
         }
         refreshInfo()
         setTimeout(() => {
@@ -267,8 +261,7 @@ export const StakeButton = () => {
       else {
         if(button) {
           button.innerHTML = "claim"
-          button.style.backgroundColor = "#E7B941"
-          button.style.color = "black"
+          setButtonLoadingColor(false)
         }
         refreshInfo()
         setTxConfirming(false)
@@ -386,7 +379,7 @@ export const StakeButton = () => {
           }) => {
             return (
               <button
-                className="absolute h-[8%] w-[36%] md:w-[26%] lg:w-[16.6%] top-[60%] lg:top-[54.8%] 2xl:top-[55%] left-[32%] md:left-[37%] lg:left-[41.6%] bg-[#E7B941] font-amaticbold text-[5vw] md:text-[4vw] lg:text-[3vw] xl:text-[2.25vw] 2xl:text-[1.9vw] tall:text-[6vw] tall:md:text-[4vw] tall:lg:text-[3vw] tall:xl:text-[2.5vw] tall:2xl:text-[1.9vw] border-2 border-black hover:bg-[#B35227] hover:text-[#E7B941] hover:scale-110"
+                className={`absolute h-[8%] w-[36%] md:w-[26%] lg:w-[16.6%] top-[60%] lg:top-[54.8%] 2xl:top-[55%] left-[32%] md:left-[37%] lg:left-[41.6%] ${buttonLoadingColor ? "bg-[#B35227] text-[#E7B941]" : "bg-[#E7B941] text-black"} hover:bg-[#B35227] hover:text-[#E7B941] font-amaticbold text-[5vw] md:text-[4vw] lg:text-[3vw] xl:text-[2.25vw] 2xl:text-[1.9vw] tall:text-[6vw] tall:md:text-[4vw] tall:lg:text-[3vw] tall:xl:text-[2.5vw] tall:2xl:text-[1.9vw] border-2 border-black hover:scale-110`}
                 id="stake-button"
                 onClick={() => {
                   const button = document.getElementById('stake-button')

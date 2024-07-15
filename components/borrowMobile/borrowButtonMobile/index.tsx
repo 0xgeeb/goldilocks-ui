@@ -216,14 +216,14 @@ export const BorrowButtonMobile = () => {
       allowanceButtons &&
       <div>
         <button
-          className="absolute bg-[#E7B941] h-[8%] w-[23%] top-[49%] left-[23%] border-2 border-black font-amaticbold text-[5vw] focus:bg-[#4D0B24] focus:text-[#E7B941] focus:scale-110"
+          className="absolute bg-[#E7B941] h-[8%] w-[23%] top-[49%] left-[23%] border-2 border-black font-amaticbold text-[5vw] focus:bg-[#634C43] focus:text-[#E7B941] focus:scale-110"
           id="left-approve-button"
           onClick={() => handleLeftButtonClick()}
         >
           approve tx
         </button>
         <button
-          className="absolute bg-[#E7B941] h-[8%] w-[23%] top-[49%] left-[54%] border-2 border-black font-amaticbold text-[5vw] focus:bg-[#4D0B24] focus:text-[#E7B941] focus:scale-110"
+          className="absolute bg-[#E7B941] h-[8%] w-[23%] top-[49%] left-[54%] border-2 border-black font-amaticbold text-[5vw] focus:bg-[#634C43] focus:text-[#E7B941] focus:scale-110"
           id="right-approve-button"
           onClick={() => handleRightButtonClick()}
         >
@@ -242,7 +242,7 @@ export const BorrowButtonMobile = () => {
         }) => {
           return (
             <button 
-              className="absolute h-[8%] w-[54%] top-[49%] left-[23%] bg-[#E7B941] font-amaticbold flex items-center justify-center text-[9vw] border-2 border-black focus:bg-[#4D0B24] focus:text-[#E7B941] focus:scale-110"
+              className="absolute h-[8%] w-[54%] top-[49%] left-[23%] bg-[#E7B941] font-amaticbold flex items-center justify-center text-[9vw] border-2 border-black focus:bg-[#634C43] focus:text-[#E7B941] focus:scale-110"
               id="borrow-button"
               onClick={() => {
                 const button = document.getElementById('borrow-button')

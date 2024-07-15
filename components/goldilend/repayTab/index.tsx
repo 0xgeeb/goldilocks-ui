@@ -19,6 +19,7 @@ export const RepayTab = () => {
 
   const [inputValues, setInputValues] = useState<InputValuesType>({})
   const [allowanceFlags, setAllowanceFlags] = useState<AllowanceFlagsType>({})
+  const [buttonLoadingColor, setButtonLoadingColor] = useState<boolean>(false)
 
   const {
     infoLoading,
@@ -107,6 +108,7 @@ export const RepayTab = () => {
         setTxConfirming(true)
         if(button) {
           button.innerHTML = "confirming..."
+          setButtonLoadingColor(true)
         }
         const repayTx = await sendRepayTx(amt, loanId, amt == borrowedAmt, wallet)
         if(repayTx.substring(0, 2) === '0x') {
@@ -119,8 +121,7 @@ export const RepayTab = () => {
           )
           if(button) {
             button.innerHTML = "REPAY LOAN"
-            button.style.backgroundColor = "#E7B941"
-            button.style.color = "black"
+            setButtonLoadingColor(false)
           }
           refreshInfo()
           setTimeout(() => {
@@ -130,8 +131,7 @@ export const RepayTab = () => {
         else {
           if(button) {
             button.innerHTML = "REPAY LOAN"
-            button.style.backgroundColor = "#E7B941"
-            button.style.color = "black"
+            setButtonLoadingColor(false)
           }
           refreshInfo()
           setTxConfirming(false)
@@ -151,11 +151,11 @@ export const RepayTab = () => {
     const rightButton = document.getElementById('right-approve-button' + loanId)
     if(leftButton) {
       leftButton.innerHTML = "approving..."
-      leftButton.style.backgroundColor = "#E7B941"
+      leftButton.style.backgroundColor = "#C9E3B9"
     }
     if(rightButton) {
       rightButton.innerHTML = "approving..."
-      rightButton.style.backgroundColor = "#E7B941"
+      rightButton.style.backgroundColor = "#C9E3B9"
     }
     await sendiBGTApproveTx(amt, false)
     // updateAllowance(honeyBuy + 0.01)
@@ -170,11 +170,11 @@ export const RepayTab = () => {
     const rightButton = document.getElementById('right-approve-button' + loanId)
     if(leftButton) {
       leftButton.innerHTML = "approving..."
-      leftButton.style.backgroundColor = "#E7B941"
+      leftButton.style.backgroundColor = "#C9E3B9"
     }
     if(rightButton) {
       rightButton.innerHTML = "approving..."
-      rightButton.style.backgroundColor = "#E7B941"
+      rightButton.style.backgroundColor = "#C9E3B9"
     }
     await sendiBGTApproveTx(0, true)
     // updateAllowance(100000000)
@@ -249,7 +249,7 @@ export const RepayTab = () => {
             </div>
             <div className="h-[100%] w-[28%] flex flex-col relative">
               <div
-                className="bg-[#CC8634] absolute top-[7.5%] left-[1%] h-[45%] w-[25%] cursor-pointer hover:scale-110 text-[2vw] xl:text-[0.9vw] border-t-2 border-b-2 border-l-2 border-black flex items-center justify-center"
+                className="bg-[#CC8634] hover:bg-[#C9E3B9] absolute top-[7.5%] left-[1%] h-[45%] w-[25%] cursor-pointer hover:scale-110 text-[2vw] xl:text-[0.9vw] border-t-2 border-b-2 border-l-2 border-black flex items-center justify-center"
                 onClick={() => handleMaxClick(loan.loanId, loan.borrowedAmount)}
               >
                 MAX
@@ -269,14 +269,14 @@ export const RepayTab = () => {
                 allowanceFlags[loan.loanId] &&
                 <div>
                   <button
-                    className="top-[65%] left-[1%] h-[40%] w-[42%] absolute border-2 border-black bg-[#E7B941] text-[1.2vw] xl:text-[0.7vw] hover:scale-110"
+                    className="top-[65%] left-[1%] h-[40%] w-[42%] absolute border-2 border-black bg-[#E7B941] hover:bg-[#C9E3B9] text-[1.2vw] xl:text-[0.7vw] hover:scale-110"
                     id={`left-approve-button${loan.loanId}`}
                     onClick={() => handleLeftButtonClick(parseFloat(inputValues[loan.loanId]), loan.loanId)}
                   >
                     approve tx
                   </button>
                   <button
-                    className="top-[65%] left-[53%] h-[40%] w-[42%] absolute border-2 border-black bg-[#E7B941] text-[1.2vw] xl:text-[0.7vw] hover:scale-110"
+                    className="top-[65%] left-[53%] h-[40%] w-[42%] absolute border-2 border-black bg-[#E7B941] hover:bg-[#C9E3B9] text-[1.2vw] xl:text-[0.7vw] hover:scale-110"
                     id={`right-approve-button${loan.loanId}`}
                     onClick={() => handleRightButtonClick(loan.loanId)}
                   >
@@ -295,7 +295,7 @@ export const RepayTab = () => {
                   }) => {
                     return (
                       <button
-                        className="top-[65%] left-[30%] h-[40%] w-[65%] absolute border-2 border-black bg-[#E7B941] text-[1.8vw] xl:text-[0.9vw] hover:scale-110"
+                        className={`top-[65%] left-[30%] h-[40%] w-[65%] absolute border-2 border-black ${buttonLoadingColor ? "bg-[#C9E3B9] text-black" : "bg-[#E7B941] text-black"} hover:bg-[#C9E3B9] hover:text-black text-[1.8vw] xl:text-[0.9vw] hover:scale-110`}
                         id={`repay-button${loan.loanId}`}
                         onClick={() => {
                           const button = document.getElementById('repay-button' + loan.loanId)

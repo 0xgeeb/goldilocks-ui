@@ -1,3 +1,6 @@
+"use client"
+
+import { useState } from "react"
 import { ConnectButton } from "@rainbow-me/rainbowkit"
 import {
   useBorrow,
@@ -36,6 +39,8 @@ export const BorrowButton = () => {
     sendRepayTx
   } = useBorrowTx()
 
+  const [buttonLoadingColor, setButtonLoadingColor] = useState<boolean>(false)
+
   const formatAsString = (num: number): string => {
     return num.toLocaleString('en-US', { maximumFractionDigits: 2 })
   }
@@ -71,8 +76,7 @@ export const BorrowButton = () => {
       setTxConfirming(true)
       if(button) {
         button.innerHTML = "confirming..."
-        button.style.backgroundColor = "#634C43"
-        button.style.color = "#E7B941"
+        setButtonLoadingColor(true)
       }
       const borrowTx = await sendBorrowTx(borrow)
       if(borrowTx.substring(0, 2) === '0x') {
@@ -85,8 +89,7 @@ export const BorrowButton = () => {
         )
         if(button) {
           button.innerHTML = "borrow"
-          button.style.backgroundColor = "#E7B941"
-          button.style.color = "black"
+          setButtonLoadingColor(false)
         }
         refreshInfo()
         setTimeout(() => {
@@ -96,8 +99,7 @@ export const BorrowButton = () => {
       else {
         if(button) {
           button.innerHTML = "borrow"
-          button.style.backgroundColor = "#E7B941"
-          button.style.color = "black"
+          setButtonLoadingColor(false)
         }
         refreshInfo()
         setTxConfirming(false)
@@ -120,8 +122,7 @@ export const BorrowButton = () => {
         setTxConfirming(true)
         if(button) {
           button.innerHTML = "confirming..."
-          button.style.backgroundColor = "#634C43"
-          button.style.color = "#E7B941"
+          setButtonLoadingColor(true)
         }
         const repayTx = await sendRepayTx(repay)
         if(repayTx.substring(0, 2) === '0x') {
@@ -134,8 +135,7 @@ export const BorrowButton = () => {
           )
           if(button) {
             button.innerHTML = "repay"
-            button.style.backgroundColor = "#E7B941"
-            button.style.color = "black"
+            setButtonLoadingColor(false)
           }
           refreshInfo()
           setTimeout(() => {
@@ -145,8 +145,7 @@ export const BorrowButton = () => {
         else {
           if(button) {
             button.innerHTML = "repay"
-            button.style.backgroundColor = "#E7B941"
-            button.style.color = "black"
+            setButtonLoadingColor(false)
           }
           refreshInfo()
           setTxConfirming(false)
@@ -216,14 +215,14 @@ export const BorrowButton = () => {
         allowanceButtons &&
         <div>
           <button
-            className="absolute bg-[#E7B941] h-[8%] w-[24%] lg:w-[16.6%] top-[60%] lg:top-[54.8%] 2xl:top-[55%] left-[24%] lg:left-[30.9%] border-2 border-black font-amaticbold text-[4vw] md:text-[2.75vw] lg:text-[2vw] xl:text-[1.5vw] hover:bg-[#B35227] hover:text-[#E7B941] hover:scale-110"
+            className="absolute bg-[#E7B941] h-[8%] w-[24%] lg:w-[16.6%] top-[60%] lg:top-[54.8%] 2xl:top-[55%] left-[24%] lg:left-[30.9%] border-2 border-black font-amaticbold text-[4vw] md:text-[2.75vw] lg:text-[2vw] xl:text-[1.5vw] hover:bg-[#634C43] hover:text-[#E7B941] hover:scale-110"
             id="left-approve-button"
             onClick={() => handleLeftButtonClick()}
           >
             approve tx
           </button>
           <button
-            className="absolute bg-[#E7B941] h-[8%] w-[24%] lg:w-[16.6%] top-[60%] lg:top-[54.8%] 2xl:top-[55%] left-[52%] lg:left-[52.5%] border-2 border-black font-amaticbold text-[4vw] md:text-[2.75vw] lg:text-[2vw] xl:text-[1.5vw] hover:bg-[#B35227] hover:text-[#E7B941] hover:scale-110"
+            className="absolute bg-[#E7B941] h-[8%] w-[24%] lg:w-[16.6%] top-[60%] lg:top-[54.8%] 2xl:top-[55%] left-[52%] lg:left-[52.5%] border-2 border-black font-amaticbold text-[4vw] md:text-[2.75vw] lg:text-[2vw] xl:text-[1.5vw] hover:bg-[#634C43] hover:text-[#E7B941] hover:scale-110"
             id="right-approve-button"
             onClick={() => handleRightButtonClick()}
           >
@@ -242,7 +241,7 @@ export const BorrowButton = () => {
           }) => {
             return (
               <button 
-                className="absolute h-[8%] w-[36%] md:w-[26%] lg:w-[16.6%] top-[60%] lg:top-[54.8%] 2xl:top-[55%] left-[32%] md:left-[37%] lg:left-[41.6%] bg-[#E7B941] font-amaticbold text-[5vw] md:text-[4vw] lg:text-[3vw] xl:text-[2.25vw] 2xl:text-[1.9vw] tall:text-[6vw] tall:md:text-[4vw] tall:lg:text-[3vw] tall:xl:text-[2.5vw] tall:2xl:text-[1.9vw] border-2 border-black hover:bg-[#B35227] hover:text-[#E7B941] hover:scale-110"
+                className={`absolute h-[8%] w-[36%] md:w-[26%] lg:w-[16.6%] top-[60%] lg:top-[54.8%] 2xl:top-[55%] left-[32%] md:left-[37%] lg:left-[41.6%] ${buttonLoadingColor ? "bg-[#634C43] text-[#E7B941]" : "bg-[#E7B941] text-black"} hover:bg-[#634C43] hover:text-[#E7B941] font-amaticbold text-[5vw] md:text-[4vw] lg:text-[3vw] xl:text-[2.25vw] 2xl:text-[1.9vw] tall:text-[6vw] tall:md:text-[4vw] tall:lg:text-[3vw] tall:xl:text-[2.5vw] tall:2xl:text-[1.9vw] border-2 border-black hover:scale-110`}
                 id="borrow-button"
                 onClick={() => {
                   const button = document.getElementById('borrow-button')
