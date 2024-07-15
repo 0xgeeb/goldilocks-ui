@@ -9,7 +9,8 @@ import {
   SwapWalletBalance,
   Footer,
   Loading,
-  LocksFetcher
+  LocksFetcher,
+  ChangeChain
 } from "../../utils"
 import { 
   SwapBox,
@@ -160,6 +161,7 @@ export const GoldiswapPage = () => {
             <Stats />
             <Footer />
             <LocksFetcher />
+            <ChangeChain />
           </div>
         </main> :
         <GoldiswapPageMobile />

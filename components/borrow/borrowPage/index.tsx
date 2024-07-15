@@ -7,7 +7,8 @@ import {
   NavBar,
   WalletBalance,
   Footer,
-  Loading
+  Loading,
+  ChangeChain
 } from "../../utils"
 import {
   BorrowBox,
@@ -110,6 +111,7 @@ export const BorrowPage = () => {
         <BorrowButton />
         <Stats />
         <Footer />
+        <ChangeChain />
       </div>
     </main> :
     <BorrowPageMobile />

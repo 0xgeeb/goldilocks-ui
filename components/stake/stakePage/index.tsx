@@ -7,7 +7,8 @@ import {
   NavBar,
   Footer,
   WalletBalance,
-  Loading
+  Loading,
+  ChangeChain
 } from "../../utils"
 import {
   Toggles,
@@ -124,6 +125,7 @@ export const StakePage = () => {
         }
         <Stats />
         <Footer />
+        <ChangeChain />
       </div>
     </main> :
     <StakePageMobile />

@@ -12,7 +12,8 @@ import {
 import {
   NavBar,
   Footer,
-  Loading
+  Loading,
+  ChangeChain
 } from "../../utils"
 
 export const GoldilendPage = () => {
@@ -52,6 +53,7 @@ export const GoldilendPage = () => {
               <BorrowBox />
               <BorrowFetcher />
               <Footer />
+              <ChangeChain />
             </div>
           </main> :
         <GoldilendPageMobile />

@@ -15,7 +15,8 @@ import {
   NavBar,
   Footer,
   Loading,
-  LendWalletBalance
+  LendWalletBalance,
+  ChangeChain
 } from "../../utils"
 
 export const GoldilendLendPage = () => {
@@ -60,6 +61,7 @@ export const GoldilendLendPage = () => {
           </>
         }
         <Footer />
+        <ChangeChain />
       </div>
     </main> :
     <GoldilendLendPageMobile />

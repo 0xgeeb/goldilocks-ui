@@ -255,11 +255,11 @@ export const BorrowButton = () => {
                     }
                   }
                   else if(chain?.name !== "Berachain bArtio") {
-                    if(button && button.innerHTML === "where Berachain bArtio") {
+                    if(button && button.innerHTML === "where bArtio") {
                       openChainModal()
                     }
                     else {
-                      button && (button.innerHTML = "where Berachain bArtio")
+                      button && (button.innerHTML = "where bArtio")
                     }
                   }
                   else {
