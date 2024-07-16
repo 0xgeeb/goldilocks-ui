@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { useGetDailyEndPricesQuery } from "../../../src/graphql/generated/queries"
 
 export const LocksFetcher = () => {
@@ -25,7 +25,7 @@ export const LocksFetcher = () => {
     return result
   }
 
-  const timestamps = last7DaysTimestamps()
+  const timestamps = useMemo(last7DaysTimestamps, [])
 
   const { data, loading } = useGetDailyEndPricesQuery({
     variables: {
