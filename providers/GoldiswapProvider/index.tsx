@@ -127,7 +127,9 @@ const INITIAL_STATE = {
   setTxConfirming: (_confirming: boolean) => {},
 
   balanceMobileToggle: false,
-  setBalanceMobileToggle: (_toggle: boolean) => {}
+  setBalanceMobileToggle: (_toggle: boolean) => {},
+  chartData: [],
+  updateChartData: (_chartData: {}) => {}
 }
 
 const GoldiswapContext = createContext(INITIAL_STATE)
@@ -161,6 +163,7 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
   const [displayStringState, setDisplayStringState] = useState<string>(INITIAL_STATE.displayString)
   const [bottomDisplayStringState, setBottomDisplayStringState] = useState<string>(INITIAL_STATE.bottomDisplayString)
 
+  const [chartDataState, setChartDataState] = useState(INITIAL_STATE.chartData)
   const [chartOpenState, setChartOpenState] = useState<boolean>(INITIAL_STATE.chartOpen)
   const [infoLoadingState, setInfoLoadingState] = useState<boolean>(INITIAL_STATE.infoLoading)
   const [txConfirmingState, setTxConfirmingState] = useState<boolean>(INITIAL_STATE.txConfirming)
@@ -702,6 +705,21 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
       hash
     }))
   }
+
+  const updateChartData = (chartData: any) => {
+    console.log(chartData)
+    let tempChartData: any[] = []
+    const days = ['firstDay', 'secondDay', 'thirdDay', 'fourthDay', 'fifthDay', 'sixthDay']
+    for(const day of days) {
+      const dayData = chartData[day]
+      const item = dayData.items[0]
+      if(item) {
+        const result = marketPrice(parseFloat(formatEther(item.fsl)), parseFloat(formatEther(item.psl)), parseFloat(formatEther(item.supply)))
+        tempChartData.push(result)
+      }
+    }
+    console.log(tempChartData)
+  } 
   
   return (
     <GoldiswapContext.Provider
@@ -763,7 +781,9 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
         handleBottomChange,
         debouncedGettingHoney: debouncedGettingHoneyState,
         balanceMobileToggle: balanceMobileToggleState,
-        setBalanceMobileToggle: setBalanceMobileToggleState
+        setBalanceMobileToggle: setBalanceMobileToggleState,
+        chartData: chartDataState,
+        updateChartData
       }}
     >
       { children }

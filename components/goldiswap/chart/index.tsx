@@ -5,7 +5,7 @@ import { useGoldiswap } from "../../../providers"
 
 export const Chart = () => {
 
-  const { setChartOpen } = useGoldiswap()
+  const { chartData, setChartOpen } = useGoldiswap()
 
   const data = [
     {name: '4/2', uv: 400, pv: 2400, amt: 2400},
