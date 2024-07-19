@@ -128,7 +128,7 @@ const INITIAL_STATE = {
 
   balanceMobileToggle: false,
   setBalanceMobileToggle: (_toggle: boolean) => {},
-  chartData: [],
+  chartData: [] as {[x: string]: number, value: number}[],
   updateChartData: (_chartData: {}) => {}
 }
 
@@ -163,7 +163,7 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
   const [displayStringState, setDisplayStringState] = useState<string>(INITIAL_STATE.displayString)
   const [bottomDisplayStringState, setBottomDisplayStringState] = useState<string>(INITIAL_STATE.bottomDisplayString)
 
-  const [chartDataState, setChartDataState] = useState(INITIAL_STATE.chartData)
+  const [chartDataState, setChartDataState] = useState<{[x: string]: number, value: number}[]>(INITIAL_STATE.chartData)
   const [chartOpenState, setChartOpenState] = useState<boolean>(INITIAL_STATE.chartOpen)
   const [infoLoadingState, setInfoLoadingState] = useState<boolean>(INITIAL_STATE.infoLoading)
   const [txConfirmingState, setTxConfirmingState] = useState<boolean>(INITIAL_STATE.txConfirming)
@@ -707,18 +707,37 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
   }
 
   const updateChartData = (chartData: any) => {
-    console.log(chartData)
-    let tempChartData: any[] = []
-    const days = ['firstDay', 'secondDay', 'thirdDay', 'fourthDay', 'fifthDay', 'sixthDay']
+    let tempChartData: {[x: string]: number, value: number}[] = []
+    const days = ['firstDay', 'secondDay', 'thirdDay', 'fourthDay', 'fifthDay', 'sixthDay', 'seventhDay']
     for(const day of days) {
       const dayData = chartData[day]
       const item = dayData.items[0]
       if(item) {
         const result = marketPrice(parseFloat(formatEther(item.fsl)), parseFloat(formatEther(item.psl)), parseFloat(formatEther(item.supply)))
-        tempChartData.push(result)
+        tempChartData.push({ [`${day}`]: result, "value": result })
+      }
+      else {
+        tempChartData.push({ [`${day}`]: 0, value: 0 })
       }
     }
-    console.log(tempChartData)
+    let fallbackNumber: number | null = null;
+    for(let i = 0; i < tempChartData.length; i++) {
+      if (tempChartData[i][`${days[i]}`] !== 0) {
+        fallbackNumber = tempChartData[i][`${days[i]}`]
+        break
+      }
+    }
+    let farthestNumber: number | null = fallbackNumber
+    for(let i = tempChartData.length - 1; i >= 0; i--) {
+      if(tempChartData[i][`${days[i]}`] !== 0) {
+        farthestNumber = tempChartData[i][`${days[i]}`]
+      }
+      else if(farthestNumber !== null) {
+        tempChartData[i][`${days[i]}`] = farthestNumber
+        tempChartData[i].value = farthestNumber
+      }
+    }
+    setChartDataState(tempChartData)
   } 
   
   return (
