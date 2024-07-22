@@ -6,14 +6,6 @@ import { useGoldiswap } from "../../../providers"
 export const Chart = () => {
 
   const { chartData, setChartOpen } = useGoldiswap()
-
-  // const data = [
-  //   {name: '4/2', uv: 400, pv: 2400, amt: 2400},
-  //   {name: '4/6', uv: 300, pv: 1200, amt: 3000},
-  //   {name: '4/10', uv: 350, pv: 4800, amt: 5000},
-  //   {name: '4/14', uv: 450, pv: 1200, amt: 3000},
-  //   {name: '4/18', uv: 800, pv: 4800, amt: 5000}
-  // ]
   const data = chartData
 
   return (
@@ -25,7 +17,7 @@ export const Chart = () => {
         data={data}
         margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
       >
-        <Line type="natural" dataKey="value" dot={false} stroke="#000000" />
+        <Line type="natural" dataKey="value" dot={false} strokeWidth={3} stroke="#000000" />
         <CartesianGrid stroke="#000000" vertical={false} />
         <XAxis dataKey="name" stroke="#000000" />
         <YAxis stroke="#000000" />

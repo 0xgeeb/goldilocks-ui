@@ -216,6 +216,7 @@ export const BorrowProvider = (props: PropsWithChildren<{}>) => {
     }
 
     setBorrowInfoState(response)
+    setInfoLoadingState(false)
   }
 
   const updateAllowance = (newAllowance: number) => {

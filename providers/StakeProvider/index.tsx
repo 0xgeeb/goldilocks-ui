@@ -276,6 +276,7 @@ export const StakeProvider = (props: PropsWithChildren<{}>) => {
     }
 
     setStakeInfoState(response)
+    setInfoLoadingState(false)
   }
 
   const openNotification = (toggle: boolean, action: string, result: string, hash: string) => {

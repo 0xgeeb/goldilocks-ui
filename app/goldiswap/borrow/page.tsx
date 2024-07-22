@@ -3,7 +3,8 @@ import { BorrowPage } from "../../../components/borrow"
 import {
   WagmiProvider,
   WalletProvider,
-  BorrowProvider
+  BorrowProvider,
+  GoldiswapProvider
 } from "../../../providers"
 
 export const metadata: Metadata = {
@@ -16,9 +17,11 @@ export default function Borrow() {
   return (
     <WagmiProvider> 
       <WalletProvider>
-        <BorrowProvider>
-          <BorrowPage />
-        </BorrowProvider>
+        <GoldiswapProvider>
+          <BorrowProvider>
+            <BorrowPage />
+          </BorrowProvider>
+        </GoldiswapProvider>
       </WalletProvider>
     </WagmiProvider>
   )

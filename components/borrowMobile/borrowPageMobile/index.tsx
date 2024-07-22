@@ -11,7 +11,8 @@ import {
 import {
   NavBarMobile,
   NavBarButtons,
-  FooterMobile
+  FooterMobile,
+  LocksFetcher
 } from "../../utils"
 
 export const BorrowPageMobile = () => {
@@ -46,6 +47,7 @@ export const BorrowPageMobile = () => {
           <BorrowButtonMobile />
           <StatsMobile />
           <FooterMobile />
+          <LocksFetcher />
         </div>
       }
     </main>

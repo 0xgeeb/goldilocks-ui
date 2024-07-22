@@ -12,7 +12,8 @@ import {
 import {
   NavBarMobile,
   NavBarButtons,
-  FooterMobile
+  FooterMobile,
+  LocksFetcher
 } from "../../utils"
 
 export const StakePageMobile = () => {
@@ -53,6 +54,7 @@ export const StakePageMobile = () => {
           }
           <WalletBalanceMobile />
           <FooterMobile />
+          <LocksFetcher />
         </div>
       }
     </main>
