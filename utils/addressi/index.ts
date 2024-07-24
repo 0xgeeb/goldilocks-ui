@@ -10,11 +10,11 @@ import honeycombABI from "../abi/HoneyComb.json"
 
 export const contracts = {
   goldiswap: {
-    address: '0xDC51E90c6c55b755744FA3570106283547495d0a',
+    address: '0xC94ecBfE16E337f6e606dcd86B8A5eaDbAe7A337',
     abi: goldiswapABI.abi
   },
   goldilocked: {
-    address: '0xC1Cee0a761b299897b20002eC6Ad20a67A160135',
+    address: '0xe2cA693a47C32bd33949120d31d42b9e5Ef5c7Ef',
     abi: goldilockedABI.abi
   },
   honey: {
