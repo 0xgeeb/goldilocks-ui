@@ -14,7 +14,7 @@ const config: Config = {
         baloo: ['var(--font-baloo)']
       },
       screens: {
-        'tall': { 'raw': '(min-height: 800px)' },
+        'tall': { 'raw': '(min-height: 900px)' },
       },
     },
   },

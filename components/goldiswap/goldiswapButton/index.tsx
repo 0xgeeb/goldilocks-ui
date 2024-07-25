@@ -328,7 +328,7 @@ export const GoldiswapButton = () => {
           }) => {
             return (
               <button 
-                className={`absolute h-[8%] w-[36%] md:w-[26%] lg:w-[16.6%] top-[70%] md:top-[68%] lg:top-[69%] left-[32%] md:left-[37%] lg:left-[41.6%] ${buttonLoadingColor ? "bg-[#4D0B24] text-[#E7B941]" : "bg-[#E7B941] text-black"} hover:bg-[#4D0B24] hover:text-[#E7B941] font-amaticbold text-[5vw] md:text-[4vw] lg:text-[3vw] xl:text-[2.25vw] 2xl:text-[1.9vw] tall:text-[6vw] tall:md:text-[4vw] tall:lg:text-[3vw] tall:xl:text-[2.5vw] tall:2xl:text-[1.9vw] border-2 border-black hover:scale-110`}
+                className={`absolute h-[8%] w-[36%] md:w-[26%] lg:w-[16.6%] top-[70%] md:top-[68%] lg:top-[69%] left-[32%] md:left-[37%] lg:left-[41.6%] ${buttonLoadingColor ? "bg-[#4D0B24] text-[#E7B941]" : "bg-[#E7B941] text-black"} hover:bg-[#4D0B24] hover:text-[#E7B941] font-amaticbold text-[5vw] md:text-[4vw] lg:text-[3vw] xl:text-[2vw] 2xl:text-[1.9vw] tall:text-[6vw] tall:md:text-[4vw] tall:lg:text-[3vw] tall:xl:text-[2.5vw] tall:2xl:text-[1.9vw] border-2 border-black hover:scale-110`}
                 id="swap-button"
                 onClick={() => {
                   const button = document.getElementById('swap-button')
