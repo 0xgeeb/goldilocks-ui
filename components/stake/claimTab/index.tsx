@@ -27,7 +27,7 @@ export const ClaimTab = () => {
   }
 
   const formatAsString = (num: number): string => {
-    return num.toLocaleString('en-US', { maximumFractionDigits: 2 })
+    return num.toLocaleString('en-US', { maximumFractionDigits: 6 })
   }
 
   const handleInfo = (num: number) => {
