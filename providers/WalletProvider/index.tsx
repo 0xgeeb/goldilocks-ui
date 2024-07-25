@@ -20,7 +20,11 @@ const INITIAL_STATE: WalletInitialState = {
     ibgt: 0,
     gibgt: 0,
     lendStaked: 0,
-    lendClaimable: 0
+    lendClaimable: 0,
+    locksPrgAllowance: 0,
+    honeyPrgAllowance: 0,
+    honeyBorrowAllowance: 0,
+    honeySwapAllowance: 0
   },
   wallet: '',
   isConnected: false,
@@ -108,6 +112,30 @@ export const WalletProvider = (props: PropsWithChildren<{}>) => {
         functionName: 'userClaimablePrg',
         args: [address]
       })
+      const locksPrgAllowanceResult = await readContract(config, {
+        address: contracts.goldiswap.address as `0x${string}`,
+        abi: contracts.goldiswap.abi,
+        functionName: 'allowance',
+        args: [address, contracts.goldilocked.address]
+      })
+      const honeyPrgAllowanceResult = await readContract(config, {
+        address: contracts.honey.address as `0x${string}`,
+        abi: contracts.honey.abi,
+        functionName: 'allowance',
+        args: [address, contracts.goldilocked.address]
+      })
+      const honeyBorrowAllowanceResult = await readContract(config, {
+        address: contracts.honey.address as `0x${string}`,
+        abi: contracts.honey.abi,
+        functionName: 'allowance',
+        args: [address, contracts.goldilocked.address]
+      })
+      const honeySwapAllowanceResult = await readContract(config, {
+        address: contracts.honey.address as `0x${string}`,
+        abi: contracts.honey.abi,
+        functionName: 'allowance',
+        args: [address, contracts.goldiswap.address]
+      })
 
       const response = {
         locks: parseFloat(formatEther(locksBalance as unknown as bigint)),
@@ -120,7 +148,11 @@ export const WalletProvider = (props: PropsWithChildren<{}>) => {
         ibgt: parseFloat(formatEther(ibgtResult as unknown as bigint)),
         gibgt: parseFloat(formatEther(gibgtResult as unknown as bigint)),
         lendStaked: parseFloat(formatEther(stakedResult as unknown as bigint)),
-        lendClaimable: parseFloat(formatEther(claimableResult as unknown as bigint))
+        lendClaimable: parseFloat(formatEther(claimableResult as unknown as bigint)),
+        locksPrgAllowance: parseFloat(formatEther(locksPrgAllowanceResult as unknown as bigint)),
+        honeyPrgAllowance: parseFloat(formatEther(honeyPrgAllowanceResult as unknown as bigint)),
+        honeyBorrowAllowance: parseFloat(formatEther(honeyBorrowAllowanceResult as unknown as bigint)),
+        honeySwapAllowance: parseFloat(formatEther(honeySwapAllowanceResult as unknown as bigint))
       }
 
       setBalanceState(response)

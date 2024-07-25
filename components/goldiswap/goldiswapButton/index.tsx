@@ -283,7 +283,7 @@ export const GoldiswapButton = () => {
 
   const renderButton = () => {
     if(activeToggle === 'BUY') {
-      if(isConnected && debouncedHoneyBuy > goldiswapInfo.honeySwapAllowance && balance.honey >= debouncedHoneyBuy && honeyBuy > goldiswapInfo.honeySwapAllowance) {
+      if(isConnected && debouncedHoneyBuy > balance.honeySwapAllowance && balance.honey >= debouncedHoneyBuy && honeyBuy > balance.honeySwapAllowance) {
         return 'approve honey'
       }
       return 'buy'

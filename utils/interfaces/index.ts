@@ -31,6 +31,10 @@ export interface BalanceState {
   gibgt: number;
   lendStaked: number;
   lendClaimable: number;
+  locksPrgAllowance: number;
+  honeyPrgAllowance: number;
+  honeyBorrowAllowance: number;
+  honeySwapAllowance: number;
 }
 
 export interface WalletInitialState {

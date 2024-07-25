@@ -335,7 +335,7 @@ export const StakeButtonMobile = () => {
 
   const renderButton = () => {
     if(activeToggle === 'STAKE') {
-      if(isConnected && stake > stakeInfo.locksPrgAllowance && balance.locks >= stake) {
+      if(isConnected && stake > balance.locksPrgAllowance && balance.locks >= stake) {
         return 'approve locks'
       }
       return 'stake'
@@ -344,7 +344,7 @@ export const StakeButtonMobile = () => {
       return 'unstake'
     }
     if(activeToggle === 'STIR') {
-      if(isConnected && stir * (stakeInfo.fsl / stakeInfo.supply) > stakeInfo.honeyPrgAllowance && balance.prg >= stir) {
+      if(isConnected && stir * (stakeInfo.fsl / stakeInfo.supply) > balance.honeyPrgAllowance && balance.prg >= stir) {
         return 'approve honey'
       }
       return 'stir'

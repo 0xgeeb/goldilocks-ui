@@ -202,7 +202,7 @@ export const BorrowButton = () => {
       return 'borrow'
     }
     if(activeToggle === 'REPAY') {
-      if(repay > borrowInfo.honeyBorrowAllowance) {
+      if(repay > balance.honeyBorrowAllowance) {
         return 'approve honey'
       }
       return 'repay'
