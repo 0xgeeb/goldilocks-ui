@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client"
 import { useBorrow, useDesktop } from "../../../providers"
+import { useGoldiswapMath } from "../../../hooks/useGoldiswapMath"
 import { BorrowPageMobile } from "../../borrowMobile"
 import { 
   NavBar,
@@ -36,6 +37,8 @@ export const BorrowPage = () => {
   } = useBorrow()
 
   const { isDesktop } = useDesktop()
+
+  const { marketPrice } = useGoldiswapMath()
 
   useEffect(() => {
     refreshBorrowInfo()
@@ -110,6 +113,7 @@ export const BorrowPage = () => {
             <h1 className="absolute top-[-0.5%] lg:top-[16%] 2xl:top-[12.16%] left-[5%] xl:left-[7.5%] text-[#D9C6BA] text-[10vw] lg:text-[8vw] tall:text-[12vw] tall:md:text-[10vw] tall:lg:text-[8vw] font-amaticbold" id="page-title">{activeToggle}</h1>
             <div className="absolute top-[15%] md:top-[14%] lg:top-[12%] xl:top-[11%] left-[10%] md:left-[20%] lg:left-[25%] 2xl:left-[28.125%] w-[80%] md:w-[60%] lg:w-[50%] 2xl:w-[43.75%] h-[3%] bg-[#634C43] flex flex-row items-center justify-between px-2 text-[2.25vw] md:text-[1.75vw] lg:text-[1.5vw] xl:text-[1vw] 2xl:text-[0.85vw]">
               <span className="text-white font-baloo mt-1">PSL/FSL ratio: {handleTokenInfo((borrowInfo.psl / borrowInfo.fsl) * 100)}%</span>
+              <span className="text-white font-baloo mt-1">market cap: {handleTokenInfo(borrowInfo.supply * marketPrice(borrowInfo.fsl, borrowInfo.psl, borrowInfo.supply) / 1000000)}m</span>
               <span className="text-white font-baloo mt-1">last floor raise: {formatDate(borrowInfo.lastFloorRaise * Math.pow(10, 21))}</span>
             </div>
             <WalletBalance />

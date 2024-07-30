@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client"
 import { useStake, useDesktop } from "../../../providers"
+import { useGoldiswapMath } from "../../../hooks/useGoldiswapMath"
 import { StakePageMobile } from "../../stakeMobile"
 import { 
   NavBar,
@@ -40,6 +41,8 @@ export const StakePage = () => {
   } = useStake()
 
   const { isDesktop } = useDesktop()
+
+  const { marketPrice } = useGoldiswapMath()
 
   useEffect(() => {
     refreshStakeInfo()
@@ -122,6 +125,7 @@ export const StakePage = () => {
               <>
                 <div className="absolute top-[15%] md:top-[14%] lg:top-[12%] xl:top-[11%] left-[10%] md:left-[20%] lg:left-[25%] 2xl:left-[28.125%] w-[80%] md:w-[60%] lg:w-[50%] 2xl:w-[43.75%] h-[3%] bg-[#B35227] flex flex-row items-center justify-between px-2 text-[2.25vw] md:text-[1.75vw] lg:text-[1.5vw] xl:text-[1vw] 2xl:text-[0.85vw]">
                   <span className="text-white font-baloo mt-1">PSL/FSL ratio: {handleTokenInfo((stakeInfo.psl / stakeInfo.fsl) * 100)}%</span>
+                  <span className="text-white font-baloo mt-1">market cap: {handleTokenInfo(stakeInfo.supply * marketPrice(stakeInfo.fsl, stakeInfo.psl, stakeInfo.supply) / 1000000)}m</span>
                   <span className="text-white font-baloo mt-1">last floor raise: {formatDate(stakeInfo.lastFloorRaise * Math.pow(10, 21))}</span>
                 </div>
                 <WalletBalance />
