@@ -74,7 +74,7 @@ export const BorrowProvider = (props: PropsWithChildren<{}>) => {
 
   const { children } = props
 
-  const { balance, wallet } = useWallet()
+  const { balance, wallet, updateBalanceAllowance } = useWallet()
 
   const [borrowInfoState, setBorrowInfoState] = useState(INITIAL_STATE.borrowInfo)
   const [notificationState, setNotificationState] = useState(INITIAL_STATE.notification)
@@ -220,10 +220,11 @@ export const BorrowProvider = (props: PropsWithChildren<{}>) => {
   }
 
   const updateAllowance = (newAllowance: number) => {
-    setBorrowInfoState(prevState => ({
-      ...prevState,
-      honeyBorrowAllowance: newAllowance
-    }))
+    // setBorrowInfoState(prevState => ({
+    //   ...prevState,
+    //   honeyBorrowAllowance: newAllowance
+    // }))
+    updateBalanceAllowance('honeyBorrowAllowance', newAllowance)
   }
 
   const openNotification = (toggle: boolean, action: string, result: string, hash: string) => {

@@ -44,6 +44,7 @@ export interface WalletInitialState {
   network: string;
   refreshBalances: () => void;
   balancesLoading: boolean;
+  updateBalanceAllowance: ( _type: string, _newAllowance: number) => void;
 }
 
 export interface BeraInfo {

@@ -30,7 +30,8 @@ const INITIAL_STATE: WalletInitialState = {
   isConnected: false,
   network: '',
   refreshBalances: async () => {},
-  balancesLoading: true
+  balancesLoading: true,
+  updateBalanceAllowance: (_type: string, _newAllowance: number) => {}
 }
 
 const WalletContext = createContext(INITIAL_STATE)
@@ -124,12 +125,6 @@ export const WalletProvider = (props: PropsWithChildren<{}>) => {
         functionName: 'allowance',
         args: [address, contracts.goldilocked.address]
       })
-      const honeyBorrowAllowanceResult = await readContract(config, {
-        address: contracts.honey.address as `0x${string}`,
-        abi: contracts.honey.abi,
-        functionName: 'allowance',
-        args: [address, contracts.goldilocked.address]
-      })
       const honeySwapAllowanceResult = await readContract(config, {
         address: contracts.honey.address as `0x${string}`,
         abi: contracts.honey.abi,
@@ -151,13 +146,40 @@ export const WalletProvider = (props: PropsWithChildren<{}>) => {
         lendClaimable: parseFloat(formatEther(claimableResult as unknown as bigint)),
         locksPrgAllowance: parseFloat(formatEther(locksPrgAllowanceResult as unknown as bigint)),
         honeyPrgAllowance: parseFloat(formatEther(honeyPrgAllowanceResult as unknown as bigint)),
-        honeyBorrowAllowance: parseFloat(formatEther(honeyBorrowAllowanceResult as unknown as bigint)),
+        honeyBorrowAllowance: parseFloat(formatEther(honeyPrgAllowanceResult as unknown as bigint)),
         honeySwapAllowance: parseFloat(formatEther(honeySwapAllowanceResult as unknown as bigint))
       }
 
       setBalanceState(response)
     }
     setBalancesLoadingState(false)
+  }
+
+  const updateBalanceAllowance = (type: string, newAllowance: number) => {
+    if(type === 'honeySwapAllowance') {
+      setBalanceState(prevState => ({
+        ...prevState,
+        honeySwapAllowance: newAllowance
+      }))
+    }
+    if(type === 'locksPrgAllowance') {
+      setBalanceState(prevState => ({
+        ...prevState,
+        locksPrgAllowance: newAllowance
+      }))
+    }
+    if(type === 'honeyPrgAllowance') {
+      setBalanceState(prevState => ({
+        ...prevState,
+        honeyPrgAllowance: newAllowance
+      }))
+    }
+    if(type === 'honeyBorrowAllowance') {
+      setBalanceState(prevState => ({
+        ...prevState,
+        honeyBorrowAllowance: newAllowance
+      }))
+    }
   }
 
   return (
@@ -168,7 +190,8 @@ export const WalletProvider = (props: PropsWithChildren<{}>) => {
         isConnected,
         network: chain?.name ? chain.name : '',
         refreshBalances,
-        balancesLoading: balancesLoadingState
+        balancesLoading: balancesLoadingState,
+        updateBalanceAllowance
       }}
     >
       { children }

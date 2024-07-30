@@ -82,7 +82,7 @@ export const StakeProvider = (props: PropsWithChildren<{}>) => {
 
   const { children } = props
 
-  const { balance, wallet } = useWallet()
+  const { balance, wallet, updateBalanceAllowance } = useWallet()
 
   const [stakeInfoState, setStakeInfoState] = useState(INITIAL_STATE.stakeInfo)
   const [notificationState, setNotificationState] = useState(INITIAL_STATE.notification)
@@ -210,7 +210,7 @@ export const StakeProvider = (props: PropsWithChildren<{}>) => {
       return 'balance'
     }
     if(activeToggleState === "UNSTAKE") {
-      return 'staked locks'
+      return 'unstakable locks'
     }
     if(activeToggleState === "STIR") {
       return 'balance'
@@ -290,16 +290,18 @@ export const StakeProvider = (props: PropsWithChildren<{}>) => {
 
   const updateAllowance = (token: string, newAllowance: number) => {
     if(token === 'locks') {
-      setStakeInfoState(prevState => ({
-        ...prevState,
-        locksPrgAllowance: newAllowance
-      }))
+      // setStakeInfoState(prevState => ({
+      //   ...prevState,
+      //   locksPrgAllowance: newAllowance
+      // }))
+      updateBalanceAllowance('locksPrgAllowance', newAllowance)
     }
     else {
-      setStakeInfoState(prevState => ({
-        ...prevState,
-        honeyPrgAllowance: newAllowance
-      }))
+      // setStakeInfoState(prevState => ({
+      //   ...prevState,
+      //   honeyPrgAllowance: newAllowance
+      // }))
+      updateBalanceAllowance('honeyPrgAllowance', newAllowance)
     }
   }
 

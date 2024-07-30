@@ -138,7 +138,7 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
 
   const { children } = props
 
-  const { balance, wallet, isConnected, network } = useWallet()
+  const { balance, wallet, isConnected, updateBalanceAllowance } = useWallet()
 
   const { simulateBuyDry, simulateSellDry, floorPrice, marketPrice } = useGoldiswapMath()
 
@@ -691,10 +691,11 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
   }
 
   const updateAllowance = (newAllowance: number) => {
-    setGoldiswapInfoState(prevState => ({
-      ...prevState,
-      honeySwapAllowance: newAllowance
-    }))
+    // setGoldiswapInfoState(prevState => ({
+    //   ...prevState,
+    //   honeySwapAllowance: newAllowance
+    // }))
+    updateBalanceAllowance('honeySwapAllowance', newAllowance)
   }
 
   const openNotification = (toggle: boolean, action: string, result: string, hash: string) => {

@@ -29,7 +29,8 @@ export const BorrowButton = () => {
   const { 
     wallet,
     balance,
-    refreshBalances
+    refreshBalances,
+    isConnected
   } = useWallet()
 
   const {
@@ -202,7 +203,7 @@ export const BorrowButton = () => {
       return 'borrow'
     }
     if(activeToggle === 'REPAY') {
-      if(repay > balance.honeyBorrowAllowance) {
+      if(isConnected && repay > balance.honeyBorrowAllowance) {
         return 'approve honey'
       }
       return 'repay'
