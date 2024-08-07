@@ -22,11 +22,11 @@ export const contracts = {
     abi: honeyABI.abi
   },
   goldilend: {
-    address: '0xC6B6f42283D45de78758502650dDf0151f84536d',
+    address: '0x9256322361d9f68d1d8d11Bc61242D1476050ea3',
     abi: goldilendABI.abi
   },
   ibgt: {
-    address: '0xB1195a6cdB7ef8fB22671bd8321727dBB6DDDe03',
+    address: '0x46eFC86F0D7455F135CC9df501673739d513E982',
     abi: ibgtABI.abi
   },
   bandbear: {
