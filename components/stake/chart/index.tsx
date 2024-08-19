@@ -20,7 +20,7 @@ export const Chart = () => {
       >
         <Line type="natural" dataKey="value" dot={false} strokeWidth={3} stroke="#000000" />
         <CartesianGrid stroke="#000000" vertical={false} />
-        <XAxis dataKey="name" stroke="#000000" />
+        <XAxis dataKey="date" stroke="#000000" />
         <YAxis stroke="#000000" />
       </LineChart>
       <p

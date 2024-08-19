@@ -13,7 +13,8 @@ import {
   NavBar,
   Footer,
   Loading,
-  ChangeChain
+  ChangeChain,
+  MintNFTs
 } from "../../utils"
 
 export const GoldilendPage = () => {
@@ -54,6 +55,7 @@ export const GoldilendPage = () => {
               <BorrowFetcher />
               <Footer />
               <ChangeChain />
+              <MintNFTs />
             </div>
           </main> :
         <GoldilendPageMobile />

@@ -21,6 +21,7 @@ const INITIAL_STATE: WalletInitialState = {
     gibgt: 0,
     lendStaked: 0,
     lendClaimable: 0,
+    lendInfraredClaimable: 0,
     locksPrgAllowance: 0,
     honeyPrgAllowance: 0,
     honeyBorrowAllowance: 0,
@@ -131,6 +132,12 @@ export const WalletProvider = (props: PropsWithChildren<{}>) => {
         functionName: 'allowance',
         args: [address, contracts.goldiswap.address]
       })
+      const claimableInfraredResult = await readContract(config, {
+        address: contracts.goldilend.address as `0x${string}`,
+        abi: contracts.goldilend.abi,
+        functionName: 'userClaimableRewards',
+        args: [address]
+      })
 
       const response = {
         locks: parseFloat(formatEther(locksBalance as unknown as bigint)),
@@ -144,6 +151,7 @@ export const WalletProvider = (props: PropsWithChildren<{}>) => {
         gibgt: parseFloat(formatEther(gibgtResult as unknown as bigint)),
         lendStaked: parseFloat(formatEther(stakedResult as unknown as bigint)),
         lendClaimable: parseFloat(formatEther(claimableResult as unknown as bigint)),
+        lendInfraredClaimable: parseFloat(formatEther(claimableInfraredResult as unknown as bigint)),
         locksPrgAllowance: parseFloat(formatEther(locksPrgAllowanceResult as unknown as bigint)),
         honeyPrgAllowance: parseFloat(formatEther(honeyPrgAllowanceResult as unknown as bigint)),
         honeyBorrowAllowance: parseFloat(formatEther(honeyPrgAllowanceResult as unknown as bigint)),
@@ -178,6 +186,18 @@ export const WalletProvider = (props: PropsWithChildren<{}>) => {
       setBalanceState(prevState => ({
         ...prevState,
         honeyBorrowAllowance: newAllowance
+      }))
+    }
+    if(type === 'lendInfraredClaimable') {
+      setBalanceState(prevState => ({
+        ...prevState,
+        lendInfraredClaimable: newAllowance
+      }))
+    }
+    if(type === 'lendClaimable') {
+      setBalanceState(prevState => ({
+        ...prevState,
+        lendClaimable: newAllowance
       }))
     }
   }

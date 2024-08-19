@@ -14,7 +14,7 @@ export const ChartSmallMobile = () => {
       <LineChart width={window.innerWidth * .72} height={window.innerHeight * .16} data={data} margin={{ top: 0, right: window.innerWidth * .1, bottom: 0, left: 0 }}>
         <Line type="natural" dataKey="value" dot={false} strokeWidth={3} stroke="#000000" />
         <CartesianGrid stroke="#000000" vertical={false} />
-        <XAxis dataKey="name" stroke="#000000" />
+        <XAxis dataKey="date" stroke="#000000" />
         <YAxis stroke="#000000" />
       </LineChart>
     </div>

@@ -31,6 +31,7 @@ export interface BalanceState {
   gibgt: number;
   lendStaked: number;
   lendClaimable: number;
+  lendInfraredClaimable: number;
   locksPrgAllowance: number;
   honeyPrgAllowance: number;
   honeyBorrowAllowance: number;
@@ -99,7 +100,9 @@ export interface BoostData {
 
 export interface GoldilendInitialState {
   goldilendInfo: {
+    gibgtSupply: number;
     stakedGibgt: number;
+    poolSize: number;
   };
   ibgtBalance: number;
   lock: number;
@@ -120,7 +123,7 @@ export interface GoldilendInitialState {
   borrowDisplayString: string;
   setDisplayString: (_displayString: string) => void;
   ownedBeras: BeraInfo[];
-  selectedBeras: BeraInfo[];
+  selectedBera: BeraInfo;
   ownedPartners: PartnerInfo[];
   selectedPartners: PartnerInfo[];
   userLoans: LoanInfo[];
@@ -143,6 +146,7 @@ export interface GoldilendInitialState {
   lendActiveToggle: string;
   changeLendActiveToggle: (_toggle: string) => void;
   refreshGoldilendInfo: () => void;
+  refreshClaimable: () => void;
   getGoldilendBorrowInfo: () => void;
   infoLoading: boolean;
   setInfoLoading: (_loading: boolean) => void;
@@ -163,7 +167,7 @@ export interface GoldilendInitialState {
   setBalanceMobileToggle: (_toggle: boolean) => void;
   handleBeraClick: (_bera: BeraInfo) => void;
   handlePartnerClick: (_partner: PartnerInfo) => void;
-  findSelectedBeraIdxs: () => number[];
+  findSelectedBeraIdx: () => number;
   findSelectedPartnerIdxs: () => number[];
   updateBorrowLimit: () => void;
   updateBoostMag: () => void;
@@ -177,6 +181,6 @@ export interface GoldilendInitialState {
   findPartners: (_partners: any) => void;
   findLiquidatableLoans: () => void;
   getInterestRate: () => void;
-  updateOwnedBeras: (_nfts: BeraInfo | BeraInfo[]) => void;
+  updateOwnedBeras: (_borrowedAgainstBera: BeraInfo) => void;
   updateOwnedPartners: (_nfts: PartnerInfo | PartnerInfo[]) => void;
 }

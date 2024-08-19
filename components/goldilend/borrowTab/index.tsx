@@ -9,7 +9,6 @@ import { contracts } from "../../../utils/addressi"
 
 export const BorrowTab = () => {
 
-  const [currentIndex, setCurrentIndex] = useState<number>(0)
   const [daysTilExpiration, setDaysTilExpiration] = useState<number>(14)
   const [buttonLoadingColor, setButtonLoadingColor] = useState<boolean>(false)
 
@@ -17,8 +16,8 @@ export const BorrowTab = () => {
     ownedBeras,
     handleBeraClick,
     infoLoading,
-    findSelectedBeraIdxs,
-    selectedBeras,
+    findSelectedBeraIdx,
+    selectedBera,
     borrowLimit,
     updateBorrowLimit,
     borrowDisplayString,
@@ -52,17 +51,17 @@ export const BorrowTab = () => {
 
   useEffect(() => {
     updateBorrowLimit()
-  }, [selectedBeras])
+  }, [selectedBera])
 
   useEffect(() => {
-    if(selectedBeras.length > 0 && debouncedLoanAmount > 0 && checkDate(debouncedLoanExpiration)) {
+    if(selectedBera.name !== '' && debouncedLoanAmount > 0 && checkDate(debouncedLoanExpiration)) {
       getInterestRate()
     }
     else {
       setLoanInterest(0)
       setLoanInterestRate(0)
     }
-  }, [selectedBeras, debouncedLoanAmount, debouncedLoanExpiration])
+  }, [selectedBera, debouncedLoanAmount, debouncedLoanExpiration])
 
   useEffect(() => {
     if(checkDate(debouncedLoanExpiration)) {
@@ -71,7 +70,7 @@ export const BorrowTab = () => {
       const currentDate = new Date()
       const timeDifference = inputDate.getTime() - currentDate.getTime()
       const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24))
-      if(daysDifference >= 7 && daysDifference <= 365) {
+      if(daysDifference >= 14 && daysDifference <= 365) {
         setDaysTilExpiration(daysDifference)
       }
     }
@@ -118,28 +117,6 @@ export const BorrowTab = () => {
     return Math.floor((timestamp - currentTimestamp) / 1000)
   }
 
-  const nextImages = () => {
-    if(currentIndex + 4 < selectedBeras.length) {
-      setCurrentIndex(currentIndex + 4)
-    }
-  }
-
-  const prevImages = () => {
-    if(currentIndex - 4 >= 0) {
-      setCurrentIndex(currentIndex - 4)
-    }
-  }
-
-  const checkSelected = (beraName: string): boolean => {
-    for(let i = 0; i < selectedBeras.length; i++) {
-      if(selectedBeras[i].name === beraName) {
-        return true
-      }
-    }
-    
-    return false
-  }
-
   const handleButtonClick = async () => {
     const button = document.getElementById('borrow-button')
     if(loanAmount == 0) {
@@ -150,21 +127,21 @@ export const BorrowTab = () => {
       button && (button.innerHTML = "invalid expiration")
       return
     }
-    if(selectedBeras.length == 0) {
+    if(selectedBera.name === '') {
       button && (button.innerHTML = "no collateral")
       return
     }
     const [bondFlag, bandFlag] = await checkLoanAllowance(wallet)
-    if((bondFlag || !checkSelected("BondBera")) && (bandFlag || !checkSelected("BandBera"))) {
+    if((bondFlag || selectedBera.name !== "BondBera") && (bandFlag || selectedBera.name !== "BandBera")) {
       borrowTxFlow(button)
     }
     else {
       button && (button.innerHTML = "approving...")
       setButtonLoadingColor(true)
-      if(!bondFlag && checkSelected('BondBera')) {
+      if(!bondFlag && selectedBera.name === 'BondBera') {
         await sendGoldilendNFTApproveTx(contracts.bondbear.address)
       }
-      if(!bandFlag && checkSelected('BandBera')) {
+      if(!bandFlag && selectedBera.name === 'BandBera') {
         await sendGoldilendNFTApproveTx(contracts.bandbear.address)
       }
       button && (button.innerHTML = "create loan")
@@ -178,18 +155,18 @@ export const BorrowTab = () => {
       button.innerHTML = "confirming..."
       setButtonLoadingColor(true)
     }
-    const borrowTx = await sendBorrowTx(loanAmount, selectedBeras, parseDate(loanExpiration))
+    const borrowTx = await sendBorrowTx(loanAmount, selectedBera, parseDate(loanExpiration))
     if(borrowTx.substring(0, 2) === '0x') {
       setTxConfirming(false)
       openNotification(
         true,
         "You've successfully created a loan",
-        `You borrowed ${formatAsString(loanAmount)} iBGT against your bera${selectedBeras.length > 1 ? "s" : ""}`,
+        `You borrowed ${formatAsString(loanAmount)} iBGT against your bera`,
         borrowTx
       )
       button && (button.innerHTML = "create loan")
       setButtonLoadingColor(false)
-      updateOwnedBeras(selectedBeras)
+      updateOwnedBeras(selectedBera)
       findLoans()
       changeActiveToggle('BORROW')
       setDaysTilExpiration(14)
@@ -236,7 +213,7 @@ export const BorrowTab = () => {
             ownedBeras.map((bera, index) => (
               <div key={index} className="h-[40%] xl:h-[45%] w-[50%] py-2">
                 <img
-                  className={`ml-[5%] h-[100%] w-[90%] border-2 border-black hover:scale-110 hover:cursor-pointer ${findSelectedBeraIdxs().includes(bera.index) ? "border-4 border-black" : "opacity-75"}`}
+                  className={`ml-[5%] h-[100%] w-[90%] border-2 border-black hover:scale-110 hover:cursor-pointer ${selectedBera.index == bera.index ? "border-4 border-black" : "opacity-75"}`}
                   onClick={() => handleBeraClick(bera)}
                   src={bera.name === 'BondBera' ? "/images/icon-bondbear.png" : "/images/icon-bandbear.png"}
                   alt="bera"
@@ -250,22 +227,19 @@ export const BorrowTab = () => {
         <h1 className="font-amaticbold text-[5vw] xl:text-[2.5vw]">create loan</h1>
         <div className="w-[90%] h-[25%] flex flex-row items-start justify-between relative">
           <span className="text-[2vw] xl:text-[0.8vw] absolute top-[-20%] left-[3%] font-baloo font-semibold">Collateral:</span>
-          <div className="text-[4vw] xl:text-[2vw] cursor-pointer hover:scale-125 mt-[3%]" onClick={() => prevImages()}>&lt;</div>
           {
-            selectedBeras.slice(currentIndex, currentIndex + 4).map((bera, index) => (
-              <img
-                className="mt-[2.5%] xl:mt-0 h-[50%] xl:h-[70%] w-[20%] border-2 border-black"
-                onClick={() => handleBeraClick(bera)}
-                src={bera.name === 'BondBera' ? "/images/icon-bondbear.png" : "/images/icon-bandbear.png"}
-                alt="selectedbera"
-                key={index}
-              />
-            ))
+            selectedBera.name !== '' &&
+            <img
+              className="mt-[2.5%] xl:mt-0 h-[50%] xl:h-[70%] w-[20%] border-2 border-black mx-auto"
+              onClick={() => handleBeraClick(selectedBera)}
+              src={selectedBera.name === 'BondBera' ? "/images/icon-bondbear.png" : "/images/icon-bandbear.png"}
+              alt="selectedbera"
+              key={selectedBera.index}
+            />
           }
-          <div className="text-[4vw] xl:text-[2vw] cursor-pointer hover:scale-125 mt-[3%]" onClick={() => nextImages()}>&gt;</div>
           <div className="text-[2vw] xl:text-[0.8vw] absolute w-[60%] bottom-[5%] left-[20%] flex flex-row items-center justify-between font-baloo font-semibold">
             <span>borrow limit:</span>
-            <span>{borrowLimit > 0 ? borrowLimit : "0.00"} iBGT</span>
+            <span>{borrowLimit > 0 ? formatAsString(borrowLimit) : "0.00"} iBGT</span>
           </div>
         </div>
         <div className="w-[90%] flex flex-row items-center justify-between font-baloo font-semibold text-[1.8vw] xl:text-[1vw]">
@@ -296,7 +270,7 @@ export const BorrowTab = () => {
               className="h-[100%] w-[100%] bg-black hover:cursor-pointer"
               id="date-slider"
               type="range"
-              min="7"
+              min="14"
               max="365"
               value={daysTilExpiration}
               onChange={(e) => handleSliderChange(e.target.value)}

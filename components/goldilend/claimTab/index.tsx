@@ -2,10 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { ConnectButton } from "@rainbow-me/rainbowkit"
-import {
-  useGoldilend,
-  useWallet
-} from "../../../providers"
+import { useGoldilend, useWallet } from "../../../providers"
 import { LendNotification } from "../../goldilend"
 import { useGoldilendTx } from "../../../hooks"
 
@@ -18,7 +15,8 @@ export const ClaimTab = () => {
     openNotification,
     infoLoading,
     findBoost,
-    userBoost
+    userBoost,
+    refreshClaimable
   } = useGoldilend()
 
   const { balance, refreshBalances, isConnected } = useWallet()
@@ -37,6 +35,10 @@ export const ClaimTab = () => {
 
   const formatAsString = (num: number): string => {
     return num.toLocaleString('en-US', { maximumFractionDigits: 2 })
+  }
+
+  const formatAsClaimableString = (num: number): string => {
+    return num.toLocaleString('en-US', { maximumFractionDigits: 6 })
   }
 
   const handleInfo = (num: number) => {
@@ -59,10 +61,10 @@ export const ClaimTab = () => {
       if(userBoost.partnerNFTs.length > 0) {
         const prgBoost = userBoost.boostMagnitude < 500 ? userBoost.boostMagnitude : 500
         let boostedNum = num * (1000 + prgBoost) / 1000
-        return formatAsString(boostedNum)
+        return formatAsClaimableString(boostedNum)
       }
       else {
-        return formatAsString(num)
+        return formatAsClaimableString(num)
       }
     }
     else {
@@ -88,7 +90,7 @@ export const ClaimTab = () => {
         openNotification(
           true,
           "You've successfully claimed $PRG",
-          `You claimed ${formatAsString(balance.lendClaimable)} Porridge`,
+          `You claimed ${formatAsString(balance.lendClaimable)} Porridge and ${formatAsString(balance.lendInfraredClaimable)} Honey`,
           claimTx
         )
         if(button) {
@@ -96,6 +98,7 @@ export const ClaimTab = () => {
           setButtonLoadingColor(false)
         }
         refreshBalances()
+        refreshClaimable()
         setTimeout(() => {
           openNotification(false, '', '', '')
         }, 10000)
@@ -111,14 +114,13 @@ export const ClaimTab = () => {
   }
 
   return (
-    <div className="absolute top-[14%] left-[14%] xl:left-[39%] h-[65%] xl:h-[70%] w-[60%] xl:w-[28%] border-2 border-black bg-[#EEDCD2] z-20">
+    <div className="absolute top-[14%] left-[20%] xl:left-[39%] h-[65%] xl:h-[70%] w-[60%] xl:w-[28%] border-2 border-black bg-[#EEDCD2] z-20">
       <div className="absolute top-4 left-0 w-8 skew-y-[45deg] border-b-2 border-black"></div>
       <div className="absolute bottom-4 left-0 w-8 -skew-y-[45deg] border-b-2 border-black"></div>
       <div className="absolute top-4 right-0 w-8 -skew-y-[45deg] border-b-2 border-black"></div>
       <div className="absolute bottom-4 right-0 w-8 skew-y-[45deg] border-b-2 border-black"></div>
       <div className={`absolute inset-8 ${txConfirming ? "border-l-2 border-r-2 border-black" : "border-2 border-black"} bg-[#D9C6BA]`}>
         {
-          // chartOpen ? <Chart /> :
           txConfirming ? <img className="w-[100%] h-[100%]" src="/images/bg-transaction.png" alt="tx" /> :
           notification.toggle ? <LendNotification /> :
           <div className="relative w-[100%] h-[100%] text-[2vw] lg:text-[1.5vw] xl:text-[1vw] flex flex-col items-center font-baloo font-semibold">
@@ -137,16 +139,8 @@ export const ClaimTab = () => {
             <div className="w-[80%] mt-[2%] flex flex-col justify-between">
               <span className="text-[#9C4924]">Infrared iBGT Staking Yield</span>
               <div className="w-[100%] flex flex-row justify-between">
-                <span>wif:</span>
-                <span>69.00</span>
-              </div>
-              <div className="w-[100%] flex flex-row justify-between">
-                <span>boden:</span>
-                <span>69.00</span>
-              </div>
-              <div className="w-[100%] flex flex-row justify-between">
-                <span>bera:</span>
-                <span>69.00</span>
+                <span>Available Honey to Claim:</span>
+                <span>{handleInfoClaimable(balance.lendInfraredClaimable)}</span>
               </div>
             </div>
             <ConnectButton.Custom>

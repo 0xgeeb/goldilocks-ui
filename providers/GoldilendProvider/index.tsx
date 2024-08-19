@@ -19,7 +19,9 @@ import {
 
 const INITIAL_STATE: GoldilendInitialState = {
   goldilendInfo: {
-    stakedGibgt: 0
+    gibgtSupply: 0,
+    stakedGibgt: 0,
+    poolSize: 0
   },
   ibgtBalance: 0,
   lock: 0,
@@ -42,7 +44,12 @@ const INITIAL_STATE: GoldilendInitialState = {
   setLoanInterest: (_interest: number) => {},
   setLoanInterestRate: (_interestRate: number) => {},
   ownedBeras: [],
-  selectedBeras: [],
+  selectedBera: {
+    name: '',
+    id: 0,
+    valuation: 0,
+    index: -1
+  },
   userLoans: [],
   ownedPartners: [],
   selectedPartners: [],
@@ -70,6 +77,7 @@ const INITIAL_STATE: GoldilendInitialState = {
   lendActiveToggle: 'LOCK',
   changeLendActiveToggle: (_toggle: string) => {},
   refreshGoldilendInfo: async () => {},
+  refreshClaimable: async () => {},
   getGoldilendBorrowInfo: async () => {},
   infoLoading: true,
   setInfoLoading: (_loading: boolean) => {},
@@ -90,7 +98,7 @@ const INITIAL_STATE: GoldilendInitialState = {
   setBalanceMobileToggle: (_toggle: boolean) => {},
   handleBeraClick: (_bera: BeraInfo) => {},
   handlePartnerClick: (_partner: PartnerInfo) => {},
-  findSelectedBeraIdxs: () => [],
+  findSelectedBeraIdx: () => 0,
   findSelectedPartnerIdxs: () => [],
   findBeras: (_beras: any) => {},
   findLoans: () => {},
@@ -102,7 +110,7 @@ const INITIAL_STATE: GoldilendInitialState = {
   handleBorrowChange: (_input: string) => {},
   handleLoanDateChange: (_input: string) => {},
   getInterestRate: () => {},
-  updateOwnedBeras: (_nfts: BeraInfo | BeraInfo[]) => {},
+  updateOwnedBeras: (_borrowedAgainstBera: BeraInfo) => {},
   updateOwnedPartners: (_nfts: PartnerInfo | PartnerInfo[]) => {}
 }
 
@@ -112,7 +120,7 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
 
   const { children } = props
 
-  const { balance, wallet, isConnected } = useWallet()
+  const { balance, wallet, isConnected, updateBalanceAllowance } = useWallet()
 
   const [goldilendInfoState, setGoldilendInfoState] = useState(INITIAL_STATE.goldilendInfo)
   const [ibgtBalanceState, setibgtBalanceState] = useState(INITIAL_STATE.ibgtBalance)
@@ -128,7 +136,7 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
   const [stakeState, setStakeState] = useState<number>(INITIAL_STATE.stake)
   const [unstakeState, setUnstakeState] = useState<number>(INITIAL_STATE.unstake)
   const [ownedBerasState, setOwnedBerasState] = useState<BeraInfo[]>(INITIAL_STATE.ownedBeras)
-  const [selectedBerasState, setSelectedBerasState] = useState<BeraInfo[]>([])
+  const [selectedBeraState, setSelectedBeraState] = useState<BeraInfo>(INITIAL_STATE.selectedBera)
   const [ownedPartnersState, setOwnedPartnersState] = useState<PartnerInfo[]>(INITIAL_STATE.ownedPartners)
   const [selectedPartnersState, setSelectedPartnersState] = useState<PartnerInfo[]>([])
   const [userLoansState, setUserLoansState] = useState<LoanInfo[]>(INITIAL_STATE.userLoans)
@@ -150,7 +158,12 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
   const [selectScreenState, setSelectScreenState] = useState<boolean>(INITIAL_STATE.selectScreen)
 
   const changeActiveToggle = (toggle: string) => {
-    setSelectedBerasState([])
+    setSelectedBeraState({
+      name: '',
+      id: 0,
+      valuation: 0,
+      index: -1
+    })
     setSelectedPartnersState([])
     setBorrowDisplayStringState('')
     setLoanExpirationState('')
@@ -234,7 +247,7 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
     }
     else {
       if(parseFloat(input) > borrowLimitState) {
-        setBorrowDisplayStringState(borrowLimitState.toString())
+        setBorrowDisplayStringState(borrowLimitState.toFixed(4))
         setLoanAmountState(borrowLimitState)
       }
       else {
@@ -246,10 +259,9 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
 
   const updateBorrowLimit = () => {
     let limit = 0
-    selectedBerasState.forEach((bera) => {
-      limit += bera.valuation
-    })
-    setBorrowLimitState(limit)
+    const poolLimit = goldilendInfoState.poolSize * 0.10
+    limit += selectedBeraState.valuation
+    setBorrowLimitState(limit > poolLimit ? poolLimit : limit)
   }
 
   const updateBoostMag = () => {
@@ -288,12 +300,16 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
   }
 
   const handleBeraClick = (bera: BeraInfo) => {
-    const idxArray: number[] = findSelectedBeraIdxs()
-    if(idxArray.includes(bera.index)) {
-      setSelectedBerasState(prev => prev.filter(beraf => beraf.index !== bera.index))
+    if(selectedBeraState.index == bera.index) {
+      setSelectedBeraState({
+        name: '',
+        id: 0,
+        valuation: 0,
+        index: -1
+      })
     }
     else {
-      setSelectedBerasState(prev => [...prev, bera])
+      setSelectedBeraState(bera)
     }
   }
 
@@ -305,12 +321,8 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
     return idxArray
   }
 
-  const findSelectedBeraIdxs = (): number[] => {
-    let idxArray: number[] = []
-    selectedBerasState.forEach((selectedBera) => {
-      idxArray.push(selectedBera.index)
-    })
-    return idxArray
+  const findSelectedBeraIdx = (): number => {
+    return selectedBeraState.index
   }
 
   const handlePartnerClick = (partner: PartnerInfo) => {
@@ -434,15 +446,41 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
       functionName: 'balanceOf',
       args: [contracts.goldilend.address]
     })
+    const poolSizeResult = await readContract(config, {
+      address: contracts.goldilend.address as `0x${string}`,
+      abi: contracts.goldilend.abi,
+      functionName: 'poolSize',
+      args: []
+    })
+    const gibgtSupplyResult = await readContract(config, {
+      address: contracts.goldilend.address as `0x${string}`,
+      abi: contracts.goldilend.abi,
+      functionName: 'totalSupply',
+      args: []
+    })
 
     const response = {
-      stakedGibgt: parseFloat(formatEther(stakedGibgtResult as unknown as bigint))
+      gibgtSupply: parseFloat(formatEther(gibgtSupplyResult as unknown as bigint)),
+      stakedGibgt: parseFloat(formatEther(stakedGibgtResult as unknown as bigint)),
+      poolSize: parseFloat(formatEther(poolSizeResult as unknown as bigint))
     }
 
     setGoldilendInfoState(response)
   }
 
   const getGoldilendBorrowInfo = async () => {
+    const poolSizeResult = await readContract(config, {
+      address: contracts.goldilend.address as `0x${string}`,
+      abi: contracts.goldilend.abi,
+      functionName: 'poolSize',
+      args: []
+    })
+    const response = {
+      gibgtSupply: 0,
+      stakedGibgt: 0,
+      poolSize: parseFloat(formatEther(poolSizeResult as unknown as bigint))
+    }
+    setGoldilendInfoState(response)
     if(wallet) {
       const ibgtBalance = await readContract(config, {
         address: contracts.ibgt.address as `0x${string}`,
@@ -505,13 +543,8 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
     setLoanInterestRateState(calculatedRate)
   }
 
-  const updateOwnedBeras = (nfts: BeraInfo | BeraInfo[]) => {
-    if(Array.isArray(nfts)) {
-      setOwnedBerasState(prevState => prevState.filter(bera => !nfts.includes(bera)))
-    }
-    else {
-      setOwnedBerasState(prevState => prevState.filter(bera => bera !== nfts))
-    }
+  const updateOwnedBeras = (borrowedAgainstBera: BeraInfo) => {
+    setOwnedBerasState(prevState => prevState.filter(bera => bera !== borrowedAgainstBera))
   }
 
   const updateOwnedPartners = (nfts: PartnerInfo | PartnerInfo[]) => {
@@ -520,6 +553,25 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
     }
     else {
       setOwnedPartnersState(prevState => prevState.filter(partner => partner !== nfts))
+    }
+  }
+
+  const refreshClaimable = async () => {
+    if(wallet) {
+      const claimableResult = await readContract(config, {
+        address: contracts.goldilend.address as `0x${string}`,
+        abi: contracts.goldilend.abi,
+        functionName: 'userClaimablePrg',
+        args: [wallet]
+      })
+      const claimableInfraredResult = await readContract(config, {
+        address: contracts.goldilend.address as `0x${string}`,
+        abi: contracts.goldilend.abi,
+        functionName: 'userClaimableRewards',
+        args: [wallet]
+      })
+      updateBalanceAllowance('lendInfraredClaimable', parseFloat(formatEther(claimableInfraredResult as unknown as bigint)))
+      updateBalanceAllowance('lendClaimable', parseFloat(formatEther(claimableResult as unknown as bigint)))
     }
   }
 
@@ -533,6 +585,7 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
         setDisplayString: setDisplayStringState,
         setInfoLoading: setInfoLoadingState,
         refreshGoldilendInfo,
+        refreshClaimable,
         getGoldilendBorrowInfo,
         activeToggle: activeToggleState,
         changeActiveToggle,
@@ -555,11 +608,11 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
         setSelectScreen: setSelectScreenState,
         notification: notificationState,
         openNotification,
-        selectedBeras: selectedBerasState,
+        selectedBera: selectedBeraState,
         ownedBeras: ownedBerasState,
         userLoans: userLoansState,
         handleBeraClick,
-        findSelectedBeraIdxs,
+        findSelectedBeraIdx,
         borrowLimit: borrowLimitState,
         boostMag: boostMagState,
         loanInterest: loanInterestState,

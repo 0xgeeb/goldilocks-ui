@@ -8,7 +8,7 @@ import { contracts } from "../../../utils/addressi"
 export const BorrowButtonMobile = () => {
 
   const {
-    selectedBeras,
+    selectedBera,
     loanExpiration,
     loanAmount,
     setTxConfirming,
@@ -39,15 +39,6 @@ export const BorrowButtonMobile = () => {
 
   const formatAsString = (num: number): string => {
     return num.toLocaleString('en-US', { maximumFractionDigits: 2 })
-  }
-
-  const checkSelected = (beraName: string): boolean => {
-    for(let i = 0; i < selectedBeras.length; i++) {
-      if(selectedBeras[i].name === beraName) {
-        return true
-      }
-    }
-    return false
   }
 
   const checkSelectedPartners = (partnerName: string): boolean => {
@@ -96,7 +87,7 @@ export const BorrowButtonMobile = () => {
     const button = document.getElementById('borrow-button')
     if(activeToggle === 'BORROW') {
       if(selectScreen) {
-        if(selectedBeras.length == 0) {
+        if(selectedBera.name === '') {
           button && (button.innerHTML = "no beras")
           return
         }
@@ -112,20 +103,20 @@ export const BorrowButtonMobile = () => {
           button && (button.innerHTML = "invalid expiration")
           return
         }
-        if(selectedBeras.length == 0) {
+        if(selectedBera.name === '') {
           button && (button.innerHTML = "no collateral")
           return
         }
         const [bondFlag, bandFlag] = await checkLoanAllowance(wallet)
-        if((bondFlag || !checkSelected("BondBera")) && (bandFlag || !checkSelected("BandBera"))) {
+        if((bondFlag || selectedBera.name !== "BondBera") && (bandFlag || selectedBera.name !== "BandBera")) {
           borrowTxFlow(button)
         }
         else {
           button && (button.innerHTML = "approving...")
-          if(!bondFlag && checkSelected('BondBera')) {
+          if(!bondFlag && selectedBera.name === 'BondBera') {
             await sendGoldilendNFTApproveTx(contracts.bondbear.address)
           }
-          if(!bandFlag && checkSelected('BandBera')) {
+          if(!bandFlag && selectedBera.name === 'BandBera') {
             await sendGoldilendNFTApproveTx(contracts.bandbear.address)
           }
           button && (button.innerHTML = "create loan")
@@ -225,17 +216,17 @@ export const BorrowButtonMobile = () => {
     if(button) {
       button.innerHTML = "confirming..."
     }
-    const borrowTx = await sendBorrowTx(loanAmount, selectedBeras, parseDate(loanExpiration))
+    const borrowTx = await sendBorrowTx(loanAmount, selectedBera, parseDate(loanExpiration))
     if(borrowTx.substring(0, 2) === '0x') {
       setTxConfirming(false)
       openNotification(
         true,
         "You've successfully created a loan",
-        `You borrowed ${formatAsString(loanAmount)} iBGT against your bera${selectedBeras.length > 1 ? "s" : ""}`,
+        `You borrowed ${formatAsString(loanAmount)} iBGT against your bera`,
         borrowTx
       )
       button && (button.innerHTML = "create loan")
-      updateOwnedBeras(selectedBeras)
+      updateOwnedBeras(selectedBera)
       findLoans()
       changeActiveToggle('BORROW')
       setTimeout(() => {

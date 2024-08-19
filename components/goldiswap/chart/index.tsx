@@ -5,8 +5,9 @@ import { useGoldiswap } from "../../../providers"
 
 export const Chart = () => {
 
+  //todo: add chartYdata to and activate all charts
   const { chartData, setChartOpen } = useGoldiswap()
-  const data = chartData
+  const data = chartData 
 
   return (
     <div className="w-[100%] h-[100%] bg-[#F3AA8A] flex flex-col justify-between lg:pl-[3%] lg:pb-[2.5%] font-baloo text-[1.4vw] lg:text-[1vw]">
@@ -19,7 +20,7 @@ export const Chart = () => {
       >
         <Line type="natural" dataKey="value" dot={false} strokeWidth={3} stroke="#000000" />
         <CartesianGrid stroke="#000000" vertical={false} />
-        <XAxis dataKey="name" stroke="#000000" />
+        <XAxis dataKey="date" stroke="#000000" />
         <YAxis stroke="#000000" />
       </LineChart>
       <p

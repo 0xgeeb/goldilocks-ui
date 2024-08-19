@@ -207,7 +207,8 @@ export const useGoldilendTx = () => {
       const hash = await writeContract(config, {
         address: contracts.goldilend.address as `0x${string}`,
         abi: contracts.goldilend.abi,
-        functionName: 'claim'
+        functionName: 'claim',
+        args: []
       })
       const data = await waitForTransactionReceipt(config, { hash })
       return data.transactionHash
@@ -286,48 +287,24 @@ export const useGoldilendTx = () => {
     return ''
   }
 
-  const sendBorrowTx = async (loanAmt: number, selectedBeras: BeraInfo[], duration: number): Promise<string> => {
+  const sendBorrowTx = async (loanAmt: number, selectedBera: BeraInfo, duration: number): Promise<string> => {
     const bond = contracts.bondbear.address as `0x${string}`
     const band = contracts.bandbear.address as `0x${string}`
-    if(selectedBeras.length == 1) {
-      try {
-        const hash = await writeContract(config, {
-          address: contracts.goldilend.address as `0x${string}`,
-          abi: parseAbi([
-            'function borrow(uint256, uint256, address, uint256)'
-          ]),
-          functionName: 'borrow',
-          args: [parseEther(`${loanAmt}`), BigInt(duration), selectedBeras[0].name === 'BondBera' ? bond : band, BigInt(selectedBeras[0].id)]
-        })
-        const data = await waitForTransactionReceipt(config, { hash })
-        return data.transactionHash
-      }
-      catch (e) {
-        console.log('user denied tx')
-        console.log('or: ', e)
-      }
+    try {
+      const hash = await writeContract(config, {
+        address: contracts.goldilend.address as `0x${string}`,
+        abi: parseAbi([
+          'function borrow(uint256, uint256, address, uint256)'
+        ]),
+        functionName: 'borrow',
+        args: [parseEther(`${loanAmt}`), BigInt(duration), selectedBera.name === 'BondBera' ? bond : band, BigInt(selectedBera.id)]
+      })
+      const data = await waitForTransactionReceipt(config, { hash })
+      return data.transactionHash
     }
-    else {
-      let nfts: string[] = []
-      let ids: number[] = []
-      for(let i = 0; i < selectedBeras.length; i++) {
-        nfts.push(selectedBeras[i].name === 'BondBera' ? contracts.bondbear.address : contracts.bandbear.address)
-        ids.push(selectedBeras[i].id)
-      }
-      try {
-        const hash = await writeContract(config, {
-          address: contracts.goldilend.address as `0x${string}`,
-          abi: contracts.goldilend.abi,
-          functionName: 'borrow',
-          args: [parseEther(`${loanAmt}`), duration, nfts, ids]
-        })
-        const data = await waitForTransactionReceipt(config, { hash })
-        return data.transactionHash
-      }
-      catch (e) {
-        console.log('user denied tx')
-        console.log('or: ', e)
-      }
+    catch (e) {
+      console.log('user denied tx')
+      console.log('or: ', e)
     }
 
     return ''
@@ -378,6 +355,52 @@ export const useGoldilendTx = () => {
     return ''
   }
 
+  const sendMintNFTTx = async (nft: string, addy: string): Promise<string> => {
+    try {
+      let hash
+      if(nft === 'bond') {
+        hash = await writeContract(config, {
+          address: contracts.bondbear.address as `0x${string}`,
+          abi: contracts.bondbear.abi,
+          functionName: 'mint',
+          args: [addy]
+        })
+      }
+      else if(nft === 'band') {
+        hash = await writeContract(config, {
+          address: contracts.bandbear.address as `0x${string}`,
+          abi: contracts.bandbear.abi,
+          functionName: 'mint',
+          args: [addy]
+        })
+      }
+      else if(nft === 'honeycomb') {
+        hash = await writeContract(config, {
+          address: contracts.honeycomb.address as `0x${string}`,
+          abi: contracts.honeycomb.abi,
+          functionName: 'mint',
+          args: [addy]
+        })
+      }
+      else {
+        hash = await writeContract(config, {
+          address: contracts.beradrome.address as `0x${string}`,
+          abi: contracts.beradrome.abi,
+          functionName: 'mint',
+          args: [addy]
+        })
+      }
+      const data = await waitForTransactionReceipt(config, { hash })
+      return data.transactionHash
+    }
+    catch (e) {
+      console.log('user denied tx')
+      console.log('or: ', e)
+    }
+    
+    return ''
+  }
+
   return { 
     checkBoostAllowance,
     checkLoanAllowance,
@@ -395,6 +418,7 @@ export const useGoldilendTx = () => {
     sendStakeTx,
     sendUnstakeTx,
     sendClaimTx,
-    sendLiquidateTx
+    sendLiquidateTx,
+    sendMintNFTTx
   }
 }

@@ -20,7 +20,8 @@ export const ClaimTabMobile = () => {
     infoLoading,
     balanceMobileToggle,
     findBoost,
-    userBoost
+    userBoost,
+    refreshClaimable
   } = useGoldilend()
 
   const { balance, refreshBalances, isConnected } = useWallet()
@@ -87,7 +88,7 @@ export const ClaimTabMobile = () => {
         openNotification(
           true,
           "You've successfully claimed $PRG",
-          `You claimed ${formatAsString(balance.lendClaimable)} Porridge`,
+          `You claimed ${formatAsString(balance.lendClaimable)} Porridge and ${formatAsString(balance.lendInfraredClaimable)} Honey`,
           claimTx
         )
         if(button) {
@@ -96,6 +97,7 @@ export const ClaimTabMobile = () => {
           button.style.color = "black"
         }
         refreshBalances()
+        refreshClaimable()
         setTimeout(() => {
           openNotification(false, '', '', '')
         }, 10000)
@@ -138,17 +140,9 @@ export const ClaimTabMobile = () => {
               </div>
               <div className="flex flex-col justify-between w-[100%] mt-[15%]">
                 <span className="text-[#9C4924] text-[4.5vw]">Infrared iBGT Staking Yield</span>
-                <div className="w-[100%] flex flex-row justify-between text-[3.5vw]">
-                  <span>wif:</span>
-                  <span>69.00</span>
-                </div>
-                <div className="w-[100%] flex flex-row justify-between text-[3.5vw]">
-                  <span>boden:</span>
-                  <span>69.00</span>
-                </div>
-                <div className="w-[100%] flex flex-row justify-between text-[3.5vw]">
-                  <span>bera:</span>
-                  <span>69.00</span>
+                <div className="w-[100%] flex flex-row justify-between">
+                  <span>Available Honey to Claim:</span>
+                  <span>{handleInfoClaimable(balance.lendInfraredClaimable)}</span>
                 </div>
               </div>
             </div>

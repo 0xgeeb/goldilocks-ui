@@ -6,15 +6,14 @@ import { LendNotificationMobile } from "../../goldilendMobile"
 
 export const BorrowTabMobile = () => {
 
-  const [currentIndex, setCurrentIndex] = useState<number>(0)
   const [daysTilExpiration, setDaysTilExpiration] = useState<number>(14)
 
   const {
     ownedBeras,
     handleBeraClick,
     infoLoading,
-    findSelectedBeraIdxs,
-    selectedBeras,
+    findSelectedBeraIdx,
+    selectedBera,
     borrowLimit,
     updateBorrowLimit,
     borrowDisplayString,
@@ -39,17 +38,17 @@ export const BorrowTabMobile = () => {
 
   useEffect(() => {
     updateBorrowLimit()
-  }, [selectedBeras])
+  }, [selectedBera])
 
   useEffect(() => {
-    if(selectedBeras.length > 0 && debouncedLoanAmount > 0 && checkDate(debouncedLoanExpiration)) {
+    if(selectedBera.name !== '' && debouncedLoanAmount > 0 && checkDate(debouncedLoanExpiration)) {
       getInterestRate()
     }
     else {
       setLoanInterest(0)
       setLoanInterestRate(0)
     }
-  }, [selectedBeras, debouncedLoanAmount, debouncedLoanExpiration])
+  }, [selectedBera, debouncedLoanAmount, debouncedLoanExpiration])
 
   useEffect(() => {
     if(checkDate(debouncedLoanExpiration)) {
@@ -58,7 +57,7 @@ export const BorrowTabMobile = () => {
       const currentDate = new Date()
       const timeDifference = inputDate.getTime() - currentDate.getTime()
       const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24))
-      if(daysDifference >= 7 && daysDifference <= 365) {
+      if(daysDifference >= 14 && daysDifference <= 365) {
         setDaysTilExpiration(daysDifference)
       }
     }
@@ -96,18 +95,6 @@ export const BorrowTabMobile = () => {
     return <span className="loader-small mx-auto mt-[10%]"></span>
   }
 
-  const nextImages = () => {
-    if(currentIndex + 4 < selectedBeras.length) {
-      setCurrentIndex(currentIndex + 4)
-    }
-  }
-
-  const prevImages = () => {
-    if(currentIndex - 4 >= 0) {
-      setCurrentIndex(currentIndex - 4)
-    }
-  }
-
   const sliderValue = ((daysTilExpiration - 7) / (365 - 7)) * 100
 
   const handleSliderChange = (days: string) => {
@@ -138,7 +125,7 @@ export const BorrowTabMobile = () => {
               ownedBeras.map((bera, index) => (
                 <div key={index} className="h-[45%] w-[50%] py-2">
                   <img
-                    className={`ml-[5%] h-[100%] w-[90%] border-2 border-black hover:scale-110 hover:cursor-pointer ${findSelectedBeraIdxs().includes(bera.index) ? "border-4 border-black" : "opacity-75"}`}
+                    className={`ml-[5%] h-[100%] w-[90%] border-2 border-black hover:scale-110 hover:cursor-pointer ${selectedBera.index == bera.index ? "border-4 border-black" : "opacity-75"}`}
                     onClick={() => handleBeraClick(bera)}
                     src={bera.name === 'BondBera' ? "/images/icon-bondbear.png" : "/images/icon-bandbear.png"}
                     alt="bera"
@@ -164,22 +151,19 @@ export const BorrowTabMobile = () => {
             <h1 className="font-amaticbold text-[10vw]">create loan</h1>
             <div className="w-[95%] h-[20%] flex flex-row items-start justify-between relative">
               <span className="absolute top-[-20%] left-[3%] font-baloo font-semibold text-[3vw]">Collateral:</span>
-              <div className="text-[6vw] cursor-pointer hover:scale-125" onClick={() => prevImages()}>&lt;</div>
               {
-                selectedBeras.slice(currentIndex, currentIndex + 4).map((bera, index) => (
-                  <img
-                    className="h-[70%] w-[20%] border-2 border-black"
-                    onClick={() => handleBeraClick(bera)}
-                    src={bera.name === 'BondBera' ? "/images/icon-bondbear.png" : "/images/icon-bandbear.png"}
-                    alt="selectedbera"
-                    key={index}
-                  />
-                ))
+                selectedBera.name !== '' &&
+                <img
+                  className="h-[70%] w-[20%] border-2 border-black mx-auto"
+                  onClick={() => handleBeraClick(selectedBera)}
+                  src={selectedBera.name === 'BondBera' ? "/images/icon-bondbear.png" : "/images/icon-bandbear.png"}
+                  alt="selectedbera"
+                  key={selectedBera.index}
+                />
               }
-              <div className="text-[6vw] cursor-pointer hover:scale-125" onClick={() => nextImages()}>&gt;</div>
               <div className="absolute text-[3vw] w-[80%] bottom-[0%] left-[10%] flex flex-row items-center justify-between font-baloo font-semibold">
                 <span>borrow limit:</span>
-                <span>{borrowLimit > 0 ? borrowLimit : "0.00"} iBGT</span>
+                <span>{borrowLimit > 0 ? formatAsString(borrowLimit) : "0.00"} iBGT</span>
               </div>
             </div>
             <div className="w-[95%] text-[3.5vw] flex flex-row items-center justify-between font-baloo font-semibold">
@@ -210,7 +194,7 @@ export const BorrowTabMobile = () => {
                   className="h-[100%] w-[100%] bg-black"
                   id="date-slider"
                   type="range"
-                  min="7"
+                  min="14"
                   max="365"
                   value={daysTilExpiration}
                   onChange={(e) => handleSliderChange(e.target.value)}

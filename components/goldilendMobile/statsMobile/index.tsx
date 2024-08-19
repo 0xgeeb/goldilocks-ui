@@ -26,18 +26,6 @@ export const StatsMobile = () => {
       return "-"
     }
   }
-
-  const handleColors = (num1: number, num2: number): string => {
-    if(num1 > num2) {
-      return 'text-red-600'
-    }
-    else if(num1 == num2) {
-      return ''
-    }
-    else {
-      return 'text-green-600'
-    }
-  }
   
   return (
     <div className="text-[3vw] absolute h-[12%] w-[80%] left-[5%] top-[60%] flex flex-row items-center justify-center text-[#D9C6BA] font-baloo font-semibold">
@@ -48,12 +36,9 @@ export const StatsMobile = () => {
       </div>
       <div className="h-[100%] w-[5%]"></div>
       <div className="flex flex-col items-start">
-        <span>69,000,000</span>
+        <span>{handleInfo(goldilendInfo.poolSize)}</span>
         <span>{handleInfo(goldilendInfo.stakedGibgt)}</span>
-        <span>69,000,000</span>
-        {/* <span className={handleColors(stakeInfo.supply, stakeInfo.supply)}>{handleInfo(stakeInfo.supply)}</span>
-        <span className={handleColors(stakeInfo.fsl, stakeInfo.fsl)}>{handleInfo(stakeInfo.fsl)}</span>
-        <span className={handleColors(stakeInfo.psl, stakeInfo.psl)}>{handleInfo(stakeInfo.psl)}</span> */}
+        <span>{handleInfo(goldilendInfo.poolSize / goldilendInfo.gibgtSupply)}</span>
       </div>
     </div>
   )

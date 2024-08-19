@@ -51,7 +51,7 @@ export const LendWalletBalanceMobilePopup = () => {
         </div>
         <div className="w-[100%] border-t-2 border-black"></div>
         <div className="flex flex-row items-center justify-between w-[100%]">
-          <span className="">claimable:</span>
+          <span className="">claimable prg:</span>
           <span className="">{handleInfoClaimable(balance.lendClaimable)}</span>
         </div>
         <div className="w-[100%] border-t-2 border-black"></div>

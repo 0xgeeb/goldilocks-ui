@@ -30,7 +30,8 @@ export const GoldiswapButtonMobile = () => {
     redeemingHoney,
     setBuyingLocks,
     setGettingHoney,
-    setRedeemingHoney
+    setRedeemingHoney,
+    buyingLocksLoading
   } = useGoldiswap()
 
   const { 
@@ -68,6 +69,9 @@ export const GoldiswapButtonMobile = () => {
   const handleButtonClick = () => {
     const button = document.getElementById('swap-button')
     if(activeToggle === 'BUY') {
+      if(buyingLocks == 0 || buyingLocksLoading) {
+        return
+      }
       buyTxFlow(button)
     }
     if(activeToggle === 'SELL') {

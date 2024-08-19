@@ -130,13 +130,13 @@ export const StakePage = () => {
                 </div>
                 <WalletBalance />
                 <StakeBox />
-                {/* <img className="absolute top-[68%] md:top-[51%] lg:top-[49%] xl:top-[48%] left-[91%] lg:left-[82%] 2xl:left-[80%] w-[4%] h-[2%] lg:w-[3%]" src="/images/icon-bearoutline.png" alt="bearoutline" />
+                <img className="absolute top-[68%] md:top-[51%] lg:top-[49%] xl:top-[48%] left-[91%] lg:left-[82%] 2xl:left-[80%] w-[4%] h-[2%] lg:w-[3%]" src="/images/icon-bearoutline.png" alt="bearoutline" />
                 <div 
                   className="absolute w-[12%] md:w-[10%] h-[7%] lg:w-[6%] lg:h-[8%] top-[70%] md:top-[53%] lg:top-[51%] xl:top-[50%] left-[87%] lg:left-[80%] 2xl:left-[78%] px-1 text-center border-2 border-black bg-[#F3AA8A] flex items-center justify-center font-amaticbold text-[2.5vw] md:text-[2.25vw] lg:text-[1.5vw] xl:text-[1.2vw] tall:text-[3vw] tall:md:text-[2.25vw] tall:lg:text-[1.5vw] tall:xl:text-[1.2vw] hover:scale-110 cursor-pointer"
                   onClick={() => setChartOpen(!chartOpen)}
                 >
                   THIS IS CHART
-                </div> */}
+                </div>
                 <StakeButton />
               </>
             }

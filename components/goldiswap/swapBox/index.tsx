@@ -50,7 +50,8 @@ export const SwapBox = () => {
     findLocksSellAmount,
     setBuyingLocks,
     redeemingHoney,
-    handleBottomChange
+    handleBottomChange,
+    setBuyingLocksLoading
   } = useGoldiswap()
 
   const { balancesLoading } = useWallet()
@@ -99,10 +100,12 @@ export const SwapBox = () => {
 
   const loadedLocks = async (dhb: number) => {
     setBottomAmountLoading(true)
+    setBuyingLocksLoading(true)
     setTimeout(() => {
       const locksAmount: number = findLocksBuyAmount(dhb)
       simulateBuy(locksAmount)
       setBottomAmountLoading(false)
+      setBuyingLocksLoading(false)
     }, 500)
   }
 

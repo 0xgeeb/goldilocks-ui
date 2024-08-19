@@ -6,6 +6,10 @@
   text-shadow: 2px 2px 7px #000000;
 }
 
+#card-div-shadow {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
 /* Chrome, Safari, Edge, Opera */
 #number-input::-webkit-outer-spin-button,
 #number-input::-webkit-inner-spin-button {

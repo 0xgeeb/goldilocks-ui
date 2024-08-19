@@ -123,6 +123,9 @@ const INITIAL_STATE = {
   infoLoading: true,
   setInfoLoading: (_loading: boolean) => {},
 
+  buyingLocksLoading: false,
+  setBuyingLocksLoading: (_loading: boolean) => {},
+
   txConfirming: false,
   setTxConfirming: (_confirming: boolean) => {},
 
@@ -166,6 +169,7 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
   const [chartDataState, setChartDataState] = useState<{[x: string]: number, value: number}[]>(INITIAL_STATE.chartData)
   const [chartOpenState, setChartOpenState] = useState<boolean>(INITIAL_STATE.chartOpen)
   const [infoLoadingState, setInfoLoadingState] = useState<boolean>(INITIAL_STATE.infoLoading)
+  const [buyingLocksLoadingState, setBuyingLocksLoadingState] = useState<boolean>(INITIAL_STATE.buyingLocksLoading)
   const [txConfirmingState, setTxConfirmingState] = useState<boolean>(INITIAL_STATE.txConfirming)
   const [balanceMobileToggleState, setBalanceMobileToggleState] = useState<boolean>(INITIAL_STATE.balanceMobileToggle)
 
@@ -707,18 +711,26 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
     }))
   }
 
+  const formatTimestamp = (timestamp: number): string => {
+    const date = new Date(timestamp * 1000); // Convert Unix timestamp to milliseconds
+    const month = (date.getUTCMonth() + 1).toString().padStart(2, '0'); // Get month and add leading zero if needed
+    const day = date.getUTCDate().toString().padStart(2, '0'); // Get day and add leading zero if needed
+
+    return `${month}/${day}`;
+  }
+
   const updateChartData = (chartData: any) => {
-    let tempChartData: {[x: string]: number, value: number}[] = []
+    let tempChartData: any[] = []
     const days = ['firstDay', 'secondDay', 'thirdDay', 'fourthDay', 'fifthDay', 'sixthDay', 'seventhDay']
     for(const day of days) {
       const dayData = chartData[day]
       const item = dayData.items[0]
       if(item) {
         const result = marketPrice(parseFloat(formatEther(item.fsl)), parseFloat(formatEther(item.psl)), parseFloat(formatEther(item.supply)))
-        tempChartData.push({ [`${day}`]: result, "value": result })
+        tempChartData.push({ [`${day}`]: result, value: result, date: formatTimestamp(item.timestamp) })
       }
       else {
-        tempChartData.push({ [`${day}`]: 0, value: 0 })
+        tempChartData.push({ [`${day}`]: 0, value: 0, date: formatTimestamp(item.timestamp) })
       }
     }
     let fallbackNumber: number | null = null;
@@ -738,6 +750,7 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
         tempChartData[i].value = farthestNumber
       }
     }
+    
     setChartDataState(tempChartData)
   } 
   
@@ -780,6 +793,8 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
         simInfo: simInfoState,
         setSimInfo,
         updateAllowance,
+        buyingLocksLoading: buyingLocksLoadingState,
+        setBuyingLocksLoading: setBuyingLocksLoadingState,
         txConfirming: txConfirmingState,
         setTxConfirming: setTxConfirmingState,
         notification: notificationState,

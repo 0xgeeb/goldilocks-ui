@@ -280,20 +280,21 @@ export const LendButton = () => {
     }
   }
 
+  //todo: doesnt go away when removing number and main button text doesnt change, prolly just error with allowance fetching 
   return (
     <>
       {
         allowanceButtons &&
         <div>
           <button
-            className="absolute bg-[#E7B941] h-[8%] w-[22%] xl:w-[16.6%] top-[61%] xl:top-[59%] left-[19.5%] xl:left-[33.9%] border-2 border-black font-amaticbold text-[3.5vw] xl:text-[1.5vw] hover:bg-[#C9E3B9] hover:text-black hover:scale-110"
+            className="absolute bg-[#E7B941] h-[8%] w-[22%] xl:w-[16.6%] top-[61%] xl:top-[59%] left-[25.5%] xl:left-[33.9%] border-2 border-black font-amaticbold text-[3.5vw] xl:text-[1.5vw] hover:bg-[#C9E3B9] hover:text-black hover:scale-110"
             id="left-approve-button"
             onClick={() => handleLeftButtonClick()}
           >
             approve tx
           </button>
           <button
-            className="absolute bg-[#E7B941] h-[8%] w-[22%] xl:w-[16.6%] top-[61%] xl:top-[59%] left-[47.5%] xl:left-[55.5%] border-2 border-black font-amaticbold text-[3.5vw] xl:text-[1.5vw] hover:bg-[#C9E3B9] hover:text-black hover:scale-110"
+            className="absolute bg-[#E7B941] h-[8%] w-[22%] xl:w-[16.6%] top-[61%] xl:top-[59%] left-[53.5%] xl:left-[55.5%] border-2 border-black font-amaticbold text-[3.5vw] xl:text-[1.5vw] hover:bg-[#C9E3B9] hover:text-black hover:scale-110"
             id="right-approve-button"
             onClick={() => handleRightButtonClick()}
           >
@@ -312,7 +313,7 @@ export const LendButton = () => {
           }) => {
             return (
               <button 
-                className={`absolute h-[8%] w-[22%] xl:w-[16.6%] top-[61%] xl:top-[59%] left-[33%] xl:left-[44.7%] ${buttonLoadingColor ? "bg-[#C9E3B9] text-black" : " bg-[#E7B941] text-black"} hover:bg-[#C9E3B9] hover:text-black font-amaticbold text-[4vw] xl:text-[1.9vw] border-2 border-black hover:scale-110`}
+                className={`absolute h-[8%] w-[22%] xl:w-[16.6%] top-[61%] xl:top-[59%] left-[39%] xl:left-[44.7%] ${buttonLoadingColor ? "bg-[#C9E3B9] text-black" : " bg-[#E7B941] text-black"} hover:bg-[#C9E3B9] hover:text-black font-amaticbold text-[4vw] xl:text-[1.9vw] border-2 border-black hover:scale-110`}
                 id="lend-button"
                 onClick={() => {
                   const button = document.getElementById('lend-button')

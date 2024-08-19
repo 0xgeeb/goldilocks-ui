@@ -7,6 +7,7 @@ import bandbearABI from "../abi/BandBear.json"
 import bondbearABI from "../abi/BondBear.json"
 import beradromeABI from "../abi/Beradrome.json"
 import honeycombABI from "../abi/HoneyComb.json"
+import goldivaultABI from "../abi/HoneyWBeraGoldivault.json"
 
 export const contracts = {
   goldiswap: {
@@ -17,16 +18,24 @@ export const contracts = {
     address: '0xe2cA693a47C32bd33949120d31d42b9e5Ef5c7Ef',
     abi: goldilockedABI.abi
   },
+  goldilend: {
+    address: '0x7c45E398A5c98046719F0D24C4F7e3f44b71588c',
+    abi: goldilendABI.abi
+  },
+  goldivault: {
+    address: '0xfcAcD9E38A1f6d7DA9Fd91E24C56BEb66AB2EB71',
+    abi: goldivaultABI.abi
+  },
   honey: {
     address: '0x0E4aaF1351de4c0264C5c7056Ef3777b41BD8e03',
     abi: honeyABI.abi
   },
-  goldilend: {
-    address: '0x9256322361d9f68d1d8d11Bc61242D1476050ea3',
-    abi: goldilendABI.abi
-  },
   ibgt: {
     address: '0x46eFC86F0D7455F135CC9df501673739d513E982',
+    abi: ibgtABI.abi
+  },
+  honeywberaLP: {
+    address: '0xd28d852cbcc68DCEC922f6d5C7a8185dBaa104B7',
     abi: ibgtABI.abi
   },
   bandbear: {

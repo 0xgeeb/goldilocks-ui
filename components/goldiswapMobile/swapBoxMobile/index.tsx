@@ -54,7 +54,8 @@ export const SwapBoxMobile = () => {
     setBuyingLocks,
     redeemingHoney,
     handleBottomChange,
-    balanceMobileToggle
+    balanceMobileToggle,
+    setBuyingLocksLoading
   } = useGoldiswap()
 
   const { balancesLoading } = useWallet()
@@ -103,10 +104,12 @@ export const SwapBoxMobile = () => {
 
   const loadedLocks = async (dhb: number) => {
     setBottomAmountLoading(true)
+    setBuyingLocksLoading(true)
     setTimeout(() => {
       const locksAmount: number = findLocksBuyAmount(dhb)
       simulateBuy(locksAmount)
       setBottomAmountLoading(false)
+      setBuyingLocksLoading(false)
     }, 500)
   }
 
