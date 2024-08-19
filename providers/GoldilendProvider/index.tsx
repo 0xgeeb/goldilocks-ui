@@ -21,7 +21,8 @@ const INITIAL_STATE: GoldilendInitialState = {
   goldilendInfo: {
     gibgtSupply: 0,
     stakedGibgt: 0,
-    poolSize: 0
+    poolSize: 0,
+    outstandingDebt: 0
   },
   ibgtBalance: 0,
   lock: 0,
@@ -258,10 +259,11 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
   }
 
   const updateBorrowLimit = () => {
-    let limit = 0
+    let valLimit = 0
     const poolLimit = goldilendInfoState.poolSize * 0.10
-    limit += selectedBeraState.valuation
-    setBorrowLimitState(limit > poolLimit ? poolLimit : limit)
+    const debtLimit = goldilendInfoState.poolSize - goldilendInfoState.outstandingDebt
+    valLimit += selectedBeraState.valuation
+    setBorrowLimitState(Math.min(poolLimit, debtLimit, valLimit))
   }
 
   const updateBoostMag = () => {
@@ -272,6 +274,7 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
     setBoostMagState(mag)
   }
 
+  //todo: prolly the cause of approvals not going away. copy handleChange from stake
   const handleStakeChange = (input: string, tab: string) => {
     setDisplayStringState(input)
     if(tab === 'LOCK') {
@@ -458,11 +461,18 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
       functionName: 'totalSupply',
       args: []
     })
+    const debtResult = await readContract(config, {
+      address: contracts.goldilend.address as `0x${string}`,
+      abi: contracts.goldilend.abi,
+      functionName: 'outstandingDebt',
+      args: []
+    })
 
     const response = {
       gibgtSupply: parseFloat(formatEther(gibgtSupplyResult as unknown as bigint)),
       stakedGibgt: parseFloat(formatEther(stakedGibgtResult as unknown as bigint)),
-      poolSize: parseFloat(formatEther(poolSizeResult as unknown as bigint))
+      poolSize: parseFloat(formatEther(poolSizeResult as unknown as bigint)),
+      outstandingDebt: parseFloat(formatEther(debtResult as unknown as bigint))
     }
 
     setGoldilendInfoState(response)
@@ -475,10 +485,17 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
       functionName: 'poolSize',
       args: []
     })
+    const debtResult = await readContract(config, {
+      address: contracts.goldilend.address as `0x${string}`,
+      abi: contracts.goldilend.abi,
+      functionName: 'outstandingDebt',
+      args: []
+    })
     const response = {
       gibgtSupply: 0,
       stakedGibgt: 0,
-      poolSize: parseFloat(formatEther(poolSizeResult as unknown as bigint))
+      poolSize: parseFloat(formatEther(poolSizeResult as unknown as bigint)),
+      outstandingDebt: parseFloat(formatEther(debtResult as unknown as bigint))
     }
     setGoldilendInfoState(response)
     if(wallet) {

@@ -103,6 +103,7 @@ export interface GoldilendInitialState {
     gibgtSupply: number;
     stakedGibgt: number;
     poolSize: number;
+    outstandingDebt: number;
   };
   ibgtBalance: number;
   lock: number;
