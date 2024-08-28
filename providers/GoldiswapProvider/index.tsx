@@ -469,18 +469,35 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
     }
     _tax = _purchasePrice * 0.003
 
-    const response = {
-      toggle: true,
-      fsl: _fsl,
-      psl: _psl,
-      supply: _supply,
-      floor: floorPrice(_fsl + _tax, _supply),
-      market: marketPrice(_fsl + _tax, _psl, _supply),
-      targetRatio: goldiswapInfoState.targetRatio
+    let response
+
+    if(_psl / _fsl >= goldiswapInfoState.targetRatio) {
+      const raiseAmount: number = (_psl / _fsl) * (_psl / 32)
+      const newFsl = _fsl + raiseAmount
+      const newPsl = _psl - raiseAmount
+      response = {
+        toggle: true,
+        fsl: newFsl,
+        psl: newPsl,
+        supply: _supply,
+        floor: floorPrice(newFsl, _supply),
+        market: marketPrice(newFsl, newPsl, _supply),
+        targetRatio: goldiswapInfoState.targetRatio + (goldiswapInfoState.targetRatio / 50)
+      }
+    }
+    else {
+      response = {
+        toggle: true,
+        fsl: _fsl,
+        psl: _psl,
+        supply: _supply,
+        floor: floorPrice(_fsl, _supply),
+        market: marketPrice(_fsl, _psl, _supply),
+        targetRatio: goldiswapInfoState.targetRatio
+      }
     }
     
     setSimInfoState(response)
-    simulateFloorRaise(_fsl + _tax, _psl, _supply)
   }
 
   const simulateSell = (amt: number) => {
@@ -525,40 +542,39 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
   }
 
   const simulateRedeem = (amt: number) => {
-    let rawTotal: number = amt * floorPrice(goldiswapInfoState.fsl, goldiswapInfoState.supply)
+    const rawTotal: number = amt * floorPrice(goldiswapInfoState.fsl, goldiswapInfoState.supply)
+    let newFsl = goldiswapInfoState.fsl - rawTotal
+    const _psl = goldiswapInfoState.psl
+    const newSupply = goldiswapInfoState.supply - redeemingLocksState 
+    let response
 
-    const response = {
-      toggle: true,
-      fsl: goldiswapInfoState.fsl - rawTotal,
-      psl: goldiswapInfoState.psl,
-      supply: goldiswapInfoState.supply - redeemingLocksState,
-      floor: floorPrice(goldiswapInfoState.fsl - rawTotal, goldiswapInfoState.supply - redeemingLocksState),
-      market: marketPrice(goldiswapInfoState.fsl - rawTotal, goldiswapInfoState.psl, goldiswapInfoState.supply - redeemingLocksState),
-      targetRatio: goldiswapInfoState.targetRatio
-    }
-
-    setSimInfoState(response)
-    simulateFloorRaise(goldiswapInfoState.fsl - rawTotal, goldiswapInfoState.psl, goldiswapInfoState.supply - redeemingLocksState)
-  }
-
-  const simulateFloorRaise = (_fsl: number, _psl: number, _supply: number) => {
-    if(_psl / _fsl >= goldiswapInfoState.targetRatio) {
-      const raiseAmount: number = (_psl / _fsl) * (_psl / 32)
-      const newFsl = _fsl + raiseAmount
+    if(_psl / newFsl >= goldiswapInfoState.targetRatio) {
+      const raiseAmount: number = (_psl / newFsl) * (_psl / 32)
+      newFsl = newFsl + raiseAmount
       const newPsl = _psl - raiseAmount
-
-      const response = {
+      response = {
         toggle: true,
         fsl: newFsl,
         psl: newPsl,
-        supply: _supply,
-        floor: floorPrice(newFsl, _supply),
-        market: marketPrice(newFsl, newPsl, _supply),
-        targetRatio: simInfoState.targetRatio + (simInfoState.targetRatio / 50)
+        supply: newSupply,
+        floor: floorPrice(newFsl, newSupply),
+        market: marketPrice(newFsl, newPsl, newSupply),
+        targetRatio: goldiswapInfoState.targetRatio + (goldiswapInfoState.targetRatio / 50)
       }
-
-      setSimInfoState(response)
     }
+    else {
+      response = {
+        toggle: true,
+        fsl: newFsl,
+        psl: _psl,
+        supply: newSupply,
+        floor: floorPrice(newFsl, newSupply),
+        market: marketPrice(newFsl, _psl, newSupply),
+        targetRatio: goldiswapInfoState.targetRatio
+      }
+    }
+
+    setSimInfoState(response)
   }
 
   const handleTopBalance = (): string => {

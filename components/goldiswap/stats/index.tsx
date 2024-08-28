@@ -59,6 +59,15 @@ export const Stats = () => {
     }
   }
 
+  const handleFloorColors = (num1: number, num2: number): string => {
+    if(Math.abs(num1 - num2) < 1e-10) {
+      return ''
+    }
+    else {
+      return 'text-green-600'
+    }
+  }
+
   return (
     <div className="absolute flex flex-col items-center justify-between w-[90%] md:w-[70%] xl:w-[60%] 2xl:w-[45%] top-[84%] md:top-[82%] xl:top-[80%] left-[5%] md:left-[15%] xl:left-[20%] 2xl:left-[27.5%] text-white font-baloo text-[2.5vw] md:text-[2vw] lg:text-[1.75vw] xl:text-[1.5vw] 2xl:text-[1.1vw]">
       <div className="w-[100%] h-[50%] flex flex-row items-center justify-between">
@@ -78,7 +87,7 @@ export const Stats = () => {
       <div className="w-[100%] h-[50%] flex flex-row items-center justify-between tall:mt-[1%]">
         <div className="flex flex-row items-center">
           <span className="mr-2">floor price:</span>
-          <span className={handleColors(floorPrice(goldiswapInfo.fsl, goldiswapInfo.supply), floorPrice(simInfo.fsl, simInfo.supply))}>${simInfo.toggle ? handlePrice(floorPrice(simInfo.fsl, simInfo.supply)) : handlePrice(floorPrice(goldiswapInfo.fsl, goldiswapInfo.supply))}</span>
+          <span className={handleFloorColors(floorPrice(goldiswapInfo.fsl, goldiswapInfo.supply), floorPrice(simInfo.fsl, simInfo.supply))}>${simInfo.toggle ? handlePrice(floorPrice(simInfo.fsl, simInfo.supply)) : handlePrice(floorPrice(goldiswapInfo.fsl, goldiswapInfo.supply))}</span>
         </div>
         <div className="flex flex-row items-center">
           <span className="mr-2">market price:</span>
