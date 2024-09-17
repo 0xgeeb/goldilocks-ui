@@ -248,8 +248,8 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
     }
     else {
       if(parseFloat(input) > borrowLimitState) {
-        setBorrowDisplayStringState(borrowLimitState.toFixed(4))
-        setLoanAmountState(borrowLimitState)
+        setBorrowDisplayStringState((borrowLimitState - 0.0001).toFixed(4))
+        setLoanAmountState(borrowLimitState - 0.0001)
       }
       else {
         setLoanAmountState(parseFloat(input))
