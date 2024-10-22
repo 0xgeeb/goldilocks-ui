@@ -55,7 +55,7 @@ export const PoolsPopup = () => {
           </div>
         </div>
       }
-      <div className="absolute z-50 right-[5%] lg:right-[9%] top-[3%] lg:top-[6%] h-[6%] lg:h-[7%] w-[15%] lg:w-[10%] border-2 border-[#FFCD00] text-[#FFCD00] bg-[#033E5E] hover:bg-[#FFCD00] hover:text-[#033E5E] hover:border-2 hover:border-[#033E5E] cursor-pointer flex items-center justify-center" onClick={() => setPoolsPopupToggle(!poolsPopupToggle)}>
+      <div className="absolute z-40 right-[5%] lg:right-[9%] top-[3%] lg:top-[6%] h-[6%] lg:h-[7%] w-[15%] lg:w-[10%] border-2 border-[#FFCD00] text-[#FFCD00] bg-[#033E5E] hover:bg-[#FFCD00] hover:text-[#033E5E] hover:border-2 hover:border-[#033E5E] cursor-pointer flex items-center justify-center" onClick={() => setPoolsPopupToggle(!poolsPopupToggle)}>
         <span className="text-[1.5vw] lg:text-[1vw] font-baloo font-semibold">LIQUIDITY POOLS</span>
       </div>
     </>

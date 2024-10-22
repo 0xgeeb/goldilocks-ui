@@ -162,7 +162,7 @@ export const VaultPage = ({ params }: Props) => {
             <Toggles />
             {
               activeToggle === 'REDEEMOT' &&
-              <div className="z-50 absolute w-[30%] xl:w-[25%] 2xl:w-[15%] font-baloo font-semibold text-center px-2 text-[2vw] xl:text-[1.5vw] 2xl:text-[1vw] h-[14%] lg:h-[16%] bottom-[1%] left-[1%] bg-[#FFE59F] border-2 border-black flex items-center justify-center">
+              <div className="z-50 absolute w-[30%] xl:w-[25%] 2xl:w-[15%] font-baloo font-semibold text-center px-2 text-[2vw] xl:text-[1.5vw] 2xl:text-[1vw] h-[20%] lg:h-[22%] bottom-[1%] left-[1%] bg-[#FFE59F] border-2 border-black flex items-center justify-center">
                 <span>Early withdrawals unavailable on bHONEY vault. OTs can be redeemed for underlying HONEY at maturation</span>
               </div>
             }
