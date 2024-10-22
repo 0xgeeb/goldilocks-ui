@@ -76,11 +76,6 @@ export const VaultButtonBhoney = () => {
       depositTxFlow(button)
     }
     if(activeToggle === 'REDEEMOT') {
-      button && (button.innerHTML = "redeem ot")
-      return
-      // if(otAmount == 0) {
-      //   return
-      // }
       redeemOTFlow(button)
     }
     if(activeToggle === 'REDEEMYT') {
@@ -139,89 +134,93 @@ export const VaultButtonBhoney = () => {
   }
 
   const redeemOTFlow = async (button: HTMLElement | null) => {
-    if(redeemOT == 0) {
-      button && (button.innerHTML = "redeem ot")
-      return
-    }
-    if(redeemOT > goldivaultWalletInfoBhoney.bhot) {
-      button && (button.innerHTML = "not enough")
-      return
-    }
-    else {
-      setTxConfirming(true)
-      if(button) {
-        button.innerHTML = "confirming..."
-      }
-      const redeemOTTx = await sendRedeemOTTx(redeemOT, 'bhoney')
-      if(redeemOTTx.substring(0, 2) === '0x') {
-        setTxConfirming(false)
-        openNotification(
-          true,
-          "You've successfully redeemed your ownership tokens",
-          `You redeemed ${formatAsString(redeemOT)} ownership tokens`,
-          redeemOTTx
-        )
-        if(button) {
-          button.innerHTML = "redeem ot"
-        }
-        refreshInfo()
-        setTimeout(() => {
-          openNotification(false, '', '', '')
-        }, 10000)
-      }
-      else {
-        if(button) {
-          button.innerHTML = "redeem ot"
-        }
-        refreshInfo()
-        setTxConfirming(false)
-      }
-    }
+    button && (button.innerHTML = "not expired")
+    return
+    // if(redeemOT == 0) {
+    //   button && (button.innerHTML = "redeem ot")
+    //   return
+    // }
+    // if(redeemOT > goldivaultWalletInfoBhoney.bhot) {
+    //   button && (button.innerHTML = "not enough")
+    //   return
+    // }
+    // else {
+    //   setTxConfirming(true)
+    //   if(button) {
+    //     button.innerHTML = "confirming..."
+    //   }
+    //   const redeemOTTx = await sendRedeemOTTx(redeemOT, 'bhoney')
+    //   if(redeemOTTx.substring(0, 2) === '0x') {
+    //     setTxConfirming(false)
+    //     openNotification(
+    //       true,
+    //       "You've successfully redeemed your ownership tokens",
+    //       `You redeemed ${formatAsString(redeemOT)} ownership tokens`,
+    //       redeemOTTx
+    //     )
+    //     if(button) {
+    //       button.innerHTML = "redeem ot"
+    //     }
+    //     refreshInfo()
+    //     setTimeout(() => {
+    //       openNotification(false, '', '', '')
+    //     }, 10000)
+    //   }
+    //   else {
+    //     if(button) {
+    //       button.innerHTML = "redeem ot"
+    //     }
+    //     refreshInfo()
+    //     setTxConfirming(false)
+    //   }
+    // }
   }
 
   const redeemYTFlow = async (button: HTMLElement | null) => {
-    if(redeemYT == 0) {
-      button && (button.innerHTML = "redeem yt")
-      return
-    }
-    if(redeemYT > goldivaultWalletInfoBhoney.bhyt) {
-      button && (button.innerHTML = "not enough")
-      return
-    }
-    if(goldivaultInfoBhoney.concludeTime == 0) {
-      button && (button.innerHTML = "not concluded")
-      return
-    }
-    else {
-      setTxConfirming(true)
-      if(button) {
-        button.innerHTML = "confirming..."
-      }
-      const redeemYTTx = await sendRedeemYTTx(redeemYT, 'bhoney')
-      if(redeemYTTx.substring(0, 2) === '0x') {
-        setTxConfirming(false)
-        openNotification(
-          true,
-          "You've successfully redeemed your yield tokens",
-          `You redeemed ${formatAsString(redeemYT)} yield tokens`,
-          redeemYTTx
-        )
-        if(button) {
-          button.innerHTML = "redeem yt"
-        }
-        refreshInfo()
-        setTimeout(() => {
-          openNotification(false, '', '', '')
-        }, 10000)
-      }
-      else {
-        if(button) {
-          button.innerHTML = "redeem yt"
-        }
-        refreshInfo()
-        setTxConfirming(false)
-      }
-    }
+    button && (button.innerHTML = "not expired")
+    return
+    // if(redeemYT == 0) {
+    //   button && (button.innerHTML = "redeem yt")
+    //   return
+    // }
+    // if(redeemYT > goldivaultWalletInfoBhoney.bhyt) {
+    //   button && (button.innerHTML = "not enough")
+    //   return
+    // }
+    // if(goldivaultInfoBhoney.concludeTime == 0) {
+    //   button && (button.innerHTML = "not concluded")
+    //   return
+    // }
+    // else {
+    //   setTxConfirming(true)
+    //   if(button) {
+    //     button.innerHTML = "confirming..."
+    //   }
+    //   const redeemYTTx = await sendRedeemYTTx(redeemYT, 'bhoney')
+    //   if(redeemYTTx.substring(0, 2) === '0x') {
+    //     setTxConfirming(false)
+    //     openNotification(
+    //       true,
+    //       "You've successfully redeemed your yield tokens",
+    //       `You redeemed ${formatAsString(redeemYT)} yield tokens`,
+    //       redeemYTTx
+    //     )
+    //     if(button) {
+    //       button.innerHTML = "redeem yt"
+    //     }
+    //     refreshInfo()
+    //     setTimeout(() => {
+    //       openNotification(false, '', '', '')
+    //     }, 10000)
+    //   }
+    //   else {
+    //     if(button) {
+    //       button.innerHTML = "redeem yt"
+    //     }
+    //     refreshInfo()
+    //     setTxConfirming(false)
+    //   }
+    // }
   }
 
   const tradeFlow = async (button: HTMLElement | null) => {

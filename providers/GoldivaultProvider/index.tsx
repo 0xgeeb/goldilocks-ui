@@ -744,6 +744,12 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
     setYtAmountState(0)
     setTradeInputState(0)
     setTradeOutputState(0)
+    const response = {
+      ibgt: 0,
+      honey: 0,
+      value: 0
+    }
+    setRedeemYTAmountsState(response)
     setAllowanceButtonsState(false)
     setOutputTokensLoadingState(false)
     setActiveToggleState(toggle)
