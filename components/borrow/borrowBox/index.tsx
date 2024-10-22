@@ -1,6 +1,6 @@
 "use client"
 
-import { useBorrow, useWallet } from "../../../providers"
+import { useBorrow } from "../../../providers"
 import { Notification, Chart } from "../../borrow"
 
 export const BorrowBox = () => {
@@ -14,9 +14,8 @@ export const BorrowBox = () => {
     handleBalance,
     txConfirming,
     notification,
+    walletInfoLoading
   } = useBorrow()
-
-  const { balancesLoading } = useWallet()
 
   const loadingElement = () => {
     return <span className="loader-small ml-3"></span>
@@ -74,7 +73,7 @@ export const BorrowBox = () => {
                   value={displayString}
                   onChange={(e) => handleChange(e.target.value)}
                 />
-                <span className="absolute bottom-0 right-[3%] font-baloo font-bold text-[2vw] md:text-[1.75vw] lg:text-[1.25vw] xl:text-[0.9vw] tall:text-[2.5vw] tall:md:text-[1.75vw] tall:lg:text-[1.25vw] tall:xl:text-[0.9vw] text-[#7F7F7F]">{activeToggle === "BORROW" ? "borrow limit" : "borrowed honey"}: {balancesLoading ? loadingElement() : handleBalance()}</span>
+                <span className="absolute bottom-0 right-[3%] font-baloo font-bold text-[2vw] md:text-[1.75vw] lg:text-[1.25vw] xl:text-[0.9vw] tall:text-[2.5vw] tall:md:text-[1.75vw] tall:lg:text-[1.25vw] tall:xl:text-[0.9vw] text-[#7F7F7F]">{activeToggle === "BORROW" ? "borrow limit" : "borrowed honey"}: {walletInfoLoading ? loadingElement() : handleBalance()}</span>
               </div>
             </div>
           </div>

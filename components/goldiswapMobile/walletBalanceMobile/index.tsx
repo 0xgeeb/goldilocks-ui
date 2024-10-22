@@ -1,16 +1,21 @@
 "use client"
 
 import { useEffect } from "react"
-import { useGoldiswap, useWallet } from "../../../providers"
+import { useAccount } from "wagmi"
+import { useGoldiswap } from "../../../providers"
 
 export const WalletBalanceMobile = () => {
 
-  const { balanceMobileToggle, setBalanceMobileToggle } = useGoldiswap()
-
-  const { refreshBalances, isConnected } = useWallet()
+  const { isConnected } = useAccount()
+  
+  const {
+    balanceMobileToggle,
+    setBalanceMobileToggle,
+    refreshGoldiswapWalletInfo
+  } = useGoldiswap()
 
   useEffect(() => {
-    refreshBalances()
+    refreshGoldiswapWalletInfo()
   }, [isConnected])
 
   return (

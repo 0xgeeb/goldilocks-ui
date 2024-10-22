@@ -2,7 +2,8 @@
 
 import { ConnectButton } from "@rainbow-me/rainbowkit"
 import { useState, useEffect } from "react"
-import { useGoldilend, useWallet } from "../../../providers"
+import { useAccount } from "wagmi"
+import { useGoldilend } from "../../../providers"
 import { useGoldilendTx } from "../../../hooks"
 import { BorrowNotification } from "../../goldilend"
 import { contracts } from "../../../utils/addressi"
@@ -16,7 +17,6 @@ export const BorrowTab = () => {
     ownedBeras,
     handleBeraClick,
     infoLoading,
-    findSelectedBeraIdx,
     selectedBera,
     borrowLimit,
     updateBorrowLimit,
@@ -47,7 +47,7 @@ export const BorrowTab = () => {
     sendBorrowTx
   } = useGoldilendTx()
 
-  const { wallet, isConnected } = useWallet()
+  const { address, isConnected } = useAccount()
 
   useEffect(() => {
     updateBorrowLimit()
@@ -131,7 +131,7 @@ export const BorrowTab = () => {
       button && (button.innerHTML = "no collateral")
       return
     }
-    const [bondFlag, bandFlag] = await checkLoanAllowance(wallet)
+    const [bondFlag, bandFlag] = await checkLoanAllowance(address as `0x${string}`)
     if((bondFlag || selectedBera.name !== "BondBera") && (bandFlag || selectedBera.name !== "BandBera")) {
       borrowTxFlow(button)
     }

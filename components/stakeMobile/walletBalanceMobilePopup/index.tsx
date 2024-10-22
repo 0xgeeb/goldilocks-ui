@@ -1,10 +1,9 @@
-import { useStake, useWallet } from "../../../providers"
+import { useStake } from "../../../providers"
 
 export const WalletBalanceMobilePopup = () => {
 
-  const { setBalanceMobileToggle } = useStake()
+  const { stakeWalletInfo, setBalanceMobileToggle } = useStake()
 
-  const { balance } = useWallet()
 
   const formatAsString = (num: number): string => {
     return num.toLocaleString('en-US', { maximumFractionDigits: 2 })
@@ -37,37 +36,37 @@ export const WalletBalanceMobilePopup = () => {
       <div className="w-[100%] h-[100%] flex flex-col justify-around">
         <div className="flex flex-row items-center justify-between w-[100%]">
           <span className="">locks balance:</span>
-          <span className="">{handleInfo(balance.locks)}</span>
+          <span className="">{handleInfo(stakeWalletInfo.locks)}</span>
         </div>
         <div className="w-[100%] border-t-2 border-black"></div>
         <div className="flex flex-row items-center justify-between w-[100%]">
           <span className="">honey balance:</span>
-          <span className="">{handleInfo(balance.honey)}</span>
+          <span className="">{handleInfo(stakeWalletInfo.honey)}</span>
         </div>
         <div className="w-[100%] border-t-2 border-black"></div>
         <div className="flex flex-row items-center justify-between w-[100%]">
           <span className="">porridge balance:</span>
-          <span className="">{handleInfo(balance.prg)}</span>
+          <span className="">{handleInfo(stakeWalletInfo.prg)}</span>
         </div>
         <div className="w-[100%] border-t-2 border-black"></div>
         <div className="flex flex-row items-center justify-between w-[100%]">
           <span className="">staked locks:</span>
-          <span className="">{handleInfo(balance.staked)}</span>
+          <span className="">{handleInfo(stakeWalletInfo.staked)}</span>
         </div>
         <div className="w-[100%] border-t-2 border-black"></div>
         <div className="flex flex-row items-center justify-between w-[100%]">
           <span className="">locked locks:</span>
-          <span className="">{handleInfo(balance.locked)}</span>
+          <span className="">{handleInfo(stakeWalletInfo.locked)}</span>
         </div>
         <div className="w-[100%] border-t-2 border-black"></div>
         <div className="flex flex-row items-center justify-between w-[100%]">
           <span className="">borrowed honey:</span>
-          <span className="">{handleInfo(balance.borrowed)}</span>
+          <span className="">{handleInfo(stakeWalletInfo.borrowed)}</span>
         </div>
         <div className="w-[100%] border-t-2 border-black"></div>
         <div className="flex flex-row items-center justify-between w-[100%]">
           <span className="">claimable porridge:</span>
-          <span className="">{handleInfoClaimable(balance.claimable)}</span>
+          <span className="">{handleInfoClaimable(stakeWalletInfo.claimable)}</span>
         </div>
         <div className="w-[100%] border-t-2 border-black"></div>
       </div>

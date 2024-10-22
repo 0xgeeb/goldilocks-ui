@@ -1,19 +1,19 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit"
-import {
-  useStake,
-  useWallet
-} from "../../../providers"
+import { useAccount } from "wagmi"
+import { useStake } from "../../../providers"
 import { useStakeTx } from "../../../hooks"
 
 export const StakeButtonMobile = () => {
 
   const {
     stakeInfo,
+    stakeWalletInfo,
     setStake,
     setUnstake,
     setStir,
     setDisplayString,
     refreshStakeInfo,
+    refreshStakeWalletInfo,
     updateAllowance,
     setAllowanceButtons,
     allowanceButtons,
@@ -25,12 +25,7 @@ export const StakeButtonMobile = () => {
     openNotification
   } = useStake()
 
-  const {
-    wallet,
-    balance,
-    refreshBalances,
-    isConnected
-  } = useWallet()
+  const { address, isConnected } = useAccount()
 
   const {
     checkAllowance,
@@ -50,7 +45,7 @@ export const StakeButtonMobile = () => {
     setStake(0)
     setUnstake(0)
     setStir(0)
-    refreshBalances()
+    refreshStakeWalletInfo()
     refreshStakeInfo()
   }
 
@@ -75,12 +70,12 @@ export const StakeButtonMobile = () => {
       button && (button.innerHTML = "stake")
       return
     }
-    if(stake > balance.locks) {
+    if(stake > stakeWalletInfo.locks) {
       button && (button.innerHTML = "balance too low")
       return
     }
     else {
-      const sufficientAllowance: boolean | void = await checkAllowance(stake, 'locks', wallet)
+      const sufficientAllowance: boolean | void = await checkAllowance(stake, 'locks', address as string)
       if(sufficientAllowance) {
         setTxConfirming(true)
         if(button) {
@@ -128,11 +123,11 @@ export const StakeButtonMobile = () => {
       button && (button.innerHTML = "unstake")
       return
     }
-    if(unstake > balance.staked - balance.locked) {
+    if(unstake > stakeWalletInfo.staked - stakeWalletInfo.locked) {
       button && (button.innerHTML = "balance too low")
       return
     }
-    if(unstake > balance.staked) {
+    if(unstake > stakeWalletInfo.staked) {
       button && (button.innerHTML = "balance too low")
       return
     }
@@ -179,12 +174,12 @@ export const StakeButtonMobile = () => {
       button && (button.innerHTML = "stir")
       return
     }
-    if(stir > balance.prg) {
+    if(stir > stakeWalletInfo.prg) {
       button && (button.innerHTML = "balance too low")
       return
     }
     else {
-      const sufficientAllowance: boolean | void = await checkAllowance(stir * (stakeInfo.fsl / stakeInfo.supply), 'honey', wallet)
+      const sufficientAllowance: boolean | void = await checkAllowance(stir * (stakeInfo.fsl / stakeInfo.supply), 'honey', address as string)
       if(sufficientAllowance) {
         setTxConfirming(true)
         if(button) {
@@ -234,7 +229,7 @@ export const StakeButtonMobile = () => {
   }
 
   const claimTxFlow = async (button: HTMLElement | null) => {
-    if(balance.claimable == 0) {
+    if(stakeWalletInfo.claimable == 0) {
       button && (button.innerHTML = "claim")
       return
     }
@@ -251,7 +246,7 @@ export const StakeButtonMobile = () => {
         openNotification(
           true,
           "You've successfully claimed $PRG",
-          `You claimed ${formatAsString(balance.claimable)} Porridge`,
+          `You claimed ${formatAsString(stakeWalletInfo.claimable)} Porridge`,
           claimTx
         )
         if(button) {
@@ -335,7 +330,7 @@ export const StakeButtonMobile = () => {
 
   const renderButton = () => {
     if(activeToggle === 'STAKE') {
-      if(isConnected && stake > balance.locksPrgAllowance && balance.locks >= stake) {
+      if(isConnected && stake > stakeWalletInfo.locksPrgAllowance && stakeWalletInfo.locks >= stake) {
         return 'approve locks'
       }
       return 'stake'
@@ -344,7 +339,7 @@ export const StakeButtonMobile = () => {
       return 'unstake'
     }
     if(activeToggle === 'STIR') {
-      if(isConnected && stir * (stakeInfo.fsl / stakeInfo.supply) > balance.honeyPrgAllowance && balance.prg >= stir) {
+      if(isConnected && stir * (stakeInfo.fsl / stakeInfo.supply) > stakeWalletInfo.honeyPrgAllowance && stakeWalletInfo.prg >= stir) {
         return 'approve honey'
       }
       return 'stir'

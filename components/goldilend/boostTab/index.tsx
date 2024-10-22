@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react"
 import { ConnectButton } from "@rainbow-me/rainbowkit"
-import { useGoldilend, useWallet } from "../../../providers"
+import { useAccount } from "wagmi"
+import { useGoldilend } from "../../../providers"
 import { useGoldilendTx } from "../../../hooks"
 import { BorrowNotification } from "../../goldilend"
 import { contracts } from "../../../utils/addressi"
@@ -39,7 +40,7 @@ export const BoostTab = () => {
     sendWithdrawBoostTx
   } = useGoldilendTx()
 
-  const { wallet, isConnected } = useWallet()
+  const { address, isConnected } = useAccount()
 
   useEffect(() => {
     updateBoostMag()
@@ -101,7 +102,7 @@ export const BoostTab = () => {
       button && (button.innerHTML = "no boost")
       return
     }
-    const [combFlag, dromeFlag] = await checkBoostAllowance(wallet)
+    const [combFlag, dromeFlag] = await checkBoostAllowance(address as `0x${string}`)
     if((combFlag || !checkSelected("HoneyComb")) && (dromeFlag || !checkSelected("Beradrome"))) {
       boostTxFlow(button)
     }
@@ -216,7 +217,7 @@ export const BoostTab = () => {
           }
         </div>
       </div>
-      <div className="h-[100%] w-[100%] flex flex-col items-center">
+      <div className="h-[100%] w-[100%] flex flex-col items-center overflow-y-auto">
         {
           (infoLoading && isConnected) ? loadingElement() :
           userBoost.partnerNFTs.length > 0 ?

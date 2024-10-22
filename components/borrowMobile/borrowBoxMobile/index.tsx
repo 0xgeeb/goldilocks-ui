@@ -1,6 +1,6 @@
 "use client"
 
-import { useBorrow, useWallet } from "../../../providers"
+import { useBorrow } from "../../../providers"
 import { ChartSmallMobile } from "../../utils"
 import { 
   WalletBalanceMobilePopup,
@@ -18,10 +18,9 @@ export const BorrowBoxMobile = () => {
     handleBalance,
     txConfirming,
     notification,
-    balanceMobileToggle
+    balanceMobileToggle,
+    walletInfoLoading
   } = useBorrow()
-
-  const { balancesLoading } = useWallet()
 
   const loadingElement = () => {
     return <span className="loader-small ml-3"></span>
@@ -82,7 +81,7 @@ export const BorrowBoxMobile = () => {
                 />
               </div>
             </div>
-            <span className="absolute bottom-[2%] right-[3%] font-baloo font-semibold text-[4vw] text-[#7F7F7F]">{activeToggle === "BORROW" ? "borrow limit" : "borrowed honey"}: {balancesLoading ? loadingElement() : handleBalance()}</span>
+            <span className="absolute bottom-[2%] right-[3%] font-baloo font-semibold text-[4vw] text-[#7F7F7F]">{activeToggle === "BORROW" ? "borrow limit" : "borrowed honey"}: {walletInfoLoading ? loadingElement() : handleBalance()}</span>
           </div>
         }
       </div>

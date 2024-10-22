@@ -16,7 +16,7 @@ export default function NotFound() {
           <a href="https://goldilocks.gitbook.io/docs" target="_blank" className="hover:scale-[150%] cursor-pointer"><span>Wut is this?</span></a>
           <a href="/goldiswap/swap" className="hover:scale-[150%] cursor-pointer"><span>Goldiswap</span></a>
           <a href="/goldilend/borrow" className="hover:scale-[150%] cursor-pointer"><span>Goldilend</span></a>
-          <a href="/goldivaults" className="hover:scale-[150%] cursor-pointer"><span>Goldivaults</span></a>
+          <a href="/goldivault/vaults" className="hover:scale-[150%] cursor-pointer"><span>Goldivaults</span></a>
         </div>
       </header>
       <div className="w-[100%] h-[89%] lg:h-[85%] flex flex-col items-center justify-center bg-[#EEDCD2]">

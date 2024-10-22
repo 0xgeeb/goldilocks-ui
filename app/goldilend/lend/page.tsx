@@ -2,7 +2,6 @@ import type { Metadata } from "next"
 import { GoldilendLendPage } from "../../../components/goldilend"
 import {
   WagmiProvider,
-  WalletProvider,
   GoldilendProvider
 } from "../../../providers"
 
@@ -15,11 +14,9 @@ export default function GoldilendLend() {
   
   return (
     <WagmiProvider> 
-      <WalletProvider>
-        <GoldilendProvider>
-          <GoldilendLendPage />
-        </GoldilendProvider>
-      </WalletProvider>
+      <GoldilendProvider>
+        <GoldilendLendPage />
+      </GoldilendProvider>
     </WagmiProvider>
   )
 }

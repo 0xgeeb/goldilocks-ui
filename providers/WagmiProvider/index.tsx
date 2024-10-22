@@ -3,6 +3,7 @@
 import { PropsWithChildren } from "react"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { WagmiProvider as WagmiClientProvider, http, createConfig } from "wagmi"
+// import { http as viemHttp, createWalletClient, publicActions } from "viem"
 import { BerachainBartioTestnet } from "../../utils/customChains"
 // import { base, baseSepolia } from "wagmi/chains"
 import { RainbowKitProvider, connectorsForWallets, getDefaultWallets } from "@rainbow-me/rainbowkit"
@@ -32,6 +33,11 @@ export const config = createConfig({
     [BerachainBartioTestnet.id]: http()
   }
 })
+
+// export const viemClient = createWalletClient({
+//   chain: BerachainBartioTestnet,
+//   transport: viemHttp()
+// }).extend(publicActions)
 
 const queryClient = new QueryClient()
 

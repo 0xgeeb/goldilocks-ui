@@ -1,5 +1,5 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit"
-import { useStake, useWallet } from "../../../providers"
+import { useStake } from "../../../providers"
 import { useStakeTx } from "../../../hooks"
 import {
   WalletBalanceMobilePopup,
@@ -12,14 +12,14 @@ export const ClaimTabMobile = () => {
   const {
     txConfirming,
     notification,
-    infoLoading,
+    walletInfoLoading,
     setTxConfirming,
     openNotification,
-    refreshStakeInfo,
-    balanceMobileToggle
+    refreshStakeWalletInfo,
+    balanceMobileToggle,
+    stakeWalletInfo
   } = useStake()
 
-  const { balance, refreshBalances } = useWallet()
   const { sendClaimTx } = useStakeTx()
 
   const loadingElement = () => {
@@ -31,7 +31,7 @@ export const ClaimTabMobile = () => {
   }
 
   const handleInfo = (num: number) => {
-    if(infoLoading) {
+    if(walletInfoLoading) {
       return loadingElement()
     }
     else if(num > 0) {
@@ -42,15 +42,10 @@ export const ClaimTabMobile = () => {
     }
   }
 
-  const refreshInfo = () => {
-    refreshBalances()
-    refreshStakeInfo()
-  }
-
   const claimTxFlow = async () => {
     const button = document.getElementById('claim-button')
 
-    if(balance.claimable == 0) {
+    if(stakeWalletInfo.claimable == 0) {
       button && (button.innerHTML = "no claim")
       return
     }
@@ -67,7 +62,7 @@ export const ClaimTabMobile = () => {
         openNotification(
           true,
           "You've successfully claimed $PRG",
-          `You claimed ${formatAsString(balance.claimable)} Porridge`,
+          `You claimed ${formatAsString(stakeWalletInfo.claimable)} Porridge`,
           claimTx
         )
         if(button) {
@@ -75,7 +70,7 @@ export const ClaimTabMobile = () => {
           button.style.backgroundColor = "#E7B941"
           button.style.color = "black"
         }
-        refreshInfo()
+        refreshStakeWalletInfo()
         setTimeout(() => {
           openNotification(false, '', '', '')
         }, 10000)
@@ -86,7 +81,6 @@ export const ClaimTabMobile = () => {
           button.style.backgroundColor = "#E7B941"
           button.style.color = "black"
         }
-        refreshInfo()
         setTxConfirming(false)
       }
     }
@@ -109,11 +103,11 @@ export const ClaimTabMobile = () => {
               <span className="text-[#9C4924] text-[4.5vw]">Porridge Yield</span>
               <div className="w-[100%] flex flex-row justify-between text-[3.5vw] mt-[2%]">
                 <span>$PRG balance:</span>
-                <span>{handleInfo(balance.prg)}</span>
+                <span>{handleInfo(stakeWalletInfo.prg)}</span>
               </div>
               <div className="w-[100%] flex flex-row justify-between text-[3.5vw]">
                 <span>claimable $PRG:</span>
-                <span>{handleInfo(balance.lendClaimable)}</span>
+                <span>{handleInfo(stakeWalletInfo.claimable)}</span>
               </div>
             </div>
           </div>
@@ -156,7 +150,7 @@ export const ClaimTabMobile = () => {
                   }
                 }}
               >
-                claim yield
+                claim
               </button>
             )
           }}

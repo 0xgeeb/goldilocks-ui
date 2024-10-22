@@ -1,22 +1,22 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useWallet } from "../../../providers"
+import { useAccount } from "wagmi"
 
 export const ChangeChain = () => {
 
   const [popup, setPopup] = useState<boolean>(false)
 
-  const { network } = useWallet()
+  const { chain } = useAccount()
 
   useEffect(() => {
-    if(network !== 'Berachain bArtio') {
+    if(chain?.name !== 'Berachain bArtio') {
       setPopup(true)
     }
     else {
       setPopup(false)
     }
-  }, [network])
+  }, [chain])
 
   return (
     popup && 

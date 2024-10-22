@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useGoldiswap, useWallet } from "../../../providers"
+import { useGoldiswap } from "../../../providers"
 import { useGoldiswapMath } from "../../../hooks/useGoldiswapMath"
 import {
   ChartMobile,
@@ -35,6 +35,7 @@ export const SwapBoxMobile = () => {
     simulateRedeem,
     goldiswapInfo,
     infoLoading,
+    walletInfoLoading,
     handleTopBalance,
     handleBottomBalance,
     slippage,
@@ -57,8 +58,6 @@ export const SwapBoxMobile = () => {
     balanceMobileToggle,
     setBuyingLocksLoading
   } = useGoldiswap()
-
-  const { balancesLoading } = useWallet()
 
   const { 
     floorPrice,
@@ -287,7 +286,7 @@ export const SwapBoxMobile = () => {
                   }
                 </div>
               </div>
-              <span className="absolute bottom-[47%] right-[3%] font-baloo font-bold text-[3vw] text-[#7F7F7F]">balance: {balancesLoading ? loadingElement() : handleTopBalance()}</span>
+              <span className="absolute bottom-[47%] right-[3%] font-baloo font-bold text-[3vw] text-[#7F7F7F]">balance: {walletInfoLoading ? loadingElement() : handleTopBalance()}</span>
             </div>
             <div className="w-[100%] h-[46%]">
               <div className="absolute flex flex-row items-center top-[61%] left-[8%]">
@@ -310,7 +309,7 @@ export const SwapBoxMobile = () => {
                   }
                 </div>
               </div>
-              <span className="absolute bottom-[1%] right-[3%] font-baloo font-semibold text-[3vw] text-[#7F7F7F]" onClick={() => console.log(balancesLoading)}>balance: {balancesLoading ? loadingElement() : handleBottomBalance()}</span>
+              <span className="absolute bottom-[1%] right-[3%] font-baloo font-semibold text-[3vw] text-[#7F7F7F]">balance: {walletInfoLoading ? loadingElement() : handleBottomBalance()}</span>
             </div>
           </div>
         }

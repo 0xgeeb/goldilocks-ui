@@ -1,8 +1,9 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useAccount } from "wagmi"
 import { useGoldilendNfTsOwnedQuery } from "../../../src/graphql/generated/queries"
-import { useWallet, useGoldilend } from "../../../providers"
+import { useGoldilend } from "../../../providers"
 
 export const BorrowFetcher = () => {
 
@@ -14,14 +15,15 @@ export const BorrowFetcher = () => {
     findBoost,
     findLoans,
     setInfoLoading,
-    getGoldilendBorrowInfo
+    refreshGoldilendInfo,
+    refreshGoldilendWalletInfo
   } = useGoldilend()
 
-  const { wallet, isConnected } = useWallet()
+  const { address, isConnected } = useAccount()
   
   const { data, loading } = useGoldilendNfTsOwnedQuery({
     variables: {
-      owner: wallet
+      owner: address as `0x${string}`
     },
     skip
   })
@@ -38,8 +40,9 @@ export const BorrowFetcher = () => {
   useEffect(() => {
     findBoost()
     findLoans()
-    getGoldilendBorrowInfo()
-  }, [wallet, isConnected])
+    refreshGoldilendInfo()
+    refreshGoldilendWalletInfo()
+  }, [address, isConnected])
 
   return null
 }

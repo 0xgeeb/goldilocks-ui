@@ -1,16 +1,18 @@
+"use client"
 import { ConnectButton } from "@rainbow-me/rainbowkit"
-import {
-  useGoldiswap,
-  useWallet
-} from "../../../providers"
+import { useAccount } from "wagmi"
+import { useGoldiswap } from "../../../providers"
 import { useGoldiswapTx } from "../../../hooks"
 
 export const GoldiswapButtonMobile = () => {
 
+  const { address, isConnected } = useAccount()
+  
   const {
     activeToggle,
     debouncedHoneyBuy,
-    goldiswapInfo,
+    goldiswapWalletInfo,
+    refreshGoldiswapWalletInfo,
     honeyBuy,
     allowanceButtons,
     setAllowanceButtons,
@@ -34,13 +36,6 @@ export const GoldiswapButtonMobile = () => {
     buyingLocksLoading
   } = useGoldiswap()
 
-  const { 
-    isConnected, 
-    balance,
-    wallet,
-    refreshBalances
-  } = useWallet()
-
   const {
     checkAllowance,
     sendApproveTx,
@@ -62,7 +57,7 @@ export const GoldiswapButtonMobile = () => {
     setGettingHoney(0)  
     setRedeemingLocks(0)
     setRedeemingHoney(0)
-    refreshBalances()
+    refreshGoldiswapWalletInfo()
     refreshGoldiswapInfo()
   }
 
@@ -87,12 +82,12 @@ export const GoldiswapButtonMobile = () => {
       button && (button.innerHTML = "buy")
       return
     }
-    if(honeyBuy > balance.honey) {
+    if(honeyBuy > goldiswapWalletInfo.honey) {
       button && (button.innerHTML = "balance too low")
       return
     }
     else {
-      const sufficientAllowance: boolean | void = await checkAllowance(honeyBuy, wallet)
+      const sufficientAllowance: boolean | void = await checkAllowance(honeyBuy, address as `0x${string}`)
       if(sufficientAllowance) {
         setTxConfirming(true)
         if(button) {
@@ -151,7 +146,7 @@ export const GoldiswapButtonMobile = () => {
       button && (button.innerHTML = "sell")
       return
     }
-    if(sellingLocks > balance.locks) {
+    if(sellingLocks > goldiswapWalletInfo.locks) {
       button && (button.innerHTML = "balance too low")
       return
     }
@@ -209,7 +204,7 @@ export const GoldiswapButtonMobile = () => {
       button && (button.innerHTML = "redeem")
       return
     }
-    if(redeemingLocks > balance.locks) {
+    if(redeemingLocks > goldiswapWalletInfo.locks) {
       button && (button.innerHTML = "balance too low")
       return
     }
@@ -293,7 +288,7 @@ export const GoldiswapButtonMobile = () => {
 
   const renderButton = () => {
     if(activeToggle === 'BUY') {
-      if(isConnected && debouncedHoneyBuy > balance.honeySwapAllowance && balance.honey >= debouncedHoneyBuy && honeyBuy > balance.honeySwapAllowance) {
+      if(isConnected && debouncedHoneyBuy > goldiswapWalletInfo.honeySwapAllowance && goldiswapWalletInfo.honey >= debouncedHoneyBuy && honeyBuy > goldiswapWalletInfo.honeySwapAllowance) {
         return 'approve honey'
       }
       return 'buy'

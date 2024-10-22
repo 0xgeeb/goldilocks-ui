@@ -2,13 +2,13 @@
 
 import { useState, useEffect } from "react"
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client"
+import { useAccount } from "wagmi"
 import { useStake, useDesktop } from "../../../providers"
 import { useGoldiswapMath } from "../../../hooks/useGoldiswapMath"
 import { StakePageMobile } from "../../stakeMobile"
 import { 
   NavBar,
   Footer,
-  WalletBalance,
   Loading,
   ChangeChain,
   LocksFetcher
@@ -19,6 +19,7 @@ import {
   StirPopup,
   Stats,
   StakeButton,
+  WalletBalance,
   UnstakePopup,
   ClaimTab
 } from "../../stake"
@@ -30,15 +31,20 @@ export const StakePage = () => {
   const {
     stakeInfo,
     infoLoading,
-    refreshStakeInfo,
     chartOpen,
     setChartOpen,
     stirPopupToggle,
     setStirPopupToggle,
     activeToggle,
     unstakePopupToggle,
-    setUnstakePopupToggle
+    setUnstakePopupToggle,
+    wutPopup,
+    setWutPopup,
+    refreshStakeInfo,
+    refreshStakeWalletInfo
   } = useStake()
+
+  const { isConnected } = useAccount()
 
   const { isDesktop } = useDesktop()
 
@@ -48,6 +54,10 @@ export const StakePage = () => {
     refreshStakeInfo()
     setPageLoading(false)
   }, [])
+
+  useEffect(() => {
+    refreshStakeWalletInfo()
+  }, [isConnected])
 
   const client = new ApolloClient({
     uri: process.env.NEXT_PUBLIC_GHOST_GRAPH_URL,
@@ -79,6 +89,9 @@ export const StakePage = () => {
     }
     if(unstakePopupToggle) {
       setUnstakePopupToggle(false)
+    }
+    if(wutPopup) {
+      setWutPopup(false)
     }
   }
 
@@ -113,7 +126,7 @@ export const StakePage = () => {
         <Loading /> :
         isDesktop ?
         <main className="w-screen h-screen" onClick={() => handlePopups()}>
-          <NavBar />
+          <NavBar wutPopup={wutPopup} setWutPopup={setWutPopup} />
           <div className="w-[100%] h-[89%] xl:h-[85%] bg-cover bg-bottom bg-[url('/images/bg-goldiswap.png')] relative">
             <Toggles />
             { stirPopupToggle && <StirPopup /> }

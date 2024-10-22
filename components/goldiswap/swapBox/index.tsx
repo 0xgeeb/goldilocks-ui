@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useGoldiswap, useWallet } from "../../../providers"
+import { useGoldiswap } from "../../../providers"
 import { useGoldiswapMath } from "../../../hooks/useGoldiswapMath"
 import { Notification, Chart } from "../../goldiswap"
 
@@ -31,6 +31,7 @@ export const SwapBox = () => {
     simulateRedeem,
     goldiswapInfo,
     infoLoading,
+    walletInfoLoading,
     handleTopBalance,
     handleBottomBalance,
     slippage,
@@ -53,8 +54,6 @@ export const SwapBox = () => {
     handleBottomChange,
     setBuyingLocksLoading
   } = useGoldiswap()
-
-  const { balancesLoading } = useWallet()
 
   const { 
     floorPrice,
@@ -108,8 +107,7 @@ export const SwapBox = () => {
       setBuyingLocksLoading(false)
     }, 500)
   }
-
-  //todo: this affects the honey not the locks as users assume
+  
   useEffect(() => {
     if(activeToggle === 'BUY') {
       if(debouncedHoneyBuy > 0) {
@@ -280,7 +278,7 @@ export const SwapBox = () => {
                       onChange={(e) => handleTopChange(e.target.value)}
                     />
                   }
-                  <span className="absolute bottom-0 right-[3%] font-baloo font-bold text-[2vw] md:text-[1.75vw] lg:text-[1.25vw] xl:text-[0.9vw] tall:text-[2.5vw] tall:md:text-[1.75vw] tall:lg:text-[1.25vw] tall:xl:text-[0.9vw] text-[#7F7F7F]">balance: {balancesLoading ? loadingElement() : handleTopBalance()}</span>
+                  <span className="absolute bottom-0 right-[3%] font-baloo font-bold text-[2vw] md:text-[1.75vw] lg:text-[1.25vw] xl:text-[0.9vw] tall:text-[2.5vw] tall:md:text-[1.75vw] tall:lg:text-[1.25vw] tall:xl:text-[0.9vw] text-[#7F7F7F]">balance: {walletInfoLoading ? loadingElement() : handleTopBalance()}</span>
                 </div>
               </div>
             </div>
@@ -303,7 +301,7 @@ export const SwapBox = () => {
                       onChange={(e) => handleBottomChange(e.target.value)}
                     />
                   }
-                  <span className="absolute bottom-0 right-[3%] font-baloo font-bold text-[2vw] md:text-[1.75vw] lg:text-[1.25vw] xl:text-[0.9vw] tall:text-[2.5vw] tall:md:text-[1.75vw] tall:lg:text-[1.25vw] tall:xl:text-[0.9vw] text-[#7F7F7F]">balance: {balancesLoading ? loadingElement() : handleBottomBalance()}</span>
+                  <span className="absolute bottom-0 right-[3%] font-baloo font-bold text-[2vw] md:text-[1.75vw] lg:text-[1.25vw] xl:text-[0.9vw] tall:text-[2.5vw] tall:md:text-[1.75vw] tall:lg:text-[1.25vw] tall:xl:text-[0.9vw] text-[#7F7F7F]">balance: {walletInfoLoading ? loadingElement() : handleBottomBalance()}</span>
                 </div>
               </div>
             </div>

@@ -2,10 +2,8 @@
 
 import { useState } from "react"
 import { ConnectButton } from "@rainbow-me/rainbowkit"
-import {
-  useGoldilend,
-  useWallet
-} from "../../../providers"
+import { useAccount } from "wagmi"
+import { useGoldilend } from "../../../providers"
 import { useGoldilendTx } from "../../../hooks"
 
 export const LendButton = () => {
@@ -23,7 +21,9 @@ export const LendButton = () => {
     setLock,
     setStake,
     setUnstake,
-    openNotification
+    openNotification,
+    refreshGoldilendWalletInfo,
+    goldilendWalletInfo
   } = useGoldilend()
 
   const {
@@ -36,11 +36,7 @@ export const LendButton = () => {
     sendUnstakeTx
   } = useGoldilendTx()
 
-  const {
-    balance,
-    wallet,
-    refreshBalances
-  } = useWallet()
+  const { address } = useAccount()
 
   const [buttonLoadingColor, setButtonLoadingColor] = useState<boolean>(false)
 
@@ -53,7 +49,7 @@ export const LendButton = () => {
     setLock(0)
     setStake(0)
     setUnstake(0)
-    refreshBalances()
+    refreshGoldilendWalletInfo()
     refreshGoldilendInfo()
   }
 
@@ -75,12 +71,12 @@ export const LendButton = () => {
       button && (button.innerHTML = "lock")
       return
     }
-    if(lock > balance.ibgt) {
+    if(lock > goldilendWalletInfo.ibgt) {
       button && (button.innerHTML = "not enough")
       return
     }
     else {
-      const sufficientAllowance: boolean | void = await checkLockAllowance(lock, wallet)
+      const sufficientAllowance: boolean | void = await checkLockAllowance(lock, address as `0x${string}`)
       if(sufficientAllowance) {
         setTxConfirming(true)
         if(button) {
@@ -125,12 +121,12 @@ export const LendButton = () => {
       button && (button.innerHTML = "stake")
       return
     }
-    if(stake > balance.gibgt) {
+    if(stake > goldilendWalletInfo.gibgt) {
       button && (button.innerHTML = "not enough")
       return
     }
     else {
-      const sufficientAllowance: boolean | void = await checkStakeAllowance(stake, wallet)
+      const sufficientAllowance: boolean | void = await checkStakeAllowance(stake, address as `0x${string}`)
       if(sufficientAllowance) {
         setTxConfirming(true)
         if(button) {
@@ -175,7 +171,7 @@ export const LendButton = () => {
       button && (button.innerHTML = "unstake")
       return
     }
-    if(unstake > balance.lendStaked) {
+    if(unstake > goldilendWalletInfo.lendStaked) {
       button && (button.innerHTML = "not enough")
       return
     }

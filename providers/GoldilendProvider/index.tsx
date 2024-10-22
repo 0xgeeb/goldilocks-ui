@@ -3,7 +3,7 @@
 import { createContext, PropsWithChildren, useContext, useState } from "react"
 import { readContract } from "@wagmi/core"
 import { formatEther } from "viem"
-import { useWallet } from "../../providers"
+import { useAccount } from "wagmi"
 import { useDebounce } from "../../hooks"
 import { config } from "../../providers/WagmiProvider"
 import { contracts } from "../../utils/addressi"
@@ -24,7 +24,15 @@ const INITIAL_STATE: GoldilendInitialState = {
     poolSize: 0,
     outstandingDebt: 0
   },
-  ibgtBalance: 0,
+  goldilendWalletInfo: {
+    ibgt: 0,
+    gibgt: 0,
+    lendStaked: 0,
+    lendClaimable: 0,
+    lendInfraredClaimable: 0,
+    ibgtGoldilendAllowance: 0,
+    gibgtGoldilendAllowance: 0
+  },
   lock: 0,
   stake: 0,
   unstake: 0,
@@ -78,10 +86,10 @@ const INITIAL_STATE: GoldilendInitialState = {
   lendActiveToggle: 'LOCK',
   changeLendActiveToggle: (_toggle: string) => {},
   refreshGoldilendInfo: async () => {},
-  refreshClaimable: async () => {},
-  getGoldilendBorrowInfo: async () => {},
-  infoLoading: true,
+  refreshGoldilendWalletInfo: async () => {},
+  infoLoading: false,
   setInfoLoading: (_loading: boolean) => {},
+  walletInfoLoading: false,
   loansLoading: true,
   setLoansLoading: (_loading: boolean) => {},
   allowanceButtons: false,
@@ -95,11 +103,14 @@ const INITIAL_STATE: GoldilendInitialState = {
   setSelectScreen: (_screen: boolean) => {},
   chartOpen: false,
   setChartOpen: (_open: boolean) => {},
+  wutPopup: false,
+  setWutPopup: (_popup: boolean) => {},
+  boostPopup: false,
+  setBoostPopup: (_popup: boolean) => {},
   balanceMobileToggle: false,
   setBalanceMobileToggle: (_toggle: boolean) => {},
   handleBeraClick: (_bera: BeraInfo) => {},
   handlePartnerClick: (_partner: PartnerInfo) => {},
-  findSelectedBeraIdx: () => 0,
   findSelectedPartnerIdxs: () => [],
   findBeras: (_beras: any) => {},
   findLoans: () => {},
@@ -121,10 +132,10 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
 
   const { children } = props
 
-  const { balance, wallet, isConnected, updateBalanceAllowance } = useWallet()
+  const { address, isConnected } = useAccount()
 
   const [goldilendInfoState, setGoldilendInfoState] = useState(INITIAL_STATE.goldilendInfo)
-  const [ibgtBalanceState, setibgtBalanceState] = useState(INITIAL_STATE.ibgtBalance)
+  const [goldilendWalletInfoState, setGoldilendWalletInfoState] = useState(INITIAL_STATE.goldilendWalletInfo)
   const [notificationState, setNotificationState] = useState(INITIAL_STATE.notification)
   
   const [displayStringState, setDisplayStringState] = useState(INITIAL_STATE.displayString)
@@ -152,11 +163,14 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
 
   const [allowanceButtonsState, setAllowanceButtonsState] = useState<boolean>(INITIAL_STATE.allowanceButtons)
   const [infoLoadingState, setInfoLoadingState] = useState<boolean>(INITIAL_STATE.infoLoading)
+  const [walletInfoLoadingState, setWalletInfoLoadingState] = useState<boolean>(INITIAL_STATE.walletInfoLoading)
   const [loansLoadingState, setLoansLoadingState] = useState<boolean>(INITIAL_STATE.loansLoading)
   const [txConfirmingState, setTxConfirmingState] = useState<boolean>(INITIAL_STATE.txConfirming)
   const [chartOpenState, setChartOpenState] = useState<boolean>(INITIAL_STATE.chartOpen)
   const [balanceMobileToggleState, setBalanceMobileToggleState] = useState<boolean>(INITIAL_STATE.balanceMobileToggle)
   const [selectScreenState, setSelectScreenState] = useState<boolean>(INITIAL_STATE.selectScreen)
+  const [wutPopupState, setWutPopupState] = useState<boolean>(INITIAL_STATE.wutPopup)
+  const [boostPopupState, setBoostPopupState] = useState<boolean>(INITIAL_STATE.boostPopup)
 
   const changeActiveToggle = (toggle: string) => {
     setSelectedBeraState({
@@ -185,58 +199,58 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
     if(!isConnected) return
     if(action == 1) {
       if(lendActiveToggleState === 'LOCK') {
-        setDisplayStringState((balance.ibgt / 4).toFixed(4))
-        setLockState(balance.ibgt / 4)
+        setDisplayStringState((goldilendWalletInfoState.ibgt / 4).toFixed(4))
+        setLockState(goldilendWalletInfoState.ibgt / 4)
       }
       if(lendActiveToggleState === 'STAKE') {
-        setDisplayStringState((balance.gibgt / 4).toFixed(4))
-        setStakeState(balance.gibgt / 4)
+        setDisplayStringState((goldilendWalletInfoState.gibgt / 4).toFixed(4))
+        setStakeState(goldilendWalletInfoState.gibgt / 4)
       }
       if(lendActiveToggleState === 'UNSTAKE') {
-        setDisplayStringState((balance.lendStaked / 4).toFixed(4))
-        setUnstakeState(balance.lendStaked / 4)
+        setDisplayStringState((goldilendWalletInfoState.lendStaked / 4).toFixed(4))
+        setUnstakeState(goldilendWalletInfoState.lendStaked / 4)
       }
     }
     if(action == 2) {
       if(lendActiveToggleState === 'LOCK') {
-        setDisplayStringState((balance.ibgt / 2).toFixed(4))
-        setLockState(balance.ibgt / 2)
+        setDisplayStringState((goldilendWalletInfoState.ibgt / 2).toFixed(4))
+        setLockState(goldilendWalletInfoState.ibgt / 2)
       }
       if(lendActiveToggleState === 'STAKE') {
-        setDisplayStringState((balance.gibgt / 2).toFixed(4))
-        setStakeState(balance.gibgt / 2)
+        setDisplayStringState((goldilendWalletInfoState.gibgt / 2).toFixed(4))
+        setStakeState(goldilendWalletInfoState.gibgt / 2)
       }
       if(lendActiveToggleState === 'UNSTAKE') {
-        setDisplayStringState((balance.lendStaked / 2).toFixed(4))
-        setUnstakeState(balance.lendStaked / 2)
+        setDisplayStringState((goldilendWalletInfoState.lendStaked / 2).toFixed(4))
+        setUnstakeState(goldilendWalletInfoState.lendStaked / 2)
       }
     }
     if(action == 3) {
       if(lendActiveToggleState === 'LOCK') {
-        setDisplayStringState((balance.ibgt * 0.75).toFixed(4))
-        setLockState(balance.ibgt * 0.75)
+        setDisplayStringState((goldilendWalletInfoState.ibgt * 0.75).toFixed(4))
+        setLockState(goldilendWalletInfoState.ibgt * 0.75)
       }
       if(lendActiveToggleState === 'STAKE') {
-        setDisplayStringState((balance.gibgt * 0.75).toFixed(4))
-        setStakeState(balance.gibgt * 0.75)
+        setDisplayStringState((goldilendWalletInfoState.gibgt * 0.75).toFixed(4))
+        setStakeState(goldilendWalletInfoState.gibgt * 0.75)
       }
       if(lendActiveToggleState === 'UNSTAKE') {
-        setDisplayStringState((balance.lendStaked * 0.75).toFixed(4))
-        setUnstakeState(balance.lendStaked * 0.75)
+        setDisplayStringState((goldilendWalletInfoState.lendStaked * 0.75).toFixed(4))
+        setUnstakeState(goldilendWalletInfoState.lendStaked * 0.75)
       }
     }
     if(action == 4) {
       if(lendActiveToggleState === 'LOCK') {
-        setDisplayStringState(balance.ibgt.toFixed(4))
-        setLockState(balance.ibgt - 0.0001)
+        setDisplayStringState(goldilendWalletInfoState.ibgt.toFixed(4))
+        setLockState(goldilendWalletInfoState.ibgt - 0.0001)
       }
       if(lendActiveToggleState === 'STAKE') {
-        setDisplayStringState(balance.gibgt.toFixed(4))
-        setStakeState(balance.gibgt - 0.0001)
+        setDisplayStringState(goldilendWalletInfoState.gibgt.toFixed(4))
+        setStakeState(goldilendWalletInfoState.gibgt - 0.0001)
       }
       if(lendActiveToggleState === 'UNSTAKE') {
-        setDisplayStringState(balance.lendStaked.toFixed(4))
-        setUnstakeState(balance.lendStaked - 0.0001)
+        setDisplayStringState(goldilendWalletInfoState.lendStaked.toFixed(4))
+        setUnstakeState(goldilendWalletInfoState.lendStaked - 0.0001)
       }
     }
   }
@@ -290,13 +304,13 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
 
   const handleStakeBalance = (tab: string): string => {
     if(tab === 'LOCK') {
-      return balance.ibgt > 0 ? balance.ibgt.toLocaleString('en-US', { maximumFractionDigits: 4 }) : "0.00"
+      return goldilendWalletInfoState.ibgt > 0 ? goldilendWalletInfoState.ibgt.toLocaleString('en-US', { maximumFractionDigits: 4 }) : "0.00"
     }
     if(tab === 'STAKE') {
-      return balance.gibgt > 0 ? balance.gibgt.toLocaleString('en-US', { maximumFractionDigits: 4 }) : "0.00"
+      return goldilendWalletInfoState.gibgt > 0 ? goldilendWalletInfoState.gibgt.toLocaleString('en-US', { maximumFractionDigits: 4 }) : "0.00"
     }
     if(tab === 'UNSTAKE') {
-      return balance.lendStaked > 0 ? balance.lendStaked.toLocaleString('en-US', { maximumFractionDigits: 4 }) : "0.00"
+      return goldilendWalletInfoState.lendStaked > 0 ? goldilendWalletInfoState.lendStaked.toLocaleString('en-US', { maximumFractionDigits: 4 }) : "0.00"
     }
 
     return ''
@@ -322,10 +336,6 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
       idxArray.push(selectedPartner.index)
     })
     return idxArray
-  }
-
-  const findSelectedBeraIdx = (): number => {
-    return selectedBeraState.index
   }
 
   const handlePartnerClick = (partner: PartnerInfo) => {
@@ -391,13 +401,13 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
   }
 
   const findLoans = async () => {
-    if(wallet) {
+    if(address) {
       let userLoans: LoanInfo[] = []
       const loans = await readContract(config, {
         address: contracts.goldilend.address as `0x${string}`,
         abi: contracts.goldilend.abi,
         functionName: 'lookupLoans',
-        args: [wallet]
+        args: [address]
       })
       const loansData = loans as unknown as LoanData[]
       for(let i = 0; i < loansData.length; i++) {
@@ -418,12 +428,12 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
   }
 
   const findBoost = async () => {
-    if(wallet) {
+    if(address) {
       const boost = await readContract(config, {
         address: contracts.goldilend.address as `0x${string}`,
         abi: contracts.goldilend.abi,
         functionName: 'lookupBoost',
-        args: [wallet]
+        args: [address]
       })
       const boostData = boost as unknown as BoostData
       const userBoost = {
@@ -443,6 +453,7 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
   }
 
   const refreshGoldilendInfo = async () => {
+    setInfoLoadingState(true)
     const stakedGibgtResult = await readContract(config, {
       address: contracts.goldilend.address as `0x${string}`,
       abi: contracts.goldilend.abi,
@@ -476,36 +487,67 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
     }
 
     setGoldilendInfoState(response)
+    setInfoLoadingState(false)
   }
 
-  const getGoldilendBorrowInfo = async () => {
-    const poolSizeResult = await readContract(config, {
-      address: contracts.goldilend.address as `0x${string}`,
-      abi: contracts.goldilend.abi,
-      functionName: 'poolSize',
-      args: []
-    })
-    const debtResult = await readContract(config, {
-      address: contracts.goldilend.address as `0x${string}`,
-      abi: contracts.goldilend.abi,
-      functionName: 'outstandingDebt',
-      args: []
-    })
-    const response = {
-      gibgtSupply: 0,
-      stakedGibgt: 0,
-      poolSize: parseFloat(formatEther(poolSizeResult as unknown as bigint)),
-      outstandingDebt: parseFloat(formatEther(debtResult as unknown as bigint))
-    }
-    setGoldilendInfoState(response)
-    if(wallet) {
-      const ibgtBalance = await readContract(config, {
+  const refreshGoldilendWalletInfo = async () => {
+    if(address) {
+      setWalletInfoLoadingState(true)
+      const ibgtResult = await readContract(config, {
         address: contracts.ibgt.address as `0x${string}`,
         abi: contracts.ibgt.abi,
         functionName: 'balanceOf',
-        args: [wallet]
+        args: [address]
       })
-      setibgtBalanceState(parseFloat(formatEther(ibgtBalance as unknown as bigint)))
+      const gibgtResult = await readContract(config, {
+        address: contracts.goldilend.address as `0x${string}`,
+        abi: contracts.goldilend.abi,
+        functionName: 'balanceOf',
+        args: [address]
+      })
+      const stakedResult = await readContract(config, {
+        address: contracts.goldilend.address as `0x${string}`,
+        abi: contracts.goldilend.abi,
+        functionName: 'stakedGiBGT',
+        args: [address]
+      })
+      const claimableResult = await readContract(config, {
+        address: contracts.goldilend.address as `0x${string}`,
+        abi: contracts.goldilend.abi,
+        functionName: 'userClaimablePrg',
+        args: [address]
+      })
+      const ibgtGoldilendAllowanceResult = await readContract(config, {
+        address: contracts.ibgt.address as `0x${string}`,
+        abi: contracts.ibgt.abi,
+        functionName: 'allowance',
+        args: [address, contracts.goldilend.address]
+      })
+      const gibgtGoldilendAllowanceResult = await readContract(config, {
+        address: contracts.goldilend.address as `0x${string}`,
+        abi: contracts.goldilend.abi,
+        functionName: 'allowance',
+        args: [address, contracts.goldilend.address]
+      })
+      const claimableInfraredResult = await readContract(config, {
+        address: contracts.goldilend.address as `0x${string}`,
+        abi: contracts.goldilend.abi,
+        functionName: 'userClaimableRewards',
+        args: [address]
+      })
+
+      const response = {
+        ibgt: parseFloat(formatEther(ibgtResult as unknown as bigint)),
+        gibgt: parseFloat(formatEther(gibgtResult as unknown as bigint)),
+        lendStaked: parseFloat(formatEther(stakedResult as unknown as bigint)),
+        lendClaimable: parseFloat(formatEther(claimableResult as unknown as bigint)),
+        lendInfraredClaimable: parseFloat(formatEther(claimableInfraredResult as unknown as bigint)),
+        ibgtGoldilendAllowance: parseFloat(formatEther(ibgtGoldilendAllowanceResult as unknown as bigint)),
+        gibgtGoldilendAllowance: parseFloat(formatEther(gibgtGoldilendAllowanceResult as unknown as bigint)),
+      }
+
+      setGoldilendWalletInfoState(response)
+      setWalletInfoLoadingState(false)
     }
   }
 
@@ -573,37 +615,18 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
     }
   }
 
-  const refreshClaimable = async () => {
-    if(wallet) {
-      const claimableResult = await readContract(config, {
-        address: contracts.goldilend.address as `0x${string}`,
-        abi: contracts.goldilend.abi,
-        functionName: 'userClaimablePrg',
-        args: [wallet]
-      })
-      const claimableInfraredResult = await readContract(config, {
-        address: contracts.goldilend.address as `0x${string}`,
-        abi: contracts.goldilend.abi,
-        functionName: 'userClaimableRewards',
-        args: [wallet]
-      })
-      updateBalanceAllowance('lendInfraredClaimable', parseFloat(formatEther(claimableInfraredResult as unknown as bigint)))
-      updateBalanceAllowance('lendClaimable', parseFloat(formatEther(claimableResult as unknown as bigint)))
-    }
-  }
-
   return (
     <GoldilendContext.Provider
       value={{
         goldilendInfo: goldilendInfoState,
-        ibgtBalance: ibgtBalanceState,
+        goldilendWalletInfo: goldilendWalletInfoState,
         infoLoading: infoLoadingState,
+        walletInfoLoading: walletInfoLoadingState,
         displayString: displayStringState,
         setDisplayString: setDisplayStringState,
         setInfoLoading: setInfoLoadingState,
         refreshGoldilendInfo,
-        refreshClaimable,
-        getGoldilendBorrowInfo,
+        refreshGoldilendWalletInfo,
         activeToggle: activeToggleState,
         changeActiveToggle,
         lendActiveToggle: lendActiveToggleState,
@@ -629,7 +652,6 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
         ownedBeras: ownedBerasState,
         userLoans: userLoansState,
         handleBeraClick,
-        findSelectedBeraIdx,
         borrowLimit: borrowLimitState,
         boostMag: boostMagState,
         loanInterest: loanInterestState,
@@ -664,7 +686,11 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
         debouncedLoanAmount: debouncedLoanAmountState,
         debouncedLoanExpiration: debouncedLoanExpirationState,
         updateOwnedBeras,
-        updateOwnedPartners
+        updateOwnedPartners,
+        wutPopup: wutPopupState,
+        setWutPopup: setWutPopupState,
+        boostPopup: boostPopupState,
+        setBoostPopup: setBoostPopupState
       }}
     >
       { children }

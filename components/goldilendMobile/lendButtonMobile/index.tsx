@@ -1,8 +1,8 @@
+"use client"
+
 import { ConnectButton } from "@rainbow-me/rainbowkit"
-import {
-  useGoldilend,
-  useWallet
-} from "../../../providers"
+import { useAccount } from "wagmi"
+import { useGoldilend } from "../../../providers"
 import { useGoldilendTx } from "../../../hooks"
 
 export const LendButtonMobile = () => {
@@ -20,7 +20,9 @@ export const LendButtonMobile = () => {
     setLock,
     setStake,
     setUnstake,
-    openNotification
+    openNotification,
+    goldilendWalletInfo,
+    refreshGoldilendWalletInfo
   } = useGoldilend()
 
   const {
@@ -33,11 +35,7 @@ export const LendButtonMobile = () => {
     sendUnstakeTx
   } = useGoldilendTx()
 
-  const {
-    balance,
-    wallet,
-    refreshBalances
-  } = useWallet()
+  const { address } = useAccount()
 
   const formatAsString = (num: number): string => {
     return num.toLocaleString('en-US', { maximumFractionDigits: 2 })
@@ -48,7 +46,7 @@ export const LendButtonMobile = () => {
     setLock(0)
     setStake(0)
     setUnstake(0)
-    refreshBalances()
+    refreshGoldilendWalletInfo()
     refreshGoldilendInfo()
   }
 
@@ -70,12 +68,12 @@ export const LendButtonMobile = () => {
       button && (button.innerHTML = "lock")
       return
     }
-    if(lock > balance.ibgt) {
+    if(lock > goldilendWalletInfo.ibgt) {
       button && (button.innerHTML = "not enough")
       return
     }
     else {
-      const sufficientAllowance: boolean | void = await checkLockAllowance(lock, wallet)
+      const sufficientAllowance: boolean | void = await checkLockAllowance(lock, address as `0x${string}`)
       if(sufficientAllowance) {
         setTxConfirming(true)
         if(button) {
@@ -122,12 +120,12 @@ export const LendButtonMobile = () => {
       button && (button.innerHTML = "stake")
       return
     }
-    if(stake > balance.gibgt) {
+    if(stake > goldilendWalletInfo.gibgt) {
       button && (button.innerHTML = "not enough")
       return
     }
     else {
-      const sufficientAllowance: boolean | void = await checkStakeAllowance(stake, wallet)
+      const sufficientAllowance: boolean | void = await checkStakeAllowance(stake, address as `0x${string}`)
       if(sufficientAllowance) {
         setTxConfirming(true)
         if(button) {
@@ -174,7 +172,7 @@ export const LendButtonMobile = () => {
       button && (button.innerHTML = "unstake")
       return
     }
-    if(unstake > balance.lendStaked) {
+    if(unstake > goldilendWalletInfo.lendStaked) {
       button && (button.innerHTML = "not enough")
       return
     }

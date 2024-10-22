@@ -35,7 +35,7 @@ export const HomePage = () => {
             <a href="https://goldilocks.gitbook.io/docs" target="_blank" className="hover:scale-[150%] cursor-pointer"><span>Wut is this?</span></a>
             <a href="/goldiswap/swap" className="hover:scale-[150%] cursor-pointer"><span>Goldiswap</span></a>
             <a href="/goldilend/borrow" className="hover:scale-[150%] cursor-pointer"><span>Goldilend</span></a>
-            <a href="/goldivaults" className="hover:scale-[150%] cursor-pointer"><span>Goldivaults</span></a>
+            <a href="/goldivault/vaults" className="hover:scale-[150%] cursor-pointer"><span>Goldivaults</span></a>
           </div>
         </header>
         <div className="w-[100%] h-[86%] xl:h-[82%] bg-bottom bg-cover bg-[url('/images/bg-home.png')] relative">
@@ -95,7 +95,7 @@ export const HomePage = () => {
               <h2 className="text-[#FFCD00] text-[4vw] xl:text-[2vw]"><span className="text-[#FFCD00] text-[5vw] xl:text-[3vw] mx-[2%] font-amaticbold">GOLDIVAULTS:</span>tokenizing yield across Berachain defi</h2>
             </div>
           </div>
-          <a className="h-[15%] w-[20%] border-2 border-[#FFCD00] mb-[12%] xl:mb-[6%] hover:scale-110  hover:bg-[#FFCD00] hover:text-black cursor-pointer" href="/goldivaults">
+          <a className="h-[15%] w-[20%] border-2 border-[#FFCD00] mb-[12%] xl:mb-[6%] hover:scale-110  hover:bg-[#FFCD00] hover:text-black cursor-pointer" href="/goldivault/vaults">
             <div className="flex items-center justify-center text-[3vw] xl:text-[2vw]">
               ENTER
             </div>

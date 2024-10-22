@@ -1,8 +1,8 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { ConnectButton } from "@rainbow-me/rainbowkit"
-import { useGoldilend, useWallet } from "../../../providers"
+import { useGoldilend } from "../../../providers"
 import { LendNotification } from "../../goldilend"
 import { useGoldilendTx } from "../../../hooks"
 
@@ -13,19 +13,13 @@ export const ClaimTab = () => {
     setTxConfirming,
     notification,
     openNotification,
-    infoLoading,
-    findBoost,
+    walletInfoLoading,
     userBoost,
-    refreshClaimable
+    refreshGoldilendWalletInfo,
+    goldilendWalletInfo
   } = useGoldilend()
 
-  const { balance, refreshBalances, isConnected } = useWallet()
   const { sendClaimTx } = useGoldilendTx()
-
-  //todo: bad change dis
-  useEffect(() => {
-    findBoost()
-  }, [isConnected])
 
   const [buttonLoadingColor, setButtonLoadingColor] = useState<boolean>(false)
 
@@ -41,20 +35,8 @@ export const ClaimTab = () => {
     return num.toLocaleString('en-US', { maximumFractionDigits: 6 })
   }
 
-  const handleInfo = (num: number) => {
-    if(infoLoading) {
-      return loadingElement()
-    }
-    else if(num > 0) {
-      return formatAsString(num)
-    }
-    else {
-      return "-"
-    }
-  }
-
   const handleInfoClaimable = (num: number) => {
-    if(infoLoading) {
+    if(walletInfoLoading) {
       return loadingElement()
     }
     else if(num > 0) {
@@ -74,7 +56,7 @@ export const ClaimTab = () => {
 
   const claimTxFlow = async () => {
     const button = document.getElementById('claim-button')
-    if(balance.lendClaimable == 0) {
+    if(goldilendWalletInfo.lendClaimable == 0) {
       button && (button.innerHTML = "claim yield")
       return
     }
@@ -90,15 +72,14 @@ export const ClaimTab = () => {
         openNotification(
           true,
           "You've successfully claimed $PRG",
-          `You claimed ${formatAsString(balance.lendClaimable)} Porridge and ${formatAsString(balance.lendInfraredClaimable)} Honey`,
+          `You claimed ${formatAsString(goldilendWalletInfo.lendClaimable)} Porridge and ${formatAsString(goldilendWalletInfo.lendInfraredClaimable)} Honey`,
           claimTx
         )
         if(button) {
           button.innerHTML = "claim yield"
           setButtonLoadingColor(false)
         }
-        refreshBalances()
-        refreshClaimable()
+        refreshGoldilendWalletInfo()
         setTimeout(() => {
           openNotification(false, '', '', '')
         }, 10000)
@@ -127,20 +108,20 @@ export const ClaimTab = () => {
             <h1 className="font-amaticbold text-[8vw] lg:text-[6vw] xl:text-[4vw]">claim yield</h1>
             <div className="w-[80%] flex flex-col justify-between">
               <span className="text-[#9C4924]">Porridge Yield</span>
-              <div className="w-[100%] flex flex-row justify-between">
+              {/* <div className="w-[100%] flex flex-row justify-between">
                 <span>Current Porridge Balance:</span>
-                <span>{handleInfo(balance.prg)}</span>
-              </div>
+                <span>{handleInfo(goldilendWalletInfo.prg)}</span>
+              </div> */}
               <div className="w-[100%] flex flex-row justify-between">
                 <span>Available Porridge to Claim:</span>
-                <span>{handleInfoClaimable(balance.lendClaimable)}</span>
+                <span>{handleInfoClaimable(goldilendWalletInfo.lendClaimable)}</span>
               </div>
             </div>
             <div className="w-[80%] mt-[2%] flex flex-col justify-between">
               <span className="text-[#9C4924]">Infrared iBGT Staking Yield</span>
               <div className="w-[100%] flex flex-row justify-between">
                 <span>Available Honey to Claim:</span>
-                <span>{handleInfoClaimable(balance.lendInfraredClaimable)}</span>
+                <span>{handleInfoClaimable(goldilendWalletInfo.lendInfraredClaimable)}</span>
               </div>
             </div>
             <ConnectButton.Custom>

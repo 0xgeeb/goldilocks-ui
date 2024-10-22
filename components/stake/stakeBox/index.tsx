@@ -1,6 +1,6 @@
 "use client"
 
-import { useStake, useWallet } from "../../../providers"
+import { useStake } from "../../../providers"
 import { useGoldiswapMath } from "../../../hooks"
 import { Notification, Chart } from "../../stake"
 
@@ -16,12 +16,12 @@ export const StakeBox = () => {
     handleChange,
     handleBalance,
     handleBalanceLabel,
-    infoLoading,
     stakeInfo,
-    stir
+    stir,
+    infoLoading,
+    walletInfoLoading
   } = useStake()
 
-  const { balancesLoading } = useWallet()
   const { floorPrice, marketPrice } = useGoldiswapMath()
 
   const loadingElement = () => {
@@ -101,7 +101,7 @@ export const StakeBox = () => {
                 <span 
                   className="absolute bottom-0 right-[3%] font-baloo font-bold text-[2vw] md:text-[1.75vw] lg:text-[1.25vw] xl:text-[0.9vw] tall:text-[2.5vw] tall:md:text-[1.75vw] tall:lg:text-[1.25vw] tall:xl:text-[0.9vw] text-[#7F7F7F]"
                 >
-                  {handleBalanceLabel()}: {balancesLoading ? loadingElement() : handleBalance()}
+                  {handleBalanceLabel()}: {walletInfoLoading ? loadingElement() : handleBalance()}
                 </span>
               </div>
             </div>

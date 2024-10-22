@@ -1,9 +1,9 @@
 "use client"
 
 import { createContext, PropsWithChildren, useContext, useState } from "react"
+import { useAccount } from "wagmi"
 import { readContract } from "@wagmi/core"
 import { formatEther } from "viem"
-import { useWallet } from "../../providers"
 import { config } from "../../providers/WagmiProvider"
 import { contracts } from "../../utils/addressi"
 
@@ -13,10 +13,20 @@ const INITIAL_STATE = {
     fsl: 0,
     psl: 0,
     supply: 0,
-    locksPrgAllowance: 0,
-    honeyPrgAllowance: 0,
     targetRatio: 0,
     lastFloorRaise: 0
+  },
+
+  stakeWalletInfo: {
+    locks: 0,
+    prg: 0,
+    honey: 0,
+    locksPrgAllowance: 0,
+    honeyPrgAllowance: 0,
+    staked: 0,
+    locked: 0,
+    borrowed: 0,
+    claimable: 0
   },
 
   notification: {
@@ -46,8 +56,8 @@ const INITIAL_STATE = {
   activeToggle: 'STAKE',
   changeActiveToggle: (_toggle: string) => {},
 
-  infoLoading: true,
-  setInfoLoading: (_loading: boolean) => {},
+  infoLoading: false,
+  walletInfoLoading: false,
 
   chartOpen: false,
   setChartOpen: (_chart: boolean) => {},
@@ -68,12 +78,16 @@ const INITIAL_STATE = {
   handleChange: (_input: string) => {},
 
   refreshStakeInfo: async () => {},
+  refreshStakeWalletInfo: async () => {},
 
   txConfirming: false,
   setTxConfirming: (_confirming: boolean) => {},
 
   balanceMobileToggle: false,
-  setBalanceMobileToggle: (_toggle: boolean) => {}
+  setBalanceMobileToggle: (_toggle: boolean) => {},
+
+  wutPopup: false,
+  setWutPopup: (_popup: boolean) => {}
 }
 
 const StakeContext = createContext(INITIAL_STATE)
@@ -82,9 +96,10 @@ export const StakeProvider = (props: PropsWithChildren<{}>) => {
 
   const { children } = props
 
-  const { balance, wallet, updateBalanceAllowance } = useWallet()
+  const { address, isConnected } = useAccount()
 
   const [stakeInfoState, setStakeInfoState] = useState(INITIAL_STATE.stakeInfo)
+  const [stakeWalletInfoState, setStakeWalletInfoState] = useState(INITIAL_STATE.stakeWalletInfo)
   const [notificationState, setNotificationState] = useState(INITIAL_STATE.notification)
 
   const [stakeState, setStakeState] = useState<number>(INITIAL_STATE.stake)
@@ -100,8 +115,10 @@ export const StakeProvider = (props: PropsWithChildren<{}>) => {
 
   const [chartOpenState, setChartOpenState] = useState<boolean>(INITIAL_STATE.chartOpen)
   const [infoLoadingState, setInfoLoadingState] = useState<boolean>(INITIAL_STATE.infoLoading)
+  const [walletInfoLoadingState, setWalletInfoLoadingState] = useState<boolean>(INITIAL_STATE.walletInfoLoading)
   const [txConfirmingState, setTxConfirmingState] = useState<boolean>(INITIAL_STATE.txConfirming)
   const [balanceMobileToggleState, setBalanceMobileToggleState] = useState<boolean>(INITIAL_STATE.balanceMobileToggle)
+  const [wutPopupState, setWutPopupState] = useState<boolean>(INITIAL_STATE.wutPopup)
 
   const [allowanceButtonsState, setAllowanceButtonsState] = useState<boolean>(INITIAL_STATE.allowanceButtons)
 
@@ -115,60 +132,61 @@ export const StakeProvider = (props: PropsWithChildren<{}>) => {
   }
 
   const handlePercentageButtons = (action: number) => {
+    if(!isConnected) return
     if(action == 1) {
       if(activeToggleState === 'STAKE') {
-        setDisplayStringState((balance.locks / 4).toFixed(4))
-        setStakeState(balance.locks / 4)
+        setDisplayStringState((stakeWalletInfoState.locks / 4).toFixed(4))
+        setStakeState(stakeWalletInfoState.locks / 4)
       }
       if(activeToggleState === 'UNSTAKE') {
-        setDisplayStringState(((balance.staked - balance.locked) / 4).toFixed(4))
-        setUnstakeState((balance.staked - balance.locked) / 4)
+        setDisplayStringState(((stakeWalletInfoState.staked - stakeWalletInfoState.locked) / 4).toFixed(4))
+        setUnstakeState((stakeWalletInfoState.staked - stakeWalletInfoState.locked) / 4)
       }
       if(activeToggleState === 'realize') {
-        setDisplayStringState((balance.prg / 4).toFixed(4))
-        setStirState(balance.prg / 4)
+        setDisplayStringState((stakeWalletInfoState.prg / 4).toFixed(4))
+        setStirState(stakeWalletInfoState.prg / 4)
       }
     }
     if(action == 2) {
       if(activeToggleState === 'STAKE') {
-        setDisplayStringState((balance.locks / 2).toFixed(4))
-        setStakeState(balance.locks / 2)
+        setDisplayStringState((stakeWalletInfoState.locks / 2).toFixed(4))
+        setStakeState(stakeWalletInfoState.locks / 2)
       }
       if(activeToggleState === 'UNSTAKE') {
-        setDisplayStringState(((balance.staked - balance.locked) / 2).toFixed(4))
-        setUnstakeState((balance.staked - balance.locked) / 2)
+        setDisplayStringState(((stakeWalletInfoState.staked - stakeWalletInfoState.locked) / 2).toFixed(4))
+        setUnstakeState((stakeWalletInfoState.staked - stakeWalletInfoState.locked) / 2)
       }
       if(activeToggleState === 'STIR') {
-        setDisplayStringState((balance.prg / 2).toFixed(4))
-        setStirState(balance.prg / 2)
+        setDisplayStringState((stakeWalletInfoState.prg / 2).toFixed(4))
+        setStirState(stakeWalletInfoState.prg / 2)
       }
     }
     if(action == 3) {
       if(activeToggleState === 'STAKE') {
-        setDisplayStringState((balance.locks * 0.75).toFixed(4))
-        setStakeState(balance.locks * 0.75)
+        setDisplayStringState((stakeWalletInfoState.locks * 0.75).toFixed(4))
+        setStakeState(stakeWalletInfoState.locks * 0.75)
       }
       if(activeToggleState === 'UNSTAKE') {
-        setDisplayStringState(((balance.staked - balance.locked) * 0.75).toFixed(4))
-        setUnstakeState((balance.staked - balance.locked) * 0.75)
+        setDisplayStringState(((stakeWalletInfoState.staked - stakeWalletInfoState.locked) * 0.75).toFixed(4))
+        setUnstakeState((stakeWalletInfoState.staked - stakeWalletInfoState.locked) * 0.75)
       }
       if(activeToggleState === 'STIR') {
-        setDisplayStringState((balance.prg * 0.75).toFixed(4))
-        setStirState(balance.prg * 0.75)
+        setDisplayStringState((stakeWalletInfoState.prg * 0.75).toFixed(4))
+        setStirState(stakeWalletInfoState.prg * 0.75)
       }
     }
     if(action == 4) {
       if(activeToggleState === 'STAKE') {
-        setDisplayStringState(balance.locks.toFixed(4))
-        setStakeState(balance.locks - 0.0001)
+        setDisplayStringState(stakeWalletInfoState.locks.toFixed(4))
+        setStakeState(stakeWalletInfoState.locks - 0.0001)
       }
       if(activeToggleState === 'UNSTAKE') {
-        setDisplayStringState((balance.staked - balance.locked).toFixed(4))
-        setUnstakeState((balance.staked - balance.locked) - 0.0001)
+        setDisplayStringState((stakeWalletInfoState.staked - stakeWalletInfoState.locked).toFixed(4))
+        setUnstakeState((stakeWalletInfoState.staked - stakeWalletInfoState.locked) - 0.0001)
       }
       if(activeToggleState === 'STIR') {
-        setDisplayStringState(balance.prg.toFixed(4))
-        setStirState(balance.prg - 0.0001)
+        setDisplayStringState(stakeWalletInfoState.prg.toFixed(4))
+        setStirState(stakeWalletInfoState.prg - 0.0001)
       }
     }
   }
@@ -190,16 +208,16 @@ export const StakeProvider = (props: PropsWithChildren<{}>) => {
 
   const handleBalance = (): string => {
     if(activeToggleState === "STAKE") {
-      return balance.locks > 0 ? balance.locks.toLocaleString('en-US', { maximumFractionDigits: 4 }) : "0.00"
+      return stakeWalletInfoState.locks > 0 ? stakeWalletInfoState.locks.toLocaleString('en-US', { maximumFractionDigits: 4 }) : "0.00"
     }
     if(activeToggleState === "UNSTAKE") {
-      return (balance.staked - balance.locked) > 0 ? (balance.staked - balance.locked).toLocaleString('en-US', { maximumFractionDigits: 4 }) : "0.00"
+      return (stakeWalletInfoState.staked - stakeWalletInfoState.locked) > 0 ? (stakeWalletInfoState.staked - stakeWalletInfoState.locked).toLocaleString('en-US', { maximumFractionDigits: 4 }) : "0.00"
     }
     if(activeToggleState === "STIR") {
-      return balance.prg > 0 ? balance.prg.toLocaleString('en-US', { maximumFractionDigits: 4 }) : "0.00"
+      return stakeWalletInfoState.prg > 0 ? stakeWalletInfoState.prg.toLocaleString('en-US', { maximumFractionDigits: 4 }) : "0.00"
     }
     if(activeToggleState === "CLAIM") {
-      return balance.claimable > 0 ? balance.claimable.toLocaleString('en-US', { maximumFractionDigits: 4 }) : "0.00"
+      return stakeWalletInfoState.claimable > 0 ? stakeWalletInfoState.claimable.toLocaleString('en-US', { maximumFractionDigits: 4 }) : "0.00"
     }
 
     return ''
@@ -223,6 +241,7 @@ export const StakeProvider = (props: PropsWithChildren<{}>) => {
   }
 
   const refreshStakeInfo = async () => {
+    setInfoLoadingState(true)
     const fslResult = await readContract(config, {
       address: contracts.goldiswap.address as `0x${string}`,
       abi: contracts.goldiswap.abi,
@@ -248,35 +267,92 @@ export const StakeProvider = (props: PropsWithChildren<{}>) => {
       abi: contracts.goldiswap.abi,
       functionName: 'lastFloorIncrease',
     })
-    let locksPrgAllowanceResult
-    let honeyPrgAllowanceResult
-    if(wallet) {
-      locksPrgAllowanceResult = await readContract(config, {
-        address: contracts.goldiswap.address as `0x${string}`,
-        abi: contracts.goldiswap.abi,
-        functionName: 'allowance',
-        args: [wallet, contracts.goldilocked.address]
-      })
-      honeyPrgAllowanceResult = await readContract(config, {
-        address: contracts.honey.address as `0x${string}`,
-        abi: contracts.honey.abi,
-        functionName: 'allowance',
-        args: [wallet, contracts.goldilocked.address]
-      })
-    }
 
     const response = {
       fsl: parseFloat(formatEther(fslResult as unknown as bigint)),
       psl: parseFloat(formatEther(pslResult as unknown as bigint)),
       supply: parseFloat(formatEther(supplyResult as unknown as bigint)),
-      locksPrgAllowance: wallet ? parseFloat(formatEther(locksPrgAllowanceResult as unknown as bigint)) : 0,
-      honeyPrgAllowance: wallet ? parseFloat(formatEther(honeyPrgAllowanceResult as unknown as bigint)) : 0,
       targetRatio: parseFloat(formatEther(ratioResult as unknown as bigint)),
       lastFloorRaise: parseFloat(formatEther(lastFloorRaiseResult as unknown as bigint))
     }
 
     setStakeInfoState(response)
     setInfoLoadingState(false)
+  }
+
+  const refreshStakeWalletInfo = async () => {
+    if(address) {
+      setWalletInfoLoadingState(true)
+      const locksBalance = await readContract(config, {
+        address: contracts.goldiswap.address as `0x${string}`,
+        abi: contracts.goldiswap.abi,
+        functionName: 'balanceOf',
+        args: [address]
+      })
+      const porridgeBalance = await readContract(config, {
+        address: contracts.goldilocked.address as `0x${string}`,
+        abi: contracts.goldilocked.abi,
+        functionName: 'balanceOf',
+        args: [address]
+      })
+      const honeyBalance = await readContract(config, {
+        address: contracts.honey.address as `0x${string}`,
+        abi: contracts.honey.abi,
+        functionName: 'balanceOf',
+        args: [address]
+      })
+      const stakedBalance = await readContract(config, {
+        address: contracts.goldilocked.address as `0x${string}`,
+        abi: contracts.goldilocked.abi,
+        functionName: 'userStakedLocks',
+        args: [address]
+      })
+      const claimableBalance = await readContract(config, {
+        address: contracts.goldilocked.address as `0x${string}`,
+        abi: contracts.goldilocked.abi,
+        functionName: 'userClaimablePrg',
+        args: [address]
+      })
+      const lockedBalance = await readContract(config, {
+        address: contracts.goldilocked.address as `0x${string}`,
+        abi: contracts.goldilocked.abi,
+        functionName: 'userLockedLocks',
+        args: [address]
+      })
+      const borrowedBalance = await readContract(config, {
+        address: contracts.goldilocked.address as `0x${string}`,
+        abi: contracts.goldilocked.abi,
+        functionName: 'userBorrowedHoney',
+        args: [address]
+      })
+      const locksPrgAllowanceResult = await readContract(config, {
+        address: contracts.goldiswap.address as `0x${string}`,
+        abi: contracts.goldiswap.abi,
+        functionName: 'allowance',
+        args: [address, contracts.goldilocked.address]
+      })
+      const honeyPrgAllowanceResult = await readContract(config, {
+        address: contracts.honey.address as `0x${string}`,
+        abi: contracts.honey.abi,
+        functionName: 'allowance',
+        args: [address, contracts.goldilocked.address]
+      })
+
+      const response = {
+        locks: parseFloat(formatEther(locksBalance as unknown as bigint)),
+        prg: parseFloat(formatEther(porridgeBalance as unknown as bigint)),
+        honey: parseFloat(formatEther(honeyBalance as unknown as bigint)),
+        locksPrgAllowance: parseFloat(formatEther(locksPrgAllowanceResult as unknown as bigint)),
+        honeyPrgAllowance: parseFloat(formatEther(honeyPrgAllowanceResult as unknown as bigint)),
+        staked: parseFloat(formatEther(stakedBalance as unknown as bigint)),
+        locked: parseFloat(formatEther(lockedBalance as unknown as bigint)),
+        borrowed: parseFloat(formatEther(borrowedBalance as unknown as bigint)),
+        claimable: parseFloat(formatEther(claimableBalance as unknown as bigint))
+      }
+
+      setStakeWalletInfoState(response)
+      setWalletInfoLoadingState(false)
+    }
   }
 
   const openNotification = (toggle: boolean, action: string, result: string, hash: string) => {
@@ -290,18 +366,16 @@ export const StakeProvider = (props: PropsWithChildren<{}>) => {
 
   const updateAllowance = (token: string, newAllowance: number) => {
     if(token === 'locks') {
-      // setStakeInfoState(prevState => ({
-      //   ...prevState,
-      //   locksPrgAllowance: newAllowance
-      // }))
-      updateBalanceAllowance('locksPrgAllowance', newAllowance)
+      setStakeWalletInfoState(prevState => ({
+        ...prevState,
+        locksPrgAllowance: newAllowance
+      }))
     }
     else {
-      // setStakeInfoState(prevState => ({
-      //   ...prevState,
-      //   honeyPrgAllowance: newAllowance
-      // }))
-      updateBalanceAllowance('honeyPrgAllowance', newAllowance)
+      setStakeWalletInfoState(prevState => ({
+        ...prevState,
+        honeyPrgAllowance: newAllowance
+      }))
     }
   }
 
@@ -317,9 +391,11 @@ export const StakeProvider = (props: PropsWithChildren<{}>) => {
         displayString: displayStringState,
         setDisplayString: setDisplayStringState,
         stakeInfo: stakeInfoState,
+        stakeWalletInfo: stakeWalletInfoState,
         infoLoading: infoLoadingState,
-        setInfoLoading: setInfoLoadingState,
+        walletInfoLoading: walletInfoLoadingState,
         refreshStakeInfo,
+        refreshStakeWalletInfo,
         chartOpen: chartOpenState,
         setChartOpen: setChartOpenState,
         stirPopupToggle: stirPopupToggleState,
@@ -340,7 +416,9 @@ export const StakeProvider = (props: PropsWithChildren<{}>) => {
         setAllowanceButtons: setAllowanceButtonsState,
         updateAllowance,
         balanceMobileToggle: balanceMobileToggleState,
-        setBalanceMobileToggle: setBalanceMobileToggleState
+        setBalanceMobileToggle: setBalanceMobileToggleState,
+        wutPopup: wutPopupState,
+        setWutPopup: setWutPopupState
       }}
     >
       { children }

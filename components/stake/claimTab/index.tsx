@@ -2,22 +2,22 @@
 
 import { useState } from "react"
 import { ConnectButton } from "@rainbow-me/rainbowkit"
-import { useStake, useWallet } from "../../../providers"
+import { useStake } from "../../../providers"
 import { useStakeTx } from "../../../hooks"
-import { Notification, Chart } from "../../stake"
+import { Notification } from "../../stake"
 
 export const ClaimTab = () => {
 
   const {
     txConfirming,
     notification,
-    infoLoading,
+    walletInfoLoading,
     setTxConfirming,
     openNotification,
-    refreshStakeInfo
+    refreshStakeWalletInfo,
+    stakeWalletInfo
   } = useStake()
 
-  const { balance, refreshBalances } = useWallet()
   const { sendClaimTx } = useStakeTx()
 
   const [buttonLoadingColor, setButtonLoadingColor] = useState<boolean>(false)
@@ -31,7 +31,7 @@ export const ClaimTab = () => {
   }
 
   const handleInfo = (num: number) => {
-    if(infoLoading) {
+    if(walletInfoLoading) {
       return loadingElement()
     }
     else if(num > 0) {
@@ -42,15 +42,10 @@ export const ClaimTab = () => {
     }
   }
 
-  const refreshInfo = () => {
-    refreshBalances()
-    refreshStakeInfo()
-  }
-
   const claimTxFlow = async () => {
     const button = document.getElementById('claim-button')
 
-    if(balance.claimable == 0) {
+    if(stakeWalletInfo.claimable == 0) {
       button && (button.innerHTML = "claim")
       return
     }
@@ -66,14 +61,14 @@ export const ClaimTab = () => {
         openNotification(
           true,
           "You've successfully claimed $PRG",
-          `You claimed ${formatAsString(balance.claimable)} Porridge`,
+          `You claimed ${formatAsString(stakeWalletInfo.claimable)} Porridge`,
           claimTx
         )
         if(button) {
           button.innerHTML = "claim"
           setButtonLoadingColor(false)
         }
-        refreshInfo()
+        refreshStakeWalletInfo()
         setTimeout(() => {
           openNotification(false, '', '', '')
         }, 10000)
@@ -83,7 +78,6 @@ export const ClaimTab = () => {
           button.innerHTML = "claim"
           setButtonLoadingColor(false)
         }
-        refreshInfo()
         setTxConfirming(false)
       }
     }
@@ -97,7 +91,6 @@ export const ClaimTab = () => {
       <div className="absolute bottom-4 right-0 w-8 skew-y-[45deg] border-b-2 border-black"></div>
       <div className={`absolute inset-8 ${txConfirming ? "" : "border-2 border-black"} bg-[#D9C6BA]`}>
         {
-          // chartOpen ? <Chart /> :
           txConfirming ? <img className="w-[100%] h-[100%]" src="/images/bg-transaction.png" alt="tx" /> :
           notification.toggle ? <Notification /> :
           <div className="relative w-[100%] h-[100%] text-[2.5vw] lg:text-[1.5vw] xl:text-[1vw] flex flex-col justify-around items-center font-baloo font-semibold">
@@ -106,11 +99,11 @@ export const ClaimTab = () => {
               <span className="text-[#9C4924] text-[3vw] lg:text-[2vw] xl:text-[1.5vw] mt-[2%]">Porridge Yield</span>
               <div className="w-[100%] flex flex-row justify-between">
                 <span>Current Porridge Balance:</span>
-                <span>{handleInfo(balance.prg)}</span>
+                <span>{handleInfo(stakeWalletInfo.prg)}</span>
               </div>
               <div className="w-[100%] flex flex-row justify-between">
                 <span>Available Porridge to Claim:</span>
-                <span>{handleInfo(balance.claimable)}</span>
+                <span>{handleInfo(stakeWalletInfo.claimable)}</span>
               </div>
             </div>
             <ConnectButton.Custom>
@@ -148,7 +141,7 @@ export const ClaimTab = () => {
                       }
                     }}
                   >
-                    claim yield
+                    claim
                   </button>
                 )
               }}

@@ -7,13 +7,13 @@ import {
   LendButtonMobile,
   StatsMobile,
   ClaimTabMobile,
-  LiquidateTabMobile
+  LiquidateTabMobile,
+  LendWalletBalanceMobile
 } from ".."
 import {
   NavBarMobile,
   NavBarButtons,
-  FooterMobile,
-  LendWalletBalanceMobile
+  FooterMobile
 } from "../../utils"
 
 export const GoldilendLendPageMobile = () => {

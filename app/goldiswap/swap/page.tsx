@@ -2,7 +2,6 @@ import type { Metadata } from "next"
 import { GoldiswapPage } from "../../../components/goldiswap"
 import {
   WagmiProvider,
-  WalletProvider,
   GoldiswapProvider
 } from "../../../providers"
 
@@ -15,11 +14,9 @@ export default function Goldiswap() {
   
   return (
     <WagmiProvider> 
-      <WalletProvider>
-        <GoldiswapProvider>
-          <GoldiswapPage />
-        </GoldiswapProvider>
-      </WalletProvider>
+      <GoldiswapProvider>
+        <GoldiswapPage />
+      </GoldiswapProvider>
     </WagmiProvider>
   )
 }

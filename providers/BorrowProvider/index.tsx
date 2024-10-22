@@ -3,7 +3,7 @@
 import { PropsWithChildren, createContext, useContext, useState } from "react"
 import { readContract } from "@wagmi/core"
 import { formatEther } from "viem"
-import { useWallet } from "../../providers"
+import { useAccount } from "wagmi"
 import { config } from "../../providers/WagmiProvider"
 import { contracts } from "../../utils/addressi"
 
@@ -13,9 +13,19 @@ const INITIAL_STATE = {
     fsl: 0,
     psl: 0,
     supply: 0,
-    honeyBorrowAllowance: 0,
     targetRatio: 0,
     lastFloorRaise: 0
+  },
+
+  borrowWalletInfo: {
+    locks: 0,
+    honey: 0,
+    prg: 0,
+    staked: 0,
+    locked: 0,
+    borrowed: 0,
+    claimable: 0,
+    honeyBorrowAllowance: 0
   },
 
   notification: {
@@ -52,17 +62,21 @@ const INITIAL_STATE = {
   chartOpen: false,
   setChartOpen: (_chart: boolean) => {},
 
-  infoLoading: true,
-  setInfoLoading: (_loading: boolean) => {},
+  infoLoading: false,
+  walletInfoLoading: false,
 
   handlePercentageButtons: (_action: number) => {},
   handleChange: (_input: string) => {},
   handleBalance: () => '',
 
   refreshBorrowInfo: async () => {},
+  refreshBorrowWalletInfo: async () => {},
   
   txConfirming: false,
   setTxConfirming: (_confirming: boolean) => {},
+
+  wutPopup: false,
+  setWutPopup: (_popup: boolean) => {},
 
   balanceMobileToggle: false,
   setBalanceMobileToggle: (_toggle: boolean) => {}
@@ -74,9 +88,10 @@ export const BorrowProvider = (props: PropsWithChildren<{}>) => {
 
   const { children } = props
 
-  const { balance, wallet, updateBalanceAllowance } = useWallet()
+  const { address, isConnected } = useAccount()
 
   const [borrowInfoState, setBorrowInfoState] = useState(INITIAL_STATE.borrowInfo)
+  const [borrowWalletInfoState, setBorrowWalletInfoState] = useState(INITIAL_STATE.borrowWalletInfo)
   const [notificationState, setNotificationState] = useState(INITIAL_STATE.notification)
 
   const [activeToggleState, setActiveToggleState] = useState<string>(INITIAL_STATE.activeToggle)
@@ -90,8 +105,10 @@ export const BorrowProvider = (props: PropsWithChildren<{}>) => {
 
   const [chartOpenState, setChartOpenState] = useState<boolean>(INITIAL_STATE.chartOpen)
   const [infoLoadingState, setInfoLoadingState] = useState<boolean>(INITIAL_STATE.infoLoading)
+  const [walletInfoLoadingState, setWalletInfoLoadingState] = useState<boolean>(INITIAL_STATE.walletInfoLoading)
   const [txConfirmingState, setTxConfirmingState] = useState<boolean>(INITIAL_STATE.txConfirming)
   const [balanceMobileToggleState, setBalanceMobileToggleState] = useState<boolean>(INITIAL_STATE.balanceMobileToggle)
+  const [wutPopupState, setWutPopupState] = useState<boolean>(INITIAL_STATE.wutPopup)
 
   const [allowanceButtonsState, setAllowanceButtonsState] = useState<boolean>(INITIAL_STATE.allowanceButtons)
 
@@ -104,15 +121,16 @@ export const BorrowProvider = (props: PropsWithChildren<{}>) => {
   }
 
   const handlePercentageButtons = (action: number) => {
-    const borrowTemp = (balance.staked - balance.locked) * (borrowInfoState.fsl / borrowInfoState.supply)
+    if(!isConnected) return
+    const borrowTemp = (borrowWalletInfoState.staked - borrowWalletInfoState.locked) * (borrowInfoState.fsl / borrowInfoState.supply)
     if(action == 1) {
       if(activeToggleState === 'BORROW') {
         setDisplayStringState((borrowTemp / 4).toFixed(4))
         setBorrowState(borrowTemp / 4)
       }
       if(activeToggleState === 'REPAY') {
-        setDisplayStringState((balance.borrowed / 4).toFixed(4))
-        setRepayState(balance.borrowed / 4)
+        setDisplayStringState((borrowWalletInfoState.borrowed / 4).toFixed(4))
+        setRepayState(borrowWalletInfoState.borrowed / 4)
       }
     }
     if(action == 2) {
@@ -121,8 +139,8 @@ export const BorrowProvider = (props: PropsWithChildren<{}>) => {
         setBorrowState(borrowTemp / 2)
       }
       if(activeToggleState === 'REPAY') {
-        setDisplayStringState((balance.borrowed / 2).toFixed(4))
-        setRepayState(balance.borrowed / 2)
+        setDisplayStringState((borrowWalletInfoState.borrowed / 2).toFixed(4))
+        setRepayState(borrowWalletInfoState.borrowed / 2)
       }
     }
     if(action == 3) {
@@ -131,8 +149,8 @@ export const BorrowProvider = (props: PropsWithChildren<{}>) => {
         setBorrowState(borrowTemp * 0.75)
       }
       if(activeToggleState === 'REPAY') {
-        setDisplayStringState((balance.borrowed * 0.75).toFixed(4))
-        setRepayState(balance.borrowed * 0.75)
+        setDisplayStringState((borrowWalletInfoState.borrowed * 0.75).toFixed(4))
+        setRepayState(borrowWalletInfoState.borrowed * 0.75)
       }
     }
     if(action == 4) {
@@ -141,8 +159,8 @@ export const BorrowProvider = (props: PropsWithChildren<{}>) => {
         setBorrowState(borrowTemp - 0.0001)
       }
       if(activeToggleState === 'REPAY') {
-        setDisplayStringState(balance.borrowed.toFixed(4))
-        setRepayState(balance.borrowed)
+        setDisplayStringState(borrowWalletInfoState.borrowed.toFixed(4))
+        setRepayState(borrowWalletInfoState.borrowed)
       }
     }
   }
@@ -160,17 +178,18 @@ export const BorrowProvider = (props: PropsWithChildren<{}>) => {
 
   const handleBalance = (): string => {
     if(activeToggleState === 'BORROW') {
-      const borrowTemp = (balance.staked - balance.locked) * (borrowInfoState.fsl / borrowInfoState.supply)
+      const borrowTemp = (borrowWalletInfoState.staked - borrowWalletInfoState.locked) * (borrowInfoState.fsl / borrowInfoState.supply)
       return borrowTemp > 0 ? borrowTemp.toLocaleString('en-US', { maximumFractionDigits: 4 }) : "0.00"
     }
     if(activeToggleState === 'REPAY') {
-      return balance.borrowed > 0 ? balance.borrowed.toLocaleString('en-US', { maximumFractionDigits: 4 }) : "0.00"
+      return borrowWalletInfoState.borrowed > 0 ? borrowWalletInfoState.borrowed.toLocaleString('en-US', { maximumFractionDigits: 4 }) : "0.00"
     }
 
     return ''
   }
 
   const refreshBorrowInfo = async () => {
+    setInfoLoadingState(true)
     const fslResult = await readContract(config, {
       address: contracts.goldiswap.address as `0x${string}`,
       abi: contracts.goldiswap.abi,
@@ -196,35 +215,92 @@ export const BorrowProvider = (props: PropsWithChildren<{}>) => {
       abi: contracts.goldiswap.abi,
       functionName: 'lastFloorIncrease',
     })
-    let honeyBorrowAllowanceResult
-    if(wallet) {
-      honeyBorrowAllowanceResult = await readContract(config, {
-        address: contracts.honey.address as `0x${string}`,
-        abi: contracts.honey.abi,
-        functionName: 'allowance',
-        args: [wallet, contracts.goldilocked.address]
-      })
-    }
-
+    
     const response = {
       fsl: parseFloat(formatEther(fslResult as unknown as bigint)),
       psl: parseFloat(formatEther(pslResult as unknown as bigint)),
       supply: parseFloat(formatEther(supplyResult as unknown as bigint)),
-      honeyBorrowAllowance: wallet ? parseFloat(formatEther(honeyBorrowAllowanceResult as unknown as bigint)) : 0,
       targetRatio: parseFloat(formatEther(ratioResult as unknown as bigint)),
       lastFloorRaise: parseFloat(formatEther(lastFloorRaiseResult as unknown as bigint))
     }
-
+    
     setBorrowInfoState(response)
     setInfoLoadingState(false)
   }
+  
+  const refreshBorrowWalletInfo = async () => {
+    if(address) {
+      setWalletInfoLoadingState(true)
+      const locksBalance = await readContract(config, {
+        address: contracts.goldiswap.address as `0x${string}`,
+        abi: contracts.goldiswap.abi,
+        functionName: 'balanceOf',
+        args: [address]
+      })
+      const porridgeBalance = await readContract(config, {
+        address: contracts.goldilocked.address as `0x${string}`,
+        abi: contracts.goldilocked.abi,
+        functionName: 'balanceOf',
+        args: [address]
+      })
+      const honeyBalance = await readContract(config, {
+        address: contracts.honey.address as `0x${string}`,
+        abi: contracts.honey.abi,
+        functionName: 'balanceOf',
+        args: [address]
+      })
+      const stakedBalance = await readContract(config, {
+        address: contracts.goldilocked.address as `0x${string}`,
+        abi: contracts.goldilocked.abi,
+        functionName: 'userStakedLocks',
+        args: [address]
+      })
+      const claimableBalance = await readContract(config, {
+        address: contracts.goldilocked.address as `0x${string}`,
+        abi: contracts.goldilocked.abi,
+        functionName: 'userClaimablePrg',
+        args: [address]
+      })
+      const lockedBalance = await readContract(config, {
+        address: contracts.goldilocked.address as `0x${string}`,
+        abi: contracts.goldilocked.abi,
+        functionName: 'userLockedLocks',
+        args: [address]
+      })
+      const borrowedBalance = await readContract(config, {
+        address: contracts.goldilocked.address as `0x${string}`,
+        abi: contracts.goldilocked.abi,
+        functionName: 'userBorrowedHoney',
+        args: [address]
+      })
+      const honeyBorrowAllowanceResult = await readContract(config, {
+        address: contracts.honey.address as `0x${string}`,
+        abi: contracts.honey.abi,
+        functionName: 'allowance',
+        args: [address, contracts.goldilocked.address]
+      })
+
+      const response = {
+        locks: parseFloat(formatEther(locksBalance as unknown as bigint)),
+        honey: parseFloat(formatEther(honeyBalance as unknown as bigint)),
+        prg: parseFloat(formatEther(porridgeBalance as unknown as bigint)),
+        staked: parseFloat(formatEther(stakedBalance as unknown as bigint)),
+        locked: parseFloat(formatEther(lockedBalance as unknown as bigint)),
+        borrowed: parseFloat(formatEther(borrowedBalance as unknown as bigint)),
+        claimable: parseFloat(formatEther(claimableBalance as unknown as bigint)),
+        honeyBorrowAllowance: parseFloat(formatEther(honeyBorrowAllowanceResult as unknown as bigint))
+      }
+
+      setBorrowWalletInfoState(response)
+      setWalletInfoLoadingState(false)
+    }
+  }
 
   const updateAllowance = (newAllowance: number) => {
-    // setBorrowInfoState(prevState => ({
-    //   ...prevState,
-    //   honeyBorrowAllowance: newAllowance
-    // }))
-    updateBalanceAllowance('honeyBorrowAllowance', newAllowance)
+    setBorrowWalletInfoState(prevState => ({
+      ...prevState,
+      honeyBorrowAllowance: newAllowance
+    }))
   }
 
   const openNotification = (toggle: boolean, action: string, result: string, hash: string) => {
@@ -240,13 +316,15 @@ export const BorrowProvider = (props: PropsWithChildren<{}>) => {
     <BorrowContext.Provider
       value={{
         borrowInfo: borrowInfoState,
+        borrowWalletInfo: borrowWalletInfoState,
         activeToggle: activeToggleState,
         changeActiveToggle,
         chartOpen: chartOpenState,
         setChartOpen: setChartOpenState,
         infoLoading: infoLoadingState,
-        setInfoLoading: setInfoLoadingState,
+        walletInfoLoading: walletInfoLoadingState,
         refreshBorrowInfo,
+        refreshBorrowWalletInfo,
         borrowPopupToggle: borrowPopupToggleState,
         setBorrowPopupToggle: setBorrowPopupToggleState,
         handlePercentageButtons,
@@ -266,7 +344,9 @@ export const BorrowProvider = (props: PropsWithChildren<{}>) => {
         setAllowanceButtons: setAllowanceButtonsState,
         updateAllowance,
         balanceMobileToggle: balanceMobileToggleState,
-        setBalanceMobileToggle: setBalanceMobileToggleState
+        setBalanceMobileToggle: setBalanceMobileToggleState,
+        wutPopup: wutPopupState,
+        setWutPopup: setWutPopupState
       }}
     >
       { children }

@@ -1,16 +1,21 @@
 "use client"
 
 import { useEffect } from "react"
-import { useBorrow, useWallet } from "../../../providers"
+import { useAccount } from "wagmi"
+import { useBorrow } from "../../../providers"
 
 export const WalletBalanceMobile = () => {
   
-  const { balanceMobileToggle, setBalanceMobileToggle } = useBorrow()
+  const { isConnected } = useAccount()
 
-  const { refreshBalances, isConnected } = useWallet()
+  const {
+    balanceMobileToggle,
+    setBalanceMobileToggle,
+    refreshBorrowWalletInfo
+  } = useBorrow()
 
   useEffect(() => {
-    refreshBalances()
+    refreshBorrowWalletInfo()
   }, [isConnected])
 
   return (

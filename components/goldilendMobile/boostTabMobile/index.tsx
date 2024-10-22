@@ -1,7 +1,8 @@
 "use client"
 
 import { useEffect } from "react"
-import { useGoldilend, useWallet } from "../../../providers"
+import { useAccount } from "wagmi"
+import { useGoldilend } from "../../../providers"
 import { LendNotificationMobile } from "../../goldilendMobile"
 import { contracts } from "../../../utils/addressi"
 
@@ -22,7 +23,7 @@ export const BoostTabMobile = () => {
     setSelectScreen
   } = useGoldilend()
 
-  const { isConnected } = useWallet()
+  const { isConnected } = useAccount()
 
   useEffect(() => {
     updateBoostMag()

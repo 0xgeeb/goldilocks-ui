@@ -7,7 +7,6 @@ import { GoldiswapPageMobile } from "../../goldiswapMobile"
 import { useGoldiswapMath } from "../../../hooks/useGoldiswapMath"
 import { 
   NavBar,
-  SwapWalletBalance,
   Footer,
   Loading,
   LocksFetcher,
@@ -19,7 +18,8 @@ import {
   SlippagePopup,
   RedeemPopup,
   Toggles,
-  Stats
+  Stats,
+  WalletBalance
 } from "../../goldiswap"
 
 export const GoldiswapPage = () => {
@@ -37,7 +37,9 @@ export const GoldiswapPage = () => {
     changeSlippageToggle,
     redeemPopupToggle,
     setRedeemPopupToggle,
-    activeToggle
+    activeToggle,
+    wutPopup,
+    setWutPopup
   } = useGoldiswap()
 
   const { isDesktop } = useDesktop()
@@ -132,6 +134,9 @@ export const GoldiswapPage = () => {
     if(redeemPopupToggle) {
       setRedeemPopupToggle(false)
     }
+    if(wutPopup) {
+      setWutPopup(false)
+    }
   }
 
   return (
@@ -141,7 +146,7 @@ export const GoldiswapPage = () => {
         <Loading /> :
         isDesktop ?
         <main className="w-screen h-screen" onClick={(e) => handlePopups(e)}>
-          <NavBar />
+          <NavBar wutPopup={wutPopup} setWutPopup={setWutPopup} />
           <div className="w-[100%] h-[89%] xl:h-[85%] bg-cover bg-bottom bg-[url('/images/bg-goldiswap.png')] relative">
             <Toggles />
             { redeemPopupToggle && <RedeemPopup /> }
@@ -151,7 +156,7 @@ export const GoldiswapPage = () => {
               <span className="text-white font-baloo mt-1">market cap: {handleTokenInfo(goldiswapInfo.supply * marketPrice(goldiswapInfo.fsl, goldiswapInfo.psl, goldiswapInfo.supply) / 1000000)}m</span>
               <span className="text-white font-baloo mt-1">last floor raise: {formatDate(goldiswapInfo.lastFloorRaise * Math.pow(10, 21))}</span>
             </div>
-            <SwapWalletBalance />
+            <WalletBalance />
             { slippage.toggle && <SlippagePopup /> }
             <SwapBox />
             <img className="absolute top-[68%] md:top-[55.87%] lg:top-[53.87%] xl:top-[63.37%] left-[90%] lg:left-[88.625%] 2xl:left-[75.5%] w-[4%] h-[2%] lg:w-[3%]" src="/images/icon-bearoutline.png" alt="bearoutline" />

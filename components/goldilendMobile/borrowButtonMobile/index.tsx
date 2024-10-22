@@ -1,7 +1,8 @@
 "use client"
 
 import { ConnectButton } from "@rainbow-me/rainbowkit"
-import { useGoldilend, useWallet } from "../../../providers"
+import { useAccount } from "wagmi"
+import { useGoldilend } from "../../../providers"
 import { useGoldilendTx } from "../../../hooks"
 import { contracts } from "../../../utils/addressi"
 
@@ -26,7 +27,7 @@ export const BorrowButtonMobile = () => {
     findLoans
   } = useGoldilend()
 
-  const { wallet } = useWallet()
+  const { address } = useAccount()
 
   const {
     checkLoanAllowance,
@@ -107,7 +108,7 @@ export const BorrowButtonMobile = () => {
           button && (button.innerHTML = "no collateral")
           return
         }
-        const [bondFlag, bandFlag] = await checkLoanAllowance(wallet)
+        const [bondFlag, bandFlag] = await checkLoanAllowance(address as `0x${string}`)
         if((bondFlag || selectedBera.name !== "BondBera") && (bandFlag || selectedBera.name !== "BandBera")) {
           borrowTxFlow(button)
         }
@@ -132,7 +133,7 @@ export const BorrowButtonMobile = () => {
           button && (button.innerHTML = "no boost")
           return
         }
-        const [combFlag, dromeFlag] = await checkBoostAllowance(wallet)
+        const [combFlag, dromeFlag] = await checkBoostAllowance(address as `0x${string}`)
         if((combFlag || !checkSelectedPartners("HoneyComb")) && (dromeFlag || !checkSelectedPartners("Beradrome"))) {
           boostTxFlow(button)
         }

@@ -1,14 +1,17 @@
+"use client"
+
 import { ConnectButton } from "@rainbow-me/rainbowkit"
-import {
-  useBorrow,
-  useWallet
-} from "../../../providers"
+import { useAccount } from "wagmi"
+import { useBorrow } from "../../../providers"
 import { useBorrowTx } from "../../../hooks"
 
 export const BorrowButtonMobile = () => {
 
+  const { address } = useAccount()
+
   const {
     borrowInfo,
+    borrowWalletInfo,
     activeToggle,
     allowanceButtons,
     borrow,
@@ -20,14 +23,9 @@ export const BorrowButtonMobile = () => {
     setBorrow,
     setRepay,
     refreshBorrowInfo,
+    refreshBorrowWalletInfo,
     openNotification
   } = useBorrow()
-
-  const { 
-    wallet,
-    balance,
-    refreshBalances
-  } = useWallet()
 
   const {
     checkAllowance,
@@ -44,7 +42,7 @@ export const BorrowButtonMobile = () => {
     setDisplayString('')
     setBorrow(0)
     setRepay(0)
-    refreshBalances()
+    refreshBorrowWalletInfo()
     refreshBorrowInfo()
   }
 
@@ -63,7 +61,7 @@ export const BorrowButtonMobile = () => {
       button && (button.innerHTML = "borrow")
       return
     }
-    if(borrow > (balance.staked - balance.locked) * (borrowInfo.fsl / borrowInfo.supply)) {
+    if(borrow > (borrowWalletInfo.staked - borrowWalletInfo.locked) * (borrowInfo.fsl / borrowInfo.supply)) {
       button && (button.innerHTML = "balance too low")
       return
     }
@@ -110,12 +108,12 @@ export const BorrowButtonMobile = () => {
       button && (button.innerHTML = "repay")
       return
     }
-    if(repay > balance.borrowed) {
+    if(repay > borrowWalletInfo.borrowed) {
       button && (button.innerHTML = "balance too low")
       return
     }
     else {
-      const sufficientAllowance: boolean | void = await checkAllowance(repay, wallet)
+      const sufficientAllowance: boolean | void = await checkAllowance(repay, address as `0x${string}`)
       if(sufficientAllowance) {
         setTxConfirming(true)
         if(button) {
@@ -193,7 +191,7 @@ export const BorrowButtonMobile = () => {
       rightButton.style.color = "#E7B941"
     }
     await sendApproveTx(0, true)
-    updateAllowance(100000000)
+    updateAllowance(10000000000)
     borrowButton && (borrowButton.innerHTML = "repay")
     setAllowanceButtons(false)
   }
@@ -203,7 +201,7 @@ export const BorrowButtonMobile = () => {
       return 'borrow'
     }
     if(activeToggle === 'REPAY') {
-      if(repay > balance.honeyBorrowAllowance) {
+      if(repay > borrowWalletInfo.honeyBorrowAllowance) {
         return 'approve honey'
       }
       return 'repay'

@@ -1,14 +1,9 @@
 "use client"
 
-import { useEffect } from "react"
 import { ConnectButton } from "@rainbow-me/rainbowkit"
-import {
-  useGoldilend,
-  useWallet
-} from "../../../providers"
-import { LendNotificationMobile } from "../"
+import { useGoldilend } from "../../../providers"
+import { LendNotificationMobile, LendWalletBalanceMobilePopup } from "../"
 import { useGoldilendTx } from "../../../hooks"
-import { LendWalletBalanceMobilePopup } from "../../utils"
 
 export const ClaimTabMobile = () => {
 
@@ -17,19 +12,20 @@ export const ClaimTabMobile = () => {
     setTxConfirming,
     notification,
     openNotification,
-    infoLoading,
+    walletInfoLoading,
     balanceMobileToggle,
-    findBoost,
     userBoost,
-    refreshClaimable
+    refreshGoldilendWalletInfo,
+    goldilendWalletInfo
   } = useGoldilend()
 
-  const { balance, refreshBalances, isConnected } = useWallet()
+  // const { isConnected } = useAccount()
+
   const { sendClaimTx } = useGoldilendTx()
 
-  useEffect(() => {
-    findBoost()
-  }, [isConnected])
+  // useEffect(() => {
+  //   findBoost()
+  // }, [isConnected])
 
   const loadingElement = () => {
     return <span className="loader-small ml-3 mt-2"></span>
@@ -39,20 +35,8 @@ export const ClaimTabMobile = () => {
     return num.toLocaleString('en-US', { maximumFractionDigits: 2 })
   }
 
-  const handleInfo = (num: number) => {
-    if(infoLoading) {
-      return loadingElement()
-    }
-    else if(num > 0) {
-      return formatAsString(num)
-    }
-    else {
-      return "-"
-    }
-  }
-
   const handleInfoClaimable = (num: number) => {
-    if(infoLoading) {
+    if(walletInfoLoading) {
       return loadingElement()
     }
     else if(num > 0) {
@@ -72,7 +56,7 @@ export const ClaimTabMobile = () => {
 
   const claimTxFlow = async () => {
     const button = document.getElementById('claim-button')
-    if(balance.lendClaimable == 0) {
+    if(goldilendWalletInfo.lendClaimable == 0) {
       button && (button.innerHTML = "claim yield")
       return
     }
@@ -88,7 +72,7 @@ export const ClaimTabMobile = () => {
         openNotification(
           true,
           "You've successfully claimed $PRG",
-          `You claimed ${formatAsString(balance.lendClaimable)} Porridge and ${formatAsString(balance.lendInfraredClaimable)} Honey`,
+          `You claimed ${formatAsString(goldilendWalletInfo.lendClaimable)} Porridge and ${formatAsString(goldilendWalletInfo.lendInfraredClaimable)} Honey`,
           claimTx
         )
         if(button) {
@@ -96,8 +80,7 @@ export const ClaimTabMobile = () => {
           button.style.backgroundColor = "#E7B941"
           button.style.color = "black"
         }
-        refreshBalances()
-        refreshClaimable()
+        refreshGoldilendWalletInfo()
         setTimeout(() => {
           openNotification(false, '', '', '')
         }, 10000)
@@ -129,20 +112,20 @@ export const ClaimTabMobile = () => {
               <h1 className="font-amaticbold text-[14vw]">claim yield</h1>
               <div className="flex flex-col justify-between w-[100%] mt-[10%]">
                 <span className="text-[#9C4924] text-[4.5vw]">Porridge Yield</span>
-                <div className="w-[100%] flex flex-row justify-between text-[3.5vw] mt-[2%]">
+                {/* <div className="w-[100%] flex flex-row justify-between text-[3.5vw] mt-[2%]">
                   <span>$PRG balance:</span>
                   <span>{handleInfo(balance.prg)}</span>
-                </div>
+                </div> */}
                 <div className="w-[100%] flex flex-row justify-between text-[3.5vw]">
                   <span>claimable $PRG:</span>
-                  <span>{handleInfoClaimable(balance.lendClaimable)}</span>
+                  <span>{handleInfoClaimable(goldilendWalletInfo.lendClaimable)}</span>
                 </div>
               </div>
               <div className="flex flex-col justify-between w-[100%] mt-[15%]">
                 <span className="text-[#9C4924] text-[4.5vw]">Infrared iBGT Staking Yield</span>
                 <div className="w-[100%] flex flex-row justify-between">
                   <span>Available Honey to Claim:</span>
-                  <span>{handleInfoClaimable(balance.lendInfraredClaimable)}</span>
+                  <span>{handleInfoClaimable(goldilendWalletInfo.lendInfraredClaimable)}</span>
                 </div>
               </div>
             </div>

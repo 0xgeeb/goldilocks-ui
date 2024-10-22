@@ -105,7 +105,15 @@ export interface GoldilendInitialState {
     poolSize: number;
     outstandingDebt: number;
   };
-  ibgtBalance: number;
+  goldilendWalletInfo: {
+    ibgt: number;
+    gibgt: number;
+    lendStaked: number;
+    lendClaimable: number;
+    lendInfraredClaimable: number;
+    ibgtGoldilendAllowance: number;
+    gibgtGoldilendAllowance: number;
+  };
   lock: number;
   stake: number;
   unstake: number;
@@ -147,10 +155,10 @@ export interface GoldilendInitialState {
   lendActiveToggle: string;
   changeLendActiveToggle: (_toggle: string) => void;
   refreshGoldilendInfo: () => void;
-  refreshClaimable: () => void;
-  getGoldilendBorrowInfo: () => void;
+  refreshGoldilendWalletInfo: () => void;
   infoLoading: boolean;
   setInfoLoading: (_loading: boolean) => void;
+  walletInfoLoading: boolean;
   loansLoading: boolean;
   setLoansLoading: (_loading: boolean) => void;
   allowanceButtons: boolean;
@@ -164,11 +172,14 @@ export interface GoldilendInitialState {
   setSelectScreen: (_screen: boolean) => void;
   chartOpen: boolean;
   setChartOpen: (_open: boolean) => void;
+  wutPopup: boolean;
+  setWutPopup: (_popup: boolean) => void;
+  boostPopup: boolean;
+  setBoostPopup: (_popup: boolean) => void;
   balanceMobileToggle: boolean;
   setBalanceMobileToggle: (_toggle: boolean) => void;
   handleBeraClick: (_bera: BeraInfo) => void;
   handlePartnerClick: (_partner: PartnerInfo) => void;
-  findSelectedBeraIdx: () => number;
   findSelectedPartnerIdxs: () => number[];
   updateBorrowLimit: () => void;
   updateBoostMag: () => void;

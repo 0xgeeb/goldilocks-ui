@@ -1,6 +1,5 @@
-import { useGoldilend, useWallet } from "../../../providers"
-import { LendNotificationMobile } from "../"
-import { LendWalletBalanceMobilePopup } from "../../utils"
+import { useGoldilend } from "../../../providers"
+import { LendNotificationMobile, LendWalletBalanceMobilePopup } from "../"
 
 export const StakeTabMobile = () => {
 
@@ -12,15 +11,13 @@ export const StakeTabMobile = () => {
     handleStakeChange,
     lendActiveToggle,
     handleStakeBalance,
-    balanceMobileToggle
+    balanceMobileToggle,
+    walletInfoLoading
   } = useGoldilend()
-
-  const { balancesLoading } = useWallet()
 
   const loadingElement = () => {
     return <span className="loader-small ml-3"></span>
   }
-
 
   return (
     txConfirming ? <img className="w-[100%] h-[100%]" src="/images/bg-transaction-mobile-small.png" alt="tx" /> :
@@ -69,7 +66,7 @@ export const StakeTabMobile = () => {
           />
         </div>
       </div>
-      <span className="absolute bottom-[2%] right-[3%] font-baloo font-bold text-[4vw] text-[#7F7F7F]">{lendActiveToggle === "UNSTAKE" ? "staked gibgt" : "balance"}: { balancesLoading ? loadingElement() : handleStakeBalance('STAKE') }</span>
+      <span className="absolute bottom-[2%] right-[3%] font-baloo font-bold text-[4vw] text-[#7F7F7F]">{lendActiveToggle === "UNSTAKE" ? "staked gibgt" : "balance"}: { walletInfoLoading ? loadingElement() : handleStakeBalance('STAKE') }</span>
     </div>
   )
 }

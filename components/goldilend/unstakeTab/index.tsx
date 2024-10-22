@@ -1,4 +1,4 @@
-import { useGoldilend, useWallet } from "../../../providers"
+import { useGoldilend } from "../../../providers"
 import { LendNotification } from "../../goldilend"
 
 export const UnstakeTab = () => {
@@ -10,10 +10,9 @@ export const UnstakeTab = () => {
     handleStakeChange,
     handleStakeBalance,
     txConfirming,
-    notification
+    notification,
+    walletInfoLoading
   } = useGoldilend()
-
-  const { balancesLoading } = useWallet()
 
   const loadingElement = () => {
     return <span className="loader-small ml-3"></span>
@@ -63,7 +62,7 @@ export const UnstakeTab = () => {
             value={displayString}
             onChange={(e) => handleStakeChange(e.target.value, 'UNSTAKE')}
           />
-          <span className="absolute bottom-0 right-[3%] font-baloo font-bold text-[1.8vw] xl:text-[0.9vw] text-[#7F7F7F]">{lendActiveToggle === "UNSTAKE" ? "staked gibgt" : "balance"}: {balancesLoading ? loadingElement() : handleStakeBalance('UNSTAKE')}</span>
+          <span className="absolute bottom-0 right-[3%] font-baloo font-bold text-[1.8vw] xl:text-[0.9vw] text-[#7F7F7F]">{lendActiveToggle === "UNSTAKE" ? "staked gibgt" : "balance"}: {walletInfoLoading ? loadingElement() : handleStakeBalance('UNSTAKE')}</span>
         </div>
       </div>
     </div>

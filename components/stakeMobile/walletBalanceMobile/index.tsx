@@ -1,17 +1,10 @@
 "use client"
 
-import { useEffect } from "react"
-import { useStake, useWallet } from "../../../providers"
+import { useStake } from "../../../providers"
 
 export const WalletBalanceMobile = () => {
 
   const { balanceMobileToggle, setBalanceMobileToggle } = useStake()
-
-  const { refreshBalances, isConnected } = useWallet()
-
-  useEffect(() => {
-    refreshBalances()
-  }, [isConnected])
 
   return (
     <div

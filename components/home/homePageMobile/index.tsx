@@ -20,7 +20,7 @@ export const HomePageMobile = () => {
               <a href="https://goldilocks.gitbook.io/docs" target="_blank" className="hover:scale-[150%] cursor-pointer"><span>Wut Is This?</span></a>
               <a href="/goldiswap/swap" className="hover:scale-[150%] cursor-pointer"><span>Goldiswap</span></a>
               <a href="/goldilend/borrow" className="hover:scale-[150%] cursor-pointer"><span>Goldilend</span></a>
-              <a href="/goldivaults" className="hover:scale-[150%] cursor-pointer"><span>Goldivaults</span></a>
+              <a href="/goldivault/vaults" className="hover:scale-[150%] cursor-pointer"><span>Goldivaults</span></a>
             </div>
             <div className="w-[50%] h-[10%] flex flex-row items-center justify-between">
               <h1 className="font-amaticbold text-[7vw]">ooga booga</h1>
@@ -88,7 +88,7 @@ export const HomePageMobile = () => {
               <h2 className="mx-[2%] font-amaticbold text-[8vw]">GOLDIVAULTS</h2>
             </div>
             <h2 className="text-[6.5vw]">where beras split their tokens</h2> */}
-            <a className="h-[20%] w-[55%] border-2 border-[#FFCD00] mt-[5%]" href="/goldivaults">
+            <a className="h-[20%] w-[55%] border-2 border-[#FFCD00] mt-[5%]" href="/goldivault/vaults">
               <div className="flex items-center justify-center text-[8vw]">
                 ENTER
               </div>

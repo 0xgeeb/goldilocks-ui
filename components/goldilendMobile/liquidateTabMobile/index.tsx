@@ -1,8 +1,9 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { ConnectButton } from "@rainbow-me/rainbowkit"
-import { useGoldilend, useWallet } from "../../../providers"
+import { useAccount } from "wagmi"
+import { useGoldilend } from "../../../providers"
 import { LendNotificationMobile } from "../../goldilendMobile"
 import { useGoldilendTx } from "../../../hooks"
 import { contracts } from "../../../utils/addressi"
@@ -24,11 +25,11 @@ export const LiquidateTabMobile = () => {
     infoLoading,
     liquidatableLoans,
     findLiquidatableLoans,
-    setInfoLoading,
     txConfirming,
     setTxConfirming,
     notification,
-    openNotification
+    openNotification,
+    goldilendWalletInfo
   } = useGoldilend()
 
   const {
@@ -37,13 +38,7 @@ export const LiquidateTabMobile = () => {
     sendLiquidateTx
   } = useGoldilendTx()
 
-  const { wallet, balance, refreshBalances, isConnected } = useWallet()
-
-  useEffect(() => {
-    findLiquidatableLoans()
-    refreshBalances()
-    setInfoLoading(false)
-  }, [isConnected])
+  const { address } = useAccount()
 
   const loadingElement = () => {
     return <span className="loader-small mx-auto my-auto"></span>
@@ -85,12 +80,12 @@ export const LiquidateTabMobile = () => {
       button && (button.innerHTML = "no amount")
       return
     }
-    if(amt > balance.ibgt) {
+    if(amt > goldilendWalletInfo.ibgt) {
       button && (button.innerHTML = "no balance")
       return
     }
     else {
-      const sufficientAllowance: boolean | void = await checkRepayAllowance(amt, wallet)
+      const sufficientAllowance: boolean | void = await checkRepayAllowance(amt, address as `0x${string}`)
       if(sufficientAllowance) {
         setTxConfirming(true)
         if(button) {

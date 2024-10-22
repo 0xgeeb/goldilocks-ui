@@ -2,7 +2,8 @@
 
 import { useState } from "react"
 import { ConnectButton } from "@rainbow-me/rainbowkit"
-import { useGoldilend, useWallet } from "../../../providers"
+import { useAccount } from "wagmi"
+import { useGoldilend } from "../../../providers"
 import { useGoldilendTx } from "../../../hooks"
 import { BorrowNotification } from "../../goldilend"
 import { contracts } from "../../../utils/addressi"
@@ -29,8 +30,9 @@ export const RepayTab = () => {
     setTxConfirming,
     notification,
     openNotification,
-    ibgtBalance,
-    getGoldilendBorrowInfo
+    refreshGoldilendInfo,
+    refreshGoldilendWalletInfo,
+    goldilendWalletInfo
   } = useGoldilend()
 
   const {
@@ -39,7 +41,7 @@ export const RepayTab = () => {
     sendiBGTApproveTx
   } = useGoldilendTx()
 
-  const { wallet, isConnected } = useWallet()
+  const { address, isConnected } = useAccount()
 
   const loadingElement = () => {
     return <span className="loader-small mx-auto my-auto"></span>
@@ -89,7 +91,8 @@ export const RepayTab = () => {
     })
     setInputValues(newValues)
     findLoans()
-    getGoldilendBorrowInfo()
+    refreshGoldilendInfo()
+    refreshGoldilendWalletInfo()
   }
 
   const handleButtonClick = async (loanId: number, amt: number, borrowedAmt: number) => {
@@ -98,19 +101,19 @@ export const RepayTab = () => {
       button && (button.innerHTML = "no amount")
       return
     }
-    if(amt > ibgtBalance) {
+    if(amt > goldilendWalletInfo.ibgt) {
       button && (button.innerHTML = "no balance")
       return
     }
     else {
-      const sufficientAllowance: boolean | void = await checkRepayAllowance(amt, wallet)
+      const sufficientAllowance: boolean | void = await checkRepayAllowance(amt, address as `0x${string}`)
       if(sufficientAllowance) {
         setTxConfirming(true)
         if(button) {
           button.innerHTML = "confirming..."
           setButtonLoadingColor(true)
         }
-        const repayTx = await sendRepayTx(amt, loanId, amt == borrowedAmt, wallet)
+        const repayTx = await sendRepayTx(amt, loanId, amt == borrowedAmt, address as `0x${string}`)
         if(repayTx.substring(0, 2) === '0x') {
           setTxConfirming(false)
           openNotification(

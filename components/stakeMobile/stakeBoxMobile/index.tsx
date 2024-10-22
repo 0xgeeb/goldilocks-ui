@@ -1,6 +1,6 @@
 "use client"
 
-import { useStake, useWallet } from "../../../providers"
+import { useStake } from "../../../providers"
 import { ChartSmallMobile } from "../../utils"
 import {
   WalletBalanceMobilePopup,
@@ -21,10 +21,9 @@ export const StakeBoxMobile = () => {
     handleBalanceLabel,
     balanceMobileToggle,
     stir,
-    stakeInfo
+    stakeInfo,
+    walletInfoLoading
   } = useStake()
-
-  const { balancesLoading } = useWallet()
 
   const loadingElement = () => {
     return <span className="loader-small ml-3"></span>
@@ -90,7 +89,7 @@ export const StakeBoxMobile = () => {
               </div>
             </div>
             <span className="absolute bottom-[2%] right-[3%] font-baloo font-bold text-[4vw] text-[#7F7F7F]">
-              {handleBalanceLabel()}: {balancesLoading ? loadingElement() : handleBalance()}
+              {handleBalanceLabel()}: {walletInfoLoading ? loadingElement() : handleBalance()}
             </span>
             { activeToggle === 'STIR' && <span className="absolute bottom-[9%] font-baloo font-semibold right-[3%] z-50 text-[4vw] text-[#7F7F7F]">$honey cost to stir: {formatAsString(stir * (stakeInfo.fsl / stakeInfo.supply))}</span> }
           </div>

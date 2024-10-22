@@ -79,12 +79,26 @@ export const NavBarButtons = () => {
             </> :
             <a href="/goldilend/borrow" className="hover:scale-[150%] cursor-pointer"><span>Goldilend</span></a>
           }
-          <a href="/goldivaults" className="hover:scale-[150%] cursor-pointer"><span>Goldivaults</span></a>
+          {
+            pathname === '/goldivault/vaults' ?
+            <>
+              <a className="text-[#DB7200]"><span>Goldivaults</span></a>
+              <a href="/goldivault/vaults" className="hover:scale-[150%] cursor-pointer text-[#DB7200] underline underline-offset-8 text-[7vw]"><span>Vaults</span></a>
+              <a href="/goldivault/pools" className="hover:scale-[150%] cursor-pointer text-[7vw]"><span>Pools</span></a>
+            </> :
+            pathname === '/goldivault/pools' ?
+            <>
+              <a className="text-[#DB7200]"><span>Goldivaults</span></a>
+              <a href="/goldivault/vaults" className="hover:scale-[150%] cursor-pointer text-[7vw]"><span>Vaults</span></a>
+              <a href="/goldivault/pools" className="hover:scale-[150%] cursor-pointer text-[#DB7200] underline underline-offset-8 text-[7vw]"><span>Pools</span></a>
+            </> :
+            <a href="/goldivault/vaults" className="hover:scale-[150%] cursor-pointer"><span>Goldivaults</span></a>
+          }
         </div>
         <div className="w-[50%] h-[10%] flex flex-row items-center justify-between">
           <h1 className="font-amaticbold text-[7vw]">ooga booga</h1>
           <div className="h-[100%] w-[40%] mt-2 flex flex-row items-center">
-            <a className="hover:scale-[150%] cursor-pointer w-[55%] mr-2" href="https:x.com/goldilocksmoney" target="_blank"><img className="" src="/images/icon-x-dark.png" alt="twitter" /></a>
+            <a className="hover:scale-[150%] cursor-pointer w-[55%] mr-2" href="https://x.com/goldilocksmoney" target="_blank"><img className="" src="/images/icon-x-dark.png" alt="twitter" /></a>
             <a className="hover:scale-[150%] cursor-pointer w-[30%]" href="https://discord.gg/3cdn88Mbq8" target="_blank"><img className="" src="/images/icon-discord-dark.png" alt="discord" /></a>
           </div>
         </div>

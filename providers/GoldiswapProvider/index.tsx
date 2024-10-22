@@ -3,8 +3,8 @@
 import { createContext, PropsWithChildren, useContext, useState } from "react"
 import { readContract } from "@wagmi/core"
 import { formatEther } from "viem"
+import { useAccount } from "wagmi"
 import { useDebounce, useGoldiswapMath } from "../../hooks"
-import { useWallet } from "../../providers"
 import { config } from "../../providers/WagmiProvider"
 import { contracts } from "../../utils/addressi"
 
@@ -15,7 +15,17 @@ const INITIAL_STATE = {
     psl: 0,
     supply: 0,
     targetRatio: 0,
-    lastFloorRaise: 0,
+    lastFloorRaise: 0
+  },
+  
+  goldiswapWalletInfo: {
+    locks: 0,
+    honey: 0,
+    prg: 0,
+    staked: 0,
+    locked: 0,
+    borrowed: 0,
+    claimable: 0,
     honeySwapAllowance: 0
   },
 
@@ -119,15 +129,19 @@ const INITIAL_STATE = {
   handleBottomChange: (_input: string) => {},
 
   refreshGoldiswapInfo: async () => {},
+  refreshGoldiswapWalletInfo: async () => {},
 
-  infoLoading: true,
-  setInfoLoading: (_loading: boolean) => {},
+  infoLoading: false,
+  walletInfoLoading: false,
 
   buyingLocksLoading: false,
   setBuyingLocksLoading: (_loading: boolean) => {},
 
   txConfirming: false,
   setTxConfirming: (_confirming: boolean) => {},
+
+  wutPopup: false,
+  setWutPopup: (_popup: boolean) => {},
 
   balanceMobileToggle: false,
   setBalanceMobileToggle: (_toggle: boolean) => {},
@@ -141,11 +155,12 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
 
   const { children } = props
 
-  const { balance, wallet, isConnected, updateBalanceAllowance } = useWallet()
+  const { address, isConnected } = useAccount()
 
   const { simulateBuyDry, simulateSellDry, floorPrice, marketPrice } = useGoldiswapMath()
 
   const [goldiswapInfoState, setGoldiswapInfoState] = useState(INITIAL_STATE.goldiswapInfo)
+  const [goldiswapWalletInfoState, setGoldiswapWalletInfoState] = useState(INITIAL_STATE.goldiswapWalletInfo)
   const [slippageState, setSlippageState] = useState(INITIAL_STATE.slippage)
   const [notificationState, setNotificationState] = useState(INITIAL_STATE.notification)
 
@@ -169,9 +184,11 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
   const [chartDataState, setChartDataState] = useState<{[x: string]: number, value: number}[]>(INITIAL_STATE.chartData)
   const [chartOpenState, setChartOpenState] = useState<boolean>(INITIAL_STATE.chartOpen)
   const [infoLoadingState, setInfoLoadingState] = useState<boolean>(INITIAL_STATE.infoLoading)
+  const [walletInfoLoadingState, setWalletInfoLoadingState] = useState<boolean>(INITIAL_STATE.walletInfoLoading)
   const [buyingLocksLoadingState, setBuyingLocksLoadingState] = useState<boolean>(INITIAL_STATE.buyingLocksLoading)
   const [txConfirmingState, setTxConfirmingState] = useState<boolean>(INITIAL_STATE.txConfirming)
   const [balanceMobileToggleState, setBalanceMobileToggleState] = useState<boolean>(INITIAL_STATE.balanceMobileToggle)
+  const [wutPopupState, setWutPopupState] = useState<boolean>(INITIAL_STATE.wutPopup)
 
   const [redeemPopupToggleState, setRedeemPopupToggleState] = useState<boolean>(INITIAL_STATE.redeemPopupToggle)
 
@@ -235,58 +252,58 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
     if(!isConnected) return
     if(action == 1) {
       if(activeToggleState === 'BUY') {
-        setDisplayStringState((balance.honey / 4).toFixed(4))
-        setHoneyBuyState(balance.honey / 4)
+        setDisplayStringState((goldiswapWalletInfoState.honey / 4).toFixed(4))
+        setHoneyBuyState(goldiswapWalletInfoState.honey / 4)
       }
       if(activeToggleState === 'SELL') {
-        setDisplayStringState((balance.locks / 4).toFixed(4))
-        setSellingLocksState(balance.locks / 4)
+        setDisplayStringState((goldiswapWalletInfoState.locks / 4).toFixed(4))
+        setSellingLocksState(goldiswapWalletInfoState.locks / 4)
       }
       if(activeToggleState === 'REDEEM') {
-        setDisplayStringState((balance.locks / 4).toFixed(4))
-        setRedeemingLocksState(balance.locks / 4)
+        setDisplayStringState((goldiswapWalletInfoState.locks / 4).toFixed(4))
+        setRedeemingLocksState(goldiswapWalletInfoState.locks / 4)
       }
     }
     if(action == 2) {
       if(activeToggleState === 'BUY') {
-        setDisplayStringState((balance.honey / 2).toFixed(4))
-        setHoneyBuyState(balance.honey / 2)
+        setDisplayStringState((goldiswapWalletInfoState.honey / 2).toFixed(4))
+        setHoneyBuyState(goldiswapWalletInfoState.honey / 2)
       }
       if(activeToggleState === 'SELL') {
-        setDisplayStringState((balance.locks / 2).toFixed(4))
-        setSellingLocksState(balance.locks / 2)
+        setDisplayStringState((goldiswapWalletInfoState.locks / 2).toFixed(4))
+        setSellingLocksState(goldiswapWalletInfoState.locks / 2)
       }
       if(activeToggleState === 'REDEEM') {
-        setDisplayStringState((balance.locks / 2).toFixed(4))
-        setRedeemingLocksState(balance.locks / 2)
+        setDisplayStringState((goldiswapWalletInfoState.locks / 2).toFixed(4))
+        setRedeemingLocksState(goldiswapWalletInfoState.locks / 2)
       }
     }
     if(action == 3) {
       if(activeToggleState === 'BUY') {
-        setDisplayStringState((balance.honey * 0.75).toFixed(4))
-        setHoneyBuyState(balance.honey * 0.75)
+        setDisplayStringState((goldiswapWalletInfoState.honey * 0.75).toFixed(4))
+        setHoneyBuyState(goldiswapWalletInfoState.honey * 0.75)
       }
       if(activeToggleState === 'SELL') {
-        setDisplayStringState((balance.locks * 0.75).toFixed(4))
-        setSellingLocksState(balance.locks * 0.75)
+        setDisplayStringState((goldiswapWalletInfoState.locks * 0.75).toFixed(4))
+        setSellingLocksState(goldiswapWalletInfoState.locks * 0.75)
       }
       if(activeToggleState === 'REDEEM') {
-        setDisplayStringState((balance.locks * 0.75).toFixed(4))
-        setRedeemingLocksState(balance.locks * 0.75)
+        setDisplayStringState((goldiswapWalletInfoState.locks * 0.75).toFixed(4))
+        setRedeemingLocksState(goldiswapWalletInfoState.locks * 0.75)
       }
     }
     if(action == 4) {
       if(activeToggleState === 'BUY') {
-        setDisplayStringState(balance.honey.toFixed(4))
-        setHoneyBuyState(balance.honey - 0.0001)
+        setDisplayStringState(goldiswapWalletInfoState.honey.toFixed(4))
+        setHoneyBuyState(goldiswapWalletInfoState.honey - 0.0001)
       }
       if(activeToggleState === 'SELL') {
-        setDisplayStringState(balance.locks.toFixed(4))
-        setSellingLocksState(balance.locks - 0.0001)
+        setDisplayStringState(goldiswapWalletInfoState.locks.toFixed(4))
+        setSellingLocksState(goldiswapWalletInfoState.locks - 0.0001)
       }
       if(activeToggleState === 'REDEEM') {
-        setDisplayStringState(balance.locks.toFixed(4))
-        setRedeemingLocksState(balance.locks - 0.0001)
+        setDisplayStringState(goldiswapWalletInfoState.locks.toFixed(4))
+        setRedeemingLocksState(goldiswapWalletInfoState.locks - 0.0001)
       }
     }
   }
@@ -579,19 +596,19 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
 
   const handleTopBalance = (): string => {
     if(activeToggleState === 'BUY') {
-      return balance.honey > 0 ? balance.honey.toLocaleString('en-US', { maximumFractionDigits: 4 }) : "0.00"      
+      return goldiswapWalletInfoState.honey > 0 ? goldiswapWalletInfoState.honey.toLocaleString('en-US', { maximumFractionDigits: 4 }) : "0.00"      
     }
     else {
-      return balance.locks > 0 ? balance.locks.toLocaleString('en-US', { maximumFractionDigits: 4 }) : "0.00"
+      return goldiswapWalletInfoState.locks > 0 ? goldiswapWalletInfoState.locks.toLocaleString('en-US', { maximumFractionDigits: 4 }) : "0.00"
     }
   }
 
   const handleBottomBalance = (): string => {
     if(activeToggleState === 'BUY') {
-      return balance.locks > 0 ? balance.locks.toLocaleString('en-US', { maximumFractionDigits: 4 }) : "0.00"
+      return goldiswapWalletInfoState.locks > 0 ? goldiswapWalletInfoState.locks.toLocaleString('en-US', { maximumFractionDigits: 4 }) : "0.00"
     }
     else {
-      return balance.honey > 0 ? balance.honey.toLocaleString('en-US', { maximumFractionDigits: 4 }) : "0.00"      
+      return goldiswapWalletInfoState.honey > 0 ? goldiswapWalletInfoState.honey.toLocaleString('en-US', { maximumFractionDigits: 4 }) : "0.00"      
     }
   }
 
@@ -639,6 +656,7 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
   }
 
   const refreshGoldiswapInfo = async () => {
+    setInfoLoadingState(true)
     const fslResult = await readContract(config, {
       address: contracts.goldiswap.address as `0x${string}`,
       abi: contracts.goldiswap.abi,
@@ -664,23 +682,13 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
       abi: contracts.goldiswap.abi,
       functionName: 'lastFloorIncrease',
     })
-    let honeySwapAllowanceResult
-    if(wallet) {
-      honeySwapAllowanceResult = await readContract(config, {
-        address: contracts.honey.address as `0x${string}`,
-        abi: contracts.honey.abi,
-        functionName: 'allowance',
-        args: [wallet, contracts.goldiswap.address]
-      })
-    }
 
     const response = {
       fsl: parseFloat(formatEther(fslResult as unknown as bigint)),
       psl: parseFloat(formatEther(pslResult as unknown as bigint)),
       supply: parseFloat(formatEther(supplyResult as unknown as bigint)),
       targetRatio: parseFloat(formatEther(ratioResult as unknown as bigint)),
-      lastFloorRaise: parseFloat(formatEther(lastFloorRaiseResult as unknown as bigint)),
-      honeySwapAllowance: wallet ? parseFloat(formatEther(honeySwapAllowanceResult as unknown as bigint)) : 0
+      lastFloorRaise: parseFloat(formatEther(lastFloorRaiseResult as unknown as bigint))
     }
 
     const simResponse = {
@@ -698,6 +706,74 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
     setInfoLoadingState(false)
   }
 
+  const refreshGoldiswapWalletInfo = async () => {
+    if(address) {
+      setWalletInfoLoadingState(true)
+      const locksBalance = await readContract(config, {
+        address: contracts.goldiswap.address as `0x${string}`,
+        abi: contracts.goldiswap.abi,
+        functionName: 'balanceOf',
+        args: [address]
+      })
+      const porridgeBalance = await readContract(config, {
+        address: contracts.goldilocked.address as `0x${string}`,
+        abi: contracts.goldilocked.abi,
+        functionName: 'balanceOf',
+        args: [address]
+      })
+      const honeyBalance = await readContract(config, {
+        address: contracts.honey.address as `0x${string}`,
+        abi: contracts.honey.abi,
+        functionName: 'balanceOf',
+        args: [address]
+      })
+      const stakedBalance = await readContract(config, {
+        address: contracts.goldilocked.address as `0x${string}`,
+        abi: contracts.goldilocked.abi,
+        functionName: 'userStakedLocks',
+        args: [address]
+      })
+      const claimableBalance = await readContract(config, {
+        address: contracts.goldilocked.address as `0x${string}`,
+        abi: contracts.goldilocked.abi,
+        functionName: 'userClaimablePrg',
+        args: [address]
+      })
+      const lockedBalance = await readContract(config, {
+        address: contracts.goldilocked.address as `0x${string}`,
+        abi: contracts.goldilocked.abi,
+        functionName: 'userLockedLocks',
+        args: [address]
+      })
+      const borrowedBalance = await readContract(config, {
+        address: contracts.goldilocked.address as `0x${string}`,
+        abi: contracts.goldilocked.abi,
+        functionName: 'userBorrowedHoney',
+        args: [address]
+      })
+      const honeySwapAllowanceResult = await readContract(config, {
+        address: contracts.honey.address as `0x${string}`,
+        abi: contracts.honey.abi,
+        functionName: 'allowance',
+        args: [address, contracts.goldiswap.address]
+      })
+  
+      const response = {
+        locks: parseFloat(formatEther(locksBalance as unknown as bigint)),
+        honey: parseFloat(formatEther(honeyBalance as unknown as bigint)),
+        prg: parseFloat(formatEther(porridgeBalance as unknown as bigint)),
+        staked: parseFloat(formatEther(stakedBalance as unknown as bigint)),
+        locked: parseFloat(formatEther(lockedBalance as unknown as bigint)),
+        borrowed: parseFloat(formatEther(borrowedBalance as unknown as bigint)),
+        claimable: parseFloat(formatEther(claimableBalance as unknown as bigint)),
+        honeySwapAllowance: parseFloat(formatEther(honeySwapAllowanceResult as unknown as bigint))
+      }
+
+      setGoldiswapWalletInfoState(response)
+      setWalletInfoLoadingState(false)
+    }
+  }
+
   const setSimInfo = (
     toggle: boolean,
     fsl: number,
@@ -711,11 +787,10 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
   }
 
   const updateAllowance = (newAllowance: number) => {
-    // setGoldiswapInfoState(prevState => ({
-    //   ...prevState,
-    //   honeySwapAllowance: newAllowance
-    // }))
-    updateBalanceAllowance('honeySwapAllowance', newAllowance)
+    setGoldiswapWalletInfoState(prevState => ({
+      ...prevState,
+      honeySwapAllowance: newAllowance
+    }))
   }
 
   const openNotification = (toggle: boolean, action: string, result: string, hash: string) => {
@@ -774,6 +849,7 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
     <GoldiswapContext.Provider
       value={{
         goldiswapInfo: goldiswapInfoState,
+        goldiswapWalletInfo: goldiswapWalletInfoState,
         slippage: slippageState,
         honeyBuy: honeyBuyState,
         debouncedHoneyBuy: debouncedHoneyBuyState,
@@ -802,8 +878,9 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
         handleBottomBalance,
         handleTopChange,
         refreshGoldiswapInfo,
+        refreshGoldiswapWalletInfo,
         infoLoading: infoLoadingState,
-        setInfoLoading: setInfoLoadingState,
+        walletInfoLoading: walletInfoLoadingState,
         allowanceButtons: allowanceButtonsState,
         setAllowanceButtons: setAllowanceButtonsState,
         simInfo: simInfoState,
@@ -834,7 +911,9 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
         balanceMobileToggle: balanceMobileToggleState,
         setBalanceMobileToggle: setBalanceMobileToggleState,
         chartData: chartDataState,
-        updateChartData
+        updateChartData,
+        wutPopup: wutPopupState,
+        setWutPopup: setWutPopupState
       }}
     >
       { children }

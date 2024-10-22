@@ -1,7 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useGoldilend, useWallet } from "../../../providers"
+import { useAccount } from "wagmi"
+import { useGoldilend } from "../../../providers"
 import { LendNotificationMobile } from "../../goldilendMobile"
 
 export const BorrowTabMobile = () => {
@@ -12,7 +13,6 @@ export const BorrowTabMobile = () => {
     ownedBeras,
     handleBeraClick,
     infoLoading,
-    findSelectedBeraIdx,
     selectedBera,
     borrowLimit,
     updateBorrowLimit,
@@ -34,7 +34,7 @@ export const BorrowTabMobile = () => {
     setLoanInterestRate
   } = useGoldilend()
 
-  const { isConnected } = useWallet()
+  const { isConnected } = useAccount()
 
   useEffect(() => {
     updateBorrowLimit()

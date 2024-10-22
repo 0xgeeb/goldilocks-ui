@@ -1,6 +1,5 @@
-import { useGoldilend, useWallet } from "../../../providers"
-import { LendNotificationMobile } from "../"
-import { LendWalletBalanceMobilePopup } from "../../utils"
+import { useGoldilend } from "../../../providers"
+import { LendNotificationMobile, LendWalletBalanceMobilePopup } from "../"
 
 export const LockTabMobile = () => {
 
@@ -12,10 +11,9 @@ export const LockTabMobile = () => {
     handleStakeChange,
     lendActiveToggle,
     handleStakeBalance,
-    balanceMobileToggle
+    balanceMobileToggle,
+    walletInfoLoading
   } = useGoldilend()
-
-  const { balancesLoading } = useWallet()
 
   const loadingElement = () => {
     return <span className="loader-small ml-3"></span>
@@ -68,7 +66,7 @@ export const LockTabMobile = () => {
           />
         </div>
       </div>
-      <span className="absolute bottom-[2%] right-[3%] font-baloo font-bold text-[4vw] text-[#7F7F7F]">{lendActiveToggle === "UNSTAKE" ? "staked gibgt" : "balance"}: { balancesLoading ? loadingElement() : handleStakeBalance('LOCK') }</span>
+      <span className="absolute bottom-[2%] right-[3%] font-baloo font-bold text-[4vw] text-[#7F7F7F]">{lendActiveToggle === "UNSTAKE" ? "staked gibgt" : "balance"}: { walletInfoLoading ? loadingElement() : handleStakeBalance('LOCK') }</span>
     </div>
   )
 }

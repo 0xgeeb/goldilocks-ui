@@ -7,7 +7,6 @@ import { useGoldiswapMath } from "../../../hooks/useGoldiswapMath"
 import { BorrowPageMobile } from "../../borrowMobile"
 import { 
   NavBar,
-  WalletBalance,
   Footer,
   Loading,
   ChangeChain,
@@ -18,7 +17,8 @@ import {
   BorrowButton,
   Toggles,
   Stats,
-  BorrowPopup
+  BorrowPopup,
+  WalletBalance
 } from "../../borrow"
 
 export const BorrowPage = () => {
@@ -33,7 +33,9 @@ export const BorrowPage = () => {
     borrowInfo,
     borrowPopupToggle,
     setBorrowPopupToggle,
-    activeToggle
+    activeToggle,
+    wutPopup,
+    setWutPopup
   } = useBorrow()
 
   const { isDesktop } = useDesktop()
@@ -97,6 +99,9 @@ export const BorrowPage = () => {
     if(borrowPopupToggle) {
       setBorrowPopupToggle(false)
     }
+    if(wutPopup) {
+      setWutPopup(false)
+    }
   }
   
   return (
@@ -106,7 +111,7 @@ export const BorrowPage = () => {
         <Loading /> :
         isDesktop ?
         <main className="w-screen h-screen" onClick={() => handlePopups()}>
-          <NavBar />
+          <NavBar wutPopup={wutPopup} setWutPopup={setWutPopup} />
           <div className="w-[100%] h-[89%] xl:h-[85%] bg-cover bg-bottom bg-[url('/images/bg-goldiswap.png')] relative">
             <Toggles />
             { borrowPopupToggle && <BorrowPopup /> }
