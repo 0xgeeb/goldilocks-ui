@@ -89,6 +89,7 @@ export const NavBar = ({ wutPopup, setWutPopup }: NavBarProps) => {
             </> :
             pathname === '/goldivault/vault/0x541C4aCA915ccC83B1bf48b510D1653cba61115F' ?
             <>
+              <a className="text-[#DB7200]"><span>Goldivaults</span></a>
               <a href="/goldivault/vaults" className="hover:scale-[150%] cursor-pointer text-[2.1vw] xl:text-[1.6vw]"><span>Vaults</span></a>
               <a href="/goldivault/pools" className="hover:scale-[150%] cursor-pointer text-[2.1vw] xl:text-[1.6vw]"><span>Pools</span></a>
               <a href="/goldivault/vault/0x541C4aCA915ccC83B1bf48b510D1653cba61115F" className="hover:scale-[150%] cursor-pointer text-[#DB7200] underline underline-offset-8 text-[2.1vw] xl:text-[1.6vw]"><span>bHoney</span></a>
