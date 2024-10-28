@@ -121,6 +121,7 @@ export const useGoldivaultTx = () => {
     }
     else {
       try {
+        console.log('trying tx')
         const hash = await writeContract(config, {
           address: contracts.bhoneygoldivault.address as `0x${string}`,
           abi: contracts.bhoneygoldivault.abi,
@@ -131,8 +132,14 @@ export const useGoldivaultTx = () => {
         return data.transactionHash
       }
       catch (e) {
-        console.log('user denied tx')
-        console.log('or: ', e)
+        console.log('catching failed tx')
+        if(findRevert(e)) {
+          return 'revert'
+        }
+        else {
+          console.log('returning nothing')
+          return ''
+        }
       }
     }
 
@@ -232,6 +239,12 @@ export const useGoldivaultTx = () => {
     }
 
     return ''
+  }
+
+  const findRevert = (e: any): boolean => {
+    console.log(e)
+    const regex = /CallExecutionError/
+    return regex.test(e)
   }
 
   return {

@@ -103,7 +103,14 @@ export const VaultButtonBhoney = () => {
           button.innerHTML = "confirming..."
         }
         const depositTx = await sendDepositTx(deposit, 'bhoney')
-        if(depositTx.substring(0, 2) === '0x') {
+        if(depositTx === 'revert') {
+          button && (button.innerHTML = "deposit failed")
+          setTxConfirming(false)
+          setTimeout(() => {
+            button && (button.innerHTML = "deposit")
+          }, 5000)
+        }
+        else if(depositTx.substring(0, 2) === '0x') {
           setTxConfirming(false)
           openNotification(
             true,
