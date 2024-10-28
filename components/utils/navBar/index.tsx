@@ -1,5 +1,6 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit"
 import { usePathname } from "next/navigation"
+import { WutPopup } from "../"
 
 interface NavBarProps {
   wutPopup: boolean;
@@ -14,12 +15,7 @@ export const NavBar = ({ wutPopup, setWutPopup }: NavBarProps) => {
     <>
       {
         wutPopup &&
-        <div className="absolute top-[11%] xl:top-[15%] left-[21.5%] xl:left-[34%] h-[30%] w-[15%] xl:w-[10%] z-50 bg-[#FFE59F] border-b-2 border-r-2 border-l-2 border-black flex flex-col items-center justify-around font-baloo font-semibold text-center px-2 text-[2vw] xl:text-[1.5vw] 2xl:text-[1vw]">
-          <a href="https://goldilocks.gitbook.io/docs" target="_blank"><span className="hover:underline cursor-pointer">docs</span></a>
-          <a href="https://mirror.xyz/0x9F5b6da006a3E13a597A2615AA8849645cC43Ec0" target="_blank"><span className="hover:underline cursor-pointer">mirror</span></a>
-          <a href="https://x.com/goldilocksmoney" target="_blank"><span className="hover:underline cursor-pointer">twitter</span></a>
-          <a href="https://discord.gg/3cdn88Mbq8" target="_blank"><span className="hover:underline cursor-pointer">discord</span></a>
-        </div>
+        <WutPopup />
       }
       <header className="w-[100%] h-[11%] xl:h-[15%] bg-[#EEDCD2] flex flex-row items-center justify-between font-amaticbold px-[2%] xl:px-[4%]">
         <a
