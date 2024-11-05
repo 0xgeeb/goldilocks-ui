@@ -4,6 +4,7 @@ import { createContext, PropsWithChildren, useContext, useState } from "react"
 import { useAccount } from "wagmi"
 import { readContract } from "@wagmi/core"
 import { formatEther } from "viem"
+import { useGoldiswapMath } from "../../hooks"
 import { config } from "../../providers/WagmiProvider"
 import { contracts } from "../../utils/addressi"
 
@@ -87,7 +88,10 @@ const INITIAL_STATE = {
   setBalanceMobileToggle: (_toggle: boolean) => {},
 
   wutPopup: false,
-  setWutPopup: (_popup: boolean) => {}
+  setWutPopup: (_popup: boolean) => {},
+
+  chartData: [] as {[x: string]: number, value: number}[],
+  updateChartData: (_chartData: {}) => {}
 }
 
 const StakeContext = createContext(INITIAL_STATE)
@@ -97,6 +101,8 @@ export const StakeProvider = (props: PropsWithChildren<{}>) => {
   const { children } = props
 
   const { address, isConnected } = useAccount()
+
+  const { marketPrice } = useGoldiswapMath()
 
   const [stakeInfoState, setStakeInfoState] = useState(INITIAL_STATE.stakeInfo)
   const [stakeWalletInfoState, setStakeWalletInfoState] = useState(INITIAL_STATE.stakeWalletInfo)
@@ -113,6 +119,7 @@ export const StakeProvider = (props: PropsWithChildren<{}>) => {
   const [stirPopupToggleState, setStirPopupToggleState] = useState<boolean>(INITIAL_STATE.stirPopupToggle)
   const [unstakePopupToggleState, setUnstakePopupToggleState] = useState<boolean>(INITIAL_STATE.unstakePopupToggle)
 
+  const [chartDataState, setChartDataState] = useState<{[x: string]: number, value: number}[]>(INITIAL_STATE.chartData)
   const [chartOpenState, setChartOpenState] = useState<boolean>(INITIAL_STATE.chartOpen)
   const [infoLoadingState, setInfoLoadingState] = useState<boolean>(INITIAL_STATE.infoLoading)
   const [walletInfoLoadingState, setWalletInfoLoadingState] = useState<boolean>(INITIAL_STATE.walletInfoLoading)
@@ -379,6 +386,49 @@ export const StakeProvider = (props: PropsWithChildren<{}>) => {
     }
   }
 
+  const formatTimestamp = (timestamp: number): string => {
+    const date = new Date(timestamp * 1000); // Convert Unix timestamp to milliseconds
+    const month = (date.getUTCMonth() + 1).toString().padStart(2, '0'); // Get month and add leading zero if needed
+    const day = date.getUTCDate().toString().padStart(2, '0'); // Get day and add leading zero if needed
+
+    return `${month}/${day}`;
+  }
+
+  const updateChartData = (chartData: any) => {
+    let tempChartData: any[] = []
+    const days = ['firstDay', 'secondDay', 'thirdDay', 'fourthDay', 'fifthDay', 'sixthDay', 'seventhDay']
+    for(const day of days) {
+      const dayData = chartData[day]
+      const item = dayData.items[0]
+      if(item) {
+        const result = marketPrice(parseFloat(formatEther(item.fsl)), parseFloat(formatEther(item.psl)), parseFloat(formatEther(item.supply)))
+        tempChartData.push({ [`${day}`]: result, value: result, date: formatTimestamp(item.timestamp) })
+      }
+      else {
+        tempChartData.push({ [`${day}`]: 0, value: 0, date: formatTimestamp(item.timestamp) })
+      }
+    }
+    let fallbackNumber: number | null = null;
+    for(let i = 0; i < tempChartData.length; i++) {
+      if (tempChartData[i][`${days[i]}`] !== 0) {
+        fallbackNumber = tempChartData[i][`${days[i]}`]
+        break
+      }
+    }
+    let farthestNumber: number | null = fallbackNumber
+    for(let i = tempChartData.length - 1; i >= 0; i--) {
+      if(tempChartData[i][`${days[i]}`] !== 0) {
+        farthestNumber = tempChartData[i][`${days[i]}`]
+      }
+      else if(farthestNumber !== null) {
+        tempChartData[i][`${days[i]}`] = farthestNumber
+        tempChartData[i].value = farthestNumber
+      }
+    }
+    
+    setChartDataState(tempChartData)
+  } 
+
   return (
     <StakeContext.Provider
       value={{
@@ -418,7 +468,9 @@ export const StakeProvider = (props: PropsWithChildren<{}>) => {
         balanceMobileToggle: balanceMobileToggleState,
         setBalanceMobileToggle: setBalanceMobileToggleState,
         wutPopup: wutPopupState,
-        setWutPopup: setWutPopupState
+        setWutPopup: setWutPopupState,
+        chartData: chartDataState,
+        updateChartData
       }}
     >
       { children }

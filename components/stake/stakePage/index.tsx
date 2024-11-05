@@ -10,8 +10,7 @@ import {
   NavBar,
   Footer,
   Loading,
-  ChangeChain,
-  LocksFetcher
+  ChangeChain
 } from "../../utils"
 import {
   Toggles,
@@ -21,7 +20,8 @@ import {
   StakeButton,
   WalletBalance,
   UnstakePopup,
-  ClaimTab
+  ClaimTab,
+  LocksFetcher
 } from "../../stake"
 
 export const StakePage = () => {

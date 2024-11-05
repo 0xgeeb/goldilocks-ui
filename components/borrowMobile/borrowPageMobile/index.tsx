@@ -1,6 +1,7 @@
 "use client"
 
 import { useBorrow, useDesktop } from "../../../providers"
+import { LocksFetcher } from "../../borrow"
 import {
   StatsMobile,
   BorrowButtonMobile,
@@ -12,7 +13,6 @@ import {
   NavBarMobile,
   NavBarButtons,
   FooterMobile,
-  LocksFetcher
 } from "../../utils"
 
 export const BorrowPageMobile = () => {

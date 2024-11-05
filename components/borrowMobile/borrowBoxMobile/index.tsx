@@ -1,10 +1,10 @@
 "use client"
 
 import { useBorrow } from "../../../providers"
-import { ChartSmallMobile } from "../../utils"
 import { 
   WalletBalanceMobilePopup,
-  NotificationMobile
+  NotificationMobile,
+  ChartSmallMobile
 } from "../../borrowMobile"
 
 export const BorrowBoxMobile = () => {

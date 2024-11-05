@@ -9,7 +9,8 @@ import {
   Toggles,
   BurnPopup,
   ExpirePopup,
-  InfoPopup
+  InfoPopup,
+  SlippagePopup
 } from "../"
 import {
   VaultBoxBhoney,
@@ -55,19 +56,24 @@ export const VaultPage = ({ params }: Props) => {
     setExpirePopupToggle,
     infoPopupToggle,
     setInfoPopupToggle,
-    activeToggle
+    activeToggle,
+    checkSlippageAmount,
+    slippage,
+    changeSlippageToggle
   } = useGoldivault()
 
   const { isDesktop } = useDesktop()
 
   useEffect(() => {
+    checkSlippageAmount()
     setPageLoading(false)
   }, [])
 
   // if(params.address !== '0x35EF111B092d5faeF321A1aC7e048E378c63DCCc' && params.address !== '0xCfeC57e0a0c8a428E335a4222B1558e30A1F4517') {
   //   notFound()
   // }
-  if(params.address !== '0x541C4aCA915ccC83B1bf48b510D1653cba61115F') {
+  // if(params.address !== '0x541C4aCA915ccC83B1bf48b510D1653cba61115F' && params.address !== '0x281F698b0969904Df5476CC4031B4C886dE86323') {
+    if(params.address !== '0x541C4aCA915ccC83B1bf48b510D1653cba61115F') {
     notFound()
   }
 
@@ -110,7 +116,37 @@ export const VaultPage = ({ params }: Props) => {
     }
   }
 
+  const insideSlippage = (e: any): boolean => {
+    let slipLeft = 0.45
+    let slipRight = 0.64
+    let slipUp = 0.32
+    let slipDown = 0.54
+
+    if(window.innerWidth > 1024) {
+      slipLeft = 0.45
+      slipRight = 0.64
+      slipUp = 0.32
+      slipDown = 0.54
+    }
+    else {
+      slipLeft = 0.33
+      slipRight = 0.70
+      slipUp = 0.33
+      slipDown = 0.53
+    }
+
+    if(e.clientX > (window.innerWidth * slipLeft) && e.clientX < (window.innerWidth * slipRight) && e.clientY > (window.innerHeight * slipUp) && e.clientY < (window.innerHeight * slipDown)) {
+      return true
+    }
+    else {
+      return false
+    }
+  }
+
   const handlePopups = (e: any) => {
+    if(slippage.toggle && !insideSlippage(e)) {
+      changeSlippageToggle(false)
+    }
     if(poolsPopupToggle && !insidePools(e)) {
       setPoolsPopupToggle(false)
     }
@@ -179,6 +215,7 @@ export const VaultPage = ({ params }: Props) => {
             <VaultButtonWeeth />
             <VaultInfoWeeth />
             <TogglesWeeth />
+            { slippage.toggle && <SlippagePopup /> }
           </>
         }
         <Footer />

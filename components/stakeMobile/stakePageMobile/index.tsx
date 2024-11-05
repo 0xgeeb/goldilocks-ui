@@ -1,6 +1,7 @@
 "use client"
 
 import { useStake, useDesktop } from "../../../providers"
+import { LocksFetcher } from "../../stake"
 import {
   StatsMobile,
   StakeButtonMobile,
@@ -12,8 +13,7 @@ import {
 import {
   NavBarMobile,
   NavBarButtons,
-  FooterMobile,
-  LocksFetcher
+  FooterMobile
 } from "../../utils"
 
 export const StakePageMobile = () => {

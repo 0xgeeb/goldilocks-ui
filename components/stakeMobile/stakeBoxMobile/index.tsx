@@ -1,10 +1,10 @@
 "use client"
 
 import { useStake } from "../../../providers"
-import { ChartSmallMobile } from "../../utils"
 import {
   WalletBalanceMobilePopup,
-  NotificationMobile
+  NotificationMobile,
+  ChartSmallMobile
 } from "../../stakeMobile"
 
 export const StakeBoxMobile = () => {

@@ -48,6 +48,23 @@ const INITIAL_STATE: any = {
     bhytRouterAllowance: 0,
     honeyRouterAllowance: 0
   },
+  goldivaultWalletInfoWeeth: {
+    honey: 0,
+    weot: 0,
+    weyt: 0,
+    honeyRouterAllowance: 0,
+    weotRouterAllowance: 0,
+    weytRouterAllowance: 0,
+    honeyVaultAllowance: 0
+  },
+  slippage: {
+    amount: 1,
+    toggle: false,
+    displayString: '1'
+  },
+  changeSlippage: (_amount: number, _displayString: string) => {},
+  changeSlippageToggle: (_toggle: boolean) => {},
+  checkSlippageAmount: () => {},
   notification: {
     toggle: false,
     action: '',
@@ -105,10 +122,12 @@ const INITIAL_STATE: any = {
   refreshGoldivaultInfoBhoney: async () => {},
   refreshGoldivaultWalletInfoBhoney: async () => {},
   refreshGoldivaultInfoWeeth: async () => {},
+  refreshGoldivaultWalletInfoWeeth: async () => {},
   calculateDeposit: async (_vault: string) => {},
   calculateOTRedeem: async () => {},
   calculateYTRedeem: async () => {},
   quoteSwap: async () => {},
+  quoteV3Swap: async () => {},
   burnPopupToggle: false,
   setBurnPopupToggle: (_bool: boolean) => {},
   expirePopupToggle: false,
@@ -143,10 +162,12 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
   const [tradeInputState, setTradeInputState] = useState<number>(INITIAL_STATE.tradeInput)
   const debouncedTradeInputState = useDebounce(tradeInputState, 1000)
   const [tradeOutputState, setTradeOutputState] = useState<number>(INITIAL_STATE.tradeOutput)
+  const [slippageState, setSlippageState] = useState(INITIAL_STATE.slippage)
   const [goldivaultInfoHoneyWberaState, setGoldivaultInfoHoneyWberaState] = useState(INITIAL_STATE.goldivaultInfoHoneyWbera)
   const [goldivaultInfoBhoneyState, setGoldivaultInfoBhoneyState] = useState(INITIAL_STATE.goldivaultInfoBhoney)
   const [goldivaultWalletInfoHoneyWberaState, setGoldivaultWalletInfoHoneyWberaState] = useState(INITIAL_STATE.goldivaultWalletInfoHoneyWbera)
   const [goldivaultWalletInfoBhoneyState, setGoldivaultWalletInfoBhoneyState] = useState(INITIAL_STATE.goldivaultWalletInfoBhoney)
+  const [goldivaultWalletInfoWeethState, setGoldivaultWalletInfoWeethState] = useState(INITIAL_STATE.goldivaultWalletInfoWeeth)
   const [notificationState, setNotificationState] = useState(INITIAL_STATE.notification)
   const [activeToggleState, setActiveToggleState] = useState<string>(INITIAL_STATE.activeToggle)
   const [tradeDirectionState, setTradeDirectionState] = useState<string>(INITIAL_STATE.tradeDirection)
@@ -164,6 +185,27 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
   const [infoPopupToggleState, setInfoPopupToggleState] = useState<boolean>(INITIAL_STATE.infoPopupToggle)
   const [wutPopupState, setWutPopupState] = useState<boolean>(INITIAL_STATE.wutPopup)
   const [infoPopupTextState, setInfoPopupTextState] = useState<string>(INITIAL_STATE.infoPopupText)
+
+  const changeSlippage = (amount: number, displayString: string) => {
+    const updatedState = { ...slippageState }
+    updatedState.amount = amount
+    updatedState.displayString = displayString
+    setSlippageState(updatedState)
+    localStorage.setItem('slippageAmount', amount.toString())
+  }
+
+  const changeSlippageToggle = (toggle: boolean) => {
+    const updatedState = { ...slippageState }
+    updatedState.toggle = toggle
+    setSlippageState(updatedState)
+  }
+
+  const checkSlippageAmount = () => {
+    const storedSlippageAmount = localStorage.getItem('slippageAmount')
+    if(storedSlippageAmount !== null) {
+      changeSlippage(parseFloat(storedSlippageAmount), storedSlippageAmount)
+    }
+  }
 
   const refreshGoldivaultInfoHoneyWbera = async () => {
     setInfoLoadingState(true)
@@ -518,6 +560,67 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
     setInfoLoadingState(false)
   }
 
+  const refreshGoldivaultWalletInfoWeeth = async () => {
+    if(address) {
+      setWalletInfoLoadingState(true)
+      const honeyBalResult = await readContract(config, {
+        address: contracts.honey.address as `0x${string}`,
+        abi: contracts.honey.abi,
+        functionName: 'balanceOf',
+        args: [address]
+      })
+      const weotBalResult = await readContract(config, {
+        address: contracts.weot.address as `0x${string}`,
+        abi: contracts.weot.abi,
+        functionName: 'balanceOf',
+        args: [address]
+      })
+      const weytBalResult = await readContract(config, {
+        address: contracts.weyt.address as `0x${string}`,
+        abi: contracts.weyt.abi,
+        functionName: 'balanceOf',
+        args: [address]
+      })
+      const honeyAllResult = await readContract(config, {
+        address: contracts.honey.address as `0x${string}`,
+        abi: contracts.honey.abi,
+        functionName: 'allowance',
+        args: [address, contracts.routerv2.address]
+      })
+      const honeyVaultAllResult = await readContract(config, {
+        address: contracts.honey.address as `0x${string}`,
+        abi: contracts.honey.abi,
+        functionName: 'allowance',
+        args: [address, contracts.weethVault.address]
+      })
+      const weotAllResult = await readContract(config, {
+        address: contracts.weot.address as `0x${string}`,
+        abi: contracts.weot.abi,
+        functionName: 'allowance',
+        args: [address, contracts.routerv2.address]
+      })
+      const weytAllResult = await readContract(config, {
+        address: contracts.weyt.address as `0x${string}`,
+        abi: contracts.weyt.abi,
+        functionName: 'allowance',
+        args: [address, contracts.routerv2.address]
+      })
+
+      const response = {
+        honey: parseFloat(formatEther(honeyBalResult as unknown as bigint)),
+        weot: parseFloat(formatEther(weotBalResult as unknown as bigint)),
+        weyt: parseFloat(formatEther(weytBalResult as unknown as bigint)),
+        honeyRouterAllowance: parseFloat(formatEther(honeyAllResult as unknown as bigint)),
+        weotRouterAllowance: parseFloat(formatEther(weotAllResult as unknown as bigint)),
+        weytRouterAllowance: parseFloat(formatEther(weytAllResult as unknown as bigint)),
+        honeyVaultAllowance: parseFloat(formatEther(honeyVaultAllResult as unknown as bigint))
+      }
+
+      setGoldivaultWalletInfoWeethState(response)
+      setWalletInfoLoadingState(false)
+    }
+  }
+
   const handleChange = (input: string) => {
     if(activeToggleState === 'DEPOSIT') {
       setDisplayStringState(input)
@@ -565,6 +668,40 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       else {
         setDisplayStringState(goldivaultWalletInfoHoneyWberaState.wbera.toFixed(4))
         setTradeInputState(goldivaultWalletInfoHoneyWberaState.wbera)
+        setOutputTokensLoadingState(true)
+      }
+    }
+    else if(vault === 'weeth') {
+      if(activeToggleState === 'DEPOSIT') {
+        setDisplayStringState(goldivaultWalletInfoWeethState.honey.toFixed(4))
+        setDepositState(goldivaultWalletInfoWeethState.honey)
+        setOutputTokensLoadingState(true)
+      }
+      else if(activeToggleState === 'REDEEMOT') {
+        setDisplayStringState(goldivaultWalletInfoWeethState.weot.toFixed(4))
+        setRedeemOTState(goldivaultWalletInfoWeethState.weot)
+        setOutputTokensLoadingState(true)
+      }
+      else {
+        let num
+        if(activeToggleState === 'TRADEOT') {
+          if(tradeDirectionState === 'OUT') {
+            num = goldivaultWalletInfoWeethState.weot
+          }
+          else {
+            num = goldivaultWalletInfoWeethState.honey
+          }
+        }
+        else {
+          if(tradeDirectionState === 'OUT') {
+            num = goldivaultWalletInfoWeethState.weyt
+          }
+          else {
+            num = goldivaultWalletInfoWeethState.honey
+          }
+        }
+        setDisplayStringState(num.toFixed(4))
+        setTradeInputState(num)
         setOutputTokensLoadingState(true)
       }
     }
@@ -628,6 +765,14 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       depositResult = await readContract(config, {
         address: contracts.honeywberagoldivault.address as `0x${string}`,
         abi: contracts.honeywberagoldivault.abi,
+        functionName: 'calculateDeposit',
+        args: [parseEther(`${debouncedDepositState}`)]
+      })
+    }
+    if(vault === 'weeth') {
+      depositResult = await readContract(config, {
+        address: contracts.weethVault.address as `0x${string}`,
+        abi: contracts.weethVault.abi,
         functionName: 'calculateDeposit',
         args: [parseEther(`${debouncedDepositState}`)]
       })
@@ -725,6 +870,85 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
 
     setTradeOutputState(parseFloat(formatEther(bhotPriceResult as unknown as bigint)))
     setOutputTokensLoadingState(false)
+  }
+
+  const quoteV3Swap = async () => {
+    if(activeToggleState === 'TRADEOT') {
+      let quoteResult: any
+      if(tradeDirectionState === 'OUT') {
+        quoteResult = await readContract(config, {
+          address: contracts.quoterv2.address as `0x${string}`,
+          abi: contracts.quoterv2.abi,
+          functionName: 'quoteExactInputSingle',
+          args: [[
+            contracts.weot.address,
+            contracts.honey.address,
+            parseEther(tradeInputState.toString()),
+            3000,
+            0
+          ]]
+        })
+      }
+      else {
+        quoteResult = await readContract(config, {
+          address: contracts.quoterv2.address as `0x${string}`,
+          abi: contracts.quoterv2.abi,
+          functionName: 'quoteExactInputSingle',
+          args: [[
+            contracts.honey.address,
+            contracts.weot.address,
+            parseEther(tradeInputState.toString()),
+            3000,
+            0
+          ]]
+        })
+      }
+
+      setTradeOutputState(parseFloat(formatEther(quoteResult[0] as unknown as bigint)))
+      setOutputTokensLoadingState(false)
+    }
+    else {
+      const client = getPublicClient(config)
+      const blockResult: any = await client.getBlock()
+      const timestamp = parseFloat(blockResult.timestamp)
+      const endTimeResult: any = await readContract(config, {
+        address: contracts.weethVault.address as `0x${string}`,
+        abi: contracts.weethVault.abi,
+        functionName: 'endTime',
+        args: []
+      })
+      const endTime = parseFloat(endTimeResult)
+      const durationResult: any = await readContract(config, {
+        address: contracts.weethVault.address as `0x${string}`,
+        abi: contracts.weethVault.abi,
+        functionName: 'duration',
+        args: []
+      })
+      const duration = parseFloat(durationResult)
+      const remainingTime = timestamp > endTime ? 0 : endTime - timestamp
+      const ratio = remainingTime / duration
+      const quoteResult: any = await readContract(config, {
+        address: contracts.quoterv2.address as `0x${string}`,
+        abi: contracts.quoterv2.abi,
+        functionName: 'quoteExactInputSingle',
+        args: [[
+          contracts.weot.address,
+          contracts.honey.address,
+          parseEther('1'),
+          3000,
+          0
+        ]]
+      })
+      const otPrice = parseFloat(formatEther(quoteResult[0] as unknown as bigint))
+      const ytPrice = (1 - otPrice) / ratio
+      if(tradeDirectionState === 'OUT') {
+        setTradeOutputState(tradeInputState * ytPrice)
+      }
+      else {
+        setTradeOutputState(tradeInputState / ytPrice)
+      }
+      setOutputTokensLoadingState(false)
+    }
   }
 
   const openNotification = (toggle: boolean, action: string, result: string, hash: string) => {
@@ -826,11 +1050,14 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         goldivaultWalletInfoHoneyWbera: goldivaultWalletInfoHoneyWberaState,
         goldivaultInfoBhoney: goldivaultInfoBhoneyState,
         goldivaultWalletInfoBhoney: goldivaultWalletInfoBhoneyState,
+        goldivaultWalletInfoWeeth: goldivaultWalletInfoWeethState,
+        slippage: slippageState,
         refreshGoldivaultInfoHoneyWbera,
         refreshGoldivaultWalletInfoHoneyWbera,
         refreshGoldivaultInfoBhoney,
         refreshGoldivaultWalletInfoBhoney,
         refreshGoldivaultInfoWeeth,
+        refreshGoldivaultWalletInfoWeeth,
         deposit: depositState,
         setDeposit: setDepositState,
         debouncedDeposit: debouncedDepositState,
@@ -847,6 +1074,9 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         debouncedTradeInput: debouncedTradeInputState,
         tradeOutput: tradeOutputState,
         setTradeOutput: setTradeOutputState,
+        changeSlippage,
+        changeSlippageToggle,
+        checkSlippageAmount,
         notification: notificationState,
         openNotification,
         activeToggle: activeToggleState,
@@ -873,6 +1103,7 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         calculateOTRedeem,
         calculateYTRedeem,
         quoteSwap,
+        quoteV3Swap,
         burnPopupToggle: burnPopupToggleState,
         setBurnPopupToggle: setBurnPopupToggleState,
         expirePopupToggle: expirePopupToggleState,

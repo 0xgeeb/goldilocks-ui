@@ -3,7 +3,8 @@
 import { useEffect } from "react"
 import { useAccount } from "wagmi"
 import { useGoldivault } from "../../../../providers"
-import { Notification, TradeTab } from "../../"
+import { TradeTabWeeth } from "../"
+import { Notification } from "../../"
 
 export const VaultBoxWeeth = () => {
 
@@ -24,8 +25,9 @@ export const VaultBoxWeeth = () => {
     setYtAmount,
     txConfirming,
     refreshGoldivaultInfoWeeth,
+    refreshGoldivaultWalletInfoWeeth,
     activeToggle,
-    goldivaultWalletInfoBhoney,
+    goldivaultWalletInfoWeeth,
     calculateOTRedeem,
     notification,
     burnPopupToggle,
@@ -48,12 +50,12 @@ export const VaultBoxWeeth = () => {
 
   useEffect(() => {
     refreshGoldivaultInfoWeeth()
-    // refreshGoldivaultWalletInfoBhoney()
+    refreshGoldivaultWalletInfoWeeth()
   }, [isConnected])
 
   useEffect(() => {
     if(debouncedDeposit > 0) {
-      calculateDeposit('bhoney')
+      calculateDeposit('weeth')
     }
     else {
       setOtAmount(0)
@@ -98,13 +100,13 @@ export const VaultBoxWeeth = () => {
 
   const renderBalance = () => {
     if(activeToggle === 'DEPOSIT') {
-      return goldivaultWalletInfoBhoney.honey
+      return goldivaultWalletInfoWeeth.honey
     }
     else if(activeToggle === 'REDEEMOT') {
-      return goldivaultWalletInfoBhoney.bhot
+      return goldivaultWalletInfoWeeth.weot
     }
     else {
-      return goldivaultWalletInfoBhoney.bhyt
+      return goldivaultWalletInfoWeeth.weyt
     }
   }
 
@@ -132,7 +134,7 @@ export const VaultBoxWeeth = () => {
             txConfirming ? <img className="w-[100%] h-[100%]" src="/images/bg-transaction.png" alt="tx" /> :
             notification.toggle ? <Notification /> :
             (activeToggle === 'TRADEOT' || activeToggle === 'TRADEYT') ?
-            <TradeTab /> :
+            <TradeTabWeeth /> :
             <div className="relative w-[100%] h-[100%] flex flex-col">
               <div className="absolute top-[44%] left-[47.27%] bg-[#995816] z-10 h-10 w-10 border-2 border-[#FFCD00] rounded-3xl flex justify-center items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFCD00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
@@ -154,7 +156,7 @@ export const VaultBoxWeeth = () => {
                   />
                   <span className="font-baloo text-nowrap font-bold text-[2.5vw] md:text-[2vw] lg:text-[1vw]">{renderBalanceLabel()}</span>
                 </div>
-                <h1 className="cursor-pointer hover:scale-110 absolute right-0 font-baloo font-medium text-white text-[2.5vw] md:text-[2vw] lg:text-[1vw] mt-[2.5%] lg:mt-[1%]" onClick={() => handleBalanceClick('bhoney')}>
+                <h1 className="cursor-pointer hover:scale-110 absolute right-0 font-baloo font-medium text-white text-[2.5vw] md:text-[2vw] lg:text-[1vw] mt-[2.5%] lg:mt-[1%]" onClick={() => handleBalanceClick('weeth')}>
                   balance: {walletInfoLoading ? loadingElement() : formatBalance(renderBalance())}
                 </h1>
               </div>

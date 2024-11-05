@@ -1,6 +1,7 @@
 "use client"
 
 import { useGoldiswap, useDesktop } from "../../../providers"
+import { LocksFetcher } from "../../goldiswap"
 import {
   StatsMobile,
   GoldiswapButtonMobile,
@@ -13,7 +14,6 @@ import {
   NavBarMobile,
   NavBarButtons,
   FooterMobile,
-  LocksFetcher
 } from "../../utils"
 
 export const GoldiswapPageMobile = () => {

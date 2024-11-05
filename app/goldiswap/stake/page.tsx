@@ -2,8 +2,7 @@ import type { Metadata } from "next"
 import { StakePage } from "../../../components/stake"
 import {
   WagmiProvider,
-  StakeProvider,
-  GoldiswapProvider
+  StakeProvider
 } from "../../../providers"
 
 export const metadata: Metadata = {
@@ -15,11 +14,9 @@ export default function Stake() {
 
   return (
     <WagmiProvider>
-      <GoldiswapProvider>
-        <StakeProvider>
-          <StakePage />
-        </StakeProvider>
-      </GoldiswapProvider>
+      <StakeProvider>
+        <StakePage />
+      </StakeProvider>
     </WagmiProvider>
   )
 }

@@ -14,6 +14,9 @@ import vaultABI from "../abi/Vault.json"
 import bhoneyABI from "../abi/BHoney.json"
 import quoterABI from "../abi/Quoter.json"
 import routerABI from "../abi/Router.json"
+import weethvaultABI from "../abi/WeethGoldivault.json"
+import quoterv2ABI from "../abi/QuoterV2.json"
+import routerv2ABI from "../abi/RouterV2.json"
 
 export const contracts = {
   goldiswap: {
@@ -108,12 +111,32 @@ export const contracts = {
     address: '0x87bF7F6748Da49EB3c90FC8f296c58C5b0EC8A23',
     abi: quoterABI.abi
   },
+  quoterv2: {
+    address: '0x5dA70228EdF3c3235a52BFa3A1CC33d7C9D5497d',
+    abi: quoterv2ABI.abi
+  },
   router: {
     address: '0x406846114B2A9b65a8A2Ab702C2C57d27784dBA2',
     abi: routerABI.abi
   },
+  routerv2: {
+    address: '0x496e305C03909ae382974cAcA4c580E1BF32afBE',
+    abi: routerv2ABI.abi
+  },
   infraredBhoneyVault: {
     address: '0x7d91Bf5851B3A8bCf8C39A69AF2F0F98A4e2202A',
     abi: vaultABI.abi
+  },
+  weethVault: {
+    address: '0x281F698b0969904Df5476CC4031B4C886dE86323',
+    abi: weethvaultABI.abi
+  },
+  weot: {
+    address: '0x620bf857eD5e8fe6022301935974c4C3EcEEe018',
+    abi: ibgtABI.abi
+  },
+  weyt: {
+    address: '0xff310cAC61DbF46ff69bE90C5156665083EE7635',
+    abi: ibgtABI.abi
   }
 }

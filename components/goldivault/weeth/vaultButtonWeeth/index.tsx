@@ -11,17 +11,13 @@ export const VaultButtonWeeth = () => {
   const {
     deposit,
     redeemOT,
-    redeemYT,
     tradeInput,
     tradeOutput,
-    goldivaultWalletInfoBhoney,
     debouncedDeposit,
-    otAmount,
     outputTokensLoading,
     setTxConfirming,
     openNotification,
     allowanceButtons,
-    goldivaultInfoBhoney,
     setAllowanceButtons,
     activeToggle,
     setDisplayString,
@@ -30,22 +26,22 @@ export const VaultButtonWeeth = () => {
     setOtAmount,
     setYtAmount,
     setOutputTokensLoading,
-    refreshGoldivaultInfoBhoney,
-    refreshGoldivaultWalletInfoBhoney,
     setTradeInput,
     setTradeOutput,
-    tradeDirection
+    tradeDirection,
+    refreshGoldivaultInfoWeeth,
+    refreshGoldivaultWalletInfoWeeth,
+    goldivaultWalletInfoWeeth
   } = useGoldivault()
 
   const {
     checkAllowance,
-    checkRouterAllowance,
+    checkRouterV2Allowance,
     sendApproveTx,
-    sendRouterApproveTx,
+    sendRouterV2ApproveTx,
     sendDepositTx,
     sendRedeemOTTx,
-    sendRedeemYTTx,
-    sendTradeTx
+    sendV3TradeTx
   } = useGoldivaultTx()
 
   const { address, isConnected } = useAccount()
@@ -55,8 +51,8 @@ export const VaultButtonWeeth = () => {
   }
 
   const refreshInfo = () => {
-    // refreshGoldivaultInfoBhoney()
-    // refreshGoldivaultWalletInfoBhoney()
+    refreshGoldivaultInfoWeeth()
+    refreshGoldivaultWalletInfoWeeth()
     setDisplayString('')
     setDeposit(0)
     setRedeemOT(0)
@@ -76,12 +72,7 @@ export const VaultButtonWeeth = () => {
       depositTxFlow(button)
     }
     if(activeToggle === 'REDEEMOT') {
-      button && (button.innerHTML = "redeem ot")
-      return
-      // if(otAmount == 0) {
-      //   return
-      // }
-      // redeemOTFlow(button)
+      redeemOTFlow(button)
     }
     if(activeToggle === 'TRADEOT' || activeToggle === 'TRADEYT') {
       tradeFlow(button)
@@ -93,18 +84,18 @@ export const VaultButtonWeeth = () => {
       button && (button.innerHTML = "deposit")
       return
     }
-    if(deposit > goldivaultWalletInfoBhoney.honey) {
+    if(deposit > goldivaultWalletInfoWeeth.honey) {
       button && (button.innerHTML = "not enough")
       return
     }
     else {
-      const sufficientAllowance: boolean | void = await checkAllowance(deposit, 'bhoney', address as string)
+      const sufficientAllowance: boolean | void = await checkAllowance(deposit, 'weeth', address as string)
       if(sufficientAllowance) {
         setTxConfirming(true)
         if(button) {
           button.innerHTML = "confirming..."
         }
-        const depositTx = await sendDepositTx(deposit, 'bhoney')
+        const depositTx = await sendDepositTx(deposit, 'weeth')
         if(depositTx.substring(0, 2) === '0x') {
           setTxConfirming(false)
           openNotification(
@@ -140,7 +131,7 @@ export const VaultButtonWeeth = () => {
       button && (button.innerHTML = "redeem ot")
       return
     }
-    if(redeemOT > goldivaultWalletInfoBhoney.bhot) {
+    if(redeemOT > goldivaultWalletInfoWeeth.weot) {
       button && (button.innerHTML = "not enough")
       return
     }
@@ -149,7 +140,7 @@ export const VaultButtonWeeth = () => {
       if(button) {
         button.innerHTML = "confirming..."
       }
-      const redeemOTTx = await sendRedeemOTTx(redeemOT, 'bhoney')
+      const redeemOTTx = await sendRedeemOTTx(redeemOT, 'weeth')
       if(redeemOTTx.substring(0, 2) === '0x') {
         setTxConfirming(false)
         openNotification(
@@ -185,21 +176,21 @@ export const VaultButtonWeeth = () => {
     let addy
     if(activeToggle === 'TRADEOT') {
       if(tradeDirection === 'OUT') {
-        num = goldivaultWalletInfoBhoney.bhot
-        addy = contracts.bhot.address
+        num = goldivaultWalletInfoWeeth.weot
+        addy = contracts.weot.address
       }
       else {
-        num = goldivaultWalletInfoBhoney.honey
+        num = goldivaultWalletInfoWeeth.honey
         addy = contracts.honey.address
       }
     }
     else {
       if(tradeDirection === 'OUT') {
-        num = goldivaultWalletInfoBhoney.bhyt
-        addy = contracts.bhyt.address
+        num = goldivaultWalletInfoWeeth.weyt
+        addy = contracts.weyt.address
       }
       else {
-        num = goldivaultWalletInfoBhoney.honey
+        num = goldivaultWalletInfoWeeth.honey
         addy = contracts.honey.address
       }
     }
@@ -208,7 +199,7 @@ export const VaultButtonWeeth = () => {
       return
     }
     else {
-      const sufficientAllowance: boolean | void = await checkRouterAllowance(tradeInput, addy, address as string)
+      const sufficientAllowance: boolean | void = await checkRouterV2Allowance(tradeInput, addy, address as string)
       if(sufficientAllowance) {
         setTxConfirming(true)
         if(button) {
@@ -220,33 +211,33 @@ export const VaultButtonWeeth = () => {
         let tokenTwo
         if(activeToggle === 'TRADEOT') {
           if(tradeDirection === 'OUT') {
-            pathOne = contracts.bhot.address
+            pathOne = contracts.weot.address
             pathTwo = contracts.honey.address
-            tokenOne = 'bHoney OT'
+            tokenOne = 'weEtherfi OT'
             tokenTwo = 'honey'
           }
           else {
             pathOne = contracts.honey.address
-            pathTwo = contracts.bhot.address
+            pathTwo = contracts.weot.address
             tokenOne = 'honey'
-            tokenTwo = 'bHoney OT'
+            tokenTwo = 'weEtherfi OT'
           }
         }
         else {
           if(tradeDirection === 'OUT') {
-            pathOne = contracts.bhyt.address
+            pathOne = contracts.weyt.address
             pathTwo = contracts.honey.address
-            tokenOne = 'bHoney YT'
+            tokenOne = 'weEtherfi YT'
             tokenTwo = 'honey'
           }
           else {
             pathOne = contracts.honey.address
-            pathTwo = contracts.bhyt.address
+            pathTwo = contracts.weyt.address
             tokenOne = 'honey'
-            tokenTwo = 'bHoney YT'
+            tokenTwo = 'weEtherfi YT'
           }
         }
-        const tradeTx = await sendTradeTx(tradeInput, tradeOutput, pathOne, pathTwo, address as string)
+        const tradeTx = await sendV3TradeTx(tradeInput, tradeOutput, pathOne, pathTwo, address as string)
         if(tradeTx.substring(0, 2) === '0x') {
           setTxConfirming(false)
           openNotification(
@@ -294,7 +285,7 @@ export const VaultButtonWeeth = () => {
     let addy
     if(activeToggle === 'TRADEOT') {
       if(tradeDirection === 'OUT') {
-        addy = contracts.bhot.address
+        addy = contracts.weot.address
       }
       else {
         addy = contracts.honey.address
@@ -302,21 +293,21 @@ export const VaultButtonWeeth = () => {
     }
     else {
       if(tradeDirection === 'OUT') {
-        addy = contracts.bhyt.address
+        addy = contracts.weyt.address
       }
       else {
         addy = contracts.honey.address
       }
     }
     if(activeToggle === 'TRADEOT' || activeToggle === 'TRADEYT') {
-      await sendRouterApproveTx(tradeInput, addy, false)
+      await sendRouterV2ApproveTx(tradeInput, addy, false)
     }
     else {
-      await sendApproveTx(deposit, 'bhoney', false)
+      await sendApproveTx(deposit, 'weeth', false)
     }
     //todo: wat
     // updateAllowance(honeyBuy + 0.01)
-    swapButton && (swapButton.innerHTML = "buy")
+    swapButton && (swapButton.innerHTML = "deposit")
     setAllowanceButtons(false)
   }
 
@@ -337,7 +328,7 @@ export const VaultButtonWeeth = () => {
     let addy
     if(activeToggle === 'TRADEOT') {
       if(tradeDirection === 'OUT') {
-        addy = contracts.bhot.address
+        addy = contracts.weot.address
       }
       else {
         addy = contracts.honey.address
@@ -345,27 +336,27 @@ export const VaultButtonWeeth = () => {
     }
     else {
       if(tradeDirection === 'OUT') {
-        addy = contracts.bhyt.address
+        addy = contracts.weyt.address
       }
       else {
         addy = contracts.honey.address
       }
     }
     if(activeToggle === 'TRADEOT' || activeToggle === 'TRADEYT') {
-      await sendRouterApproveTx(0, addy, true)
+      await sendRouterV2ApproveTx(0, addy, true)
     }
     else {
-      await sendApproveTx(0, 'bhoney', true)
+      await sendApproveTx(0, 'weeth', true)
     }
     // updateAllowance(100000000)
-    swapButton && (swapButton.innerHTML = "buy")
+    swapButton && (swapButton.innerHTML = "deposit")
     setAllowanceButtons(false)
   }
   
   const renderButton = (): string => {
     if(activeToggle === 'DEPOSIT') {
-      if(isConnected && debouncedDeposit > goldivaultWalletInfoBhoney.honeyAllowance && goldivaultWalletInfoBhoney.honey >= debouncedDeposit && deposit > goldivaultWalletInfoBhoney.honey) {
-        return 'approve LP tokens'
+      if(isConnected && debouncedDeposit > goldivaultWalletInfoWeeth.honeyAllowance && goldivaultWalletInfoWeeth.honey >= debouncedDeposit && deposit > goldivaultWalletInfoWeeth.honey) {
+        return 'approve weeth (honey)'
       }
       return 'deposit'
     }

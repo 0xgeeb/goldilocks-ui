@@ -10,13 +10,13 @@ import {
   Footer,
   Loading,
   ChangeChain,
-  LocksFetcher
 } from "../../utils"
 import {
   BorrowBox,
   BorrowButton,
   Toggles,
   Stats,
+  LocksFetcher,
   BorrowPopup,
   WalletBalance
 } from "../../borrow"

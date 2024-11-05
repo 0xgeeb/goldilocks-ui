@@ -9,7 +9,6 @@ import {
   NavBar,
   Footer,
   Loading,
-  LocksFetcher,
   ChangeChain
 } from "../../utils"
 import { 
@@ -19,6 +18,7 @@ import {
   RedeemPopup,
   Toggles,
   Stats,
+  LocksFetcher,
   WalletBalance
 } from "../../goldiswap"
 

@@ -47,7 +47,7 @@ export const VaultDisplay = () => {
             </div>
           </div>
         </a>
-        {/* <a className="w-[100%] lg:w-[30%] h-[30%] lg:h-[100%]" href="/goldivault/vault/weethmock">
+        {/* <a className="w-[100%] lg:w-[30%] h-[30%] lg:h-[100%]" href="/goldivault/vault/0x281F698b0969904Df5476CC4031B4C886dE86323">
           <div className="w-[100%] h-[100%] bg-[#9A5816] border-2 border-[#FFCD00] relative hover:scale-105 cursor-pointer" id="card-div-shadow">
             <div className="absolute top-2 left-0 w-4 skew-y-[45deg] border-b-2 border-[#FFCD00]"></div>
             <div className="absolute bottom-2 left-0 w-4 -skew-y-[45deg] border-b-2 border-[#FFCD00]"></div>
