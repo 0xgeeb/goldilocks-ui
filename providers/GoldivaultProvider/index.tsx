@@ -366,6 +366,12 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       functionName: 'balanceOf',
       args: [contracts.bhoneygoldivault.address]
     })
+    const vaultCompleteBhoneyBal = await readContract(config, {
+      address: contracts.bhoney.address as `0x${string}`,
+      abi: contracts.bhoney.abi,
+      functionName: 'completeBalanceOf',
+      args: [contracts.bhoneygoldivault.address]
+    })
     const vaultBhoneyStakedBal = await readContract(config, {
       address: contracts.infraredBhoneyVault.address as `0x${string}`,
       abi: contracts.infraredBhoneyVault.abi,
@@ -382,7 +388,7 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       address: contracts.bhoney.address as `0x${string}`,
       abi: contracts.bhoney.abi,
       functionName: 'convertToAssets',
-      args: [parseEther(`${parseFloat(formatEther(vaultBhoneyBal as unknown as bigint)) + parseFloat(formatEther(vaultBhoneyStakedBal as unknown as bigint))}`)]
+      args: [parseEther(`${parseFloat(formatEther(vaultBhoneyBal as unknown as bigint)) + parseFloat(formatEther(vaultCompleteBhoneyBal as unknown as bigint)) + parseFloat(formatEther(vaultBhoneyStakedBal as unknown as bigint))}`)]
     })
     const vaultIbgtResult = await readContract(config, {
       address: contracts.ibgt.address as `0x${string}`,
