@@ -87,57 +87,59 @@ export const VaultButtonBhoney = () => {
   }
 
   const depositTxFlow = async (button: HTMLElement | null) => {
-    if(deposit == 0) {
-      button && (button.innerHTML = "deposit")
-      return
-    }
-    if(deposit > goldivaultWalletInfoBhoney.honey) {
-      button && (button.innerHTML = "not enough")
-      return
-    }
-    else {
-      const sufficientAllowance: boolean | void = await checkAllowance(deposit, 'bhoney', address as string)
-      if(sufficientAllowance) {
-        setTxConfirming(true)
-        if(button) {
-          button.innerHTML = "confirming..."
-        }
-        const depositTx = await sendDepositTx(deposit, 'bhoney')
-        if(depositTx === 'revert') {
-          button && (button.innerHTML = "deposit failed")
-          setTxConfirming(false)
-          setTimeout(() => {
-            button && (button.innerHTML = "deposit")
-          }, 5000)
-        }
-        else if(depositTx.substring(0, 2) === '0x') {
-          setTxConfirming(false)
-          openNotification(
-            true,
-            "You've successfully deposited Honey tokens",
-            `You deposited ${formatAsString(deposit)} Honey`,
-            depositTx
-          )
-          if(button) {
-            button.innerHTML = "deposit"
-          }
-          refreshInfo()
-          setTimeout(() => {
-            openNotification(false, '', '', '')
-          }, 10000)
-        }
-        else {
-          if(button) {
-            button.innerHTML = "deposit"
-          }
-          refreshInfo()
-          setTxConfirming(false)
-        }
-      }
-      else {
-        setAllowanceButtons(true)
-      }
-    }
+    button && (button.innerHTML = "vault concluded")
+    return
+    // if(deposit == 0) {
+    //   button && (button.innerHTML = "deposit")
+    //   return
+    // }
+    // if(deposit > goldivaultWalletInfoBhoney.honey) {
+    //   button && (button.innerHTML = "not enough")
+    //   return
+    // }
+    // else {
+    //   const sufficientAllowance: boolean | void = await checkAllowance(deposit, 'bhoney', address as string)
+    //   if(sufficientAllowance) {
+    //     setTxConfirming(true)
+    //     if(button) {
+    //       button.innerHTML = "confirming..."
+    //     }
+    //     const depositTx = await sendDepositTx(deposit, 'bhoney')
+    //     if(depositTx === 'revert') {
+    //       button && (button.innerHTML = "deposit failed")
+    //       setTxConfirming(false)
+    //       setTimeout(() => {
+    //         button && (button.innerHTML = "deposit")
+    //       }, 5000)
+    //     }
+    //     else if(depositTx.substring(0, 2) === '0x') {
+    //       setTxConfirming(false)
+    //       openNotification(
+    //         true,
+    //         "You've successfully deposited Honey tokens",
+    //         `You deposited ${formatAsString(deposit)} Honey`,
+    //         depositTx
+    //       )
+    //       if(button) {
+    //         button.innerHTML = "deposit"
+    //       }
+    //       refreshInfo()
+    //       setTimeout(() => {
+    //         openNotification(false, '', '', '')
+    //       }, 10000)
+    //     }
+    //     else {
+    //       if(button) {
+    //         button.innerHTML = "deposit"
+    //       }
+    //       refreshInfo()
+    //       setTxConfirming(false)
+    //     }
+    //   }
+    //   else {
+    //     setAllowanceButtons(true)
+    //   }
+    // }
   }
 
   const redeemOTFlow = async (button: HTMLElement | null) => {

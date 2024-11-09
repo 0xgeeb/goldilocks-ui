@@ -774,6 +774,8 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         functionName: 'calculateDeposit',
         args: [parseEther(`${debouncedDepositState}`)]
       })
+      setOtAmountState(depositState)
+      setYtAmountState(parseFloat(formatEther(depositResult as unknown as bigint)))
     }
     if(vault === 'weeth') {
       depositResult = await readContract(config, {
@@ -782,17 +784,13 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         functionName: 'calculateDeposit',
         args: [parseEther(`${debouncedDepositState}`)]
       })
+      setOtAmountState(depositState)
+      setYtAmountState(parseFloat(formatEther(depositResult as unknown as bigint)))
     }
     else {
-      depositResult = await readContract(config, {
-        address: contracts.bhoneygoldivault.address as `0x${string}`,
-        abi: contracts.bhoneygoldivault.abi,
-        functionName: 'calculateDeposit',
-        args: [parseEther(`${debouncedDepositState}`)]
-      })
+      setOtAmountState(0)
+      setYtAmountState(0)
     }
-    setOtAmountState(depositState)
-    setYtAmountState(parseFloat(formatEther(depositResult as unknown as bigint)))
     setOutputTokensLoadingState(false)
   }
 
