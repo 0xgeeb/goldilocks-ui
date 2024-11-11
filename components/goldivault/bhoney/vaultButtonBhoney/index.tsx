@@ -34,7 +34,8 @@ export const VaultButtonBhoney = () => {
     refreshGoldivaultWalletInfoBhoney,
     setTradeInput,
     setTradeOutput,
-    tradeDirection
+    tradeDirection,
+    resetYTAmounts
   } = useGoldivault()
 
   const {
@@ -57,6 +58,7 @@ export const VaultButtonBhoney = () => {
   const refreshInfo = () => {
     refreshGoldivaultInfoBhoney()
     refreshGoldivaultWalletInfoBhoney()
+    resetYTAmounts()
     setDisplayString('')
     setDeposit(0)
     setRedeemOT(0)
