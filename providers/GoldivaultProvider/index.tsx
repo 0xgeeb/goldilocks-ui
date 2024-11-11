@@ -101,6 +101,7 @@ const INITIAL_STATE: any = {
   tradeOutput: 0,
   setTradeOutput: (_tradeOutput: number) => {},
   debouncedTradeInput: 0,
+  otPrice: 0,
   otAmount: 0,
   setOtAmount: (_otAmount: number) => {},
   ytAmount: 0,
@@ -162,6 +163,7 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
   const [tradeInputState, setTradeInputState] = useState<number>(INITIAL_STATE.tradeInput)
   const debouncedTradeInputState = useDebounce(tradeInputState, 1000)
   const [tradeOutputState, setTradeOutputState] = useState<number>(INITIAL_STATE.tradeOutput)
+  const [otPriceState, setOtPriceState] = useState<number>(INITIAL_STATE.otPrice)
   const [slippageState, setSlippageState] = useState(INITIAL_STATE.slippage)
   const [goldivaultInfoHoneyWberaState, setGoldivaultInfoHoneyWberaState] = useState(INITIAL_STATE.goldivaultInfoHoneyWbera)
   const [goldivaultInfoBhoneyState, setGoldivaultInfoBhoneyState] = useState(INITIAL_STATE.goldivaultInfoBhoney)
@@ -820,13 +822,20 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       functionName: 'totalSupply',
       args: []
     })
+    const prgBalance = await readContract(config, {
+      address: contracts.goldilocked.address as `0x${string}`,
+      abi: contracts.goldilocked.abi,
+      functionName: 'balanceOf',
+      args: [contracts.bhoneygoldivault.address]
+    })
 
-    const ibgtResponse = goldivaultInfoBhoneyState.accumulatedIbgt * (debouncedRedeemYTState / parseFloat(formatEther(ytTotalSupply as unknown as bigint)))
-    const honeyResponse = goldivaultInfoBhoneyState.accumulatedHoney * (debouncedRedeemYTState / parseFloat(formatEther(ytTotalSupply as unknown as bigint)))
+    const prgResponse = parseFloat(formatEther(prgBalance as unknown as bigint)) * (debouncedRedeemYTState / parseFloat(formatEther(ytTotalSupply as unknown as bigint)))
+    // const ibgtResponse = goldivaultInfoBhoneyState.accumulatedIbgt * (debouncedRedeemYTState / parseFloat(formatEther(ytTotalSupply as unknown as bigint)))
+    // const honeyResponse = goldivaultInfoBhoneyState.accumulatedHoney * (debouncedRedeemYTState / parseFloat(formatEther(ytTotalSupply as unknown as bigint)))
     const response = {
-      ibgt: ibgtResponse,
-      honey: honeyResponse,
-      value: ibgtResponse + honeyResponse
+      ibgt: prgResponse,
+      honey: 0,
+      value: prgResponse
     }
     setRedeemYTAmountsState(response)
     setOutputTokensLoadingState(false)
@@ -947,9 +956,11 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       const ytPrice = (1 - otPrice) / ratio
       if(tradeDirectionState === 'OUT') {
         setTradeOutputState(tradeInputState * ytPrice)
+        setOtPriceState(otPrice * (1 + (slippageState.amount / 100)))
       }
       else {
         setTradeOutputState(tradeInputState / ytPrice)
+        setOtPriceState(otPrice * (1 - (slippageState.amount / 100)))
       }
       setOutputTokensLoadingState(false)
     }
@@ -1078,6 +1089,7 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         debouncedTradeInput: debouncedTradeInputState,
         tradeOutput: tradeOutputState,
         setTradeOutput: setTradeOutputState,
+        otPrice: otPriceState,
         changeSlippage,
         changeSlippageToggle,
         checkSlippageAmount,

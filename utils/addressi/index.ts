@@ -128,15 +128,15 @@ export const contracts = {
     abi: vaultABI.abi
   },
   weethVault: {
-    address: '0x281F698b0969904Df5476CC4031B4C886dE86323',
+    address: '0xD7Fa83521D4c70Ca2F2511Bd2cf8b93918e455B2',
     abi: weethvaultABI.abi
   },
   weot: {
-    address: '0x620bf857eD5e8fe6022301935974c4C3EcEEe018',
+    address: '0x8D8bE5df5994dA9ca2D7f9106a0c2483F2c57f72',
     abi: ibgtABI.abi
   },
   weyt: {
-    address: '0xff310cAC61DbF46ff69bE90C5156665083EE7635',
+    address: '0x499b2221750aDC4C4A218815e61D1003c6d20A26',
     abi: ibgtABI.abi
   }
 }

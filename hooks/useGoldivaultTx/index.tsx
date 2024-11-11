@@ -27,6 +27,15 @@ export const useGoldivaultTx = () => {
       })
       allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
     }
+    else if(vault === 'weot') {
+      allowanceResult = await readContract(config, {
+        address: contracts.weot.address as `0x${string}`,
+        abi: contracts.weot.abi,
+        functionName: 'allowance',
+        args: [wallet, contracts.weethVault.address]
+      })
+      allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
+    }
     else {
       allowanceResult = await readContract(config, {
         address: contracts.honey.address as `0x${string}`,
@@ -374,13 +383,14 @@ export const useGoldivaultTx = () => {
     return ''
   }
 
-  const sendSellYTTx = async (ytAmount: number, dtAmountMin: number): Promise<string> => {
+  const sendSellYTTx = async (ytAmount: number, dtAmountMin: number, otPriceMax: number): Promise<string> => {
+    console.log(ytAmount, dtAmountMin, otPriceMax)
     try {
       const hash = await writeContract(config, {
         address: contracts.weethVault.address as `0x${string}`,
         abi: contracts.weethVault.abi,
         functionName: 'sellYT',
-        args: [parseEther(`${ytAmount}`), parseEther(`${dtAmountMin}`)]
+        args: [parseEther(`${ytAmount}`), parseEther(`${dtAmountMin}`), parseEther(`${otPriceMax}`)]
       })
 
       const receipt = await waitForTransactionReceipt(config, { hash })

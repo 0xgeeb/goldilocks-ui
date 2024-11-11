@@ -175,25 +175,25 @@ export const VaultBoxBhoney = () => {
                 <div className="mb-[2.5%] flex flex-row justify-between">
                   <h1 className="text-[2.25vw] md:text-[2vw] lg:text-[1vw] text-white font-baloo font-medium">{activeToggle === 'REDEEMYT' ? "Tokens received" : "Estimated tokens received"}</h1>
                   {activeToggle === 'REDEEMOT' && <h1 className="text-[2.5vw] md:text-[2vw] lg:text-[1vw] text-white font-baloo font-medium">Estimated tokens burned</h1> }
-                  {activeToggle === 'REDEEMYT' && <h1 className="text-[2.5vw] md:text-[2vw] lg:text-[1vw] text-white font-baloo font-medium">Estimated value</h1> }
+                  {/* {activeToggle === 'REDEEMYT' && <h1 className="text-[2.5vw] md:text-[2vw] lg:text-[1vw] text-white font-baloo font-medium">Estimated value</h1> } */}
                 </div>
                 {
                   activeToggle === 'REDEEMYT' ?
                   <div className="w-[100%] h-[50%] flex flex-row items-center justify-between">
-                    <div className="h-[100%] w-[42.5%] flex flex-row items-center justify-around">
+                    <div className="h-[100%] w-[100%] flex flex-row items-center justify-around">
                       <div className="flex flex-col items-center">
-                        <img className="h-10 w-10" src="/images/logo-ibgt.svg" alt="ibgt" />
-                        <span className="text-[1.5vw] lg:text-[1vw] text-white font-baloo font-medium mt-[5%]">iBGT: {outputTokensLoading ? loadingElement() : redeemYTAmounts.ibgt > 0 ? redeemYTAmounts.ibgt.toFixed(4) : redeemYTAmounts.ibgt}</span>
+                        <img className="h-10 w-10" src="/images/logo-porridge.png" alt="prg" />
+                        <span className="text-[1.5vw] lg:text-[1vw] text-white font-baloo font-medium mt-[5%]">PRG: {outputTokensLoading ? loadingElement() : redeemYTAmounts.ibgt > 0 ? redeemYTAmounts.ibgt.toFixed(4) : redeemYTAmounts.ibgt}</span>
                       </div>
-                      <div className="flex flex-col items-center">
+                      {/* <div className="flex flex-col items-center">
                         <img className="h-10 w-10" src="/images/logo-honey.png" alt="honey" />
                         <span className="text-[1.5vw] lg:text-[1vw] text-white font-baloo font-medium mt-[5%]">Honey: {handleHoneyAmount()}</span>
-                      </div>
+                      </div> */}
                     </div>
-                    <div className="h-[100%] w-[47.5%] flex flex-row items-center justify-between border-2 border-black bg-slate-200 px-[3.5%]">
+                    {/* <div className="h-[100%] w-[47.5%] flex flex-row items-center justify-between border-2 border-black bg-slate-200 px-[3.5%]">
                       <span className="font-baloo text-nowrap font-bold text-[3vw] lg:text-[1.25vw]">{outputTokensLoading ? loadingElement() : redeemYTAmounts.value > 0 ? redeemYTAmounts.value.toFixed(4) : redeemYTAmounts.value}</span>
-                    </div>
-                  </div> :
+                    </div> */}
+                  </div>:
                   <div className="w-[100%] h-[50%] flex flex-row items-center justify-between">
                     <div className="h-[100%] w-[47.5%] flex flex-row items-center justify-between border-2 border-black bg-slate-200 px-[3.5%]">
                       <span className="font-baloo text-nowrap font-bold text-[3vw] lg:text-[1.25vw]">{outputTokensLoading ? loadingElement() : formatBalance(otAmount)}</span>
