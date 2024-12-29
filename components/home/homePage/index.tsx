@@ -27,6 +27,7 @@ export const HomePage = () => {
     <Loading /> :
     isDesktop ?
     <main className="flex flex-col min-h-screen overflow-hidden" onClick={() => handlePopups()}>
+    { wutPopup && <WutPopup /> }
       <div className="h-[100vh] w-[100vw]">
         <header className="w-[100%] h-[11%] xl:h-[15%] bg-[#EEDCD2] flex flex-row items-center justify-between font-amaticbold px-[4%]">
           <a
