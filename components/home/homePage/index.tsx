@@ -3,23 +3,30 @@
 import { useState, useEffect } from "react"
 import { useDesktop } from "../../../providers"
 import { Loading } from "../../utils"
-import { HomePageMobile } from "../"
+import { HomePageMobile, WutPopup } from "../"
 
 export const HomePage = () => {
   
   const [pageLoading, setPageLoading] = useState<boolean>(true)
+  const [wutPopup, setWutPopup] = useState<boolean>(false)
 
   const { isDesktop } = useDesktop()
 
   useEffect(() => {
     setPageLoading(false)
   }, [])
+
+  const handlePopups = () => {
+    if(wutPopup) {
+      setWutPopup(false)
+    }
+  }
   
   return (
     pageLoading ?
     <Loading /> :
     isDesktop ?
-    <main className="flex flex-col min-h-screen overflow-hidden">
+    <main className="flex flex-col min-h-screen overflow-hidden" onClick={() => handlePopups()}>
       <div className="h-[100vh] w-[100vw]">
         <header className="w-[100%] h-[11%] xl:h-[15%] bg-[#EEDCD2] flex flex-row items-center justify-between font-amaticbold px-[4%]">
           <a
@@ -32,7 +39,7 @@ export const HomePage = () => {
             </div>
           </a>
           <div className="w-[55%] xl:w-[45%] h-[100%] flex flex-row items-center justify-between text-[3vw] xl:text-[2.2vw]">
-            <a href="https://goldilocks.gitbook.io/docs" target="_blank" className="hover:scale-[150%] cursor-pointer"><span>Wut is this?</span></a>
+            <span className="hover:scale-[150%] cursor-pointer" onClick={() => setWutPopup(!wutPopup)}>Wut is this?</span>
             <a href="/goldiswap/swap" className="hover:scale-[150%] cursor-pointer"><span>Goldiswap</span></a>
             <a href="/goldilend/borrow" className="hover:scale-[150%] cursor-pointer"><span>Goldilend</span></a>
             <a href="/goldivault/vaults" className="hover:scale-[150%] cursor-pointer"><span>Goldivaults</span></a>
