@@ -1,5 +1,5 @@
 import { readContract, writeContract, waitForTransactionReceipt} from "@wagmi/core"
-import { parseEther, formatEther } from "viem"
+import { parseEther, formatEther, parseUnits, formatUnits } from "viem"
 import { config } from "../../providers/WagmiProvider"
 import { contracts } from "../../utils/addressi"
 
@@ -20,19 +20,55 @@ export const useGoldivaultTx = () => {
     }
     else if(vault === 'weeth') {
       allowanceResult = await readContract(config, {
-        address: contracts.honey.address as `0x${string}`,
-        abi: contracts.honey.abi,
+        address: contracts.weeth.address as `0x${string}`,
+        abi: contracts.weeth.abi,
         functionName: 'allowance',
         args: [wallet, contracts.weethVault.address]
       })
       allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
     }
-    else if(vault === 'weot') {
+    else if(vault === 'weETH-OT') {
       allowanceResult = await readContract(config, {
         address: contracts.weot.address as `0x${string}`,
         abi: contracts.weot.abi,
         functionName: 'allowance',
         args: [wallet, contracts.weethVault.address]
+      })
+      allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
+    }
+    else if(vault === 'unibtc') {
+      allowanceResult = await readContract(config, {
+        address: contracts.unibtc.address as `0x${string}`,
+        abi: contracts.unibtc.abi,
+        functionName: 'allowance',
+        args: [wallet, contracts.unibtcVault.address]
+      })
+      allowanceNum = parseFloat((allowanceResult as unknown as bigint).toString()) / 1e8
+    }
+    else if(vault === 'solvbtc') {
+      allowanceResult = await readContract(config, {
+        address: contracts.solvbtc.address as `0x${string}`,
+        abi: contracts.solvbtc.abi,
+        functionName: 'allowance',
+        args: [wallet, contracts.solvbtcVault.address]
+      })
+      allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
+    }
+    else if(vault === 'uniBTC-OT') {
+      allowanceResult = await readContract(config, {
+        address: contracts.unibtcot.address as `0x${string}`,
+        abi: contracts.unibtcot.abi,
+        functionName: 'allowance',
+        args: [wallet, contracts.unibtcVault.address]
+      })
+      allowanceNum = parseFloat((allowanceResult as unknown as bigint).toString()) / 1e8
+    }
+    else if(vault === 'solvBTC.BBN-OT') {
+      allowanceResult = await readContract(config, {
+        address: contracts.solvbtcot.address as `0x${string}`,
+        abi: contracts.solvbtcot.abi,
+        functionName: 'allowance',
+        args: [wallet, contracts.solvbtcVault.address]
       })
       allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
     }
@@ -71,14 +107,14 @@ export const useGoldivaultTx = () => {
     }
   }
 
-  const checkRouterV2Allowance = async (amt: number, token: string, wallet: string): Promise<boolean> => {
+  const checkRouterV2Allowance = async (amt: number, token: string, wallet: string, vaultType: string): Promise<boolean> => {
     const allowanceResult = await readContract(config, {
       address: token as `0x${string}`,
       abi: contracts.ibgt.abi,
       functionName: 'allowance',
       args: [wallet, contracts.routerv2.address]
     })
-    const allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
+    const allowanceNum = vaultType === 'eth' ? parseFloat(formatEther(allowanceResult as unknown as bigint)) : parseFloat(formatUnits(allowanceResult as unknown as bigint, 8))
 
     if(amt > allowanceNum) {
       return false
@@ -107,10 +143,85 @@ export const useGoldivaultTx = () => {
     else if(vault === 'weeth') {
       try {
         const hash = await writeContract(config, {
-          address: contracts.honey.address as `0x${string}`,
-          abi: contracts.honey.abi,
+          address: contracts.weeth.address as `0x${string}`,
+          abi: contracts.weeth.abi,
           functionName: 'approve',
           args: [contracts.weethVault.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
+        })
+        await waitForTransactionReceipt(config, { hash })
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+    else if(vault === 'weETH-OT') {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.weot.address as `0x${string}`,
+          abi: contracts.weot.abi,
+          functionName: 'approve',
+          args: [contracts.weethVault.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
+        })
+        await waitForTransactionReceipt(config, { hash })
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+    else if(vault === 'unibtc') {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.unibtc.address as `0x${string}`,
+          abi: contracts.unibtc.abi,
+          functionName: 'approve',
+          args: [contracts.unibtcVault.address, infinite ? parseUnits('115792089237316195423570985008687907853269984665640564039457', 8) : parseUnits(`${amt + 0.01}`, 8)]
+        })
+        await waitForTransactionReceipt(config, { hash })
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+    else if(vault === 'solvbtc') {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.solvbtc.address as `0x${string}`,
+          abi: contracts.solvbtc.abi,
+          functionName: 'approve',
+          args: [contracts.solvbtcVault.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
+        })
+        await waitForTransactionReceipt(config, { hash })
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+    else if(vault === 'uniBTC-OT') {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.unibtcot.address as `0x${string}`,
+          abi: contracts.unibtcot.abi,
+          functionName: 'approve',
+          args: [contracts.unibtcVault.address, infinite ? parseUnits('115792089237316195423570985008687907853269984665640564039457', 8) : parseUnits(`${amt + 0.01}`, 8)]
+        })
+        await waitForTransactionReceipt(config, { hash })
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+    else if(vault === 'solvBTC.BBN-OT') {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.solvbtcot.address as `0x${string}`,
+          abi: contracts.solvbtcot.abi,
+          functionName: 'approve',
+          args: [contracts.solvbtcVault.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
         })
         await waitForTransactionReceipt(config, { hash })
       }
@@ -152,13 +263,13 @@ export const useGoldivaultTx = () => {
     }
   }
 
-  const sendRouterV2ApproveTx = async (amt: number, token: string, infinite: boolean) => {
+  const sendRouterV2ApproveTx = async (amt: number, token: string, infinite: boolean, vaultType: string) => {
     try {
       const hash = await writeContract(config, {
         address: token as `0x${string}`,
         abi: contracts.ibgt.abi,
         functionName: 'approve',
-        args: [contracts.routerv2.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
+        args: [contracts.routerv2.address, infinite ? (vaultType === 'eth' ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseUnits('115792089237316195423570985008687907853269984665640564039457', 8)) : (vaultType === 'eth' ? parseEther(`${amt + 0.01}`) : parseUnits(`${amt + 0.01}`, 8))]
       })
       await waitForTransactionReceipt(config, { hash })
     }
@@ -190,6 +301,38 @@ export const useGoldivaultTx = () => {
         const hash = await writeContract(config, {
           address: contracts.weethVault.address as `0x${string}`,
           abi: contracts.weethVault.abi,
+          functionName: 'deposit',
+          args: [parseEther(`${depositAmt}`)]
+        })
+        const data = await waitForTransactionReceipt(config, { hash })
+        return data.transactionHash
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+    else if(vault === 'unibtc') {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.unibtcVault.address as `0x${string}`,
+          abi: contracts.unibtcVault.abi,
+          functionName: 'deposit',
+          args: [parseUnits(`${depositAmt}`, 8)]
+        })
+        const data = await waitForTransactionReceipt(config, { hash })
+        return data.transactionHash
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+    else if(vault === 'solvbtc') {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.solvbtcVault.address as `0x${string}`,
+          abi: contracts.solvbtcVault.abi,
           functionName: 'deposit',
           args: [parseEther(`${depositAmt}`)]
         })
@@ -247,6 +390,38 @@ export const useGoldivaultTx = () => {
         const hash = await writeContract(config, {
           address: contracts.weethVault.address as `0x${string}`,
           abi: contracts.weethVault.abi,
+          functionName: 'redeemOwnership',
+          args: [parseEther(`${redeemOTAmt}`)]
+        })
+        const data = await waitForTransactionReceipt(config, { hash })
+        return data.transactionHash
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+    else if(vault === 'unibtc') {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.unibtcVault.address as `0x${string}`,
+          abi: contracts.unibtcVault.abi,
+          functionName: 'redeemOwnership',
+          args: [parseUnits(`${redeemOTAmt}`, 8)]
+        })
+        const data = await waitForTransactionReceipt(config, { hash })
+        return data.transactionHash
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+    else if(vault === 'solvbtc') {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.solvbtcVault.address as `0x${string}`,
+          abi: contracts.solvbtcVault.abi,
           functionName: 'redeemOwnership',
           args: [parseEther(`${redeemOTAmt}`)]
         })
@@ -335,7 +510,7 @@ export const useGoldivaultTx = () => {
     return ''
   }
 
-  const sendV3TradeTx = async (tradeInput: number, tradeOutput: number, pathOne: string, pathTwo: string, wallet: string): Promise<string> => {
+  const sendV3TradeTx = async (tradeInput: number, tradeOutput: number, pathOne: string, pathTwo: string, wallet: string, vaultType: string): Promise<string> => {
     try {
       const hash = await writeContract(config, {
         address: contracts.routerv2.address as `0x${string}`,
@@ -344,10 +519,10 @@ export const useGoldivaultTx = () => {
         args: [[
           pathOne,
           pathTwo,
-          3000,
+          500,
           wallet,
-          parseEther(`${tradeInput}`),
-          parseEther(`${tradeOutput * .99}`),
+          vaultType === 'eth' ? parseEther(`${tradeInput}`) : parseUnits(`${tradeInput}`, 8),
+          vaultType === 'eth' ? parseEther(`${tradeOutput * .99}`) : parseUnits(`${tradeOutput * .99}`, 8),
           0
         ]]
       })
@@ -363,45 +538,59 @@ export const useGoldivaultTx = () => {
     return ''
   }
 
-  const sendBuyYTTx = async (ytAmount: number, dtAmountMax: number, otPriceMin: number): Promise<string> => {
+  const sendBuyYTTx = async (ytAmount: number, dtAmountMax: number, amountOutMin: number, address: string, vaultType: string): Promise<[string, number]> => {
+    console.log(ytAmount, dtAmountMax, amountOutMin)
     try {
       const hash = await writeContract(config, {
         address: contracts.weethVault.address as `0x${string}`,
         abi: contracts.weethVault.abi,
         functionName: 'buyYT',
-        args: [parseEther(`${ytAmount}`), parseEther(`${dtAmountMax}`), parseEther(`${otPriceMin}`)]
+        args: [vaultType === 'eth' ? parseEther(`${ytAmount}`) : parseUnits(`${ytAmount}`, 8), vaultType === 'eth' ? parseEther(`${dtAmountMax}`) : parseUnits(`${dtAmountMax}`, 8), vaultType === 'eth' ? parseEther(`${amountOutMin}`) : parseUnits(`${amountOutMin}`, 8)]
+      })
+      const receipt = await waitForTransactionReceipt(config, { hash })
+      const afterBalance = await readContract(config, {
+        address: contracts.weeth.address as `0x${string}`,
+        abi: contracts.weeth.abi,
+        functionName: 'balanceOf',
+        args: [address]
       })
 
-      const receipt = await waitForTransactionReceipt(config, { hash })
-      return receipt.transactionHash
+      return [receipt.transactionHash, vaultType === 'eth' ? parseFloat(formatEther(afterBalance as unknown as bigint)) : parseFloat(formatUnits(afterBalance as unknown as bigint, 8))]
     }
     catch (e) {
       console.log('user denied tx')
       console.log('or: ', e)
     }
 
-    return ''
+    return ['', 0]
   }
 
-  const sendSellYTTx = async (ytAmount: number, dtAmountMin: number, otPriceMax: number): Promise<string> => {
-    console.log(ytAmount, dtAmountMin, otPriceMax)
+  const sendSellYTTx = async (ytAmount: number, dtAmountMin: number, amountInMax: number, address: string, vaultType: string): Promise<[string, number]> => {
+    console.log(ytAmount, dtAmountMin, amountInMax)
     try {
       const hash = await writeContract(config, {
         address: contracts.weethVault.address as `0x${string}`,
         abi: contracts.weethVault.abi,
         functionName: 'sellYT',
-        args: [parseEther(`${ytAmount}`), parseEther(`${dtAmountMin}`), parseEther(`${otPriceMax}`)]
+        args: [vaultType === 'eth' ? parseEther(`${ytAmount}`) : parseUnits(`${ytAmount}`, 8), vaultType === 'eth' ? parseEther(`${dtAmountMin}`) : parseUnits(`${dtAmountMin}`, 8), vaultType === 'eth' ? parseEther(`${amountInMax}`) : parseUnits(`${amountInMax}`, 8)]
+
+      })
+      const receipt = await waitForTransactionReceipt(config, { hash })
+      const afterBalance = await readContract(config, {
+        address: contracts.weeth.address as `0x${string}`,
+        abi: contracts.weeth.abi,
+        functionName: 'balanceOf',
+        args: [address]
       })
 
-      const receipt = await waitForTransactionReceipt(config, { hash })
-      return receipt.transactionHash
+      return [receipt.transactionHash, vaultType === 'eth' ? parseFloat(formatEther(afterBalance as unknown as bigint)) : parseFloat(formatUnits(afterBalance as unknown as bigint, 8))]
     }
     catch (e) {
       console.log('user denied tx')
       console.log('or: ', e)
     }
 
-    return ''
+    return ['', 0]
   }
 
   const findRevert = (e: any): boolean => {

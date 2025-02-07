@@ -1,6 +1,6 @@
 "use client"
 
-import { LineChart, Line, CartesianGrid, XAxis, YAxis } from "recharts"
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from "recharts"
 import { useGoldiswap } from "../../../providers"
 
 export const ChartMobile = () => {
@@ -17,10 +17,12 @@ export const ChartMobile = () => {
         data={data}
         margin={{ top: 0, right: window.innerWidth * .1, bottom: 0, left: 0 }}
       >
-        <Line type="natural" dataKey="value" dot={false} stroke="#000000" />
+        <Line type="natural" dataKey="marketPrice" dot={false} strokeWidth={3} stroke="#000000" />
+        <Line type="natural" dataKey="floorPrice" dot={false} strokeWidth={3} stroke="#c4c4c4" />
         <CartesianGrid stroke="#000000" vertical={false} />
         <XAxis dataKey="date" stroke="#000000" />
         <YAxis type="number" domain={['auto', 'auto']} stroke="#000000" />
+        <Tooltip />
       </LineChart>
     </div>
   )

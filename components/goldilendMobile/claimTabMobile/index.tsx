@@ -28,7 +28,7 @@ export const ClaimTabMobile = () => {
   // }, [isConnected])
 
   const loadingElement = () => {
-    return <span className="loader-small ml-3 mt-2"></span>
+    return <span className="loader-small-mobile mx-1"></span>
   }
 
   const formatAsString = (num: number): string => {

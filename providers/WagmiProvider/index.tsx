@@ -3,13 +3,19 @@
 import { PropsWithChildren } from "react"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { WagmiProvider as WagmiClientProvider, http, createConfig } from "wagmi"
-// import { http as viemHttp, createWalletClient, publicActions } from "viem"
-import { BerachainBartioTestnet } from "../../utils/customChains"
-// import { base, baseSepolia } from "wagmi/chains"
-import { RainbowKitProvider, connectorsForWallets, getDefaultWallets } from "@rainbow-me/rainbowkit"
+import { BerachainBartioTestnet, BerachainMainnet } from "../../utils/customChains"
+import { RainbowKitProvider, connectorsForWallets } from "@rainbow-me/rainbowkit"
 import "@rainbow-me/rainbowkit/styles.css"
+import {
+  injectedWallet,
+  metaMaskWallet,
+  bitgetWallet,
+  binanceWallet,
+  rainbowWallet,
+  coinbaseWallet,
+  walletConnectWallet
+} from "@rainbow-me/rainbowkit/wallets"
 
-const { wallets } = getDefaultWallets()
 const appName = 'goldilocks'
 const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_ID as string
 
@@ -23,21 +29,34 @@ const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_ID as string
 //   }
 // })
 
-const connectors = connectorsForWallets(wallets, {appName, projectId})
-
-export const config = createConfig({
-  chains: [BerachainBartioTestnet],
-  ssr: true,
-  connectors: connectors,
-  transports: {
-    [BerachainBartioTestnet.id]: http()
-  }
-})
-
 // export const viemClient = createWalletClient({
 //   chain: BerachainBartioTestnet,
 //   transport: viemHttp()
 // }).extend(publicActions)
+
+// const connectors = connectorsForWallets(wallets, {appName, projectId})
+
+const connectors = connectorsForWallets(
+  [
+    {
+      groupName: 'Recommended',
+      wallets: [injectedWallet, metaMaskWallet, bitgetWallet, binanceWallet, rainbowWallet, coinbaseWallet, walletConnectWallet]
+    }
+  ],
+  {
+    appName,
+    projectId
+  }
+)
+
+export const config = createConfig({
+  chains: [BerachainMainnet],
+  ssr: true,
+  connectors: connectors,
+  transports: {
+    [BerachainMainnet.id]: http()
+  }
+})
 
 const queryClient = new QueryClient()
 
@@ -48,7 +67,7 @@ export const WagmiProvider = (props: PropsWithChildren<{}>) => {
   return (
     <WagmiClientProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider coolMode>
+        <RainbowKitProvider>
           { children }
         </RainbowKitProvider>
       </QueryClientProvider>

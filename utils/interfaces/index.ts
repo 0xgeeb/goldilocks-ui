@@ -196,3 +196,10 @@ export interface GoldilendInitialState {
   updateOwnedBeras: (_borrowedAgainstBera: BeraInfo) => void;
   updateOwnedPartners: (_nfts: PartnerInfo | PartnerInfo[]) => void;
 }
+
+export interface EtherfiAPIResponse {
+  "7_day_apr": number;
+  "7_day_restaking_apr": number;
+  tvl: number;
+  buffer_eth: number 
+}

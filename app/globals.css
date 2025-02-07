@@ -22,6 +22,17 @@
   -moz-appearance: textfield;
 }
 
+.loader-small-mobile {
+  width: 9px;
+  height: 9px;
+  border: 2px solid #FFF;
+  border-bottom-color: #878d97;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
 .loader-small {
   width: 18px;
   height: 18px;

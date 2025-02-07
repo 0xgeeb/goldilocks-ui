@@ -45,7 +45,7 @@ export const DesktopProvider = (props: PropsWithChildren<{}>) => {
         setNavButtonsOpen: setNavButtonsOpenState
       }}
     >
-      {children}
+      { children }
     </DesktopContext.Provider>
   )
 }

@@ -2,14 +2,15 @@
 
 import { useState, useEffect } from "react"
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client"
-import { useGoldiswap, useDesktop } from "../../../providers"
+import { useGoldiswap, useDesktop, useGeo } from "../../../providers"
 import { GoldiswapPageMobile } from "../../goldiswapMobile"
 import { useGoldiswapMath } from "../../../hooks/useGoldiswapMath"
 import { 
   NavBar,
   Footer,
   Loading,
-  ChangeChain
+  ChangeChain,
+  TAndCs
 } from "../../utils"
 import { 
   SwapBox,
@@ -43,6 +44,8 @@ export const GoldiswapPage = () => {
   } = useGoldiswap()
 
   const { isDesktop } = useDesktop()
+
+  const { signed } = useGeo()
 
   const { marketPrice } = useGoldiswapMath()
 
@@ -145,34 +148,38 @@ export const GoldiswapPage = () => {
         pageLoading ?
         <Loading /> :
         isDesktop ?
-        <main className="w-screen h-screen" onClick={(e) => handlePopups(e)}>
-          <NavBar wutPopup={wutPopup} setWutPopup={setWutPopup} />
-          <div className="w-[100%] h-[89%] xl:h-[85%] bg-cover bg-bottom bg-[url('/images/bg-goldiswap.png')] relative">
-            <Toggles />
-            { redeemPopupToggle && <RedeemPopup /> }
-            <h1 className="absolute top-[-0.5%] lg:top-[16%] 2xl:top-[12.16%] left-[5%] xl:left-[7.5%] 2xl:left-[10%] text-[#D9C6BA] text-[10vw] lg:text-[8vw] tall:text-[12vw] tall:md:text-[10vw] tall:lg:text-[8vw] font-amaticbold" id="page-title">{activeToggle === 'REDEEM' ? "REDEEM" : "SWAP"}</h1>
-            <div className="absolute top-[15%] md:top-[13%] lg:top-[12%] xl:top-[7.12%] left-[10%] md:left-[20%] lg:left-[25%] 2xl:left-[28.125%] w-[80%] md:w-[60%] lg:w-[50%] 2xl:w-[43.75%] h-[3%] bg-[#4D0B24] flex flex-row items-center justify-between px-2 text-[2.25vw] md:text-[1.75vw] lg:text-[1.5vw] xl:text-[1vw] 2xl:text-[0.85vw]">
-              <span className="text-white font-baloo mt-1">PSL/FSL ratio: {handleTokenInfo((goldiswapInfo.psl / goldiswapInfo.fsl) * 100)}%</span>
-              <span className="text-white font-baloo mt-1">market cap: {handleTokenInfo(goldiswapInfo.supply * marketPrice(goldiswapInfo.fsl, goldiswapInfo.psl, goldiswapInfo.supply) / 1000000)}m</span>
-              <span className="text-white font-baloo mt-1">last floor raise: {formatDate(goldiswapInfo.lastFloorRaise * Math.pow(10, 21))}</span>
+        (
+          signed !== 'TRUE' ?
+          <TAndCs /> :
+          <main className="w-screen h-screen" onClick={(e) => handlePopups(e)}>
+            <NavBar wutPopup={wutPopup} setWutPopup={setWutPopup} />
+            <div className="w-[100%] h-[89%] xl:h-[85%] bg-cover bg-bottom bg-[url('/images/bg-goldiswap.png')] relative">
+              <Toggles />
+              { redeemPopupToggle && <RedeemPopup /> }
+              <h1 className="absolute top-[-0.5%] lg:top-[16%] 2xl:top-[12.16%] left-[5%] xl:left-[7.5%] 2xl:left-[10%] text-[#D9C6BA] text-[10vw] lg:text-[8vw] tall:text-[12vw] tall:md:text-[10vw] tall:lg:text-[8vw] font-amaticbold" id="page-title">{activeToggle === 'REDEEM' ? "REDEEM" : "SWAP"}</h1>
+              <div className="absolute top-[15%] md:top-[13%] lg:top-[12%] xl:top-[7.12%] left-[10%] md:left-[20%] lg:left-[25%] 2xl:left-[28.125%] w-[80%] md:w-[60%] lg:w-[50%] 2xl:w-[43.75%] h-[3%] bg-[#4D0B24] flex flex-row items-center justify-between px-2 text-[2.25vw] md:text-[1.75vw] lg:text-[1.5vw] xl:text-[1vw] 2xl:text-[0.85vw]">
+                <span className="text-white font-baloo mt-1">PSL/FSL ratio: {handleTokenInfo((goldiswapInfo.psl / goldiswapInfo.fsl) * 100)}%</span>
+                <span className="text-white font-baloo mt-1">locks market cap: {handleTokenInfo(goldiswapInfo.supply * marketPrice(goldiswapInfo.fsl, goldiswapInfo.psl, goldiswapInfo.supply) / 1000000)}m</span>
+                <span className="text-white font-baloo mt-1">last floor raise: {formatDate(goldiswapInfo.lastFloorRaise * Math.pow(10, 21))}</span>
+              </div>
+              <WalletBalance />
+              { slippage.toggle && <SlippagePopup /> }
+              <SwapBox />
+              {/* <img className="absolute top-[68%] md:top-[55.87%] lg:top-[53.87%] xl:top-[63.37%] left-[90%] lg:left-[88.625%] 2xl:left-[75.5%] w-[4%] h-[2%] lg:w-[3%]" src="/images/icon-bearoutline.png" alt="bearoutline" /> */}
+              {/* <div 
+                className="absolute w-[12%] md:w-[10%] h-[7%] lg:w-[6%] lg:h-[8%] top-[70%] md:top-[57.87%] lg:top-[55.87%] xl:top-[65.37%] left-[87%] lg:left-[87.125%] 2xl:left-[74%] px-1 border-2 border-black bg-[#F3AA8A] flex items-center justify-center font-amaticbold text-center text-[2.5vw] md:text-[2.25vw] lg:text-[1.5vw] xl:text-[1.2vw] tall:text-[3vw] tall:md:text-[2.25vw] tall:lg:text-[1.5vw] tall:xl:text-[1.2vw] hover:scale-110 cursor-pointer"
+                onClick={() => setChartOpen(!chartOpen)}
+              >
+                THIS IS CHART
+              </div> */}
+              <GoldiswapButton />
+              <Stats />
+              <Footer />
+              <LocksFetcher />
+              <ChangeChain />
             </div>
-            <WalletBalance />
-            { slippage.toggle && <SlippagePopup /> }
-            <SwapBox />
-            <img className="absolute top-[68%] md:top-[55.87%] lg:top-[53.87%] xl:top-[63.37%] left-[90%] lg:left-[88.625%] 2xl:left-[75.5%] w-[4%] h-[2%] lg:w-[3%]" src="/images/icon-bearoutline.png" alt="bearoutline" />
-            <div 
-              className="absolute w-[12%] md:w-[10%] h-[7%] lg:w-[6%] lg:h-[8%] top-[70%] md:top-[57.87%] lg:top-[55.87%] xl:top-[65.37%] left-[87%] lg:left-[87.125%] 2xl:left-[74%] px-1 border-2 border-black bg-[#F3AA8A] flex items-center justify-center font-amaticbold text-center text-[2.5vw] md:text-[2.25vw] lg:text-[1.5vw] xl:text-[1.2vw] tall:text-[3vw] tall:md:text-[2.25vw] tall:lg:text-[1.5vw] tall:xl:text-[1.2vw] hover:scale-110 cursor-pointer"
-              onClick={() => setChartOpen(!chartOpen)}
-            >
-              THIS IS CHART
-            </div>
-            <GoldiswapButton />
-            <Stats />
-            <Footer />
-            <LocksFetcher />
-            <ChangeChain />
-          </div>
-        </main> :
+          </main>
+        ) :
         <GoldiswapPageMobile />
       }
     </ApolloProvider>

@@ -73,7 +73,7 @@ export const SwapBox = () => {
     setRedeemingLocks(0)
     setTopAmountLoading(false)
     setBottomAmountLoading(false)
-    setSimInfo(false, goldiswapInfo.fsl, goldiswapInfo.psl, goldiswapInfo.supply, floorPrice(goldiswapInfo.fsl, goldiswapInfo.supply), marketPrice(goldiswapInfo.fsl, goldiswapInfo.psl, goldiswapInfo.supply), goldiswapInfo.targetRatio)
+    setSimInfo(false, goldiswapInfo.fsl, goldiswapInfo.psl, goldiswapInfo.supply, floorPrice(goldiswapInfo.fsl, goldiswapInfo.supply), marketPrice(goldiswapInfo.fsl, goldiswapInfo.psl, goldiswapInfo.supply), goldiswapInfo.targetRatio, marketPrice(goldiswapInfo.fsl, goldiswapInfo.psl, goldiswapInfo.supply) - floorPrice(goldiswapInfo.fsl, goldiswapInfo.supply))
   }
 
   const loadingElement = () => {

@@ -2,12 +2,21 @@
 
 import { useGoldivault } from "../../../providers"
 
-export const PoolsPopup = () => {
+type PoolsPopupProps = {
+  params: {
+    vaultToken: string;
+    poolUrl: string;
+    poolName: string
+  }
+}
+
+export const PoolsPopup = ({ params }: PoolsPopupProps) => {
 
   const {
     poolsPopupToggle,
     setPoolsPopupToggle,
     infoLoading,
+    goldivaultInfoWeeth,
     goldivaultInfoBhoney
   } = useGoldivault()
 
@@ -18,6 +27,10 @@ export const PoolsPopup = () => {
   const loadingElement = () => {
     return <span className="loader-small m-auto"></span>
   }
+
+  const data = 
+    params.vaultToken === 'weeth' ? goldivaultInfoWeeth :
+    params.vaultToken === 'bhoney' ? goldivaultInfoBhoney : {}
 
   return (
     <>
@@ -38,16 +51,10 @@ export const PoolsPopup = () => {
                   loadingElement() :
                   <>
                     <div className="flex flex-row items-center justify-between border-b-2 border-[#FFCD00] py-[3%] px-[7.5%] text-[2.5vw] lg:text-[1.25vw] text-[#FFCD00] font-baloo font-semibold">
-                      <a href="https://app.kodiak.finance/#/liquidity/v2/add/0x0E4aaF1351de4c0264C5c7056Ef3777b41BD8e03/0xde0a616437151c5D655c5341f24D624cBf35B0DE?chain=berachain_bartio" target="_blank"><span className="hover:underline">BHONEY OT LP</span></a>                      
-                      <span>${formatAsString(goldivaultInfoBhoney.otLiquidity)}</span>
+                      <a href={params.poolUrl} target="_blank"><span className="hover:underline">{params.poolName}</span></a>                      
+                      <span>${formatAsString(data.otLiquidity)}</span>
                       <span>~%</span>
                     </div>
-                    <div className="flex flex-row items-center justify-between border-b-2 border-[#FFCD00] py-[3%] px-[7.5%] text-[2.5vw] lg:text-[1.25vw] text-[#FFCD00] font-baloo font-semibold">
-                      <a href="https://app.kodiak.finance/#/liquidity/v2/add/0x0E4aaF1351de4c0264C5c7056Ef3777b41BD8e03/0x3c3834513371895A25A37aF3cdc83b8DC0352cC1?chain=berachain_bartio" target="_blank"><span className="hover:underline">BHONEY YT LP</span></a>
-                      <span>${formatAsString(goldivaultInfoBhoney.ytLiquidity)}</span>
-                      <span>~%</span>
-                    </div>
-                    {/* <h1 className="m-auto font-amatic font-medium text-[#FFCD00] text-[2vw]">MOAR POOLS COMING THOON...</h1> */}
                   </>
                 }
               </div>
@@ -56,7 +63,7 @@ export const PoolsPopup = () => {
         </div>
       }
       <div className="absolute z-40 right-[5%] lg:right-[9%] top-[3%] lg:top-[6%] h-[6%] lg:h-[7%] w-[15%] lg:w-[10%] border-2 border-[#FFCD00] text-[#FFCD00] bg-[#033E5E] hover:bg-[#FFCD00] hover:text-[#033E5E] hover:border-2 hover:border-[#033E5E] cursor-pointer flex items-center justify-center" onClick={() => setPoolsPopupToggle(!poolsPopupToggle)}>
-        <span className="text-[1.5vw] lg:text-[1vw] font-baloo font-semibold">LIQUIDITY POOLS</span>
+        <span className="text-[1.5vw] lg:text-[1vw] font-baloo font-semibold">LIQUIDITY POOL</span>
       </div>
     </>
   )

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { LineChart, Line, CartesianGrid, XAxis, YAxis } from "recharts"
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from "recharts"
 import { useStake } from "../../../providers"
 
 export const Chart = () => {
@@ -33,17 +33,19 @@ export const Chart = () => {
 
   return (
     <div className="w-[100%] h-[100%] bg-[#F3AA8A] relative flex flex-col justify-between lg:pl-[3%] lg:pb-[2.5%] font-baloo text-[1.4vw] lg:text-[1vw]">
-      <h1 className="font-amaticbold text-[3.5vw] lg:text-[1.75vw] ml-[4%]">this is market price chart</h1>
+      <h1 className="font-amaticbold text-[3.5vw] lg:text-[1.75vw] ml-[4%]">this is price chart</h1>
       <LineChart 
         width={chartWidth}
         height={chartHeight}
         data={data}
         margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
       >
-        <Line type="natural" dataKey="value" dot={false} strokeWidth={3} stroke="#000000" />
+        <Line type="natural" dataKey="marketPrice" dot={false} strokeWidth={3} stroke="#000000" />
+        <Line type="natural" dataKey="floorPrice" dot={false} strokeWidth={3} stroke="#c4c4c4" />
         <CartesianGrid stroke="#000000" vertical={false} />
         <XAxis dataKey="date" stroke="#000000" />
         <YAxis type="number" domain={['auto', 'auto']} stroke="#000000" />
+        <Tooltip />
       </LineChart>
       <p
         className="absolute top-[-2%] right-[2%] font-baloo text-[3vw] lg:text-[2vw] cursor-pointer hover:scale-125"

@@ -110,16 +110,28 @@ export const HomePage = () => {
           </a>
         </div>
         <div className="w-[100%] h-[15vh] bg-black"></div>
-        <img className="absolute h-10 w-10 bottom-[0.5%] left-[1%] cursor-pointer hover:animate-spin" src="/images/icon-share.png" alt="share" />
-        <div className="absolute bottom-[0.5%] right-[1%] flex flex-row items-center text-[#D9C6BA]">
-          <span className="font-amatic text-[2.4vw] xl:text-[1.7vw] 2xl:text-[1.3vw] mr-3 2xl:mr-6">OOGA BOOGA</span>
-          <a className="cursor-pointer hover:scale-110" href="https://x.com/goldilocksmoney" target="_blank">
-            <img className="w-8 h-8" src="/images/icon-x.png" alt="x" />
-          </a>
-          <a className="cursor-pointer hover:scale-110" href="https://discord.gg/3cdn88Mbq8" target="_blank">
-            <img className="w-8 h-8" src="/images/icon-discord.png" alt="discord" />
-          </a>
-          <span className="text-[1.2vw] xl:text-[0.9vw] 2xl:text-[0.7vw] font-baloo ml-3 2xl:ml-6">© 2024 Goldilocks DAO. All rights reserved.</span>
+        <div className="flex flex-row items-center justify-center text-[#D9C6BA] text-[1.5vw] font-amaticbold mx-auto mb-[0.75%] z-50">
+          <span>Audited by</span>
+          <a className="hover:scale-110 cursor-pointer" href="https://yaudit.dev/" target="_blank"><img className="h-8 w-8 mx-3" src="/images/yaudit-logo.png" alt="yaudit" /></a>
+          <span className="text-[1.15vw] ">&</span>
+          <a className="hover:scale-110 cursor-pointer" href="https://www.cyfrin.io/" target="_blank"><img className="h-10 w-10 mx-3" src="/images/cyfrin-logo.png" alt="cyfrin" /></a>
+          <span className="text-[1.15vw] ">&</span>
+          <a className="hover:scale-110 cursor-pointer" href="https://www.hyacinthaudits.xyz/" target="_blank"><img className="h-10 w-16 mx-3" src="/images/hyacinth-logo.svg" alt="hyacinth" /></a>
+          <span className="text-[1.15vw] ">&</span>
+          <a className="hover:scale-110 cursor-pointer" href="https://www.halborn.com/" target="_blank"><img className="h-9 w-9 mx-3" src="/images/halborn-logo.svg" alt="halborn" /></a>
+        </div>
+        <div className="absolute bottom-[0.5%] w-[100%] px-[2.5%] flex flex-row items-center justify-between z-10">
+          <img className="h-10 w-10 cursor-pointer hover:animate-spin" src="/images/icon-share.png" alt="share" />
+          <div className="flex flex-row items-center text-[#D9C6BA]">
+            <span className="font-amatic text-[2.4vw] xl:text-[1.7vw] 2xl:text-[1.3vw] mr-3 2xl:mr-6">OOGA BOOGA</span>
+            <a className="cursor-pointer hover:scale-110" href="https://x.com/goldilocksmoney" target="_blank">
+              <img className="w-8 h-8" src="/images/icon-x.png" alt="x" />
+            </a>
+            <a className="cursor-pointer hover:scale-110" href="https://discord.gg/3cdn88Mbq8" target="_blank">
+              <img className="w-8 h-8" src="/images/icon-discord.png" alt="discord" />
+            </a>
+            <span className="text-[1.2vw] xl:text-[0.9vw] 2xl:text-[0.7vw] font-baloo ml-3 2xl:ml-6">© 2024 Goldilocks DAO. All rights reserved.</span>
+          </div>
         </div>
       </div>
     </main> :

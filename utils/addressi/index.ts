@@ -17,14 +17,16 @@ import routerABI from "../abi/Router.json"
 import weethvaultABI from "../abi/WeethGoldivault.json"
 import quoterv2ABI from "../abi/QuoterV2.json"
 import routerv2ABI from "../abi/RouterV2.json"
+import goldigovABI from "../abi/Goldigovernor.json"
+import govlocksABI from "../abi/GovLocks.json"
 
 export const contracts = {
   goldiswap: {
-    address: '0xC94ecBfE16E337f6e606dcd86B8A5eaDbAe7A337',
+    address: '0xb7E448E5677D212B8C8Da7D6312E8Afc49800466',
     abi: goldiswapABI.abi
   },
   goldilocked: {
-    address: '0xe2cA693a47C32bd33949120d31d42b9e5Ef5c7Ef',
+    address: '0xbf2E152f460090aCE91A456e3deE5ACf703f27aD',
     abi: goldilockedABI.abi
   },
   goldilend: {
@@ -56,7 +58,7 @@ export const contracts = {
     abi: ibgtABI.abi
   },
   honey: {
-    address: '0x0E4aaF1351de4c0264C5c7056Ef3777b41BD8e03',
+    address: '0xFCBD14DC51f0A4d49d5E53C2E0950e0bC26d0Dce',
     abi: honeyABI.abi
   },
   ibgt: {
@@ -128,15 +130,59 @@ export const contracts = {
     abi: vaultABI.abi
   },
   weethVault: {
-    address: '0xD7Fa83521D4c70Ca2F2511Bd2cf8b93918e455B2',
+    address: '0xEE4A91F5BFA0Bf54124CF00cc7e144427cCE1162',
     abi: weethvaultABI.abi
   },
   weot: {
-    address: '0x8D8bE5df5994dA9ca2D7f9106a0c2483F2c57f72',
+    address: '0x6218379852D5609870e91f168B81cbB4532f0346',
     abi: ibgtABI.abi
   },
   weyt: {
-    address: '0x499b2221750aDC4C4A218815e61D1003c6d20A26',
+    address: '0x401CBe777E8BE57a426A5B5F13Ca4d73200BD95B',
     abi: ibgtABI.abi
+  },
+  weeth: {
+    address: '0x7Cc43d94818005499D2740975D2aEFD3893E940E',
+    abi: ibgtABI.abi
+  },
+  solvbtcVault: {
+    address: '0xa861d5687ff698902A632E2e62AA7df41199B397',
+    abi: weethvaultABI.abi
+  },
+  solvbtcot: {
+    address: '0xBea86272fF455A7F60863E1D6224FB5Ad1eb147f',
+    abi: ibgtABI.abi
+  },
+  solvbtcyt: {
+    address: '0xB0D8A7dAa386597371A11837737c4E45A51a9eF3',
+    abi: ibgtABI.abi
+  },
+  solvbtc: {
+    address: '0x0ed996697ABDe35eD6C3E61C562D37366ba06d88',
+    abi: ibgtABI.abi
+  },
+  unibtcVault: {
+    address: '0xc7f687Ef7CBbB5335801BF479877017F0baebD98',
+    abi: weethvaultABI.abi
+  },
+  unibtcot: {
+    address: '0x671ddbe0e20E9Ec638962d9f4dEb0088F38F3434',
+    abi: ibgtABI.abi
+  },
+  unibtcyt: {
+    address: '0x3f566256bc962ab24550580B5339751562562784',
+    abi: ibgtABI.abi
+  },
+  unibtc: {
+    address: '0xEfBfEC4ab23BeB740D6463Ba046f2d7B66E9e314',
+    abi: ibgtABI.abi
+  },
+  goldigov: {
+    address: '0x6c00d68Dc6BCC3D47d698F4B566CcBe893D34Fed',
+    abi: goldigovABI.abi
+  },
+  govlocks: {
+    address: '0xB9798E0e3AB8B2f2c80684C9D51056538E021DAc',
+    abi: govlocksABI.abi
   }
 }

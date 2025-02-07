@@ -15,7 +15,10 @@ const INITIAL_STATE = {
     psl: 0,
     supply: 0,
     targetRatio: 0,
-    lastFloorRaise: 0
+    lastFloorRaise: 0,
+    prgValue: 0,
+    prgSupply: 0,
+    prgMarketCap: 0
   },
   
   goldiswapWalletInfo: {
@@ -36,7 +39,8 @@ const INITIAL_STATE = {
     supply: 0,
     floor: 0,
     market: 0,
-    targetRatio: 0
+    targetRatio: 0,
+    prgValue: 0
   },
   setSimInfo: (
     _toggle: boolean,
@@ -45,7 +49,8 @@ const INITIAL_STATE = {
     _supply: number,
     _floor: number,
     _market: number,
-    _targetRatio: number
+    _targetRatio: number,
+    prgValue: number
   ) => {},
 
   slippage: {
@@ -499,7 +504,8 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
         supply: _supply,
         floor: floorPrice(newFsl, _supply),
         market: marketPrice(newFsl, newPsl, _supply),
-        targetRatio: goldiswapInfoState.targetRatio + (goldiswapInfoState.targetRatio / 50)
+        targetRatio: goldiswapInfoState.targetRatio + (goldiswapInfoState.targetRatio / 50),
+        prgValue: marketPrice(newFsl, newPsl, _supply) - floorPrice(newFsl, _supply)
       }
     }
     else {
@@ -510,7 +516,8 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
         supply: _supply,
         floor: floorPrice(_fsl, _supply),
         market: marketPrice(_fsl, _psl, _supply),
-        targetRatio: goldiswapInfoState.targetRatio
+        targetRatio: goldiswapInfoState.targetRatio,
+        prgValue: marketPrice(_fsl, _psl, _supply) - floorPrice(_fsl, _supply)
       }
     }
     
@@ -552,7 +559,8 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
       supply: _supply,
       floor: floorPrice(_fsl + _tax, _supply),
       market: marketPrice(_fsl + _tax, _psl, _supply),
-      targetRatio: goldiswapInfoState.targetRatio
+      targetRatio: goldiswapInfoState.targetRatio,
+      prgValue: marketPrice(_fsl + _tax, _psl, _supply) - floorPrice(_fsl + _tax, _supply)
     }
     
     setSimInfoState(response)
@@ -576,7 +584,8 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
         supply: newSupply,
         floor: floorPrice(newFsl, newSupply),
         market: marketPrice(newFsl, newPsl, newSupply),
-        targetRatio: goldiswapInfoState.targetRatio + (goldiswapInfoState.targetRatio / 50)
+        targetRatio: goldiswapInfoState.targetRatio + (goldiswapInfoState.targetRatio / 50),
+        prgValue: marketPrice(newFsl, newPsl, newSupply) - floorPrice(newFsl, newSupply)
       }
     }
     else {
@@ -587,7 +596,8 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
         supply: newSupply,
         floor: floorPrice(newFsl, newSupply),
         market: marketPrice(newFsl, _psl, newSupply),
-        targetRatio: goldiswapInfoState.targetRatio
+        targetRatio: goldiswapInfoState.targetRatio,
+        prgValue: marketPrice(newFsl, _psl, newSupply) - floorPrice(newFsl, newSupply)
       }
     }
 
@@ -682,13 +692,31 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
       abi: contracts.goldiswap.abi,
       functionName: 'lastFloorIncrease',
     })
+    const prgSupply = await readContract(config, {
+      address: contracts.goldilocked.address as `0x${string}`,
+      abi: contracts.goldilocked.abi,
+      functionName: 'totalSupply',
+      args: []
+    })
+    const prgTreasuryBalance = await readContract(config, {
+      address: contracts.goldilocked.address as `0x${string}`,
+      abi: contracts.goldilocked.abi,
+      functionName: 'balanceOf',
+      args: ['0x895614c89beC7D11454312f740854d08CbF57A78']
+    })
+    
+    const prgValueResponse = marketPrice(parseFloat(formatEther(fslResult as unknown as bigint)), parseFloat(formatEther(pslResult as unknown as bigint)), parseFloat(formatEther(supplyResult as unknown as bigint))) - floorPrice(parseFloat(formatEther(fslResult as unknown as bigint)), parseFloat(formatEther(supplyResult as unknown as bigint)))
+    const prgSupplyResponse = parseFloat(formatEther(prgSupply as unknown as bigint)) - parseFloat(formatEther(prgTreasuryBalance as unknown as bigint))
 
     const response = {
       fsl: parseFloat(formatEther(fslResult as unknown as bigint)),
       psl: parseFloat(formatEther(pslResult as unknown as bigint)),
       supply: parseFloat(formatEther(supplyResult as unknown as bigint)),
       targetRatio: parseFloat(formatEther(ratioResult as unknown as bigint)),
-      lastFloorRaise: parseFloat(formatEther(lastFloorRaiseResult as unknown as bigint))
+      lastFloorRaise: parseFloat(formatEther(lastFloorRaiseResult as unknown as bigint)),
+      prgValue: prgValueResponse,
+      prgSupply: prgSupplyResponse,
+      prgMarketCap: prgValueResponse * prgSupplyResponse
     }
 
     const simResponse = {
@@ -698,7 +726,8 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
       supply: parseFloat(formatEther(supplyResult as unknown as bigint)),
       floor: floorPrice(parseFloat(formatEther(fslResult as unknown as bigint)), parseFloat(formatEther(supplyResult as unknown as bigint))),
       market: marketPrice(parseFloat(formatEther(fslResult as unknown as bigint)), parseFloat(formatEther(pslResult as unknown as bigint)), parseFloat(formatEther(supplyResult as unknown as bigint))),
-      targetRatio: parseFloat(formatEther(ratioResult as unknown as bigint))
+      targetRatio: parseFloat(formatEther(ratioResult as unknown as bigint)),
+      prgValue: prgValueResponse
     }
 
     setGoldiswapInfoState(response)
@@ -781,9 +810,10 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
     supply: number,
     floor: number,
     market: number,
-    targetRatio: number
+    targetRatio: number,
+    prgValue: number
   ) => {
-    setSimInfoState({ toggle, fsl, psl, supply, floor, market, targetRatio })
+    setSimInfoState({ toggle, fsl, psl, supply, floor, market, targetRatio, prgValue })
   }
 
   const updateAllowance = (newAllowance: number) => {
@@ -817,11 +847,22 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
       const dayData = chartData[day]
       const item = dayData.items[0]
       if(item) {
-        const result = marketPrice(parseFloat(formatEther(item.fsl)), parseFloat(formatEther(item.psl)), parseFloat(formatEther(item.supply)))
-        tempChartData.push({ [`${day}`]: result, value: result, date: formatTimestamp(item.timestamp) })
+        const marketResult = marketPrice(parseFloat(formatEther(item.fsl)), parseFloat(formatEther(item.psl)), parseFloat(formatEther(item.supply)))
+        const floorResult = floorPrice(parseFloat(formatEther(item.fsl)), parseFloat(formatEther(item.supply)))
+        tempChartData.push({
+          [`${day}`]: marketResult,
+          marketPrice: marketResult.toLocaleString('en-US', { maximumFractionDigits: 6 }),
+          floorPrice: floorResult.toLocaleString('en-US', { maximumFractionDigits: 6 }),
+          date: formatTimestamp(item.timestamp)
+        })
       }
       else {
-        tempChartData.push({ [`${day}`]: 0, value: 0, date: formatTimestamp(item.timestamp) })
+        tempChartData.push({
+          [`${day}`]: 0,
+          marketPrice: 0,
+          floorPrice: 0,
+          date: formatTimestamp(item.timestamp)
+        })
       }
     }
     let fallbackNumber: number | null = null;
@@ -838,7 +879,7 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
       }
       else if(farthestNumber !== null) {
         tempChartData[i][`${days[i]}`] = farthestNumber
-        tempChartData[i].value = farthestNumber
+        tempChartData[i].marketPrice = farthestNumber
       }
     }
     

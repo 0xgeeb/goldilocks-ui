@@ -84,7 +84,7 @@ export const Stats = () => {
           <span className={handleColors(goldiswapInfo.psl, simInfo.psl)}>{simInfo.toggle ? handleInfo(simInfo.psl) : handleInfo(goldiswapInfo.psl)}</span>
         </div>
       </div>
-      <div className="w-[100%] h-[50%] flex flex-row items-center justify-between tall:mt-[1%]">
+      <div className="w-[100%] h-[50%] flex flex-row items-center justify-between tall:mt-[0.25%]">
         <div className="flex flex-row items-center">
           <span className="mr-2">floor price:</span>
           <span className={handleFloorColors(floorPrice(goldiswapInfo.fsl, goldiswapInfo.supply), floorPrice(simInfo.fsl, simInfo.supply))}>${simInfo.toggle ? handlePrice(floorPrice(simInfo.fsl, simInfo.supply)) : handlePrice(floorPrice(goldiswapInfo.fsl, goldiswapInfo.supply))}</span>
@@ -96,6 +96,20 @@ export const Stats = () => {
         <div className="flex flex-row items-center">
           <span className="mr-2">target ratio:</span>
           <span className={handleColors(goldiswapInfo.targetRatio, simInfo.targetRatio)}>{simInfo.toggle ? handlePrice(simInfo.targetRatio * 100) : handlePrice(goldiswapInfo.targetRatio * 100)}%</span>
+        </div>
+      </div>
+      <div className="w-[100%] h-[50%] flex flex-row items-center justify-between tall:mt-[0.25%]">
+        <div className="flex flex-row items-center">
+          <span className="mr-2">porridge value:</span>
+          <span className={handleColors(goldiswapInfo.prgValue, simInfo.prgValue)}>${simInfo.toggle ? handlePrice(simInfo.prgValue) : handlePrice(goldiswapInfo.prgValue)}</span>
+        </div>
+        <div className="flex flex-row items-center">
+          <span className="mr-2">porridge supply:</span>
+          <span>{handleInfo(goldiswapInfo.prgSupply)}</span>
+        </div>
+        <div className="flex flex-row items-center">
+          <span className="mr-2">porridge market cap:</span>
+          <span className={handleColors(goldiswapInfo.prgMarketCap, simInfo.prgValue * goldiswapInfo.prgSupply)}>{simInfo.toggle ? handleInfo((simInfo.prgValue * goldiswapInfo.prgSupply) / 1000000) : handleInfo(goldiswapInfo.prgMarketCap / 1000000)}m</span>
         </div>
       </div>
     </div>

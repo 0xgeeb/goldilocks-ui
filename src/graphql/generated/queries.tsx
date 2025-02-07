@@ -18,6 +18,138 @@ export type Scalars = {
   BigInt: { input: any; output: any; }
 };
 
+export type Action = {
+  __typename?: 'Action';
+  calldatas: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  proposal: Proposal;
+  proposalId: Scalars['String']['output'];
+  signature: Scalars['String']['output'];
+  target: Scalars['String']['output'];
+  value: Scalars['BigInt']['output'];
+};
+
+export type ActionFilter = {
+  AND?: InputMaybe<Array<InputMaybe<ActionFilter>>>;
+  OR?: InputMaybe<Array<InputMaybe<ActionFilter>>>;
+  calldatas?: InputMaybe<Scalars['String']['input']>;
+  calldatas_gt?: InputMaybe<Scalars['String']['input']>;
+  calldatas_gte?: InputMaybe<Scalars['String']['input']>;
+  calldatas_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  calldatas_lt?: InputMaybe<Scalars['String']['input']>;
+  calldatas_lte?: InputMaybe<Scalars['String']['input']>;
+  calldatas_not?: InputMaybe<Scalars['String']['input']>;
+  calldatas_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  id_contains?: InputMaybe<Scalars['String']['input']>;
+  id_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not?: InputMaybe<Scalars['String']['input']>;
+  id_not_contains?: InputMaybe<Scalars['String']['input']>;
+  id_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id_starts_with?: InputMaybe<Scalars['String']['input']>;
+  proposalId?: InputMaybe<Scalars['String']['input']>;
+  proposalId_contains?: InputMaybe<Scalars['String']['input']>;
+  proposalId_ends_with?: InputMaybe<Scalars['String']['input']>;
+  proposalId_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  proposalId_not?: InputMaybe<Scalars['String']['input']>;
+  proposalId_not_contains?: InputMaybe<Scalars['String']['input']>;
+  proposalId_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  proposalId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  proposalId_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  proposalId_starts_with?: InputMaybe<Scalars['String']['input']>;
+  proposal_?: InputMaybe<ActionProposalFilter>;
+  signature?: InputMaybe<Scalars['String']['input']>;
+  signature_contains?: InputMaybe<Scalars['String']['input']>;
+  signature_ends_with?: InputMaybe<Scalars['String']['input']>;
+  signature_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  signature_not?: InputMaybe<Scalars['String']['input']>;
+  signature_not_contains?: InputMaybe<Scalars['String']['input']>;
+  signature_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  signature_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  signature_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  signature_starts_with?: InputMaybe<Scalars['String']['input']>;
+  target?: InputMaybe<Scalars['String']['input']>;
+  target_gt?: InputMaybe<Scalars['String']['input']>;
+  target_gte?: InputMaybe<Scalars['String']['input']>;
+  target_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  target_lt?: InputMaybe<Scalars['String']['input']>;
+  target_lte?: InputMaybe<Scalars['String']['input']>;
+  target_not?: InputMaybe<Scalars['String']['input']>;
+  target_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  value?: InputMaybe<Scalars['BigInt']['input']>;
+  value_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  value_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  value_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  value_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  value_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  value_not?: InputMaybe<Scalars['BigInt']['input']>;
+  value_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+};
+
+export type ActionPage = {
+  __typename?: 'ActionPage';
+  items: Array<Action>;
+  pageInfo: PageInfo;
+};
+
+export type ActionProposalFilter = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  description_contains?: InputMaybe<Scalars['String']['input']>;
+  description_ends_with?: InputMaybe<Scalars['String']['input']>;
+  description_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  description_not?: InputMaybe<Scalars['String']['input']>;
+  description_not_contains?: InputMaybe<Scalars['String']['input']>;
+  description_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  description_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  description_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  description_starts_with?: InputMaybe<Scalars['String']['input']>;
+  endBlock?: InputMaybe<Scalars['BigInt']['input']>;
+  endBlock_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  endBlock_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  endBlock_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  endBlock_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  endBlock_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  endBlock_not?: InputMaybe<Scalars['BigInt']['input']>;
+  endBlock_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  id_contains?: InputMaybe<Scalars['String']['input']>;
+  id_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not?: InputMaybe<Scalars['String']['input']>;
+  id_not_contains?: InputMaybe<Scalars['String']['input']>;
+  id_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id_starts_with?: InputMaybe<Scalars['String']['input']>;
+  proposalId?: InputMaybe<Scalars['BigInt']['input']>;
+  proposalId_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  proposalId_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  proposalId_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  proposalId_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  proposalId_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  proposalId_not?: InputMaybe<Scalars['BigInt']['input']>;
+  proposalId_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  proposer?: InputMaybe<Scalars['String']['input']>;
+  proposer_gt?: InputMaybe<Scalars['String']['input']>;
+  proposer_gte?: InputMaybe<Scalars['String']['input']>;
+  proposer_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  proposer_lt?: InputMaybe<Scalars['String']['input']>;
+  proposer_lte?: InputMaybe<Scalars['String']['input']>;
+  proposer_not?: InputMaybe<Scalars['String']['input']>;
+  proposer_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  startBlock?: InputMaybe<Scalars['BigInt']['input']>;
+  startBlock_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  startBlock_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  startBlock_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  startBlock_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  startBlock_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  startBlock_not?: InputMaybe<Scalars['BigInt']['input']>;
+  startBlock_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+};
+
 export type BandBera = {
   __typename?: 'BandBera';
   id: Scalars['BigInt']['output'];
@@ -231,8 +363,153 @@ export type PageInfo = {
   startCursor?: Maybe<Scalars['String']['output']>;
 };
 
+export type Proposal = {
+  __typename?: 'Proposal';
+  actions?: Maybe<ActionPage>;
+  description: Scalars['String']['output'];
+  endBlock: Scalars['BigInt']['output'];
+  id: Scalars['String']['output'];
+  proposalId: Scalars['BigInt']['output'];
+  proposer: Scalars['String']['output'];
+  startBlock: Scalars['BigInt']['output'];
+};
+
+
+export type ProposalActionsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Scalars['String']['input']>;
+  orderDirection?: InputMaybe<Scalars['String']['input']>;
+  where?: InputMaybe<ActionFilter>;
+};
+
+export type ProposalActionFilter = {
+  calldatas?: InputMaybe<Scalars['String']['input']>;
+  calldatas_gt?: InputMaybe<Scalars['String']['input']>;
+  calldatas_gte?: InputMaybe<Scalars['String']['input']>;
+  calldatas_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  calldatas_lt?: InputMaybe<Scalars['String']['input']>;
+  calldatas_lte?: InputMaybe<Scalars['String']['input']>;
+  calldatas_not?: InputMaybe<Scalars['String']['input']>;
+  calldatas_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  id_contains?: InputMaybe<Scalars['String']['input']>;
+  id_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not?: InputMaybe<Scalars['String']['input']>;
+  id_not_contains?: InputMaybe<Scalars['String']['input']>;
+  id_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id_starts_with?: InputMaybe<Scalars['String']['input']>;
+  proposalId?: InputMaybe<Scalars['String']['input']>;
+  proposalId_contains?: InputMaybe<Scalars['String']['input']>;
+  proposalId_ends_with?: InputMaybe<Scalars['String']['input']>;
+  proposalId_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  proposalId_not?: InputMaybe<Scalars['String']['input']>;
+  proposalId_not_contains?: InputMaybe<Scalars['String']['input']>;
+  proposalId_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  proposalId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  proposalId_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  proposalId_starts_with?: InputMaybe<Scalars['String']['input']>;
+  signature?: InputMaybe<Scalars['String']['input']>;
+  signature_contains?: InputMaybe<Scalars['String']['input']>;
+  signature_ends_with?: InputMaybe<Scalars['String']['input']>;
+  signature_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  signature_not?: InputMaybe<Scalars['String']['input']>;
+  signature_not_contains?: InputMaybe<Scalars['String']['input']>;
+  signature_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  signature_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  signature_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  signature_starts_with?: InputMaybe<Scalars['String']['input']>;
+  target?: InputMaybe<Scalars['String']['input']>;
+  target_gt?: InputMaybe<Scalars['String']['input']>;
+  target_gte?: InputMaybe<Scalars['String']['input']>;
+  target_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  target_lt?: InputMaybe<Scalars['String']['input']>;
+  target_lte?: InputMaybe<Scalars['String']['input']>;
+  target_not?: InputMaybe<Scalars['String']['input']>;
+  target_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  value?: InputMaybe<Scalars['BigInt']['input']>;
+  value_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  value_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  value_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  value_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  value_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  value_not?: InputMaybe<Scalars['BigInt']['input']>;
+  value_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+};
+
+export type ProposalFilter = {
+  AND?: InputMaybe<Array<InputMaybe<ProposalFilter>>>;
+  OR?: InputMaybe<Array<InputMaybe<ProposalFilter>>>;
+  actions_?: InputMaybe<ProposalActionFilter>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  description_contains?: InputMaybe<Scalars['String']['input']>;
+  description_ends_with?: InputMaybe<Scalars['String']['input']>;
+  description_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  description_not?: InputMaybe<Scalars['String']['input']>;
+  description_not_contains?: InputMaybe<Scalars['String']['input']>;
+  description_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  description_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  description_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  description_starts_with?: InputMaybe<Scalars['String']['input']>;
+  endBlock?: InputMaybe<Scalars['BigInt']['input']>;
+  endBlock_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  endBlock_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  endBlock_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  endBlock_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  endBlock_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  endBlock_not?: InputMaybe<Scalars['BigInt']['input']>;
+  endBlock_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  id_contains?: InputMaybe<Scalars['String']['input']>;
+  id_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not?: InputMaybe<Scalars['String']['input']>;
+  id_not_contains?: InputMaybe<Scalars['String']['input']>;
+  id_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id_starts_with?: InputMaybe<Scalars['String']['input']>;
+  proposalId?: InputMaybe<Scalars['BigInt']['input']>;
+  proposalId_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  proposalId_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  proposalId_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  proposalId_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  proposalId_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  proposalId_not?: InputMaybe<Scalars['BigInt']['input']>;
+  proposalId_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  proposer?: InputMaybe<Scalars['String']['input']>;
+  proposer_gt?: InputMaybe<Scalars['String']['input']>;
+  proposer_gte?: InputMaybe<Scalars['String']['input']>;
+  proposer_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  proposer_lt?: InputMaybe<Scalars['String']['input']>;
+  proposer_lte?: InputMaybe<Scalars['String']['input']>;
+  proposer_not?: InputMaybe<Scalars['String']['input']>;
+  proposer_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  startBlock?: InputMaybe<Scalars['BigInt']['input']>;
+  startBlock_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  startBlock_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  startBlock_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  startBlock_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  startBlock_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  startBlock_not?: InputMaybe<Scalars['BigInt']['input']>;
+  startBlock_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+};
+
+export type ProposalPage = {
+  __typename?: 'ProposalPage';
+  items: Array<Proposal>;
+  pageInfo: PageInfo;
+};
+
 export type Query = {
   __typename?: 'Query';
+  _meta?: Maybe<_Meta>;
+  action?: Maybe<Action>;
+  actions: ActionPage;
   bandBera?: Maybe<BandBera>;
   bandBeras: BandBeraPage;
   beradrome?: Maybe<Beradrome>;
@@ -243,6 +520,23 @@ export type Query = {
   goldiswapTxes: GoldiswapTxPage;
   honeycomb?: Maybe<Honeycomb>;
   honeycombs: HoneycombPage;
+  proposal?: Maybe<Proposal>;
+  proposals: ProposalPage;
+};
+
+
+export type QueryActionArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryActionsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Scalars['String']['input']>;
+  orderDirection?: InputMaybe<Scalars['String']['input']>;
+  where?: InputMaybe<ActionFilter>;
 };
 
 
@@ -330,6 +624,26 @@ export type QueryHoneycombsArgs = {
   where?: InputMaybe<HoneycombFilter>;
 };
 
+
+export type QueryProposalArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryProposalsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Scalars['String']['input']>;
+  orderDirection?: InputMaybe<Scalars['String']['input']>;
+  where?: InputMaybe<ProposalFilter>;
+};
+
+export type _Meta = {
+  __typename?: '_meta';
+  block?: Maybe<Scalars['Int']['output']>;
+};
+
 export type GoldilendNfTsOwnedQueryVariables = Exact<{
   owner: Scalars['String']['input'];
 }>;
@@ -356,6 +670,11 @@ export type GetDailyEndPricesQueryVariables = Exact<{
 
 
 export type GetDailyEndPricesQuery = { __typename?: 'Query', firstDay: { __typename?: 'GoldiswapTxPage', items: Array<{ __typename?: 'GoldiswapTx', txType: string, fsl: any, psl: any, supply: any, timestamp: any }> }, secondDay: { __typename?: 'GoldiswapTxPage', items: Array<{ __typename?: 'GoldiswapTx', txType: string, fsl: any, psl: any, supply: any, timestamp: any }> }, thirdDay: { __typename?: 'GoldiswapTxPage', items: Array<{ __typename?: 'GoldiswapTx', txType: string, fsl: any, psl: any, supply: any, timestamp: any }> }, fourthDay: { __typename?: 'GoldiswapTxPage', items: Array<{ __typename?: 'GoldiswapTx', txType: string, fsl: any, psl: any, supply: any, timestamp: any }> }, fifthDay: { __typename?: 'GoldiswapTxPage', items: Array<{ __typename?: 'GoldiswapTx', txType: string, fsl: any, psl: any, supply: any, timestamp: any }> }, sixthDay: { __typename?: 'GoldiswapTxPage', items: Array<{ __typename?: 'GoldiswapTx', txType: string, fsl: any, psl: any, supply: any, timestamp: any }> }, seventhDay: { __typename?: 'GoldiswapTxPage', items: Array<{ __typename?: 'GoldiswapTx', txType: string, fsl: any, psl: any, supply: any, timestamp: any }> } };
+
+export type GoldiGovProposalsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GoldiGovProposalsQuery = { __typename?: 'Query', proposals: { __typename?: 'ProposalPage', items: Array<{ __typename?: 'Proposal', id: string, proposalId: any, proposer: string, startBlock: any, endBlock: any, description: string, actions?: { __typename?: 'ActionPage', items: Array<{ __typename?: 'Action', id: string, proposalId: string, target: string, value: any, signature: string, calldatas: string }> } | null }> } };
 
 
 export const GoldilendNfTsOwnedDocument = gql`
@@ -567,3 +886,59 @@ export type GetDailyEndPricesQueryHookResult = ReturnType<typeof useGetDailyEndP
 export type GetDailyEndPricesLazyQueryHookResult = ReturnType<typeof useGetDailyEndPricesLazyQuery>;
 export type GetDailyEndPricesSuspenseQueryHookResult = ReturnType<typeof useGetDailyEndPricesSuspenseQuery>;
 export type GetDailyEndPricesQueryResult = Apollo.QueryResult<GetDailyEndPricesQuery, GetDailyEndPricesQueryVariables>;
+export const GoldiGovProposalsDocument = gql`
+    query GoldiGovProposals {
+  proposals {
+    items {
+      id
+      proposalId
+      proposer
+      startBlock
+      endBlock
+      description
+      actions {
+        items {
+          id
+          proposalId
+          target
+          value
+          signature
+          calldatas
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGoldiGovProposalsQuery__
+ *
+ * To run a query within a React component, call `useGoldiGovProposalsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGoldiGovProposalsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGoldiGovProposalsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGoldiGovProposalsQuery(baseOptions?: Apollo.QueryHookOptions<GoldiGovProposalsQuery, GoldiGovProposalsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GoldiGovProposalsQuery, GoldiGovProposalsQueryVariables>(GoldiGovProposalsDocument, options);
+      }
+export function useGoldiGovProposalsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GoldiGovProposalsQuery, GoldiGovProposalsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GoldiGovProposalsQuery, GoldiGovProposalsQueryVariables>(GoldiGovProposalsDocument, options);
+        }
+export function useGoldiGovProposalsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GoldiGovProposalsQuery, GoldiGovProposalsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GoldiGovProposalsQuery, GoldiGovProposalsQueryVariables>(GoldiGovProposalsDocument, options);
+        }
+export type GoldiGovProposalsQueryHookResult = ReturnType<typeof useGoldiGovProposalsQuery>;
+export type GoldiGovProposalsLazyQueryHookResult = ReturnType<typeof useGoldiGovProposalsLazyQuery>;
+export type GoldiGovProposalsSuspenseQueryHookResult = ReturnType<typeof useGoldiGovProposalsSuspenseQuery>;
+export type GoldiGovProposalsQueryResult = Apollo.QueryResult<GoldiGovProposalsQuery, GoldiGovProposalsQueryVariables>;

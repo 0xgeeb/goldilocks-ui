@@ -2,11 +2,12 @@
 
 import { createContext, PropsWithChildren, useContext, useState } from "react"
 import { readContract, getPublicClient } from "@wagmi/core"
-import { parseEther, formatEther } from "viem"
+import { parseEther, formatEther, parseUnits, formatUnits } from "viem"
 import { useAccount } from "wagmi"
 import { useDebounce } from "../../hooks"
 import { config } from "../../providers/WagmiProvider"
 import { contracts } from "../../utils/addressi"
+import { EtherfiAPIResponse } from "../../utils/interfaces"
 
 const INITIAL_STATE: any = {
 
@@ -48,14 +49,81 @@ const INITIAL_STATE: any = {
     bhytRouterAllowance: 0,
     honeyRouterAllowance: 0
   },
+  goldivaultInfoWeeth: {
+    endTime: 0,
+    vaultDeposits: 0,
+    fixedApr: 0,
+    impliedYield: 0,
+    leverage: 0,
+    otLiquidity: 0,
+    durationRatio: 0,
+    restakingYield: 0
+  },
   goldivaultWalletInfoWeeth: {
-    honey: 0,
+    weeth: 0,
     weot: 0,
     weyt: 0,
-    honeyRouterAllowance: 0,
+    weethRouterAllowance: 0,
     weotRouterAllowance: 0,
     weytRouterAllowance: 0,
-    honeyVaultAllowance: 0
+    weethVaultAllowance: 0
+  },
+  goldivaultInfoSolvbtc: {
+    endTime: 0,
+    fixedApr: 0,
+    otLiquidity: 0
+  },
+  goldivaultWalletInfoSolvbtc: {
+    solvbtc: 0,
+    solvbtcAllowance: 0,
+    solvbtcot: 0,
+    solvbtcyt: 0
+  },
+  goldivaultInfoUnibtc: {
+    endTime: 0,
+    fixedApr: 0,
+    otLiquidity: 0,
+    bedrockLeverage: 0,
+    babylonLeverage: 0,
+    restakingYield: 0
+  },
+  goldivaultWalletInfoUnibtc: {
+    unibtc: 0,
+    unibtcAllowance: 0,
+    unibtcot: 0,
+    unibtcyt: 0
+  },
+  vaultDisplayInfo: {
+    weeth: {
+      fixedApr: 0,
+      daysTil: '',
+      liquidity: 0,
+      ytPrice: 0
+    },
+    rseth: {
+      fixedApr: 0,
+      daysTil: '',
+      liquidity: 0,
+      ytPrice: 0
+    },
+    ebtc: {
+      fixedApr: 0,
+      daysTil: '',
+      liquidity: 0,
+      ytPrice: 0
+    },
+    unibtc: {
+      fixedApr: 0,
+      daysTil: '',
+      liquidity: 0,
+      ytPrice: 0
+    },
+    solvbtc: {
+      fixedApr: 0,
+      daysTil: '',
+      liquidity: 0,
+      ytPrice: 0
+    }
   },
   slippage: {
     amount: 1,
@@ -101,7 +169,12 @@ const INITIAL_STATE: any = {
   tradeOutput: 0,
   setTradeOutput: (_tradeOutput: number) => {},
   debouncedTradeInput: 0,
-  otPrice: 0,
+  vaultSwapTxAmount: 0,
+  calledDtAmountMin: 0,
+  priceImpact: 0,
+  impliedApr: 0,
+  honeyApprovalAmount: 0,
+  otApprovalAmount: 0,
   otAmount: 0,
   setOtAmount: (_otAmount: number) => {},
   ytAmount: 0,
@@ -124,8 +197,13 @@ const INITIAL_STATE: any = {
   refreshGoldivaultWalletInfoBhoney: async () => {},
   refreshGoldivaultInfoWeeth: async () => {},
   refreshGoldivaultWalletInfoWeeth: async () => {},
+  refreshGoldivaultInfoSolvbtc: async () => {},
+  refreshGoldivaultWalletInfoSolvbtc: async () => {},
+  refreshGoldivaultInfoUnibtc: async () => {},
+  refreshGoldivaultWalletInfoUnibtc: async () => {},
+  refreshVaultDisplayInfo: async () => {},
   calculateDeposit: async (_vault: string) => {},
-  calculateOTRedeem: async () => {},
+  calculateOTRedeem: async (_vault: string) => {},
   calculateYTRedeem: async () => {},
   quoteSwap: async () => {},
   quoteV3Swap: async () => {},
@@ -142,7 +220,8 @@ const INITIAL_STATE: any = {
   flipTokens: () => {},
   enableInfoPopup: (_info: string) => {},
   disableInfoPopup: (_info: string) => {},
-  infoPopupText: ''
+  infoPopupText: '',
+  checkVaultLiquidity: async () => false
 }
 
 const GoldivaultContext = createContext(INITIAL_STATE)
@@ -163,13 +242,24 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
   const [tradeInputState, setTradeInputState] = useState<number>(INITIAL_STATE.tradeInput)
   const debouncedTradeInputState = useDebounce(tradeInputState, 1000)
   const [tradeOutputState, setTradeOutputState] = useState<number>(INITIAL_STATE.tradeOutput)
-  const [otPriceState, setOtPriceState] = useState<number>(INITIAL_STATE.otPrice)
+  const [vaultSwapTxAmountState, setVaultSwapTxAmountState] = useState<number>(INITIAL_STATE.vaultSwapTxAmount)
+  const [calledDtAmountMinState, setCalledDtAmountMin] = useState<number>(INITIAL_STATE.calledDtAmountMin)
+  const [priceImpactState, setPriceImpactState] = useState<number>(INITIAL_STATE.priceImpact)
+  const [impliedAprState, setImpliedAprState] = useState<number>(INITIAL_STATE.impliedApr)
+  const [honeyApprovalAmountState, setHoneyApprovalAmountState] = useState<number>(INITIAL_STATE.honeyApprovalAmount)
+  const [otApprovalAmountState, setOtApprovalAmountState] = useState<number>(INITIAL_STATE.otApprovalAmount)
   const [slippageState, setSlippageState] = useState(INITIAL_STATE.slippage)
   const [goldivaultInfoHoneyWberaState, setGoldivaultInfoHoneyWberaState] = useState(INITIAL_STATE.goldivaultInfoHoneyWbera)
   const [goldivaultInfoBhoneyState, setGoldivaultInfoBhoneyState] = useState(INITIAL_STATE.goldivaultInfoBhoney)
+  const [goldivaultInfoWeethState, setGoldivaultInfoWeethState] = useState(INITIAL_STATE.goldivaultInfoWeeth)
   const [goldivaultWalletInfoHoneyWberaState, setGoldivaultWalletInfoHoneyWberaState] = useState(INITIAL_STATE.goldivaultWalletInfoHoneyWbera)
   const [goldivaultWalletInfoBhoneyState, setGoldivaultWalletInfoBhoneyState] = useState(INITIAL_STATE.goldivaultWalletInfoBhoney)
   const [goldivaultWalletInfoWeethState, setGoldivaultWalletInfoWeethState] = useState(INITIAL_STATE.goldivaultWalletInfoWeeth)
+  const [goldivaultInfoSolvbtcState, setGoldivaultInfoSolvbtcState] = useState(INITIAL_STATE.goldivaultInfoSolvbtc)
+  const [goldivaultWalletInfoSolvbtcState, setGoldivaultWalletInfoSolvbtcState] = useState(INITIAL_STATE.goldivaultWalletInfoSolvbtc)
+  const [goldivaultInfoUnibtcState, setGoldivaultInfoUnibtcState] = useState(INITIAL_STATE.goldivaultInfoUnibtc)
+  const [goldivaultWalletInfoUnibtcState, setGoldivaultWalletInfoUnibtcState] = useState(INITIAL_STATE.goldivaultWalletInfoUnibtc)
+  const [vaultDisplayInfoState, setVaultDisplayInfoState] = useState(INITIAL_STATE.vaultDisplayInfo)
   const [notificationState, setNotificationState] = useState(INITIAL_STATE.notification)
   const [activeToggleState, setActiveToggleState] = useState<string>(INITIAL_STATE.activeToggle)
   const [tradeDirectionState, setTradeDirectionState] = useState<string>(INITIAL_STATE.tradeDirection)
@@ -187,6 +277,28 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
   const [infoPopupToggleState, setInfoPopupToggleState] = useState<boolean>(INITIAL_STATE.infoPopupToggle)
   const [wutPopupState, setWutPopupState] = useState<boolean>(INITIAL_STATE.wutPopup)
   const [infoPopupTextState, setInfoPopupTextState] = useState<string>(INITIAL_STATE.infoPopupText)
+
+  const formatDate = (timestamp: number): string => {
+    const date = new Date(timestamp * 1000)
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    const year = String(date.getFullYear())
+    return `${month}-${day}-${year}`
+  }
+
+  const getRelativeDate = (timestamp: number): string => {
+    const now = Date.now()
+    const diffInMilliseconds = (timestamp * 1000) - now
+    const diffInDays = Math.round(diffInMilliseconds / (1000 * 60 * 60 * 24))
+  
+    if (diffInDays === 0) {
+      return "today"
+    } else if (diffInDays > 0) {
+      return `${Math.abs(diffInDays)} day${diffInDays === 1 ? "" : "s"}`
+    } else {
+      return `${Math.abs(diffInDays)} day${diffInDays === -1 ? "" : "s"} ago`
+    }
+  }
 
   const changeSlippage = (amount: number, displayString: string) => {
     const updatedState = { ...slippageState }
@@ -565,15 +677,132 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
   }
 
   const refreshGoldivaultInfoWeeth = async () => {
+    setInfoLoadingState(true)
+    const client = getPublicClient(config)
+    const blockResult: any = await client.getBlock()
+    const timestamp = parseFloat(blockResult.timestamp)
+    const endTimeResult: any = await readContract(config, {
+      address: contracts.weethVault.address as `0x${string}`,
+      abi: contracts.weethVault.abi,
+      functionName: 'endTime',
+      args: []
+    })
+    const endTime = parseFloat(endTimeResult)
+    const durationResult: any = await readContract(config, {
+      address: contracts.weethVault.address as `0x${string}`,
+      abi: contracts.weethVault.abi,
+      functionName: 'duration',
+      args: []
+    })
+    const duration = parseFloat(durationResult)
+    const remainingTime = timestamp > endTime ? 0 : endTime - timestamp
+    const ratio = remainingTime / duration
+
+    const buyingOTQuoteResult: any = await readContract(config, {
+      address: contracts.quoterv2.address as `0x${string}`,
+      abi: contracts.quoterv2.abi,
+      functionName: 'quoteExactOutputSingle',
+      args: [[
+        contracts.weeth.address,
+        contracts.weot.address,
+        parseEther(`1`),
+        500,
+        0
+      ]]
+    })
+    const buyingOTPrice = parseFloat(formatEther(buyingOTQuoteResult[0] as unknown as bigint))
+    const impliedYieldResult = ((1 - buyingOTPrice) * (31536000 / duration)) * 100
+
+    const weethVaultBalanceResult = await readContract(config, {
+      address: contracts.weeth.address as `0x${string}`,
+      abi: contracts.weeth.abi,
+      functionName: 'balanceOf',
+      args: [contracts.weethVault.address]
+    })
+    const vaultDepositsResult = parseFloat(formatEther(weethVaultBalanceResult as unknown as bigint)) * 4000
+
+    const timeDifference = (parseFloat(endTimeResult)*1000) - Date.now()
+    const fixedDaysDifference = timeDifference / (1000 * 60 * 60 * 24)
+    const daysTil = parseFloat(fixedDaysDifference.toFixed(2))
+    const fixedAprResponse = (((1 - buyingOTPrice) / 1) * 100) * (365 / daysTil)
+
+    const currentYtPrice = 1 - buyingOTPrice
+    const leverageResult = (1 / currentYtPrice) * 4
+
+    const weethOTLiquidity = await readContract(config, {
+      address: contracts.weeth.address as `0x${string}`,
+      abi: contracts.weeth.abi, 
+      functionName: 'balanceOf',
+      args: ['0xD26503C0447bEF83e978e7b872cb2d6b9B35262c']
+    })
+    const weethLiquidity = await readContract(config, {
+      address: contracts.weot.address as `0x${string}`,
+      abi: contracts.weot.abi,
+      functionName: 'balanceOf',
+      args: ['0xD26503C0447bEF83e978e7b872cb2d6b9B35262c']
+    })
+    // const weethPriceResult: any = await readContract(config, {
+    //   address: contracts.quoterv2.address as `0x${string}`,
+    //   abi: contracts.quoterv2.abi,
+    //   functionName: 'quoteExactOutputSingle',
+    //   args: [[
+    //     '0x0E4aaF1351de4c0264C5c7056Ef3777b41BD8e03',
+    //     '0xE28AfD8c634946833e89ee3F122C06d7C537E8A8',
+    //     parseEther(`1`),
+    //     3000,
+    //     0
+    //   ]]
+    // })
+    // const weethPrice = parseFloat(formatEther(weethPriceResult[0] as unknown as bigint))
+    const liquidityResult = (parseFloat(formatEther(weethOTLiquidity as unknown as bigint)) + parseFloat(formatEther(weethLiquidity as unknown as bigint))) * 3100
+    const etherfiResult = await getEtherfiData()
+
+    const response = {
+      endTime: parseFloat(endTimeResult),
+      vaultDeposits: vaultDepositsResult,
+      fixedApr: fixedAprResponse,
+      impliedYield: impliedYieldResult,
+      leverage: leverageResult,
+      otLiquidity: liquidityResult,
+      durationRatio: ratio,
+      restakingYield: etherfiResult ? etherfiResult["7_day_restaking_apr"] / 0.90 : 0
+    }
+
+    setGoldivaultInfoWeethState(response)
     setInfoLoadingState(false)
+  }
+
+  const getEtherfiData = async (): Promise<EtherfiAPIResponse | null> => {
+    // let rsethResponse: any | null = null
+    // try {
+    //   const response = await fetch("/api/kelpdao")
+    //   rsethResponse = await response.json()
+    //   console.log(rsethResponse)
+    //   console.log(rsethResponse.data[rsethResponse.data.length - 1].apy)
+    // }
+    // catch {
+    //   console.log('rseth api error')
+    // }
+    let etherfiResponse: EtherfiAPIResponse | null = null
+    try {
+      const response = await fetch("/api/etherfi")
+      etherfiResponse = await response.json()
+    }
+    catch (e) {
+      console.log("error getting apr:", e)
+    }
+
+    return etherfiResponse
   }
 
   const refreshGoldivaultWalletInfoWeeth = async () => {
     if(address) {
+      // todo: timeout for slow rpc
+      await new Promise(resolve => setTimeout(resolve, 2000))
       setWalletInfoLoadingState(true)
-      const honeyBalResult = await readContract(config, {
-        address: contracts.honey.address as `0x${string}`,
-        abi: contracts.honey.abi,
+      const weethBalResult = await readContract(config, {
+        address: contracts.weeth.address as `0x${string}`,
+        abi: contracts.weeth.abi,
         functionName: 'balanceOf',
         args: [address]
       })
@@ -589,15 +818,15 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         functionName: 'balanceOf',
         args: [address]
       })
-      const honeyAllResult = await readContract(config, {
-        address: contracts.honey.address as `0x${string}`,
-        abi: contracts.honey.abi,
+      const weethAllResult = await readContract(config, {
+        address: contracts.weeth.address as `0x${string}`,
+        abi: contracts.weeth.abi,
         functionName: 'allowance',
         args: [address, contracts.routerv2.address]
       })
-      const honeyVaultAllResult = await readContract(config, {
-        address: contracts.honey.address as `0x${string}`,
-        abi: contracts.honey.abi,
+      const weethVaultAllResult = await readContract(config, {
+        address: contracts.weeth.address as `0x${string}`,
+        abi: contracts.weeth.abi,
         functionName: 'allowance',
         args: [address, contracts.weethVault.address]
       })
@@ -615,18 +844,303 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       })
 
       const response = {
-        honey: parseFloat(formatEther(honeyBalResult as unknown as bigint)),
+        weeth: parseFloat(formatEther(weethBalResult as unknown as bigint)),
         weot: parseFloat(formatEther(weotBalResult as unknown as bigint)),
         weyt: parseFloat(formatEther(weytBalResult as unknown as bigint)),
-        honeyRouterAllowance: parseFloat(formatEther(honeyAllResult as unknown as bigint)),
+        weethRouterAllowance: parseFloat(formatEther(weethAllResult as unknown as bigint)),
         weotRouterAllowance: parseFloat(formatEther(weotAllResult as unknown as bigint)),
         weytRouterAllowance: parseFloat(formatEther(weytAllResult as unknown as bigint)),
-        honeyVaultAllowance: parseFloat(formatEther(honeyVaultAllResult as unknown as bigint))
+        weethVaultAllowance: parseFloat(formatEther(weethVaultAllResult as unknown as bigint))
       }
 
       setGoldivaultWalletInfoWeethState(response)
       setWalletInfoLoadingState(false)
     }
+  }
+
+  const refreshGoldivaultInfoSolvbtc = async () => {
+    setInfoLoadingState(true)
+    const endTimeResult: any = await readContract(config, {
+      address: contracts.solvbtcVault.address as `0x${string}`,
+      abi: contracts.solvbtcVault.abi,
+      functionName: 'endTime',
+      args: []
+    })
+
+    const response = {
+      endTime: parseFloat(endTimeResult),
+      fixedApr: 0,
+      otLiquidity: 0
+    }
+
+    setGoldivaultInfoSolvbtcState(response)
+    setInfoLoadingState(false)
+  }
+
+  const refreshGoldivaultWalletInfoSolvbtc = async () => {
+    if(address) {
+      setWalletInfoLoadingState(true)
+      const solvbtcBalResult = await readContract(config, {
+        address: contracts.solvbtc.address as `0x${string}`,
+        abi: contracts.solvbtc.abi,
+        functionName: 'balanceOf',
+        args: [address]
+      })
+      const solvbtcotBalResult = await readContract(config, {
+        address: contracts.solvbtcot.address as `0x${string}`,
+        abi: contracts.solvbtcot.abi,
+        functionName: 'balanceOf',
+        args: [address]
+      })
+      const solvbtcytBalResult = await readContract(config, {
+        address: contracts.solvbtcyt.address as `0x${string}`,
+        abi: contracts.solvbtcyt.abi,
+        functionName: 'balanceOf',
+        args: [address]
+      })
+      const solvbtcAllResult = await readContract(config, {
+        address: contracts.solvbtc.address as `0x${string}`,
+        abi: contracts.solvbtc.abi,
+        functionName: 'allowance',
+        args: [address, contracts.solvbtcVault.address]
+      })
+
+      const response = {
+        solvbtc: parseFloat(formatEther(solvbtcBalResult as unknown as bigint)),
+        solvbtcAllowance: parseFloat(formatEther(solvbtcotBalResult as unknown as bigint)),
+        solvbtcot: parseFloat(formatEther(solvbtcytBalResult as unknown as bigint)),
+        solvbtcyt: parseFloat(formatEther(solvbtcAllResult as unknown as bigint)),
+      }
+
+      setGoldivaultWalletInfoSolvbtcState(response)
+      setWalletInfoLoadingState(false)
+    }
+  }
+
+  const refreshGoldivaultInfoUnibtc = async () => {
+    setInfoLoadingState(true)
+    const endTimeResult: any = await readContract(config, {
+      address: contracts.unibtcVault.address as `0x${string}`,
+      abi: contracts.unibtcVault.abi,
+      functionName: 'endTime',
+      args: []
+    })
+    const buyingOTQuoteResult: any = await readContract(config, {
+      address: contracts.quoterv2.address as `0x${string}`,
+      abi: contracts.quoterv2.abi,
+      functionName: 'quoteExactOutputSingle',
+      args: [[
+        contracts.unibtc.address,
+        contracts.unibtcot.address,
+        parseUnits('1', 8),
+        500,
+        0
+      ]]
+    })
+    const buyingOTPrice = parseFloat((buyingOTQuoteResult[0] as unknown as bigint).toString()) / 1e8
+    const currentYtPrice = 1 - buyingOTPrice
+
+    const timeDifference = (parseFloat(endTimeResult)*1000) - Date.now()
+    const fixedDaysDifference = timeDifference / (1000 * 60 * 60 * 24)
+    const daysTil = parseFloat(fixedDaysDifference.toFixed(2))
+    const fixedAprResponse = (((1 - buyingOTPrice) / 1) * 100) * (365 / daysTil)
+
+    const unibtcLiquidity = await readContract(config, {
+      address: contracts.unibtc.address as `0x${string}`,
+      abi: contracts.unibtc.abi,
+      functionName: 'balanceOf',
+      args: ['0xC08B25dA34bf269E2cB37b951b4dff2D59B32165']
+    })
+    const unibtcOTLiquidity = await readContract(config, {
+      address: contracts.unibtcot.address as `0x${string}`,
+      abi: contracts.unibtcot.abi, 
+      functionName: 'balanceOf',
+      args: ['0xC08B25dA34bf269E2cB37b951b4dff2D59B32165']
+    })
+    const liquidityResult = ((parseFloat((unibtcOTLiquidity as unknown as bigint).toString()) / 1e8) + (parseFloat((unibtcLiquidity as unknown as bigint).toString()) / 1e8)) * 100000
+
+    const response = {
+      endTime: parseFloat(endTimeResult),
+      fixedApr: fixedAprResponse,
+      otLiquidity: liquidityResult,
+      bedrockLeverage: (1 / currentYtPrice) * 4,
+      babylonLeverage: (1 / currentYtPrice) * 1,
+      restakingYield: 0
+    }
+
+    setGoldivaultInfoUnibtcState(response)
+    setInfoLoadingState(false)
+  }
+
+  const refreshGoldivaultWalletInfoUnibtc = async () => {
+    if(address) {
+      setWalletInfoLoadingState(true)
+      const unibtcBalResult = await readContract(config, {
+        address: contracts.unibtc.address as `0x${string}`,
+        abi: contracts.unibtc.abi,
+        functionName: 'balanceOf',
+        args: [address]
+      })
+      const unibtcAllResult = await readContract(config, {
+        address: contracts.unibtc.address as `0x${string}`,
+        abi: contracts.unibtc.abi,
+        functionName: 'allowance',
+        args: [address, contracts.unibtcVault.address]
+      })
+      const unibtcotBalResult = await readContract(config, {
+        address: contracts.unibtcot.address as `0x${string}`,
+        abi: contracts.unibtcot.abi,
+        functionName: 'balanceOf',
+        args: [address]
+      })
+      const unibtcytBalResult = await readContract(config, {
+        address: contracts.unibtcyt.address as `0x${string}`,
+        abi: contracts.unibtcyt.abi,
+        functionName: 'balanceOf',
+        args: [address]
+      })
+
+      const response = {
+        unibtc: parseFloat((unibtcBalResult as unknown as bigint).toString()) / 1e8,
+        unibtcAllowance: parseFloat((unibtcAllResult as unknown as bigint).toString()) / 1e8,
+        unibtcot: parseFloat((unibtcotBalResult as unknown as bigint).toString()) / 1e8,
+        unibtcyt: parseFloat((unibtcytBalResult as unknown as bigint).toString()) / 1e8,
+      }
+
+      setGoldivaultWalletInfoUnibtcState(response)
+      setWalletInfoLoadingState(false)
+    }
+  }
+
+  const refreshVaultDisplayInfo = async () => {
+    setInfoLoadingState(true)
+
+    // weeth
+    const endTimeResultWeeth: any = await readContract(config, {
+      address: contracts.weethVault.address as `0x${string}`,
+      abi: contracts.weethVault.abi,
+      functionName: 'endTime',
+      args: []
+    })
+    const buyingOTQuoteResultWeeth: any = await readContract(config, {
+      address: contracts.quoterv2.address as `0x${string}`,
+      abi: contracts.quoterv2.abi,
+      functionName: 'quoteExactOutputSingle',
+      args: [[
+        contracts.weeth.address,
+        contracts.weot.address,
+        parseEther(`1`),
+        500,
+        0
+      ]]
+    })
+    const weethOTLiquidity = await readContract(config, {
+      address: contracts.weeth.address as `0x${string}`,
+      abi: contracts.weeth.abi, 
+      functionName: 'balanceOf',
+      args: ['0xD26503C0447bEF83e978e7b872cb2d6b9B35262c']
+    })
+    const weethLiquidity = await readContract(config, {
+      address: contracts.weot.address as `0x${string}`,
+      abi: contracts.weot.abi,
+      functionName: 'balanceOf',
+      args: ['0xD26503C0447bEF83e978e7b872cb2d6b9B35262c']
+    })
+    // const weethPriceResult: any = await readContract(config, {
+    //   address: contracts.quoterv2.address as `0x${string}`,
+    //   abi: contracts.quoterv2.abi,
+    //   functionName: 'quoteExactOutputSingle',
+    //   args: [[
+    //     '0x0E4aaF1351de4c0264C5c7056Ef3777b41BD8e03',
+    //     '0xE28AfD8c634946833e89ee3F122C06d7C537E8A8',
+    //     parseEther(`1`),
+    //     3000,
+    //     0
+    //   ]]
+    // })
+    // const weethPrice = parseFloat(formatEther(weethPriceResult[0] as unknown as bigint))
+    const liquidityResultWeeth = (parseFloat(formatEther(weethOTLiquidity as unknown as bigint)) + parseFloat(formatEther(weethLiquidity as unknown as bigint))) * 3100
+    const buyingOTPriceWeeth = parseFloat(formatEther(buyingOTQuoteResultWeeth[0] as unknown as bigint))
+    const timeDifferenceWeeth = (parseFloat(endTimeResultWeeth)*1000) - Date.now()
+    const fixedDaysDifferenceWeeth = timeDifferenceWeeth / (1000 * 60 * 60 * 24)
+    const daysTilWeeth = parseFloat(fixedDaysDifferenceWeeth.toFixed(2))
+    const fixedAprResponseWeeth = (((1 - buyingOTPriceWeeth) / 1) * 100) * (365 / daysTilWeeth)
+    const ytPriceWeeth = 1 - buyingOTPriceWeeth
+
+    // unibtc
+    const endTimeResultUnibtc: any = await readContract(config, {
+      address: contracts.unibtcVault.address as `0x${string}`,
+      abi: contracts.unibtcVault.abi,
+      functionName: 'endTime',
+      args: []
+    })
+    const buyingOTQuoteResultUnibtc: any = await readContract(config, {
+      address: contracts.quoterv2.address as `0x${string}`,
+      abi: contracts.quoterv2.abi,
+      functionName: 'quoteExactOutputSingle',
+      args: [[
+        contracts.unibtc.address,
+        contracts.unibtcot.address,
+        parseUnits(`1`, 8),
+        500,
+        0
+      ]]
+    })
+    const unibtcOTLiquidity = await readContract(config, {
+      address: contracts.unibtc.address as `0x${string}`,
+      abi: contracts.unibtc.abi, 
+      functionName: 'balanceOf',
+      args: ['0xC08B25dA34bf269E2cB37b951b4dff2D59B32165']
+    })
+    const unibtcLiquidity = await readContract(config, {
+      address: contracts.unibtcot.address as `0x${string}`,
+      abi: contracts.unibtcot.abi,
+      functionName: 'balanceOf',
+      args: ['0xC08B25dA34bf269E2cB37b951b4dff2D59B32165']
+    })
+    const liquidityResultUnibtc = ((parseFloat((unibtcOTLiquidity as unknown as bigint).toString()) / 1e8) + (parseFloat((unibtcLiquidity as unknown as bigint).toString()) / 1e8)) * 100000
+    const buyingOTPriceUnibtc = parseFloat((buyingOTQuoteResultUnibtc[0] as unknown as bigint).toString())
+    const timeDifferenceUnibtc = (parseFloat(endTimeResultUnibtc)*1000) - Date.now()
+    const fixedDaysDifferenceUnibtc = timeDifferenceUnibtc / (1000 * 60 * 60 * 24)
+    const daysTilUnibtc = parseFloat(fixedDaysDifferenceUnibtc.toFixed(2))
+    const fixedAprResponseUnibtc = (((1 - buyingOTPriceUnibtc) / 1) * 100) * (365 / daysTilUnibtc)
+    const ytPriceUnibtc = 1 - buyingOTPriceUnibtc
+
+    const response = {
+      weeth: {
+        fixedApr: fixedAprResponseWeeth,
+        daysTil: getRelativeDate(parseFloat(endTimeResultWeeth)),
+        liquidity: liquidityResultWeeth,
+        ytPrice: ytPriceWeeth,
+      },
+      rseth: {
+        fixedApr: 0,
+        daysTil: '',
+        liquidity: 0,
+        ytPrice: 0
+      },
+      ebtc: {
+        fixedApr: 0,
+        daysTil: '',
+        liquidity: 0,
+        ytPrice: 0
+      },
+      unibtc: {
+        fixedApr: fixedAprResponseUnibtc,
+        daysTil: getRelativeDate(parseFloat(endTimeResultUnibtc)),
+        liquidity: liquidityResultUnibtc,
+        ytPrice: ytPriceUnibtc
+      },
+      solvbtc: {
+        fixedApr: 0,
+        daysTil: '',
+        liquidity: 0,
+        ytPrice: 0
+      }
+    }
+    
+    setVaultDisplayInfoState(response)
+    setInfoLoadingState(false)
   }
 
   const handleChange = (input: string) => {
@@ -681,8 +1195,8 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
     }
     else if(vault === 'weeth') {
       if(activeToggleState === 'DEPOSIT') {
-        setDisplayStringState(goldivaultWalletInfoWeethState.honey.toFixed(4))
-        setDepositState(goldivaultWalletInfoWeethState.honey)
+        setDisplayStringState(goldivaultWalletInfoWeethState.weeth.toFixed(4))
+        setDepositState(goldivaultWalletInfoWeethState.weeth)
         setOutputTokensLoadingState(true)
       }
       else if(activeToggleState === 'REDEEMOT') {
@@ -697,7 +1211,7 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
             num = goldivaultWalletInfoWeethState.weot
           }
           else {
-            num = goldivaultWalletInfoWeethState.honey
+            num = goldivaultWalletInfoWeethState.weeth
           }
         }
         else {
@@ -705,7 +1219,75 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
             num = goldivaultWalletInfoWeethState.weyt
           }
           else {
-            num = goldivaultWalletInfoWeethState.honey
+            num = goldivaultWalletInfoWeethState.weeth
+          }
+        }
+        setDisplayStringState(num.toFixed(4))
+        setTradeInputState(num)
+        setOutputTokensLoadingState(true)
+      }
+    }
+    else if(vault === 'unibtc') {
+      if(activeToggleState === 'DEPOSIT') {
+        setDisplayStringState(goldivaultWalletInfoUnibtcState.unibtc.toFixed(4))
+        setDepositState(goldivaultWalletInfoUnibtcState.unibtc)
+        setOutputTokensLoadingState(true)
+      }
+      else if(activeToggleState === 'REDEEMOT') {
+        setDisplayStringState(goldivaultWalletInfoUnibtcState.unibtcot.toFixed(4))
+        setRedeemOTState(goldivaultWalletInfoUnibtcState.unibtcot)
+        setOutputTokensLoadingState(true)
+      }
+      else {
+        let num
+        if(activeToggleState === 'TRADEOT') {
+          if(tradeDirectionState === 'OUT') {
+            num = goldivaultWalletInfoUnibtcState.unibtcot
+          }
+          else {
+            num = goldivaultWalletInfoUnibtcState.unibtc
+          }
+        }
+        else {
+          if(tradeDirectionState === 'OUT') {
+            num = goldivaultWalletInfoUnibtcState.unibtcyt
+          }
+          else {
+            num = goldivaultWalletInfoUnibtcState.unibtc
+          }
+        }
+        setDisplayStringState(num.toFixed(4))
+        setTradeInputState(num)
+        setOutputTokensLoadingState(true)
+      }
+    }
+    else if(vault === 'solvbtc') {
+      if(activeToggleState === 'DEPOSIT') {
+        setDisplayStringState(goldivaultWalletInfoSolvbtcState.solvbtc.toFixed(4))
+        setDepositState(goldivaultWalletInfoSolvbtcState.solvbtc)
+        setOutputTokensLoadingState(true)
+      }
+      else if(activeToggleState === 'REDEEMOT') {
+        setDisplayStringState(goldivaultWalletInfoSolvbtcState.solvbtcot.toFixed(4))
+        setRedeemOTState(goldivaultWalletInfoSolvbtcState.solvbtcot)
+        setOutputTokensLoadingState(true)
+      }
+      else {
+        let num
+        if(activeToggleState === 'TRADEOT') {
+          if(tradeDirectionState === 'OUT') {
+            num = goldivaultWalletInfoSolvbtcState.solvbtcot
+          }
+          else {
+            num = goldivaultWalletInfoSolvbtcState.solvbtc
+          }
+        }
+        else {
+          if(tradeDirectionState === 'OUT') {
+            num = goldivaultWalletInfoSolvbtcState.solvbtcyt
+          }
+          else {
+            num = goldivaultWalletInfoSolvbtcState.solvbtc
           }
         }
         setDisplayStringState(num.toFixed(4))
@@ -758,6 +1340,8 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
     setDisplayStringState('')
     setTradeInputState(0)
     setTradeOutputState(0)
+    setPriceImpactState(0)
+    setImpliedAprState(0)
     setAllowanceButtonsState(false)
     if(tradeDirectionState === 'OUT') {
       setTradeDirectionState('IN')
@@ -779,15 +1363,17 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       setOtAmountState(depositState)
       setYtAmountState(parseFloat(formatEther(depositResult as unknown as bigint)))
     }
-    if(vault === 'weeth') {
-      depositResult = await readContract(config, {
-        address: contracts.weethVault.address as `0x${string}`,
-        abi: contracts.weethVault.abi,
-        functionName: 'calculateDeposit',
-        args: [parseEther(`${debouncedDepositState}`)]
-      })
+    else if(vault === 'weeth') {
       setOtAmountState(depositState)
-      setYtAmountState(parseFloat(formatEther(depositResult as unknown as bigint)))
+      setYtAmountState(depositState)
+    }
+    else if(vault === 'unibtc') {
+      setOtAmountState(depositState)
+      setYtAmountState(depositState)
+    }
+    else if(vault === 'solvbtc') {
+      setOtAmountState(depositState)
+      setYtAmountState(depositState)
     }
     else {
       setOtAmountState(0)
@@ -796,22 +1382,34 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
     setOutputTokensLoadingState(false)
   }
 
-  const calculateOTRedeem = async () => {
-    const redeemResult = await readContract(config, {
-      address: contracts.honeywberagoldivault.address as `0x${string}`,
-      abi: contracts.honeywberagoldivault.abi,
-      functionName: 'calculateDeposit',
-      args: [parseEther(`${debouncedRedeemOTState}`)]
-    })
+  const calculateOTRedeem = async (vault: string) => {
     const client = getPublicClient(config)
     const block: any = await client.getBlock()
-    if(parseInt(block.timestamp.toString(), 16) < parseInt(goldivaultInfoHoneyWberaState.endTime.toString(), 16)) {
-      setOtAmountState(debouncedRedeemOTState * 0.97)
+    let redeemResult
+    if(vault === 'honeywbera') {
+      redeemResult = await readContract(config, {
+        address: contracts.honeywberagoldivault.address as `0x${string}`,
+        abi: contracts.honeywberagoldivault.abi,
+        functionName: 'calculateDeposit',
+        args: [parseEther(`${debouncedRedeemOTState}`)]
+      })
+      if(parseInt(block.timestamp.toString(), 16) < parseInt(goldivaultInfoHoneyWberaState.endTime.toString(), 16)) {
+        setOtAmountState(debouncedRedeemOTState * 0.97)
+      }
+      else {
+        setOtAmountState(debouncedRedeemOTState)
+      }
+      setYtAmountState(parseFloat(formatEther(redeemResult as unknown as bigint)))
     }
-    else {
+    else if(vault === 'unibtc') {
       setOtAmountState(debouncedRedeemOTState)
+      setYtAmountState(debouncedRedeemOTState)
     }
-    setYtAmountState(parseFloat(formatEther(redeemResult as unknown as bigint)))
+    else if(vault === 'solvbtc') {
+      setOtAmountState(debouncedRedeemOTState)
+      setYtAmountState(debouncedRedeemOTState)
+    }
+
     setOutputTokensLoadingState(false)
   }
 
@@ -885,22 +1483,109 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
     setOutputTokensLoadingState(false)
   }
 
-  const quoteV3Swap = async () => {
+  const getDaysUntil = (timestamp: number): number => {
+    const now = new Date()
+    const futureDate = new Date(timestamp * 1000)
+    const differenceInMs = futureDate.getTime() - now.getTime()
+    const daysLeft = Math.floor(differenceInMs / (1000 * 60 * 60 * 24))
+    return daysLeft >= 0 ? daysLeft : 0
+  }
+
+  const getVaultOT = (vault: string): string => {
+    if(vault === 'weeth') {
+      return contracts.weot.address
+    }
+    else if(vault === 'rseth') {
+      return ''
+    }
+    else if(vault === 'ebtc') {
+      return ''
+    }
+    else if (vault === 'unibtc') {
+      return contracts.unibtcot.address
+    }
+    else {
+      return contracts.solvbtcot.address
+    }
+  }
+
+  const getVaultDT = (vault: string): string => {
+    if(vault === 'weeth') {
+      return contracts.weeth.address
+    }
+    else if(vault === 'rseth') {
+      return ''
+    }
+    else if(vault === 'ebtc') {
+      return ''
+    }
+    else if (vault === 'unibtc') {
+      return contracts.unibtc.address
+    }
+    else {
+      return contracts.solvbtc.address
+    }
+  }
+
+  const getVault = (vault: string): string => {
+    if(vault === 'weeth') {
+      return contracts.weethVault.address
+    }
+    else if(vault === 'rseth') {
+      return ''
+    }
+    else if(vault === 'ebtc') {
+      return ''
+    }
+    else if (vault === 'unibtc') {
+      return contracts.unibtcVault.address
+    }
+    else {
+      return contracts.solvbtcVault.address
+    }
+  }
+
+  const getVaultFixedAPR = (vault: string): number => {
+    if(vault === 'weeth') {
+      return goldivaultInfoWeethState.fixedApr
+    }
+    else if(vault === 'rseth') {
+      return 0
+    }
+    else if(vault === 'ebtc') {
+      return 0
+    }
+    else if (vault === 'unibtc') {
+      return goldivaultInfoUnibtcState.fixedApr
+    }
+    else {
+      return goldivaultInfoSolvbtcState.fixedApr
+    }
+  }
+
+  const quoteV3Swap = async (vault: string, vaultType: string) => {
+    const vaultOT = getVaultOT(vault)
+    const vaultDT = getVaultDT(vault)
+    const vaultAddy = getVault(vault)
+    const vaultFixedApr = getVaultFixedAPR(vault)
     if(activeToggleState === 'TRADEOT') {
       let quoteResult: any
+      let quoteForOutput: any
+      let impliedApr: any
       if(tradeDirectionState === 'OUT') {
         quoteResult = await readContract(config, {
           address: contracts.quoterv2.address as `0x${string}`,
           abi: contracts.quoterv2.abi,
           functionName: 'quoteExactInputSingle',
           args: [[
-            contracts.weot.address,
-            contracts.honey.address,
-            parseEther(tradeInputState.toString()),
-            3000,
+            vaultOT,
+            vaultDT,
+            vaultType === 'eth' ? parseEther(tradeInputState.toString()) : parseUnits(tradeInputState.toString(), 8),
+            500,
             0
           ]]
         })
+        quoteForOutput = vaultType === 'eth' ? parseFloat(formatEther(quoteResult[0] as unknown as bigint)) : parseFloat((quoteResult[0] as unknown as bigint).toString()) / 1e8
       }
       else {
         quoteResult = await readContract(config, {
@@ -908,16 +1593,35 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
           abi: contracts.quoterv2.abi,
           functionName: 'quoteExactInputSingle',
           args: [[
-            contracts.honey.address,
-            contracts.weot.address,
-            parseEther(tradeInputState.toString()),
-            3000,
+            vaultDT,
+            vaultOT,
+            vaultType === 'eth' ? parseEther(tradeInputState.toString()) : parseUnits(tradeInputState.toString(), 8),
+            500,
             0
           ]]
         })
+        quoteForOutput = vaultType === 'eth' ? parseFloat(formatEther(quoteResult[0] as unknown as bigint)) : parseFloat((quoteResult[0] as unknown as bigint).toString()) / 1e8
       }
+      const buyingOTQuoteResult: any = await readContract(config, {
+        address: contracts.quoterv2.address as `0x${string}`,
+        abi: contracts.quoterv2.abi,
+        functionName: 'quoteExactOutputSingle',
+        args: [[
+          vaultDT,
+          vaultOT,
+          vaultType === 'eth' ? parseEther(`1`) : parseUnits('1', 8),
+          500,
+          0
+        ]]
+      })
+      const buyingOTPrice = vaultType === 'eth' ? parseFloat(formatEther(buyingOTQuoteResult[0] as unknown as bigint)) : parseFloat((buyingOTQuoteResult[0] as unknown as bigint).toString()) / 1e8
+      const executionPrice = tradeDirectionState === 'OUT' ? quoteForOutput / tradeInputState : tradeInputState / quoteForOutput 
+      const predictedPriceImpact = Math.abs(((executionPrice - buyingOTPrice) / buyingOTPrice) * 100)
+      impliedApr = tradeDirectionState === 'OUT' ? (vaultFixedApr * (100 - predictedPriceImpact)) / 100 : (vaultFixedApr * (100 + predictedPriceImpact)) / 100
 
-      setTradeOutputState(parseFloat(formatEther(quoteResult[0] as unknown as bigint)))
+      setPriceImpactState(predictedPriceImpact)
+      setImpliedAprState(impliedApr)
+      setTradeOutputState(quoteForOutput)
       setOutputTokensLoadingState(false)
     }
     else {
@@ -925,14 +1629,14 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       const blockResult: any = await client.getBlock()
       const timestamp = parseFloat(blockResult.timestamp)
       const endTimeResult: any = await readContract(config, {
-        address: contracts.weethVault.address as `0x${string}`,
+        address: vaultAddy as `0x${string}`,
         abi: contracts.weethVault.abi,
         functionName: 'endTime',
         args: []
       })
       const endTime = parseFloat(endTimeResult)
       const durationResult: any = await readContract(config, {
-        address: contracts.weethVault.address as `0x${string}`,
+        address: vaultAddy as `0x${string}`,
         abi: contracts.weethVault.abi,
         functionName: 'duration',
         args: []
@@ -940,29 +1644,233 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       const duration = parseFloat(durationResult)
       const remainingTime = timestamp > endTime ? 0 : endTime - timestamp
       const ratio = remainingTime / duration
-      const quoteResult: any = await readContract(config, {
-        address: contracts.quoterv2.address as `0x${string}`,
-        abi: contracts.quoterv2.abi,
-        functionName: 'quoteExactInputSingle',
-        args: [[
-          contracts.weot.address,
-          contracts.honey.address,
-          parseEther('1'),
-          3000,
-          0
-        ]]
-      })
-      const otPrice = parseFloat(formatEther(quoteResult[0] as unknown as bigint))
-      const ytPrice = (1 - otPrice) / ratio
       if(tradeDirectionState === 'OUT') {
-        setTradeOutputState(tradeInputState * ytPrice)
-        setOtPriceState(otPrice * (1 + (slippageState.amount / 100)))
+        // const buyingOTQuoteResult: any = await readContract(config, {
+        //   address: contracts.quoterv2.address as `0x${string}`,
+        //   abi: contracts.quoterv2.abi,
+        //   functionName: 'quoteExactOutputSingle',
+        //   args: [[
+        //     vaultDT,
+        //     vaultOT,
+        //     vaultType === 'eth' ? parseEther(`1`) : parseUnits('1', 8),
+        //     500,
+        //     0
+        //   ]]
+        // })
+        // const buyingOTPrice = vaultType === 'eth' ? parseFloat(formatEther(buyingOTQuoteResult[0] as unknown as bigint)) : parseFloat((buyingOTQuoteResult[0] as unknown as bigint).toString()) / 1e8
+        // const dtSpendQuoteResult: any = await readContract(config, {
+        //   address: contracts.quoterv2.address as `0x${string}`,
+        //   abi: contracts.quoterv2.abi,
+        //   functionName: 'quoteExactOutputSingle',
+        //   args: [[
+        //     vaultDT,
+        //     vaultOT,
+        //     vaultType === 'eth' ? parseEther(`${tradeInputState}`) : parseUnits(tradeInputState.toString(), 8),
+        //     500,
+        //     0
+        //   ]]
+        // })
+        // const amountInMax = vaultType === 'eth' ? parseFloat(formatEther(dtSpendQuoteResult[0] as unknown as bigint)) * 1.003 : (parseFloat((dtSpendQuoteResult[0] as unknown as bigint).toString()) / 1e8) * 1.003
+        // const currentYtPrice = 1 - buyingOTPrice
+        // const calleddtAmountMin = (tradeInputState - amountInMax) * 0.997
+        // const dtAmountMin = tradeInputState * currentYtPrice
+        // const executionYtPrice = vaultType === 'eth' ? (tradeInputState - parseFloat(formatEther(dtSpendQuoteResult[0] as unknown as bigint))) / tradeInputState : (tradeInputState - (parseFloat((dtSpendQuoteResult[0] as unknown as bigint).toString()) / 1e8)) / tradeInputState
+        // const predictedPriceImpact = Math.abs(((currentYtPrice - executionYtPrice) / currentYtPrice) * 100)
+        // const impliedApr = (vaultFixedApr * (100 - predictedPriceImpact)) / 100
+        // setTradeOutputState(dtAmountMin * (1 - Math.abs((currentYtPrice - executionYtPrice) / currentYtPrice)))
+        // setCalledDtAmountMin(calleddtAmountMin)
+        const QuoteResult: any = await readContract(config, {
+          address: contracts.quoterv2.address as `0x${string}`,
+          abi: contracts.quoterv2.abi,
+          functionName: 'quoteExactOutputSingle',
+          args: [[
+            vaultDT,
+            vaultOT,
+            parseUnits(`${tradeInputState}`, 8),
+            500,
+            0
+          ]]
+        })
+        const buyingOTQuoteResult: any = await readContract(config, {
+          address: contracts.quoterv2.address as `0x${string}`,
+          abi: contracts.quoterv2.abi,
+          functionName: 'quoteExactOutputSingle',
+          args: [[
+            vaultDT,
+            vaultOT,
+            parseUnits('0.00001', 8),
+            500,
+            0
+          ]]
+        })
+        const amountInMax = parseFloat(formatUnits(QuoteResult[0] as unknown as bigint, 8)) * 1.2
+        const dtAmountMin = (tradeInputState - amountInMax) * 0.80
+        const oldYtPrice = 1 - parseFloat(formatUnits(buyingOTQuoteResult[0] as unknown as bigint, 8))
+        // (0.00001 - quote for buying 0.00001 OT)x100,000
+        const currentYtPrice = (0.00001 - parseFloat(formatUnits(buyingOTQuoteResult[0] as unknown as bigint, 8))) * 100000
+        console.log(oldYtPrice, currentYtPrice)
+        const executionPrice = (tradeInputState - parseFloat(formatUnits(QuoteResult[0] as unknown as bigint, 8))) / tradeInputState
+        const predictedPriceImpact = Math.abs(((currentYtPrice - executionPrice) / currentYtPrice) * 100)
+        const impliedApr = (vaultFixedApr * (100 - predictedPriceImpact)) / 100
+        setTradeOutputState(tradeInputState * currentYtPrice)
+        setCalledDtAmountMin(dtAmountMin)
+        setVaultSwapTxAmountState(amountInMax)
+        setHoneyApprovalAmountState(amountInMax)
+        setPriceImpactState(predictedPriceImpact)
+        setImpliedAprState(impliedApr)
       }
       else {
-        setTradeOutputState(tradeInputState / ytPrice)
-        setOtPriceState(otPrice * (1 - (slippageState.amount / 100)))
+        // const quoteResult: any = await readContract(config, {
+        //   address: contracts.quoterv2.address as `0x${string}`,
+        //   abi: contracts.quoterv2.abi,
+        //   functionName: 'quoteExactInputSingle',
+        //   args: [[
+        //     vaultOT,
+        //     vaultDT,
+        //     vaultType === 'eth' ? parseEther(`1`) : parseUnits('1', 8),
+        //     500,
+        //     0
+        //   ]]
+        // })
+        // const otPrice = vaultType === 'eth' ? parseFloat(formatEther(quoteResult[0] as unknown as bigint)) : parseFloat((quoteResult[0] as unknown as bigint).toString()) / 1e8
+        // const ytPrice = 1 - otPrice
+        // const ytAmount = (tradeInputState / ytPrice) * (1 - (slippageState.amount / 100))
+        // const dtNeeded = tradeInputState > ytAmount ? 0 : ytAmount - tradeInputState
+        // const dtProceedsQuoteResult: any = await readContract(config, {
+        //   address: contracts.quoterv2.address as `0x${string}`,
+        //   abi: contracts.quoterv2.abi,
+        //   functionName: 'quoteExactInputSingle',
+        //   args: [[
+        //     vaultOT,
+        //     vaultDT,
+        //     vaultType === 'eth' ? parseEther(`${ytAmount}`) : parseUnits(ytAmount.toString(), 8),
+        //     500,
+        //     0
+        //   ]]
+        // })
+        // const amountOutMin = vaultType === 'eth' ? parseFloat(formatEther(dtProceedsQuoteResult[0] as unknown as bigint)) * 0.997 : (parseFloat((dtProceedsQuoteResult[0] as unknown as bigint).toString()) / 1e8) * 0.997
+        // const actualSpend = vaultType === 'eth' ? ytAmount - parseFloat(formatEther(dtProceedsQuoteResult[0] as unknown as bigint)) : ytAmount - (parseFloat((dtProceedsQuoteResult[0] as unknown as bigint).toString()) / 1e8)
+        // const executionPrice = actualSpend / ytAmount
+        // const predictedPriceImpact = Math.abs(((executionPrice - ytPrice) / ytPrice) * 100)
+        // const impliedApr = (vaultFixedApr * (100 + predictedPriceImpact)) / 100
+        
+        const oldquoteResult: any = await readContract(config, {
+          address: contracts.quoterv2.address as `0x${string}`,
+          abi: contracts.quoterv2.abi,
+          functionName: 'quoteExactInputSingle',
+          args: [[
+            vaultOT,
+            vaultDT,
+            parseUnits('1', 8),
+            500,
+            0
+          ]]
+        })
+        const quoteResult: any = await readContract(config, {
+          address: contracts.quoterv2.address as `0x${string}`,
+          abi: contracts.quoterv2.abi,
+          functionName: 'quoteExactInputSingle',
+          args: [[
+            vaultOT,
+            vaultDT,
+            parseUnits('0.00001', 8),
+            500,
+            0
+          ]]
+        })
+        const oldytPrice = 1 - parseFloat(formatUnits(oldquoteResult[0] as unknown as bigint, 8))
+        // (0.0001 - quote for selling 0.00001 OT)x100,000 
+        const ytPrice = (0.0001 - parseFloat(formatUnits(quoteResult[0] as unknown as bigint, 8))) * 100000
+        console.log(parseFloat(formatUnits(oldquoteResult[0] as unknown as bigint, 8)), parseFloat(formatUnits(quoteResult[0] as unknown as bigint, 8)))
+        console.log(oldytPrice, ytPrice)
+        const ytAmount = tradeInputState / ytPrice
+        const dtProceedsQuoteResult: any = await readContract(config, {
+          address: contracts.quoterv2.address as `0x${string}`,
+          abi: contracts.quoterv2.abi,
+          functionName: 'quoteExactInputSingle',
+          args: [[
+            vaultOT,
+            vaultDT,
+            parseUnits(`${ytAmount / ratio}`, 8),
+            500,
+            0
+          ]]
+        })
+        const amountOutMin = parseFloat(formatUnits(dtProceedsQuoteResult[0] as unknown as bigint, 8)) * 0.80
+        const dtNeeded = tradeInputState > ytAmount ? 0 : ytAmount - tradeInputState
+        const executionPrice = ((ytAmount / ratio) - parseFloat(formatUnits(dtProceedsQuoteResult[0] as unknown as bigint, 8))) / ytAmount
+        const predictedPriceImpact = Math.abs(((executionPrice - ytPrice) / ytPrice) * 100)
+        const impliedApr = (vaultFixedApr * (100 + predictedPriceImpact)) / 100
+        setTradeOutputState(ytAmount * (1 - Math.abs((executionPrice - ytPrice) / ytPrice)))
+        setCalledDtAmountMin(ytAmount)
+        setVaultSwapTxAmountState(amountOutMin)
+        setOtApprovalAmountState(tradeInputState + dtNeeded)
+        setHoneyApprovalAmountState((tradeInputState + dtNeeded) + dtNeeded + ((tradeInputState + dtNeeded) * 1.003))
+        setPriceImpactState(predictedPriceImpact)
+        setImpliedAprState(impliedApr)
       }
       setOutputTokensLoadingState(false)
+    }
+  }
+
+  const checkVaultLiquidity = async (vault: string, vaultType: string): Promise<boolean> => {
+    const vaultAddy = getVault(vault)
+    const vaultOT = getVaultOT(vault)
+    const vaultDT = getVaultDT(vault)
+    const liquidityResult = await readContract(config, {
+      address: vaultDT as `0x${string}`,
+      abi: contracts.weeth.abi,
+      functionName: 'balanceOf',
+      args: [vaultAddy]
+    })
+    const client = getPublicClient(config)
+    const blockResult: any = await client.getBlock()
+    const timestamp = parseFloat(blockResult.timestamp)
+    const endTimeResult: any = await readContract(config, {
+      address: vaultAddy as `0x${string}`,
+      abi: contracts.weethVault.abi,
+      functionName: 'endTime',
+      args: []
+    })
+    const endTime = parseFloat(endTimeResult)
+    const durationResult: any = await readContract(config, {
+      address: vaultAddy as `0x${string}`,
+      abi: contracts.weethVault.abi,
+      functionName: 'duration',
+      args: []
+    })
+    const quoteResult: any = await readContract(config, {
+      address: contracts.quoterv2.address as `0x${string}`,
+      abi: contracts.quoterv2.abi,
+      functionName: 'quoteExactInputSingle',
+      args: [[
+        vaultOT,
+        vaultDT,
+        vaultType === 'eth' ? parseEther(`1`) : parseUnits('1', 8),
+        500,
+        0
+      ]]
+    })
+    const otPrice = vaultType === 'eth' ? parseFloat(formatEther(quoteResult[0] as unknown as bigint)) : parseFloat((quoteResult[0] as unknown as bigint).toString()) / 1e8
+    const duration = parseFloat(durationResult)
+    const remainingTime = timestamp > endTime ? 0 : endTime - timestamp
+    const ratio = remainingTime / duration
+    const vaultLiq = vaultType === 'eth' ? parseFloat(formatEther(liquidityResult as unknown as bigint)) : parseFloat((liquidityResult as unknown as bigint).toString()) / 1e8
+    if(tradeDirectionState === 'OUT') {
+      if(vaultLiq < (tradeOutputState * (1 - (slippageState.amount / 100))) / ratio) {
+        return false
+      }
+      else {
+        return true
+      }
+    }
+    else {
+      if(vaultLiq < (tradeInputState / ratio) * otPrice) {
+        return false
+      }
+      else {
+        return true
+      }
     }
   }
 
@@ -1040,7 +1948,7 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       setInfoPopupToggleState(true)
     }
     if(info === 'pointsmultiplier') {
-      setInfoPopupTextState('Boosted Etherfi points multiplier given to YT holders')
+      setInfoPopupTextState('Boosted points multiplier given to YT holders')
       setInfoPopupToggleState(true)
     }
     if(info === 'pointsperyt') {
@@ -1048,7 +1956,47 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       setInfoPopupToggleState(true)
     }
     if(info === 'pointsleverage') {
-      setInfoPopupTextState('Effective Etherfi points leverage achieved by holding 1 YT')
+      setInfoPopupTextState('Effective points leverage achieved by holding 1 YT')
+      setInfoPopupToggleState(true)
+    }
+    if(info === 'vaultmaturity') {
+      setInfoPopupTextState('At maturity, YT tokens stop receiving yield and OT tokens become redeemable 1:1 for the underlying asset.')
+      setInfoPopupToggleState(true)
+    }
+    if(info === 'tvlweeth') {
+      setInfoPopupTextState('Amount of weETH currently held in vault')
+      setInfoPopupToggleState(true)
+    }
+    if(info === 'fixedaprweeth') {
+      setInfoPopupTextState('Guaranteed annualized APR for buying OT at current price and holding until maturity. Alternatively: the expected apr implied by the current YT price')
+      setInfoPopupToggleState(true)
+    }
+    if(info === 'impliedyieldweeth') {
+      setInfoPopupTextState('Implied APR of points/yield based on current YT price')
+      setInfoPopupToggleState(true)
+    }
+    if(info === 'weethvaultinfo') {
+      setInfoPopupTextState(`4x Etherfi points and LRT^2 staking rewards;69x Etherfi point leverage`)
+      setInfoPopupToggleState(true)
+    }
+    if(info === 'rsethvaultinfo') {
+      setInfoPopupTextState(`2x Kelp DAO points and 1x Eigenlayer restaking rewards;69x Kelp DAO point leverage and 69x Eigenlayer point leverage`)
+      setInfoPopupToggleState(true)
+    }
+    if(info === 'ebtcvaultinfo') {
+      setInfoPopupTextState(`1x Babylon points, 2x Lombard points, 1x Symbiotic points, 3x Veda points, and 2x Karak points;69x Babylon point leverage, 69x Lombard point leverage, 69x Symbiotic point leverage, 69x Veda point leverage, and 69x Karak point leverage`)
+      setInfoPopupToggleState(true)
+    }
+    if(info === 'unibtcvaultinfo') {
+      setInfoPopupTextState(`4x Bedrock points and 1x Babylon points;69x Bedrock point leverage and 69x Babylon point leverage`)
+      setInfoPopupToggleState(true)
+    }
+    if(info === 'solvbtcvaultinfo') {
+      setInfoPopupTextState(`1x Babylon points and 4x Solv points;69x Babylon point leverage and 69x Solv point leverage`)
+      setInfoPopupToggleState(true)
+    }
+    if(info === 'impliedapr') {
+      setInfoPopupTextState('The apr implied by the price at which your YT price is predicted to execute')
       setInfoPopupToggleState(true)
     }
   }
@@ -1065,7 +2013,13 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         goldivaultWalletInfoHoneyWbera: goldivaultWalletInfoHoneyWberaState,
         goldivaultInfoBhoney: goldivaultInfoBhoneyState,
         goldivaultWalletInfoBhoney: goldivaultWalletInfoBhoneyState,
+        goldivaultInfoWeeth: goldivaultInfoWeethState,
         goldivaultWalletInfoWeeth: goldivaultWalletInfoWeethState,
+        goldivaultInfoSolvbtc: goldivaultInfoSolvbtcState,
+        goldivaultWalletInfoSolvbtc: goldivaultWalletInfoSolvbtcState,
+        goldivaultInfoUnibtc: goldivaultInfoUnibtcState,
+        goldivaultWalletInfoUnibtc: goldivaultWalletInfoUnibtcState,
+        vaultDisplayInfo: vaultDisplayInfoState,
         slippage: slippageState,
         refreshGoldivaultInfoHoneyWbera,
         refreshGoldivaultWalletInfoHoneyWbera,
@@ -1073,6 +2027,11 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         refreshGoldivaultWalletInfoBhoney,
         refreshGoldivaultInfoWeeth,
         refreshGoldivaultWalletInfoWeeth,
+        refreshGoldivaultInfoSolvbtc,
+        refreshGoldivaultInfoUnibtc,
+        refreshGoldivaultWalletInfoSolvbtc,
+        refreshGoldivaultWalletInfoUnibtc,
+        refreshVaultDisplayInfo,
         deposit: depositState,
         setDeposit: setDepositState,
         debouncedDeposit: debouncedDepositState,
@@ -1089,7 +2048,12 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         debouncedTradeInput: debouncedTradeInputState,
         tradeOutput: tradeOutputState,
         setTradeOutput: setTradeOutputState,
-        otPrice: otPriceState,
+        vaultSwapTxAmount: vaultSwapTxAmountState,
+        calledDtAmountMin: calledDtAmountMinState,
+        priceImpact: priceImpactState,
+        impliedApr: impliedAprState,
+        honeyApprovalAmount: honeyApprovalAmountState,
+        otApprovalAmount: otApprovalAmountState,
         changeSlippage,
         changeSlippageToggle,
         checkSlippageAmount,
@@ -1133,7 +2097,8 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         flipTokens,
         enableInfoPopup,
         disableInfoPopup,
-        infoPopupText: infoPopupTextState
+        infoPopupText: infoPopupTextState,
+        checkVaultLiquidity
       }}
     >
       { children }

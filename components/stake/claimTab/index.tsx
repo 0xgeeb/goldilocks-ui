@@ -85,11 +85,11 @@ export const ClaimTab = () => {
 
   return (
     <div className="absolute top-[15%] md:top-[14%] lg:top-[12%] xl:top-[11%] left-[10%] md:left-[15%] lg:left-[25%] xl:left-[30%] w-[80%] md:w-[70%] lg:w-[50%] xl:w-[40%] h-[60%] border-2 border-black bg-[#EEDCD2] z-20">
-      <div className="absolute top-4 left-0 w-8 skew-y-[45deg] border-b-2 border-black"></div>
-      <div className="absolute bottom-4 left-0 w-8 -skew-y-[45deg] border-b-2 border-black"></div>
-      <div className="absolute top-4 right-0 w-8 -skew-y-[45deg] border-b-2 border-black"></div>
-      <div className="absolute bottom-4 right-0 w-8 skew-y-[45deg] border-b-2 border-black"></div>
-      <div className={`absolute inset-8 ${txConfirming ? "" : "border-2 border-black"} bg-[#D9C6BA]`}>
+      <div className="absolute top-3 left-0 w-6 skew-y-[45deg] border-b-2 border-black"></div>
+      <div className="absolute bottom-3 left-0 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
+      <div className="absolute top-3 right-0 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
+      <div className="absolute bottom-3 right-0 w-6 skew-y-[45deg] border-b-2 border-black"></div>
+      <div className={`absolute inset-6 ${txConfirming ? "" : "border-2 border-black"} bg-[#D9C6BA]`}>
         {
           txConfirming ? <img className="w-[100%] h-[100%]" src="/images/bg-transaction.png" alt="tx" /> :
           notification.toggle ? <Notification /> :

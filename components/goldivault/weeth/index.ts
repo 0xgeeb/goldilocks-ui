@@ -1,5 +1,0 @@
-export * from './vaultInfoWeeth'
-export * from './vaultBoxWeeth'
-export * from './vaultButtonWeeth'
-export * from './togglesWeeth'
-export * from './tradeTabWeeth'

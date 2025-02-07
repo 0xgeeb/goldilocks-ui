@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client"
-import { useGoldilend, useDesktop } from "../../../providers"
+import { useGoldilend, useDesktop, useGeo } from "../../../providers"
 import { GoldilendPageMobile } from "../../goldilendMobile"
 import {
   Toggles,
@@ -15,7 +15,8 @@ import {
   Footer,
   Loading,
   ChangeChain,
-  MintNFTs
+  MintNFTs,
+  TAndCs
 } from "../../utils"
 
 export const GoldilendPage = () => {
@@ -31,6 +32,8 @@ export const GoldilendPage = () => {
   } = useGoldilend()
 
   const { isDesktop } = useDesktop()
+
+  const { signed } = useGeo()
 
   useEffect(() => {
     setPageLoading(false)
@@ -59,6 +62,9 @@ export const GoldilendPage = () => {
         pageLoading ?
         <Loading /> :
         isDesktop ?
+        (
+          signed !== 'TRUE' ?
+          <TAndCs /> :
           <main className="w-screen h-screen" onClick={() => handlePopups()}>
             <NavBar wutPopup={wutPopup} setWutPopup={setWutPopup} />
             <div className="w-[100%] h-[89%] xl:h-[85%] bg-cover bg-bottom bg-[url('/images/bg-goldilend.png')] relative">
@@ -72,7 +78,8 @@ export const GoldilendPage = () => {
               <ChangeChain />
               <MintNFTs />
             </div>
-          </main> :
+          </main>
+        ) :
         <GoldilendPageMobile />
       }
     </ApolloProvider>

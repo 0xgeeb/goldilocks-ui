@@ -175,3 +175,26 @@ query GetDailyEndPrices(
     }
   }
 }
+
+query GoldiGovProposals {
+  proposals {
+    items {
+    	id
+    	proposalId
+    	proposer
+    	startBlock
+    	endBlock
+    	description
+      actions {
+        items {
+        	id
+    			proposalId
+    			target
+    			value
+    			signature
+    			calldatas
+        }
+      }
+    }
+  }
+}

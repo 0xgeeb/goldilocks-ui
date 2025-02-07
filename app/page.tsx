@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description: "Berachain Defi"
 }
 
-export default function Goldilend() {
+export default function Home() {
   
   return (
     <HomePage />

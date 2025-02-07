@@ -9,6 +9,11 @@ type Query {
   honeycombs(timestamp: Int, where: HoneycombFilter, orderBy: String, orderDirection: String, before: String, after: String, limit: Int): HoneycombPage!
   goldiswapTx(id: String!, timestamp: Int): GoldiswapTx
   goldiswapTxes(timestamp: Int, where: GoldiswapTxFilter, orderBy: String, orderDirection: String, before: String, after: String, limit: Int): GoldiswapTxPage!
+  proposal(id: String!): Proposal
+  proposals(where: ProposalFilter, orderBy: String, orderDirection: String, before: String, after: String, limit: Int): ProposalPage!
+  action(id: String!): Action
+  actions(where: ActionFilter, orderBy: String, orderDirection: String, before: String, after: String, limit: Int): ActionPage!
+  _meta: _meta
 }
 
 type BondBera {
@@ -213,4 +218,277 @@ input GoldiswapTxFilter {
   timestamp_lt: BigInt
   timestamp_gte: BigInt
   timestamp_lte: BigInt
+}
+
+type Proposal {
+  id: String!
+  proposalId: BigInt!
+  proposer: String!
+  actions(where: ActionFilter, orderBy: String, orderDirection: String, before: String, after: String, limit: Int): ActionPage
+  startBlock: BigInt!
+  endBlock: BigInt!
+  description: String!
+}
+
+scalar BigInt
+
+type ActionPage {
+  items: [Action!]!
+  pageInfo: PageInfo!
+}
+
+type Action {
+  id: String!
+  proposalId: String!
+  proposal: Proposal!
+  target: String!
+  value: BigInt!
+  signature: String!
+  calldatas: String!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+input ActionFilter {
+  AND: [ActionFilter]
+  OR: [ActionFilter]
+  id: String
+  id_not: String
+  id_in: [String]
+  id_not_in: [String]
+  id_contains: String
+  id_not_contains: String
+  id_starts_with: String
+  id_ends_with: String
+  id_not_starts_with: String
+  id_not_ends_with: String
+  proposalId: String
+  proposalId_not: String
+  proposalId_in: [String]
+  proposalId_not_in: [String]
+  proposalId_contains: String
+  proposalId_not_contains: String
+  proposalId_starts_with: String
+  proposalId_ends_with: String
+  proposalId_not_starts_with: String
+  proposalId_not_ends_with: String
+  proposal_: ActionProposalFilter
+  target: String
+  target_not: String
+  target_in: [String]
+  target_not_in: [String]
+  target_gt: String
+  target_lt: String
+  target_gte: String
+  target_lte: String
+  value: BigInt
+  value_not: BigInt
+  value_in: [BigInt]
+  value_not_in: [BigInt]
+  value_gt: BigInt
+  value_lt: BigInt
+  value_gte: BigInt
+  value_lte: BigInt
+  signature: String
+  signature_not: String
+  signature_in: [String]
+  signature_not_in: [String]
+  signature_contains: String
+  signature_not_contains: String
+  signature_starts_with: String
+  signature_ends_with: String
+  signature_not_starts_with: String
+  signature_not_ends_with: String
+  calldatas: String
+  calldatas_not: String
+  calldatas_in: [String]
+  calldatas_not_in: [String]
+  calldatas_gt: String
+  calldatas_lt: String
+  calldatas_gte: String
+  calldatas_lte: String
+}
+
+input ActionProposalFilter {
+  id: String
+  id_not: String
+  id_in: [String]
+  id_not_in: [String]
+  id_contains: String
+  id_not_contains: String
+  id_starts_with: String
+  id_ends_with: String
+  id_not_starts_with: String
+  id_not_ends_with: String
+  proposalId: BigInt
+  proposalId_not: BigInt
+  proposalId_in: [BigInt]
+  proposalId_not_in: [BigInt]
+  proposalId_gt: BigInt
+  proposalId_lt: BigInt
+  proposalId_gte: BigInt
+  proposalId_lte: BigInt
+  proposer: String
+  proposer_not: String
+  proposer_in: [String]
+  proposer_not_in: [String]
+  proposer_gt: String
+  proposer_lt: String
+  proposer_gte: String
+  proposer_lte: String
+  startBlock: BigInt
+  startBlock_not: BigInt
+  startBlock_in: [BigInt]
+  startBlock_not_in: [BigInt]
+  startBlock_gt: BigInt
+  startBlock_lt: BigInt
+  startBlock_gte: BigInt
+  startBlock_lte: BigInt
+  endBlock: BigInt
+  endBlock_not: BigInt
+  endBlock_in: [BigInt]
+  endBlock_not_in: [BigInt]
+  endBlock_gt: BigInt
+  endBlock_lt: BigInt
+  endBlock_gte: BigInt
+  endBlock_lte: BigInt
+  description: String
+  description_not: String
+  description_in: [String]
+  description_not_in: [String]
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_ends_with: String
+  description_not_starts_with: String
+  description_not_ends_with: String
+}
+
+type ProposalPage {
+  items: [Proposal!]!
+  pageInfo: PageInfo!
+}
+
+input ProposalFilter {
+  AND: [ProposalFilter]
+  OR: [ProposalFilter]
+  id: String
+  id_not: String
+  id_in: [String]
+  id_not_in: [String]
+  id_contains: String
+  id_not_contains: String
+  id_starts_with: String
+  id_ends_with: String
+  id_not_starts_with: String
+  id_not_ends_with: String
+  proposalId: BigInt
+  proposalId_not: BigInt
+  proposalId_in: [BigInt]
+  proposalId_not_in: [BigInt]
+  proposalId_gt: BigInt
+  proposalId_lt: BigInt
+  proposalId_gte: BigInt
+  proposalId_lte: BigInt
+  proposer: String
+  proposer_not: String
+  proposer_in: [String]
+  proposer_not_in: [String]
+  proposer_gt: String
+  proposer_lt: String
+  proposer_gte: String
+  proposer_lte: String
+  actions_: ProposalActionFilter
+  startBlock: BigInt
+  startBlock_not: BigInt
+  startBlock_in: [BigInt]
+  startBlock_not_in: [BigInt]
+  startBlock_gt: BigInt
+  startBlock_lt: BigInt
+  startBlock_gte: BigInt
+  startBlock_lte: BigInt
+  endBlock: BigInt
+  endBlock_not: BigInt
+  endBlock_in: [BigInt]
+  endBlock_not_in: [BigInt]
+  endBlock_gt: BigInt
+  endBlock_lt: BigInt
+  endBlock_gte: BigInt
+  endBlock_lte: BigInt
+  description: String
+  description_not: String
+  description_in: [String]
+  description_not_in: [String]
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_ends_with: String
+  description_not_starts_with: String
+  description_not_ends_with: String
+}
+
+input ProposalActionFilter {
+  id: String
+  id_not: String
+  id_in: [String]
+  id_not_in: [String]
+  id_contains: String
+  id_not_contains: String
+  id_starts_with: String
+  id_ends_with: String
+  id_not_starts_with: String
+  id_not_ends_with: String
+  proposalId: String
+  proposalId_not: String
+  proposalId_in: [String]
+  proposalId_not_in: [String]
+  proposalId_contains: String
+  proposalId_not_contains: String
+  proposalId_starts_with: String
+  proposalId_ends_with: String
+  proposalId_not_starts_with: String
+  proposalId_not_ends_with: String
+  target: String
+  target_not: String
+  target_in: [String]
+  target_not_in: [String]
+  target_gt: String
+  target_lt: String
+  target_gte: String
+  target_lte: String
+  value: BigInt
+  value_not: BigInt
+  value_in: [BigInt]
+  value_not_in: [BigInt]
+  value_gt: BigInt
+  value_lt: BigInt
+  value_gte: BigInt
+  value_lte: BigInt
+  signature: String
+  signature_not: String
+  signature_in: [String]
+  signature_not_in: [String]
+  signature_contains: String
+  signature_not_contains: String
+  signature_starts_with: String
+  signature_ends_with: String
+  signature_not_starts_with: String
+  signature_not_ends_with: String
+  calldatas: String
+  calldatas_not: String
+  calldatas_in: [String]
+  calldatas_not_in: [String]
+  calldatas_gt: String
+  calldatas_lt: String
+  calldatas_gte: String
+  calldatas_lte: String
+}
+
+type _meta {
+  block: Int
 }

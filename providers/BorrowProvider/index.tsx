@@ -94,7 +94,7 @@ export const BorrowProvider = (props: PropsWithChildren<{}>) => {
 
   const { address, isConnected } = useAccount()
 
-  const { marketPrice } = useGoldiswapMath()
+  const { marketPrice, floorPrice } = useGoldiswapMath()
 
   const [borrowInfoState, setBorrowInfoState] = useState(INITIAL_STATE.borrowInfo)
   const [borrowWalletInfoState, setBorrowWalletInfoState] = useState(INITIAL_STATE.borrowWalletInfo)
@@ -334,11 +334,22 @@ export const BorrowProvider = (props: PropsWithChildren<{}>) => {
       const dayData = chartData[day]
       const item = dayData.items[0]
       if(item) {
-        const result = marketPrice(parseFloat(formatEther(item.fsl)), parseFloat(formatEther(item.psl)), parseFloat(formatEther(item.supply)))
-        tempChartData.push({ [`${day}`]: result, value: result, date: formatTimestamp(item.timestamp) })
+        const marketResult = marketPrice(parseFloat(formatEther(item.fsl)), parseFloat(formatEther(item.psl)), parseFloat(formatEther(item.supply)))
+        const floorResult = floorPrice(parseFloat(formatEther(item.fsl)), parseFloat(formatEther(item.supply)))
+        tempChartData.push({
+          [`${day}`]: marketResult,
+          marketPrice: marketResult.toLocaleString('en-US', { maximumFractionDigits: 6 }),
+          floorPrice: floorResult.toLocaleString('en-US', { maximumFractionDigits: 6 }),
+          date: formatTimestamp(item.timestamp)
+        })
       }
       else {
-        tempChartData.push({ [`${day}`]: 0, value: 0, date: formatTimestamp(item.timestamp) })
+        tempChartData.push({
+          [`${day}`]: 0,
+          marketPrice: 0,
+          floorPrice: 0,
+          date: formatTimestamp(item.timestamp)
+        })
       }
     }
     let fallbackNumber: number | null = null;
@@ -355,7 +366,7 @@ export const BorrowProvider = (props: PropsWithChildren<{}>) => {
       }
       else if(farthestNumber !== null) {
         tempChartData[i][`${days[i]}`] = farthestNumber
-        tempChartData[i].value = farthestNumber
+        tempChartData[i].marketPrice = farthestNumber
       }
     }
     
