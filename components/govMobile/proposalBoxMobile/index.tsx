@@ -59,8 +59,8 @@ export const ProposalBoxMobile = ({ number }: BoxProps) => {
         text && (text.innerHTML = "no wallet")
         return
       }
-      if(chain?.name !== 'Berachain bArtio') {
-        text && (text.innerHTML = "no bartio")
+      if(chain?.name !== 'Berachain') {
+        text && (text.innerHTML = "no berachain")
         return
       }
       text && (text.innerHTML = "voting...")
@@ -78,8 +78,8 @@ export const ProposalBoxMobile = ({ number }: BoxProps) => {
         text && (text.innerHTML = "no wallet")
         return
       }
-      if(chain?.name !== 'Berachain bArtio') {
-        text && (text.innerHTML = "no bartio")
+      if(chain?.name !== 'Berachain') {
+        text && (text.innerHTML = "no berachain")
         return
       }
       text && (text.innerHTML = "voting...")
@@ -97,8 +97,8 @@ export const ProposalBoxMobile = ({ number }: BoxProps) => {
         text && (text.innerHTML = "no wallet")
         return
       }
-      if(chain?.name !== 'Berachain bArtio') {
-        text && (text.innerHTML = "no bartio")
+      if(chain?.name !== 'Berachain') {
+        text && (text.innerHTML = "no berachain")
         return
       }
       text && (text.innerHTML = "voting...")

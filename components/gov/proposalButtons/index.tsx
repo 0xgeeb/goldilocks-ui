@@ -39,8 +39,8 @@ export const ProposalButtons = ({ number }: ButtonsProps) => {
         text && (text.innerHTML = "no wallet")
         return
       }
-      if(chain?.name !== 'Berachain bArtio') {
-        text && (text.innerHTML = "no bartio")
+      if(chain?.name !== 'Berachain') {
+        text && (text.innerHTML = "no berachain")
         return
       }
       text && (text.innerHTML = "cancelling...")
@@ -59,8 +59,8 @@ export const ProposalButtons = ({ number }: ButtonsProps) => {
         text && (text.innerHTML = "no wallet")
         return
       }
-      if(chain?.name !== 'Berachain bArtio') {
-        text && (text.innerHTML = "no bartio")
+      if(chain?.name !== 'Berachain') {
+        text && (text.innerHTML = "no berachain")
         return
       }
       text && (text.innerHTML = "queueing...")
@@ -79,8 +79,8 @@ export const ProposalButtons = ({ number }: ButtonsProps) => {
         text && (text.innerHTML = "no wallet")
         return
       }
-      if(chain?.name !== 'Berachain bArtio') {
-        text && (text.innerHTML = "no bartio")
+      if(chain?.name !== 'Berachain') {
+        text && (text.innerHTML = "no berachain")
         return
       }
       text && (text.innerHTML = "executing...")

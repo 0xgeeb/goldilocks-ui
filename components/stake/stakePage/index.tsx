@@ -141,11 +141,11 @@ export const StakePage = () => {
               {
                 activeToggle === 'CLAIM' ?
                 <>
-                  <a href="https://app.kodiak.finance/#/liquidity/v2/add/0x0E4aaF1351de4c0264C5c7056Ef3777b41BD8e03/0xe2cA693a47C32bd33949120d31d42b9e5Ef5c7Ef?chain=berachain_bartio" target="_blank">
+                  {/* <a href="https://app.kodiak.finance/#/liquidity/v2/add/0x0E4aaF1351de4c0264C5c7056Ef3777b41BD8e03/0xe2cA693a47C32bd33949120d31d42b9e5Ef5c7Ef?chain=berachain_bartio" target="_blank">
                     <div className="absolute top-[25%] left-[90%] md:left-[85%] lg:left-[75%] xl:left-[70%] h-[5%] w-[5%] border-black bg-[#EEDCD2] cursor-pointer hover:scale-105 flex justify-center items-center font-medium font-baloo text-[1.2vw] xl:text-[1vw]">
                       $PRG LP
                     </div>
-                  </a>
+                  </a> */}
                   <ClaimTab />
                 </> :
                 <>

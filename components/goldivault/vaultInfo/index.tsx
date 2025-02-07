@@ -402,10 +402,10 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
           }
           <div className="w-[100%] flex flex-row items-center justify-between px-[4%] my-[1%]">
             <span>Contract addresses:</span>
-            <a href={`https://bartio.beratrail.io/address/${vaultaddy}`} target="_blank"><span className="hover:opacity-50 cursor-pointer">Vault</span></a>
-            <a href={`https://bartio.beratrail.io/address/${vaultOTaddy}`} target="_blank"><span className="hover:opacity-50 cursor-pointer">OT</span></a>
-            <a href={`https://bartio.beratrail.io/address/${vaultYTaddy}`} target="_blank"><span className="hover:opacity-50 cursor-pointer">YT</span></a>
-            <a href={`https://bartio.beratrail.io/address/lpaddy`} target="_blank"><span className="hover:opacity-50 cursor-pointer">LP</span></a>
+            <a href={`https://beratrail.io/address/${vaultaddy}`} target="_blank"><span className="hover:opacity-50 cursor-pointer">Vault</span></a>
+            <a href={`https://beratrail.io/address/${vaultOTaddy}`} target="_blank"><span className="hover:opacity-50 cursor-pointer">OT</span></a>
+            <a href={`https://beratrail.io/address/${vaultYTaddy}`} target="_blank"><span className="hover:opacity-50 cursor-pointer">YT</span></a>
+            <a href={`https://beratrail.io/address/lpaddy`} target="_blank"><span className="hover:opacity-50 cursor-pointer">LP</span></a>
           </div>
           <div className="w-[100%] flex flex-row items-center justify-between px-[4%] my-[1%]">
             <a href={params.dexLink} target="_blank"><span className="hover:opacity-50 cursor-pointer">Link to OT chart</span></a>

@@ -11,7 +11,7 @@ export const BorrowNotification = () => {
         <span className="font-baloo font-semibold text-[3vw] xl:text-[1.5vw]">{notification.action}</span>
         <span className="font-baloo font-semibold text-[3vw] xl:text-[1.5vw] mt-[3%]">{notification.result}</span>
         <a 
-          href={`https://bartio.beratrail.io/tx/${notification.hash}`}
+          href={`https://beratrail.io/tx/${notification.hash}`}
           target="_blank"
           className="h-[15%] w-[25%] xl:h-[20%] xl:w-[19%] mt-[3%] bg-[#E7B941] hover:scale-110 border-2 border-black"
         >

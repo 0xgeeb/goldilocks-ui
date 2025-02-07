@@ -10,7 +10,7 @@ export const MintNFTs = () => {
   const { chain } = useAccount()
 
   useEffect(() => {
-    if(chain?.name === 'Berachain bArtio') {
+    if(chain?.name === 'Berachain') {
       setPopup(true)
     }
   }, [chain])

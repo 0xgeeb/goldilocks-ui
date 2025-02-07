@@ -2,7 +2,7 @@ import { type Chain } from "viem"
 
 export const BerachainBartioTestnet = {
   id: 80084,
-  name: 'Berachain bArtio',  
+  name: 'Berachain',  
   nativeCurrency: {
     name: 'BERA',
     symbol: 'BERA',

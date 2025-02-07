@@ -280,12 +280,12 @@ export const BorrowButtonMobile = () => {
                     button && (button.innerHTML = "connect wallet")
                   }
                 }
-                else if(chain?.name !== "Berachain bArtio") {
-                  if(button && button.innerHTML === "where bArtio") {
+                else if(chain?.name !== "Berachain") {
+                  if(button && button.innerHTML === "where berachain") {
                     openChainModal()
                   }
                   else {
-                    button && (button.innerHTML = "where bArtio")
+                    button && (button.innerHTML = "where berachain")
                   }
                 }
                 else {
@@ -320,12 +320,12 @@ export const BorrowButtonMobile = () => {
                     button && (button.innerHTML = "connect wallet")
                   }
                 }
-                else if(chain?.name !== "Berachain bArtio") {
-                  if(button && button.innerHTML === "where bArtio") {
+                else if(chain?.name !== "Berachain") {
+                  if(button && button.innerHTML === "where berachain") {
                     openChainModal()
                   }
                   else {
-                    button && (button.innerHTML = "where bArtio")
+                    button && (button.innerHTML = "where berachain")
                   }
                 }
                 else {
@@ -361,12 +361,12 @@ export const BorrowButtonMobile = () => {
                   button && (button.innerHTML = "connect wallet")
                 }
               }
-              else if(chain?.name !== "Berachain bArtio") {
-                if(button && button.innerHTML === "where bArtio") {
+              else if(chain?.name !== "Berachain") {
+                if(button && button.innerHTML === "where berachain") {
                   openChainModal()
                 }
                 else {
-                  button && (button.innerHTML = "where bArtio")
+                  button && (button.innerHTML = "where berachain")
                 }
               }
               else {
