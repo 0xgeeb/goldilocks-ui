@@ -139,7 +139,7 @@ export const BorrowPage = () => {
               <BorrowButton />
               <Stats />
               <Footer />
-              <LocksFetcher />
+              {/* <LocksFetcher /> */}
               <ChangeChain />
             </div>
           </main>

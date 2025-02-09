@@ -47,7 +47,7 @@ export const BorrowPageMobile = () => {
           <BorrowButtonMobile />
           <StatsMobile />
           <FooterMobile />
-          <LocksFetcher />
+          {/* <LocksFetcher /> */}
         </div>
       }
     </main>

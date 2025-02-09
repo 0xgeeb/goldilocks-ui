@@ -168,7 +168,7 @@ export const StakePage = () => {
               }
               <Stats />
               <Footer />
-              <LocksFetcher />
+              {/* <LocksFetcher /> */}
               <ChangeChain />
             </div>
           </main>

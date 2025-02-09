@@ -128,7 +128,7 @@ export const GoldiswapPageMobile = () => {
           <GoldiswapButtonMobile />
           <StatsMobile />
           <FooterMobile />
-          <LocksFetcher />
+          {/* <LocksFetcher /> */}
         </div>
       }
     </main>

@@ -54,7 +54,7 @@ export const StakePageMobile = () => {
           }
           <WalletBalanceMobile />
           <FooterMobile />
-          <LocksFetcher />
+          {/* <LocksFetcher /> */}
         </div>
       }
     </main>

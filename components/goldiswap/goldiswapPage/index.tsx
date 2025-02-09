@@ -175,7 +175,7 @@ export const GoldiswapPage = () => {
               <GoldiswapButton />
               <Stats />
               <Footer />
-              <LocksFetcher />
+              {/* <LocksFetcher /> */}
               <ChangeChain />
             </div>
           </main>
