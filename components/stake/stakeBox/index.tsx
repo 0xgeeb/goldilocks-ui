@@ -57,7 +57,7 @@ export const StakeBox = () => {
           notification.toggle ? <Notification /> :
           <div className="w-[100%] h-[100%] relative flex flex-col">
             { activeToggle === 'STIR' && <span className="absolute bottom-[0.5%] font-baloo font-semibold left-[1%] z-50 text-[2.5vw] md:text-[1.75vw] lg:text-[1.25vw] xl:text-[0.9vw]">$honey cost to stir: {formatAsString(stir * (stakeInfo.fsl / stakeInfo.supply))}</span> }
-            <span className="absolute bottom-[0.5%] font-baloo font-semibold right-[1%] z-50 text-[2.5vw] md:text-[1.75vw] lg:text-[1.25vw] xl:text-[0.9vw]">staking apr: {handleInfo(0.5*((marketPrice(stakeInfo.fsl, stakeInfo.psl, stakeInfo.supply) - floorPrice(stakeInfo.fsl, stakeInfo.supply)) / marketPrice(stakeInfo.fsl, stakeInfo.psl, stakeInfo.supply)) * 100)}%</span>
+            <span className="absolute bottom-[0.5%] font-baloo font-semibold right-[1%] z-50 text-[2.5vw] md:text-[1.75vw] lg:text-[1.25vw] xl:text-[0.9vw]">staking apr: {handleInfo(0.4*((marketPrice(stakeInfo.fsl, stakeInfo.psl, stakeInfo.supply) - floorPrice(stakeInfo.fsl, stakeInfo.supply)) / marketPrice(stakeInfo.fsl, stakeInfo.psl, stakeInfo.supply)) * 100)}%</span>
             <div className="flex flex-row absolute top-0 right-0 w-[50%] lg:w-[42%] 2xl:w-[33.61%] h-[15%] text-[2.5vw] md:text-[2vw] lg:text-[1.5vw] xl:text-[1.25vw] 2xl:text-[1vw] font-baloo font-semibold border-b-2 border-l-2 border-black">
               <div 
                 className="flex items-center justify-center h-[100%] w-[25%] border-r-2 border-black bg-[#DCC2A8] hover:bg-[#F3AA8A] cursor-pointer"
