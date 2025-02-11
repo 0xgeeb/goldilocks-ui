@@ -247,8 +247,8 @@ export const SwapBox = () => {
                 MAX
               </div>
             </div>
-            <img 
-              className="absolute h-6 w-6 lg:h-7 lg:w-7 top-[16%] left-[89%] lg:left-[79%] cursor-pointer hover:scale-125" 
+            <img
+              className="absolute h-6 w-6 lg:h-9 lg:w-9 top-[16%] left-[89%] lg:left-[79%] cursor-pointer hover:animate-spin" 
               src="/images/icon-settings.png" 
               alt="settings"
               onClick={() => changeSlippageToggle(true)}
