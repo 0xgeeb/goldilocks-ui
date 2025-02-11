@@ -10,7 +10,7 @@ import {
   injectedWallet,
   metaMaskWallet,
   bitgetWallet,
-  binanceWallet,
+  // binanceWallet,
   rainbowWallet,
   coinbaseWallet,
   walletConnectWallet
@@ -40,7 +40,7 @@ const connectors = connectorsForWallets(
   [
     {
       groupName: 'Recommended',
-      wallets: [injectedWallet, metaMaskWallet, bitgetWallet, binanceWallet, rainbowWallet, coinbaseWallet, walletConnectWallet]
+      wallets: [injectedWallet, metaMaskWallet, bitgetWallet, rainbowWallet, coinbaseWallet, walletConnectWallet]
     }
   ],
   {
