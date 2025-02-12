@@ -175,7 +175,11 @@ export const StakeButtonMobile = () => {
       return
     }
     if(stir > stakeWalletInfo.prg) {
-      button && (button.innerHTML = "balance too low")
+      button && (button.innerHTML = "not enough prg")
+      return
+    }
+    if(stakeWalletInfo.honey < (stir * (stakeInfo.fsl / stakeInfo.supply))) {
+      button && (button.innerHTML = "not enough honey")
       return
     }
     else {
