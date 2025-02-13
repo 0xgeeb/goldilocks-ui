@@ -346,13 +346,13 @@ export const GovProvider = (props: PropsWithChildren<{}>) => {
         args: [address]
       })
       const allowanceResult = await readContract(config, {
-        address: '0xF7278945D19616a4b47F3E1E43246283e2a3016F',
+        address: contracts.goldiswap.address as `0x${string}`,
         abi: contracts.govlocks.abi,
         functionName: 'allowance',
         args: [address, contracts.govlocks.address]
       })
       const locksResult = await readContract(config, {
-        address: '0xF7278945D19616a4b47F3E1E43246283e2a3016F',
+        address: contracts.goldiswap.address as `0x${string}`,
         abi: contracts.govlocks.abi,
         functionName: 'balanceOf',
         args: [address]

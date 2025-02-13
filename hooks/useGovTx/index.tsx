@@ -7,7 +7,7 @@ export const useGovTx = () => {
 
   const checkAllowance = async (amt: number, wallet: string): Promise<boolean> => {
     const allowanceResult = await readContract(config, {
-      address: '0xF7278945D19616a4b47F3E1E43246283e2a3016F',
+      address: contracts.goldiswap.address as `0x${string}`,
       abi: contracts.goldiswap.abi,
       functionName: 'allowance',
       args: [wallet, contracts.govlocks.address]
@@ -25,7 +25,7 @@ export const useGovTx = () => {
   const sendApproveTx = async (amt: number, infinite: boolean) => {
     try {
       const hash = await writeContract(config, {
-        address: '0xF7278945D19616a4b47F3E1E43246283e2a3016F',
+        address: contracts.goldiswap.address as `0x${string}`,
         abi: contracts.goldiswap.abi,
         functionName: 'approve',
         args: [contracts.govlocks.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
