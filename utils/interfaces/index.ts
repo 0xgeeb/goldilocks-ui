@@ -1,4 +1,4 @@
-import React from "../../node_modules/@types/react"
+import React from "../../node_modules/@types/react";
 
 export interface LayoutProps {
   children: React.ReactNode;
@@ -11,7 +11,7 @@ export type NotificationProps = {
   amount: number;
   price: number;
   page: string;
-}
+};
 
 export interface NotificationProviderState {
   notifications: Array<NotificationProps>;
@@ -45,7 +45,7 @@ export interface WalletInitialState {
   network: string;
   refreshBalances: () => void;
   balancesLoading: boolean;
-  updateBalanceAllowance: ( _type: string, _newAllowance: number) => void;
+  updateBalanceAllowance: (_type: string, _newAllowance: number) => void;
 }
 
 export interface BeraInfo {
@@ -142,13 +142,13 @@ export interface GoldilendInitialState {
     toggle: boolean;
     action: string;
     result: string;
-    hash:string;
+    hash: string;
   };
   openNotification: (
     _toggle: boolean,
     _action: string,
     _result: string,
-    _hash: string
+    _hash: string,
   ) => void;
   activeToggle: string;
   changeActiveToggle: (_toggle: string) => void;
@@ -201,5 +201,5 @@ export interface EtherfiAPIResponse {
   "7_day_apr": number;
   "7_day_restaking_apr": number;
   tvl: number;
-  buffer_eth: number 
+  buffer_eth: number;
 }

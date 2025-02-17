@@ -1,58 +1,61 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { useGov, useDesktop, useGeo } from "../../../providers"
-import { ProposePageMobile } from "../../govMobile"
-import { ProposeBox, NewProposalPreview } from "../"
-import {
-  NavBar,
-  Footer,
-  Loading,
-  ChangeChain,
-  TAndCs
-} from "../../utils"
+import { useEffect } from "react";
+
+import { useAtom } from "jotai";
+
+import { pageLoadingAtom } from "@/app/_components/atoms/pageLoadingAtom";
+import CsrPageLayout from "@/app/_components/CsrPageLayout";
+
+import { NewProposalPreview, ProposeBox } from "../";
+import { useDesktop, useGeo, useGov } from "../../../providers";
+import { ProposePageMobile } from "../../govMobile";
+import { Loading, TAndCs } from "../../utils";
 
 export const ProposePage = () => {
+  const [pageLoading, setPageLoading] = useAtom(pageLoadingAtom);
 
-  const [pageLoading, setPageLoading] = useState<boolean>(true)
+  const { wutPopup, setWutPopup } = useGov();
 
-  const {
-    wutPopup,
-    setWutPopup
-  } = useGov()
+  const { isDesktop } = useDesktop();
 
-  const { isDesktop } = useDesktop()
-
-  const { signed } = useGeo()
+  const { signed } = useGeo();
 
   useEffect(() => {
-    setPageLoading(false)
-  }, [])
+    setPageLoading(false);
+  }, []);
 
   const handlePopups = (e: any) => {
-    if(wutPopup) {
-      setWutPopup(false)
+    if (wutPopup) {
+      setWutPopup(false);
     }
-  }
+  };
 
-  return (
-    pageLoading ?
-    <Loading /> :
-    isDesktop ?
-    (
-      signed !== 'TRUE' ?
-      <TAndCs /> :
-      <main className="w-screen h-screen" onClick={(e) => handlePopups(e)}>
-        <NavBar wutPopup={wutPopup} setWutPopup={setWutPopup} />
-        <div className="w-[100%] h-[89%] xl:h-[85%] bg-cover bg-bottom bg-[url('/images/bg-goldiswap.png')] relative">
-          <h1 className="absolute top-[-0.5%] left-[2.5%] text-[#D9C6BA] text-[7.5vw] lg:text-[6vw] font-amaticbold" id="page-title">New Proposal</h1>
+  return pageLoading ? (
+    <Loading />
+  ) : isDesktop ? (
+    signed !== "TRUE" ? (
+      <TAndCs />
+    ) : (
+      <CsrPageLayout
+        onPageClick={(e) => handlePopups(e)}
+        wutPopup={wutPopup}
+        setWutPopup={setWutPopup}
+        bgImageUrl="/images/bg-goldiswap.png"
+      >
+        <>
+          <h1
+            className="absolute left-[2.5%] top-[-0.5%] font-amaticbold text-[7.5vw] text-[#D9C6BA] lg:text-[6vw]"
+            id="page-title"
+          >
+            New Proposal
+          </h1>
           <NewProposalPreview />
           <ProposeBox />
-        </div>
-        <Footer />
-        <ChangeChain />
-      </main>
-     ) :
+        </>
+      </CsrPageLayout>
+    )
+  ) : (
     <ProposePageMobile />
-  )
-}
+  );
+};

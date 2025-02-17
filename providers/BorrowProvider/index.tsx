@@ -1,21 +1,20 @@
-"use client"
+"use client";
 
-import { PropsWithChildren, createContext, useContext, useState } from "react"
-import { readContract } from "@wagmi/core"
-import { formatEther } from "viem"
-import { useAccount } from "wagmi"
-import { useGoldiswapMath } from "../../hooks"
-import { config } from "../../providers/WagmiProvider"
-import { contracts } from "../../utils/addressi"
+import { PropsWithChildren, createContext, useContext, useState } from "react";
+import { readContract } from "@wagmi/core";
+import { formatEther } from "viem";
+import { useAccount } from "wagmi";
+import { useGoldiswapMath } from "../../hooks";
+import { config } from "../../providers/WagmiProvider";
+import { contracts } from "../../utils/addressi";
 
 const INITIAL_STATE = {
-
   borrowInfo: {
     fsl: 0,
     psl: 0,
     supply: 0,
     targetRatio: 0,
-    lastFloorRaise: 0
+    lastFloorRaise: 0,
   },
 
   borrowWalletInfo: {
@@ -26,20 +25,20 @@ const INITIAL_STATE = {
     locked: 0,
     borrowed: 0,
     claimable: 0,
-    honeyBorrowAllowance: 0
+    honeyBorrowAllowance: 0,
   },
 
   notification: {
     toggle: false,
-    action: '',
-    result: '',
-    hash: ''
+    action: "",
+    result: "",
+    hash: "",
   },
   openNotification: (
     _toggle: boolean,
     _action: string,
     _result: string,
-    _hash: string
+    _hash: string,
   ) => {},
 
   borrow: 0,
@@ -47,14 +46,14 @@ const INITIAL_STATE = {
   setBorrow: (_borrow: number) => {},
   setRepay: (_repay: number) => {},
 
-  displayString: '',
+  displayString: "",
   setDisplayString: (_displayString: string) => {},
 
   allowanceButtons: false,
   setAllowanceButtons: (_bool: boolean) => {},
   updateAllowance: (_newAllowance: number) => {},
 
-  activeToggle: 'BORROW',
+  activeToggle: "BORROW",
   changeActiveToggle: (_toggle: string) => {},
 
   borrowPopupToggle: false,
@@ -68,11 +67,11 @@ const INITIAL_STATE = {
 
   handlePercentageButtons: (_action: number) => {},
   handleChange: (_input: string) => {},
-  handleBalance: () => '',
+  handleBalance: () => "",
 
   refreshBorrowInfo: async () => {},
   refreshBorrowWalletInfo: async () => {},
-  
+
   txConfirming: false,
   setTxConfirming: (_confirming: boolean) => {},
 
@@ -82,210 +81,250 @@ const INITIAL_STATE = {
   balanceMobileToggle: false,
   setBalanceMobileToggle: (_toggle: boolean) => {},
 
-  chartData: [] as {[x: string]: number, value: number}[],
-  updateChartData: (_chartData: {}) => {}
-}
+  chartData: [] as { [x: string]: number; value: number }[],
+  updateChartData: (_chartData: {}) => {},
+};
 
-const BorrowContext = createContext(INITIAL_STATE)
+const BorrowContext = createContext(INITIAL_STATE);
 
 export const BorrowProvider = (props: PropsWithChildren<{}>) => {
+  const { children } = props;
 
-  const { children } = props
+  const { address, isConnected } = useAccount();
 
-  const { address, isConnected } = useAccount()
+  const { marketPrice, floorPrice } = useGoldiswapMath();
 
-  const { marketPrice, floorPrice } = useGoldiswapMath()
+  const [borrowInfoState, setBorrowInfoState] = useState(
+    INITIAL_STATE.borrowInfo,
+  );
+  const [borrowWalletInfoState, setBorrowWalletInfoState] = useState(
+    INITIAL_STATE.borrowWalletInfo,
+  );
+  const [notificationState, setNotificationState] = useState(
+    INITIAL_STATE.notification,
+  );
 
-  const [borrowInfoState, setBorrowInfoState] = useState(INITIAL_STATE.borrowInfo)
-  const [borrowWalletInfoState, setBorrowWalletInfoState] = useState(INITIAL_STATE.borrowWalletInfo)
-  const [notificationState, setNotificationState] = useState(INITIAL_STATE.notification)
+  const [activeToggleState, setActiveToggleState] = useState<string>(
+    INITIAL_STATE.activeToggle,
+  );
 
-  const [activeToggleState, setActiveToggleState] = useState<string>(INITIAL_STATE.activeToggle)
+  const [displayStringState, setDisplayStringState] = useState<string>(
+    INITIAL_STATE.displayString,
+  );
 
-  const [displayStringState, setDisplayStringState] = useState<string>(INITIAL_STATE.displayString)
+  const [borrowState, setBorrowState] = useState<number>(INITIAL_STATE.borrow);
+  const [repayState, setRepayState] = useState<number>(INITIAL_STATE.repay);
 
-  const [borrowState, setBorrowState] = useState<number>(INITIAL_STATE.borrow)
-  const [repayState, setRepayState] = useState<number>(INITIAL_STATE.repay)
+  const [borrowPopupToggleState, setBorrowPopupToggleState] = useState<boolean>(
+    INITIAL_STATE.borrowPopupToggle,
+  );
 
-  const [borrowPopupToggleState, setBorrowPopupToggleState] = useState<boolean>(INITIAL_STATE.borrowPopupToggle)
+  const [chartDataState, setChartDataState] = useState<
+    { [x: string]: number; value: number }[]
+  >(INITIAL_STATE.chartData);
+  const [chartOpenState, setChartOpenState] = useState<boolean>(
+    INITIAL_STATE.chartOpen,
+  );
+  const [infoLoadingState, setInfoLoadingState] = useState<boolean>(
+    INITIAL_STATE.infoLoading,
+  );
+  const [walletInfoLoadingState, setWalletInfoLoadingState] = useState<boolean>(
+    INITIAL_STATE.walletInfoLoading,
+  );
+  const [txConfirmingState, setTxConfirmingState] = useState<boolean>(
+    INITIAL_STATE.txConfirming,
+  );
+  const [balanceMobileToggleState, setBalanceMobileToggleState] =
+    useState<boolean>(INITIAL_STATE.balanceMobileToggle);
+  const [wutPopupState, setWutPopupState] = useState<boolean>(
+    INITIAL_STATE.wutPopup,
+  );
 
-  const [chartDataState, setChartDataState] = useState<{[x: string]: number, value: number}[]>(INITIAL_STATE.chartData)
-  const [chartOpenState, setChartOpenState] = useState<boolean>(INITIAL_STATE.chartOpen)
-  const [infoLoadingState, setInfoLoadingState] = useState<boolean>(INITIAL_STATE.infoLoading)
-  const [walletInfoLoadingState, setWalletInfoLoadingState] = useState<boolean>(INITIAL_STATE.walletInfoLoading)
-  const [txConfirmingState, setTxConfirmingState] = useState<boolean>(INITIAL_STATE.txConfirming)
-  const [balanceMobileToggleState, setBalanceMobileToggleState] = useState<boolean>(INITIAL_STATE.balanceMobileToggle)
-  const [wutPopupState, setWutPopupState] = useState<boolean>(INITIAL_STATE.wutPopup)
-
-  const [allowanceButtonsState, setAllowanceButtonsState] = useState<boolean>(INITIAL_STATE.allowanceButtons)
+  const [allowanceButtonsState, setAllowanceButtonsState] = useState<boolean>(
+    INITIAL_STATE.allowanceButtons,
+  );
 
   const changeActiveToggle = (toggle: string) => {
-    setDisplayStringState('')
-    setBorrowState(0)
-    setRepayState(0)
-    setActiveToggleState(toggle)
-    setAllowanceButtonsState(false)
-  }
+    setDisplayStringState("");
+    setBorrowState(0);
+    setRepayState(0);
+    setActiveToggleState(toggle);
+    setAllowanceButtonsState(false);
+  };
 
   const handlePercentageButtons = (action: number) => {
-    if(!isConnected) return
-    const borrowTemp = (borrowWalletInfoState.staked - borrowWalletInfoState.locked) * (borrowInfoState.fsl / borrowInfoState.supply)
-    if(action == 1) {
-      if(activeToggleState === 'BORROW') {
-        setDisplayStringState((borrowTemp / 4).toFixed(4))
-        setBorrowState(borrowTemp / 4)
+    if (!isConnected) return;
+    const borrowTemp =
+      (borrowWalletInfoState.staked - borrowWalletInfoState.locked) *
+      (borrowInfoState.fsl / borrowInfoState.supply);
+    if (action == 1) {
+      if (activeToggleState === "BORROW") {
+        setDisplayStringState((borrowTemp / 4).toFixed(4));
+        setBorrowState(borrowTemp / 4);
       }
-      if(activeToggleState === 'REPAY') {
-        setDisplayStringState((borrowWalletInfoState.borrowed / 4).toFixed(4))
-        setRepayState(borrowWalletInfoState.borrowed / 4)
-      }
-    }
-    if(action == 2) {
-      if(activeToggleState === 'BORROW') {
-        setDisplayStringState((borrowTemp / 2).toFixed(4))
-        setBorrowState(borrowTemp / 2)
-      }
-      if(activeToggleState === 'REPAY') {
-        setDisplayStringState((borrowWalletInfoState.borrowed / 2).toFixed(4))
-        setRepayState(borrowWalletInfoState.borrowed / 2)
+      if (activeToggleState === "REPAY") {
+        setDisplayStringState((borrowWalletInfoState.borrowed / 4).toFixed(4));
+        setRepayState(borrowWalletInfoState.borrowed / 4);
       }
     }
-    if(action == 3) {
-      if(activeToggleState === 'BORROW') {
-        setDisplayStringState((borrowTemp * 0.75).toFixed(4))
-        setBorrowState(borrowTemp * 0.75)
+    if (action == 2) {
+      if (activeToggleState === "BORROW") {
+        setDisplayStringState((borrowTemp / 2).toFixed(4));
+        setBorrowState(borrowTemp / 2);
       }
-      if(activeToggleState === 'REPAY') {
-        setDisplayStringState((borrowWalletInfoState.borrowed * 0.75).toFixed(4))
-        setRepayState(borrowWalletInfoState.borrowed * 0.75)
-      }
-    }
-    if(action == 4) {
-      if(activeToggleState === 'BORROW') {
-        setDisplayStringState(borrowTemp.toFixed(4))
-        setBorrowState(borrowTemp - 0.0001)
-      }
-      if(activeToggleState === 'REPAY') {
-        setDisplayStringState(borrowWalletInfoState.borrowed.toFixed(4))
-        setRepayState(borrowWalletInfoState.borrowed)
+      if (activeToggleState === "REPAY") {
+        setDisplayStringState((borrowWalletInfoState.borrowed / 2).toFixed(4));
+        setRepayState(borrowWalletInfoState.borrowed / 2);
       }
     }
-  }
+    if (action == 3) {
+      if (activeToggleState === "BORROW") {
+        setDisplayStringState((borrowTemp * 0.75).toFixed(4));
+        setBorrowState(borrowTemp * 0.75);
+      }
+      if (activeToggleState === "REPAY") {
+        setDisplayStringState(
+          (borrowWalletInfoState.borrowed * 0.75).toFixed(4),
+        );
+        setRepayState(borrowWalletInfoState.borrowed * 0.75);
+      }
+    }
+    if (action == 4) {
+      if (activeToggleState === "BORROW") {
+        setDisplayStringState(borrowTemp.toFixed(4));
+        setBorrowState(borrowTemp - 0.0001);
+      }
+      if (activeToggleState === "REPAY") {
+        setDisplayStringState(borrowWalletInfoState.borrowed.toFixed(4));
+        setRepayState(borrowWalletInfoState.borrowed);
+      }
+    }
+  };
 
   const handleChange = (input: string) => {
-    setDisplayStringState(input)
-    if(activeToggleState === 'BORROW') {
-      !input ? setBorrowState(0) : setBorrowState(parseFloat(input))
+    setDisplayStringState(input);
+    if (activeToggleState === "BORROW") {
+      !input ? setBorrowState(0) : setBorrowState(parseFloat(input));
     }
-    if(activeToggleState === 'REPAY') {
-      !input ? setRepayState(0) : setRepayState(parseFloat(input))
-      !input && setAllowanceButtonsState(false)
+    if (activeToggleState === "REPAY") {
+      !input ? setRepayState(0) : setRepayState(parseFloat(input));
+      !input && setAllowanceButtonsState(false);
     }
-  }
+  };
 
   const handleBalance = (): string => {
-    if(activeToggleState === 'BORROW') {
-      const borrowTemp = (borrowWalletInfoState.staked - borrowWalletInfoState.locked) * (borrowInfoState.fsl / borrowInfoState.supply)
-      return borrowTemp > 0 ? borrowTemp.toLocaleString('en-US', { maximumFractionDigits: 4 }) : "0.00"
+    if (activeToggleState === "BORROW") {
+      const borrowTemp =
+        (borrowWalletInfoState.staked - borrowWalletInfoState.locked) *
+        (borrowInfoState.fsl / borrowInfoState.supply);
+      return borrowTemp > 0
+        ? borrowTemp.toLocaleString("en-US", { maximumFractionDigits: 4 })
+        : "0.00";
     }
-    if(activeToggleState === 'REPAY') {
-      return borrowWalletInfoState.borrowed > 0 ? borrowWalletInfoState.borrowed.toLocaleString('en-US', { maximumFractionDigits: 4 }) : "0.00"
+    if (activeToggleState === "REPAY") {
+      return borrowWalletInfoState.borrowed > 0
+        ? borrowWalletInfoState.borrowed.toLocaleString("en-US", {
+            maximumFractionDigits: 4,
+          })
+        : "0.00";
     }
 
-    return ''
-  }
+    return "";
+  };
 
   const refreshBorrowInfo = async () => {
-    setInfoLoadingState(true)
+    setInfoLoadingState(true);
     const fslResult = await readContract(config, {
       address: contracts.goldiswap.address as `0x${string}`,
       abi: contracts.goldiswap.abi,
-      functionName: 'fsl',
-    })
+      functionName: "fsl",
+    });
     const pslResult = await readContract(config, {
       address: contracts.goldiswap.address as `0x${string}`,
       abi: contracts.goldiswap.abi,
-      functionName: 'psl',
-    })
+      functionName: "psl",
+    });
     const supplyResult = await readContract(config, {
       address: contracts.goldiswap.address as `0x${string}`,
       abi: contracts.goldiswap.abi,
-      functionName: 'totalSupply',
-    })
+      functionName: "totalSupply",
+    });
     const ratioResult = await readContract(config, {
       address: contracts.goldiswap.address as `0x${string}`,
       abi: contracts.goldiswap.abi,
-      functionName: 'targetRatio',
-    })
+      functionName: "targetRatio",
+    });
     const lastFloorRaiseResult = await readContract(config, {
       address: contracts.goldiswap.address as `0x${string}`,
       abi: contracts.goldiswap.abi,
-      functionName: 'lastFloorIncrease',
-    })
-    
+      functionName: "lastFloorIncrease",
+    });
+
     const response = {
       fsl: parseFloat(formatEther(fslResult as unknown as bigint)),
       psl: parseFloat(formatEther(pslResult as unknown as bigint)),
       supply: parseFloat(formatEther(supplyResult as unknown as bigint)),
       targetRatio: parseFloat(formatEther(ratioResult as unknown as bigint)),
-      lastFloorRaise: parseFloat(formatEther(lastFloorRaiseResult as unknown as bigint))
-    }
-    
-    setBorrowInfoState(response)
-    setInfoLoadingState(false)
-  }
-  
+      lastFloorRaise: parseFloat(
+        formatEther(lastFloorRaiseResult as unknown as bigint),
+      ),
+    };
+
+    setBorrowInfoState(response);
+    setInfoLoadingState(false);
+  };
+
   const refreshBorrowWalletInfo = async () => {
-    if(address) {
-      setWalletInfoLoadingState(true)
+    if (address) {
+      setWalletInfoLoadingState(true);
       const locksBalance = await readContract(config, {
         address: contracts.goldiswap.address as `0x${string}`,
         abi: contracts.goldiswap.abi,
-        functionName: 'balanceOf',
-        args: [address]
-      })
+        functionName: "balanceOf",
+        args: [address],
+      });
       const porridgeBalance = await readContract(config, {
         address: contracts.goldilocked.address as `0x${string}`,
         abi: contracts.goldilocked.abi,
-        functionName: 'balanceOf',
-        args: [address]
-      })
+        functionName: "balanceOf",
+        args: [address],
+      });
       const honeyBalance = await readContract(config, {
         address: contracts.honey.address as `0x${string}`,
         abi: contracts.honey.abi,
-        functionName: 'balanceOf',
-        args: [address]
-      })
+        functionName: "balanceOf",
+        args: [address],
+      });
       const stakedBalance = await readContract(config, {
         address: contracts.goldilocked.address as `0x${string}`,
         abi: contracts.goldilocked.abi,
-        functionName: 'userStakedLocks',
-        args: [address]
-      })
+        functionName: "userStakedLocks",
+        args: [address],
+      });
       const claimableBalance = await readContract(config, {
         address: contracts.goldilocked.address as `0x${string}`,
         abi: contracts.goldilocked.abi,
-        functionName: 'userClaimablePrg',
-        args: [address]
-      })
+        functionName: "userClaimablePrg",
+        args: [address],
+      });
       const lockedBalance = await readContract(config, {
         address: contracts.goldilocked.address as `0x${string}`,
         abi: contracts.goldilocked.abi,
-        functionName: 'userLockedLocks',
-        args: [address]
-      })
+        functionName: "userLockedLocks",
+        args: [address],
+      });
       const borrowedBalance = await readContract(config, {
         address: contracts.goldilocked.address as `0x${string}`,
         abi: contracts.goldilocked.abi,
-        functionName: 'userBorrowedHoney',
-        args: [address]
-      })
+        functionName: "userBorrowedHoney",
+        args: [address],
+      });
       const honeyBorrowAllowanceResult = await readContract(config, {
         address: contracts.honey.address as `0x${string}`,
         abi: contracts.honey.abi,
-        functionName: 'allowance',
-        args: [address, contracts.goldilocked.address]
-      })
+        functionName: "allowance",
+        args: [address, contracts.goldilocked.address],
+      });
 
       const response = {
         locks: parseFloat(formatEther(locksBalance as unknown as bigint)),
@@ -294,84 +333,110 @@ export const BorrowProvider = (props: PropsWithChildren<{}>) => {
         staked: parseFloat(formatEther(stakedBalance as unknown as bigint)),
         locked: parseFloat(formatEther(lockedBalance as unknown as bigint)),
         borrowed: parseFloat(formatEther(borrowedBalance as unknown as bigint)),
-        claimable: parseFloat(formatEther(claimableBalance as unknown as bigint)),
-        honeyBorrowAllowance: parseFloat(formatEther(honeyBorrowAllowanceResult as unknown as bigint))
-      }
+        claimable: parseFloat(
+          formatEther(claimableBalance as unknown as bigint),
+        ),
+        honeyBorrowAllowance: parseFloat(
+          formatEther(honeyBorrowAllowanceResult as unknown as bigint),
+        ),
+      };
 
-      setBorrowWalletInfoState(response)
-      setWalletInfoLoadingState(false)
+      setBorrowWalletInfoState(response);
+      setWalletInfoLoadingState(false);
     }
-  }
+  };
 
   const updateAllowance = (newAllowance: number) => {
-    setBorrowWalletInfoState(prevState => ({
+    setBorrowWalletInfoState((prevState) => ({
       ...prevState,
-      honeyBorrowAllowance: newAllowance
-    }))
-  }
+      honeyBorrowAllowance: newAllowance,
+    }));
+  };
 
-  const openNotification = (toggle: boolean, action: string, result: string, hash: string) => {
-    setNotificationState(prevState => ({
+  const openNotification = (
+    toggle: boolean,
+    action: string,
+    result: string,
+    hash: string,
+  ) => {
+    setNotificationState((prevState) => ({
       toggle,
       action,
       result,
-      hash
-    }))
-  }
+      hash,
+    }));
+  };
 
   const formatTimestamp = (timestamp: number): string => {
     const date = new Date(timestamp * 1000); // Convert Unix timestamp to milliseconds
-    const month = (date.getUTCMonth() + 1).toString().padStart(2, '0'); // Get month and add leading zero if needed
-    const day = date.getUTCDate().toString().padStart(2, '0'); // Get day and add leading zero if needed
+    const month = (date.getUTCMonth() + 1).toString().padStart(2, "0"); // Get month and add leading zero if needed
+    const day = date.getUTCDate().toString().padStart(2, "0"); // Get day and add leading zero if needed
 
     return `${month}/${day}`;
-  }
+  };
 
   const updateChartData = (chartData: any) => {
-    let tempChartData: any[] = []
-    const days = ['firstDay', 'secondDay', 'thirdDay', 'fourthDay', 'fifthDay', 'sixthDay', 'seventhDay']
-    for(const day of days) {
-      const dayData = chartData[day]
-      const item = dayData.items[0]
-      if(item) {
-        const marketResult = marketPrice(parseFloat(formatEther(item.fsl)), parseFloat(formatEther(item.psl)), parseFloat(formatEther(item.supply)))
-        const floorResult = floorPrice(parseFloat(formatEther(item.fsl)), parseFloat(formatEther(item.supply)))
+    const tempChartData: any[] = [];
+    const days = [
+      "firstDay",
+      "secondDay",
+      "thirdDay",
+      "fourthDay",
+      "fifthDay",
+      "sixthDay",
+      "seventhDay",
+    ];
+    for (const day of days) {
+      const dayData = chartData[day];
+      const item = dayData.items[0];
+      if (item) {
+        const marketResult = marketPrice(
+          parseFloat(formatEther(item.fsl)),
+          parseFloat(formatEther(item.psl)),
+          parseFloat(formatEther(item.supply)),
+        );
+        const floorResult = floorPrice(
+          parseFloat(formatEther(item.fsl)),
+          parseFloat(formatEther(item.supply)),
+        );
         tempChartData.push({
           [`${day}`]: marketResult,
-          marketPrice: marketResult.toLocaleString('en-US', { maximumFractionDigits: 6 }),
-          floorPrice: floorResult.toLocaleString('en-US', { maximumFractionDigits: 6 }),
-          date: formatTimestamp(item.timestamp)
-        })
-      }
-      else {
+          marketPrice: marketResult.toLocaleString("en-US", {
+            maximumFractionDigits: 6,
+          }),
+          floorPrice: floorResult.toLocaleString("en-US", {
+            maximumFractionDigits: 6,
+          }),
+          date: formatTimestamp(item.timestamp),
+        });
+      } else {
         tempChartData.push({
           [`${day}`]: 0,
           marketPrice: 0,
           floorPrice: 0,
-          date: formatTimestamp(item.timestamp)
-        })
+          date: formatTimestamp(item.timestamp),
+        });
       }
     }
     let fallbackNumber: number | null = null;
-    for(let i = 0; i < tempChartData.length; i++) {
+    for (let i = 0; i < tempChartData.length; i++) {
       if (tempChartData[i][`${days[i]}`] !== 0) {
-        fallbackNumber = tempChartData[i][`${days[i]}`]
-        break
+        fallbackNumber = tempChartData[i][`${days[i]}`];
+        break;
       }
     }
-    let farthestNumber: number | null = fallbackNumber
-    for(let i = tempChartData.length - 1; i >= 0; i--) {
-      if(tempChartData[i][`${days[i]}`] !== 0) {
-        farthestNumber = tempChartData[i][`${days[i]}`]
-      }
-      else if(farthestNumber !== null) {
-        tempChartData[i][`${days[i]}`] = farthestNumber
-        tempChartData[i].marketPrice = farthestNumber
+    let farthestNumber: number | null = fallbackNumber;
+    for (let i = tempChartData.length - 1; i >= 0; i--) {
+      if (tempChartData[i][`${days[i]}`] !== 0) {
+        farthestNumber = tempChartData[i][`${days[i]}`];
+      } else if (farthestNumber !== null) {
+        tempChartData[i][`${days[i]}`] = farthestNumber;
+        tempChartData[i].marketPrice = farthestNumber;
       }
     }
-    
-    setChartDataState(tempChartData)
-  } 
+
+    setChartDataState(tempChartData);
+  };
 
   return (
     <BorrowContext.Provider
@@ -409,12 +474,12 @@ export const BorrowProvider = (props: PropsWithChildren<{}>) => {
         wutPopup: wutPopupState,
         setWutPopup: setWutPopupState,
         chartData: chartDataState,
-        updateChartData
+        updateChartData,
       }}
     >
-      { children }
+      {children}
     </BorrowContext.Provider>
-  )
-}
+  );
+};
 
-export const useBorrow = () => useContext(BorrowContext)
+export const useBorrow = () => useContext(BorrowContext);

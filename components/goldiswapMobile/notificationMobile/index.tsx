@@ -1,27 +1,33 @@
-import { useGoldiswap } from "../../../providers"
+import { useGoldiswap } from "../../../providers";
 
 export const NotificationMobile = () => {
-
-  const { notification, openNotification } = useGoldiswap()
+  const { notification, openNotification } = useGoldiswap();
 
   return (
-    <div className="w-[100%] h-[100%] bg-[#E9D7A9] flex flex-col items-center relative px-[2%]">
-      <h1 className="font-amaticbold text-[15vw] mt-[25%]">SUCCESS!</h1>
-      <span className="font-baloo font-semibold text-[3vw] mt-[2%]">{notification.action}</span>
-      <span className="font-baloo font-semibold text-[3vw] mt-[10%]">{notification.result}</span>
-      <a 
-        href={`https://beratrail.io/tx/${notification.hash}`}
+    <div className="relative flex h-[100%] w-[100%] flex-col items-center bg-[#E9D7A9] px-[2%]">
+      <h1 className="mt-[25%] font-amaticbold text-[15vw]">SUCCESS!</h1>
+      <span className="mt-[2%] font-baloo text-[3vw] font-semibold">
+        {notification.action}
+      </span>
+      <span className="mt-[10%] font-baloo text-[3vw] font-semibold">
+        {notification.result}
+      </span>
+      <a
+        href={`https://berascan.com/tx/${notification.hash}`}
         target="_blank"
-        className="h-[11%] w-[50%] mt-[20%] bg-[#E7B941] focus:scale-110 border-2 border-black"
+        className="mt-[20%] h-[11%] w-[50%] border-2 border-black bg-[#E7B941] focus:scale-110"
+        rel="noreferrer"
       >
-        <button className="w-[100%] h-[100%] font-amaticbold text-[5vw]">VIEW TX</button>
+        <button className="h-[100%] w-[100%] font-amaticbold text-[5vw]">
+          VIEW TX
+        </button>
       </a>
       <p
-        className="absolute top-[-1%] right-[3%] font-baloo text-[7vw] cursor-pointer focus:scale-125"
-        onClick={() => openNotification(false, '', '', '')}
+        className="absolute right-[3%] top-[-1%] cursor-pointer font-baloo text-[7vw] focus:scale-125"
+        onClick={() => openNotification(false, "", "", "")}
       >
         x
       </p>
     </div>
-  )
-}
+  );
+};

@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { useGoldilend } from "../../../providers"
+import { useGoldilend } from "../../../providers";
 import {
   LockTab,
   StakeTab,
@@ -9,39 +9,40 @@ import {
   Stats,
   LendWalletBalance,
   LiquidateTab,
-  ClaimTab
-} from ".."
+  ClaimTab,
+} from "..";
 
 export const LendBox = () => {
+  const { lendActiveToggle, txConfirming } = useGoldilend();
 
-  const { lendActiveToggle, txConfirming } = useGoldilend()
-
-  return (
-    lendActiveToggle === 'LIQUIDATE' ?
-    <LiquidateTab /> :
-    lendActiveToggle === 'CLAIM' ?
+  return lendActiveToggle === "LIQUIDATE" ? (
+    <LiquidateTab />
+  ) : lendActiveToggle === "CLAIM" ? (
     <>
       <ClaimTab />
-    </> :
+    </>
+  ) : (
     <>
-      <div className="absolute top-[14%] left-[20%] xl:left-[30%] h-[40%] w-[60%] xl:w-[46%] border-2 border-black bg-[#EEDCD2] z-20">
-        <div className="absolute top-3 left-0 w-6 skew-y-[45deg] border-b-2 border-black"></div>
+      <div className="absolute left-[20%] top-[14%] z-20 h-[40%] w-[60%] border-2 border-black bg-[#EEDCD2] xl:left-[30%] xl:w-[46%]">
+        <div className="absolute left-0 top-3 w-6 skew-y-[45deg] border-b-2 border-black"></div>
         <div className="absolute bottom-3 left-0 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
-        <div className="absolute top-3 right-0 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
+        <div className="absolute right-0 top-3 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
         <div className="absolute bottom-3 right-0 w-6 skew-y-[45deg] border-b-2 border-black"></div>
-        <div className={`absolute inset-6 ${txConfirming ? "" : "border-2 border-black"} bg-[#D9C6BA]`}>
-          {
-            lendActiveToggle === 'LOCK' ?
-            <LockTab /> :
-            lendActiveToggle === 'STAKE' ?
-            <StakeTab /> :
+        <div
+          className={`absolute inset-6 ${txConfirming ? "" : "border-2 border-black"} bg-[#D9C6BA]`}
+        >
+          {lendActiveToggle === "LOCK" ? (
+            <LockTab />
+          ) : lendActiveToggle === "STAKE" ? (
+            <StakeTab />
+          ) : (
             <UnstakeTab />
-          }
+          )}
         </div>
-        </div>
+      </div>
       <LendWalletBalance />
       <LendButton />
       <Stats />
     </>
-  )
-}
+  );
+};

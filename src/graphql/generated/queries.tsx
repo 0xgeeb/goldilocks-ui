@@ -1,512 +1,528 @@
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
+import { gql } from "@apollo/client";
+import * as Apollo from "@apollo/client";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
-export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+export type Exact<T extends { [key: string]: unknown }> = {
+  [K in keyof T]: T[K];
+};
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]?: Maybe<T[SubKey]>;
+};
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]: Maybe<T[SubKey]>;
+};
+export type MakeEmpty<
+  T extends { [key: string]: unknown },
+  K extends keyof T,
+> = { [_ in K]?: never };
+export type Incremental<T> =
+  | T
+  | {
+      [P in keyof T]?: P extends " $fragmentName" | "__typename" ? T[P] : never;
+    };
 const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string; output: string; }
-  String: { input: string; output: string; }
-  Boolean: { input: boolean; output: boolean; }
-  Int: { input: number; output: number; }
-  Float: { input: number; output: number; }
-  BigInt: { input: any; output: any; }
+  ID: { input: string; output: string };
+  String: { input: string; output: string };
+  Boolean: { input: boolean; output: boolean };
+  Int: { input: number; output: number };
+  Float: { input: number; output: number };
+  BigInt: { input: any; output: any };
 };
 
 export type Action = {
-  __typename?: 'Action';
-  calldatas: Scalars['String']['output'];
-  id: Scalars['String']['output'];
+  __typename?: "Action";
+  calldatas: Scalars["String"]["output"];
+  id: Scalars["String"]["output"];
   proposal: Proposal;
-  proposalId: Scalars['String']['output'];
-  signature: Scalars['String']['output'];
-  target: Scalars['String']['output'];
-  value: Scalars['BigInt']['output'];
+  proposalId: Scalars["String"]["output"];
+  signature: Scalars["String"]["output"];
+  target: Scalars["String"]["output"];
+  value: Scalars["BigInt"]["output"];
 };
 
 export type ActionFilter = {
   AND?: InputMaybe<Array<InputMaybe<ActionFilter>>>;
   OR?: InputMaybe<Array<InputMaybe<ActionFilter>>>;
-  calldatas?: InputMaybe<Scalars['String']['input']>;
-  calldatas_gt?: InputMaybe<Scalars['String']['input']>;
-  calldatas_gte?: InputMaybe<Scalars['String']['input']>;
-  calldatas_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  calldatas_lt?: InputMaybe<Scalars['String']['input']>;
-  calldatas_lte?: InputMaybe<Scalars['String']['input']>;
-  calldatas_not?: InputMaybe<Scalars['String']['input']>;
-  calldatas_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  id?: InputMaybe<Scalars['String']['input']>;
-  id_contains?: InputMaybe<Scalars['String']['input']>;
-  id_ends_with?: InputMaybe<Scalars['String']['input']>;
-  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  id_not?: InputMaybe<Scalars['String']['input']>;
-  id_not_contains?: InputMaybe<Scalars['String']['input']>;
-  id_not_ends_with?: InputMaybe<Scalars['String']['input']>;
-  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  id_not_starts_with?: InputMaybe<Scalars['String']['input']>;
-  id_starts_with?: InputMaybe<Scalars['String']['input']>;
-  proposalId?: InputMaybe<Scalars['String']['input']>;
-  proposalId_contains?: InputMaybe<Scalars['String']['input']>;
-  proposalId_ends_with?: InputMaybe<Scalars['String']['input']>;
-  proposalId_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  proposalId_not?: InputMaybe<Scalars['String']['input']>;
-  proposalId_not_contains?: InputMaybe<Scalars['String']['input']>;
-  proposalId_not_ends_with?: InputMaybe<Scalars['String']['input']>;
-  proposalId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  proposalId_not_starts_with?: InputMaybe<Scalars['String']['input']>;
-  proposalId_starts_with?: InputMaybe<Scalars['String']['input']>;
+  calldatas?: InputMaybe<Scalars["String"]["input"]>;
+  calldatas_gt?: InputMaybe<Scalars["String"]["input"]>;
+  calldatas_gte?: InputMaybe<Scalars["String"]["input"]>;
+  calldatas_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  calldatas_lt?: InputMaybe<Scalars["String"]["input"]>;
+  calldatas_lte?: InputMaybe<Scalars["String"]["input"]>;
+  calldatas_not?: InputMaybe<Scalars["String"]["input"]>;
+  calldatas_not_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  id?: InputMaybe<Scalars["String"]["input"]>;
+  id_contains?: InputMaybe<Scalars["String"]["input"]>;
+  id_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  id_not?: InputMaybe<Scalars["String"]["input"]>;
+  id_not_contains?: InputMaybe<Scalars["String"]["input"]>;
+  id_not_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  id_not_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  id_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  proposalId?: InputMaybe<Scalars["String"]["input"]>;
+  proposalId_contains?: InputMaybe<Scalars["String"]["input"]>;
+  proposalId_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  proposalId_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  proposalId_not?: InputMaybe<Scalars["String"]["input"]>;
+  proposalId_not_contains?: InputMaybe<Scalars["String"]["input"]>;
+  proposalId_not_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  proposalId_not_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  proposalId_not_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  proposalId_starts_with?: InputMaybe<Scalars["String"]["input"]>;
   proposal_?: InputMaybe<ActionProposalFilter>;
-  signature?: InputMaybe<Scalars['String']['input']>;
-  signature_contains?: InputMaybe<Scalars['String']['input']>;
-  signature_ends_with?: InputMaybe<Scalars['String']['input']>;
-  signature_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  signature_not?: InputMaybe<Scalars['String']['input']>;
-  signature_not_contains?: InputMaybe<Scalars['String']['input']>;
-  signature_not_ends_with?: InputMaybe<Scalars['String']['input']>;
-  signature_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  signature_not_starts_with?: InputMaybe<Scalars['String']['input']>;
-  signature_starts_with?: InputMaybe<Scalars['String']['input']>;
-  target?: InputMaybe<Scalars['String']['input']>;
-  target_gt?: InputMaybe<Scalars['String']['input']>;
-  target_gte?: InputMaybe<Scalars['String']['input']>;
-  target_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  target_lt?: InputMaybe<Scalars['String']['input']>;
-  target_lte?: InputMaybe<Scalars['String']['input']>;
-  target_not?: InputMaybe<Scalars['String']['input']>;
-  target_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  value?: InputMaybe<Scalars['BigInt']['input']>;
-  value_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  value_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  value_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
-  value_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  value_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  value_not?: InputMaybe<Scalars['BigInt']['input']>;
-  value_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  signature?: InputMaybe<Scalars["String"]["input"]>;
+  signature_contains?: InputMaybe<Scalars["String"]["input"]>;
+  signature_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  signature_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  signature_not?: InputMaybe<Scalars["String"]["input"]>;
+  signature_not_contains?: InputMaybe<Scalars["String"]["input"]>;
+  signature_not_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  signature_not_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  signature_not_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  signature_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  target?: InputMaybe<Scalars["String"]["input"]>;
+  target_gt?: InputMaybe<Scalars["String"]["input"]>;
+  target_gte?: InputMaybe<Scalars["String"]["input"]>;
+  target_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  target_lt?: InputMaybe<Scalars["String"]["input"]>;
+  target_lte?: InputMaybe<Scalars["String"]["input"]>;
+  target_not?: InputMaybe<Scalars["String"]["input"]>;
+  target_not_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  value?: InputMaybe<Scalars["BigInt"]["input"]>;
+  value_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  value_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  value_in?: InputMaybe<Array<InputMaybe<Scalars["BigInt"]["input"]>>>;
+  value_lt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  value_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  value_not?: InputMaybe<Scalars["BigInt"]["input"]>;
+  value_not_in?: InputMaybe<Array<InputMaybe<Scalars["BigInt"]["input"]>>>;
 };
 
 export type ActionPage = {
-  __typename?: 'ActionPage';
+  __typename?: "ActionPage";
   items: Array<Action>;
   pageInfo: PageInfo;
 };
 
 export type ActionProposalFilter = {
-  description?: InputMaybe<Scalars['String']['input']>;
-  description_contains?: InputMaybe<Scalars['String']['input']>;
-  description_ends_with?: InputMaybe<Scalars['String']['input']>;
-  description_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  description_not?: InputMaybe<Scalars['String']['input']>;
-  description_not_contains?: InputMaybe<Scalars['String']['input']>;
-  description_not_ends_with?: InputMaybe<Scalars['String']['input']>;
-  description_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  description_not_starts_with?: InputMaybe<Scalars['String']['input']>;
-  description_starts_with?: InputMaybe<Scalars['String']['input']>;
-  endBlock?: InputMaybe<Scalars['BigInt']['input']>;
-  endBlock_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  endBlock_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  endBlock_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
-  endBlock_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  endBlock_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  endBlock_not?: InputMaybe<Scalars['BigInt']['input']>;
-  endBlock_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
-  id?: InputMaybe<Scalars['String']['input']>;
-  id_contains?: InputMaybe<Scalars['String']['input']>;
-  id_ends_with?: InputMaybe<Scalars['String']['input']>;
-  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  id_not?: InputMaybe<Scalars['String']['input']>;
-  id_not_contains?: InputMaybe<Scalars['String']['input']>;
-  id_not_ends_with?: InputMaybe<Scalars['String']['input']>;
-  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  id_not_starts_with?: InputMaybe<Scalars['String']['input']>;
-  id_starts_with?: InputMaybe<Scalars['String']['input']>;
-  proposalId?: InputMaybe<Scalars['BigInt']['input']>;
-  proposalId_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  proposalId_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  proposalId_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
-  proposalId_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  proposalId_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  proposalId_not?: InputMaybe<Scalars['BigInt']['input']>;
-  proposalId_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
-  proposer?: InputMaybe<Scalars['String']['input']>;
-  proposer_gt?: InputMaybe<Scalars['String']['input']>;
-  proposer_gte?: InputMaybe<Scalars['String']['input']>;
-  proposer_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  proposer_lt?: InputMaybe<Scalars['String']['input']>;
-  proposer_lte?: InputMaybe<Scalars['String']['input']>;
-  proposer_not?: InputMaybe<Scalars['String']['input']>;
-  proposer_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  startBlock?: InputMaybe<Scalars['BigInt']['input']>;
-  startBlock_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  startBlock_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  startBlock_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
-  startBlock_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  startBlock_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  startBlock_not?: InputMaybe<Scalars['BigInt']['input']>;
-  startBlock_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  description?: InputMaybe<Scalars["String"]["input"]>;
+  description_contains?: InputMaybe<Scalars["String"]["input"]>;
+  description_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  description_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  description_not?: InputMaybe<Scalars["String"]["input"]>;
+  description_not_contains?: InputMaybe<Scalars["String"]["input"]>;
+  description_not_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  description_not_in?: InputMaybe<
+    Array<InputMaybe<Scalars["String"]["input"]>>
+  >;
+  description_not_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  description_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  endBlock?: InputMaybe<Scalars["BigInt"]["input"]>;
+  endBlock_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  endBlock_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  endBlock_in?: InputMaybe<Array<InputMaybe<Scalars["BigInt"]["input"]>>>;
+  endBlock_lt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  endBlock_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  endBlock_not?: InputMaybe<Scalars["BigInt"]["input"]>;
+  endBlock_not_in?: InputMaybe<Array<InputMaybe<Scalars["BigInt"]["input"]>>>;
+  id?: InputMaybe<Scalars["String"]["input"]>;
+  id_contains?: InputMaybe<Scalars["String"]["input"]>;
+  id_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  id_not?: InputMaybe<Scalars["String"]["input"]>;
+  id_not_contains?: InputMaybe<Scalars["String"]["input"]>;
+  id_not_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  id_not_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  id_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  proposalId?: InputMaybe<Scalars["BigInt"]["input"]>;
+  proposalId_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  proposalId_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  proposalId_in?: InputMaybe<Array<InputMaybe<Scalars["BigInt"]["input"]>>>;
+  proposalId_lt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  proposalId_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  proposalId_not?: InputMaybe<Scalars["BigInt"]["input"]>;
+  proposalId_not_in?: InputMaybe<Array<InputMaybe<Scalars["BigInt"]["input"]>>>;
+  proposer?: InputMaybe<Scalars["String"]["input"]>;
+  proposer_gt?: InputMaybe<Scalars["String"]["input"]>;
+  proposer_gte?: InputMaybe<Scalars["String"]["input"]>;
+  proposer_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  proposer_lt?: InputMaybe<Scalars["String"]["input"]>;
+  proposer_lte?: InputMaybe<Scalars["String"]["input"]>;
+  proposer_not?: InputMaybe<Scalars["String"]["input"]>;
+  proposer_not_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  startBlock?: InputMaybe<Scalars["BigInt"]["input"]>;
+  startBlock_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  startBlock_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  startBlock_in?: InputMaybe<Array<InputMaybe<Scalars["BigInt"]["input"]>>>;
+  startBlock_lt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  startBlock_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  startBlock_not?: InputMaybe<Scalars["BigInt"]["input"]>;
+  startBlock_not_in?: InputMaybe<Array<InputMaybe<Scalars["BigInt"]["input"]>>>;
 };
 
 export type BandBera = {
-  __typename?: 'BandBera';
-  id: Scalars['BigInt']['output'];
-  owner: Scalars['String']['output'];
+  __typename?: "BandBera";
+  id: Scalars["BigInt"]["output"];
+  owner: Scalars["String"]["output"];
 };
 
 export type BandBeraFilter = {
   AND?: InputMaybe<Array<InputMaybe<BandBeraFilter>>>;
   OR?: InputMaybe<Array<InputMaybe<BandBeraFilter>>>;
-  id?: InputMaybe<Scalars['BigInt']['input']>;
-  id_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  id_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  id_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
-  id_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  id_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  id_not?: InputMaybe<Scalars['BigInt']['input']>;
-  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
-  owner?: InputMaybe<Scalars['String']['input']>;
-  owner_gt?: InputMaybe<Scalars['String']['input']>;
-  owner_gte?: InputMaybe<Scalars['String']['input']>;
-  owner_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  owner_lt?: InputMaybe<Scalars['String']['input']>;
-  owner_lte?: InputMaybe<Scalars['String']['input']>;
-  owner_not?: InputMaybe<Scalars['String']['input']>;
-  owner_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id?: InputMaybe<Scalars["BigInt"]["input"]>;
+  id_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  id_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars["BigInt"]["input"]>>>;
+  id_lt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  id_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  id_not?: InputMaybe<Scalars["BigInt"]["input"]>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars["BigInt"]["input"]>>>;
+  owner?: InputMaybe<Scalars["String"]["input"]>;
+  owner_gt?: InputMaybe<Scalars["String"]["input"]>;
+  owner_gte?: InputMaybe<Scalars["String"]["input"]>;
+  owner_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  owner_lt?: InputMaybe<Scalars["String"]["input"]>;
+  owner_lte?: InputMaybe<Scalars["String"]["input"]>;
+  owner_not?: InputMaybe<Scalars["String"]["input"]>;
+  owner_not_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
 };
 
 export type BandBeraPage = {
-  __typename?: 'BandBeraPage';
+  __typename?: "BandBeraPage";
   items: Array<BandBera>;
   pageInfo: PageInfo;
 };
 
 export type Beradrome = {
-  __typename?: 'Beradrome';
-  id: Scalars['BigInt']['output'];
-  owner: Scalars['String']['output'];
+  __typename?: "Beradrome";
+  id: Scalars["BigInt"]["output"];
+  owner: Scalars["String"]["output"];
 };
 
 export type BeradromeFilter = {
   AND?: InputMaybe<Array<InputMaybe<BeradromeFilter>>>;
   OR?: InputMaybe<Array<InputMaybe<BeradromeFilter>>>;
-  id?: InputMaybe<Scalars['BigInt']['input']>;
-  id_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  id_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  id_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
-  id_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  id_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  id_not?: InputMaybe<Scalars['BigInt']['input']>;
-  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
-  owner?: InputMaybe<Scalars['String']['input']>;
-  owner_gt?: InputMaybe<Scalars['String']['input']>;
-  owner_gte?: InputMaybe<Scalars['String']['input']>;
-  owner_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  owner_lt?: InputMaybe<Scalars['String']['input']>;
-  owner_lte?: InputMaybe<Scalars['String']['input']>;
-  owner_not?: InputMaybe<Scalars['String']['input']>;
-  owner_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id?: InputMaybe<Scalars["BigInt"]["input"]>;
+  id_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  id_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars["BigInt"]["input"]>>>;
+  id_lt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  id_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  id_not?: InputMaybe<Scalars["BigInt"]["input"]>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars["BigInt"]["input"]>>>;
+  owner?: InputMaybe<Scalars["String"]["input"]>;
+  owner_gt?: InputMaybe<Scalars["String"]["input"]>;
+  owner_gte?: InputMaybe<Scalars["String"]["input"]>;
+  owner_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  owner_lt?: InputMaybe<Scalars["String"]["input"]>;
+  owner_lte?: InputMaybe<Scalars["String"]["input"]>;
+  owner_not?: InputMaybe<Scalars["String"]["input"]>;
+  owner_not_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
 };
 
 export type BeradromePage = {
-  __typename?: 'BeradromePage';
+  __typename?: "BeradromePage";
   items: Array<Beradrome>;
   pageInfo: PageInfo;
 };
 
 export type BondBera = {
-  __typename?: 'BondBera';
-  id: Scalars['BigInt']['output'];
-  owner: Scalars['String']['output'];
+  __typename?: "BondBera";
+  id: Scalars["BigInt"]["output"];
+  owner: Scalars["String"]["output"];
 };
 
 export type BondBeraFilter = {
   AND?: InputMaybe<Array<InputMaybe<BondBeraFilter>>>;
   OR?: InputMaybe<Array<InputMaybe<BondBeraFilter>>>;
-  id?: InputMaybe<Scalars['BigInt']['input']>;
-  id_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  id_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  id_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
-  id_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  id_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  id_not?: InputMaybe<Scalars['BigInt']['input']>;
-  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
-  owner?: InputMaybe<Scalars['String']['input']>;
-  owner_gt?: InputMaybe<Scalars['String']['input']>;
-  owner_gte?: InputMaybe<Scalars['String']['input']>;
-  owner_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  owner_lt?: InputMaybe<Scalars['String']['input']>;
-  owner_lte?: InputMaybe<Scalars['String']['input']>;
-  owner_not?: InputMaybe<Scalars['String']['input']>;
-  owner_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id?: InputMaybe<Scalars["BigInt"]["input"]>;
+  id_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  id_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars["BigInt"]["input"]>>>;
+  id_lt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  id_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  id_not?: InputMaybe<Scalars["BigInt"]["input"]>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars["BigInt"]["input"]>>>;
+  owner?: InputMaybe<Scalars["String"]["input"]>;
+  owner_gt?: InputMaybe<Scalars["String"]["input"]>;
+  owner_gte?: InputMaybe<Scalars["String"]["input"]>;
+  owner_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  owner_lt?: InputMaybe<Scalars["String"]["input"]>;
+  owner_lte?: InputMaybe<Scalars["String"]["input"]>;
+  owner_not?: InputMaybe<Scalars["String"]["input"]>;
+  owner_not_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
 };
 
 export type BondBeraPage = {
-  __typename?: 'BondBeraPage';
+  __typename?: "BondBeraPage";
   items: Array<BondBera>;
   pageInfo: PageInfo;
 };
 
 export type GoldiswapTx = {
-  __typename?: 'GoldiswapTx';
-  fsl: Scalars['BigInt']['output'];
-  id: Scalars['String']['output'];
-  psl: Scalars['BigInt']['output'];
-  supply: Scalars['BigInt']['output'];
-  timestamp: Scalars['BigInt']['output'];
-  txType: Scalars['String']['output'];
+  __typename?: "GoldiswapTx";
+  fsl: Scalars["BigInt"]["output"];
+  id: Scalars["String"]["output"];
+  psl: Scalars["BigInt"]["output"];
+  supply: Scalars["BigInt"]["output"];
+  timestamp: Scalars["BigInt"]["output"];
+  txType: Scalars["String"]["output"];
 };
 
 export type GoldiswapTxFilter = {
   AND?: InputMaybe<Array<InputMaybe<GoldiswapTxFilter>>>;
   OR?: InputMaybe<Array<InputMaybe<GoldiswapTxFilter>>>;
-  fsl?: InputMaybe<Scalars['BigInt']['input']>;
-  fsl_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  fsl_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  fsl_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
-  fsl_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  fsl_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  fsl_not?: InputMaybe<Scalars['BigInt']['input']>;
-  fsl_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
-  id?: InputMaybe<Scalars['String']['input']>;
-  id_contains?: InputMaybe<Scalars['String']['input']>;
-  id_ends_with?: InputMaybe<Scalars['String']['input']>;
-  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  id_not?: InputMaybe<Scalars['String']['input']>;
-  id_not_contains?: InputMaybe<Scalars['String']['input']>;
-  id_not_ends_with?: InputMaybe<Scalars['String']['input']>;
-  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  id_not_starts_with?: InputMaybe<Scalars['String']['input']>;
-  id_starts_with?: InputMaybe<Scalars['String']['input']>;
-  psl?: InputMaybe<Scalars['BigInt']['input']>;
-  psl_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  psl_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  psl_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
-  psl_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  psl_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  psl_not?: InputMaybe<Scalars['BigInt']['input']>;
-  psl_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
-  supply?: InputMaybe<Scalars['BigInt']['input']>;
-  supply_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  supply_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  supply_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
-  supply_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  supply_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  supply_not?: InputMaybe<Scalars['BigInt']['input']>;
-  supply_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
-  timestamp?: InputMaybe<Scalars['BigInt']['input']>;
-  timestamp_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  timestamp_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  timestamp_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
-  timestamp_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  timestamp_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  timestamp_not?: InputMaybe<Scalars['BigInt']['input']>;
-  timestamp_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
-  txType?: InputMaybe<Scalars['String']['input']>;
-  txType_contains?: InputMaybe<Scalars['String']['input']>;
-  txType_ends_with?: InputMaybe<Scalars['String']['input']>;
-  txType_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  txType_not?: InputMaybe<Scalars['String']['input']>;
-  txType_not_contains?: InputMaybe<Scalars['String']['input']>;
-  txType_not_ends_with?: InputMaybe<Scalars['String']['input']>;
-  txType_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  txType_not_starts_with?: InputMaybe<Scalars['String']['input']>;
-  txType_starts_with?: InputMaybe<Scalars['String']['input']>;
+  fsl?: InputMaybe<Scalars["BigInt"]["input"]>;
+  fsl_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  fsl_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  fsl_in?: InputMaybe<Array<InputMaybe<Scalars["BigInt"]["input"]>>>;
+  fsl_lt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  fsl_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  fsl_not?: InputMaybe<Scalars["BigInt"]["input"]>;
+  fsl_not_in?: InputMaybe<Array<InputMaybe<Scalars["BigInt"]["input"]>>>;
+  id?: InputMaybe<Scalars["String"]["input"]>;
+  id_contains?: InputMaybe<Scalars["String"]["input"]>;
+  id_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  id_not?: InputMaybe<Scalars["String"]["input"]>;
+  id_not_contains?: InputMaybe<Scalars["String"]["input"]>;
+  id_not_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  id_not_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  id_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  psl?: InputMaybe<Scalars["BigInt"]["input"]>;
+  psl_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  psl_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  psl_in?: InputMaybe<Array<InputMaybe<Scalars["BigInt"]["input"]>>>;
+  psl_lt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  psl_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  psl_not?: InputMaybe<Scalars["BigInt"]["input"]>;
+  psl_not_in?: InputMaybe<Array<InputMaybe<Scalars["BigInt"]["input"]>>>;
+  supply?: InputMaybe<Scalars["BigInt"]["input"]>;
+  supply_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  supply_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  supply_in?: InputMaybe<Array<InputMaybe<Scalars["BigInt"]["input"]>>>;
+  supply_lt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  supply_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  supply_not?: InputMaybe<Scalars["BigInt"]["input"]>;
+  supply_not_in?: InputMaybe<Array<InputMaybe<Scalars["BigInt"]["input"]>>>;
+  timestamp?: InputMaybe<Scalars["BigInt"]["input"]>;
+  timestamp_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  timestamp_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  timestamp_in?: InputMaybe<Array<InputMaybe<Scalars["BigInt"]["input"]>>>;
+  timestamp_lt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  timestamp_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  timestamp_not?: InputMaybe<Scalars["BigInt"]["input"]>;
+  timestamp_not_in?: InputMaybe<Array<InputMaybe<Scalars["BigInt"]["input"]>>>;
+  txType?: InputMaybe<Scalars["String"]["input"]>;
+  txType_contains?: InputMaybe<Scalars["String"]["input"]>;
+  txType_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  txType_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  txType_not?: InputMaybe<Scalars["String"]["input"]>;
+  txType_not_contains?: InputMaybe<Scalars["String"]["input"]>;
+  txType_not_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  txType_not_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  txType_not_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  txType_starts_with?: InputMaybe<Scalars["String"]["input"]>;
 };
 
 export type GoldiswapTxPage = {
-  __typename?: 'GoldiswapTxPage';
+  __typename?: "GoldiswapTxPage";
   items: Array<GoldiswapTx>;
   pageInfo: PageInfo;
 };
 
 export type Honeycomb = {
-  __typename?: 'Honeycomb';
-  id: Scalars['BigInt']['output'];
-  owner: Scalars['String']['output'];
+  __typename?: "Honeycomb";
+  id: Scalars["BigInt"]["output"];
+  owner: Scalars["String"]["output"];
 };
 
 export type HoneycombFilter = {
   AND?: InputMaybe<Array<InputMaybe<HoneycombFilter>>>;
   OR?: InputMaybe<Array<InputMaybe<HoneycombFilter>>>;
-  id?: InputMaybe<Scalars['BigInt']['input']>;
-  id_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  id_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  id_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
-  id_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  id_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  id_not?: InputMaybe<Scalars['BigInt']['input']>;
-  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
-  owner?: InputMaybe<Scalars['String']['input']>;
-  owner_gt?: InputMaybe<Scalars['String']['input']>;
-  owner_gte?: InputMaybe<Scalars['String']['input']>;
-  owner_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  owner_lt?: InputMaybe<Scalars['String']['input']>;
-  owner_lte?: InputMaybe<Scalars['String']['input']>;
-  owner_not?: InputMaybe<Scalars['String']['input']>;
-  owner_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id?: InputMaybe<Scalars["BigInt"]["input"]>;
+  id_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  id_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars["BigInt"]["input"]>>>;
+  id_lt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  id_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  id_not?: InputMaybe<Scalars["BigInt"]["input"]>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars["BigInt"]["input"]>>>;
+  owner?: InputMaybe<Scalars["String"]["input"]>;
+  owner_gt?: InputMaybe<Scalars["String"]["input"]>;
+  owner_gte?: InputMaybe<Scalars["String"]["input"]>;
+  owner_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  owner_lt?: InputMaybe<Scalars["String"]["input"]>;
+  owner_lte?: InputMaybe<Scalars["String"]["input"]>;
+  owner_not?: InputMaybe<Scalars["String"]["input"]>;
+  owner_not_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
 };
 
 export type HoneycombPage = {
-  __typename?: 'HoneycombPage';
+  __typename?: "HoneycombPage";
   items: Array<Honeycomb>;
   pageInfo: PageInfo;
 };
 
 export type PageInfo = {
-  __typename?: 'PageInfo';
-  endCursor?: Maybe<Scalars['String']['output']>;
-  hasNextPage: Scalars['Boolean']['output'];
-  hasPreviousPage: Scalars['Boolean']['output'];
-  startCursor?: Maybe<Scalars['String']['output']>;
+  __typename?: "PageInfo";
+  endCursor?: Maybe<Scalars["String"]["output"]>;
+  hasNextPage: Scalars["Boolean"]["output"];
+  hasPreviousPage: Scalars["Boolean"]["output"];
+  startCursor?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type Proposal = {
-  __typename?: 'Proposal';
+  __typename?: "Proposal";
   actions?: Maybe<ActionPage>;
-  description: Scalars['String']['output'];
-  endBlock: Scalars['BigInt']['output'];
-  id: Scalars['String']['output'];
-  proposalId: Scalars['BigInt']['output'];
-  proposer: Scalars['String']['output'];
-  startBlock: Scalars['BigInt']['output'];
+  description: Scalars["String"]["output"];
+  endBlock: Scalars["BigInt"]["output"];
+  id: Scalars["String"]["output"];
+  proposalId: Scalars["BigInt"]["output"];
+  proposer: Scalars["String"]["output"];
+  startBlock: Scalars["BigInt"]["output"];
 };
 
-
 export type ProposalActionsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Scalars['String']['input']>;
-  orderDirection?: InputMaybe<Scalars['String']['input']>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  orderBy?: InputMaybe<Scalars["String"]["input"]>;
+  orderDirection?: InputMaybe<Scalars["String"]["input"]>;
   where?: InputMaybe<ActionFilter>;
 };
 
 export type ProposalActionFilter = {
-  calldatas?: InputMaybe<Scalars['String']['input']>;
-  calldatas_gt?: InputMaybe<Scalars['String']['input']>;
-  calldatas_gte?: InputMaybe<Scalars['String']['input']>;
-  calldatas_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  calldatas_lt?: InputMaybe<Scalars['String']['input']>;
-  calldatas_lte?: InputMaybe<Scalars['String']['input']>;
-  calldatas_not?: InputMaybe<Scalars['String']['input']>;
-  calldatas_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  id?: InputMaybe<Scalars['String']['input']>;
-  id_contains?: InputMaybe<Scalars['String']['input']>;
-  id_ends_with?: InputMaybe<Scalars['String']['input']>;
-  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  id_not?: InputMaybe<Scalars['String']['input']>;
-  id_not_contains?: InputMaybe<Scalars['String']['input']>;
-  id_not_ends_with?: InputMaybe<Scalars['String']['input']>;
-  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  id_not_starts_with?: InputMaybe<Scalars['String']['input']>;
-  id_starts_with?: InputMaybe<Scalars['String']['input']>;
-  proposalId?: InputMaybe<Scalars['String']['input']>;
-  proposalId_contains?: InputMaybe<Scalars['String']['input']>;
-  proposalId_ends_with?: InputMaybe<Scalars['String']['input']>;
-  proposalId_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  proposalId_not?: InputMaybe<Scalars['String']['input']>;
-  proposalId_not_contains?: InputMaybe<Scalars['String']['input']>;
-  proposalId_not_ends_with?: InputMaybe<Scalars['String']['input']>;
-  proposalId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  proposalId_not_starts_with?: InputMaybe<Scalars['String']['input']>;
-  proposalId_starts_with?: InputMaybe<Scalars['String']['input']>;
-  signature?: InputMaybe<Scalars['String']['input']>;
-  signature_contains?: InputMaybe<Scalars['String']['input']>;
-  signature_ends_with?: InputMaybe<Scalars['String']['input']>;
-  signature_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  signature_not?: InputMaybe<Scalars['String']['input']>;
-  signature_not_contains?: InputMaybe<Scalars['String']['input']>;
-  signature_not_ends_with?: InputMaybe<Scalars['String']['input']>;
-  signature_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  signature_not_starts_with?: InputMaybe<Scalars['String']['input']>;
-  signature_starts_with?: InputMaybe<Scalars['String']['input']>;
-  target?: InputMaybe<Scalars['String']['input']>;
-  target_gt?: InputMaybe<Scalars['String']['input']>;
-  target_gte?: InputMaybe<Scalars['String']['input']>;
-  target_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  target_lt?: InputMaybe<Scalars['String']['input']>;
-  target_lte?: InputMaybe<Scalars['String']['input']>;
-  target_not?: InputMaybe<Scalars['String']['input']>;
-  target_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  value?: InputMaybe<Scalars['BigInt']['input']>;
-  value_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  value_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  value_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
-  value_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  value_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  value_not?: InputMaybe<Scalars['BigInt']['input']>;
-  value_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  calldatas?: InputMaybe<Scalars["String"]["input"]>;
+  calldatas_gt?: InputMaybe<Scalars["String"]["input"]>;
+  calldatas_gte?: InputMaybe<Scalars["String"]["input"]>;
+  calldatas_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  calldatas_lt?: InputMaybe<Scalars["String"]["input"]>;
+  calldatas_lte?: InputMaybe<Scalars["String"]["input"]>;
+  calldatas_not?: InputMaybe<Scalars["String"]["input"]>;
+  calldatas_not_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  id?: InputMaybe<Scalars["String"]["input"]>;
+  id_contains?: InputMaybe<Scalars["String"]["input"]>;
+  id_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  id_not?: InputMaybe<Scalars["String"]["input"]>;
+  id_not_contains?: InputMaybe<Scalars["String"]["input"]>;
+  id_not_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  id_not_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  id_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  proposalId?: InputMaybe<Scalars["String"]["input"]>;
+  proposalId_contains?: InputMaybe<Scalars["String"]["input"]>;
+  proposalId_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  proposalId_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  proposalId_not?: InputMaybe<Scalars["String"]["input"]>;
+  proposalId_not_contains?: InputMaybe<Scalars["String"]["input"]>;
+  proposalId_not_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  proposalId_not_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  proposalId_not_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  proposalId_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  signature?: InputMaybe<Scalars["String"]["input"]>;
+  signature_contains?: InputMaybe<Scalars["String"]["input"]>;
+  signature_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  signature_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  signature_not?: InputMaybe<Scalars["String"]["input"]>;
+  signature_not_contains?: InputMaybe<Scalars["String"]["input"]>;
+  signature_not_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  signature_not_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  signature_not_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  signature_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  target?: InputMaybe<Scalars["String"]["input"]>;
+  target_gt?: InputMaybe<Scalars["String"]["input"]>;
+  target_gte?: InputMaybe<Scalars["String"]["input"]>;
+  target_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  target_lt?: InputMaybe<Scalars["String"]["input"]>;
+  target_lte?: InputMaybe<Scalars["String"]["input"]>;
+  target_not?: InputMaybe<Scalars["String"]["input"]>;
+  target_not_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  value?: InputMaybe<Scalars["BigInt"]["input"]>;
+  value_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  value_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  value_in?: InputMaybe<Array<InputMaybe<Scalars["BigInt"]["input"]>>>;
+  value_lt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  value_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  value_not?: InputMaybe<Scalars["BigInt"]["input"]>;
+  value_not_in?: InputMaybe<Array<InputMaybe<Scalars["BigInt"]["input"]>>>;
 };
 
 export type ProposalFilter = {
   AND?: InputMaybe<Array<InputMaybe<ProposalFilter>>>;
   OR?: InputMaybe<Array<InputMaybe<ProposalFilter>>>;
   actions_?: InputMaybe<ProposalActionFilter>;
-  description?: InputMaybe<Scalars['String']['input']>;
-  description_contains?: InputMaybe<Scalars['String']['input']>;
-  description_ends_with?: InputMaybe<Scalars['String']['input']>;
-  description_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  description_not?: InputMaybe<Scalars['String']['input']>;
-  description_not_contains?: InputMaybe<Scalars['String']['input']>;
-  description_not_ends_with?: InputMaybe<Scalars['String']['input']>;
-  description_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  description_not_starts_with?: InputMaybe<Scalars['String']['input']>;
-  description_starts_with?: InputMaybe<Scalars['String']['input']>;
-  endBlock?: InputMaybe<Scalars['BigInt']['input']>;
-  endBlock_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  endBlock_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  endBlock_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
-  endBlock_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  endBlock_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  endBlock_not?: InputMaybe<Scalars['BigInt']['input']>;
-  endBlock_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
-  id?: InputMaybe<Scalars['String']['input']>;
-  id_contains?: InputMaybe<Scalars['String']['input']>;
-  id_ends_with?: InputMaybe<Scalars['String']['input']>;
-  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  id_not?: InputMaybe<Scalars['String']['input']>;
-  id_not_contains?: InputMaybe<Scalars['String']['input']>;
-  id_not_ends_with?: InputMaybe<Scalars['String']['input']>;
-  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  id_not_starts_with?: InputMaybe<Scalars['String']['input']>;
-  id_starts_with?: InputMaybe<Scalars['String']['input']>;
-  proposalId?: InputMaybe<Scalars['BigInt']['input']>;
-  proposalId_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  proposalId_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  proposalId_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
-  proposalId_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  proposalId_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  proposalId_not?: InputMaybe<Scalars['BigInt']['input']>;
-  proposalId_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
-  proposer?: InputMaybe<Scalars['String']['input']>;
-  proposer_gt?: InputMaybe<Scalars['String']['input']>;
-  proposer_gte?: InputMaybe<Scalars['String']['input']>;
-  proposer_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  proposer_lt?: InputMaybe<Scalars['String']['input']>;
-  proposer_lte?: InputMaybe<Scalars['String']['input']>;
-  proposer_not?: InputMaybe<Scalars['String']['input']>;
-  proposer_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  startBlock?: InputMaybe<Scalars['BigInt']['input']>;
-  startBlock_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  startBlock_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  startBlock_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
-  startBlock_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  startBlock_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  startBlock_not?: InputMaybe<Scalars['BigInt']['input']>;
-  startBlock_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  description?: InputMaybe<Scalars["String"]["input"]>;
+  description_contains?: InputMaybe<Scalars["String"]["input"]>;
+  description_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  description_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  description_not?: InputMaybe<Scalars["String"]["input"]>;
+  description_not_contains?: InputMaybe<Scalars["String"]["input"]>;
+  description_not_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  description_not_in?: InputMaybe<
+    Array<InputMaybe<Scalars["String"]["input"]>>
+  >;
+  description_not_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  description_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  endBlock?: InputMaybe<Scalars["BigInt"]["input"]>;
+  endBlock_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  endBlock_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  endBlock_in?: InputMaybe<Array<InputMaybe<Scalars["BigInt"]["input"]>>>;
+  endBlock_lt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  endBlock_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  endBlock_not?: InputMaybe<Scalars["BigInt"]["input"]>;
+  endBlock_not_in?: InputMaybe<Array<InputMaybe<Scalars["BigInt"]["input"]>>>;
+  id?: InputMaybe<Scalars["String"]["input"]>;
+  id_contains?: InputMaybe<Scalars["String"]["input"]>;
+  id_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  id_not?: InputMaybe<Scalars["String"]["input"]>;
+  id_not_contains?: InputMaybe<Scalars["String"]["input"]>;
+  id_not_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  id_not_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  id_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  proposalId?: InputMaybe<Scalars["BigInt"]["input"]>;
+  proposalId_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  proposalId_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  proposalId_in?: InputMaybe<Array<InputMaybe<Scalars["BigInt"]["input"]>>>;
+  proposalId_lt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  proposalId_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  proposalId_not?: InputMaybe<Scalars["BigInt"]["input"]>;
+  proposalId_not_in?: InputMaybe<Array<InputMaybe<Scalars["BigInt"]["input"]>>>;
+  proposer?: InputMaybe<Scalars["String"]["input"]>;
+  proposer_gt?: InputMaybe<Scalars["String"]["input"]>;
+  proposer_gte?: InputMaybe<Scalars["String"]["input"]>;
+  proposer_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  proposer_lt?: InputMaybe<Scalars["String"]["input"]>;
+  proposer_lte?: InputMaybe<Scalars["String"]["input"]>;
+  proposer_not?: InputMaybe<Scalars["String"]["input"]>;
+  proposer_not_in?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
+  startBlock?: InputMaybe<Scalars["BigInt"]["input"]>;
+  startBlock_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  startBlock_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  startBlock_in?: InputMaybe<Array<InputMaybe<Scalars["BigInt"]["input"]>>>;
+  startBlock_lt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  startBlock_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  startBlock_not?: InputMaybe<Scalars["BigInt"]["input"]>;
+  startBlock_not_in?: InputMaybe<Array<InputMaybe<Scalars["BigInt"]["input"]>>>;
 };
 
 export type ProposalPage = {
-  __typename?: 'ProposalPage';
+  __typename?: "ProposalPage";
   items: Array<Proposal>;
   pageInfo: PageInfo;
 };
 
 export type Query = {
-  __typename?: 'Query';
+  __typename?: "Query";
   _meta?: Maybe<_Meta>;
   action?: Maybe<Action>;
   actions: ActionPage;
@@ -524,187 +540,292 @@ export type Query = {
   proposals: ProposalPage;
 };
 
-
 export type QueryActionArgs = {
-  id: Scalars['String']['input'];
+  id: Scalars["String"]["input"];
 };
 
-
 export type QueryActionsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Scalars['String']['input']>;
-  orderDirection?: InputMaybe<Scalars['String']['input']>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  orderBy?: InputMaybe<Scalars["String"]["input"]>;
+  orderDirection?: InputMaybe<Scalars["String"]["input"]>;
   where?: InputMaybe<ActionFilter>;
 };
 
-
 export type QueryBandBeraArgs = {
-  id: Scalars['BigInt']['input'];
-  timestamp?: InputMaybe<Scalars['Int']['input']>;
+  id: Scalars["BigInt"]["input"];
+  timestamp?: InputMaybe<Scalars["Int"]["input"]>;
 };
 
-
 export type QueryBandBerasArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Scalars['String']['input']>;
-  orderDirection?: InputMaybe<Scalars['String']['input']>;
-  timestamp?: InputMaybe<Scalars['Int']['input']>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  orderBy?: InputMaybe<Scalars["String"]["input"]>;
+  orderDirection?: InputMaybe<Scalars["String"]["input"]>;
+  timestamp?: InputMaybe<Scalars["Int"]["input"]>;
   where?: InputMaybe<BandBeraFilter>;
 };
 
-
 export type QueryBeradromeArgs = {
-  id: Scalars['BigInt']['input'];
-  timestamp?: InputMaybe<Scalars['Int']['input']>;
+  id: Scalars["BigInt"]["input"];
+  timestamp?: InputMaybe<Scalars["Int"]["input"]>;
 };
 
-
 export type QueryBeradromesArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Scalars['String']['input']>;
-  orderDirection?: InputMaybe<Scalars['String']['input']>;
-  timestamp?: InputMaybe<Scalars['Int']['input']>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  orderBy?: InputMaybe<Scalars["String"]["input"]>;
+  orderDirection?: InputMaybe<Scalars["String"]["input"]>;
+  timestamp?: InputMaybe<Scalars["Int"]["input"]>;
   where?: InputMaybe<BeradromeFilter>;
 };
 
-
 export type QueryBondBeraArgs = {
-  id: Scalars['BigInt']['input'];
-  timestamp?: InputMaybe<Scalars['Int']['input']>;
+  id: Scalars["BigInt"]["input"];
+  timestamp?: InputMaybe<Scalars["Int"]["input"]>;
 };
 
-
 export type QueryBondBerasArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Scalars['String']['input']>;
-  orderDirection?: InputMaybe<Scalars['String']['input']>;
-  timestamp?: InputMaybe<Scalars['Int']['input']>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  orderBy?: InputMaybe<Scalars["String"]["input"]>;
+  orderDirection?: InputMaybe<Scalars["String"]["input"]>;
+  timestamp?: InputMaybe<Scalars["Int"]["input"]>;
   where?: InputMaybe<BondBeraFilter>;
 };
 
-
 export type QueryGoldiswapTxArgs = {
-  id: Scalars['String']['input'];
-  timestamp?: InputMaybe<Scalars['Int']['input']>;
+  id: Scalars["String"]["input"];
+  timestamp?: InputMaybe<Scalars["Int"]["input"]>;
 };
 
-
 export type QueryGoldiswapTxesArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Scalars['String']['input']>;
-  orderDirection?: InputMaybe<Scalars['String']['input']>;
-  timestamp?: InputMaybe<Scalars['Int']['input']>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  orderBy?: InputMaybe<Scalars["String"]["input"]>;
+  orderDirection?: InputMaybe<Scalars["String"]["input"]>;
+  timestamp?: InputMaybe<Scalars["Int"]["input"]>;
   where?: InputMaybe<GoldiswapTxFilter>;
 };
 
-
 export type QueryHoneycombArgs = {
-  id: Scalars['BigInt']['input'];
-  timestamp?: InputMaybe<Scalars['Int']['input']>;
+  id: Scalars["BigInt"]["input"];
+  timestamp?: InputMaybe<Scalars["Int"]["input"]>;
 };
 
-
 export type QueryHoneycombsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Scalars['String']['input']>;
-  orderDirection?: InputMaybe<Scalars['String']['input']>;
-  timestamp?: InputMaybe<Scalars['Int']['input']>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  orderBy?: InputMaybe<Scalars["String"]["input"]>;
+  orderDirection?: InputMaybe<Scalars["String"]["input"]>;
+  timestamp?: InputMaybe<Scalars["Int"]["input"]>;
   where?: InputMaybe<HoneycombFilter>;
 };
 
-
 export type QueryProposalArgs = {
-  id: Scalars['String']['input'];
+  id: Scalars["String"]["input"];
 };
 
-
 export type QueryProposalsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Scalars['String']['input']>;
-  orderDirection?: InputMaybe<Scalars['String']['input']>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  orderBy?: InputMaybe<Scalars["String"]["input"]>;
+  orderDirection?: InputMaybe<Scalars["String"]["input"]>;
   where?: InputMaybe<ProposalFilter>;
 };
 
 export type _Meta = {
-  __typename?: '_meta';
-  block?: Maybe<Scalars['Int']['output']>;
+  __typename?: "_meta";
+  block?: Maybe<Scalars["Int"]["output"]>;
 };
 
 export type GoldilendNfTsOwnedQueryVariables = Exact<{
-  owner: Scalars['String']['input'];
+  owner: Scalars["String"]["input"];
 }>;
 
-
-export type GoldilendNfTsOwnedQuery = { __typename?: 'Query', bondBeras: { __typename?: 'BondBeraPage', items: Array<{ __typename?: 'BondBera', id: any, owner: string }> }, bandBeras: { __typename?: 'BandBeraPage', items: Array<{ __typename?: 'BandBera', id: any, owner: string }> }, beradromes: { __typename?: 'BeradromePage', items: Array<{ __typename?: 'Beradrome', id: any, owner: string }> }, honeycombs: { __typename?: 'HoneycombPage', items: Array<{ __typename?: 'Honeycomb', id: any, owner: string }> } };
+export type GoldilendNfTsOwnedQuery = {
+  __typename?: "Query";
+  bondBeras: {
+    __typename?: "BondBeraPage";
+    items: Array<{ __typename?: "BondBera"; id: any; owner: string }>;
+  };
+  bandBeras: {
+    __typename?: "BandBeraPage";
+    items: Array<{ __typename?: "BandBera"; id: any; owner: string }>;
+  };
+  beradromes: {
+    __typename?: "BeradromePage";
+    items: Array<{ __typename?: "Beradrome"; id: any; owner: string }>;
+  };
+  honeycombs: {
+    __typename?: "HoneycombPage";
+    items: Array<{ __typename?: "Honeycomb"; id: any; owner: string }>;
+  };
+};
 
 export type GetDailyEndPricesQueryVariables = Exact<{
-  firstStart?: InputMaybe<Scalars['BigInt']['input']>;
-  firstEnd?: InputMaybe<Scalars['BigInt']['input']>;
-  secondStart?: InputMaybe<Scalars['BigInt']['input']>;
-  secondEnd?: InputMaybe<Scalars['BigInt']['input']>;
-  thirdStart?: InputMaybe<Scalars['BigInt']['input']>;
-  thirdEnd?: InputMaybe<Scalars['BigInt']['input']>;
-  fourthStart?: InputMaybe<Scalars['BigInt']['input']>;
-  fourthEnd?: InputMaybe<Scalars['BigInt']['input']>;
-  fifthStart?: InputMaybe<Scalars['BigInt']['input']>;
-  fifthEnd?: InputMaybe<Scalars['BigInt']['input']>;
-  sixthStart?: InputMaybe<Scalars['BigInt']['input']>;
-  sixthEnd?: InputMaybe<Scalars['BigInt']['input']>;
-  seventhStart?: InputMaybe<Scalars['BigInt']['input']>;
-  seventhEnd?: InputMaybe<Scalars['BigInt']['input']>;
+  firstStart?: InputMaybe<Scalars["BigInt"]["input"]>;
+  firstEnd?: InputMaybe<Scalars["BigInt"]["input"]>;
+  secondStart?: InputMaybe<Scalars["BigInt"]["input"]>;
+  secondEnd?: InputMaybe<Scalars["BigInt"]["input"]>;
+  thirdStart?: InputMaybe<Scalars["BigInt"]["input"]>;
+  thirdEnd?: InputMaybe<Scalars["BigInt"]["input"]>;
+  fourthStart?: InputMaybe<Scalars["BigInt"]["input"]>;
+  fourthEnd?: InputMaybe<Scalars["BigInt"]["input"]>;
+  fifthStart?: InputMaybe<Scalars["BigInt"]["input"]>;
+  fifthEnd?: InputMaybe<Scalars["BigInt"]["input"]>;
+  sixthStart?: InputMaybe<Scalars["BigInt"]["input"]>;
+  sixthEnd?: InputMaybe<Scalars["BigInt"]["input"]>;
+  seventhStart?: InputMaybe<Scalars["BigInt"]["input"]>;
+  seventhEnd?: InputMaybe<Scalars["BigInt"]["input"]>;
 }>;
 
+export type GetDailyEndPricesQuery = {
+  __typename?: "Query";
+  firstDay: {
+    __typename?: "GoldiswapTxPage";
+    items: Array<{
+      __typename?: "GoldiswapTx";
+      txType: string;
+      fsl: any;
+      psl: any;
+      supply: any;
+      timestamp: any;
+    }>;
+  };
+  secondDay: {
+    __typename?: "GoldiswapTxPage";
+    items: Array<{
+      __typename?: "GoldiswapTx";
+      txType: string;
+      fsl: any;
+      psl: any;
+      supply: any;
+      timestamp: any;
+    }>;
+  };
+  thirdDay: {
+    __typename?: "GoldiswapTxPage";
+    items: Array<{
+      __typename?: "GoldiswapTx";
+      txType: string;
+      fsl: any;
+      psl: any;
+      supply: any;
+      timestamp: any;
+    }>;
+  };
+  fourthDay: {
+    __typename?: "GoldiswapTxPage";
+    items: Array<{
+      __typename?: "GoldiswapTx";
+      txType: string;
+      fsl: any;
+      psl: any;
+      supply: any;
+      timestamp: any;
+    }>;
+  };
+  fifthDay: {
+    __typename?: "GoldiswapTxPage";
+    items: Array<{
+      __typename?: "GoldiswapTx";
+      txType: string;
+      fsl: any;
+      psl: any;
+      supply: any;
+      timestamp: any;
+    }>;
+  };
+  sixthDay: {
+    __typename?: "GoldiswapTxPage";
+    items: Array<{
+      __typename?: "GoldiswapTx";
+      txType: string;
+      fsl: any;
+      psl: any;
+      supply: any;
+      timestamp: any;
+    }>;
+  };
+  seventhDay: {
+    __typename?: "GoldiswapTxPage";
+    items: Array<{
+      __typename?: "GoldiswapTx";
+      txType: string;
+      fsl: any;
+      psl: any;
+      supply: any;
+      timestamp: any;
+    }>;
+  };
+};
 
-export type GetDailyEndPricesQuery = { __typename?: 'Query', firstDay: { __typename?: 'GoldiswapTxPage', items: Array<{ __typename?: 'GoldiswapTx', txType: string, fsl: any, psl: any, supply: any, timestamp: any }> }, secondDay: { __typename?: 'GoldiswapTxPage', items: Array<{ __typename?: 'GoldiswapTx', txType: string, fsl: any, psl: any, supply: any, timestamp: any }> }, thirdDay: { __typename?: 'GoldiswapTxPage', items: Array<{ __typename?: 'GoldiswapTx', txType: string, fsl: any, psl: any, supply: any, timestamp: any }> }, fourthDay: { __typename?: 'GoldiswapTxPage', items: Array<{ __typename?: 'GoldiswapTx', txType: string, fsl: any, psl: any, supply: any, timestamp: any }> }, fifthDay: { __typename?: 'GoldiswapTxPage', items: Array<{ __typename?: 'GoldiswapTx', txType: string, fsl: any, psl: any, supply: any, timestamp: any }> }, sixthDay: { __typename?: 'GoldiswapTxPage', items: Array<{ __typename?: 'GoldiswapTx', txType: string, fsl: any, psl: any, supply: any, timestamp: any }> }, seventhDay: { __typename?: 'GoldiswapTxPage', items: Array<{ __typename?: 'GoldiswapTx', txType: string, fsl: any, psl: any, supply: any, timestamp: any }> } };
+export type GoldiGovProposalsQueryVariables = Exact<{ [key: string]: never }>;
 
-export type GoldiGovProposalsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GoldiGovProposalsQuery = { __typename?: 'Query', proposals: { __typename?: 'ProposalPage', items: Array<{ __typename?: 'Proposal', id: string, proposalId: any, proposer: string, startBlock: any, endBlock: any, description: string, actions?: { __typename?: 'ActionPage', items: Array<{ __typename?: 'Action', id: string, proposalId: string, target: string, value: any, signature: string, calldatas: string }> } | null }> } };
-
+export type GoldiGovProposalsQuery = {
+  __typename?: "Query";
+  proposals: {
+    __typename?: "ProposalPage";
+    items: Array<{
+      __typename?: "Proposal";
+      id: string;
+      proposalId: any;
+      proposer: string;
+      startBlock: any;
+      endBlock: any;
+      description: string;
+      actions?: {
+        __typename?: "ActionPage";
+        items: Array<{
+          __typename?: "Action";
+          id: string;
+          proposalId: string;
+          target: string;
+          value: any;
+          signature: string;
+          calldatas: string;
+        }>;
+      } | null;
+    }>;
+  };
+};
 
 export const GoldilendNfTsOwnedDocument = gql`
-    query GoldilendNFTsOwned($owner: String!) {
-  bondBeras(where: {owner: $owner}, orderDirection: "desc") {
-    items {
-      id
-      owner
+  query GoldilendNFTsOwned($owner: String!) {
+    bondBeras(where: { owner: $owner }, orderDirection: "desc") {
+      items {
+        id
+        owner
+      }
+    }
+    bandBeras(where: { owner: $owner }, orderDirection: "desc") {
+      items {
+        id
+        owner
+      }
+    }
+    beradromes(where: { owner: $owner }, orderDirection: "desc") {
+      items {
+        id
+        owner
+      }
+    }
+    honeycombs(where: { owner: $owner }, orderDirection: "desc") {
+      items {
+        id
+        owner
+      }
     }
   }
-  bandBeras(where: {owner: $owner}, orderDirection: "desc") {
-    items {
-      id
-      owner
-    }
-  }
-  beradromes(where: {owner: $owner}, orderDirection: "desc") {
-    items {
-      id
-      owner
-    }
-  }
-  honeycombs(where: {owner: $owner}, orderDirection: "desc") {
-    items {
-      id
-      owner
-    }
-  }
-}
-    `;
+`;
 
 /**
  * __useGoldilendNfTsOwnedQuery__
@@ -722,124 +843,190 @@ export const GoldilendNfTsOwnedDocument = gql`
  *   },
  * });
  */
-export function useGoldilendNfTsOwnedQuery(baseOptions: Apollo.QueryHookOptions<GoldilendNfTsOwnedQuery, GoldilendNfTsOwnedQueryVariables> & ({ variables: GoldilendNfTsOwnedQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GoldilendNfTsOwnedQuery, GoldilendNfTsOwnedQueryVariables>(GoldilendNfTsOwnedDocument, options);
-      }
-export function useGoldilendNfTsOwnedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GoldilendNfTsOwnedQuery, GoldilendNfTsOwnedQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GoldilendNfTsOwnedQuery, GoldilendNfTsOwnedQueryVariables>(GoldilendNfTsOwnedDocument, options);
-        }
-export function useGoldilendNfTsOwnedSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GoldilendNfTsOwnedQuery, GoldilendNfTsOwnedQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GoldilendNfTsOwnedQuery, GoldilendNfTsOwnedQueryVariables>(GoldilendNfTsOwnedDocument, options);
-        }
-export type GoldilendNfTsOwnedQueryHookResult = ReturnType<typeof useGoldilendNfTsOwnedQuery>;
-export type GoldilendNfTsOwnedLazyQueryHookResult = ReturnType<typeof useGoldilendNfTsOwnedLazyQuery>;
-export type GoldilendNfTsOwnedSuspenseQueryHookResult = ReturnType<typeof useGoldilendNfTsOwnedSuspenseQuery>;
-export type GoldilendNfTsOwnedQueryResult = Apollo.QueryResult<GoldilendNfTsOwnedQuery, GoldilendNfTsOwnedQueryVariables>;
-export const GetDailyEndPricesDocument = gql`
-    query GetDailyEndPrices($firstStart: BigInt, $firstEnd: BigInt, $secondStart: BigInt, $secondEnd: BigInt, $thirdStart: BigInt, $thirdEnd: BigInt, $fourthStart: BigInt, $fourthEnd: BigInt, $fifthStart: BigInt, $fifthEnd: BigInt, $sixthStart: BigInt, $sixthEnd: BigInt, $seventhStart: BigInt, $seventhEnd: BigInt) {
-  firstDay: goldiswapTxes(
-    where: {AND: [{timestamp_gte: $firstStart}, {timestamp_lt: $firstEnd}]}
-    orderBy: "timestamp"
-    orderDirection: "desc"
-    limit: 1
-  ) {
-    items {
-      txType
-      fsl
-      psl
-      supply
-      timestamp
-    }
-  }
-  secondDay: goldiswapTxes(
-    where: {AND: [{timestamp_gte: $secondStart}, {timestamp_lt: $secondEnd}]}
-    orderBy: "timestamp"
-    orderDirection: "desc"
-    limit: 1
-  ) {
-    items {
-      txType
-      fsl
-      psl
-      supply
-      timestamp
-    }
-  }
-  thirdDay: goldiswapTxes(
-    where: {AND: [{timestamp_gte: $thirdStart}, {timestamp_lt: $thirdEnd}]}
-    orderBy: "timestamp"
-    orderDirection: "desc"
-    limit: 1
-  ) {
-    items {
-      txType
-      fsl
-      psl
-      supply
-      timestamp
-    }
-  }
-  fourthDay: goldiswapTxes(
-    where: {AND: [{timestamp_gte: $fourthStart}, {timestamp_lt: $fourthEnd}]}
-    orderBy: "timestamp"
-    orderDirection: "desc"
-    limit: 1
-  ) {
-    items {
-      txType
-      fsl
-      psl
-      supply
-      timestamp
-    }
-  }
-  fifthDay: goldiswapTxes(
-    where: {AND: [{timestamp_gte: $fifthStart}, {timestamp_lt: $fifthEnd}]}
-    orderBy: "timestamp"
-    orderDirection: "desc"
-    limit: 1
-  ) {
-    items {
-      txType
-      fsl
-      psl
-      supply
-      timestamp
-    }
-  }
-  sixthDay: goldiswapTxes(
-    where: {AND: [{timestamp_gte: $sixthStart}, {timestamp_lt: $sixthEnd}]}
-    orderBy: "timestamp"
-    orderDirection: "desc"
-    limit: 1
-  ) {
-    items {
-      txType
-      fsl
-      psl
-      supply
-      timestamp
-    }
-  }
-  seventhDay: goldiswapTxes(
-    where: {AND: [{timestamp_gte: $seventhStart}, {timestamp_lt: $seventhEnd}]}
-    orderBy: "timestamp"
-    orderDirection: "desc"
-    limit: 1
-  ) {
-    items {
-      txType
-      fsl
-      psl
-      supply
-      timestamp
-    }
-  }
+export function useGoldilendNfTsOwnedQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GoldilendNfTsOwnedQuery,
+    GoldilendNfTsOwnedQueryVariables
+  > &
+    (
+      | { variables: GoldilendNfTsOwnedQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    ),
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GoldilendNfTsOwnedQuery,
+    GoldilendNfTsOwnedQueryVariables
+  >(GoldilendNfTsOwnedDocument, options);
 }
-    `;
+export function useGoldilendNfTsOwnedLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GoldilendNfTsOwnedQuery,
+    GoldilendNfTsOwnedQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GoldilendNfTsOwnedQuery,
+    GoldilendNfTsOwnedQueryVariables
+  >(GoldilendNfTsOwnedDocument, options);
+}
+export function useGoldilendNfTsOwnedSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GoldilendNfTsOwnedQuery,
+    GoldilendNfTsOwnedQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GoldilendNfTsOwnedQuery,
+    GoldilendNfTsOwnedQueryVariables
+  >(GoldilendNfTsOwnedDocument, options);
+}
+export type GoldilendNfTsOwnedQueryHookResult = ReturnType<
+  typeof useGoldilendNfTsOwnedQuery
+>;
+export type GoldilendNfTsOwnedLazyQueryHookResult = ReturnType<
+  typeof useGoldilendNfTsOwnedLazyQuery
+>;
+export type GoldilendNfTsOwnedSuspenseQueryHookResult = ReturnType<
+  typeof useGoldilendNfTsOwnedSuspenseQuery
+>;
+export type GoldilendNfTsOwnedQueryResult = Apollo.QueryResult<
+  GoldilendNfTsOwnedQuery,
+  GoldilendNfTsOwnedQueryVariables
+>;
+export const GetDailyEndPricesDocument = gql`
+  query GetDailyEndPrices(
+    $firstStart: BigInt
+    $firstEnd: BigInt
+    $secondStart: BigInt
+    $secondEnd: BigInt
+    $thirdStart: BigInt
+    $thirdEnd: BigInt
+    $fourthStart: BigInt
+    $fourthEnd: BigInt
+    $fifthStart: BigInt
+    $fifthEnd: BigInt
+    $sixthStart: BigInt
+    $sixthEnd: BigInt
+    $seventhStart: BigInt
+    $seventhEnd: BigInt
+  ) {
+    firstDay: goldiswapTxes(
+      where: {
+        AND: [{ timestamp_gte: $firstStart }, { timestamp_lt: $firstEnd }]
+      }
+      orderBy: "timestamp"
+      orderDirection: "desc"
+      limit: 1
+    ) {
+      items {
+        txType
+        fsl
+        psl
+        supply
+        timestamp
+      }
+    }
+    secondDay: goldiswapTxes(
+      where: {
+        AND: [{ timestamp_gte: $secondStart }, { timestamp_lt: $secondEnd }]
+      }
+      orderBy: "timestamp"
+      orderDirection: "desc"
+      limit: 1
+    ) {
+      items {
+        txType
+        fsl
+        psl
+        supply
+        timestamp
+      }
+    }
+    thirdDay: goldiswapTxes(
+      where: {
+        AND: [{ timestamp_gte: $thirdStart }, { timestamp_lt: $thirdEnd }]
+      }
+      orderBy: "timestamp"
+      orderDirection: "desc"
+      limit: 1
+    ) {
+      items {
+        txType
+        fsl
+        psl
+        supply
+        timestamp
+      }
+    }
+    fourthDay: goldiswapTxes(
+      where: {
+        AND: [{ timestamp_gte: $fourthStart }, { timestamp_lt: $fourthEnd }]
+      }
+      orderBy: "timestamp"
+      orderDirection: "desc"
+      limit: 1
+    ) {
+      items {
+        txType
+        fsl
+        psl
+        supply
+        timestamp
+      }
+    }
+    fifthDay: goldiswapTxes(
+      where: {
+        AND: [{ timestamp_gte: $fifthStart }, { timestamp_lt: $fifthEnd }]
+      }
+      orderBy: "timestamp"
+      orderDirection: "desc"
+      limit: 1
+    ) {
+      items {
+        txType
+        fsl
+        psl
+        supply
+        timestamp
+      }
+    }
+    sixthDay: goldiswapTxes(
+      where: {
+        AND: [{ timestamp_gte: $sixthStart }, { timestamp_lt: $sixthEnd }]
+      }
+      orderBy: "timestamp"
+      orderDirection: "desc"
+      limit: 1
+    ) {
+      items {
+        txType
+        fsl
+        psl
+        supply
+        timestamp
+      }
+    }
+    seventhDay: goldiswapTxes(
+      where: {
+        AND: [{ timestamp_gte: $seventhStart }, { timestamp_lt: $seventhEnd }]
+      }
+      orderBy: "timestamp"
+      orderDirection: "desc"
+      limit: 1
+    ) {
+      items {
+        txType
+        fsl
+        psl
+        supply
+        timestamp
+      }
+    }
+  }
+`;
 
 /**
  * __useGetDailyEndPricesQuery__
@@ -870,46 +1057,79 @@ export const GetDailyEndPricesDocument = gql`
  *   },
  * });
  */
-export function useGetDailyEndPricesQuery(baseOptions?: Apollo.QueryHookOptions<GetDailyEndPricesQuery, GetDailyEndPricesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetDailyEndPricesQuery, GetDailyEndPricesQueryVariables>(GetDailyEndPricesDocument, options);
-      }
-export function useGetDailyEndPricesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetDailyEndPricesQuery, GetDailyEndPricesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetDailyEndPricesQuery, GetDailyEndPricesQueryVariables>(GetDailyEndPricesDocument, options);
-        }
-export function useGetDailyEndPricesSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetDailyEndPricesQuery, GetDailyEndPricesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetDailyEndPricesQuery, GetDailyEndPricesQueryVariables>(GetDailyEndPricesDocument, options);
-        }
-export type GetDailyEndPricesQueryHookResult = ReturnType<typeof useGetDailyEndPricesQuery>;
-export type GetDailyEndPricesLazyQueryHookResult = ReturnType<typeof useGetDailyEndPricesLazyQuery>;
-export type GetDailyEndPricesSuspenseQueryHookResult = ReturnType<typeof useGetDailyEndPricesSuspenseQuery>;
-export type GetDailyEndPricesQueryResult = Apollo.QueryResult<GetDailyEndPricesQuery, GetDailyEndPricesQueryVariables>;
+export function useGetDailyEndPricesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetDailyEndPricesQuery,
+    GetDailyEndPricesQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetDailyEndPricesQuery,
+    GetDailyEndPricesQueryVariables
+  >(GetDailyEndPricesDocument, options);
+}
+export function useGetDailyEndPricesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetDailyEndPricesQuery,
+    GetDailyEndPricesQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetDailyEndPricesQuery,
+    GetDailyEndPricesQueryVariables
+  >(GetDailyEndPricesDocument, options);
+}
+export function useGetDailyEndPricesSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetDailyEndPricesQuery,
+    GetDailyEndPricesQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetDailyEndPricesQuery,
+    GetDailyEndPricesQueryVariables
+  >(GetDailyEndPricesDocument, options);
+}
+export type GetDailyEndPricesQueryHookResult = ReturnType<
+  typeof useGetDailyEndPricesQuery
+>;
+export type GetDailyEndPricesLazyQueryHookResult = ReturnType<
+  typeof useGetDailyEndPricesLazyQuery
+>;
+export type GetDailyEndPricesSuspenseQueryHookResult = ReturnType<
+  typeof useGetDailyEndPricesSuspenseQuery
+>;
+export type GetDailyEndPricesQueryResult = Apollo.QueryResult<
+  GetDailyEndPricesQuery,
+  GetDailyEndPricesQueryVariables
+>;
 export const GoldiGovProposalsDocument = gql`
-    query GoldiGovProposals {
-  proposals {
-    items {
-      id
-      proposalId
-      proposer
-      startBlock
-      endBlock
-      description
-      actions {
-        items {
-          id
-          proposalId
-          target
-          value
-          signature
-          calldatas
+  query GoldiGovProposals {
+    proposals {
+      items {
+        id
+        proposalId
+        proposer
+        startBlock
+        endBlock
+        description
+        actions {
+          items {
+            id
+            proposalId
+            target
+            value
+            signature
+            calldatas
+          }
         }
       }
     }
   }
-}
-    `;
+`;
 
 /**
  * __useGoldiGovProposalsQuery__
@@ -926,19 +1146,52 @@ export const GoldiGovProposalsDocument = gql`
  *   },
  * });
  */
-export function useGoldiGovProposalsQuery(baseOptions?: Apollo.QueryHookOptions<GoldiGovProposalsQuery, GoldiGovProposalsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GoldiGovProposalsQuery, GoldiGovProposalsQueryVariables>(GoldiGovProposalsDocument, options);
-      }
-export function useGoldiGovProposalsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GoldiGovProposalsQuery, GoldiGovProposalsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GoldiGovProposalsQuery, GoldiGovProposalsQueryVariables>(GoldiGovProposalsDocument, options);
-        }
-export function useGoldiGovProposalsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GoldiGovProposalsQuery, GoldiGovProposalsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GoldiGovProposalsQuery, GoldiGovProposalsQueryVariables>(GoldiGovProposalsDocument, options);
-        }
-export type GoldiGovProposalsQueryHookResult = ReturnType<typeof useGoldiGovProposalsQuery>;
-export type GoldiGovProposalsLazyQueryHookResult = ReturnType<typeof useGoldiGovProposalsLazyQuery>;
-export type GoldiGovProposalsSuspenseQueryHookResult = ReturnType<typeof useGoldiGovProposalsSuspenseQuery>;
-export type GoldiGovProposalsQueryResult = Apollo.QueryResult<GoldiGovProposalsQuery, GoldiGovProposalsQueryVariables>;
+export function useGoldiGovProposalsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GoldiGovProposalsQuery,
+    GoldiGovProposalsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GoldiGovProposalsQuery,
+    GoldiGovProposalsQueryVariables
+  >(GoldiGovProposalsDocument, options);
+}
+export function useGoldiGovProposalsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GoldiGovProposalsQuery,
+    GoldiGovProposalsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GoldiGovProposalsQuery,
+    GoldiGovProposalsQueryVariables
+  >(GoldiGovProposalsDocument, options);
+}
+export function useGoldiGovProposalsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GoldiGovProposalsQuery,
+    GoldiGovProposalsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GoldiGovProposalsQuery,
+    GoldiGovProposalsQueryVariables
+  >(GoldiGovProposalsDocument, options);
+}
+export type GoldiGovProposalsQueryHookResult = ReturnType<
+  typeof useGoldiGovProposalsQuery
+>;
+export type GoldiGovProposalsLazyQueryHookResult = ReturnType<
+  typeof useGoldiGovProposalsLazyQuery
+>;
+export type GoldiGovProposalsSuspenseQueryHookResult = ReturnType<
+  typeof useGoldiGovProposalsSuspenseQuery
+>;
+export type GoldiGovProposalsQueryResult = Apollo.QueryResult<
+  GoldiGovProposalsQuery,
+  GoldiGovProposalsQueryVariables
+>;

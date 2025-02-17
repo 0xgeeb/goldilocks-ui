@@ -1,13 +1,12 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { useAccount } from "wagmi"
-import { useGoldilendNfTsOwnedQuery } from "../../../src/graphql/generated/queries"
-import { useGoldilend } from "../../../providers"
+import { useState, useEffect } from "react";
+import { useAccount } from "wagmi";
+import { useGoldilendNfTsOwnedQuery } from "../../../src/graphql/generated/queries";
+import { useGoldilend } from "../../../providers";
 
 export const BorrowFetcher = () => {
-
-  const [skip, setSkip] = useState<boolean>(false)
+  const [skip, setSkip] = useState<boolean>(false);
 
   const {
     findBeras,
@@ -16,33 +15,33 @@ export const BorrowFetcher = () => {
     findLoans,
     setInfoLoading,
     refreshGoldilendInfo,
-    refreshGoldilendWalletInfo
-  } = useGoldilend()
+    refreshGoldilendWalletInfo,
+  } = useGoldilend();
 
-  const { address, isConnected } = useAccount()
-  
+  const { address, isConnected } = useAccount();
+
   const { data, loading } = useGoldilendNfTsOwnedQuery({
     variables: {
-      owner: address as `0x${string}`
+      owner: address as `0x${string}`,
     },
-    skip
-  })
+    skip,
+  });
 
   useEffect(() => {
-    if(!loading && !!data) {
-      findBeras(data)
-      findPartners(data)
-      setSkip(true)
-      setInfoLoading(false)
+    if (!loading && !!data) {
+      findBeras(data);
+      findPartners(data);
+      setSkip(true);
+      setInfoLoading(false);
     }
-  }, [data, loading])
+  }, [data, loading]);
 
   useEffect(() => {
-    findBoost()
-    findLoans()
-    refreshGoldilendInfo()
-    refreshGoldilendWalletInfo()
-  }, [address, isConnected])
+    findBoost();
+    findLoans();
+    refreshGoldilendInfo();
+    refreshGoldilendWalletInfo();
+  }, [address, isConnected]);
 
-  return null
-}
+  return null;
+};

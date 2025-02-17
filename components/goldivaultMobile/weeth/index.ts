@@ -1,5 +1,0 @@
-export * from './vaultButtonWeethMobile'
-export * from './vaultInfoWeethMobile'
-export * from './vaultBoxWeethMobile'
-export * from './togglesWeethMobile'
-export * from './tradeTabWeethMobile'

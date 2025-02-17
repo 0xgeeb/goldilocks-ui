@@ -1,24 +1,26 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { useAccount } from "wagmi"
+import { useState, useEffect } from "react";
+import { useAccount } from "wagmi";
 
 export const MintNFTs = () => {
+  const [popup, setPopup] = useState<boolean>(false);
 
-  const [popup, setPopup] = useState<boolean>(false)
-
-  const { chain } = useAccount()
+  const { chain } = useAccount();
 
   useEffect(() => {
-    if(chain?.name === 'Berachain') {
-      setPopup(true)
+    if (chain?.name === "Berachain") {
+      setPopup(true);
     }
-  }, [chain])
+  }, [chain]);
 
   return (
-    popup && 
-    <div className="absolute w-[30%] xl:w-[25%] 2xl:w-[15%] font-baloo font-semibold text-center px-2 text-[2vw] xl:text-[1.5vw] 2xl:text-[1vw] h-[6%] lg:h-[8%] bottom-[1%] left-[1%] bg-[#FFE59F] border-2 border-black flex items-center justify-center">
-      <a href="/goldilend/mint" className="hover:underline cursor-pointer"><span>mint NFTs for goldilend here</span></a>
-    </div>
-  )
-}
+    popup && (
+      <div className="absolute bottom-[1%] left-[1%] flex h-[6%] w-[30%] items-center justify-center border-2 border-black bg-[#FFE59F] px-2 text-center font-baloo text-[2vw] font-semibold lg:h-[8%] xl:w-[25%] xl:text-[1.5vw] 2xl:w-[15%] 2xl:text-[1vw]">
+        <a href="/goldilend/mint" className="cursor-pointer hover:underline">
+          <span>mint NFTs for goldilend here</span>
+        </a>
+      </div>
+    )
+  );
+};

@@ -1,30 +1,31 @@
-"use client"
+"use client";
 
-import { useState, useEffect, useMemo } from "react"
-import { useGetDailyEndPricesQuery } from "../../../src/graphql/generated/queries"
-import { useGoldiswap } from "../../../providers"
+import { useState, useEffect, useMemo } from "react";
+import { useGetDailyEndPricesQuery } from "../../../src/graphql/generated/queries";
+import { useGoldiswap } from "../../../providers";
 
 export const LocksFetcher = () => {
+  const [skip, setSkip] = useState<boolean>(false);
 
-  const [skip, setSkip] = useState<boolean>(false)
+  const { updateChartData } = useGoldiswap();
 
-  const { updateChartData } = useGoldiswap()
-
-  const last7DaysTimestamps = (): { start: number, end: number }[] => {
-    const timestamps = []
-    const now = new Date()
-    let end = Math.floor((new Date(now.setUTCHours(23, 59, 59, 999)).getTime() - 86400000) / 1000)
+  const last7DaysTimestamps = (): { start: number; end: number }[] => {
+    const timestamps = [];
+    const now = new Date();
+    let end = Math.floor(
+      (new Date(now.setUTCHours(23, 59, 59, 999)).getTime() - 86400000) / 1000,
+    );
 
     for (let i = 0; i < 7; i++) {
-      const start = end - 86399
-      timestamps.push({ start, end })
-      end = start - 1
+      const start = end - 86399;
+      timestamps.push({ start, end });
+      end = start - 1;
     }
 
-    return timestamps.reverse()
-  }
+    return timestamps.reverse();
+  };
 
-  const timestamps = useMemo(last7DaysTimestamps, [])
+  const timestamps = useMemo(last7DaysTimestamps, []);
 
   const { data, loading } = useGetDailyEndPricesQuery({
     variables: {
@@ -43,15 +44,15 @@ export const LocksFetcher = () => {
       seventhStart: timestamps[6].start,
       seventhEnd: timestamps[6].end,
     },
-    skip
-  })
+    skip,
+  });
 
   useEffect(() => {
-    if(!loading && !!data) {
-      updateChartData(data)
-      setSkip(true)
+    if (!loading && !!data) {
+      updateChartData(data);
+      setSkip(true);
     }
-  }, [data, loading])
+  }, [data, loading]);
 
-  return null
-}
+  return null;
+};

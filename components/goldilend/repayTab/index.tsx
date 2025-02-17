@@ -1,26 +1,25 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { ConnectButton } from "@rainbow-me/rainbowkit"
-import { useAccount } from "wagmi"
-import { useGoldilend } from "../../../providers"
-import { useGoldilendTx } from "../../../hooks"
-import { BorrowNotification } from "../../goldilend"
-import { contracts } from "../../../utils/addressi"
+import { useState } from "react";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useAccount } from "wagmi";
+import { useGoldilend } from "../../../providers";
+import { useGoldilendTx } from "../../../hooks";
+import { BorrowNotification } from "../../goldilend";
+import { contracts } from "../../../utils/addressi";
 
 type InputValuesType = {
   [key: number]: string;
-}
+};
 
 type AllowanceFlagsType = {
   [key: number]: boolean;
-}
+};
 
 export const RepayTab = () => {
-
-  const [inputValues, setInputValues] = useState<InputValuesType>({})
-  const [allowanceFlags, setAllowanceFlags] = useState<AllowanceFlagsType>({})
-  const [buttonLoadingColor, setButtonLoadingColor] = useState<boolean>(false)
+  const [inputValues, setInputValues] = useState<InputValuesType>({});
+  const [allowanceFlags, setAllowanceFlags] = useState<AllowanceFlagsType>({});
+  const [buttonLoadingColor, setButtonLoadingColor] = useState<boolean>(false);
 
   const {
     infoLoading,
@@ -32,308 +31,353 @@ export const RepayTab = () => {
     openNotification,
     refreshGoldilendInfo,
     refreshGoldilendWalletInfo,
-    goldilendWalletInfo
-  } = useGoldilend()
+    goldilendWalletInfo,
+  } = useGoldilend();
 
-  const {
-    checkRepayAllowance,
-    sendRepayTx,
-    sendiBGTApproveTx
-  } = useGoldilendTx()
+  const { checkRepayAllowance, sendRepayTx, sendiBGTApproveTx } =
+    useGoldilendTx();
 
-  const { address, isConnected } = useAccount()
+  const { address, isConnected } = useAccount();
 
   const loadingElement = () => {
-    return <span className="loader-small mx-auto my-auto"></span>
-  }
+    return <span className="loader-small mx-auto my-auto"></span>;
+  };
 
   const formatDate = (timestamp: number): string => {
-    const date = new Date(timestamp * 1000)
-    const month = String(date.getMonth() + 1).padStart(2, '0')
-    const day = String(date.getDate()).padStart(2, '0')
-    const year = String(date.getFullYear())
-    return `${month}-${day}-${year}`
-  }
+    const date = new Date(timestamp * 1000);
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const year = String(date.getFullYear());
+    return `${month}-${day}-${year}`;
+  };
 
   const formatNum = (num: number): string => {
-    return num.toLocaleString('en-US', { maximumFractionDigits: 2 })
-  }
+    return num.toLocaleString("en-US", { maximumFractionDigits: 2 });
+  };
 
   const formatAsString = (num: number): string => {
-    return num.toLocaleString('en-US', { maximumFractionDigits: 2 })
-  }
+    return num.toLocaleString("en-US", { maximumFractionDigits: 2 });
+  };
 
   const handleInputChange = (loanId: number, value: string) => {
-    setInputValues(prev => ({
+    setInputValues((prev) => ({
       ...prev,
-      [loanId]: value
-    }))
-  }
+      [loanId]: value,
+    }));
+  };
 
   const handleMaxClick = (loanId: number, amt: number) => {
-    setInputValues(prev => ({
+    setInputValues((prev) => ({
       ...prev,
-      [loanId]: amt.toString()
-    }))
-  }
+      [loanId]: amt.toString(),
+    }));
+  };
 
   const handleAllowanceChange = (loanId: number, flag: boolean) => {
-    setAllowanceFlags(prev => ({
+    setAllowanceFlags((prev) => ({
       ...prev,
-      [loanId]: flag
-    }))
-  }
+      [loanId]: flag,
+    }));
+  };
 
   const refreshInfo = () => {
-    const newValues: InputValuesType = {}
-    Object.keys(inputValues).forEach(key => {
-      newValues[parseInt(key)] = '0'
-    })
-    setInputValues(newValues)
-    findLoans()
-    refreshGoldilendInfo()
-    refreshGoldilendWalletInfo()
-  }
+    const newValues: InputValuesType = {};
+    Object.keys(inputValues).forEach((key) => {
+      newValues[parseInt(key)] = "0";
+    });
+    setInputValues(newValues);
+    findLoans();
+    refreshGoldilendInfo();
+    refreshGoldilendWalletInfo();
+  };
 
-  const handleButtonClick = async (loanId: number, amt: number, borrowedAmt: number) => {
-    const button = document.getElementById('repay-button' + loanId)
-    if(amt == 0) {
-      button && (button.innerHTML = "no amount")
-      return
+  const handleButtonClick = async (
+    loanId: number,
+    amt: number,
+    borrowedAmt: number,
+  ) => {
+    const button = document.getElementById("repay-button" + loanId);
+    if (amt == 0) {
+      button && (button.innerHTML = "no amount");
+      return;
     }
-    if(amt > goldilendWalletInfo.ibgt) {
-      button && (button.innerHTML = "no balance")
-      return
-    }
-    else {
-      const sufficientAllowance: boolean | void = await checkRepayAllowance(amt, address as `0x${string}`)
-      if(sufficientAllowance) {
-        setTxConfirming(true)
-        if(button) {
-          button.innerHTML = "confirming..."
-          setButtonLoadingColor(true)
+    if (amt > goldilendWalletInfo.ibgt) {
+      button && (button.innerHTML = "no balance");
+      return;
+    } else {
+      const sufficientAllowance: boolean | void = await checkRepayAllowance(
+        amt,
+        address as `0x${string}`,
+      );
+      if (sufficientAllowance) {
+        setTxConfirming(true);
+        if (button) {
+          button.innerHTML = "confirming...";
+          setButtonLoadingColor(true);
         }
-        const repayTx = await sendRepayTx(amt, loanId, amt == borrowedAmt, address as `0x${string}`)
-        if(repayTx.substring(0, 2) === '0x') {
-          setTxConfirming(false)
+        const repayTx = await sendRepayTx(
+          amt,
+          loanId,
+          amt == borrowedAmt,
+          address as `0x${string}`,
+        );
+        if (repayTx.substring(0, 2) === "0x") {
+          setTxConfirming(false);
           openNotification(
             true,
             "You've successfully repaid your loan",
             `You repaid ${formatAsString(amt)} iBGT`,
-            repayTx
-          )
-          if(button) {
-            button.innerHTML = "REPAY LOAN"
-            setButtonLoadingColor(false)
+            repayTx,
+          );
+          if (button) {
+            button.innerHTML = "REPAY LOAN";
+            setButtonLoadingColor(false);
           }
-          refreshInfo()
+          refreshInfo();
           setTimeout(() => {
-            openNotification(false, '', '', '')
-          }, 10000)
-        }
-        else {
-          if(button) {
-            button.innerHTML = "REPAY LOAN"
-            setButtonLoadingColor(false)
+            openNotification(false, "", "", "");
+          }, 10000);
+        } else {
+          if (button) {
+            button.innerHTML = "REPAY LOAN";
+            setButtonLoadingColor(false);
           }
-          refreshInfo()
-          setTxConfirming(false)
+          refreshInfo();
+          setTxConfirming(false);
         }
-      }
-      else {
+      } else {
         // setAllowanceButtons(true)
-        handleAllowanceChange(loanId, true)
+        handleAllowanceChange(loanId, true);
       }
     }
-  }
+  };
 
   //todo: fix update allowance here
   const handleLeftButtonClick = async (amt: number, loanId: number) => {
-    const swapButton = document.getElementById('repay-button' + loanId)
-    const leftButton = document.getElementById('left-approve-button' + loanId)
-    const rightButton = document.getElementById('right-approve-button' + loanId)
-    if(leftButton) {
-      leftButton.innerHTML = "approving..."
-      leftButton.style.backgroundColor = "#C9E3B9"
+    const swapButton = document.getElementById("repay-button" + loanId);
+    const leftButton = document.getElementById("left-approve-button" + loanId);
+    const rightButton = document.getElementById(
+      "right-approve-button" + loanId,
+    );
+    if (leftButton) {
+      leftButton.innerHTML = "approving...";
+      leftButton.style.backgroundColor = "#C9E3B9";
     }
-    if(rightButton) {
-      rightButton.innerHTML = "approving..."
-      rightButton.style.backgroundColor = "#C9E3B9"
+    if (rightButton) {
+      rightButton.innerHTML = "approving...";
+      rightButton.style.backgroundColor = "#C9E3B9";
     }
-    await sendiBGTApproveTx(amt, false)
+    await sendiBGTApproveTx(amt, false);
     // updateAllowance(honeyBuy + 0.01)
-    swapButton && (swapButton.innerHTML = "REPAY LOAN")
+    swapButton && (swapButton.innerHTML = "REPAY LOAN");
     // setAllowanceButtons(false)
-    handleAllowanceChange(loanId, false)
-  }
-  
-  const handleRightButtonClick = async (loanId: number) => {
-    const swapButton = document.getElementById('repay-button' + loanId)
-    const leftButton = document.getElementById('left-approve-button' + loanId)
-    const rightButton = document.getElementById('right-approve-button' + loanId)
-    if(leftButton) {
-      leftButton.innerHTML = "approving..."
-      leftButton.style.backgroundColor = "#C9E3B9"
-    }
-    if(rightButton) {
-      rightButton.innerHTML = "approving..."
-      rightButton.style.backgroundColor = "#C9E3B9"
-    }
-    await sendiBGTApproveTx(0, true)
-    // updateAllowance(100000000)
-    swapButton && (swapButton.innerHTML = "REPAY LOAN")
-    // setAllowanceButtons(false)
-    handleAllowanceChange(loanId, false)
-  }
+    handleAllowanceChange(loanId, false);
+  };
 
-  return (
-    txConfirming ? <img className="w-[100%] h-[100%]" src="/images/bg-transaction.png" alt="tx" /> :
-    notification.toggle ? <BorrowNotification /> :
-    <div className="h-[100%] w-[100%] flex flex-col overflow-y-auto" id="hide-scrollbar">
-      <div className="w-[100%] h-[15%] border-b-2 border-black">
-        <h1 className="font-amaticbold ml-[4%] text-[5vw] xl:text-[2.3vw]">my loans</h1>
+  const handleRightButtonClick = async (loanId: number) => {
+    const swapButton = document.getElementById("repay-button" + loanId);
+    const leftButton = document.getElementById("left-approve-button" + loanId);
+    const rightButton = document.getElementById(
+      "right-approve-button" + loanId,
+    );
+    if (leftButton) {
+      leftButton.innerHTML = "approving...";
+      leftButton.style.backgroundColor = "#C9E3B9";
+    }
+    if (rightButton) {
+      rightButton.innerHTML = "approving...";
+      rightButton.style.backgroundColor = "#C9E3B9";
+    }
+    await sendiBGTApproveTx(0, true);
+    // updateAllowance(100000000)
+    swapButton && (swapButton.innerHTML = "REPAY LOAN");
+    // setAllowanceButtons(false)
+    handleAllowanceChange(loanId, false);
+  };
+
+  return txConfirming ? (
+    <img
+      className="h-[100%] w-[100%]"
+      src="/images/bg-transaction.png"
+      alt="tx"
+    />
+  ) : notification.toggle ? (
+    <BorrowNotification />
+  ) : (
+    <div
+      className="flex h-[100%] w-[100%] flex-col overflow-y-auto"
+      id="hide-scrollbar"
+    >
+      <div className="h-[15%] w-[100%] border-b-2 border-black">
+        <h1 className="ml-[4%] font-amaticbold text-[5vw] xl:text-[2.3vw]">
+          my loans
+        </h1>
       </div>
-      {
-        (infoLoading && isConnected) ? loadingElement() :
-        (!isConnected || userLoans.length == 0) ? 
-        <div className="w-[100%] h-[100%] flex flex-col items-center opacity-50">
-          <img className="h-[40%] my-[5%]" src="/images/icon-not-found.png" alt="not-found" />
+      {infoLoading && isConnected ? (
+        loadingElement()
+      ) : !isConnected || userLoans.length == 0 ? (
+        <div className="flex h-[100%] w-[100%] flex-col items-center opacity-50">
+          <img
+            className="my-[5%] h-[40%]"
+            src="/images/icon-not-found.png"
+            alt="not-found"
+          />
           <h1 className="font-amaticbold text-[3vw]">no loans</h1>
-        </div> :
+        </div>
+      ) : (
         userLoans.map((loan, index) => (
-          <div className="w-[100%] py-[2%] font-baloo font-semibold border-b-2 border-black flex flex-row items-center relative" key={index}>
-            {
-              loan.borrowedAmount == 0 &&
-              <div className="rotate-[16deg] absolute right-0 w-[30%] h-[25%] bg-[#79AF45] border-2 border-black flex items-center justify-center text-[2vw] xl:text-[1.1vw] z-30">
+          <div
+            className="relative flex w-[100%] flex-row items-center border-b-2 border-black py-[2%] font-baloo font-semibold"
+            key={index}
+          >
+            {loan.borrowedAmount == 0 && (
+              <div className="absolute right-0 z-30 flex h-[25%] w-[30%] rotate-[16deg] items-center justify-center border-2 border-black bg-[#79AF45] text-[2vw] xl:text-[1.1vw]">
                 REPAID
               </div>
-            }
-            {
-              loan.endDate < Math.floor(Date.now() / 1000) &&
-              <div className="rotate-[16deg] absolute right-0 w-[30%] h-[25%] bg-[#CC7E16] border-2 border-black flex items-center justify-center text-[2vw] xl:text-[1.1vw] z-30">
+            )}
+            {loan.endDate < Math.floor(Date.now() / 1000) && (
+              <div className="absolute right-0 z-30 flex h-[25%] w-[30%] rotate-[16deg] items-center justify-center border-2 border-black bg-[#CC7E16] text-[2vw] xl:text-[1.1vw]">
                 EXPIRED
               </div>
-            }
-            {
-              loan.liquidated &&
-              <div className="rotate-[16deg] absolute right-0 w-[30%] h-[25%] bg-[#B11614] border-2 border-black flex items-center justify-center text-[2vw] xl:text-[1.1vw] z-30">
+            )}
+            {loan.liquidated && (
+              <div className="absolute right-0 z-30 flex h-[25%] w-[30%] rotate-[16deg] items-center justify-center border-2 border-black bg-[#B11614] text-[2vw] xl:text-[1.1vw]">
                 LIQUIDATED
               </div>
-            }
-            <h1 className="absolute text-[2vw] xl:text-[1vw] top-[2%] left-[1%]">Loan {loan.loanId}</h1>
-            <div className="h-[50%] w-[40%] px-[3%] flex flex-col justify-center text-[1.5vw] xl:text-[0.8vw] ml-[7%]">
-              <div className="w-[100%] flex flex-row items-center justify-between">
+            )}
+            <h1 className="absolute left-[1%] top-[2%] text-[2vw] xl:text-[1vw]">
+              Loan {loan.loanId}
+            </h1>
+            <div className="ml-[7%] flex h-[50%] w-[40%] flex-col justify-center px-[3%] text-[1.5vw] xl:text-[0.8vw]">
+              <div className="flex w-[100%] flex-row items-center justify-between">
                 <span>total amount to repay:</span>
                 <span>{formatNum(loan.borrowedAmount)} iBGT</span>
               </div>
-              <div className="w-[100%] flex flex-row items-center justify-between">
+              <div className="flex w-[100%] flex-row items-center justify-between">
                 <span>interest:</span>
                 <span>{formatNum(loan.interest)} iBGT</span>
               </div>
-              <div className="w-[100%] flex flex-row items-center justify-between">
+              <div className="flex w-[100%] flex-row items-center justify-between">
                 <span>expiration date:</span>
                 <span>{formatDate(loan.endDate)}</span>
               </div>
             </div>
-            <div className="h-[100%] w-[30%] flex flex-col items-center">
-              <h1 className="text-[#9C4924] text-[1.2vw] xl:text-[0.8vw]">Collateral</h1>
-              <div className="w-[90%] h-[65%] overflow-x-auto flex flex-row items-center justify-around" id="hide-scrollbar">
-                {
-                  loan.collateralNFTs.map((nft, index) => (
-                    <img
-                      className="h-[100%] w-[30%] mr-[5%]  border-2 border-black"
-                      src={nft === contracts.bondbear.address ? '/images/icon-bondbear.png' : '/images/icon-bandbear.png'}
-                      alt="collateral"
-                      key={index}
-                    />
-                  ))
-                }
+            <div className="flex h-[100%] w-[30%] flex-col items-center">
+              <h1 className="text-[1.2vw] text-[#9C4924] xl:text-[0.8vw]">
+                Collateral
+              </h1>
+              <div
+                className="flex h-[65%] w-[90%] flex-row items-center justify-around overflow-x-auto"
+                id="hide-scrollbar"
+              >
+                {loan.collateralNFTs.map((nft, index) => (
+                  <img
+                    className="mr-[5%] h-[100%] w-[30%] border-2 border-black"
+                    src={
+                      nft === contracts.bondbear.address
+                        ? "/images/icon-bondbear.png"
+                        : "/images/icon-bandbear.png"
+                    }
+                    alt="collateral"
+                    key={index}
+                  />
+                ))}
               </div>
             </div>
-            <div className="h-[100%] w-[28%] flex flex-col relative">
+            <div className="relative flex h-[100%] w-[28%] flex-col">
               <div
-                className="bg-[#CC8634] hover:bg-[#C9E3B9] absolute top-[7.5%] left-[1%] h-[45%] w-[25%] cursor-pointer hover:scale-110 text-[2vw] xl:text-[0.9vw] border-t-2 border-b-2 border-l-2 border-black flex items-center justify-center"
+                className="absolute left-[1%] top-[7.5%] flex h-[45%] w-[25%] cursor-pointer items-center justify-center border-b-2 border-l-2 border-t-2 border-black bg-[#CC8634] text-[2vw] hover:scale-110 hover:bg-[#C9E3B9] xl:text-[0.9vw]"
                 onClick={() => handleMaxClick(loan.loanId, loan.borrowedAmount)}
               >
                 MAX
               </div>
-              <div className="top-[7.5%] left-[26%] h-[45%] w-[69%] absolute bg-white border-2 border-black flex flex-row items-center justify-between">
+              <div className="absolute left-[26%] top-[7.5%] flex h-[45%] w-[69%] flex-row items-center justify-between border-2 border-black bg-white">
                 <input
-                  className="h-[100%] w-[70%] pl-[5%] text-[2.2vw] xl:text-[1.3vw] focus:outline-none"
+                  className="h-[100%] w-[70%] pl-[5%] text-[2.2vw] focus:outline-none xl:text-[1.3vw]"
                   type="text"
                   id="number-input"
                   placeholder="0.00"
-                  value={inputValues[loan.loanId] || ''}
-                  onChange={(e) => handleInputChange(loan.loanId, e.target.value)}
+                  value={inputValues[loan.loanId] || ""}
+                  onChange={(e) =>
+                    handleInputChange(loan.loanId, e.target.value)
+                  }
                 />
-                <span className="text-[1.5vw] xl:text-[0.8vw] text-[#7B7876] mr-[1%]">iBGT</span>
+                <span className="mr-[1%] text-[1.5vw] text-[#7B7876] xl:text-[0.8vw]">
+                  iBGT
+                </span>
               </div>
-              {
-                allowanceFlags[loan.loanId] &&
+              {allowanceFlags[loan.loanId] && (
                 <div>
                   <button
-                    className="top-[65%] left-[1%] h-[40%] w-[42%] absolute border-2 border-black bg-[#E7B941] hover:bg-[#C9E3B9] text-[1.2vw] xl:text-[0.7vw] hover:scale-110"
+                    className="absolute left-[1%] top-[65%] h-[40%] w-[42%] border-2 border-black bg-[#E7B941] text-[1.2vw] hover:scale-110 hover:bg-[#C9E3B9] xl:text-[0.7vw]"
                     id={`left-approve-button${loan.loanId}`}
-                    onClick={() => handleLeftButtonClick(parseFloat(inputValues[loan.loanId]), loan.loanId)}
+                    onClick={() =>
+                      handleLeftButtonClick(
+                        parseFloat(inputValues[loan.loanId]),
+                        loan.loanId,
+                      )
+                    }
                   >
                     approve tx
                   </button>
                   <button
-                    className="top-[65%] left-[53%] h-[40%] w-[42%] absolute border-2 border-black bg-[#E7B941] hover:bg-[#C9E3B9] text-[1.2vw] xl:text-[0.7vw] hover:scale-110"
+                    className="absolute left-[53%] top-[65%] h-[40%] w-[42%] border-2 border-black bg-[#E7B941] text-[1.2vw] hover:scale-110 hover:bg-[#C9E3B9] xl:text-[0.7vw]"
                     id={`right-approve-button${loan.loanId}`}
                     onClick={() => handleRightButtonClick(loan.loanId)}
                   >
                     approve infinite
                   </button>
                 </div>
-              }
-              {
-                !allowanceFlags[loan.loanId] &&
+              )}
+              {!allowanceFlags[loan.loanId] && (
                 <ConnectButton.Custom>
-                  {({
-                    account,
-                    chain,
-                    openChainModal,
-                    openConnectModal
-                  }) => {
+                  {({ account, chain, openChainModal, openConnectModal }) => {
                     return (
                       <button
-                        className={`top-[65%] left-[30%] h-[40%] w-[65%] absolute border-2 border-black ${buttonLoadingColor ? "bg-[#C9E3B9] text-black" : "bg-[#E7B941] text-black"} hover:bg-[#C9E3B9] hover:text-black text-[1.8vw] xl:text-[0.9vw] hover:scale-110`}
+                        className={`absolute left-[30%] top-[65%] h-[40%] w-[65%] border-2 border-black ${buttonLoadingColor ? "bg-[#C9E3B9] text-black" : "bg-[#E7B941] text-black"} text-[1.8vw] hover:scale-110 hover:bg-[#C9E3B9] hover:text-black xl:text-[0.9vw]`}
                         id={`repay-button${loan.loanId}`}
                         onClick={() => {
-                          const button = document.getElementById('repay-button' + loan.loanId)
-                          
-                          if(!account) {
-                            if(button && button.innerHTML === "connect wallet") {
-                              openConnectModal()
+                          const button = document.getElementById(
+                            "repay-button" + loan.loanId,
+                          );
+
+                          if (!account) {
+                            if (
+                              button &&
+                              button.innerHTML === "connect wallet"
+                            ) {
+                              openConnectModal();
+                            } else {
+                              button && (button.innerHTML = "connect wallet");
                             }
-                            else {
-                              button && (button.innerHTML = "connect wallet")
+                          } else if (chain?.name !== "Berachain") {
+                            if (
+                              button &&
+                              button.innerHTML === "where berachain"
+                            ) {
+                              openChainModal();
+                            } else {
+                              button && (button.innerHTML = "where berachain");
                             }
-                          }
-                          else if(chain?.name !== "Berachain") {
-                            if(button && button.innerHTML === "where berachain") {
-                              openChainModal()
-                            }
-                            else {
-                              button && (button.innerHTML = "where berachain")
-                            }
-                          }
-                          else {
-                            handleButtonClick(loan.loanId, parseFloat(inputValues[loan.loanId]), loan.borrowedAmount)
+                          } else {
+                            handleButtonClick(
+                              loan.loanId,
+                              parseFloat(inputValues[loan.loanId]),
+                              loan.borrowedAmount,
+                            );
                           }
                         }}
                       >
                         REPAY LOAN
                       </button>
-                    )
+                    );
                   }}
                 </ConnectButton.Custom>
-              }
+              )}
             </div>
           </div>
         ))
-      }
+      )}
     </div>
-  )
-}
+  );
+};

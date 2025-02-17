@@ -1,81 +1,84 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client"
-import { useGov, useDesktop, useGeo } from "../../../providers"
-import { ProposalsPageMobile } from "../../govMobile"
-import {
-  NavBar,
-  Footer,
-  Loading,
-  ChangeChain,
-  TAndCs
-} from "../../utils"
-import { ProposalsBox, ProposalsFetcher } from ".."
+import { useEffect } from "react";
+
+import { useAtom } from "jotai";
+
+import { pageLoadingAtom } from "@/app/_components/atoms/pageLoadingAtom";
+import CsrPageLayout from "@/app/_components/CsrPageLayout";
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+
+import { ProposalsBox, ProposalsFetcher } from "../";
+import { useDesktop, useGeo, useGov } from "../../../providers";
+import { ProposalsPageMobile } from "../../govMobile";
+import { Loading, TAndCs } from "../../utils";
 
 export const ProposalsPage = () => {
+  const [pageLoading, setPageLoading] = useAtom(pageLoadingAtom);
 
-  const [pageLoading, setPageLoading] = useState<boolean>(true)
+  const { wutPopup, setWutPopup } = useGov();
 
-  const {
-    wutPopup,
-    setWutPopup
-  } = useGov()
+  const { isDesktop } = useDesktop();
 
-  const { isDesktop } = useDesktop()
-
-  const { signed } = useGeo()
+  const { signed } = useGeo();
 
   useEffect(() => {
-    setPageLoading(false)
-  }, [])
+    setPageLoading(false);
+  }, []);
 
   const client = new ApolloClient({
     uri: process.env.NEXT_PUBLIC_GHOST_GRAPH_PROPOSALS_URL,
     cache: new InMemoryCache(),
     headers: {
-      "X-GHOST-KEY": process.env.NEXT_PUBLIC_GHOST_GRAPH_KEY!
-    }
-  })
+      "X-GHOST-KEY": process.env.NEXT_PUBLIC_GHOST_GRAPH_KEY!,
+    },
+  });
 
   const handlePopups = (e: any) => {
-    if(wutPopup) {
-      setWutPopup(false)
+    if (wutPopup) {
+      setWutPopup(false);
     }
-  }
+  };
 
   return (
     <ApolloProvider client={client}>
-      {
-        pageLoading ?
-        <Loading /> :
-        isDesktop ?
-        (
-          signed !== 'TRUE' ?
-          <TAndCs /> :
-          <main className="w-screen h-screen" onClick={(e) => handlePopups(e)}>
-            <NavBar wutPopup={wutPopup} setWutPopup={setWutPopup} />
-            <div className="w-[100%] h-[89%] xl:h-[85%] bg-cover bg-bottom bg-[url('/images/bg-goldiswap.png')] relative">
-              <h1 className="absolute top-[-0.5%] lg:top-[16%] 2xl:top-[12.16%] left-[2.5%] xl:left-[5%] 2xl:left-[7.5%] text-[#D9C6BA] text-[7.5vw] lg:text-[6vw] tall:text-[10vw] tall:md:text-[7.5vw] tall:lg:text-[6vw] font-amaticbold" id="page-title">GoldiGovernance</h1>
+      {pageLoading ? (
+        <Loading />
+      ) : isDesktop ? (
+        signed !== "TRUE" ? (
+          <TAndCs />
+        ) : (
+          <CsrPageLayout
+            onPageClick={(e) => handlePopups(e)}
+            wutPopup={wutPopup}
+            setWutPopup={setWutPopup}
+            bgImageUrl="/images/bg-goldiswap.png"
+          >
+            <>
+              <h1
+                className="absolute left-[2.5%] top-[-0.5%] font-amaticbold text-[7.5vw] text-[#D9C6BA] lg:top-[16%] lg:text-[6vw] xl:left-[5%] 2xl:left-[7.5%] 2xl:top-[12.16%] tall:text-[10vw] tall:md:text-[7.5vw] tall:lg:text-[6vw]"
+                id="page-title"
+              >
+                GoldiGovernance
+              </h1>
               <a href="/goldigovernance/propose">
-                <div className="absolute h-[8%] w-[20%] lg:w-[16.6%] top-[2.25%] lg:top-[40%] right-[23%] lg:left-[15%] bg-[#E7B941] text-black hover:bg-[#4D0B24] hover:text-[#E7B941] font-amaticbold flex items-center justify-center text-[3.5vw] lg:text-[1.9vw] border-2 border-black hover:scale-110">
+                <div className="absolute right-[23%] top-[2.25%] flex h-[8%] w-1/5 items-center justify-center border-2 border-black bg-[#E7B941] font-amaticbold text-[3.5vw] text-black hover:scale-110 hover:bg-[#4D0B24] hover:text-[#E7B941] lg:left-[15%] lg:top-[40%] lg:w-[16.6%] lg:text-[1.9vw]">
                   new proposal
                 </div>
               </a>
               <a href="/goldigovernance/govlocks">
-                <div className="absolute h-[8%] w-[20%] lg:w-[16.6%] top-[2.25%] lg:top-[50%] right-[1.5%] lg:left-[15%] bg-[#E7B941] text-black hover:bg-[#4D0B24] hover:text-[#E7B941] font-amaticbold flex items-center justify-center text-[3.5vw] lg:text-[1.9vw] border-2 border-black hover:scale-110">
+                <div className="absolute right-[1.5%] top-[2.25%] flex h-[8%] w-1/5 items-center justify-center border-2 border-black bg-[#E7B941] font-amaticbold text-[3.5vw] text-black hover:scale-110 hover:bg-[#4D0B24] hover:text-[#E7B941] lg:left-[15%] lg:top-[50%] lg:w-[16.6%] lg:text-[1.9vw]">
                   get $govLOCKS
                 </div>
               </a>
               <ProposalsBox />
-              <Footer />
               <ProposalsFetcher />
-              <ChangeChain />
-            </div>
-          </main>
-        ) :
+            </>
+          </CsrPageLayout>
+        )
+      ) : (
         <ProposalsPageMobile />
-      }
+      )}
     </ApolloProvider>
-  )
-}
+  );
+};

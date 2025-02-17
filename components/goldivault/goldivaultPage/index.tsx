@@ -1,70 +1,72 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { useGoldivault, useDesktop, useGeo } from "../../../providers"
-import { GoldivaultPageMobile } from "../../goldivaultMobile"
-import {
-  Stats,
-  VaultDisplay,
-  InfoDisplayPopup
-} from "../"
-import {
-  NavBar,
-  Footer,
-  Loading,
-  ChangeChain,
-  TAndCs
-} from "../../utils"
+import { useEffect } from "react";
+
+import { useAtom } from "jotai";
+
+import { pageLoadingAtom } from "@/app/_components/atoms/pageLoadingAtom";
+import CsrPageLayout from "@/app/_components/CsrPageLayout";
+
+import { InfoDisplayPopup, VaultDisplay } from "../";
+import { useDesktop, useGeo, useGoldivault } from "../../../providers";
+import { GoldivaultPageMobile } from "../../goldivaultMobile";
+import { Loading, TAndCs } from "../../utils";
 
 export const GoldivaultPage = () => {
-
-  const [pageLoading, setPageLoading] = useState<boolean>(true)
+  const [pageLoading, setPageLoading] = useAtom(pageLoadingAtom);
 
   const {
     wutPopup,
     setWutPopup,
     infoPopupToggle,
     setInfoPopupToggle,
-    refreshVaultDisplayInfo
-  } = useGoldivault()
+    refreshVaultDisplayInfo,
+  } = useGoldivault();
 
-  const { isDesktop } = useDesktop()
+  const { isDesktop } = useDesktop();
 
-  const { signed } = useGeo()
+  const { signed } = useGeo();
 
   useEffect(() => {
-    refreshVaultDisplayInfo()
-    setPageLoading(false)
-  }, [])
+    refreshVaultDisplayInfo();
+    setPageLoading(false);
+  }, []);
 
   const handlePopups = () => {
-    if(wutPopup) {
-      setWutPopup(false)
+    if (wutPopup) {
+      setWutPopup(false);
     }
-    if(infoPopupToggle) {
-      setInfoPopupToggle(false)
+    if (infoPopupToggle) {
+      setInfoPopupToggle(false);
     }
-  }
+  };
 
-  return (
-    pageLoading ?
-    <Loading /> :
-    isDesktop ?
-    (
-      signed !== 'TRUE' ?
-      <TAndCs /> :
-      <main className="w-screen h-screen" onClick={() => handlePopups()}>
-        <NavBar wutPopup={wutPopup} setWutPopup={setWutPopup} />
-        <div className="w-[100%] h-[89%] xl:h-[85%] bg-cover bg-bottom bg-[url('/images/bg-goldivault.png')] relative">
-          { infoPopupToggle && <InfoDisplayPopup /> }
-          <h1 className="absolute bottom-[82.5%] md:bottom-[80%] lg:bottom-[71%] 2xl:bottom-[71%] tall:bottom-[85%] tall:md:bottom-[80%] tall:lg:bottom-[76%] tall:2xl:bottom-[71%] left-[6%] 2xl:left-[5%] text-[#FFCD00] text-[12vw] md:text-[11vw] lg:text-[10vw] 2xl:text-[8vw] font-amaticbold" id="page-title">Goldivaults</h1>
+  return pageLoading ? (
+    <Loading />
+  ) : isDesktop ? (
+    signed !== "TRUE" ? (
+      <TAndCs />
+    ) : (
+      <CsrPageLayout
+        onPageClick={() => handlePopups()}
+        wutPopup={wutPopup}
+        setWutPopup={setWutPopup}
+        bgImageUrl="/images/bg-goldivault.png"
+      >
+        <>
+          {infoPopupToggle && <InfoDisplayPopup />}
+          <h1
+            className="absolute bottom-[82.5%] left-[6%] font-amaticbold text-[12vw] text-[#FFCD00] md:bottom-[80%] md:text-[11vw] lg:bottom-[71%] lg:text-[10vw] 2xl:bottom-[71%] 2xl:left-[5%] 2xl:text-[8vw] tall:bottom-[85%] tall:md:bottom-[80%] tall:lg:bottom-[76%] tall:2xl:bottom-[71%]"
+            id="page-title"
+          >
+            Goldivaults
+          </h1>
           {/* <Stats /> */}
           <VaultDisplay />
-          <Footer />
-          <ChangeChain />
-        </div>
-      </main>
-    ) :
+        </>
+      </CsrPageLayout>
+    )
+  ) : (
     <GoldivaultPageMobile />
-  )
-}
+  );
+};

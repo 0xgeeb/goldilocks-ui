@@ -1,51 +1,57 @@
-import { useGoldiswap } from "../../../providers"
+import { useGoldiswap } from "../../../providers";
 
 export const SlippagePopup = () => {
-
-  const { slippage, changeSlippage, changeSlippageToggle } = useGoldiswap()
+  const { slippage, changeSlippage, changeSlippageToggle } = useGoldiswap();
 
   return (
-    <div className="bg-[#B95500] border-2 border-black absolute top-[18%] 2xl:top-[18%] left-[30%] xl:left-[38%] 2xl:left-[45%] w-[40%] xl:w-[24%] 2xl:w-[19%] h-[30%] tall:h-[22%] z-50">
-      <div className="h-[100%] w-[100%] py-[5%] relative flex flex-col items-center justify-between font-baloo font-semibold">
-        <span className="text-white text-[3.5vw] md:text-[2.5vw] xl:text-[1.75vw] 2xl:text-[1.25vw]">Set Slippage:</span>
-        <div className="relative bg-white w-[70%] md:w-[60%] h-[60%] border-2 border-black">
+    <div className="absolute left-[30%] top-[18%] z-50 h-[30%] w-[40%] border-2 border-black bg-[#B95500] xl:left-[38%] xl:w-[24%] 2xl:left-[45%] 2xl:top-[18%] 2xl:w-[19%] tall:h-[22%]">
+      <div className="relative flex h-[100%] w-[100%] flex-col items-center justify-between py-[5%] font-baloo font-semibold">
+        <span className="text-[3.5vw] text-white md:text-[2.5vw] xl:text-[1.75vw] 2xl:text-[1.25vw]">
+          Set Slippage:
+        </span>
+        <div className="relative h-[60%] w-[70%] border-2 border-black bg-white md:w-[60%]">
           <input
-            className="absolute text-[3vw] xl:text-[2.2vw] 2xl:text-[1.4vw] top-[2%] left-[6%] 2xl:left-[10%] w-[100%] h-[50%] focus:outline-none bg-transparent"
+            className="absolute left-[6%] top-[2%] h-[50%] w-[100%] bg-transparent text-[3vw] focus:outline-none xl:text-[2.2vw] 2xl:left-[10%] 2xl:text-[1.4vw]"
             type="number"
             id="number-input"
             value={slippage.displayString}
             onChange={(e) => {
-              if(!e.target.value) {
-                changeSlippage(0, e.target.value)
-              }
-              else {
-                changeSlippage(parseFloat(e.target.value), e.target.value)
+              if (!e.target.value) {
+                changeSlippage(0, e.target.value);
+              } else {
+                changeSlippage(parseFloat(e.target.value), e.target.value);
               }
             }}
           />
-          <div className="absolute bottom-0 w-[100%] h-[50%] bg-[#DCC2A8] border-t-2 border-black flex flex-row">
+          <div className="absolute bottom-0 flex h-[50%] w-[100%] flex-row border-t-2 border-black bg-[#DCC2A8]">
             <div
-              className={`${slippage.amount == 0.5 ? "bg-[#E7B941]" : ""} h-[100%] w-[50%] flex items-center justify-center hover:bg-[#F3AA8A] cursor-pointer border-r-2 border-black`}
-              onClick={() => changeSlippage(0.5, '0.5')}
+              className={`${slippage.amount == 0.5 ? "bg-[#E7B941]" : ""} flex h-[100%] w-[50%] cursor-pointer items-center justify-center border-r-2 border-black hover:bg-[#F3AA8A]`}
+              onClick={() => changeSlippage(0.5, "0.5")}
             >
-              <span className="font-baloo text-[2vw] md:text-[1.75vw] xl:text-[1.25vw] 2xl:text-[0.8vw]">DEFAULT</span>
+              <span className="font-baloo text-[2vw] md:text-[1.75vw] xl:text-[1.25vw] 2xl:text-[0.8vw]">
+                DEFAULT
+              </span>
             </div>
             <div
-              className={`${slippage.amount == 0.5 ? "" : "bg-[#E7B941]"} h-[100%] w-[50%] flex items-center justify-center hover:bg-[#F3AA8A] cursor-pointer`}
-              onClick={() => changeSlippage(0, '0')}
+              className={`${slippage.amount == 0.5 ? "" : "bg-[#E7B941]"} flex h-[100%] w-[50%] cursor-pointer items-center justify-center hover:bg-[#F3AA8A]`}
+              onClick={() => changeSlippage(0, "0")}
             >
-              <span className="font-baloo text-[2vw] md:text-[1.75vw] xl:text-[1.25vw] 2xl:text-[0.8vw]">CUSTOM</span>
+              <span className="font-baloo text-[2vw] md:text-[1.75vw] xl:text-[1.25vw] 2xl:text-[0.8vw]">
+                CUSTOM
+              </span>
             </div>
           </div>
-          <span className="absolute text-[3vw] md:text-[2.5vw] xl:text-[1.75vw] 2xl:text-[1.25vw] top-[10%] right-[10%]">%</span>
+          <span className="absolute right-[10%] top-[10%] text-[3vw] md:text-[2.5vw] xl:text-[1.75vw] 2xl:text-[1.25vw]">
+            %
+          </span>
         </div>
         <p
-          className="absolute top-0 right-[3%] 2xl:right-[4%] font-baloo text-[3vw] md:text-[2.5vw] 2xl:text-[1.5vw] cursor-pointer hover:scale-110"
+          className="absolute right-[3%] top-0 cursor-pointer font-baloo text-[3vw] hover:scale-110 md:text-[2.5vw] 2xl:right-[4%] 2xl:text-[1.5vw]"
           onClick={() => changeSlippageToggle(false)}
         >
           x
         </p>
       </div>
     </div>
-  )
-}
+  );
+};

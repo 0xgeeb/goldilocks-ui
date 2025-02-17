@@ -1,17 +1,16 @@
-"use client"
+"use client";
 
-import { ConnectButton } from "@rainbow-me/rainbowkit"
-import { useState, useEffect } from "react"
-import { useAccount } from "wagmi"
-import { useGoldilend } from "../../../providers"
-import { useGoldilendTx } from "../../../hooks"
-import { BorrowNotification } from "../../goldilend"
-import { contracts } from "../../../utils/addressi"
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useState, useEffect } from "react";
+import { useAccount } from "wagmi";
+import { useGoldilend } from "../../../providers";
+import { useGoldilendTx } from "../../../hooks";
+import { BorrowNotification } from "../../goldilend";
+import { contracts } from "../../../utils/addressi";
 
 export const BorrowTab = () => {
-
-  const [daysTilExpiration, setDaysTilExpiration] = useState<number>(14)
-  const [buttonLoadingColor, setButtonLoadingColor] = useState<boolean>(false)
+  const [daysTilExpiration, setDaysTilExpiration] = useState<number>(14);
+  const [buttonLoadingColor, setButtonLoadingColor] = useState<boolean>(false);
 
   const {
     ownedBeras,
@@ -38,214 +37,252 @@ export const BorrowTab = () => {
     loanInterestRate,
     setLoanInterestRate,
     updateOwnedBeras,
-    findLoans
-  } = useGoldilend()
+    findLoans,
+  } = useGoldilend();
 
-  const {
-    checkLoanAllowance,
-    sendGoldilendNFTApproveTx,
-    sendBorrowTx
-  } = useGoldilendTx()
+  const { checkLoanAllowance, sendGoldilendNFTApproveTx, sendBorrowTx } =
+    useGoldilendTx();
 
-  const { address, isConnected } = useAccount()
+  const { address, isConnected } = useAccount();
 
   useEffect(() => {
-    updateBorrowLimit()
-  }, [selectedBera])
+    updateBorrowLimit();
+  }, [selectedBera]);
 
   useEffect(() => {
-    if(selectedBera.name !== '' && debouncedLoanAmount > 0 && checkDate(debouncedLoanExpiration)) {
-      getInterestRate()
+    if (
+      selectedBera.name !== "" &&
+      debouncedLoanAmount > 0 &&
+      checkDate(debouncedLoanExpiration)
+    ) {
+      getInterestRate();
+    } else {
+      setLoanInterest(0);
+      setLoanInterestRate(0);
     }
-    else {
-      setLoanInterest(0)
-      setLoanInterestRate(0)
-    }
-  }, [selectedBera, debouncedLoanAmount, debouncedLoanExpiration])
+  }, [selectedBera, debouncedLoanAmount, debouncedLoanExpiration]);
 
   useEffect(() => {
-    if(checkDate(debouncedLoanExpiration)) {
-      const [month, day, year] = debouncedLoanExpiration.split('-').map(Number)
-      const inputDate = new Date(year, month - 1, day)
-      const currentDate = new Date()
-      const timeDifference = inputDate.getTime() - currentDate.getTime()
-      const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24))
-      if(daysDifference >= 14 && daysDifference <= 365) {
-        setDaysTilExpiration(daysDifference)
+    if (checkDate(debouncedLoanExpiration)) {
+      const [month, day, year] = debouncedLoanExpiration.split("-").map(Number);
+      const inputDate = new Date(year, month - 1, day);
+      const currentDate = new Date();
+      const timeDifference = inputDate.getTime() - currentDate.getTime();
+      const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+      if (daysDifference >= 14 && daysDifference <= 365) {
+        setDaysTilExpiration(daysDifference);
       }
     }
-  }, [debouncedLoanExpiration])
+  }, [debouncedLoanExpiration]);
 
   const loadingElement = () => {
-    return <span className="loader-small mx-auto mt-[10%]"></span>
-  }
+    return <span className="loader-small mx-auto mt-[10%]"></span>;
+  };
 
   const formatAsString = (num: number): string => {
-    return num.toLocaleString('en-US', { maximumFractionDigits: 2 })
-  }
+    return num.toLocaleString("en-US", { maximumFractionDigits: 2 });
+  };
 
-  const checkDate = (dateString: String): boolean => {
-    const dateParts = dateString.split('-')
-    const [month, day, year] = dateParts.map(Number)
-    const parsedDate = new Date(year, month - 1, day)
-    const timestamp = parsedDate.getTime()
-    const timestampDigits = Math.floor(timestamp / 1000)
-    if(dateParts.length !== 3) {
-      return false
+  const checkDate = (dateString: string): boolean => {
+    const dateParts = dateString.split("-");
+    const [month, day, year] = dateParts.map(Number);
+    const parsedDate = new Date(year, month - 1, day);
+    const timestamp = parsedDate.getTime();
+    const timestampDigits = Math.floor(timestamp / 1000);
+    if (dateParts.length !== 3) {
+      return false;
     }
     if (isNaN(month) || isNaN(day) || isNaN(year)) {
-      return false
+      return false;
     }
     if (isNaN(parsedDate.getTime())) {
-      return false
+      return false;
     }
-    if(timestampDigits < Math.floor(Date.now() / 1000)) {
-      return false
+    if (timestampDigits < Math.floor(Date.now() / 1000)) {
+      return false;
     }
-    if(timestampDigits < Math.floor(Date.now() / 1000) + (86400 * 14)) {
-      return false
+    if (timestampDigits < Math.floor(Date.now() / 1000) + 86400 * 14) {
+      return false;
     }
-    return true
-  }
+    return true;
+  };
 
   const parseDate = (dateString: string): number => {
-    const dateParts = dateString.split('-')
+    const dateParts = dateString.split("-");
     const [month, day, year] = dateParts.map(Number);
-    const parsedDate = new Date(year, month - 1, day)
-    const timestamp = parsedDate.getTime()
-    const currentTimestamp = Date.now()
-    return Math.floor((timestamp - currentTimestamp) / 1000)
-  }
+    const parsedDate = new Date(year, month - 1, day);
+    const timestamp = parsedDate.getTime();
+    const currentTimestamp = Date.now();
+    return Math.floor((timestamp - currentTimestamp) / 1000);
+  };
 
   const handleButtonClick = async () => {
-    const button = document.getElementById('borrow-button')
-    if(loanAmount == 0) {
-      button && (button.innerHTML = "no loan")
-      return
+    const button = document.getElementById("borrow-button");
+    if (loanAmount == 0) {
+      button && (button.innerHTML = "no loan");
+      return;
     }
-    if(!checkDate(loanExpiration)) {
-      button && (button.innerHTML = "invalid expiration")
-      return
+    if (!checkDate(loanExpiration)) {
+      button && (button.innerHTML = "invalid expiration");
+      return;
     }
-    if(selectedBera.name === '') {
-      button && (button.innerHTML = "no collateral")
-      return
+    if (selectedBera.name === "") {
+      button && (button.innerHTML = "no collateral");
+      return;
     }
-    const [bondFlag, bandFlag] = await checkLoanAllowance(address as `0x${string}`)
-    if((bondFlag || selectedBera.name !== "BondBera") && (bandFlag || selectedBera.name !== "BandBera")) {
-      borrowTxFlow(button)
-    }
-    else {
-      button && (button.innerHTML = "approving...")
-      setButtonLoadingColor(true)
-      if(!bondFlag && selectedBera.name === 'BondBera') {
-        await sendGoldilendNFTApproveTx(contracts.bondbear.address)
+    const [bondFlag, bandFlag] = await checkLoanAllowance(
+      address as `0x${string}`,
+    );
+    if (
+      (bondFlag || selectedBera.name !== "BondBera") &&
+      (bandFlag || selectedBera.name !== "BandBera")
+    ) {
+      borrowTxFlow(button);
+    } else {
+      button && (button.innerHTML = "approving...");
+      setButtonLoadingColor(true);
+      if (!bondFlag && selectedBera.name === "BondBera") {
+        await sendGoldilendNFTApproveTx(contracts.bondbear.address);
       }
-      if(!bandFlag && selectedBera.name === 'BandBera') {
-        await sendGoldilendNFTApproveTx(contracts.bandbear.address)
+      if (!bandFlag && selectedBera.name === "BandBera") {
+        await sendGoldilendNFTApproveTx(contracts.bandbear.address);
       }
-      button && (button.innerHTML = "create loan")
-      setButtonLoadingColor(false)
+      button && (button.innerHTML = "create loan");
+      setButtonLoadingColor(false);
     }
-  }
+  };
 
   const borrowTxFlow = async (button: HTMLElement | null) => {
-    setTxConfirming(true)
-    if(button) {
-      button.innerHTML = "confirming..."
-      setButtonLoadingColor(true)
+    setTxConfirming(true);
+    if (button) {
+      button.innerHTML = "confirming...";
+      setButtonLoadingColor(true);
     }
-    const borrowTx = await sendBorrowTx(loanAmount, selectedBera, parseDate(loanExpiration))
-    if(borrowTx.substring(0, 2) === '0x') {
-      setTxConfirming(false)
+    const borrowTx = await sendBorrowTx(
+      loanAmount,
+      selectedBera,
+      parseDate(loanExpiration),
+    );
+    if (borrowTx.substring(0, 2) === "0x") {
+      setTxConfirming(false);
       openNotification(
         true,
         "You've successfully created a loan",
         `You borrowed ${formatAsString(loanAmount)} iBGT against your bera`,
-        borrowTx
-      )
-      button && (button.innerHTML = "create loan")
-      setButtonLoadingColor(false)
-      updateOwnedBeras(selectedBera)
-      findLoans()
-      changeActiveToggle('BORROW')
-      setDaysTilExpiration(14)
+        borrowTx,
+      );
+      button && (button.innerHTML = "create loan");
+      setButtonLoadingColor(false);
+      updateOwnedBeras(selectedBera);
+      findLoans();
+      changeActiveToggle("BORROW");
+      setDaysTilExpiration(14);
       setTimeout(() => {
-        openNotification(false, '', '', '')
-      }, 10000)
+        openNotification(false, "", "", "");
+      }, 10000);
+    } else {
+      button && (button.innerHTML = "create loan");
+      setButtonLoadingColor(false);
+      changeActiveToggle("BORROW");
+      setDaysTilExpiration(14);
+      setTxConfirming(false);
     }
-    else {
-      button && (button.innerHTML = "create loan")
-      setButtonLoadingColor(false)
-      changeActiveToggle('BORROW')
-      setDaysTilExpiration(14)
-      setTxConfirming(false)
-    }
-  }
+  };
 
-  const sliderValue = ((daysTilExpiration - 7) / (365 - 7)) * 100
+  const sliderValue = ((daysTilExpiration - 7) / (365 - 7)) * 100;
 
   const handleSliderChange = (days: string) => {
-    const daysNum = parseFloat(days)
-    setDaysTilExpiration(daysNum)
-    const currentDate = new Date()
-    currentDate.setDate(currentDate.getDate() + daysNum)
-    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0')
-    const day = currentDate.getDate().toString().padStart(2, '0')
-    const year = currentDate.getFullYear().toString()
-    handleLoanDateChange(`${month}-${day}-${year}`)
-  }
+    const daysNum = parseFloat(days);
+    setDaysTilExpiration(daysNum);
+    const currentDate = new Date();
+    currentDate.setDate(currentDate.getDate() + daysNum);
+    const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
+    const day = currentDate.getDate().toString().padStart(2, "0");
+    const year = currentDate.getFullYear().toString();
+    handleLoanDateChange(`${month}-${day}-${year}`);
+  };
 
-  return (
-    txConfirming ? <img className="w-[100%] h-[100%]" src="/images/bg-transaction.png" alt="tx" /> :
-    notification.toggle ? <BorrowNotification /> :
-    <div className="w-[100%] h-[100%] flex flex-row">
-      <div className="h-[100%] w-[100%] px-[0%] border-r-2 border-black flex flex-col items-center">
-        <h1 className="font-amaticbold text-[5vw] xl:text-[3vw] mt-[2%]">select collateral</h1>
-        <div className="flex flex-wrap overflow-y-auto w-[85%] h-[80%] py-[2%]" id="hide-scrollbar">
-          {
-            (infoLoading && isConnected) ? loadingElement() :
-            (!isConnected || ownedBeras.length == 0) ? 
-            <div className="w-[100%] h-[100%] flex flex-col justify-center items-center opacity-50">
-              <img className="w-[70%] mb-[5%]" src="/images/icon-not-found.png" alt="not-found" />
-              <h1 className="font-amaticbold text-[5vw] xl:text-[3vw]">no beras</h1>
-            </div> :
+  return txConfirming ? (
+    <img
+      className="h-[100%] w-[100%]"
+      src="/images/bg-transaction.png"
+      alt="tx"
+    />
+  ) : notification.toggle ? (
+    <BorrowNotification />
+  ) : (
+    <div className="flex h-[100%] w-[100%] flex-row">
+      <div className="flex h-[100%] w-[100%] flex-col items-center border-r-2 border-black px-[0%]">
+        <h1 className="mt-[2%] font-amaticbold text-[5vw] xl:text-[3vw]">
+          select collateral
+        </h1>
+        <div
+          className="flex h-[80%] w-[85%] flex-wrap overflow-y-auto py-[2%]"
+          id="hide-scrollbar"
+        >
+          {infoLoading && isConnected ? (
+            loadingElement()
+          ) : !isConnected || ownedBeras.length == 0 ? (
+            <div className="flex h-[100%] w-[100%] flex-col items-center justify-center opacity-50">
+              <img
+                className="mb-[5%] w-[70%]"
+                src="/images/icon-not-found.png"
+                alt="not-found"
+              />
+              <h1 className="font-amaticbold text-[5vw] xl:text-[3vw]">
+                no beras
+              </h1>
+            </div>
+          ) : (
             ownedBeras.map((bera, index) => (
-              <div key={index} className="h-[40%] xl:h-[45%] w-[50%] py-2">
+              <div key={index} className="h-[40%] w-[50%] py-2 xl:h-[45%]">
                 <img
                   className={`ml-[5%] h-[100%] w-[90%] border-2 border-black hover:scale-110 hover:cursor-pointer ${selectedBera.index == bera.index ? "border-4 border-black" : "opacity-75"}`}
                   onClick={() => handleBeraClick(bera)}
-                  src={bera.name === 'BondBera' ? "/images/icon-bondbear.png" : "/images/icon-bandbear.png"}
+                  src={
+                    bera.name === "BondBera"
+                      ? "/images/icon-bondbear.png"
+                      : "/images/icon-bandbear.png"
+                  }
                   alt="bera"
                 />
               </div>
             ))
-          }
+          )}
         </div>
       </div>
-      <div className="h-[100%] w-[100%] flex flex-col items-center justify-between py-[1%]">
-        <h1 className="font-amaticbold text-[5vw] xl:text-[2.5vw]">create loan</h1>
-        <div className="w-[90%] h-[25%] flex flex-row items-start justify-between relative">
-          <span className="text-[2vw] xl:text-[0.8vw] absolute top-[-20%] left-[3%] font-baloo font-semibold">Collateral:</span>
-          {
-            selectedBera.name !== '' &&
+      <div className="flex h-[100%] w-[100%] flex-col items-center justify-between py-[1%]">
+        <h1 className="font-amaticbold text-[5vw] xl:text-[2.5vw]">
+          create loan
+        </h1>
+        <div className="relative flex h-[25%] w-[90%] flex-row items-start justify-between">
+          <span className="absolute left-[3%] top-[-20%] font-baloo text-[2vw] font-semibold xl:text-[0.8vw]">
+            Collateral:
+          </span>
+          {selectedBera.name !== "" && (
             <img
-              className="mt-[2.5%] xl:mt-0 h-[50%] xl:h-[70%] w-[20%] border-2 border-black mx-auto"
+              className="mx-auto mt-[2.5%] h-[50%] w-[20%] border-2 border-black xl:mt-0 xl:h-[70%]"
               onClick={() => handleBeraClick(selectedBera)}
-              src={selectedBera.name === 'BondBera' ? "/images/icon-bondbear.png" : "/images/icon-bandbear.png"}
+              src={
+                selectedBera.name === "BondBera"
+                  ? "/images/icon-bondbear.png"
+                  : "/images/icon-bandbear.png"
+              }
               alt="selectedbera"
               key={selectedBera.index}
             />
-          }
-          <div className="text-[2vw] xl:text-[0.8vw] absolute w-[60%] bottom-[5%] left-[20%] flex flex-row items-center justify-between font-baloo font-semibold">
+          )}
+          <div className="absolute bottom-[5%] left-[20%] flex w-[60%] flex-row items-center justify-between font-baloo text-[2vw] font-semibold xl:text-[0.8vw]">
             <span>borrow limit:</span>
-            <span>{borrowLimit > 0 ? formatAsString(borrowLimit) : "0.00"} iBGT</span>
+            <span>
+              {borrowLimit > 0 ? formatAsString(borrowLimit) : "0.00"} iBGT
+            </span>
           </div>
         </div>
-        <div className="w-[90%] flex flex-row items-center justify-between font-baloo font-semibold text-[1.8vw] xl:text-[1vw]">
+        <div className="flex w-[90%] flex-row items-center justify-between font-baloo text-[1.8vw] font-semibold xl:text-[1vw]">
           <span>Loan Amount:</span>
           <input
-            className="w-[50%] pl-2 focus:outline-none border-2 border-black bg-white"
+            className="w-[50%] border-2 border-black bg-white pl-2 focus:outline-none"
             type="number"
             id="number-input"
             placeholder="0.00"
@@ -253,10 +290,10 @@ export const BorrowTab = () => {
             onChange={(e) => handleBorrowChange(e.target.value)}
           />
         </div>
-        <div className="w-[90%] flex flex-row items-center justify-between font-baloo font-semibold text-[1.8vw] xl:text-[1vw]">
+        <div className="flex w-[90%] flex-row items-center justify-between font-baloo text-[1.8vw] font-semibold xl:text-[1vw]">
           <span>Repay Deadline:</span>
           <input
-            className="w-[50%] pl-2 focus:outline-none border-2 border-black bg-white"
+            className="w-[50%] border-2 border-black bg-white pl-2 focus:outline-none"
             type="text"
             id="number-input"
             placeholder="mm-dd-yyyy"
@@ -264,8 +301,8 @@ export const BorrowTab = () => {
             onChange={(e) => handleLoanDateChange(e.target.value)}
           />
         </div>
-        <div className="w-[90%] my-[1%] flex flex-row items-center justify-between font-baloo font-semibold text-[1.8vw] xl:text-[1vw]">
-          <div className="h-[100%] w-[70%] bg-[#C09D87] p-2 flex items-center justify-center">
+        <div className="my-[1%] flex w-[90%] flex-row items-center justify-between font-baloo text-[1.8vw] font-semibold xl:text-[1vw]">
+          <div className="flex h-[100%] w-[70%] items-center justify-center bg-[#C09D87] p-2">
             <input
               className="h-[100%] w-[100%] bg-black hover:cursor-pointer"
               id="date-slider"
@@ -274,64 +311,57 @@ export const BorrowTab = () => {
               max="365"
               value={daysTilExpiration}
               onChange={(e) => handleSliderChange(e.target.value)}
-              style={{background: `linear-gradient(to right, black ${sliderValue}%, #C09D87 ${sliderValue}%)`}}
+              style={{
+                background: `linear-gradient(to right, black ${sliderValue}%, #C09D87 ${sliderValue}%)`,
+              }}
             />
           </div>
           <span>{daysTilExpiration} days</span>
         </div>
-        <div className="w-[90%] flex flex-row items-center justify-between font-baloo font-semibold text-[1.8vw] xl:text-[1vw]">
+        <div className="flex w-[90%] flex-row items-center justify-between font-baloo text-[1.8vw] font-semibold xl:text-[1vw]">
           <span>Interest Rate:</span>
           <span>{formatAsString(loanInterestRate)}%</span>
         </div>
-        <div className="w-[90%] flex flex-row items-center justify-between font-baloo font-semibold text-[1.8vw] xl:text-[1vw]">
+        <div className="flex w-[90%] flex-row items-center justify-between font-baloo text-[1.8vw] font-semibold xl:text-[1vw]">
           <span>Total Interest Due:</span>
           <span>{formatAsString(loanInterest)}</span>
         </div>
-        <div className="w-[85%] px-2 flex flex-row items-center justify-between font-baloo font-semibold text-[1.6vw] xl:text-[0.8vw] bg-[#EFD9CA]">
+        <div className="flex w-[85%] flex-row items-center justify-between bg-[#EFD9CA] px-2 font-baloo text-[1.6vw] font-semibold xl:text-[0.8vw]">
           <span>Total Amount to Repay:</span>
           <span>{formatAsString(loanAmount + loanInterest)} iBGT</span>
         </div>
         <ConnectButton.Custom>
-          {({
-            account,
-            chain,
-            openChainModal,
-            openConnectModal
-          }) => {
+          {({ account, chain, openChainModal, openConnectModal }) => {
             return (
               <button
-                className={`w-[48%] h-[12%] ${buttonLoadingColor ? "bg-[#C9E3B9] text-black" : "bg-[#E7B941] text-black"} hover:bg-[#C9E3B9] hover:text-black border-2 border-black font-amaticbold text-[4vw] xl:text-[1.7vw] flex items-center justify-center hover:scale-110`}
+                className={`h-[12%] w-[48%] ${buttonLoadingColor ? "bg-[#C9E3B9] text-black" : "bg-[#E7B941] text-black"} flex items-center justify-center border-2 border-black font-amaticbold text-[4vw] hover:scale-110 hover:bg-[#C9E3B9] hover:text-black xl:text-[1.7vw]`}
                 id="borrow-button"
                 onClick={() => {
-                  const button = document.getElementById('borrow-button')
-                  
-                  if(!account) {
-                    if(button && button.innerHTML === "connect wallet") {
-                      openConnectModal()
+                  const button = document.getElementById("borrow-button");
+
+                  if (!account) {
+                    if (button && button.innerHTML === "connect wallet") {
+                      openConnectModal();
+                    } else {
+                      button && (button.innerHTML = "connect wallet");
                     }
-                    else {
-                      button && (button.innerHTML = "connect wallet")
+                  } else if (chain?.name !== "Berachain") {
+                    if (button && button.innerHTML === "where berachain") {
+                      openChainModal();
+                    } else {
+                      button && (button.innerHTML = "where berachain");
                     }
-                  }
-                  else if(chain?.name !== "Berachain") {
-                    if(button && button.innerHTML === "where berachain") {
-                      openChainModal()
-                    }
-                    else {
-                      button && (button.innerHTML = "where berachain")
-                    }
-                  }
-                  else {
-                    handleButtonClick()
+                  } else {
+                    handleButtonClick();
                   }
                 }}
               >
                 create loan
               </button>
-            )
+            );
           }}
         </ConnectButton.Custom>
       </div>
     </div>
-  )
-}
+  );
+};

@@ -1,44 +1,43 @@
-"use client"
+"use client";
 
-import { useStake, useDesktop } from "../../../providers"
-import { LocksFetcher } from "../../stake"
+import { useDesktop, useStake } from "../../../providers";
 import {
-  StatsMobile,
+  ClaimTabMobile,
+  StakeBoxMobile,
   StakeButtonMobile,
+  StatsMobile,
   TogglesMobile,
   WalletBalanceMobile,
-  StakeBoxMobile,
-  ClaimTabMobile
-} from "../../stakeMobile"
-import {
-  NavBarMobile,
-  NavBarButtons,
-  FooterMobile
-} from "../../utils"
+} from "../../stakeMobile";
+import { FooterMobile, NavBarButtons, NavBarMobile } from "../../utils";
 
 export const StakePageMobile = () => {
+  const { chartOpen, setChartOpen, activeToggle } = useStake();
 
-  const {
-    chartOpen,
-    setChartOpen,
-    activeToggle
-  } = useStake()
-
-  const { navButtonsOpen } = useDesktop()
+  const { navButtonsOpen } = useDesktop();
 
   return (
-    <main className="w-screen h-screen">
+    <main className="h-screen w-screen">
       <NavBarMobile />
-      { navButtonsOpen && <NavBarButtons /> }
-      {
-        !navButtonsOpen &&
-        <div className="w-[100%] h-[89%] relative bg-cover bg-[url('/images/bg-goldiswap-mobile.png')]">
+      {navButtonsOpen && <NavBarButtons />}
+      {!navButtonsOpen && (
+        <div className="relative h-[89%] w-full bg-[url('/images/bg-goldiswap-mobile.png')] bg-cover">
           <TogglesMobile />
-          <h1 className="absolute top-[0%] left-[13%] text-[#D9C6BA] text-[9vw] font-amaticbold" id="page-title">Goldiswap</h1>
-          <h1 className="absolute top-[0%] left-[44%] text-[#E7B941] text-[9vw] font-amaticbold" id="page-title">{activeToggle}</h1>
-          {
-            activeToggle === 'CLAIM' ?
-            <ClaimTabMobile /> :
+          <h1
+            className="absolute left-[13%] top-0 font-amaticbold text-[9vw] text-[#D9C6BA]"
+            id="page-title"
+          >
+            Goldiswap
+          </h1>
+          <h1
+            className="absolute left-[44%] top-0 font-amaticbold text-[9vw] text-[#E7B941]"
+            id="page-title"
+          >
+            {activeToggle}
+          </h1>
+          {activeToggle === "CLAIM" ? (
+            <ClaimTabMobile />
+          ) : (
             <>
               <StakeBoxMobile />
               {/* <img className="absolute bottom-[26%] left-[80%] origin-bottom-right -rotate-[90deg] h-[1.27%] w-[8.36%]" src="/images/icon-bearoutline.png" alt="bearoutline" /> */}
@@ -51,12 +50,12 @@ export const StakePageMobile = () => {
               <StakeButtonMobile />
               <StatsMobile />
             </>
-          }
+          )}
           <WalletBalanceMobile />
           <FooterMobile />
           {/* <LocksFetcher /> */}
         </div>
-      }
+      )}
     </main>
-  )
-}
+  );
+};

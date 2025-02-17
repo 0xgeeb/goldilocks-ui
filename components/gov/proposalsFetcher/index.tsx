@@ -1,26 +1,25 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { useGoldiGovProposalsQuery } from "../../../src/graphql/generated/queries"
-import { useGov } from "../../../providers"
+import { useState, useEffect } from "react";
+import { useGoldiGovProposalsQuery } from "../../../src/graphql/generated/queries";
+import { useGov } from "../../../providers";
 
 export const ProposalsFetcher = () => {
+  const [skip, setSkip] = useState<boolean>(false);
 
-  const [skip, setSkip] = useState<boolean>(false)
-
-  const { refreshProposals } = useGov()
+  const { refreshProposals } = useGov();
 
   const { data, loading } = useGoldiGovProposalsQuery({
     variables: {},
-    skip
-  })
+    skip,
+  });
 
   useEffect(() => {
-    if(!loading && !!data) {
-      refreshProposals(data)
-      setSkip(true)
+    if (!loading && !!data) {
+      refreshProposals(data);
+      setSkip(true);
     }
-  }, [data, loading])
+  }, [data, loading]);
 
-  return null
-}
+  return null;
+};

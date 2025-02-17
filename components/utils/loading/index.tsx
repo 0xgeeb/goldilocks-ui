@@ -1,8 +1,7 @@
 export const Loading = () => {
-
   return (
-    <div className="w-screen h-screen bg-black flex items-center justify-center">
-      <h1 className="text-[10vw] text-white font-amaticbold">mmm porridge</h1>
+    <div className="flex h-screen w-screen items-center justify-center bg-black">
+      <h1 className="font-amaticbold text-[10vw] text-white">mmm porridge</h1>
     </div>
-  )
-}
+  );
+};

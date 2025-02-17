@@ -1,46 +1,44 @@
-import { useGoldilend } from "../../../providers"
+import { useGoldilend } from "../../../providers";
 
 export const LendToggles = () => {
-
-  const {
-    lendActiveToggle,
-    changeLendActiveToggle
-  } = useGoldilend()
+  const { lendActiveToggle, changeLendActiveToggle } = useGoldilend();
 
   return (
     <>
-      <div className={`absolute w-[40%] xl:w-[25%] h-[7%] xl:h-[8%] ${lendActiveToggle === 'LIQUIDATE' ? "left-[58%] xl:left-[43.5%]" : "left-[58%] xl:left-[40.5%]"} top-[3%] flex flex-row items-center justify-between`}>
+      <div
+        className={`absolute h-[7%] w-[40%] xl:h-[8%] xl:w-[25%] ${lendActiveToggle === "LIQUIDATE" ? "left-[58%] xl:left-[43.5%]" : "left-[58%] xl:left-[40.5%]"} top-[3%] flex flex-row items-center justify-between`}
+      >
         <div
-          className={`font-baloo font-semibold text-[2vw] xl:text-[1vw] h-[100%] w-[22.5%] border-2 border-black ${lendActiveToggle === 'LOCK' ? "bg-[#E7B941]" : "bg-[#E2D6CF]"} flex items-center justify-center hover:bg-[#C9E3B9] cursor-pointer`}
-          onClick={() => changeLendActiveToggle('LOCK')}
+          className={`h-[100%] w-[22.5%] border-2 border-black font-baloo text-[2vw] font-semibold xl:text-[1vw] ${lendActiveToggle === "LOCK" ? "bg-[#E7B941]" : "bg-[#E2D6CF]"} flex cursor-pointer items-center justify-center hover:bg-[#C9E3B9]`}
+          onClick={() => changeLendActiveToggle("LOCK")}
         >
           LOCK
         </div>
         <div
-          className={`font-baloo font-semibold text-[2vw] xl:text-[1vw] h-[100%] w-[22.5%] border-2 border-black ${lendActiveToggle === 'STAKE' ? "bg-[#E7B941]" : "bg-[#E2D6CF]"} flex items-center justify-center hover:bg-[#C9E3B9] cursor-pointer`}
-          onClick={() => changeLendActiveToggle('STAKE')}
+          className={`h-[100%] w-[22.5%] border-2 border-black font-baloo text-[2vw] font-semibold xl:text-[1vw] ${lendActiveToggle === "STAKE" ? "bg-[#E7B941]" : "bg-[#E2D6CF]"} flex cursor-pointer items-center justify-center hover:bg-[#C9E3B9]`}
+          onClick={() => changeLendActiveToggle("STAKE")}
         >
           STAKE
         </div>
         <div
-          className={`font-baloo font-semibold text-[2vw] xl:text-[1vw] h-[100%] w-[22.5%] border-2 border-black ${lendActiveToggle === 'UNSTAKE' ? "bg-[#E7B941]" : "bg-[#E2D6CF]"} flex items-center justify-center hover:bg-[#C9E3B9] cursor-pointer`}
-          onClick={() => changeLendActiveToggle('UNSTAKE')}
+          className={`h-[100%] w-[22.5%] border-2 border-black font-baloo text-[2vw] font-semibold xl:text-[1vw] ${lendActiveToggle === "UNSTAKE" ? "bg-[#E7B941]" : "bg-[#E2D6CF]"} flex cursor-pointer items-center justify-center hover:bg-[#C9E3B9]`}
+          onClick={() => changeLendActiveToggle("UNSTAKE")}
         >
           UNSTAKE
         </div>
         <div
-          className={`font-baloo font-semibold text-[2vw] xl:text-[1vw] h-[100%] w-[22.5%] border-2 border-black ${lendActiveToggle === 'CLAIM' ? "bg-[#E7B941]" : "bg-[#E2D6CF]"} flex items-center justify-center hover:bg-[#C9E3B9] cursor-pointer`}
-          onClick={() => changeLendActiveToggle('CLAIM')}
+          className={`h-[100%] w-[22.5%] border-2 border-black font-baloo text-[2vw] font-semibold xl:text-[1vw] ${lendActiveToggle === "CLAIM" ? "bg-[#E7B941]" : "bg-[#E2D6CF]"} flex cursor-pointer items-center justify-center hover:bg-[#C9E3B9]`}
+          onClick={() => changeLendActiveToggle("CLAIM")}
         >
           CLAIM
         </div>
       </div>
       <div
-        className={`absolute top-[87%] xl:top-[3%] right-[2%] font-baloo font-semibold text-[2vw] xl:text-[1vw] h-[7%] xl:h-[8%] w-[11%] xl:w-[9%] border-2 border-black ${lendActiveToggle === 'LIQUIDATE' ? "bg-[#E7B941]" : "bg-[#E2D6CF]"} flex items-center justify-center hover:bg-[#C9E3B9] cursor-pointer`}
-        onClick={() => changeLendActiveToggle('LIQUIDATE')}
+        className={`absolute right-[2%] top-[87%] h-[7%] w-[11%] border-2 border-black font-baloo text-[2vw] font-semibold xl:top-[3%] xl:h-[8%] xl:w-[9%] xl:text-[1vw] ${lendActiveToggle === "LIQUIDATE" ? "bg-[#E7B941]" : "bg-[#E2D6CF]"} flex cursor-pointer items-center justify-center hover:bg-[#C9E3B9]`}
+        onClick={() => changeLendActiveToggle("LIQUIDATE")}
       >
         LIQUIDATE
       </div>
     </>
-  )
-}
+  );
+};

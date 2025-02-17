@@ -1,32 +1,28 @@
-import { useGoldiswap } from "../../../providers"
+import { useGoldiswap } from "../../../providers";
 
 export const TogglesMobile = () => {
-  
-  const {
-    activeToggle,
-    changeActiveToggle
-  } = useGoldiswap()
+  const { activeToggle, changeActiveToggle } = useGoldiswap();
 
   return (
     <>
       <div
-        className={`absolute w-[13%] tall:w-[15.34%] h-[3.9%] bottom-[58.4%] right-[15.5%] border-l-2 border-r-2 border-t-2 border-black origin-bottom-right rotate-[90deg] ${activeToggle === 'REDEEM' ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} focus:bg-[#F3AA8A] cursor-pointer font-baloo text-[3vw] flex items-center justify-center`}
-        onClick={() => changeActiveToggle('REDEEM')}
+        className={`absolute bottom-[58.4%] right-[15.5%] h-[3.9%] w-[13%] origin-bottom-right rotate-[90deg] border-l-2 border-r-2 border-t-2 border-black tall:w-[15.34%] ${activeToggle === "REDEEM" ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} flex cursor-pointer items-center justify-center font-baloo text-[3vw] focus:bg-[#F3AA8A]`}
+        onClick={() => changeActiveToggle("REDEEM")}
       >
         <span className="scale-[-1]">REDEEM</span>
       </div>
       <div
-        className={`absolute w-[13%] tall:w-[15.34%] h-[3.9%] bottom-[49.4%] right-[15.5%] border-l-2 border-r-2 border-t-2 border-black origin-bottom-right rotate-[90deg] ${activeToggle === 'SELL' ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} focus:bg-[#F3AA8A] cursor-pointer font-baloo text-[3vw] flex items-center justify-center`}
-        onClick={() => changeActiveToggle('SELL')}
+        className={`absolute bottom-[49.4%] right-[15.5%] h-[3.9%] w-[13%] origin-bottom-right rotate-[90deg] border-l-2 border-r-2 border-t-2 border-black tall:w-[15.34%] ${activeToggle === "SELL" ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} flex cursor-pointer items-center justify-center font-baloo text-[3vw] focus:bg-[#F3AA8A]`}
+        onClick={() => changeActiveToggle("SELL")}
       >
         <span className="scale-[-1]">SELL</span>
       </div>
       <div
-        className={`absolute w-[13%] tall:w-[15.34%] h-[3.9%] bottom-[40.4%] right-[15.5%] border-l-2 border-r-2 border-t-2 border-black origin-bottom-right rotate-[90deg] ${activeToggle === 'BUY' ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} focus:bg-[#F3AA8A] cursor-pointer font-baloo text-[3vw] flex items-center justify-center`}
-        onClick={() => changeActiveToggle('BUY')}
+        className={`absolute bottom-[40.4%] right-[15.5%] h-[3.9%] w-[13%] origin-bottom-right rotate-[90deg] border-l-2 border-r-2 border-t-2 border-black tall:w-[15.34%] ${activeToggle === "BUY" ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} flex cursor-pointer items-center justify-center font-baloo text-[3vw] focus:bg-[#F3AA8A]`}
+        onClick={() => changeActiveToggle("BUY")}
       >
         <span className="scale-[-1]">BUY</span>
       </div>
     </>
-  )
-}
+  );
+};

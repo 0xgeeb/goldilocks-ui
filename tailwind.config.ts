@@ -9,12 +9,12 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        amatic: ['var(--font-amatic)'],
-        amaticbold: ['var(--font-amaticbold)'],
-        baloo: ['var(--font-baloo)']
+        amatic: ["var(--font-amatic)"],
+        amaticbold: ["var(--font-amaticbold)"],
+        baloo: ["var(--font-baloo)"],
       },
       screens: {
-        'tall': { 'raw': '(min-height: 900px)' },
+        tall: { raw: "(min-height: 900px)" },
       },
     },
   },

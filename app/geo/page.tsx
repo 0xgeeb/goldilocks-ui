@@ -1,15 +1,16 @@
-import type { Metadata } from "next"
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'mf geoblocked',
-  description: 'Goldilocks Geoblocked'
-}
+  title: "mf geoblocked",
+  description: "Goldilocks Geoblocked",
+};
 
 export default function GeoBlocked() {
-
   return (
-    <main className="w-screen h-screen">
-      <h1 className="font-amaticbold font-medium text-[5vw] m-auto">ur region is blocked ser</h1>
+    <main className="h-screen w-screen">
+      <h1 className="m-auto font-amaticbold text-[5vw] font-medium">
+        ur region is blocked ser
+      </h1>
     </main>
-  )
+  );
 }

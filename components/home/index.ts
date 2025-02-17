@@ -1,3 +1,3 @@
-export * from './homePage'
-export * from './homePageMobile'
-export * from './wutPopup'
+export * from "./homePage";
+export * from "./homePageMobile";
+export * from "./wutPopup";

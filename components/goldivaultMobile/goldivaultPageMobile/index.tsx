@@ -1,33 +1,29 @@
-"use client"
+"use client";
 
-import { useDesktop } from "../../../providers"
-import {
-  StatsMobile,
-  VaultDisplayMobile
-} from "../"
-import {
-  NavBarMobile,
-  NavBarButtons,
-  FooterMobile
-} from "../../utils"
+import { VaultDisplayMobile } from "../";
+import { useDesktop } from "../../../providers";
+import { FooterMobile, NavBarButtons, NavBarMobile } from "../../utils";
 
 export const GoldivaultPageMobile = () => {
-
-  const { navButtonsOpen } = useDesktop()
+  const { navButtonsOpen } = useDesktop();
 
   return (
-    <main className="w-screen h-screen">
+    <main className="h-screen w-screen">
       <NavBarMobile />
-      { navButtonsOpen && <NavBarButtons /> }
-      {
-        !navButtonsOpen &&
-        <div className="w-[100%] h-[89%] relative bg-cover bg-[url('/images/bg-goldivault-mobile.png')]">
-          <h1 className="absolute top-[0%] left-[10%] text-[#D9C6BA] text-[10vw] font-amaticbold" id="page-title">Goldivaults</h1>
+      {navButtonsOpen && <NavBarButtons />}
+      {!navButtonsOpen && (
+        <div className="relative h-[89%] w-full bg-[url('/images/bg-goldivault-mobile.png')] bg-cover">
+          <h1
+            className="absolute left-[10%] top-0 font-amaticbold text-[10vw] text-[#D9C6BA]"
+            id="page-title"
+          >
+            Goldivaults
+          </h1>
           {/* <StatsMobile /> */}
           <VaultDisplayMobile />
           <FooterMobile />
         </div>
-      }
+      )}
     </main>
-  )
-}
+  );
+};

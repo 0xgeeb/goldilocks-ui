@@ -1,95 +1,110 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { useAccount } from "wagmi"
-import { useBorrow } from "../../../providers"
+import { useState, useEffect } from "react";
+import { useAccount } from "wagmi";
+import { useBorrow } from "../../../providers";
 
-export const WalletBalance = ()=> {
+export const WalletBalance = () => {
+  const [walletOpen, setWalletOpen] = useState<boolean>(false);
 
-  const [walletOpen, setWalletOpen] = useState<boolean>(false)
+  const { isConnected } = useAccount();
 
-  const { isConnected } = useAccount()
-
-  const { borrowWalletInfo, refreshBorrowWalletInfo } = useBorrow()
+  const { borrowWalletInfo, refreshBorrowWalletInfo } = useBorrow();
 
   useEffect(() => {
-    refreshBorrowWalletInfo()
-  }, [isConnected])
+    refreshBorrowWalletInfo();
+  }, [isConnected]);
 
   const formatAsString = (num: number): string => {
-    return num.toLocaleString('en-US', { maximumFractionDigits: 2 })
-  }
+    return num.toLocaleString("en-US", { maximumFractionDigits: 2 });
+  };
 
   const formatAsClaimable = (num: number): string => {
-    return num.toLocaleString('en-US', { maximumFractionDigits: 4 })
-  }
+    return num.toLocaleString("en-US", { maximumFractionDigits: 4 });
+  };
 
   const handleInfo = (num: number): string => {
-    if(num > 0) {
-      return formatAsString(num)
+    if (num > 0) {
+      return formatAsString(num);
+    } else {
+      return "-";
     }
-    else {
-      return "-"
-    }
-  }
+  };
 
   const handleInfoClaimable = (num: number): string => {
-    if(num > 0) {
-      return formatAsClaimable(num)
+    if (num > 0) {
+      return formatAsClaimable(num);
+    } else {
+      return "-";
     }
-    else {
-      return "-"
-    }
-  }
+  };
 
   useEffect(() => {
-    removeWalletOpen()
-    window.addEventListener("resize", removeWalletOpen)
-    return () => window.removeEventListener("resize", removeWalletOpen)
-  }, [])
-  
+    removeWalletOpen();
+    window.addEventListener("resize", removeWalletOpen);
+    return () => window.removeEventListener("resize", removeWalletOpen);
+  }, []);
+
   function removeWalletOpen() {
-    setWalletOpen(false)
+    setWalletOpen(false);
   }
 
   return (
     <>
       <div
-        className={`absolute h-[4%] w-[14%] md:w-[13%] lg:w-[10.5%] xl:w-[10%] top-[35%] xl:top-[14%] left-[25%] md:left-[20%] lg:left-[25%] xl:left-[75%] 2xl:left-[71.875%] origin-top-left xl:origin-bottom-left rotate-[90deg] hover:scale-105 ${walletOpen && window.innerWidth >= 1280 ? "translate-x-[220%]" : ""} bg-[#D5A774] flex justify-center items-center font-baloo font-semibold text-[1.5vw] lg:text-[1.1vw] xl:text-[1vw] 2xl:text-[0.8vw] border-r-2 border-l-2 border-b-2 xl:border-b-0 xl:border-t-2 border-black cursor-pointer transition-transform ease-linear`}
-        onClick={() => setWalletOpen(prev => !prev)}
+        className={`absolute left-[25%] top-[35%] h-[4%] w-[14%] origin-top-left rotate-[90deg] hover:scale-105 md:left-[20%] md:w-[13%] lg:left-[25%] lg:w-[10.5%] xl:left-[75%] xl:top-[14%] xl:w-[10%] xl:origin-bottom-left 2xl:left-[71.875%] ${walletOpen && window.innerWidth >= 1280 ? "translate-x-[220%]" : ""} flex cursor-pointer items-center justify-center border-b-2 border-l-2 border-r-2 border-black bg-[#D5A774] font-baloo text-[1.5vw] font-semibold transition-transform ease-linear lg:text-[1.1vw] xl:border-b-0 xl:border-t-2 xl:text-[1vw] 2xl:text-[0.8vw]`}
+        onClick={() => setWalletOpen((prev) => !prev)}
       >
         <span className="scale-[-1]">WALLET BALANCE</span>
       </div>
-      <div className={`absolute w-[19%] lg:w-[22%] h-[32%] top-[18%] md:top-[17%] lg:top-[15%] xl:top-[14%] left-[61%] lg:left-[53%] 2xl:left-[49.875%] ${walletOpen ? "translate-x-[100%] border-r-2" : ""} font-baloo font-semibold text-[1.5vw] lg:text-[1.25vw] xl:text-[1vw] border-t-2 border-b-2 border-black bg-[#D5A774] bg-opacity-30 flex flex-col justify-between py-[1.5%] px-[0.5%] xl:px-[3%] text-white transition-transform ease-linear`}>
-        <div className="flex flex-row items-center justify-between w-[100%]">
-          <span className="">{window.innerWidth > 1024 ? "locks balance:" : "locks:"}</span>
+      <div
+        className={`absolute left-[61%] top-[18%] h-[32%] w-[19%] md:top-[17%] lg:left-[53%] lg:top-[15%] lg:w-[22%] xl:top-[14%] 2xl:left-[49.875%] ${walletOpen ? "translate-x-[100%] border-r-2" : ""} flex flex-col justify-between border-b-2 border-t-2 border-black bg-[#D5A774] bg-opacity-30 px-[0.5%] py-[1.5%] font-baloo text-[1.5vw] font-semibold text-white transition-transform ease-linear lg:text-[1.25vw] xl:px-[3%] xl:text-[1vw]`}
+      >
+        <div className="flex w-[100%] flex-row items-center justify-between">
+          <span className="">
+            {window.innerWidth > 1024 ? "locks balance:" : "locks:"}
+          </span>
           <span className="">{handleInfo(borrowWalletInfo.locks)}</span>
         </div>
-        <div className="flex flex-row items-center justify-between w-[100%]">
-          <span className="">{window.innerWidth > 1024 ? "honey balance:" : "honey:"}</span>
+        <div className="flex w-[100%] flex-row items-center justify-between">
+          <span className="">
+            {window.innerWidth > 1024 ? "honey balance:" : "honey:"}
+          </span>
           <span className="">{handleInfo(borrowWalletInfo.honey)}</span>
         </div>
-        <div className="flex flex-row items-center justify-between w-[100%]">
-          <span className="">{window.innerWidth > 1024 ? "porridge balance:" : "porridge:"}</span>
+        <div className="flex w-[100%] flex-row items-center justify-between">
+          <span className="">
+            {window.innerWidth > 1024 ? "porridge balance:" : "porridge:"}
+          </span>
           <span className="">{handleInfo(borrowWalletInfo.prg)}</span>
         </div>
-        <div className="flex flex-row items-center justify-between w-[100%]">
-          <span className="">{window.innerWidth > 1024 ? "staked locks:" : "staked:"}</span>
+        <div className="flex w-[100%] flex-row items-center justify-between">
+          <span className="">
+            {window.innerWidth > 1024 ? "staked locks:" : "staked:"}
+          </span>
           <span className="">{handleInfo(borrowWalletInfo.staked)}</span>
         </div>
-        <div className="flex flex-row items-center justify-between w-[100%]">
-          <span className="">{window.innerWidth > 1024 ? "locked locks:" : "locked:"}</span>
+        <div className="flex w-[100%] flex-row items-center justify-between">
+          <span className="">
+            {window.innerWidth > 1024 ? "locked locks:" : "locked:"}
+          </span>
           <span className="">{handleInfo(borrowWalletInfo.locked)}</span>
         </div>
-        <div className="flex flex-row items-center justify-between w-[100%]">
-          <span className="">{window.innerWidth > 1024 ? "borrowed honey:" : "borrowed:"}</span>
+        <div className="flex w-[100%] flex-row items-center justify-between">
+          <span className="">
+            {window.innerWidth > 1024 ? "borrowed honey:" : "borrowed:"}
+          </span>
           <span className="">{handleInfo(borrowWalletInfo.borrowed)}</span>
         </div>
-        <div className="flex flex-row items-center justify-between w-[100%]">
-          <span className="">{window.innerWidth > 1024 ? "claimable porridge:" : "claimable:"}</span>
-          <span className="">{handleInfoClaimable(borrowWalletInfo.claimable)}</span>
+        <div className="flex w-[100%] flex-row items-center justify-between">
+          <span className="">
+            {window.innerWidth > 1024 ? "claimable porridge:" : "claimable:"}
+          </span>
+          <span className="">
+            {handleInfoClaimable(borrowWalletInfo.claimable)}
+          </span>
         </div>
       </div>
     </>
-  )
-}
+  );
+};

@@ -1,40 +1,39 @@
-"use client"
+"use client";
 
-import { useBorrow, useDesktop } from "../../../providers"
-import { LocksFetcher } from "../../borrow"
+import { useBorrow, useDesktop } from "../../../providers";
 import {
-  StatsMobile,
-  BorrowButtonMobile,
   BorrowBoxMobile,
+  BorrowButtonMobile,
+  StatsMobile,
   TogglesMobile,
-  WalletBalanceMobile
-} from "../../borrowMobile"
-import {
-  NavBarMobile,
-  NavBarButtons,
-  FooterMobile,
-} from "../../utils"
+  WalletBalanceMobile,
+} from "../../borrowMobile";
+import { FooterMobile, NavBarButtons, NavBarMobile } from "../../utils";
 
 export const BorrowPageMobile = () => {
+  const { chartOpen, setChartOpen, activeToggle } = useBorrow();
 
-  const {
-    chartOpen,
-    setChartOpen,
-    activeToggle
-  } = useBorrow()
-
-  const { navButtonsOpen } = useDesktop()
+  const { navButtonsOpen } = useDesktop();
 
   return (
-    <main className="w-screen h-screen">
+    <main className="h-screen w-screen">
       <NavBarMobile />
-      { navButtonsOpen && <NavBarButtons /> }
-      {
-        !navButtonsOpen &&
-        <div className="w-[100%] h-[89%] relative bg-cover bg-[url('/images/bg-goldiswap-mobile.png')]">
+      {navButtonsOpen && <NavBarButtons />}
+      {!navButtonsOpen && (
+        <div className="relative h-[89%] w-full bg-[url('/images/bg-goldiswap-mobile.png')] bg-cover">
           <TogglesMobile />
-          <h1 className="absolute top-[0%] left-[13%] text-[#D9C6BA] text-[9vw] font-amaticbold" id="page-title">Goldiswap</h1>
-          <h1 className="absolute top-[0%] left-[44%] text-[#E7B941] text-[9vw] font-amaticbold" id="page-title">{activeToggle}</h1>
+          <h1
+            className="absolute left-[13%] top-0 font-amaticbold text-[9vw] text-[#D9C6BA]"
+            id="page-title"
+          >
+            Goldiswap
+          </h1>
+          <h1
+            className="absolute left-[44%] top-0 font-amaticbold text-[9vw] text-[#E7B941]"
+            id="page-title"
+          >
+            {activeToggle}
+          </h1>
           <WalletBalanceMobile />
           <BorrowBoxMobile />
           {/* <img className="absolute bottom-[26%] left-[80%] origin-bottom-right -rotate-[90deg] h-[1.27%] w-[8.36%]" src="/images/icon-bearoutline.png" alt="bearoutline" /> */}
@@ -49,7 +48,7 @@ export const BorrowPageMobile = () => {
           <FooterMobile />
           {/* <LocksFetcher /> */}
         </div>
-      }
+      )}
     </main>
-  )
-}
+  );
+};

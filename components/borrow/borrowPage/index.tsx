@@ -1,30 +1,28 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client"
-import { useBorrow, useDesktop, useGeo } from "../../../providers"
-import { useGoldiswapMath } from "../../../hooks/useGoldiswapMath"
-import { BorrowPageMobile } from "../../borrowMobile"
-import { 
-  NavBar,
-  Footer,
-  Loading,
-  ChangeChain,
-  TAndCs
-} from "../../utils"
+import { useEffect } from "react";
+
+import { useAtom } from "jotai";
+
+import { pageLoadingAtom } from "@/app/_components/atoms/pageLoadingAtom";
+import CsrPageLayout from "@/app/_components/CsrPageLayout";
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+
+import { useGoldiswapMath } from "../../../hooks/useGoldiswapMath";
+import { useBorrow, useDesktop, useGeo } from "../../../providers";
 import {
   BorrowBox,
   BorrowButton,
-  Toggles,
-  Stats,
-  LocksFetcher,
   BorrowPopup,
-  WalletBalance
-} from "../../borrow"
+  Stats,
+  Toggles,
+  WalletBalance,
+} from "../../borrow";
+import { BorrowPageMobile } from "../../borrowMobile";
+import { Loading, TAndCs } from "../../utils";
 
 export const BorrowPage = () => {
-
-  const [pageLoading, setPageLoading] = useState<boolean>(true)
+  const [pageLoading, setPageLoading] = useAtom(pageLoadingAtom);
 
   const {
     chartOpen,
@@ -36,96 +34,120 @@ export const BorrowPage = () => {
     setBorrowPopupToggle,
     activeToggle,
     wutPopup,
-    setWutPopup
-  } = useBorrow()
+    setWutPopup,
+  } = useBorrow();
 
-  const { isDesktop } = useDesktop()
+  const { isDesktop } = useDesktop();
 
-  const { signed } = useGeo()
+  const { signed } = useGeo();
 
-  const { marketPrice } = useGoldiswapMath()
+  const { marketPrice } = useGoldiswapMath();
 
   useEffect(() => {
-    refreshBorrowInfo()
-    setPageLoading(false)
-  }, [])
+    refreshBorrowInfo();
+    setPageLoading(false);
+  }, []);
 
   const client = new ApolloClient({
     uri: process.env.NEXT_PUBLIC_GHOST_GRAPH_URL,
     cache: new InMemoryCache(),
     headers: {
-      "X-GHOST-KEY": process.env.NEXT_PUBLIC_GHOST_GRAPH_KEY!
-    }
-  })
+      "X-GHOST-KEY": process.env.NEXT_PUBLIC_GHOST_GRAPH_KEY!,
+    },
+  });
 
   const formatAsTokenPrice = (num: number): string => {
-    return num.toLocaleString('en-US', { maximumFractionDigits: 2 })
-  }
+    return num.toLocaleString("en-US", { maximumFractionDigits: 2 });
+  };
 
   const handleTokenInfo = (num: number) => {
-    if(infoLoading) {
-      return "-"
+    if (infoLoading) {
+      return "-";
+    } else if (num > 0) {
+      return formatAsTokenPrice(num);
+    } else {
+      return "-";
     }
-    else if(num > 0) {
-      return formatAsTokenPrice(num)
-    }
-    else {
-      return "-"
-    }
-  }
+  };
 
   const formatDate = (timestamp: number): string => {
-    const ONE_MINUTE = 60
-    const ONE_HOUR = 60 * ONE_MINUTE
-    const ONE_DAY = 24 * ONE_HOUR
-    const ONE_WEEK = 7 * ONE_DAY
-    const now = Date.now()
-    const secondsAgo = (now - timestamp) / 1000
+    const ONE_MINUTE = 60;
+    const ONE_HOUR = 60 * ONE_MINUTE;
+    const ONE_DAY = 24 * ONE_HOUR;
+    const ONE_WEEK = 7 * ONE_DAY;
+    const now = Date.now();
+    const secondsAgo = (now - timestamp) / 1000;
     if (secondsAgo < ONE_MINUTE) {
-      return 'just now';
+      return "just now";
     } else if (secondsAgo < ONE_HOUR) {
-      const minutesAgo = Math.floor(secondsAgo / ONE_MINUTE)
-      return `${minutesAgo} minute${minutesAgo > 1 ? 's' : ''} ago`
+      const minutesAgo = Math.floor(secondsAgo / ONE_MINUTE);
+      return `${minutesAgo} minute${minutesAgo > 1 ? "s" : ""} ago`;
     } else if (secondsAgo < ONE_DAY) {
-      const hoursAgo = Math.floor(secondsAgo / ONE_HOUR)
-      return `${hoursAgo} hour${hoursAgo > 1 ? 's' : ''} ago`
+      const hoursAgo = Math.floor(secondsAgo / ONE_HOUR);
+      return `${hoursAgo} hour${hoursAgo > 1 ? "s" : ""} ago`;
     } else if (secondsAgo < ONE_WEEK) {
-      const daysAgo = Math.floor(secondsAgo / ONE_DAY)
-      return `${daysAgo} day${daysAgo > 1 ? 's' : ''} ago`
+      const daysAgo = Math.floor(secondsAgo / ONE_DAY);
+      return `${daysAgo} day${daysAgo > 1 ? "s" : ""} ago`;
     } else {
-      const weeksAgo = Math.floor(secondsAgo / ONE_WEEK)
-      return `${weeksAgo} week${weeksAgo > 1 ? 's' : ''} ago`
+      const weeksAgo = Math.floor(secondsAgo / ONE_WEEK);
+      return `${weeksAgo} week${weeksAgo > 1 ? "s" : ""} ago`;
     }
-  }
+  };
 
   const handlePopups = () => {
-    if(borrowPopupToggle) {
-      setBorrowPopupToggle(false)
+    if (borrowPopupToggle) {
+      setBorrowPopupToggle(false);
     }
-    if(wutPopup) {
-      setWutPopup(false)
+    if (wutPopup) {
+      setWutPopup(false);
     }
-  }
-  
+  };
+
   return (
     <ApolloProvider client={client}>
-      {
-        pageLoading ?
-        <Loading /> :
-        isDesktop ?
-        (
-          signed !== 'TRUE' ?
-          <TAndCs /> :
-          <main className="w-screen h-screen" onClick={() => handlePopups()}>
-            <NavBar wutPopup={wutPopup} setWutPopup={setWutPopup} />
-            <div className="w-[100%] h-[89%] xl:h-[85%] bg-cover bg-bottom bg-[url('/images/bg-goldiswap.png')] relative">
+      {pageLoading ? (
+        <Loading />
+      ) : isDesktop ? (
+        signed !== "TRUE" ? (
+          <TAndCs />
+        ) : (
+          <CsrPageLayout
+            onPageClick={() => handlePopups()}
+            wutPopup={wutPopup}
+            setWutPopup={setWutPopup}
+            bgImageUrl="/images/bg-goldiswap.png"
+          >
+            <>
               <Toggles />
-              { borrowPopupToggle && <BorrowPopup /> }
-              <h1 className="absolute top-[-0.5%] lg:top-[16%] 2xl:top-[12.16%] left-[5%] xl:left-[7.5%] text-[#D9C6BA] text-[10vw] lg:text-[8vw] tall:text-[12vw] tall:md:text-[10vw] tall:lg:text-[8vw] font-amaticbold" id="page-title">{activeToggle}</h1>
-              <div className="absolute top-[15%] md:top-[14%] lg:top-[12%] xl:top-[11%] left-[10%] md:left-[20%] lg:left-[25%] 2xl:left-[28.125%] w-[80%] md:w-[60%] lg:w-[50%] 2xl:w-[43.75%] h-[3%] bg-[#634C43] flex flex-row items-center justify-between px-2 text-[2.25vw] md:text-[1.75vw] lg:text-[1.5vw] xl:text-[1vw] 2xl:text-[0.85vw]">
-                <span className="text-white font-baloo mt-1">PSL/FSL ratio: {handleTokenInfo((borrowInfo.psl / borrowInfo.fsl) * 100)}%</span>
-                <span className="text-white font-baloo mt-1">market cap: {handleTokenInfo(borrowInfo.supply * marketPrice(borrowInfo.fsl, borrowInfo.psl, borrowInfo.supply) / 1000000)}m</span>
-                <span className="text-white font-baloo mt-1">last floor raise: {formatDate(borrowInfo.lastFloorRaise * Math.pow(10, 21))}</span>
+              {borrowPopupToggle && <BorrowPopup />}
+              <h1
+                className="absolute left-[5%] top-[-0.5%] font-amaticbold text-[10vw] text-[#D9C6BA] lg:top-[16%] lg:text-[8vw] xl:left-[7.5%] 2xl:top-[12.16%] tall:text-[12vw] tall:md:text-[10vw] tall:lg:text-[8vw]"
+                id="page-title"
+              >
+                {activeToggle}
+              </h1>
+              <div className="absolute left-[10%] top-[15%] flex h-[3%] w-4/5 flex-row items-center justify-between bg-[#634C43] px-2 text-[2.25vw] md:left-[20%] md:top-[14%] md:w-3/5 md:text-[1.75vw] lg:left-1/4 lg:top-[12%] lg:w-[50%] lg:text-[1.5vw] xl:top-[11%] xl:text-[1vw] 2xl:left-[28.125%] 2xl:w-[43.75%] 2xl:text-[0.85vw]">
+                <span className="mt-1 font-baloo text-white">
+                  PSL/FSL ratio:{" "}
+                  {handleTokenInfo((borrowInfo.psl / borrowInfo.fsl) * 100)}%
+                </span>
+                <span className="mt-1 font-baloo text-white">
+                  market cap:{" "}
+                  {handleTokenInfo(
+                    (borrowInfo.supply *
+                      marketPrice(
+                        borrowInfo.fsl,
+                        borrowInfo.psl,
+                        borrowInfo.supply,
+                      )) /
+                      1000000,
+                  )}
+                  m
+                </span>
+                <span className="mt-1 font-baloo text-white">
+                  last floor raise:{" "}
+                  {formatDate(borrowInfo.lastFloorRaise * Math.pow(10, 21))}
+                </span>
               </div>
               <WalletBalance />
               <BorrowBox />
@@ -138,14 +160,13 @@ export const BorrowPage = () => {
               </div> */}
               <BorrowButton />
               <Stats />
-              <Footer />
               {/* <LocksFetcher /> */}
-              <ChangeChain />
-            </div>
-          </main>
-        ) :
+            </>
+          </CsrPageLayout>
+        )
+      ) : (
         <BorrowPageMobile />
-      }
+      )}
     </ApolloProvider>
-  )
-}
+  );
+};
