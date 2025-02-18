@@ -1293,8 +1293,6 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       reservoirLeverage: (1 / currentYtPrice) * 2.25,
     };
 
-    console.log(response)
-
     setGoldivaultInfoRusdState(response);
     setInfoLoadingState(false);
   };

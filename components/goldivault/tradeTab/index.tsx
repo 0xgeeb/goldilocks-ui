@@ -308,7 +308,7 @@ export const TradeTab = ({ params }: TradeTabProps) => {
         onClick={() => changeSlippageToggle(true)}
       />
       <div
-        className="absolute left-[47.27%] top-[44%] z-10 flex h-10 w-10 cursor-pointer items-center justify-center rounded-3xl border-2 border-[#FFCD00] bg-[#995816] hover:scale-[110%]"
+        className="absolute left-[47.27%] top-[44%] z-10 flex h-10 w-10 cursor-pointer items-center justify-center rounded-3xl border-2 border-[#FFCD00] bg-[#033E5E] hover:scale-[140%]"
         onClick={() => flipTokens()}
       >
         <svg

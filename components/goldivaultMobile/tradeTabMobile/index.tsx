@@ -297,7 +297,7 @@ export const TradeTabMobile = ({ params }: TradeTabProps) => {
   return (
     <div className="relative flex h-[100%] w-[100%] flex-col">
       <div
-        className="absolute left-[42.5%] top-[45%] z-10 flex h-10 w-10 cursor-pointer items-center justify-center rounded-3xl border-2 border-[#FFCD00] bg-[#995816] hover:scale-[110%]"
+        className="absolute left-[42.5%] top-[45%] z-10 flex h-10 w-10 cursor-pointer items-center justify-center rounded-3xl border-2 border-[#FFCD00] bg-[#033E5E]"
         onClick={() => flipTokens()}
       >
         <svg

@@ -217,7 +217,7 @@ export const VaultBox = ({ params }: VaultBoxProps) => {
             <LiqManagerTab />
           ) : (
             <div className="relative flex h-[100%] w-[100%] flex-col">
-              <div className="absolute left-[47.27%] top-[44%] z-10 flex h-10 w-10 items-center justify-center rounded-3xl border-2 border-[#FFCD00] bg-[#995816]">
+              <div className="absolute left-[47.27%] top-[44%] z-10 flex h-10 w-10 items-center justify-center rounded-3xl border-2 border-[#FFCD00] bg-[#033E5E]">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
