@@ -2364,7 +2364,7 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       setInfoPopupToggleState(true)
     }
     if(info === 'fees') {
-      setInfoPopupTextState('3% of points and 33% of LP trading fees (0.05%)')
+      setInfoPopupTextState('3% of points and 33% of LP trading fees (0.05%) and 0.5% fee on proceeds from YT trades')
       setInfoPopupToggleState(true)
     }
   };
