@@ -5,9 +5,9 @@ import { useAccount } from "wagmi";
 import { useGoldivault } from "../../../providers";
 import {
   TradeTabMobile,
-  PoolsPopupMobile,
   NotificationMobile,
   VaultInfoMobile,
+  LiqManagerTabMobile
 } from "..";
 
 type VaultBoxProps = {
@@ -44,9 +44,6 @@ export const VaultBoxMobile = ({ params }: VaultBoxProps) => {
     refreshGoldivaultInfoWeeth,
     refreshGoldivaultWalletInfoWeeth,
     goldivaultWalletInfoWeeth,
-    refreshGoldivaultInfoBhoney,
-    refreshGoldivaultWalletInfoBhoney,
-    goldivaultWalletInfoBhoney,
     refreshGoldivaultInfoSolvbtc,
     refreshGoldivaultWalletInfoSolvbtc,
     goldivaultWalletInfoSolvbtc,
@@ -56,6 +53,9 @@ export const VaultBoxMobile = ({ params }: VaultBoxProps) => {
     refreshGoldivaultInfoRusd,
     refreshGoldivaultWalletInfoRusd,
     goldivaultWalletInfoRusd,
+    refreshGoldivaultInfoEbtc,
+    refreshGoldivaultWalletInfoEbtc,
+    goldivaultWalletInfoEbtc,
     activeToggle,
     calculateOTRedeem,
     notification,
@@ -75,55 +75,55 @@ export const VaultBoxMobile = ({ params }: VaultBoxProps) => {
   const vaultOT =
     params.vaultToken === "weeth"
       ? goldivaultWalletInfoWeeth.weot
-      : params.vaultToken === "bhoney"
-        ? goldivaultWalletInfoBhoney.bhot
         : params.vaultToken === "solvbtc"
           ? goldivaultWalletInfoSolvbtc.solvbtcot
           : params.vaultToken === "unibtc"
             ? goldivaultWalletInfoUnibtc.unibtcot
             : params.vaultToken === "rusd"
               ? goldivaultWalletInfoRusd.rusdot
+              : params.vaultToken === "ebtc"
+                ? goldivaultWalletInfoEbtc.ebtcot
               : {};
 
   const vaultYT =
     params.vaultToken === "weeth"
       ? goldivaultWalletInfoWeeth.weyt
-      : params.vaultToken === "bhoney"
-        ? goldivaultWalletInfoBhoney.bhyt
         : params.vaultToken === "solvbtc"
           ? goldivaultWalletInfoSolvbtc.solvbtcyt
           : params.vaultToken === "unibtc"
             ? goldivaultWalletInfoUnibtc.unibtcyt
             : params.vaultToken === "rusd"
               ? goldivaultWalletInfoRusd.rusdyt
+              : params.vaultToken === "ebtc"
+                ? goldivaultWalletInfoEbtc.ebtcyt
               : {};
 
   const vaultDT =
     params.vaultToken === "weeth"
       ? goldivaultWalletInfoWeeth.weeth
-      : params.vaultToken === "bhoney"
-        ? goldivaultWalletInfoBhoney.honey
         : params.vaultToken === "solvbtc"
           ? goldivaultWalletInfoSolvbtc.solvbtc
           : params.vaultToken === "unibtc"
             ? goldivaultWalletInfoUnibtc.unibtc
             : params.vaultToken === "rusd"
               ? goldivaultWalletInfoRusd.rusd
+              : params.vaultToken === "ebtc"
+                ? goldivaultWalletInfoEbtc.ebtc
               : {};
 
   useEffect(() => {
     if (params.vaultToken === "weeth") {
       refreshGoldivaultInfoWeeth();
       refreshGoldivaultWalletInfoWeeth();
-    } else if (params.vaultToken === "bhoney") {
-      refreshGoldivaultInfoBhoney();
-      refreshGoldivaultWalletInfoBhoney();
     } else if (params.vaultToken === "solvbtc") {
       refreshGoldivaultInfoSolvbtc();
       refreshGoldivaultWalletInfoSolvbtc();
     } else if (params.vaultToken === "rusd") {
       refreshGoldivaultInfoRusd();
       refreshGoldivaultWalletInfoRusd();
+    } else if (params.vaultToken === "ebtc") {
+      refreshGoldivaultInfoEbtc();
+      refreshGoldivaultWalletInfoEbtc();
     } else {
       refreshGoldivaultInfoUnibtc();
       refreshGoldivaultWalletInfoUnibtc();
@@ -222,16 +222,23 @@ export const VaultBoxMobile = ({ params }: VaultBoxProps) => {
                 dexLink: params.dexLink,
               }}
             />
-          ) : activeToggle === "POOLS" ? (
-            <PoolsPopupMobile
+          ) : activeToggle === "ADDLIQ" || activeToggle === "REMOVELIQ" ? (
+            <LiqManagerTabMobile
               params={{
                 vaultToken: params.vaultToken,
-                poolUrl: params.poolUrl,
-                poolName: params.poolName,
-                liqManagerUrl: params.liqManagerUrl
               }}
             />
           ) : (
+          // ) : activeToggle === "POOLS" ? (
+          //   <PoolsPopupMobile
+          //     params={{
+          //       vaultToken: params.vaultToken,
+          //       poolUrl: params.poolUrl,
+          //       poolName: params.poolName,
+          //       liqManagerUrl: params.liqManagerUrl
+          //     }}
+          //   />
+          // ) : (
             <div className="relative flex h-[100%] w-[100%] flex-col">
               <div className="absolute left-[42.5%] top-[45%] z-10 flex h-10 w-10 items-center justify-center rounded-3xl border-2 border-[#FFCD00] bg-[#033E5E]">
                 <svg

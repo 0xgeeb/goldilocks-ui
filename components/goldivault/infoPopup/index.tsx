@@ -6,7 +6,7 @@ export const InfoPopup = () => {
   const { infoPopupText } = useGoldivault();
 
   return (
-    <div className="absolute left-[2%] top-[-2%] z-50 h-[12%] w-[60%] xl:w-[50%]">
+    <div className="absolute left-[0%] top-[0%] z-50 h-[12%] w-[60%] xl:w-[50%]">
       <div className="relative h-[100%] w-[100%] border-2 border-[#FFCD00] bg-[#9A5816]">
         <div className="absolute left-0 top-1 w-2 skew-y-[45deg] border-b-2 border-[#FFCD00]"></div>
         <div className="absolute bottom-1 left-0 w-2 -skew-y-[45deg] border-b-2 border-[#FFCD00]"></div>

@@ -16,20 +16,20 @@ export const VaultDisplayMobile = () => {
         />
         <VaultDisplayCardMobile
           params={{
-            address: "rseth",
-            tokenName: "rsETH",
-            imageUrl: "rseth_logo.png",
-            vaultName: "KelpDAO Points Vault",
-          }}
-        />
-        <VaultDisplayCardMobile
-          params={{
             address: "ebtc",
             tokenName: "eBTC",
             imageUrl: "ebtc-logo.png",
             vaultName: "EtherFi Points Vault",
           }}
-        />
+        /> */}
+        {/* <VaultDisplayCardMobile
+            params={{
+              address: "rseth",
+              tokenName: "rsETH",
+              imageUrl: "rseth_logo.png",
+              vaultName: "KelpDAO Points Vault",
+            }}
+          />
         <VaultDisplayCardMobile
           params={{
             address: "unibtc",

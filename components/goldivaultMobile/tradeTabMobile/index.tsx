@@ -17,10 +17,10 @@ export const TradeTabMobile = ({ params }: TradeTabProps) => {
     activeToggle,
     tradeDirection,
     goldivaultWalletInfoWeeth,
-    goldivaultWalletInfoBhoney,
     goldivaultWalletInfoSolvbtc,
     goldivaultWalletInfoUnibtc,
     goldivaultWalletInfoRusd,
+    goldivaultWalletInfoEbtc,
     handleBalanceClick,
     outputTokensLoading,
     debouncedTradeInput,
@@ -29,46 +29,47 @@ export const TradeTabMobile = ({ params }: TradeTabProps) => {
     tradeOutput,
     setOutputTokensLoading,
     quoteV3Swap,
-    debouncedSlippage
+    debouncedSlippage,
+    changeSlippageToggle
   } = useGoldivault();
 
   const vaultOT =
     params.vaultToken === "weeth"
       ? goldivaultWalletInfoWeeth.weot
-      : params.vaultToken === "bhoney"
-        ? goldivaultWalletInfoBhoney.bhot
         : params.vaultToken === "solvbtc"
           ? goldivaultWalletInfoSolvbtc.solvbtcot
           : params.vaultToken === "unibtc"
             ? goldivaultWalletInfoUnibtc.unibtcot
             : params.vaultToken === "rusd"
               ? goldivaultWalletInfoRusd.rusdot
+              : params.vaultToken === "ebtc"
+                ? goldivaultWalletInfoEbtc.ebtcot
               : {};
 
   const vaultYT =
     params.vaultToken === "weeth"
       ? goldivaultWalletInfoWeeth.weyt
-      : params.vaultToken === "bhoney"
-        ? goldivaultWalletInfoBhoney.bhyt
         : params.vaultToken === "solvbtc"
           ? goldivaultWalletInfoSolvbtc.solvbtcyt
           : params.vaultToken === "unibtc"
             ? goldivaultWalletInfoUnibtc.unibtcyt
             : params.vaultToken === "rusd"
               ? goldivaultWalletInfoRusd.rusdyt
+              : params.vaultToken === "ebtc"
+                ? goldivaultWalletInfoEbtc.ebtcyt
               : {};
 
   const vaultDT =
     params.vaultToken === "weeth"
       ? goldivaultWalletInfoWeeth.weeth
-      : params.vaultToken === "bhoney"
-        ? goldivaultWalletInfoBhoney.honey
         : params.vaultToken === "solvbtc"
           ? goldivaultWalletInfoSolvbtc.solvbtc
           : params.vaultToken === "unibtc"
             ? goldivaultWalletInfoUnibtc.unibtc
             : params.vaultToken === "rusd"
               ? goldivaultWalletInfoRusd.rusd
+              : params.vaultToken === "ebtc"
+                ? goldivaultWalletInfoEbtc.ebtc
               : {};
 
   const loadingElement = () => {
@@ -203,21 +204,24 @@ export const TradeTabMobile = ({ params }: TradeTabProps) => {
           return "rUSD";
         }
       }
-    } else {
+    }
+    else if (params.vaultToken === "ebtc") {
       if (activeToggle === "TRADEOT") {
         if (tradeDirection === "OUT") {
-          return "BHOT";
+          return "eBTCOT";
         } else {
-          return "honey";
+          return "eBTC";
         }
       } else {
         if (tradeDirection === "OUT") {
-          return "BHYT";
+          return "eBTCYT";
         } else {
-          return "honey";
+          return "eBTC";
         }
       }
     }
+
+    return ''
   };
 
   const renderBottomBalanceLabel = (): string => {
@@ -277,21 +281,24 @@ export const TradeTabMobile = ({ params }: TradeTabProps) => {
           return "rUSDYT";
         }
       }
-    } else {
+    }
+    else if (params.vaultToken === "ebtc") {
       if (activeToggle === "TRADEOT") {
         if (tradeDirection === "OUT") {
-          return "honey";
+          return "eBTC";
         } else {
-          return "BHOT";
+          return "eBTCOT";
         }
       } else {
         if (tradeDirection === "OUT") {
-          return "honey";
+          return "eBTC";
         } else {
-          return "BHYT";
+          return "eBTCYT";
         }
       }
     }
+
+    return ''
   };
 
   return (
@@ -316,9 +323,17 @@ export const TradeTabMobile = ({ params }: TradeTabProps) => {
         </svg>
       </div>
       <div className="relative mx-auto h-[50%] w-[95%] py-[3.5%]">
-        <h1 className="font-baloo text-[4vw] font-medium text-white">
-          Trade Tokens
-        </h1>
+        <div className="w-[100%] flex flex-row justify-between">
+          <h1 className="font-baloo text-[4vw] font-medium text-white">
+            Trade Tokens
+          </h1>
+          <img
+            className="size-5"
+            src="/images/icon-settings-mobile.png"
+            alt="settings"
+            onClick={() => changeSlippageToggle(true)}
+          />
+        </div>
         <div className="mt-[5%] flex h-[50%] w-[100%] flex-row items-center justify-between border-2 border-black bg-white pl-[3.5%] pr-[1%]">
           <input
             className="h-[100%] w-full border-none bg-transparent font-baloo text-[5.5vw] font-bold focus:outline-none"

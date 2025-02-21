@@ -7,11 +7,9 @@ import bandbearABI from "../abi/BandBear.json";
 import bondbearABI from "../abi/BondBear.json";
 import beradromeABI from "../abi/Beradrome.json";
 import honeycombABI from "../abi/HoneyComb.json";
-import goldivaultABI from "../abi/HoneyWBeraGoldivault.json";
 import crocqueryABI from "../abi/CrocQuery.json";
 import biggayberaqueryABI from "../abi/BigGayBeraQuery.json";
 import vaultABI from "../abi/Vault.json";
-import bhoneyABI from "../abi/BHoney.json";
 import quoterABI from "../abi/Quoter.json";
 import routerABI from "../abi/Router.json";
 import weethvaultABI from "../abi/WeethGoldivault.json";
@@ -19,6 +17,7 @@ import quoterv2ABI from "../abi/QuoterV2.json";
 import routerv2ABI from "../abi/RouterV2.json";
 import goldigovABI from "../abi/Goldigovernor.json";
 import govlocksABI from "../abi/GovLocks.json";
+import depositguardABI from "../abi/DepositGuard.json"
 
 export const contracts = {
   goldiswap: {
@@ -33,44 +32,12 @@ export const contracts = {
     address: "0x7c45E398A5c98046719F0D24C4F7e3f44b71588c",
     abi: goldilendABI.abi,
   },
-  honeywberagoldivault: {
-    address: "0x35EF111B092d5faeF321A1aC7e048E378c63DCCc",
-    abi: goldivaultABI.abi,
-  },
-  hwbot: {
-    address: "0x374fdFdBC915A4119bcA40cE96b917df99515c93",
-    abi: ibgtABI.abi,
-  },
-  hwbyt: {
-    address: "0xa711F108A7Cd270d12B9661fb72bFadADb28b658",
-    abi: ibgtABI.abi,
-  },
-  bhoneygoldivault: {
-    address: "0x541C4aCA915ccC83B1bf48b510D1653cba61115F",
-    abi: goldivaultABI.abi,
-  },
-  bhot: {
-    address: "0xde0a616437151c5D655c5341f24D624cBf35B0DE",
-    abi: ibgtABI.abi,
-  },
-  bhyt: {
-    address: "0x3c3834513371895A25A37aF3cdc83b8DC0352cC1",
-    abi: ibgtABI.abi,
-  },
   honey: {
     address: "0xFCBD14DC51f0A4d49d5E53C2E0950e0bC26d0Dce",
     abi: honeyABI.abi,
   },
   ibgt: {
     address: "0x46eFC86F0D7455F135CC9df501673739d513E982",
-    abi: ibgtABI.abi,
-  },
-  honeywberaLP: {
-    address: "0xd28d852cbcc68DCEC922f6d5C7a8185dBaa104B7",
-    abi: ibgtABI.abi,
-  },
-  wbera: {
-    address: "0x7507c1dc16935B82698e4C63f2746A2fCf994dF8",
     abi: ibgtABI.abi,
   },
   bandbear: {
@@ -105,10 +72,6 @@ export const contracts = {
     address: "0x31E6458C83C4184A23c761fDAffb61941665E012",
     abi: vaultABI.abi,
   },
-  bhoney: {
-    address: "0x1306D3c36eC7E38dd2c128fBe3097C2C2449af64",
-    abi: bhoneyABI.abi,
-  },
   quoter: {
     address: "0x87bF7F6748Da49EB3c90FC8f296c58C5b0EC8A23",
     abi: quoterABI.abi,
@@ -129,22 +92,42 @@ export const contracts = {
     address: "0x7d91Bf5851B3A8bCf8C39A69AF2F0F98A4e2202A",
     abi: vaultABI.abi,
   },
+  weth: {
+    address: "0x2F6F07CDcf3588944Bf4C42aC74ff24bF56e7590",
+    abi: ibgtABI.abi
+  },
   weethVault: {
-    address: "0xEE4A91F5BFA0Bf54124CF00cc7e144427cCE1162",
+    address: "0x0B8B5e0ec1dc908E0d8513cC03E91Eb479Ab6Ea9",
     abi: weethvaultABI.abi,
   },
   weot: {
-    address: "0x6218379852D5609870e91f168B81cbB4532f0346",
+    address: "0x46C7BdE4422b6798A09e76B555F2fea8D7FfADdc",
     abi: ibgtABI.abi,
   },
   weyt: {
-    address: "0x401CBe777E8BE57a426A5B5F13Ca4d73200BD95B",
+    address: "0x98577aC3C6b376fc9Ee56377FEcAb6D751e40610",
     abi: ibgtABI.abi,
   },
   weeth: {
-    address: "0x7Cc43d94818005499D2740975D2aEFD3893E940E",
+    address: "0x7DCC39B4d1C53CB31e1aBc0e358b43987FEF80f7",
     abi: ibgtABI.abi,
   },
+  ebtcVault: {
+    address: "0x0c3F856b93d6D7B46C76296f073A1357738d238C",
+    abi: weethvaultABI.abi,
+  },
+  ebtcot: {
+    address: "0x96284cCFd80E546b8239b44f653b4B5Db3f21371",
+    abi: ibgtABI.abi,
+  },
+  ebtcyt: {
+    address: "0x7a8238604314a2AD17F7550Dcbb3a08383D48Df8",
+    abi: ibgtABI.abi,
+  },
+  ebtc: {
+    address: "0x657e8C867D8B37dCC18fA4Caead9C45EB088C642",
+    abi: ibgtABI.abi,
+  }, 
   solvbtcVault: {
     address: "0xa861d5687ff698902A632E2e62AA7df41199B397",
     abi: weethvaultABI.abi,
@@ -201,4 +184,12 @@ export const contracts = {
     address: "0xB9798E0e3AB8B2f2c80684C9D51056538E021DAc",
     abi: govlocksABI.abi,
   },
+  depositGuard: {
+    address: "0xc0c6D4178410849eC9765B4267A73F4F64241832",
+    abi: depositguardABI.abi
+  },
+  rusdaquabera: {
+    address: "0x20a49a266AE70d07Ba066Ef1F8b6e670216Ab2a6",
+    abi: ibgtABI.abi
+  }
 };

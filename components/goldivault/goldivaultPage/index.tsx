@@ -53,8 +53,9 @@ export const GoldivaultPage = () => {
         setWutPopup={setWutPopup}
         bgImageUrl="/images/bg-goldivault.png"
       >
-        <>
-          {infoPopupToggle && <InfoDisplayPopup />}
+        {infoPopupToggle && <InfoDisplayPopup />}
+
+        <div className="absolute size-full overflow-y-scroll">
           <h1
             className="absolute bottom-[82.5%] left-[6%] font-amaticbold text-[12vw] text-[#FFCD00] md:bottom-[80%] md:text-[11vw] lg:bottom-[71%] lg:text-[10vw] 2xl:bottom-[71%] 2xl:left-[5%] 2xl:text-[8vw] tall:bottom-[85%] tall:md:bottom-[80%] tall:lg:bottom-[76%] tall:2xl:bottom-[71%]"
             id="page-title"
@@ -63,7 +64,7 @@ export const GoldivaultPage = () => {
           </h1>
           {/* <Stats /> */}
           <VaultDisplay />
-        </>
+        </div>
       </CsrPageLayout>
     )
   ) : (

@@ -1,8 +1,10 @@
-import type { Metadata } from "next";
-import { LayoutProps } from "../utils/interfaces";
-import localFont from "next/font/local";
-import { DesktopProvider } from "../providers";
 import "./globals.css";
+
+import type { Metadata } from "next";
+import localFont from "next/font/local";
+
+import { DesktopProvider } from "../providers";
+import { LayoutProps } from "../utils/interfaces";
 
 export const metadata: Metadata = {
   title: "Goldilocks",
@@ -33,7 +35,7 @@ export default function RootLayout({ children }: Readonly<LayoutProps>) {
       lang="en"
       className={`${amatic.variable} ${amaticBold.variable} ${baloo.variable}`}
     >
-      <body>
+      <body className="h-screen w-screen overflow-hidden">
         <DesktopProvider>{children}</DesktopProvider>
       </body>
     </html>

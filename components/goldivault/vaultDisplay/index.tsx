@@ -5,7 +5,7 @@ import { VaultDisplayCard } from "../";
 export const VaultDisplay = () => {
   return (
     <div className="absolute left-[7.5%] top-[20%] h-[65%] w-[85%] p-2 lg:top-[29%] lg:h-[55%]">
-      <div className="relative flex h-[100%] w-[100%] flex-wrap overflow-y-auto">
+      <div className="relative grid size-full grid-cols-1 flex-wrap gap-6 overflow-y-auto pb-16 [mask-image:linear-gradient(to_bottom,black_calc(100%-6rem),transparent)] lg:grid-cols-3">
         {/* <VaultDisplayCard
           params={{
             address: "weeth",
@@ -17,20 +17,20 @@ export const VaultDisplay = () => {
         />
         <VaultDisplayCard
           params={{
-            address: "rseth",
-            mouseFlag: "rsethvaultinfo",
-            tokenName: "rsETH",
-            imageUrl: "rseth_logo.png",
-            vaultName: "KelpDAO Points Vault",
-          }}
-        />
-        <VaultDisplayCard
-          params={{
             address: "ebtc",
             mouseFlag: "ebtcvaultinfo",
             tokenName: "eBTC",
             imageUrl: "ebtc-logo.png",
             vaultName: "EtherFi Points Vault",
+          }}
+        /> */}
+        {/* <VaultDisplayCard
+          params={{
+            address: "rseth",
+            mouseFlag: "rsethvaultinfo",
+            tokenName: "rsETH",
+            imageUrl: "rseth_logo.png",
+            vaultName: "KelpDAO Points Vault",
           }}
         />
         <VaultDisplayCard

@@ -48,17 +48,29 @@ export const TogglesMobile = () => {
             TRADEYT
           </div>
           <div
-            className={`z-100 absolute right-[2.5%] top-[31.5%] h-[6%] w-[25%] border-b-2 border-l-2 border-r-2 border-[#FFCD00] ${activeToggle === "INFO" ? "bg-[#033E5E]" : "bg-[#995816]"} flex items-center justify-center font-amaticbold text-[6vw] font-medium text-[#FFCD00]`}
+            className={`z-100 absolute right-[2.5%] top-[31.5%] h-[6%] w-[25%] border-b-2 border-l-2 border-r-2 border-[#FFCD00] ${activeToggle === "ADDLIQ" ? "bg-[#033E5E]" : "bg-[#995816]"} flex items-center justify-center font-amaticbold text-[6vw] font-medium text-[#FFCD00]`}
+            onClick={() => changeToggle("ADDLIQ")}
+          >
+            ADD LIQ
+          </div>
+          <div
+            className={`z-100 absolute right-[2.5%] top-[37.5%] h-[6%] w-[25%] border-b-2 border-l-2 border-r-2 border-[#FFCD00] ${activeToggle === "REMOVELIQ" ? "bg-[#033E5E]" : "bg-[#995816]"} flex items-center justify-center font-amaticbold text-[6vw] font-medium text-[#FFCD00]`}
+            onClick={() => changeToggle("REMOVELIQ")}
+          >
+            REMOVE LIQ
+          </div>
+          <div
+            className={`z-100 absolute right-[2.5%] top-[43.5%] h-[6%] w-[25%] border-b-2 border-l-2 border-r-2 border-[#FFCD00] ${activeToggle === "INFO" ? "bg-[#033E5E]" : "bg-[#995816]"} flex items-center justify-center font-amaticbold text-[6vw] font-medium text-[#FFCD00]`}
             onClick={() => changeToggle("INFO")}
           >
             INFO
           </div>
-          <div
+          {/* <div
             className={`z-100 absolute right-[2.5%] top-[37.5%] h-[6%] w-[25%] border-b-2 border-l-2 border-r-2 border-[#FFCD00] ${activeToggle === "POOLS" ? "bg-[#033E5E]" : "bg-[#995816]"} flex items-center justify-center font-amaticbold text-[6vw] font-medium text-[#FFCD00]`}
             onClick={() => changeToggle("POOLS")}
           >
             POOL
-          </div>
+          </div> */}
         </>
       )}
       {!togglesOpen && (

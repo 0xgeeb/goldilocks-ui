@@ -194,18 +194,6 @@ export const VaultPage = ({ params }: Props) => {
           <Toggles />
           {slippage.toggle && <SlippagePopup />}
           {
-            //   {
-            //     activeToggle === 'REDEEMOT' &&
-            //     <div className="z-50 absolute w-[30%] xl:w-[25%] 2xl:w-[15%] font-baloo font-semibold text-center px-2 text-[2vw] xl:text-[1.5vw] 2xl:text-[1vw] h-[20%] lg:h-[22%] bottom-[1%] left-[1%] bg-[#FFE59F] border-2 border-black flex items-center justify-center">
-            //       <span>Early withdrawals unavailable on bHONEY vault. OTs can be redeemed for underlying HONEY at maturation</span>
-            //     </div>
-            //   }
-            //   {
-            //     activeToggle === 'REDEEMYT' &&
-            //     <div className="z-50 absolute w-[30%] xl:w-[25%] 2xl:w-[15%] font-baloo font-semibold text-center px-2 text-[2vw] xl:text-[1.5vw] 2xl:text-[1vw] h-[14%] lg:h-[16%] bottom-[1%] left-[1%] bg-[#FFE59F] border-2 border-black flex items-center justify-center">
-            //       <span>YTs can be redeemed for the accumulated yield of one OT at maturation</span>
-            //     </div>
-            //   }
             params.address === "rseth" ? (
               <>
                 <h1
@@ -402,7 +390,7 @@ export const VaultPage = ({ params }: Props) => {
                     dexLink: "https://dexscreener.com/berachain/0x1a2A927F758AE242fB967481CF293D2a36883be6",
                   }}
                 />
-                <PoolsPopup
+                {/* <PoolsPopup
                   params={{
                     vaultToken: "rusd",
                     poolUrl:
@@ -410,7 +398,7 @@ export const VaultPage = ({ params }: Props) => {
                     poolName: "rUSD / rUSD OT LP",
                     liqManagerUrl: "https://app.aquabera.com/vault/0x20a49a266AE70d07Ba066Ef1F8b6e670216Ab2a6"
                   }}
-                />
+                /> */}
               </>
             ) : (
               <>

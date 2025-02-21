@@ -15,23 +15,23 @@ export const VaultInfoMobile = ({ params }: VaultInfoProps) => {
   const {
     infoLoading,
     goldivaultInfoWeeth,
-    goldivaultInfoBhoney,
     goldivaultInfoSolvbtc,
     goldivaultInfoUnibtc,
     goldivaultInfoRusd,
+    goldivaultInfoEbtc
   } = useGoldivault();
 
   const data =
     params.vaultToken === "weeth"
       ? goldivaultInfoWeeth
-      : params.vaultToken === "bhoney"
-        ? goldivaultInfoBhoney
         : params.vaultToken === "unibtc"
           ? goldivaultInfoUnibtc
           : params.vaultToken === "solvbtc"
             ? goldivaultInfoSolvbtc
             : params.vaultToken === "rusd"
               ? goldivaultInfoRusd
+              : params.vaultToken === "ebtc"
+                ? goldivaultInfoEbtc
               : {
                   endTime: 0,
                   vaultDeposits: 0,
@@ -46,43 +46,50 @@ export const VaultInfoMobile = ({ params }: VaultInfoProps) => {
   const vaultOTaddy =
     params.vaultToken === "weeth"
       ? contracts.weot.address
-      : params.vaultToken === "bhoney"
-        ? contracts.bhot.address
         : params.vaultToken === "solvbtc"
           ? contracts.solvbtcot.address
           : params.vaultToken === "unibtc"
             ? contracts.unibtcot.address
             : params.vaultToken === "rusd"
               ? contracts.rusdot.address
+              : params.vaultToken === "ebtc"
+                ? contracts.ebtcot.address
               : "";
 
   const vaultYTaddy =
     params.vaultToken === "weeth"
       ? contracts.weyt.address
-      : params.vaultToken === "bhoney"
-        ? contracts.bhyt.address
         : params.vaultToken === "solvbtc"
           ? contracts.solvbtcyt.address
           : params.vaultToken === "unibtc"
             ? contracts.unibtcyt.address
             : params.vaultToken === "rusd"
               ? contracts.rusdyt.address
+              : params.vaultToken === "ebtc"
+                ? contracts.ebtcyt.address
               : "";
 
   const vaultaddy =
     params.vaultToken === "weeth"
       ? contracts.weethVault.address
-      : params.vaultToken === "bhoney"
-        ? contracts.bhoneygoldivault.address
         : params.vaultToken === "solvbtc"
           ? contracts.solvbtcVault.address
           : params.vaultToken === "unibtc"
             ? contracts.unibtcVault.address
             : params.vaultToken === "rusd"
               ? contracts.rusdVault.address
+              : params.vaultToken === "ebtc"
+                ? contracts.ebtcVault.address
               : "";
 
-  const vaultLPaddy = params.vaultToken === "rusd" ? "0x1a2A927F758AE242fB967481CF293D2a36883be6" : ""
+  const vaultLPaddy =
+    params.vaultToken === "rusd"
+      ? "0x1a2A927F758AE242fB967481CF293D2a36883be6"
+      : params.vaultToken === "weeth"
+        ? "0xD26503C0447bEF83e978e7b872cb2d6b9B35262c"
+        : params.vaultToken === "ebtc"
+          ? "0x339b8859a691eb5c8E8E576E6Caf4c3556711e34"
+          : ""
 
   const loadingElement = () => {
     return <span className="loader-small m-auto"></span>;
@@ -162,7 +169,7 @@ export const VaultInfoMobile = ({ params }: VaultInfoProps) => {
                 <span className="cursor-pointer hover:text-gray-400">
                   Babylon Points Leverage:
                 </span>
-                <span>69x</span>
+                <span>{formatAsString(data.babylonLeverage)}x</span>
               </div>
               <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
                 <span className="cursor-pointer hover:text-gray-400">
@@ -174,7 +181,7 @@ export const VaultInfoMobile = ({ params }: VaultInfoProps) => {
                 <span className="cursor-pointer hover:text-gray-400">
                   Lombard Points Leverage:
                 </span>
-                <span>69x</span>
+                <span>{formatAsString(data.lombardLeverage)}x</span>
               </div>
               <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
                 <span className="cursor-pointer hover:text-gray-400">
@@ -186,7 +193,7 @@ export const VaultInfoMobile = ({ params }: VaultInfoProps) => {
                 <span className="cursor-pointer hover:text-gray-400">
                   Symbiotic Points Leverage:
                 </span>
-                <span>69x</span>
+                <span>{formatAsString(data.symbioticLeverage)}x</span>
               </div>
               <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
                 <span className="cursor-pointer hover:text-gray-400">
@@ -198,7 +205,7 @@ export const VaultInfoMobile = ({ params }: VaultInfoProps) => {
                 <span className="cursor-pointer hover:text-gray-400">
                   Veda Points Leverage:
                 </span>
-                <span>69x</span>
+                <span>{formatAsString(data.vedaLeverage)}x</span>
               </div>
               <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
                 <span className="cursor-pointer hover:text-gray-400">
@@ -210,7 +217,7 @@ export const VaultInfoMobile = ({ params }: VaultInfoProps) => {
                 <span className="cursor-pointer hover:text-gray-400">
                   Karak Points Leverage:
                 </span>
-                <span>69x</span>
+                <span>{formatAsString(data.karakLeverage)}x</span>
               </div>
             </>
           ) : params.vaultToken === "rseth" ? (

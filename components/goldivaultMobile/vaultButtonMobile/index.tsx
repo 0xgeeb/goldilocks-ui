@@ -6,6 +6,9 @@ import { useAccount } from "wagmi";
 import { useGoldivault } from "../../../providers";
 import { useGoldivaultTx } from "../../../hooks";
 import { contracts } from "../../../utils/addressi";
+import { formatEther, parseEther } from "viem"
+import { getPublicClient } from "@wagmi/core"
+import { config } from "../../../providers/WagmiProvider";
 
 type VaultButtonProps = {
   params: {
@@ -43,18 +46,18 @@ export const VaultButtonMobile = ({ params }: VaultButtonProps) => {
     refreshGoldivaultInfoWeeth,
     refreshGoldivaultWalletInfoWeeth,
     goldivaultWalletInfoWeeth,
-    refreshGoldivaultInfoBhoney,
-    refreshGoldivaultWalletInfoBhoney,
     refreshGoldivaultInfoSolvbtc,
     refreshGoldivaultWalletInfoSolvbtc,
     goldivaultWalletInfoSolvbtc,
     refreshGoldivaultInfoUnibtc,
     refreshGoldivaultWalletInfoUnibtc,
     goldivaultWalletInfoUnibtc,
-    goldivaultWalletInfoBhoney,
     refreshGoldivaultInfoRusd,
     refreshGoldivaultWalletInfoRusd,
     goldivaultWalletInfoRusd,
+    refreshGoldivaultInfoEbtc,
+    refreshGoldivaultWalletInfoEbtc,
+    goldivaultWalletInfoEbtc,
     vaultSwapTxAmount,
     honeyApprovalAmount,
     otApprovalAmount,
@@ -74,6 +77,8 @@ export const VaultButtonMobile = ({ params }: VaultButtonProps) => {
     sendV3TradeTx,
     sendBuyYTTx,
     sendSellYTTx,
+    sendAddLiqTx,
+    sendRemoveLiqTx
   } = useGoldivaultTx();
 
   const { address, isConnected } = useAccount();
@@ -85,107 +90,112 @@ export const VaultButtonMobile = ({ params }: VaultButtonProps) => {
   const vaultOT =
     params.vaultToken === "weeth"
       ? goldivaultWalletInfoWeeth.weot
-      : params.vaultToken === "bhoney"
-        ? goldivaultWalletInfoBhoney.bhot
         : params.vaultToken === "solvbtc"
           ? goldivaultWalletInfoSolvbtc.solvbtcot
           : params.vaultToken === "unibtc"
             ? goldivaultWalletInfoUnibtc.unibtcot
             : params.vaultToken === "rusd"
               ? goldivaultWalletInfoRusd.rusdot
+              : params.vaultToken === "ebtc"
+                ? goldivaultWalletInfoEbtc.ebtcot
               : {};
 
   const vaultYT =
     params.vaultToken === "weeth"
       ? goldivaultWalletInfoWeeth.weyt
-      : params.vaultToken === "bhoney"
-        ? goldivaultWalletInfoBhoney.bhyt
         : params.vaultToken === "solvbtc"
           ? goldivaultWalletInfoSolvbtc.solvbtcyt
           : params.vaultToken === "unibtc"
             ? goldivaultWalletInfoUnibtc.unibtcyt
             : params.vaultToken === "rusd"
               ? goldivaultWalletInfoRusd.rusdyt
+              : params.vaultToken === "ebtc"
+                ? goldivaultWalletInfoEbtc.ebtcyt
               : {};
 
   const vaultDT =
     params.vaultToken === "weeth"
       ? goldivaultWalletInfoWeeth.weeth
-      : params.vaultToken === "bhoney"
-        ? goldivaultWalletInfoBhoney.honey
         : params.vaultToken === "solvbtc"
           ? goldivaultWalletInfoSolvbtc.solvbtc
           : params.vaultToken === "unibtc"
             ? goldivaultWalletInfoUnibtc.unibtc
             : params.vaultToken === "rusd"
               ? goldivaultWalletInfoRusd.rusd
+              : params.vaultToken === "ebtc"
+                ? goldivaultWalletInfoEbtc.ebtc
               : {};
 
   const vaultOTaddy =
     params.vaultToken === "weeth"
       ? contracts.weot.address
-      : params.vaultToken === "bhoney"
-        ? contracts.bhot.address
         : params.vaultToken === "solvbtc"
           ? contracts.solvbtcot.address
           : params.vaultToken === "unibtc"
             ? contracts.unibtcot.address
             : params.vaultToken === "rusd"
               ? contracts.rusdot.address
+              : params.vaultToken === "ebtc"
+                ? contracts.ebtcot.address
               : "";
 
   const vaultDTaddy =
     params.vaultToken === "weeth"
       ? contracts.weeth.address
-      : params.vaultToken === "bhoney"
-        ? contracts.honey.address
         : params.vaultToken === "solvbtc"
           ? contracts.solvbtc.address
           : params.vaultToken === "unibtc"
             ? contracts.unibtc.address
             : params.vaultToken === "rusd"
               ? contracts.rusd.address
+              : params.vaultToken === "ebtc"
+                ? contracts.ebtc.address
               : "";
 
   const vaultDTAllowance =
     params.vaultToken === "weeth"
       ? goldivaultWalletInfoWeeth.weethVaultAllowance
-      : params.vaultToken === "bhoney"
-        ? goldivaultWalletInfoBhoney.honeyAllowance
         : params.vaultToken === "solvbtc"
           ? goldivaultWalletInfoSolvbtc.solvbtcAllowance
           : params.vaultToken === "unibtc"
             ? goldivaultWalletInfoUnibtc.unibtcAllowance
             : params.vaultToken === "rusd"
               ? goldivaultWalletInfoRusd.rusdAllowance
+              : params.vaultToken === "ebtc"
+                ? goldivaultWalletInfoEbtc.ebtcAllowance
               : 0;
 
   const vaultDTBalance =
     params.vaultToken === "weeth"
       ? goldivaultWalletInfoWeeth.weeth
-      : params.vaultToken === "bhoney"
-        ? goldivaultWalletInfoBhoney.honey
         : params.vaultToken === "solvbtc"
           ? goldivaultWalletInfoSolvbtc.solvbtc
           : params.vaultToken === "unibtc"
             ? goldivaultWalletInfoUnibtc.unibtc
             : params.vaultToken === "rusd"
               ? goldivaultWalletInfoRusd.rusd
+              : params.vaultToken === "ebtc"
+                ? goldivaultWalletInfoEbtc.ebtc
               : 0;
+
+  const vaultLPBalance =
+    params.vaultToken === "rusd"
+      ? goldivaultWalletInfoRusd.rusdaquabera
+      : 0
 
   const refreshInfo = () => {
     if (params.vaultToken === "weeth") {
       refreshGoldivaultInfoWeeth();
       refreshGoldivaultWalletInfoWeeth();
-    } else if (params.vaultToken === "bhoney") {
-      refreshGoldivaultInfoBhoney();
-      refreshGoldivaultWalletInfoBhoney();
     } else if (params.vaultToken === "solvbtc") {
       refreshGoldivaultInfoSolvbtc();
       refreshGoldivaultWalletInfoSolvbtc();
     } else if (params.vaultToken === "rusd") {
       refreshGoldivaultInfoRusd();
       refreshGoldivaultWalletInfoRusd();
+    } else if (params.vaultToken === "ebtc") {
+      refreshGoldivaultInfoEbtc();
+      refreshGoldivaultWalletInfoEbtc();
     } else {
       refreshGoldivaultInfoUnibtc();
       refreshGoldivaultWalletInfoUnibtc();
@@ -216,6 +226,12 @@ export const VaultButtonMobile = ({ params }: VaultButtonProps) => {
     }
     if (activeToggle === "TRADEYT") {
       tradeYTFlow(button);
+    }
+    if (activeToggle === "ADDLIQ") {
+      addLiqFlow(button)
+    }
+    if (activeToggle === "REMOVELIQ") {
+      removeLiqFlow(button)
     }
   };
 
@@ -528,6 +544,136 @@ export const VaultButtonMobile = ({ params }: VaultButtonProps) => {
     }
   };
 
+    const addLiqFlow = async (button: HTMLElement | null) => {
+      if (tradeInput == 0) {
+        button && (button.innerHTML = "add liq");
+        return;
+      }
+      if (tradeInput > vaultDT) {
+        button && (button.innerHTML = "not enough");
+        return;
+      } else {
+        const sufficientAllowance: boolean | void = await checkAllowance(
+          tradeInput,
+          "rusdaqua",
+          address as string,
+        );
+        if (sufficientAllowance) {
+          setTxConfirming(true);
+          if (button) {
+            button.innerHTML = "confirming...";
+          }
+          const client = getPublicClient(config);
+          const lpAmountResult = await client.simulateContract({
+            address: contracts.depositGuard.address as `0x${string}`,
+            abi: contracts.depositGuard.abi,
+            functionName: 'forwardDepositToICHIVault',
+            args: [
+              "0x20a49a266AE70d07Ba066Ef1F8b6e670216Ab2a6",
+              "0x9Fbba6c87923af2561A2391198166b51Cf5736E8",
+              contracts.rusd.address,
+              parseEther(`${tradeInput}`),
+              parseEther(`${0}`),
+              address
+            ],
+            account: address
+          })
+          const lpAmount = parseFloat(formatEther(lpAmountResult.result as unknown as bigint)) * (1 - slippage.amount / 100)
+          const addLiqTx = await sendAddLiqTx(tradeInput, lpAmount, address as `0x${string}`);
+          if (addLiqTx.substring(0, 2) === "0x") {
+            setTxConfirming(false);
+            openNotification(
+              true,
+              `You've successfully deposited ${params.dt} tokens into the LP`,
+              `You deposited ${formatAsString(tradeInput)} ${params.dt}`,
+              addLiqTx,
+            );
+            if (button) {
+              button.innerHTML = "add liq";
+            }
+            refreshInfo();
+            setTimeout(() => {
+              openNotification(false, "", "", "");
+            }, 10000);
+          } else {
+            if (button) {
+              button.innerHTML = "add liq";
+            }
+            refreshInfo();
+            setTxConfirming(false);
+          }
+        } else {
+          setAllowanceButtons(true);
+        }
+      }
+    }
+  
+    const removeLiqFlow = async (button: HTMLElement | null) => {
+      if (tradeInput == 0) {
+        button && (button.innerHTML = "remove liq");
+        return;
+      }
+      if (tradeInput > vaultLPBalance) {
+        button && (button.innerHTML = "not enough");
+        return;
+      } else {
+        const sufficientAllowance: boolean | void = await checkAllowance(
+          tradeInput,
+          "rusdaqualp",
+          address as string,
+        );
+        if(sufficientAllowance) {
+          setTxConfirming(true);
+          if (button) {
+            button.innerHTML = "confirming...";
+          }
+          const client = getPublicClient(config);
+          const lpAmountResult = await client.simulateContract({
+            address: contracts.depositGuard.address as `0x${string}`,
+            abi: contracts.depositGuard.abi,
+            functionName: 'forwardWithdrawFromICHIVault',
+            args: [
+              "0x20a49a266AE70d07Ba066Ef1F8b6e670216Ab2a6",
+              "0x9Fbba6c87923af2561A2391198166b51Cf5736E8",
+              parseEther(`${tradeInput}`),
+              address,
+              parseEther(`${0}`),
+              parseEther(`${0}`)
+            ],
+            account: address
+          })
+          const lpAmt1 = parseFloat(formatEther(lpAmountResult.result[0] as unknown as bigint)) * (1 - slippage.amount / 100)
+          const lpAmt2 = parseFloat(formatEther(lpAmountResult.result[1] as unknown as bigint)) * (1 - slippage.amount / 100)
+          const removeLiqTX = await sendRemoveLiqTx(tradeInput, address as `0x${string}`, lpAmt1, lpAmt2);
+          if (removeLiqTX.substring(0, 2) === "0x") {
+            setTxConfirming(false);
+            openNotification(
+              true,
+              `You've successfully withdrew your LP`,
+              `You withdrew liquidity with ${formatAsString(tradeInput)} LP tokens`,
+              removeLiqTX,
+            );
+            if (button) {
+              button.innerHTML = "remove liq";
+            }
+            refreshInfo();
+            setTimeout(() => {
+              openNotification(false, "", "", "");
+            }, 10000);
+          } else {
+            if (button) {
+              button.innerHTML = "remove liq"
+            }
+            refreshInfo();
+            setTxConfirming(false);
+          }
+        }
+        else {
+          setAllowanceButtons(true)
+        }
+      }
+    }
+
   const handleLeftButtonClick = async () => {
     const swapButton = document.getElementById("swap-button");
     const leftButton = document.getElementById("left-approve-button");
@@ -573,6 +719,10 @@ export const VaultButtonMobile = ({ params }: VaultButtonProps) => {
           await sendApproveTx(honeyApprovalAmount, params.vaultToken, false);
         }
       }
+    } else if (activeToggle === "ADDLIQ") {
+      await sendApproveTx(tradeInput, "rusdaqua", false)
+    } else if (activeToggle === "REMOVELIQ") {
+      await sendApproveTx(tradeInput, "rusdaqualp", false)
     } else {
       await sendApproveTx(deposit, params.vaultToken, false);
     }
@@ -627,6 +777,10 @@ export const VaultButtonMobile = ({ params }: VaultButtonProps) => {
           await sendApproveTx(0, params.vaultToken, true);
         }
       }
+    } else if (activeToggle === "ADDLIQ") {
+      await sendApproveTx(0, "rusdaqua", true);
+    } else if (activeToggle === "REMOVELIQ") {
+      await sendApproveTx(0, "rusdaqualp", true)
     } else {
       await sendApproveTx(0, params.vaultToken, true);
     }
@@ -650,6 +804,10 @@ export const VaultButtonMobile = ({ params }: VaultButtonProps) => {
       return "redeem ot";
     } else if (activeToggle === "TRADEOT") {
       return "trade ot";
+    } else if (activeToggle === "ADDLIQ") {
+      return "add liq";
+    } else if (activeToggle === "REMOVELIQ") {
+      return "remove liq";
     } else {
       return "trade yt";
     }

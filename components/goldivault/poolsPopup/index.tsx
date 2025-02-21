@@ -17,10 +17,10 @@ export const PoolsPopup = ({ params }: PoolsPopupProps) => {
     setPoolsPopupToggle,
     infoLoading,
     goldivaultInfoWeeth,
-    goldivaultInfoBhoney,
     goldivaultInfoSolvbtc,
     goldivaultInfoUnibtc,
     goldivaultInfoRusd,
+    goldivaultInfoEbtc
   } = useGoldivault();
 
   const formatAsString = (num: number): string => {
@@ -34,14 +34,14 @@ export const PoolsPopup = ({ params }: PoolsPopupProps) => {
   const data =
     params.vaultToken === "weeth"
       ? goldivaultInfoWeeth
-      : params.vaultToken === "bhoney"
-        ? goldivaultInfoBhoney
         : params.vaultToken === "unibtc"
           ? goldivaultInfoUnibtc
           : params.vaultToken === "solvbtc"
             ? goldivaultInfoSolvbtc
             : params.vaultToken === "rusd"
               ? goldivaultInfoRusd
+              : params.vaultToken === 'ebtc'
+                ? goldivaultInfoEbtc
               : {};
 
   return (

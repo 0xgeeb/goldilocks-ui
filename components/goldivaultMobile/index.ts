@@ -12,3 +12,4 @@ export * from "./vaultBoxMobile";
 export * from "./vaultInfoMobile";
 export * from "./vaultDisplayCardMobile";
 export * from "./vaultButtonMobile";
+export * from './liqManagerTabMobile'
