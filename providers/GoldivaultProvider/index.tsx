@@ -1356,18 +1356,18 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
 
     if (activeToggleState === "DEPOSIT") {
       setDisplayStringState(vaultDT.toFixed(4));
-      setDepositState(vaultDT);
+      setDepositState(vaultDT - 0.0000001);
       setOutputTokensLoadingState(true);
     } else if (activeToggleState === "REDEEMOT") {
       setDisplayStringState(vaultOT.toFixed(4));
-      setRedeemOTState(vaultOT);
+      setRedeemOTState(vaultOT - 0.0000001);
       setOutputTokensLoadingState(true);
     } else if (activeToggleState === "ADDLIQ") {
       setDisplayStringState(vaultDT.toFixed(4))
-      setTradeInputState(vaultDT)
+      setTradeInputState(vaultDT - 0.0000001)
     } else if (activeToggleState === "REMOVELIQ") {
       setDisplayStringState(vaultLP.toFixed(4))
-      setTradeInputState(vaultLP)
+      setTradeInputState(vaultLP - 0.0000001)
     } else {
       let num;
       if (activeToggleState === "TRADEOT") {
@@ -1384,7 +1384,7 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         }
       }
       setDisplayStringState(num.toFixed(4));
-      setTradeInputState(num);
+      setTradeInputState(num - 0.0000001);
       setOutputTokensLoadingState(true);
     }
   };
@@ -1528,11 +1528,17 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
   const quoteV3Swap = async (vault: string, vaultType: string) => {
     const vaultOT = getVaultOT(vault);
     const vaultDT = getVaultDT(vault);
+    const vaultAddy = getVault(vault);
     const vaultFixedApr = getVaultFixedAPR(vault);
     if (activeToggleState === "TRADEOT") {
       let quoteResult: any;
       let quoteForOutput: any;
-      let impliedApr: any;
+      const endTimeResult: any = await readContract(config, {
+        address: vaultAddy as `0x${string}`,
+        abi: contracts.weethVault.abi,
+        functionName: 'endTime',
+        args: []
+      })
       if (tradeDirectionState === "OUT") {
         quoteResult = await readContract(config, {
           address: contracts.quoterv2.address as `0x${string}`,
@@ -1605,10 +1611,18 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       const predictedPriceImpact = Math.abs(
         ((executionPrice - buyingOTPrice) / buyingOTPrice) * 100,
       );
-      impliedApr =
+      // Implied apr = (1 - execution price)*365/days to maturity
+      const oldimpliedApr =
         tradeDirectionState === "OUT"
           ? (vaultFixedApr * (100 + predictedPriceImpact)) / 100
           : (vaultFixedApr * (100 - predictedPriceImpact)) / 100;
+      const timeDifference = parseFloat(endTimeResult) * 1000 - Date.now();
+      const fixedDaysDifference = timeDifference / (1000 * 60 * 60 * 24);
+      const daysTil = parseFloat(fixedDaysDifference.toFixed(2));
+      const impliedApr = ((1 - executionPrice) * (365 / daysTil)) * 100
+      console.log("old impliedapr: ", oldimpliedApr)
+      console.log("new impliedapr: ", impliedApr)
+      console.log("exeuction price: ", executionPrice)
 
       setPriceImpactState(predictedPriceImpact);
       setImpliedAprState(impliedApr);
