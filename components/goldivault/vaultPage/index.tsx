@@ -9,8 +9,6 @@ import { pageLoadingAtom } from "@/app/_components/atoms/pageLoadingAtom";
 import CsrPageLayout from "@/app/_components/CsrPageLayout";
 
 import {
-  BurnPopup,
-  ExpirePopup,
   InfoPopup,
   PoolsPopup,
   SlippagePopup,
@@ -33,14 +31,10 @@ export const VaultPage = ({ params }: Props) => {
   const [pageLoading, setPageLoading] = useAtom(pageLoadingAtom);
 
   const {
-    burnPopupToggle,
-    setBurnPopupToggle,
     poolsPopupToggle,
     setPoolsPopupToggle,
     wutPopup,
     setWutPopup,
-    expirePopupToggle,
-    setExpirePopupToggle,
     infoPopupToggle,
     setInfoPopupToggle,
     checkSlippageAmount,
@@ -145,14 +139,8 @@ export const VaultPage = ({ params }: Props) => {
     if (poolsPopupToggle && !insidePools(e)) {
       setPoolsPopupToggle(false);
     }
-    if (burnPopupToggle) {
-      setBurnPopupToggle(false);
-    }
     if (wutPopup) {
       setWutPopup(false);
-    }
-    if (expirePopupToggle) {
-      setExpirePopupToggle(false);
     }
     if (infoPopupToggle) {
       setInfoPopupToggle(false);
@@ -182,8 +170,6 @@ export const VaultPage = ({ params }: Props) => {
               </span>
             </div>
           </a>
-          {burnPopupToggle && <BurnPopup />}
-          {expirePopupToggle && <ExpirePopup />}
           {infoPopupToggle && <InfoPopup />}
           <h1
             className="absolute right-[45%] top-[1%] font-amaticbold text-[8vw] font-medium text-[#FFCD00] md:right-[47.5%] md:top-0 md:text-[7vw] lg:right-[78.5%] lg:top-[42%] lg:text-[6vw]"

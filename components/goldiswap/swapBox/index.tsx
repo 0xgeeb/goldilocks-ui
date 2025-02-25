@@ -1,9 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useGoldiswap } from "../../../providers";
+import { useEffect, useState } from "react";
+
 import { useGoldiswapMath } from "../../../hooks/useGoldiswapMath";
-import { Notification, Chart } from "../../goldiswap";
+import { useGoldiswap } from "../../../providers";
+import { Chart, Notification } from "../../goldiswap";
+import InputLogo from "./InputLogo";
+import SwapInput from "./SwapInput";
 
 export const SwapBox = () => {
   const [topAmountLoading, setTopAmountLoading] = useState<boolean>(false);
@@ -36,6 +39,7 @@ export const SwapBox = () => {
     handleBottomBalance,
     slippage,
     handlePercentageButtons,
+    simInfo,
     setSimInfo,
     txConfirming,
     notification,
@@ -80,10 +84,6 @@ export const SwapBox = () => {
       marketPrice(goldiswapInfo.fsl, goldiswapInfo.psl, goldiswapInfo.supply) -
         floorPrice(goldiswapInfo.fsl, goldiswapInfo.supply),
     );
-  };
-
-  const loadingElement = () => {
-    return <span className="loader-small ml-3"></span>;
   };
 
   const formatAsPercentage = Intl.NumberFormat("default", {
@@ -276,7 +276,7 @@ export const SwapBox = () => {
   }, [redeemingHoney]);
 
   return (
-    <div className="absolute left-[10%] top-[18%] h-[48.87%] w-[80%] border-2 border-black bg-[#EEDCD2] md:left-[20%] md:top-[16%] md:w-[60%] lg:left-[25%] lg:top-[15%] lg:w-[50%] xl:top-[10.12%] xl:h-[55.25%] 2xl:left-[28.125%] 2xl:w-[43.75%]">
+    <div className="absolute left-[10%] top-[18%] h-[48.87%] w-4/5 border-2 border-black bg-[#EEDCD2] md:left-[20%] md:top-[16%] md:w-3/5 lg:left-1/4 lg:top-[15%] lg:w-[50%] xl:top-[10.12%] xl:h-[55.25%] 2xl:left-[28.125%] 2xl:w-[43.75%]">
       <div className="absolute left-0 top-3 w-6 skew-y-[45deg] border-b-2 border-black"></div>
       <div className="absolute bottom-3 left-0 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
       <div className="absolute right-0 top-3 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
@@ -288,48 +288,43 @@ export const SwapBox = () => {
           <Chart />
         ) : txConfirming ? (
           <img
-            className="h-[100%] w-[100%]"
+            className="size-full"
             src="/images/bg-transaction.png"
             alt="tx"
           />
         ) : notification.toggle ? (
           <Notification />
         ) : (
-          <div className="relative flex h-[100%] w-[100%] flex-col">
+          <div className="relative flex size-full flex-col divide-y-2 divide-black">
             <div className="absolute right-0 top-0 flex h-[10%] w-[50%] flex-row border-b-2 border-l-2 border-black font-baloo text-[2.5vw] font-semibold md:text-[2vw] lg:w-[42%] lg:text-[1.5vw] xl:text-[1.25vw] 2xl:w-[33.61%] 2xl:text-[1vw]">
               <div
-                className="flex h-[100%] w-[25%] cursor-pointer items-center justify-center border-r-2 border-black bg-[#DCC2A8] hover:bg-[#F3AA8A]"
+                className="flex h-full w-[25%] cursor-pointer items-center justify-center border-r-2 border-black bg-[#DCC2A8] hover:bg-[#F3AA8A]"
                 onClick={() => handlePercentageButtons(1)}
               >
                 25%
               </div>
               <div
-                className="flex h-[100%] w-[25%] cursor-pointer items-center justify-center border-r-2 border-black bg-[#D5A774] hover:bg-[#F3AA8A]"
+                className="flex h-full w-[25%] cursor-pointer items-center justify-center border-r-2 border-black bg-[#D5A774] hover:bg-[#F3AA8A]"
                 onClick={() => handlePercentageButtons(2)}
               >
                 50%
               </div>
               <div
-                className="flex h-[100%] w-[25%] cursor-pointer items-center justify-center border-r-2 border-black bg-[#D19A5B] hover:bg-[#F3AA8A]"
+                className="flex h-full w-[25%] cursor-pointer items-center justify-center border-r-2 border-black bg-[#D19A5B] hover:bg-[#F3AA8A]"
                 onClick={() => handlePercentageButtons(3)}
               >
                 75%
               </div>
               <div
-                className="flex h-[100%] w-[25%] cursor-pointer items-center justify-center bg-[#CC8634] hover:bg-[#F3AA8A]"
+                className="flex h-full w-[25%] cursor-pointer items-center justify-center bg-[#CC8634] hover:bg-[#F3AA8A]"
                 onClick={() => handlePercentageButtons(4)}
               >
                 MAX
               </div>
             </div>
-            <img
-              className="absolute left-[89%] top-[16%] h-6 w-6 cursor-pointer hover:animate-spin lg:left-[79%] lg:h-9 lg:w-9"
-              src="/images/icon-settings.png"
-              alt="settings"
-              onClick={() => changeSlippageToggle(true)}
-            />
+
             <div
-              className="absolute left-[47.27%] top-[44%] z-10 flex h-10 w-10 cursor-pointer items-center justify-center rounded-3xl border-2 border-black bg-[#D9C6BA] hover:scale-110"
+              className="absolute left-1/2 top-1/2 z-10 flex size-10 -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-3xl !border-2 border-black bg-[#D9C6BA] hover:scale-110"
               onClick={() => flipTokens()}
             >
               <svg
@@ -347,70 +342,42 @@ export const SwapBox = () => {
                 <polyline points="19 12 12 19 5 12"></polyline>
               </svg>
             </div>
-            <div className="h-[50%] w-[100%] border-b-2 border-black">
-              <div className="absolute left-[1%] top-[21%] flex flex-row items-center sm:left-[2%] xl:left-[3%]">
-                <img
-                  className="h-6 w-6 md:h-8 md:w-8"
-                  src={`/images/logo-${activeToggle === "BUY" ? "honey" : "locks"}.png`}
-                  alt="coinlogo"
+            <div className="flex h-1/2 w-full items-center gap-4 !border-t-0 px-8">
+              <InputLogo type={activeToggle === "BUY" ? "honey" : "locks"} />
+              <div className="h-1/2 w-3/5 border-2 border-black bg-white">
+                <SwapInput
+                  isLoading={topAmountLoading}
+                  value={displayString}
+                  onChange={handleTopChange}
+                  balance={handleTopBalance()}
+                  walletInfoLoading={walletInfoLoading}
+                  unitPrice={
+                    activeToggle === "BUY" ? undefined : simInfo.market
+                  }
                 />
-                <h1 className="ml-1 font-baloo text-[3vw] font-semibold md:text-[2.4vw] lg:ml-3 lg:text-[1.4vw]">
-                  {activeToggle === "BUY" ? "HONEY" : "LOCKS"}
-                </h1>
               </div>
-              <div className="absolute left-[26%] top-[15%] h-[25%] w-[60%] border-2 border-black bg-white lg:left-[22%] lg:h-[22%] lg:w-[55.6%]">
-                <div className="relative h-[100%] w-[100%]">
-                  {topAmountLoading ? (
-                    <span className="loader-small absolute left-[8%] top-[40%]"></span>
-                  ) : (
-                    <input
-                      className="absolute left-[5%] top-[7.5%] w-[90%] border-none bg-transparent font-baloo text-[4.5vw] font-bold focus:outline-none md:text-[4vw] lg:text-[3.5vw] xl:text-[2.25vw] 2xl:text-[2vw] tall:top-[15%] tall:text-[5.5vw] tall:md:text-[4vw] tall:lg:text-[3.5vw] tall:xl:text-[2.5vw] tall:2xl:text-[2vw]"
-                      type="number"
-                      id="number-input"
-                      placeholder="0.00"
-                      value={displayString}
-                      onChange={(e) => handleTopChange(e.target.value)}
-                    />
-                  )}
-                  <span className="absolute bottom-0 right-[3%] font-baloo text-[2vw] font-bold text-[#7F7F7F] md:text-[1.75vw] lg:text-[1.25vw] xl:text-[0.9vw] tall:text-[2.5vw] tall:md:text-[1.75vw] tall:lg:text-[1.25vw] tall:xl:text-[0.9vw]">
-                    balance:{" "}
-                    {walletInfoLoading ? loadingElement() : handleTopBalance()}
-                  </span>
-                </div>
+              <div className="h-1/2">
+                <img
+                  className="size-8 cursor-pointer hover:animate-spin"
+                  src="/images/icon-settings.png"
+                  alt="settings"
+                  onClick={() => changeSlippageToggle(true)}
+                />
               </div>
             </div>
-            <div className="h-[50%] w-[100%]">
-              <div className="absolute left-[1%] top-[71%] flex flex-row items-center sm:left-[2%] xl:left-[3%]">
-                <img
-                  className="h-6 w-6 md:h-8 md:w-8"
-                  src={`/images/logo-${activeToggle === "BUY" ? "locks" : "honey"}.png`}
-                  alt="coinlogo"
+            <div className="flex h-1/2 w-full items-center gap-4 px-8">
+              <InputLogo type={activeToggle === "BUY" ? "locks" : "honey"} />
+              <div className="h-1/2 w-3/5 border-2 border-black bg-white">
+                <SwapInput
+                  isLoading={bottomAmountLoading}
+                  value={bottomDisplayString}
+                  onChange={handleBottomChange}
+                  balance={handleBottomBalance()}
+                  walletInfoLoading={walletInfoLoading}
+                  unitPrice={
+                    activeToggle === "BUY" ? simInfo.market : undefined
+                  }
                 />
-                <h1 className="ml-1 font-baloo text-[3vw] font-semibold md:text-[2.4vw] lg:ml-3 lg:text-[1.4vw]">
-                  {activeToggle === "BUY" ? "LOCKS" : "HONEY"}
-                </h1>
-              </div>
-              <div className="absolute left-[26%] top-[65%] h-[25%] w-[60%] border-2 border-black bg-white lg:left-[22%] lg:h-[22%] lg:w-[55.6%]">
-                <div className="relative h-[100%] w-[100%]">
-                  {bottomAmountLoading ? (
-                    <span className="loader-small absolute left-[8%] top-[40%]"></span>
-                  ) : (
-                    <input
-                      className="absolute left-[5%] top-[7.5%] w-[90%] border-none bg-transparent font-baloo text-[4.5vw] font-bold focus:outline-none md:text-[4vw] lg:text-[3.5vw] xl:text-[2.25vw] 2xl:text-[2vw] tall:top-[15%] tall:text-[5.5vw] tall:md:text-[4vw] tall:lg:text-[3.5vw] tall:xl:text-[2.5vw] tall:2xl:text-[2vw]"
-                      type="number"
-                      id="number-input"
-                      placeholder="0.00"
-                      value={bottomDisplayString}
-                      onChange={(e) => handleBottomChange(e.target.value)}
-                    />
-                  )}
-                  <span className="absolute bottom-0 right-[3%] font-baloo text-[2vw] font-bold text-[#7F7F7F] md:text-[1.75vw] lg:text-[1.25vw] xl:text-[0.9vw] tall:text-[2.5vw] tall:md:text-[1.75vw] tall:lg:text-[1.25vw] tall:xl:text-[0.9vw]">
-                    balance:{" "}
-                    {walletInfoLoading
-                      ? loadingElement()
-                      : handleBottomBalance()}
-                  </span>
-                </div>
               </div>
             </div>
           </div>

@@ -308,7 +308,7 @@ export const TradeTab = ({ params }: TradeTabProps) => {
   return (
     <div className="relative flex h-[100%] w-[100%] flex-col">
       <img
-        className="absolute left-[89%] top-[16%] h-6 w-6 cursor-pointer hover:scale-125 lg:left-[87.5%] lg:top-[5%] lg:h-7 lg:w-7"
+        className="absolute left-[89%] top-[16%] h-6 w-6 cursor-pointer hover:animate-spin lg:left-[87.5%] lg:top-[5%] lg:h-8 lg:w-8"
         src="/images/icon-settings.png"
         alt="settings"
         onClick={() => changeSlippageToggle(true)}
@@ -360,11 +360,7 @@ export const TradeTab = ({ params }: TradeTabProps) => {
         </h1>
       </div>
       <div className="h-[50%] w-[100%] border-t-2 border-[#FFCD00] px-[12.5%] py-[3.5%]">
-        <h1 className="mb-[2.5%] font-baloo text-[2.5vw] font-medium text-white md:text-[2vw] lg:text-[1vw]">
-          {activeToggle === "TRADEOT"
-            ? "Minimum tokens received"
-            : "Predicted Output"}
-        </h1>
+        <h1 className="mb-[2.5%] font-baloo text-[2.5vw] font-medium text-white md:text-[2vw] lg:text-[1vw]">Minimum tokens received</h1>
         <div className="flex h-[50%] w-[100%] flex-row items-center justify-between border-2 border-black bg-slate-200 pl-[3.5%] pr-[1%]">
           <span className="text-nowrap font-baloo text-[4vw] font-bold lg:text-[2vw]">
             {outputTokensLoading

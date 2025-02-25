@@ -360,7 +360,7 @@ export const TradeTabMobile = ({ params }: TradeTabProps) => {
       <div className="h-[50%] w-[100%] border-t-2 border-[#FFCD00]">
         <div className="relative mx-auto h-[100%] w-[95%] py-[3.5%]">
           <h1 className="mt-[2.5%] font-baloo text-[4vw] font-medium text-white">
-            Estimated tokens received
+            Minimum tokens received
           </h1>
           <div className="mt-[5%] flex h-[50%] w-[100%] flex-row items-center justify-between border-2 border-black bg-slate-200 pl-[3.5%] pr-[1%]">
             <span className="text-nowrap font-baloo text-[5.5vw] font-bold">

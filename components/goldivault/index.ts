@@ -6,8 +6,6 @@ export * from "./poolsPage";
 export * from "./poolsPopup";
 export * from "./toggles";
 export * from "./notification";
-export * from "./burnPopup";
-export * from "./expirePopup";
 export * from "./infoPopup";
 export * from "./tradeTab";
 export * from "./slippagePopup";

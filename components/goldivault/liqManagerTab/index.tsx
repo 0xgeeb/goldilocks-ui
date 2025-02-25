@@ -54,7 +54,7 @@ export const LiqManagerTab = ({ params }: LiqManagerTabProps) => {
             {activeToggle === 'ADDLIQ' ? "Deposit" : "Withdraw"} Liquidity
           </h1>
           <img
-            className="h-6 w-6 cursor-pointer hover:scale-125 lg:h-7 lg:w-7"
+            className="h-6 w-6 cursor-pointer hover:animate-spin lg:h-8 lg:w-8"
             src="/images/icon-settings.png"
             alt="settings"
             onClick={() => changeSlippageToggle(true)}

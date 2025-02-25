@@ -53,8 +53,7 @@ export const VaultBox = ({ params }: VaultBoxProps) => {
     activeToggle,
     calculateOTRedeem,
     notification,
-    burnPopupToggle,
-    setBurnPopupToggle,
+    enableInfoPopup,
     expirePopupToggle,
     setExpirePopupToggle,
     walletInfoLoading,
@@ -243,7 +242,7 @@ export const VaultBox = ({ params }: VaultBoxProps) => {
                   {activeToggle === "REDEEMOT" && (
                     <span
                       className="ml-2 cursor-pointer rounded-full border-2 border-white px-2 hover:bg-black"
-                      onClick={() => setBurnPopupToggle(!burnPopupToggle)}
+                      onClick={() => enableInfoPopup("redeemotinfo")}
                     >
                       ?
                     </span>
@@ -251,7 +250,7 @@ export const VaultBox = ({ params }: VaultBoxProps) => {
                   {activeToggle === "REDEEMYT" && (
                     <span
                       className="ml-2 cursor-pointer rounded-full border-2 border-white px-2 hover:bg-black"
-                      onClick={() => setExpirePopupToggle(!expirePopupToggle)}
+                      onClick={() => enableInfoPopup("redeemytinfo")}
                     >
                       ?
                     </span>
