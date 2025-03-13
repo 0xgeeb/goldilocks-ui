@@ -1,21 +1,23 @@
 "use client";
 
-import { useGeo } from "../../../providers";
+import { useSetAtom } from "jotai";
+
+import { geoAtom } from "@/app/_components/atoms/geoAtom";
 
 export const TAndCs = () => {
-  const { changeSigned } = useGeo();
+  const setGeo = useSetAtom(geoAtom);
 
   return (
     <main className="relative h-screen w-screen bg-[url('/images/bg-goldiswap.png')] bg-cover bg-bottom">
-      <div className="absolute left-[20%] top-[7.5%] h-[85%] w-[60%] border-2 border-black bg-[#EEDCD2]">
+      <div className="absolute left-[20%] top-[7.5%] h-[85%] w-3/5 border-2 border-black bg-[#EEDCD2]">
         <div className="absolute left-0 top-3 w-6 skew-y-[45deg] border-b-2 border-black"></div>
         <div className="absolute bottom-3 left-0 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
         <div className="absolute right-0 top-3 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
         <div className="absolute bottom-3 right-0 w-6 skew-y-[45deg] border-b-2 border-black"></div>
         <div className="absolute inset-6 border-2 border-black bg-[#D9C6BA]">
-          <div className="relative h-[100%] w-[100%]">
+          <div className="relative size-full">
             <div
-              className="flex h-[100%] w-[100%] flex-col overflow-y-auto p-[7.5%] text-center font-amaticbold text-[3vw] font-medium text-black lg:text-[1.5vw]"
+              className="flex size-full flex-col overflow-y-auto p-[7.5%] text-center font-amaticbold text-[3vw] font-medium text-black lg:text-[1.5vw]"
               id="gimme-scrollbar"
             >
               <p className="text-[7.5vw] font-bold lg:text-[5vw]">
@@ -848,12 +850,14 @@ export const TAndCs = () => {
                 in connection thereto, and each party waives any right (whether
                 statutory or otherwise) to use and rely upon any other language,
                 or translations. Il est de la volonté expresse des parties que
-                tous les documents qui s'y rattachent soient rédigés en langue
-                anglaise.
+                tous les documents qui s&apos;y rattachent soient rédigés en
+                langue anglaise.
               </p>
               <p
                 className="cursor-pointer text-[7.5vw] font-bold hover:scale-[120%] lg:text-[5vw]"
-                onClick={() => changeSigned("TRUE")}
+                onClick={() => {
+                  setGeo("TRUE");
+                }}
               >
                 please click here to sign
               </p>

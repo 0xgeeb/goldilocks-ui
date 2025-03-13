@@ -19,6 +19,7 @@ type VaultBoxProps = {
 };
 
 export const VaultBox = ({ params }: VaultBoxProps) => {
+
   const {
     displayString,
     handleChange,
@@ -50,12 +51,16 @@ export const VaultBox = ({ params }: VaultBoxProps) => {
     refreshGoldivaultInfoEbtc,
     refreshGoldivaultWalletInfoEbtc,
     goldivaultWalletInfoEbtc,
+    refreshGoldivaultInfoRseth,
+    refreshGoldivaultWalletInfoRseth,
+    goldivaultWalletInfoRseth,
+    refreshGoldivaultInfoUsdchoneylp,
+    refreshGoldivaultWalletInfoUsdchoneylp,
+    goldivaultWalletInfoUsdchoneylp,
     activeToggle,
     calculateOTRedeem,
     notification,
     enableInfoPopup,
-    expirePopupToggle,
-    setExpirePopupToggle,
     walletInfoLoading,
     redeemYTAmounts,
   } = useGoldivault();
@@ -81,7 +86,11 @@ export const VaultBox = ({ params }: VaultBoxProps) => {
               ? goldivaultWalletInfoRusd.rusdot
               : params.vaultToken === "ebtc"
                 ? goldivaultWalletInfoEbtc.ebtcot
-              : {};
+                : params.vaultToken === "rseth"
+                  ? goldivaultWalletInfoRseth.rsethot
+                  : params.vaultToken === "usdchoneylp"
+                    ? goldivaultWalletInfoUsdchoneylp.usdchoneylpot
+                    : {};
 
   const vaultYT =
     params.vaultToken === "weeth"
@@ -94,7 +103,11 @@ export const VaultBox = ({ params }: VaultBoxProps) => {
               ? goldivaultWalletInfoRusd.rusdyt
               : params.vaultToken === "ebtc"
                 ? goldivaultWalletInfoEbtc.ebtcyt
-              : {};
+                : params.vaultToken === "rseth"
+                  ? goldivaultWalletInfoRseth.rsethyt
+                  : params.vaultToken === "usdchoneylp"
+                    ? goldivaultWalletInfoUsdchoneylp.usdchoneylpyt
+                    : {};
 
   const vaultDT =
     params.vaultToken === "weeth"
@@ -107,7 +120,11 @@ export const VaultBox = ({ params }: VaultBoxProps) => {
               ? goldivaultWalletInfoRusd.rusd
               : params.vaultToken === "ebtc"
                 ? goldivaultWalletInfoEbtc.ebtc
-              : {};
+                : params.vaultToken === "rseth"
+                  ? goldivaultWalletInfoRseth.rseth
+                  : params.vaultToken === "usdchoneylp"
+                    ? goldivaultWalletInfoUsdchoneylp.usdchoneylp
+                    : {};
 
   useEffect(() => {
     if (params.vaultToken === "weeth") {
@@ -122,6 +139,12 @@ export const VaultBox = ({ params }: VaultBoxProps) => {
     } else if (params.vaultToken === "ebtc") {
       refreshGoldivaultInfoEbtc();
       refreshGoldivaultWalletInfoEbtc();
+    } else if (params.vaultToken === "rseth") {
+      refreshGoldivaultInfoRseth()
+      refreshGoldivaultWalletInfoRseth()
+    } else if (params.vaultToken === "usdchoneylp") {
+      refreshGoldivaultInfoUsdchoneylp()
+      refreshGoldivaultWalletInfoUsdchoneylp()
     } else {
       refreshGoldivaultInfoUnibtc();
       refreshGoldivaultWalletInfoUnibtc();
@@ -258,7 +281,7 @@ export const VaultBox = ({ params }: VaultBoxProps) => {
                 </h1>
                 <div className="flex h-[50%] w-[100%] flex-row items-center justify-between border-2 border-black bg-white pl-[3.5%] pr-[1%]">
                   <input
-                    className="h-[100%] w-full border-none bg-transparent font-baloo text-[4vw] font-bold focus:outline-none lg:text-[2vw]"
+                    className="h-[100%] w-full border-none bg-transparent font-baloo text-[4vw] font-bold focus:outline-hidden lg:text-[2vw]"
                     type="number"
                     id="number-input"
                     placeholder="0.00"

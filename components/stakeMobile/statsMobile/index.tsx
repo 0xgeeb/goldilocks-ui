@@ -1,5 +1,7 @@
-import { useStake } from "../../../providers";
+import { formatAsString } from "@/app/_components/utils";
+
 import { useGoldiswapMath } from "../../../hooks";
+import { useStake } from "../../../providers";
 
 export const StatsMobile = () => {
   const { stakeInfo, infoLoading } = useStake();
@@ -12,10 +14,6 @@ export const StatsMobile = () => {
 
   const loadingElement = () => {
     return <span className="loader-small-mobile mx-1"></span>;
-  };
-
-  const formatAsString = (num: number): string => {
-    return num.toLocaleString("en-US", { maximumFractionDigits: 2 });
   };
 
   const handleInfo = (num: number) => {
@@ -59,7 +57,7 @@ export const StatsMobile = () => {
         <span>market price:</span>
         <span>target ratio:</span>
       </div>
-      <div className="h-[100%] w-[7.5%]"></div>
+      <div className="h-full w-[7.5%]"></div>
       <div className="flex flex-col items-start">
         <span
           className={handleColors(stakeInfo.targetRatio, stakeInfo.targetRatio)}

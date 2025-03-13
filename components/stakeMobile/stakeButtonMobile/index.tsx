@@ -1,7 +1,10 @@
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
-import { useStake } from "../../../providers";
+
+import { formatAsString } from "@/app/_components/utils";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+
 import { useStakeTx } from "../../../hooks";
+import { useStake } from "../../../providers";
 
 export const StakeButtonMobile = () => {
   const {
@@ -34,10 +37,6 @@ export const StakeButtonMobile = () => {
     sendStirTx,
     sendClaimTx,
   } = useStakeTx();
-
-  const formatAsString = (num: number): string => {
-    return num.toLocaleString("en-US", { maximumFractionDigits: 2 });
-  };
 
   const refreshInfo = () => {
     setDisplayString("");

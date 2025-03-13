@@ -6,4 +6,3 @@ export * from "./StakeProvider";
 export * from "./GoldilendProvider";
 export * from "./GoldivaultProvider";
 export * from "./GovProvider";
-export * from "./GeoProvider";

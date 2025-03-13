@@ -2,13 +2,14 @@
 
 import { useEffect } from "react";
 
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 
+import { geoAtom } from "@/app/_components/atoms/geoAtom";
 import { pageLoadingAtom } from "@/app/_components/atoms/pageLoadingAtom";
 import CsrPageLayout from "@/app/_components/CsrPageLayout";
 
 import { InfoDisplayPopup, VaultDisplay } from "../";
-import { useDesktop, useGeo, useGoldivault } from "../../../providers";
+import { useDesktop, useGoldivault } from "../../../providers";
 import { GoldivaultPageMobile } from "../../goldivaultMobile";
 import { Loading, TAndCs } from "../../utils";
 
@@ -25,7 +26,7 @@ export const GoldivaultPage = () => {
 
   const { isDesktop } = useDesktop();
 
-  const { signed } = useGeo();
+  const signed = useAtomValue(geoAtom);
 
   useEffect(() => {
     refreshVaultDisplayInfo();

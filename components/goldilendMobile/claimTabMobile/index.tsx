@@ -1,9 +1,11 @@
 "use client";
 
+import { formatAsString } from "@/app/_components/utils";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useGoldilend } from "../../../providers";
+
 import { LendNotificationMobile, LendWalletBalanceMobilePopup } from "../";
 import { useGoldilendTx } from "../../../hooks";
+import { useGoldilend } from "../../../providers";
 
 export const ClaimTabMobile = () => {
   const {
@@ -28,10 +30,6 @@ export const ClaimTabMobile = () => {
 
   const loadingElement = () => {
     return <span className="loader-small-mobile mx-1"></span>;
-  };
-
-  const formatAsString = (num: number): string => {
-    return num.toLocaleString("en-US", { maximumFractionDigits: 2 });
   };
 
   const handleInfoClaimable = (num: number) => {
@@ -99,11 +97,11 @@ export const ClaimTabMobile = () => {
         <div className="absolute right-0 top-3 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
         <div className="absolute bottom-3 right-0 w-6 skew-y-[45deg] border-b-2 border-black"></div>
         <div
-          className={`absolute inset-3 ${txConfirming ? "border-l-2 border-r-2 border-black" : "border-2 border-black"} bg-[#D9C6BA]`}
+          className={`absolute inset-3 ${txConfirming ? "border-x-2 border-black" : "border-2 border-black"} bg-[#D9C6BA]`}
         >
           {txConfirming ? (
             <img
-              className="h-[100%] w-[100%]"
+              className="size-full"
               src="/images/bg-transaction-mobile.png"
               alt="tx"
             />
@@ -112,9 +110,9 @@ export const ClaimTabMobile = () => {
           ) : balanceMobileToggle ? (
             <LendWalletBalanceMobilePopup />
           ) : (
-            <div className="relative flex h-[100%] w-[100%] flex-col items-center px-[4%] font-baloo font-semibold">
+            <div className="relative flex size-full flex-col items-center px-[4%] font-baloo font-semibold">
               <h1 className="font-amaticbold text-[14vw]">claim yield</h1>
-              <div className="mt-[10%] flex w-[100%] flex-col justify-between">
+              <div className="mt-[10%] flex w-full flex-col justify-between">
                 <span className="text-[4.5vw] text-[#9C4924]">
                   Porridge Yield
                 </span>
@@ -122,18 +120,18 @@ export const ClaimTabMobile = () => {
                   <span>$PRG balance:</span>
                   <span>{handleInfo(balance.prg)}</span>
                 </div> */}
-                <div className="flex w-[100%] flex-row justify-between text-[3.5vw]">
+                <div className="flex w-full flex-row justify-between text-[3.5vw]">
                   <span>claimable $PRG:</span>
                   <span>
                     {handleInfoClaimable(goldilendWalletInfo.lendClaimable)}
                   </span>
                 </div>
               </div>
-              <div className="mt-[15%] flex w-[100%] flex-col justify-between">
+              <div className="mt-[15%] flex w-full flex-col justify-between">
                 <span className="text-[4.5vw] text-[#9C4924]">
                   Infrared iBGT Staking Yield
                 </span>
-                <div className="flex w-[100%] flex-row justify-between">
+                <div className="flex w-full flex-row justify-between">
                   <span>Available Honey to Claim:</span>
                   <span>
                     {handleInfoClaimable(

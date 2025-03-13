@@ -62,7 +62,7 @@ export const LockTab = () => {
       <div className="absolute left-[30%] top-[30%] h-[36%] w-[65%] border-2 border-black bg-white xl:left-[22%] xl:w-[55.6%]">
         <div className="relative h-[100%] w-[100%]">
           <input
-            className="absolute left-[7.5%] top-[17%] w-[90%] border-none bg-transparent font-baloo text-[4vw] font-bold focus:outline-none xl:left-[5%] xl:text-[2vw]"
+            className="absolute left-[7.5%] top-[17%] w-[90%] border-none bg-transparent font-baloo text-[4vw] font-bold focus:outline-hidden xl:left-[5%] xl:text-[2vw]"
             type="number"
             id="number-input"
             placeholder="0.00"

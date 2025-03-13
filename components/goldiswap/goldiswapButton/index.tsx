@@ -1,10 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+
 import { useAccount } from "wagmi";
-import { useGoldiswap } from "../../../providers";
+
+import { formatAsString } from "@/app/_components/utils";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+
 import { useGoldiswapTx } from "../../../hooks";
+import { useGoldiswap } from "../../../providers";
 
 export const GoldiswapButton = () => {
   const { address, isConnected } = useAccount();
@@ -41,10 +45,6 @@ export const GoldiswapButton = () => {
     useGoldiswapTx();
 
   const [buttonLoadingColor, setButtonLoadingColor] = useState<boolean>(false);
-
-  const formatAsString = (num: number): string => {
-    return num.toLocaleString("en-US", { maximumFractionDigits: 2 });
-  };
 
   const refreshInfo = () => {
     setDisplayString("");
@@ -290,14 +290,14 @@ export const GoldiswapButton = () => {
       {allowanceButtons && (
         <div>
           <button
-            className="absolute left-[24%] top-[70%] h-[8%] w-[24%] border-2 border-black bg-[#E7B941] font-amaticbold text-[4vw] hover:scale-110 hover:bg-[#4D0B24] hover:text-[#E7B941] md:top-[68%] md:text-[2.75vw] lg:left-[30.9%] lg:top-[69%] lg:w-[16.6%] lg:text-[2vw] xl:top-[69%] xl:text-[1.75vw] 2xl:text-[1.5vw]"
+            className="cursor-pointer absolute left-[24%] top-[70%] h-[8%] w-[24%] border-2 border-black bg-[#E7B941] font-amaticbold text-[4vw] hover:scale-110 hover:bg-[#4D0B24] hover:text-[#E7B941] md:top-[68%] md:text-[2.75vw] lg:left-[30.9%] lg:top-[69%] lg:w-[16.6%] lg:text-[2vw] xl:top-[69%] xl:text-[1.75vw] 2xl:text-[1.5vw]"
             id="left-approve-button"
             onClick={() => handleLeftButtonClick()}
           >
             approve tx
           </button>
           <button
-            className="absolute left-[52%] top-[70%] h-[8%] w-[24%] border-2 border-black bg-[#E7B941] font-amaticbold text-[4vw] hover:scale-110 hover:bg-[#4D0B24] hover:text-[#E7B941] md:top-[68%] md:text-[2.75vw] lg:left-[52.5%] lg:top-[69%] lg:w-[16.6%] lg:text-[2vw] xl:top-[69%] xl:text-[1.75vw] 2xl:text-[1.5vw]"
+            className="cursor-pointer absolute left-[52%] top-[70%] h-[8%] w-[24%] border-2 border-black bg-[#E7B941] font-amaticbold text-[4vw] hover:scale-110 hover:bg-[#4D0B24] hover:text-[#E7B941] md:top-[68%] md:text-[2.75vw] lg:left-[52.5%] lg:top-[69%] lg:w-[16.6%] lg:text-[2vw] xl:top-[69%] xl:text-[1.75vw] 2xl:text-[1.5vw]"
             id="right-approve-button"
             onClick={() => handleRightButtonClick()}
           >
@@ -310,7 +310,7 @@ export const GoldiswapButton = () => {
           {({ account, chain, openChainModal, openConnectModal }) => {
             return (
               <button
-                className={`absolute left-[32%] top-[70%] h-[8%] w-[36%] md:left-[37%] md:top-[68%] md:w-[26%] lg:left-[41.6%] lg:top-[69%] lg:w-[16.6%] ${buttonLoadingColor ? "bg-[#4D0B24] text-[#E7B941]" : "bg-[#E7B941] text-black"} border-2 border-black font-amaticbold text-[5vw] hover:scale-110 hover:bg-[#4D0B24] hover:text-[#E7B941] md:text-[4vw] lg:text-[3vw] xl:text-[2vw] 2xl:text-[1.9vw] tall:text-[6vw] tall:md:text-[4vw] tall:lg:text-[3vw] tall:xl:text-[2.5vw] tall:2xl:text-[1.9vw]`}
+                className={`cursor-pointer absolute left-[32%] top-[70%] h-[8%] w-[36%] md:left-[37%] md:top-[68%] md:w-[26%] lg:left-[41.6%] lg:top-[69%] lg:w-[16.6%] ${buttonLoadingColor ? "bg-[#4D0B24] text-[#E7B941]" : "bg-[#E7B941] text-black"} border-2 border-black font-amaticbold text-[5vw] hover:scale-110 hover:bg-[#4D0B24] hover:text-[#E7B941] md:text-[4vw] lg:text-[3vw] xl:text-[2vw] 2xl:text-[1.9vw] tall:text-[6vw] tall:md:text-[4vw] tall:lg:text-[3vw] tall:xl:text-[2.5vw] tall:2xl:text-[1.9vw]`}
                 id="swap-button"
                 onClick={() => {
                   const button = document.getElementById("swap-button");

@@ -1,9 +1,12 @@
 "use client";
 
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
-import { useBorrow } from "../../../providers";
+
+import { formatAsString } from "@/app/_components/utils";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+
 import { useBorrowTx } from "../../../hooks";
+import { useBorrow } from "../../../providers";
 
 export const BorrowButtonMobile = () => {
   const { address } = useAccount();
@@ -28,10 +31,6 @@ export const BorrowButtonMobile = () => {
 
   const { checkAllowance, sendApproveTx, sendBorrowTx, sendRepayTx } =
     useBorrowTx();
-
-  const formatAsString = (num: number): string => {
-    return num.toLocaleString("en-US", { maximumFractionDigits: 2 });
-  };
 
   const refreshInfo = () => {
     setDisplayString("");

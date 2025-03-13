@@ -1,7 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+
 import { useAccount } from "wagmi";
+
+import { formatAsString } from "@/app/_components/utils";
+
 import { useGoldilend } from "../../../providers";
 import { LendNotificationMobile } from "../../goldilendMobile";
 
@@ -89,10 +93,6 @@ export const BorrowTabMobile = () => {
     return true;
   };
 
-  const formatAsString = (num: number): string => {
-    return num.toLocaleString("en-US", { maximumFractionDigits: 2 });
-  };
-
   const loadingElement = () => {
     return <span className="loader-small mx-auto mt-[10%]"></span>;
   };
@@ -113,18 +113,18 @@ export const BorrowTabMobile = () => {
   return (
     <>
       {selectScreen && (
-        <div className="flex h-[100%] w-[100%] flex-col items-center">
+        <div className="flex size-full flex-col items-center">
           <h1 className="mt-[5%] font-amaticbold text-[10vw]">
             select collateral
           </h1>
           <div
-            className="flex h-[80%] w-[95%] flex-wrap overflow-y-auto"
+            className="flex h-4/5 w-[95%] flex-wrap overflow-y-auto"
             id="hide-scrollbar"
           >
             {infoLoading && isConnected ? (
               loadingElement()
             ) : !isConnected || ownedBeras.length == 0 ? (
-              <div className="flex h-[100%] w-[100%] flex-col items-center opacity-50">
+              <div className="flex size-full flex-col items-center opacity-50">
                 <img
                   className="my-[10%] w-[70%]"
                   src="/images/icon-not-found.png"
@@ -136,7 +136,7 @@ export const BorrowTabMobile = () => {
               ownedBeras.map((bera, index) => (
                 <div key={index} className="h-[45%] w-[50%] py-2">
                   <img
-                    className={`ml-[5%] h-[100%] w-[90%] border-2 border-black hover:scale-110 hover:cursor-pointer ${selectedBera.index == bera.index ? "border-4 border-black" : "opacity-75"}`}
+                    className={`ml-[5%] h-full w-[90%] border-2 border-black hover:scale-110 hover:cursor-pointer ${selectedBera.index == bera.index ? "border-4 border-black" : "opacity-75"}`}
                     onClick={() => handleBeraClick(bera)}
                     src={
                       bera.name === "BondBera"
@@ -154,14 +154,14 @@ export const BorrowTabMobile = () => {
       {!selectScreen &&
         (txConfirming ? (
           <img
-            className="h-[100%] w-[100%]"
+            className="size-full"
             src="/images/bg-transaction-mobile.png"
             alt="tx"
           />
         ) : notification.toggle ? (
           <LendNotificationMobile />
         ) : (
-          <div className="relative flex h-[100%] w-[100%] flex-col items-center justify-between py-[3%]">
+          <div className="relative flex size-full flex-col items-center justify-between py-[3%]">
             <div
               className="absolute right-[3%] top-[3%] flex h-[8%] w-[10%] items-center justify-center border-2 border-black bg-[#E7B941] text-[5.5vw] text-black"
               onClick={() => setSelectScreen(true)}
@@ -169,13 +169,13 @@ export const BorrowTabMobile = () => {
               &#8634;
             </div>
             <h1 className="font-amaticbold text-[10vw]">create loan</h1>
-            <div className="relative flex h-[20%] w-[95%] flex-row items-start justify-between">
+            <div className="relative flex h-1/5 w-[95%] flex-row items-start justify-between">
               <span className="absolute left-[3%] top-[-20%] font-baloo text-[3vw] font-semibold">
                 Collateral:
               </span>
               {selectedBera.name !== "" && (
                 <img
-                  className="mx-auto h-[70%] w-[20%] border-2 border-black"
+                  className="mx-auto h-[70%] w-1/5 border-2 border-black"
                   onClick={() => handleBeraClick(selectedBera)}
                   src={
                     selectedBera.name === "BondBera"
@@ -186,7 +186,7 @@ export const BorrowTabMobile = () => {
                   key={selectedBera.index}
                 />
               )}
-              <div className="absolute bottom-[0%] left-[10%] flex w-[80%] flex-row items-center justify-between font-baloo text-[3vw] font-semibold">
+              <div className="absolute bottom-0 left-[10%] flex w-4/5 flex-row items-center justify-between font-baloo text-[3vw] font-semibold">
                 <span>borrow limit:</span>
                 <span>
                   {borrowLimit > 0 ? formatAsString(borrowLimit) : "0.00"} iBGT
@@ -196,7 +196,7 @@ export const BorrowTabMobile = () => {
             <div className="flex w-[95%] flex-row items-center justify-between font-baloo text-[3.5vw] font-semibold">
               <span>Loan Amount:</span>
               <input
-                className="w-[55%] border-2 border-black bg-white pl-2 focus:outline-none"
+                className="w-[55%] border-2 border-black bg-white pl-2 focus:outline-hidden"
                 type="number"
                 id="number-input"
                 placeholder="0.00"
@@ -207,7 +207,7 @@ export const BorrowTabMobile = () => {
             <div className="flex w-[95%] flex-row items-center justify-between font-baloo text-[3.5vw] font-semibold">
               <span>Repay Deadline:</span>
               <input
-                className="w-[55%] border-2 border-black bg-white pl-2 focus:outline-none"
+                className="w-[55%] border-2 border-black bg-white pl-2 focus:outline-hidden"
                 type="text"
                 id="number-input"
                 placeholder="mm-dd-yyyy"
@@ -216,9 +216,9 @@ export const BorrowTabMobile = () => {
               />
             </div>
             <div className="my-[1%] flex w-[95%] flex-row items-center justify-between font-baloo text-[3.5vw] font-semibold">
-              <div className="flex h-[100%] w-[70%] items-center justify-center bg-[#C09D87] p-2">
+              <div className="flex h-full w-[70%] items-center justify-center bg-[#C09D87] p-2">
                 <input
-                  className="h-[100%] w-[100%] bg-black"
+                  className="size-full bg-black"
                   id="date-slider"
                   type="range"
                   min="14"

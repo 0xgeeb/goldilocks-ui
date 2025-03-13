@@ -2,14 +2,15 @@
 
 import { useEffect } from "react";
 
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 
+import { geoAtom } from "@/app/_components/atoms/geoAtom";
 import { pageLoadingAtom } from "@/app/_components/atoms/pageLoadingAtom";
 import CsrPageLayout from "@/app/_components/CsrPageLayout";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 
 import { useGoldiswapMath } from "../../../hooks/useGoldiswapMath";
-import { useBorrow, useDesktop, useGeo } from "../../../providers";
+import { useBorrow, useDesktop } from "../../../providers";
 import {
   BorrowBox,
   BorrowButton,
@@ -39,7 +40,7 @@ export const BorrowPage = () => {
 
   const { isDesktop } = useDesktop();
 
-  const { signed } = useGeo();
+  const signed = useAtomValue(geoAtom);
 
   const { marketPrice } = useGoldiswapMath();
 
@@ -65,6 +66,20 @@ export const BorrowPage = () => {
       return "-";
     } else if (num > 0) {
       return formatAsTokenPrice(num);
+    } else {
+      return "-";
+    }
+  };
+
+  const formatAsTokenPriceExtra = (num: number): string => {
+    return num.toLocaleString("en-US", { maximumFractionDigits: 4 });
+  };
+
+  const handlePriceInfo = (num: number) => {
+    if (infoLoading) {
+      return "-";
+    } else if (num > 0) {
+      return formatAsTokenPriceExtra(num);
     } else {
       return "-";
     }
@@ -128,11 +143,11 @@ export const BorrowPage = () => {
               </h1>
               <div className="absolute left-[10%] top-[15%] flex h-[3%] w-4/5 flex-row items-center justify-between bg-[#634C43] px-2 text-[2.25vw] md:left-[20%] md:top-[14%] md:w-3/5 md:text-[1.75vw] lg:left-1/4 lg:top-[12%] lg:w-[50%] lg:text-[1.5vw] xl:top-[11%] xl:text-[1vw] 2xl:left-[28.125%] 2xl:w-[43.75%] 2xl:text-[0.85vw]">
                 <span className="mt-1 font-baloo text-white">
-                  PSL/FSL ratio:{" "}
-                  {handleTokenInfo((borrowInfo.psl / borrowInfo.fsl) * 100)}%
+                  locks market price:{" "}
+                  ${handlePriceInfo(marketPrice(borrowInfo.fsl, borrowInfo.psl, borrowInfo.supply))}
                 </span>
                 <span className="mt-1 font-baloo text-white">
-                  market cap:{" "}
+                  locks market cap:{" "}
                   {handleTokenInfo(
                     (borrowInfo.supply *
                       marketPrice(

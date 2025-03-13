@@ -18,6 +18,7 @@ import routerv2ABI from "../abi/RouterV2.json";
 import goldigovABI from "../abi/Goldigovernor.json";
 import govlocksABI from "../abi/GovLocks.json";
 import depositguardABI from "../abi/DepositGuard.json"
+import goldivaultstakingABI from "../abi/GoldivaultStaking.json"
 
 export const contracts = {
   goldiswap: {
@@ -129,35 +130,35 @@ export const contracts = {
     abi: ibgtABI.abi,
   }, 
   solvbtcVault: {
-    address: "0xa861d5687ff698902A632E2e62AA7df41199B397",
+    address: "0xe2f6eF50fD232c7c9698F2f4CaE44A6D80AaFdEE",
     abi: weethvaultABI.abi,
   },
   solvbtcot: {
-    address: "0xBea86272fF455A7F60863E1D6224FB5Ad1eb147f",
+    address: "0xA01cB564ecc3F58a4e2bA5fD59d13a6b998de9b8",
     abi: ibgtABI.abi,
   },
   solvbtcyt: {
-    address: "0xB0D8A7dAa386597371A11837737c4E45A51a9eF3",
+    address: "0x89b37108D3eb174673D98f0a5bb419f47270130e",
     abi: ibgtABI.abi,
   },
   solvbtc: {
-    address: "0x0ed996697ABDe35eD6C3E61C562D37366ba06d88",
+    address: "0xCC0966D8418d412c599A6421b760a847eB169A8c",
     abi: ibgtABI.abi,
   },
   unibtcVault: {
-    address: "0x848EF5FD85AACeAc216d3b9a107aaF5c466241d9",
+    address: "0x8742DB52a4EAEFE88bE5D3431980E221aaAA1EE3",
     abi: weethvaultABI.abi,
   },
   unibtcot: {
-    address: "0x99a802915Ef43613c6dCb17D4bb112597689D5d6",
+    address: "0xE771779B350d2cC291E9461387d7f41765a7cB8b",
     abi: ibgtABI.abi,
   },
   unibtcyt: {
-    address: "0x4Ab870696407d1f1aEE537898dcdbFb8c83E89b1",
+    address: "0x888d15E66b5eb410ea5Df520Fc46f030BBa31299",
     abi: ibgtABI.abi,
   },
   unibtc: {
-    address: "0x2dbdDF2c6460371B6D63191a65F0BcE8429Aa675",
+    address: "0xC3827A4BC8224ee2D116637023b124CED6db6e90",
     abi: ibgtABI.abi,
   },
   rusd: {
@@ -176,6 +177,38 @@ export const contracts = {
     address: '0x0D7d10e0cB3BAde481cA28ba811822683c1E5705',
     abi: ibgtABI.abi
   },
+  rseth: {
+    address: "0x4186BFC76E2E237523CBC30FD220FE055156b41F",
+    abi: ibgtABI.abi
+  },
+  rsethVault: {
+    address: "0xE4dC8142CEd52C547384032e43379b0514341c22",
+    abi: weethvaultABI.abi
+  },
+  rsethot: {
+    address: "0xB1195a6cdB7ef8fB22671bd8321727dBB6DDDe03",
+    abi: ibgtABI.abi
+  },
+  rsethyt: {
+    address: "0xfb8283E50c89e367674BC566db3070D9e9Ff2fDd",
+    abi: ibgtABI.abi
+  },
+  usdchoneylp: {
+    address: "0xF961a8f6d8c69E7321e78d254ecAfBcc3A637621",
+    abi: ibgtABI.abi
+  },
+  usdchoneylpVault: {
+    address: "0xE712A065Aae828D6654ccBc96c4dD9152eEdFeA5",
+    abi: goldivaultstakingABI.abi
+  },
+  usdchoneylpot: {
+    address: "0xbAa40B380B283E8B1B7aA2Cd7f8b1ac6186be74B",
+    abi: ibgtABI.abi
+  },
+  usdchoneylpyt: {
+    address: "0xe2cA693a47C32bd33949120d31d42b9e5Ef5c7Ef",
+    abi: ibgtABI.abi
+  },
   goldigov: {
     address: "0x6c00d68Dc6BCC3D47d698F4B566CcBe893D34Fed",
     abi: goldigovABI.abi,
@@ -191,5 +224,14 @@ export const contracts = {
   rusdaquabera: {
     address: "0x20a49a266AE70d07Ba066Ef1F8b6e670216Ab2a6",
     abi: ibgtABI.abi
+  },
+  vaultLPaddys: {
+    weeth: "0xd7e3962974993870C28C25D031BF202021bf635B",
+    ebtc: "0x339b8859a691eb5c8E8E576E6Caf4c3556711e34",
+    unibtc: "0x54577C10Dee86BE94Daf4706224cf5952D54C191",
+    solvbtc: "0x8F513Fb5C947C20a01Dee083Cdb9250FBe73A6A8",
+    rseth: "0xE457b56a1f9379B604dFBcE809Da6fEA1dECE717",
+    rusd: "0x1a2A927F758AE242fB967481CF293D2a36883be6",
+    usdchoneylp: ""
   }
 };

@@ -1,7 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+
 import { useAccount } from "wagmi";
+
+import { formatAsString } from "@/app/_components/utils";
+
 import { useBorrow } from "../../../providers";
 
 export const WalletBalance = () => {
@@ -14,10 +18,6 @@ export const WalletBalance = () => {
   useEffect(() => {
     refreshBorrowWalletInfo();
   }, [isConnected]);
-
-  const formatAsString = (num: number): string => {
-    return num.toLocaleString("en-US", { maximumFractionDigits: 2 });
-  };
 
   const formatAsClaimable = (num: number): string => {
     return num.toLocaleString("en-US", { maximumFractionDigits: 4 });
@@ -52,51 +52,51 @@ export const WalletBalance = () => {
   return (
     <>
       <div
-        className={`absolute left-[25%] top-[35%] h-[4%] w-[14%] origin-top-left rotate-[90deg] hover:scale-105 md:left-[20%] md:w-[13%] lg:left-[25%] lg:w-[10.5%] xl:left-[75%] xl:top-[14%] xl:w-[10%] xl:origin-bottom-left 2xl:left-[71.875%] ${walletOpen && window.innerWidth >= 1280 ? "translate-x-[220%]" : ""} flex cursor-pointer items-center justify-center border-b-2 border-l-2 border-r-2 border-black bg-[#D5A774] font-baloo text-[1.5vw] font-semibold transition-transform ease-linear lg:text-[1.1vw] xl:border-b-0 xl:border-t-2 xl:text-[1vw] 2xl:text-[0.8vw]`}
+        className={`absolute left-1/4 top-[35%] h-[4%] w-[14%] origin-top-left rotate-90 hover:scale-105 md:left-[20%] md:w-[13%] lg:left-1/4 lg:w-[10.5%] xl:left-3/4 xl:top-[14%] xl:w-[10%] xl:origin-bottom-left 2xl:left-[71.875%] ${walletOpen && window.innerWidth >= 1280 ? "translate-x-[220%]" : ""} flex cursor-pointer items-center justify-center border-x-2 border-b-2 border-black bg-[#D5A774] font-baloo text-[1.5vw] font-semibold transition-transform ease-linear lg:text-[1.1vw] xl:border-b-0 xl:border-t-2 xl:text-[1vw] 2xl:text-[0.8vw]`}
         onClick={() => setWalletOpen((prev) => !prev)}
       >
-        <span className="scale-[-1]">WALLET BALANCE</span>
+        <span className="-scale-100">WALLET BALANCE</span>
       </div>
       <div
-        className={`absolute left-[61%] top-[18%] h-[32%] w-[19%] md:top-[17%] lg:left-[53%] lg:top-[15%] lg:w-[22%] xl:top-[14%] 2xl:left-[49.875%] ${walletOpen ? "translate-x-[100%] border-r-2" : ""} flex flex-col justify-between border-b-2 border-t-2 border-black bg-[#D5A774] bg-opacity-30 px-[0.5%] py-[1.5%] font-baloo text-[1.5vw] font-semibold text-white transition-transform ease-linear lg:text-[1.25vw] xl:px-[3%] xl:text-[1vw]`}
+        className={`absolute left-[61%] top-[18%] h-[32%] w-[19%] md:top-[17%] lg:left-[53%] lg:top-[15%] lg:w-[22%] xl:top-[14%] 2xl:left-[49.875%] ${walletOpen ? "translate-x-full border-r-2" : ""} flex flex-col justify-between border-y-2 border-black bg-[#D5A774]/30 px-[0.5%] py-[1.5%] font-baloo text-[1.5vw] font-semibold text-white transition-transform ease-linear lg:text-[1.25vw] xl:px-[3%] xl:text-[1vw]`}
       >
-        <div className="flex w-[100%] flex-row items-center justify-between">
+        <div className="flex w-full flex-row items-center justify-between">
           <span className="">
             {window.innerWidth > 1024 ? "locks balance:" : "locks:"}
           </span>
           <span className="">{handleInfo(borrowWalletInfo.locks)}</span>
         </div>
-        <div className="flex w-[100%] flex-row items-center justify-between">
+        <div className="flex w-full flex-row items-center justify-between">
           <span className="">
             {window.innerWidth > 1024 ? "honey balance:" : "honey:"}
           </span>
           <span className="">{handleInfo(borrowWalletInfo.honey)}</span>
         </div>
-        <div className="flex w-[100%] flex-row items-center justify-between">
+        <div className="flex w-full flex-row items-center justify-between">
           <span className="">
             {window.innerWidth > 1024 ? "porridge balance:" : "porridge:"}
           </span>
           <span className="">{handleInfo(borrowWalletInfo.prg)}</span>
         </div>
-        <div className="flex w-[100%] flex-row items-center justify-between">
+        <div className="flex w-full flex-row items-center justify-between">
           <span className="">
             {window.innerWidth > 1024 ? "staked locks:" : "staked:"}
           </span>
           <span className="">{handleInfo(borrowWalletInfo.staked)}</span>
         </div>
-        <div className="flex w-[100%] flex-row items-center justify-between">
+        <div className="flex w-full flex-row items-center justify-between">
           <span className="">
             {window.innerWidth > 1024 ? "locked locks:" : "locked:"}
           </span>
           <span className="">{handleInfo(borrowWalletInfo.locked)}</span>
         </div>
-        <div className="flex w-[100%] flex-row items-center justify-between">
+        <div className="flex w-full flex-row items-center justify-between">
           <span className="">
             {window.innerWidth > 1024 ? "borrowed honey:" : "borrowed:"}
           </span>
           <span className="">{handleInfo(borrowWalletInfo.borrowed)}</span>
         </div>
-        <div className="flex w-[100%] flex-row items-center justify-between">
+        <div className="flex w-full flex-row items-center justify-between">
           <span className="">
             {window.innerWidth > 1024 ? "claimable porridge:" : "claimable:"}
           </span>

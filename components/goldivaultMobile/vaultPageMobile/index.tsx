@@ -8,6 +8,7 @@ import {
 } from "../";
 import { useDesktop, useGoldivault } from "../../../providers";
 import { FooterMobile, NavBarButtons, NavBarMobile } from "../../utils";
+import { contracts } from "../../../utils/addressi"
 
 type PageProps = {
   address: string;
@@ -55,12 +56,11 @@ export const VaultPageMobile = ({ address }: PageProps) => {
                   dt: "rsETH",
                   ot: "rsETH-OT",
                   yt: "rsETH-YT",
-                  poolUrl:
-                    "https://app.kodiak.finance/#/liquidity/v3/18466?chain=berachain_bartio",
+                  poolUrl: `https://berascan.com/address/${contracts.vaultLPaddys.rseth}`,
                   poolName: "rsETH / rsETH OT LP",
                   protocolUrl: "https://www.kelpdao.xyz/",
-                  dexLink: "https://dexscreener.com/",
-                  liqManagerUrl: ""
+                  dexLink: `https://dexscreener.com/berachain/${contracts.vaultLPaddys.rseth}`,
+                  liqManagerUrl: "https://app.kodiak.finance/#/liquidity/v3/add/0x4186BFC76E2E237523CBC30FD220FE055156b41F/0xB1195a6cdB7ef8fB22671bd8321727dBB6DDDe03/500?chain=berachain_mainnet&maxPrice=1.005265"
                 }}
               />
               <VaultButtonMobile
@@ -69,6 +69,11 @@ export const VaultPageMobile = ({ address }: PageProps) => {
                   dt: "rsETH",
                   ot: "rsETH-OT",
                   yt: "rsETH-YT",
+                }}
+              />
+              <TogglesMobile
+                params={{
+                  vaultToken: "rseth"
                 }}
               />
             </>
@@ -86,12 +91,11 @@ export const VaultPageMobile = ({ address }: PageProps) => {
                   dt: "eBTC",
                   ot: "eBTC-OT",
                   yt: "eBTC-YT",
-                  poolUrl:
-                    "https://app.kodiak.finance/#/liquidity/v3/18466?chain=berachain_bartio",
+                  poolUrl: `https://berascan.com/address/${contracts.vaultLPaddys.ebtc}`,
                   poolName: "eBTC / eBTC OT LP",
                   protocolUrl: "https://app.ether.fi/ebtc",
-                  dexLink: "https://dexscreener.com/",
-                  liqManagerUrl: ""
+                  dexLink: `https://dexscreener.com/berachain/${contracts.vaultLPaddys.ebtc}`,
+                  liqManagerUrl: "https://app.kodiak.finance/#/liquidity/v3/add/0x657e8C867D8B37dCC18fA4Caead9C45EB088C642/0x96284cCFd80E546b8239b44f653b4B5Db3f21371/500?chain=berachain_mainnet"
                 }}
               />
               <VaultButtonMobile
@@ -100,6 +104,11 @@ export const VaultPageMobile = ({ address }: PageProps) => {
                   dt: "eBTC",
                   ot: "eBTC-OT",
                   yt: "eBTC-YT",
+                }}
+              />
+              <TogglesMobile
+                params={{
+                  vaultToken: "ebtc"
                 }}
               />
             </>
@@ -117,11 +126,45 @@ export const VaultPageMobile = ({ address }: PageProps) => {
                   dt: "uniBTC",
                   ot: "uniBTC-OT",
                   yt: "uniBTC-YT",
-                  poolUrl:
-                    "https://app.kodiak.finance/#/liquidity/v3/18466?chain=berachain_bartio",
+                  poolUrl: `https://berascan.com/address/${contracts.vaultLPaddys.unibtc}`,
                   poolName: "uniBTC / uniBTC OT LP",
                   protocolUrl: "https://app.bedrock.technology/",
-                  dexLink: "https://dexscreener.com/",
+                  dexLink: `https://dexscreener.com/berachain/${contracts.vaultLPaddys.unibtc}`,
+                  liqManagerUrl: "https://app.kodiak.finance/#/liquidity/v3/add/0xc3827a4bc8224ee2d116637023b124ced6db6e90/0xe771779b350d2cc291e9461387d7f41765a7cb8b/500?chain=berachain_mainnet&maxPrice=1.012541"
+                }}
+              />
+              <VaultButtonMobile
+                params={{
+                  vaultToken: "unibtc",
+                  dt: "uniBTC",
+                  ot: "uniBTC-OT",
+                  yt: "uniBTC-YT",
+                }}
+              />
+              <TogglesMobile
+                params={{
+                  vaultToken: "unibtc"
+                }}
+              />
+            </>
+          ) : address === "usdchoneylp" ? (
+            <>
+              <h1
+                className="absolute left-[43%] top-0 font-amaticbold text-[9vw] text-[#E7B941]"
+                id="page-title"
+              >
+                USDC-HONEY LP
+              </h1>
+              <VaultBoxMobile
+                params={{
+                  vaultToken: "usdchoneylp",
+                  dt: "USDC-HONEY LP",
+                  ot: "UHIOT",
+                  yt: "UHIYT",
+                  poolUrl: `https://berascan.com/address/${contracts.vaultLPaddys.usdchoneylp}`,
+                  poolName: "uniBTC / uniBTC OT LP",
+                  protocolUrl: "https://infrared.finance/",
+                  dexLink: `https://dexscreener.com/berachain/${contracts.vaultLPaddys.usdchoneylp}`,
                   liqManagerUrl: ""
                 }}
               />
@@ -131,6 +174,11 @@ export const VaultPageMobile = ({ address }: PageProps) => {
                   dt: "uniBTC",
                   ot: "uniBTC-OT",
                   yt: "uniBTC-YT",
+                }}
+              />
+              <TogglesMobile
+                params={{
+                  vaultToken: "unibtc"
                 }}
               />
             </>
@@ -148,13 +196,11 @@ export const VaultPageMobile = ({ address }: PageProps) => {
                   dt: "solvBTC.BBN",
                   ot: "solvBTC.BBN-OT",
                   yt: "solvBTC.BBN-YT",
-                  poolUrl:
-                    "https://app.kodiak.finance/#/liquidity/v3/18466?chain=berachain_bartio",
+                  poolUrl: `https://berascan.com/address/${contracts.vaultLPaddys.solvbtc}`,
                   poolName: "solvBTC.BBN / solvBTC.BBN OT LP",
-                  protocolUrl:
-                    "https://app.solv.finance/solvbtc?network=ethereum",
-                  dexLink: "https://dexscreener.com/",
-                  liqManagerUrl: ""
+                  protocolUrl: "https://app.solv.finance/solvbtc?network=ethereum",
+                  dexLink: `https://dexscreener.com/berachain/${contracts.vaultLPaddys.solvbtc}`,
+                  liqManagerUrl: "https://app.kodiak.finance/#/liquidity/v3/add/0xCC0966D8418d412c599A6421b760a847eB169A8c/0xA01cB564ecc3F58a4e2bA5fD59d13a6b998de9b8/500?chain=berachain_mainnet&maxPrice=1.013246"
                 }}
               />
               <VaultButtonMobile
@@ -163,6 +209,11 @@ export const VaultPageMobile = ({ address }: PageProps) => {
                   dt: "solvBTC.BBN",
                   ot: "solvBTC.BBN-OT",
                   yt: "solvBTC.BBN-YT",
+                }}
+              />
+              <TogglesMobile
+                params={{
+                  vaultToken: "solvbtc"
                 }}
               />
             </>
@@ -180,11 +231,10 @@ export const VaultPageMobile = ({ address }: PageProps) => {
                   dt: "rUSD",
                   ot: "rUSD-OT",
                   yt: "rUSD-YT",
-                  poolUrl:
-                    "https://berascan.com/address/0x1a2A927F758AE242fB967481CF293D2a36883be6",
+                  poolUrl: `https://berascan.com/address/${contracts.vaultLPaddys.rusd}`,
                   poolName: "rUSD / rUSD OT LP",
                   protocolUrl: "https://app.reservoir.xyz/",
-                  dexLink: "https://dexscreener.com/berachain/0x1a2A927F758AE242fB967481CF293D2a36883be6",
+                  dexLink: `https://dexscreener.com/berachain/${contracts.vaultLPaddys.rusd}`,
                   liqManagerUrl: "https://app.aquabera.com/vault/0x20a49a266AE70d07Ba066Ef1F8b6e670216Ab2a6"
                 }}
               />
@@ -194,6 +244,11 @@ export const VaultPageMobile = ({ address }: PageProps) => {
                   dt: "rUSD",
                   ot: "rUSD-OT",
                   yt: "rUSD-YT",
+                }}
+              />
+              <TogglesMobile
+                params={{
+                  vaultToken: "rusd"
                 }}
               />
             </>
@@ -211,12 +266,11 @@ export const VaultPageMobile = ({ address }: PageProps) => {
                   dt: "weETH",
                   ot: "weETH-OT",
                   yt: "weETH-YT",
-                  poolUrl:
-                    "https://app.kodiak.finance/#/liquidity/v3/18466?chain=berachain_bartio",
+                  poolUrl: `https://berascan.com/address/${contracts.vaultLPaddys.weeth}`,
                   poolName: "weETH / weETH OT LP",
                   protocolUrl: "https://app.ether.fi/weeth",
-                  dexLink: "https://dexscreener.com/",
-                  liqManagerUrl: ""
+                  dexLink: `https://dexscreener.com/berachain/${contracts.vaultLPaddys.weeth}`,
+                  liqManagerUrl: "https://app.kodiak.finance/#/liquidity/v3/add/0x7DCC39B4d1C53CB31e1aBc0e358b43987FEF80f7/0x46C7BdE4422b6798A09e76B555F2fea8D7FfADdc/500?chain=berachain_mainnet&maxPrice=1.004768"
                 }}
               />
               <VaultButtonMobile
@@ -227,9 +281,13 @@ export const VaultPageMobile = ({ address }: PageProps) => {
                   yt: "weETH-YT",
                 }}
               />
+              <TogglesMobile
+                params={{
+                  vaultToken: "weeth"
+                }}
+              />
             </>
           )}
-          <TogglesMobile />
           <FooterMobile />
         </div>
       )}

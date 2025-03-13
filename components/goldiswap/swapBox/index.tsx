@@ -324,7 +324,7 @@ export const SwapBox = () => {
             </div>
 
             <div
-              className="absolute left-1/2 top-1/2 z-10 flex size-10 -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-3xl !border-2 border-black bg-[#D9C6BA] hover:scale-110"
+              className="absolute left-1/2 top-1/2 z-10 flex size-10 -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-3xl border-2! border-black bg-[#D9C6BA] hover:scale-110"
               onClick={() => flipTokens()}
             >
               <svg
@@ -342,7 +342,7 @@ export const SwapBox = () => {
                 <polyline points="19 12 12 19 5 12"></polyline>
               </svg>
             </div>
-            <div className="flex h-1/2 w-full items-center gap-4 !border-t-0 px-8">
+            <div className="flex h-1/2 w-full items-center gap-4 border-t-0! px-8">
               <InputLogo type={activeToggle === "BUY" ? "honey" : "locks"} />
               <div className="h-1/2 w-3/5 border-2 border-black bg-white">
                 <SwapInput

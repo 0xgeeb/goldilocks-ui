@@ -21,8 +21,8 @@ export const VaultDisplayMobile = () => {
             imageUrl: "ebtc-logo.png",
             vaultName: "EtherFi Points Vault",
           }}
-        /> */}
-        {/* <VaultDisplayCardMobile
+        />
+        <VaultDisplayCardMobile
             params={{
               address: "rseth",
               tokenName: "rsETH",
@@ -30,14 +30,6 @@ export const VaultDisplayMobile = () => {
               vaultName: "KelpDAO Points Vault",
             }}
           />
-        <VaultDisplayCardMobile
-          params={{
-            address: "unibtc",
-            tokenName: "uniBTC",
-            imageUrl: "unibtc-logo.png",
-            vaultName: "Bedrock Points Vault",
-          }}
-        />
         <VaultDisplayCardMobile
           params={{
             address: "solvbtcbbn",
@@ -54,6 +46,22 @@ export const VaultDisplayMobile = () => {
             vaultName: "Reservoir Points Vault",
           }}
         />
+        <VaultDisplayCardMobile
+          params={{
+            address: "unibtc",
+            tokenName: "uniBTC",
+            imageUrl: "unibtc-logo.png",
+            vaultName: "Bedrock Points Vault",
+          }}
+        />
+        {/* <VaultDisplayCardMobile
+          params={{
+            address: "usdchoneylp",
+            tokenName: "USDC-HONEY LP",
+            imageUrl: "logo-honey.png",
+            vaultName: "USDC-HONEY LP Vault",
+          }}
+        /> */}
       </div>
     </div>
   );

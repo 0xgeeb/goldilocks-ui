@@ -1,5 +1,7 @@
-import { useGoldiswap } from "../../../providers";
+import { formatAsString } from "@/app/_components/utils";
+
 import { useGoldiswapMath } from "../../../hooks";
+import { useGoldiswap } from "../../../providers";
 
 export const StatsMobile = () => {
   const { goldiswapInfo, simInfo, infoLoading } = useGoldiswap();
@@ -8,10 +10,6 @@ export const StatsMobile = () => {
 
   const loadingElement = () => {
     return <span className="loader-small-mobile mx-1"></span>;
-  };
-
-  const formatAsString = (num: number): string => {
-    return num.toLocaleString("en-US", { maximumFractionDigits: 2 });
   };
 
   const formatAsPrice = (num: number): string => {
@@ -57,7 +55,7 @@ export const StatsMobile = () => {
   };
 
   return (
-    <div className="absolute left-[10%] top-[72.5%] flex h-[15%] w-[80%] flex-row items-center justify-center font-baloo text-[3.3vw] font-semibold text-[#D9C6BA]">
+    <div className="absolute left-[10%] top-[72.5%] flex h-[15%] w-4/5 flex-row items-center justify-center font-baloo text-[3.3vw] font-semibold text-[#D9C6BA]">
       <div className="flex flex-col items-end">
         <span>locks supply:</span>
         <span>current fsl:</span>
@@ -66,7 +64,7 @@ export const StatsMobile = () => {
         <span>market price:</span>
         <span>target ratio:</span>
       </div>
-      <div className="h-[100%] w-[5%]"></div>
+      <div className="h-full w-[5%]"></div>
       <div className="flex flex-col items-start">
         <span className={handleColors(goldiswapInfo.supply, simInfo.supply)}>
           {simInfo.toggle

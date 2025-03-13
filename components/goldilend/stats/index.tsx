@@ -1,3 +1,5 @@
+import { formatAsString } from "@/app/_components/utils";
+
 import { useGoldilend } from "../../../providers";
 
 export const Stats = () => {
@@ -5,10 +7,6 @@ export const Stats = () => {
 
   const loadingElement = () => {
     return <span className="loader-small ml-3 mt-2"></span>;
-  };
-
-  const formatAsString = (num: number): string => {
-    return num.toLocaleString("en-US", { maximumFractionDigits: 2 });
   };
 
   const handleInfo = (num: number) => {

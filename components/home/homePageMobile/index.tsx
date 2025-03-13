@@ -13,7 +13,7 @@ export const HomePageMobile = () => {
           <div className="flex h-[100%] w-[100%] flex-col items-center justify-between py-[8%]">
             <div className="flex h-[80%] w-[100%] flex-col items-center justify-between font-amaticbold text-[11vw]">
               <a
-                href="https://goldilocks.gitbook.io/docs"
+                href="https://goldilocks.gitbook.io/goldidocs"
                 target="_blank"
                 className="cursor-pointer hover:scale-[150%]"
                 rel="noreferrer"

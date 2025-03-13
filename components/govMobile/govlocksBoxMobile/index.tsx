@@ -265,7 +265,7 @@ export const GovLocksBoxMobile = () => {
             <div className="relative h-[100%] w-[100%]">
               {govlocksActiveToggle === "DELEGATE" ? (
                 <input
-                  className="absolute top-[15%] w-[90%] border-none bg-transparent pl-[5%] font-baloo text-[7vw] font-bold focus:outline-none"
+                  className="absolute top-[15%] w-[90%] border-none bg-transparent pl-[5%] font-baloo text-[7vw] font-bold focus:outline-hidden"
                   type="string"
                   placeholder=""
                   value={govlocksDisplayString}
@@ -273,7 +273,7 @@ export const GovLocksBoxMobile = () => {
                 />
               ) : (
                 <input
-                  className="absolute top-[15%] w-[90%] border-none bg-transparent pl-[5%] font-baloo text-[7vw] font-bold focus:outline-none"
+                  className="absolute top-[15%] w-[90%] border-none bg-transparent pl-[5%] font-baloo text-[7vw] font-bold focus:outline-hidden"
                   type="number"
                   id="number-input"
                   placeholder="0.00"

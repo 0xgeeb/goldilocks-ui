@@ -9,6 +9,10 @@ const nextConfig = {
       {
         source: '/api/kelpdao',
         destination: 'https://yields.llama.fi/chart/33c732f6-a78d-41da-af5b-ccd9fa5e52d5'
+      },
+      {
+        source: '/api/lockschart',
+        destination: 'http://localhost:3001/locksdaily'
       }
     ]
   }

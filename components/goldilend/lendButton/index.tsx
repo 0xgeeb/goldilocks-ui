@@ -1,10 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+
 import { useAccount } from "wagmi";
-import { useGoldilend } from "../../../providers";
+
+import { formatAsString } from "@/app/_components/utils";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+
 import { useGoldilendTx } from "../../../hooks";
+import { useGoldilend } from "../../../providers";
 
 export const LendButton = () => {
   const {
@@ -38,10 +42,6 @@ export const LendButton = () => {
   const { address } = useAccount();
 
   const [buttonLoadingColor, setButtonLoadingColor] = useState<boolean>(false);
-
-  const formatAsString = (num: number): string => {
-    return num.toLocaleString("en-US", { maximumFractionDigits: 2 });
-  };
 
   const refreshInfo = () => {
     setDisplayString("");

@@ -1,12 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useEffect, useState } from "react";
+
 import { useAccount } from "wagmi";
-import { useGoldilend } from "../../../providers";
+
+import { formatAsString } from "@/app/_components/utils";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+
 import { useGoldilendTx } from "../../../hooks";
-import { BorrowNotification } from "../../goldilend";
+import { useGoldilend } from "../../../providers";
 import { contracts } from "../../../utils/addressi";
+import { BorrowNotification } from "../../goldilend";
 
 export const BoostTab = () => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
@@ -47,10 +51,6 @@ export const BoostTab = () => {
 
   const loadingElement = () => {
     return <span className="loader-small m-auto"></span>;
-  };
-
-  const formatAsString = (num: number): string => {
-    return num.toLocaleString("en-US", { maximumFractionDigits: 2 });
   };
 
   const nextImages = () => {
@@ -191,27 +191,23 @@ export const BoostTab = () => {
   };
 
   return txConfirming ? (
-    <img
-      className="h-[100%] w-[100%]"
-      src="/images/bg-transaction.png"
-      alt="tx"
-    />
+    <img className="size-full" src="/images/bg-transaction.png" alt="tx" />
   ) : notification.toggle ? (
     <BorrowNotification />
   ) : (
-    <div className="flex h-[100%] w-[100%] flex-row">
-      <div className="flex h-[100%] w-[100%] flex-col items-center border-r-2 border-black px-[0%]">
+    <div className="flex size-full flex-row">
+      <div className="flex size-full flex-col items-center border-r-2 border-black px-0">
         <h1 className="mt-[2%] font-amaticbold text-[6vw] xl:text-[3vw]">
           select partner nfts
         </h1>
         <div
-          className="flex h-[80%] w-[85%] flex-wrap overflow-y-auto"
+          className="flex h-4/5 w-[85%] flex-wrap overflow-y-auto"
           id="hide-scrollbar"
         >
           {infoLoading && isConnected ? (
             loadingElement()
           ) : !isConnected || ownedPartners.length == 0 ? (
-            <div className="flex h-[100%] w-[100%] flex-col items-center justify-center opacity-50">
+            <div className="flex size-full flex-col items-center justify-center opacity-50">
               <img
                 className="mb-[5%] w-[70%]"
                 src="/images/icon-not-found.png"
@@ -225,7 +221,7 @@ export const BoostTab = () => {
             ownedPartners.map((partner, index) => (
               <div key={index} className="h-[45%] w-[50%] py-2">
                 <img
-                  className={`ml-[5%] h-[100%] w-[90%] border-2 border-black hover:scale-110 hover:cursor-pointer ${findSelectedPartnerIdxs().includes(partner.index) ? "border-4 border-black" : "opacity-75"}`}
+                  className={`ml-[5%] h-full w-[90%] border-2 border-black hover:scale-110 hover:cursor-pointer ${findSelectedPartnerIdxs().includes(partner.index) ? "border-4 border-black" : "opacity-75"}`}
                   onClick={() => {
                     setBoostedPartners(false);
                     handlePartnerClick(partner);
@@ -242,15 +238,15 @@ export const BoostTab = () => {
           )}
         </div>
       </div>
-      <div className="flex h-[100%] w-[100%] flex-col items-center overflow-y-auto">
+      <div className="flex size-full flex-col items-center overflow-y-auto">
         {infoLoading && isConnected ? (
           loadingElement()
         ) : userBoost.partnerNFTs.length > 0 ? (
           <>
-            <h1 className="mb-[4%] mt-[4%] font-amaticbold text-[9vw] xl:mb-[2%] xl:text-[4vw]">
+            <h1 className="my-[4%] font-amaticbold text-[9vw] xl:mb-[2%] xl:text-[4vw]">
               my boost
             </h1>
-            <div className="relative flex h-[25%] w-[90%] flex-row items-start justify-between">
+            <div className="relative flex h-1/4 w-[90%] flex-row items-start justify-between">
               <span
                 className="absolute left-[3%] top-[-20%] cursor-pointer font-baloo text-[2vw] font-semibold hover:scale-125 xl:text-[1vw]"
                 onClick={() => setBoostedPartners(!boostedPartners)}
@@ -271,7 +267,7 @@ export const BoostTab = () => {
                     .slice(currentBoostIndex, currentBoostIndex + 4)
                     .map((partner, index) => (
                       <img
-                        className="h-[50%] w-[20%] border-2 border-black xl:h-[70%]"
+                        className="h-[50%] w-1/5 border-2 border-black xl:h-[70%]"
                         src={
                           partner === contracts.beradrome.address
                             ? "/images/icon-beradrome.png"
@@ -300,7 +296,7 @@ export const BoostTab = () => {
                     .slice(currentIndex, currentIndex + 4)
                     .map((partner, index) => (
                       <img
-                        className="h-[50%] w-[20%] cursor-pointer border-2 border-black hover:scale-110 xl:h-[70%]"
+                        className="h-[50%] w-1/5 cursor-pointer border-2 border-black hover:scale-110 xl:h-[70%]"
                         onClick={() => handlePartnerClick(partner)}
                         src={
                           partner.name === "Beradrome"
@@ -401,7 +397,7 @@ export const BoostTab = () => {
             <h1 className="mb-[8%] mt-[4%] font-amaticbold text-[9vw] lg:text-[7vw] xl:text-[5vw]">
               create boost
             </h1>
-            <div className="relative flex h-[25%] w-[90%] flex-row items-start justify-between">
+            <div className="relative flex h-1/4 w-[90%] flex-row items-start justify-between">
               <span className="absolute left-[3%] top-[-20%] font-baloo text-[2vw] font-semibold xl:text-[1vw]">
                 Selected Partner NFTs:
               </span>
@@ -415,7 +411,7 @@ export const BoostTab = () => {
                 .slice(currentIndex, currentIndex + 4)
                 .map((partner, index) => (
                   <img
-                    className="h-[50%] w-[20%] border-2 border-black xl:h-[70%]"
+                    className="h-[50%] w-1/5 border-2 border-black xl:h-[70%]"
                     onClick={() => handlePartnerClick(partner)}
                     src={
                       partner.name === "Beradrome"

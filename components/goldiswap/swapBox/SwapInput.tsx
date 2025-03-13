@@ -27,7 +27,7 @@ function SwapInput({
         <span className="loader-small"></span>
       ) : (
         <input
-          className="w-[90%] border-none bg-transparent font-baloo text-[4.5vw] font-bold focus:outline-none md:text-[4vw] lg:text-[3.5vw] xl:text-[2.25vw] 2xl:text-[2vw] tall:top-[15%] tall:text-[5.5vw] tall:md:text-[4vw] tall:lg:text-[3.5vw] tall:xl:text-[2.5vw] tall:2xl:text-[2vw]"
+          className="w-[90%] border-none bg-transparent font-baloo text-[4.5vw] font-bold focus:outline-hidden md:text-[4vw] lg:text-[3.5vw] xl:text-[2.25vw] 2xl:text-[2vw] tall:top-[15%] tall:text-[5.5vw] tall:md:text-[4vw] tall:lg:text-[3.5vw] tall:xl:text-[2.5vw] tall:2xl:text-[2vw]"
           type="number"
           id="number-input"
           placeholder="0.00"

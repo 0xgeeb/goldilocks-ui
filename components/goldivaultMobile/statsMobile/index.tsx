@@ -4,14 +4,14 @@ export const StatsMobile = () => {
       <div className="flex flex-row items-center justify-between">
         <span className="">my position</span>
         <span className="text-[5.5vw]">$500,000</span>
-        <button className="border-2 border-[#FFCD00] px-2 py-1 text-[3vw] font-semibold text-[#FFCD00] outline-none hover:border-black hover:bg-[#FFCD00] hover:text-black">
+        <button className="border-2 border-[#FFCD00] px-2 py-1 text-[3vw] font-semibold text-[#FFCD00] outline-hidden hover:border-black hover:bg-[#FFCD00] hover:text-black">
           DEETS
         </button>
       </div>
       <div className="mt-2 flex flex-row items-center justify-between">
         <span className="">claimable rewards</span>
         <span className="text-[5.5vw]">$69</span>
-        <button className="border-2 border-[#FFCD00] px-2 py-1 text-[3vw] font-semibold text-[#FFCD00] outline-none hover:border-black hover:bg-[#FFCD00] hover:text-black">
+        <button className="border-2 border-[#FFCD00] px-2 py-1 text-[3vw] font-semibold text-[#FFCD00] outline-hidden hover:border-black hover:bg-[#FFCD00] hover:text-black">
           CLAIM
         </button>
       </div>

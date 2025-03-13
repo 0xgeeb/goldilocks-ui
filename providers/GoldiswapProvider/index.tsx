@@ -7,6 +7,7 @@ import { useAccount } from "wagmi";
 import { useDebounce, useGoldiswapMath } from "../../hooks";
 import { config } from "../../providers/WagmiProvider";
 import { contracts } from "../../utils/addressi";
+import { ChartDataEntry } from "../..//utils/interfaces";
 
 const INITIAL_STATE = {
   goldiswapInfo: {
@@ -149,8 +150,9 @@ const INITIAL_STATE = {
 
   balanceMobileToggle: false,
   setBalanceMobileToggle: (_toggle: boolean) => {},
-  chartData: [] as { [x: string]: number; value: number }[],
+  chartData: [] as ChartDataEntry[],
   updateChartData: (_chartData: {}) => {},
+  getChartData: async () => {}
 };
 
 const GoldiswapContext = createContext(INITIAL_STATE);
@@ -213,7 +215,7 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
     useState<string>(INITIAL_STATE.bottomDisplayString);
 
   const [chartDataState, setChartDataState] = useState<
-    { [x: string]: number; value: number }[]
+    any[]
   >(INITIAL_STATE.chartData);
   const [chartOpenState, setChartOpenState] = useState<boolean>(
     INITIAL_STATE.chartOpen,
@@ -1001,6 +1003,31 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
     setChartDataState(tempChartData);
   };
 
+  const getFormattedDate = (timestamp: number): string => {
+    const date = new Date(timestamp * 1000);
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    return `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}`;
+  }
+
+  const getChartData = async () => {
+    const response = await fetch("/api/lockschart")
+    const responseJson: any = await response.json()
+    console.log(responseJson)
+    const newChartData = []
+    for(let node of responseJson.locksDaily) {
+      const entry = {
+        floorPrice: node.floor,
+        marketPrice: node.market,
+        date: getFormattedDate(node.timestamp)
+      }
+
+      newChartData.push(entry)
+    }
+
+    setChartDataState(newChartData.reverse())
+  }
+
   return (
     <GoldiswapContext.Provider
       value={{
@@ -1068,6 +1095,7 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
         setBalanceMobileToggle: setBalanceMobileToggleState,
         chartData: chartDataState,
         updateChartData,
+        getChartData,
         wutPopup: wutPopupState,
         setWutPopup: setWutPopupState,
       }}

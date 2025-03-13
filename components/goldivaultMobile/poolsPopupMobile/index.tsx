@@ -1,5 +1,7 @@
 "use client";
 
+import { formatAsString } from "@/app/_components/utils";
+
 import { useGoldivault } from "../../../providers";
 
 type PoolsPopupProps = {
@@ -18,12 +20,10 @@ export const PoolsPopupMobile = ({ params }: PoolsPopupProps) => {
     goldivaultInfoSolvbtc,
     goldivaultInfoUnibtc,
     goldivaultInfoRusd,
-    goldivaultInfoEbtc
+    goldivaultInfoEbtc,
+    goldivaultInfoRseth,
+    goldivaultInfoUsdchoneylp
   } = useGoldivault();
-
-  const formatAsString = (num: number): string => {
-    return num.toLocaleString("en-US", { maximumFractionDigits: 2 });
-  };
 
   const loadingElement = () => {
     return <span className="loader-small m-auto"></span>;
@@ -32,18 +32,22 @@ export const PoolsPopupMobile = ({ params }: PoolsPopupProps) => {
   const data =
     params.vaultToken === "weeth"
       ? goldivaultInfoWeeth
-        : params.vaultToken === "unibtc"
-          ? goldivaultInfoUnibtc
-          : params.vaultToken === "solvbtc"
-            ? goldivaultInfoSolvbtc
-            : params.vaultToken === "rusd"
-              ? goldivaultInfoRusd
-              : params.vaultToken === "ebtc"
-                ? goldivaultInfoEbtc
-              : {};
+      : params.vaultToken === "unibtc"
+        ? goldivaultInfoUnibtc
+        : params.vaultToken === "solvbtc"
+          ? goldivaultInfoSolvbtc
+          : params.vaultToken === "rusd"
+            ? goldivaultInfoRusd
+            : params.vaultToken === "ebtc"
+              ? goldivaultInfoEbtc
+              : params.vaultToken === "rseth"
+                ? goldivaultInfoRseth
+                : params.vaultToken === "usdchoneylp"
+                  ? goldivaultInfoUsdchoneylp
+                  : {};
 
   return (
-    <div className="relative flex h-[100%] w-[100%] flex-col bg-[#033E5E]">
+    <div className="relative flex size-full flex-col bg-[#033E5E]">
       <div className="flex flex-row items-center justify-between border-b-2 border-[#FFCD00] px-[2.5%] py-[3%] font-baloo text-[3vw] font-semibold text-[#FFCD00]">
         <span>LIQUIDITY POOL</span>
         <span>TVL</span>
@@ -58,7 +62,10 @@ export const PoolsPopupMobile = ({ params }: PoolsPopupProps) => {
               <span className="hover:underline">{params.poolName}</span>
             </a>
             <span>${formatAsString(data.otLiquidity)}</span>
-            <span>{`>`}{formatAsString(data.fixedApr)}%</span>
+            <span>
+              {`>`}
+              {formatAsString(data.fixedApr)}%
+            </span>
           </div>
           <div className="flex flex-row items-center justify-center px-[2.5%] py-[3%] font-baloo text-[3vw] font-semibold text-[#FFCD00]">
             <a href={params.liqManagerUrl} target="_blank" rel="noreferrer">

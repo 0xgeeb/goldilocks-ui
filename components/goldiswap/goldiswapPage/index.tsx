@@ -2,14 +2,15 @@
 
 import { useEffect } from "react";
 
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 
+import { geoAtom } from "@/app/_components/atoms/geoAtom";
 import { pageLoadingAtom } from "@/app/_components/atoms/pageLoadingAtom";
 import CsrPageLayout from "@/app/_components/CsrPageLayout";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 
 import { useGoldiswapMath } from "../../../hooks/useGoldiswapMath";
-import { useDesktop, useGeo, useGoldiswap } from "../../../providers";
+import { useDesktop, useGoldiswap } from "../../../providers";
 import {
   GoldiswapButton,
   RedeemPopup,
@@ -28,6 +29,7 @@ export const GoldiswapPage = () => {
   const {
     chartOpen,
     setChartOpen,
+    getChartData,
     goldiswapInfo,
     refreshGoldiswapInfo,
     infoLoading,
@@ -43,11 +45,12 @@ export const GoldiswapPage = () => {
 
   const { isDesktop } = useDesktop();
 
-  const { signed } = useGeo();
+  const signed = useAtomValue(geoAtom);
 
   const { marketPrice } = useGoldiswapMath();
 
   useEffect(() => {
+    // getChartData();
     refreshGoldiswapInfo();
     checkSlippageAmount();
     setPageLoading(false);
@@ -70,6 +73,20 @@ export const GoldiswapPage = () => {
       return "-";
     } else if (num > 0) {
       return formatAsTokenPrice(num);
+    } else {
+      return "-";
+    }
+  };
+
+  const formatAsTokenPriceExtra = (num: number): string => {
+    return num.toLocaleString("en-US", { maximumFractionDigits: 4 });
+  };
+
+  const handlePriceInfo = (num: number) => {
+    if (infoLoading) {
+      return "-";
+    } else if (num > 0) {
+      return formatAsTokenPriceExtra(num);
     } else {
       return "-";
     }
@@ -166,11 +183,14 @@ export const GoldiswapPage = () => {
               </h1>
               <div className="absolute left-[10%] top-[15%] flex h-[3%] w-4/5 flex-row items-center justify-between bg-[#4D0B24] px-2 text-[2.25vw] md:left-[20%] md:top-[13%] md:w-3/5 md:text-[1.75vw] lg:left-1/4 lg:top-[12%] lg:w-[50%] lg:text-[1.5vw] xl:top-[7.12%] xl:text-[1vw] 2xl:left-[28.125%] 2xl:w-[43.75%] 2xl:text-[0.85vw]">
                 <span className="mt-1 font-baloo text-white">
-                  PSL/FSL ratio:{" "}
-                  {handleTokenInfo(
-                    (goldiswapInfo.psl / goldiswapInfo.fsl) * 100,
+                  locks market price:{" "}
+                  ${handlePriceInfo(
+                      marketPrice(
+                        goldiswapInfo.fsl,
+                        goldiswapInfo.psl,
+                        goldiswapInfo.supply,
+                      )
                   )}
-                  %
                 </span>
                 <span className="mt-1 font-baloo text-white">
                   locks market cap:{" "}

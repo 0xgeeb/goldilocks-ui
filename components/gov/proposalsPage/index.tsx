@@ -2,14 +2,15 @@
 
 import { useEffect } from "react";
 
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 
+import { geoAtom } from "@/app/_components/atoms/geoAtom";
 import { pageLoadingAtom } from "@/app/_components/atoms/pageLoadingAtom";
 import CsrPageLayout from "@/app/_components/CsrPageLayout";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 
 import { ProposalsBox, ProposalsFetcher } from "../";
-import { useDesktop, useGeo, useGov } from "../../../providers";
+import { useDesktop, useGov } from "../../../providers";
 import { ProposalsPageMobile } from "../../govMobile";
 import { Loading, TAndCs } from "../../utils";
 
@@ -20,7 +21,7 @@ export const ProposalsPage = () => {
 
   const { isDesktop } = useDesktop();
 
-  const { signed } = useGeo();
+  const signed = useAtomValue(geoAtom);
 
   useEffect(() => {
     setPageLoading(false);

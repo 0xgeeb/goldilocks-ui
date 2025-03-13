@@ -1,12 +1,16 @@
 "use client";
 
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+
 import { useAccount } from "wagmi";
-import { useGoldilend } from "../../../providers";
+
+import { formatAsString } from "@/app/_components/utils";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+
 import { useGoldilendTx } from "../../../hooks";
-import { BorrowNotification } from "../../goldilend";
+import { useGoldilend } from "../../../providers";
 import { contracts } from "../../../utils/addressi";
+import { BorrowNotification } from "../../goldilend";
 
 export const BorrowTab = () => {
   const [daysTilExpiration, setDaysTilExpiration] = useState<number>(14);
@@ -77,10 +81,6 @@ export const BorrowTab = () => {
 
   const loadingElement = () => {
     return <span className="loader-small mx-auto mt-[10%]"></span>;
-  };
-
-  const formatAsString = (num: number): string => {
-    return num.toLocaleString("en-US", { maximumFractionDigits: 2 });
   };
 
   const checkDate = (dateString: string): boolean => {
@@ -203,27 +203,23 @@ export const BorrowTab = () => {
   };
 
   return txConfirming ? (
-    <img
-      className="h-[100%] w-[100%]"
-      src="/images/bg-transaction.png"
-      alt="tx"
-    />
+    <img className="size-full" src="/images/bg-transaction.png" alt="tx" />
   ) : notification.toggle ? (
     <BorrowNotification />
   ) : (
-    <div className="flex h-[100%] w-[100%] flex-row">
-      <div className="flex h-[100%] w-[100%] flex-col items-center border-r-2 border-black px-[0%]">
+    <div className="flex size-full flex-row">
+      <div className="flex size-full flex-col items-center border-r-2 border-black px-0">
         <h1 className="mt-[2%] font-amaticbold text-[5vw] xl:text-[3vw]">
           select collateral
         </h1>
         <div
-          className="flex h-[80%] w-[85%] flex-wrap overflow-y-auto py-[2%]"
+          className="flex h-4/5 w-[85%] flex-wrap overflow-y-auto py-[2%]"
           id="hide-scrollbar"
         >
           {infoLoading && isConnected ? (
             loadingElement()
           ) : !isConnected || ownedBeras.length == 0 ? (
-            <div className="flex h-[100%] w-[100%] flex-col items-center justify-center opacity-50">
+            <div className="flex size-full flex-col items-center justify-center opacity-50">
               <img
                 className="mb-[5%] w-[70%]"
                 src="/images/icon-not-found.png"
@@ -235,9 +231,9 @@ export const BorrowTab = () => {
             </div>
           ) : (
             ownedBeras.map((bera, index) => (
-              <div key={index} className="h-[40%] w-[50%] py-2 xl:h-[45%]">
+              <div key={index} className="h-2/5 w-[50%] py-2 xl:h-[45%]">
                 <img
-                  className={`ml-[5%] h-[100%] w-[90%] border-2 border-black hover:scale-110 hover:cursor-pointer ${selectedBera.index == bera.index ? "border-4 border-black" : "opacity-75"}`}
+                  className={`ml-[5%] h-full w-[90%] border-2 border-black hover:scale-110 hover:cursor-pointer ${selectedBera.index == bera.index ? "border-4 border-black" : "opacity-75"}`}
                   onClick={() => handleBeraClick(bera)}
                   src={
                     bera.name === "BondBera"
@@ -251,17 +247,17 @@ export const BorrowTab = () => {
           )}
         </div>
       </div>
-      <div className="flex h-[100%] w-[100%] flex-col items-center justify-between py-[1%]">
+      <div className="flex size-full flex-col items-center justify-between py-[1%]">
         <h1 className="font-amaticbold text-[5vw] xl:text-[2.5vw]">
           create loan
         </h1>
-        <div className="relative flex h-[25%] w-[90%] flex-row items-start justify-between">
+        <div className="relative flex h-1/4 w-[90%] flex-row items-start justify-between">
           <span className="absolute left-[3%] top-[-20%] font-baloo text-[2vw] font-semibold xl:text-[0.8vw]">
             Collateral:
           </span>
           {selectedBera.name !== "" && (
             <img
-              className="mx-auto mt-[2.5%] h-[50%] w-[20%] border-2 border-black xl:mt-0 xl:h-[70%]"
+              className="mx-auto mt-[2.5%] h-[50%] w-1/5 border-2 border-black xl:mt-0 xl:h-[70%]"
               onClick={() => handleBeraClick(selectedBera)}
               src={
                 selectedBera.name === "BondBera"
@@ -272,7 +268,7 @@ export const BorrowTab = () => {
               key={selectedBera.index}
             />
           )}
-          <div className="absolute bottom-[5%] left-[20%] flex w-[60%] flex-row items-center justify-between font-baloo text-[2vw] font-semibold xl:text-[0.8vw]">
+          <div className="absolute bottom-[5%] left-[20%] flex w-3/5 flex-row items-center justify-between font-baloo text-[2vw] font-semibold xl:text-[0.8vw]">
             <span>borrow limit:</span>
             <span>
               {borrowLimit > 0 ? formatAsString(borrowLimit) : "0.00"} iBGT
@@ -282,7 +278,7 @@ export const BorrowTab = () => {
         <div className="flex w-[90%] flex-row items-center justify-between font-baloo text-[1.8vw] font-semibold xl:text-[1vw]">
           <span>Loan Amount:</span>
           <input
-            className="w-[50%] border-2 border-black bg-white pl-2 focus:outline-none"
+            className="w-[50%] border-2 border-black bg-white pl-2 focus:outline-hidden"
             type="number"
             id="number-input"
             placeholder="0.00"
@@ -293,7 +289,7 @@ export const BorrowTab = () => {
         <div className="flex w-[90%] flex-row items-center justify-between font-baloo text-[1.8vw] font-semibold xl:text-[1vw]">
           <span>Repay Deadline:</span>
           <input
-            className="w-[50%] border-2 border-black bg-white pl-2 focus:outline-none"
+            className="w-[50%] border-2 border-black bg-white pl-2 focus:outline-hidden"
             type="text"
             id="number-input"
             placeholder="mm-dd-yyyy"
@@ -302,9 +298,9 @@ export const BorrowTab = () => {
           />
         </div>
         <div className="my-[1%] flex w-[90%] flex-row items-center justify-between font-baloo text-[1.8vw] font-semibold xl:text-[1vw]">
-          <div className="flex h-[100%] w-[70%] items-center justify-center bg-[#C09D87] p-2">
+          <div className="flex h-full w-[70%] items-center justify-center bg-[#C09D87] p-2">
             <input
-              className="h-[100%] w-[100%] bg-black hover:cursor-pointer"
+              className="size-full bg-black hover:cursor-pointer"
               id="date-slider"
               type="range"
               min="14"

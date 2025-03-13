@@ -1,12 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+
 import { useAccount } from "wagmi";
-import { useGoldilend } from "../../../providers";
-import { LendNotificationMobile } from "../../goldilendMobile";
+
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+
 import { useGoldilendTx } from "../../../hooks";
+import { useGoldilend } from "../../../providers";
 import { contracts } from "../../../utils/addressi";
+import { LendNotificationMobile } from "../../goldilendMobile";
 
 type CollateralFlagsType = {
   [key: number]: boolean;
@@ -39,7 +42,7 @@ export const LiquidateTabMobile = () => {
   const { address } = useAccount();
 
   const loadingElement = () => {
-    return <span className="loader-small mx-auto my-auto"></span>;
+    return <span className="loader-small m-auto"></span>;
   };
 
   const formatDate = (timestamp: number): string => {
@@ -51,10 +54,6 @@ export const LiquidateTabMobile = () => {
   };
 
   const formatNum = (num: number): string => {
-    return num.toLocaleString("en-US", { maximumFractionDigits: 2 });
-  };
-
-  const formatAsString = (num: number): string => {
     return num.toLocaleString("en-US", { maximumFractionDigits: 2 });
   };
 
@@ -168,11 +167,11 @@ export const LiquidateTabMobile = () => {
       <div className="absolute right-0 top-3 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
       <div className="absolute bottom-3 right-0 w-6 skew-y-[45deg] border-b-2 border-black"></div>
       <div
-        className={`absolute inset-3 ${txConfirming ? "border-l-2 border-r-2 border-black" : "border-2 border-black"} bg-[#D9C6BA]`}
+        className={`absolute inset-3 ${txConfirming ? "border-x-2 border-black" : "border-2 border-black"} bg-[#D9C6BA]`}
       ></div>
       {txConfirming ? (
         <img
-          className="h-[100%] w-[100%]"
+          className="size-full"
           src="/images/bg-transaction-mobile.png"
           alt="tx"
         />
@@ -180,7 +179,7 @@ export const LiquidateTabMobile = () => {
         <LendNotificationMobile />
       ) : (
         <div
-          className="flex h-[100%] w-[100%] flex-wrap overflow-y-auto"
+          className="flex size-full flex-wrap overflow-y-auto"
           id="hide-scrollbar"
         >
           {infoLoading
@@ -188,10 +187,10 @@ export const LiquidateTabMobile = () => {
             : liquidatableLoans.map((loan, index) =>
                 collateralFlags[loan.loanId] ? (
                   <div
-                    className="relative flex h-[40%] w-[100%] flex-col border-b-2 border-black p-[3%] font-baloo font-semibold"
+                    className="relative flex h-2/5 w-full flex-col border-b-2 border-black p-[3%] font-baloo font-semibold"
                     key={index}
                   >
-                    <div className="flex h-[10%] w-[100%] flex-row items-center justify-between">
+                    <div className="flex h-[10%] w-full flex-row items-center justify-between">
                       <h1 className="text-[5.5vw]">Loan {loan.loanId}</h1>
                       <h1
                         className="text-[4vw] text-[#9C4924]"
@@ -201,16 +200,13 @@ export const LiquidateTabMobile = () => {
                       </h1>
                     </div>
                     <div
-                      className="flex h-[90%] w-[100%] flex-wrap overflow-y-auto"
+                      className="flex h-[90%] w-full flex-wrap overflow-y-auto"
                       id="hide-scrollbar"
                     >
                       {loan.collateralNFTs.map((nft, index) => (
-                        <div
-                          key={index}
-                          className="ml-[5%] h-[45%] w-[45%] py-2"
-                        >
+                        <div key={index} className="ml-[5%] size-[45%] py-2">
                           <img
-                            className="ml-[5%] h-[100%] w-[90%] border-2 border-black"
+                            className="ml-[5%] h-full w-[90%] border-2 border-black"
                             src={
                               nft === contracts.bondbear.address
                                 ? "/images/icon-bondbear.png"
@@ -224,7 +220,7 @@ export const LiquidateTabMobile = () => {
                   </div>
                 ) : (
                   <div
-                    className="relative flex h-[50%] w-[100%] flex-col border-b-2 border-black p-[3%] font-baloo font-semibold tall:h-[40%]"
+                    className="relative flex h-[50%] w-full flex-col border-b-2 border-black p-[3%] font-baloo font-semibold tall:h-2/5"
                     key={index}
                   >
                     {loan.borrowedAmount == 0 && (
@@ -242,7 +238,7 @@ export const LiquidateTabMobile = () => {
                         LIQUIDATED
                       </div>
                     )}
-                    <div className="flex w-[100%] flex-row items-center justify-between">
+                    <div className="flex w-full flex-row items-center justify-between">
                       <h1 className="text-[5.5vw]">Loan {loan.loanId}</h1>
                       <h1
                         className="text-[4vw] text-[#9C4924]"
@@ -251,25 +247,25 @@ export const LiquidateTabMobile = () => {
                         View Collateral
                       </h1>
                     </div>
-                    <div className="my-[8%] flex w-[100%] flex-col text-[4vw]">
-                      <div className="flex w-[100%] flex-row items-center justify-between">
+                    <div className="my-[8%] flex w-full flex-col text-[4vw]">
+                      <div className="flex w-full flex-row items-center justify-between">
                         <span>liquidation price:</span>
                         <span>{formatNum(loan.borrowedAmount)} iBGT</span>
                       </div>
-                      <div className="flex w-[100%] flex-row items-center justify-between">
+                      <div className="flex w-full flex-row items-center justify-between">
                         <span>liquidate by:</span>
                         <span>{formatDate(loan.endDate + 86400 * 7)}</span>
                       </div>
-                      <div className="flex w-[100%] flex-row items-center justify-between">
+                      <div className="flex w-full flex-row items-center justify-between">
                         <span>expiration date:</span>
                         <span>{formatDate(loan.endDate)}</span>
                       </div>
                     </div>
-                    <div className="relative h-[20%] w-[100%]">
+                    <div className="relative h-1/5 w-full">
                       {allowanceFlags[loan.loanId] && (
                         <div>
                           <button
-                            className="absolute left-[0%] h-[100%] w-[42%] border-2 border-black bg-[#E7B941] text-[3vw]"
+                            className="absolute left-0 h-full w-[42%] border-2 border-black bg-[#E7B941] text-[3vw]"
                             id={`left-approve-button${loan.loanId}`}
                             onClick={() =>
                               handleLeftButtonClick(
@@ -281,7 +277,7 @@ export const LiquidateTabMobile = () => {
                             approve tx
                           </button>
                           <button
-                            className="absolute left-[58%] h-[100%] w-[42%] border-2 border-black bg-[#E7B941] text-[3vw]"
+                            className="absolute left-[58%] h-full w-[42%] border-2 border-black bg-[#E7B941] text-[3vw]"
                             id={`right-approve-button${loan.loanId}`}
                             onClick={() => handleRightButtonClick(loan.loanId)}
                           >
@@ -299,7 +295,7 @@ export const LiquidateTabMobile = () => {
                           }) => {
                             return (
                               <button
-                                className="absolute left-[19%] h-[100%] w-[62%] border-2 border-black bg-[#E7B941] text-[4vw]"
+                                className="absolute left-[19%] h-full w-[62%] border-2 border-black bg-[#E7B941] text-[4vw]"
                                 id={`liquidate-button${loan.loanId}`}
                                 onClick={() => {
                                   const button = document.getElementById(

@@ -367,7 +367,7 @@ export const SwapBoxMobile = () => {
                     <span className="loader-small absolute left-[8%] top-[40%]"></span>
                   ) : (
                     <input
-                      className="absolute left-[5%] top-[0%] h-[100%] w-[90%] border-none bg-transparent font-baloo text-[8vw] font-medium focus:outline-none"
+                      className="absolute left-[5%] top-[0%] h-[100%] w-[90%] border-none bg-transparent font-baloo text-[8vw] font-medium focus:outline-hidden"
                       type="number"
                       id="number-input"
                       placeholder="0.00"
@@ -399,7 +399,7 @@ export const SwapBoxMobile = () => {
                     <span className="loader-small absolute left-[8%] top-[40%]"></span>
                   ) : (
                     <input
-                      className="absolute left-[5%] top-[0%] h-[100%] w-[90%] border-none bg-transparent font-baloo text-[8vw] font-medium focus:outline-none"
+                      className="absolute left-[5%] top-[0%] h-[100%] w-[90%] border-none bg-transparent font-baloo text-[8vw] font-medium focus:outline-hidden"
                       type="number"
                       id="number-input"
                       placeholder="0.00"

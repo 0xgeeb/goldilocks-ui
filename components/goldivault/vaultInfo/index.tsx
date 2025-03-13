@@ -1,6 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+
+import { formatAsString } from "@/app/_components/utils";
+
 import { useGoldivault } from "../../../providers";
 import { contracts } from "../../../utils/addressi";
 
@@ -22,6 +25,8 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
     goldivaultInfoUnibtc,
     goldivaultInfoRusd,
     goldivaultInfoEbtc,
+    goldivaultInfoRseth,
+    goldivaultInfoUsdchoneylp,
     activeToggle,
   } = useGoldivault();
 
@@ -44,72 +49,95 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
   const data =
     params.vaultToken === "weeth"
       ? goldivaultInfoWeeth
-        : params.vaultToken === "unibtc"
-          ? goldivaultInfoUnibtc
-          : params.vaultToken === "solvbtc"
-            ? goldivaultInfoSolvbtc
-            : params.vaultToken === "rusd"
-              ? goldivaultInfoRusd
-              : params.vaultToken === "ebtc"
-                ? goldivaultInfoEbtc
-              : {
-                  endTime: 0,
-                  vaultDeposits: 0,
-                  fixedApr: 0,
-                  impliedYield: 0,
-                  leverage: 0,
-                  otLiquidity: 0,
-                  durationRatio: 0,
-                  restakingYield: 0,
-                };
+      : params.vaultToken === "unibtc"
+        ? goldivaultInfoUnibtc
+        : params.vaultToken === "solvbtc"
+          ? goldivaultInfoSolvbtc
+          : params.vaultToken === "rusd"
+            ? goldivaultInfoRusd
+            : params.vaultToken === "ebtc"
+              ? goldivaultInfoEbtc
+              : params.vaultToken === "rseth"
+                ? goldivaultInfoRseth
+                : params.vaultToken === "usdchoneylp"
+                  ? goldivaultInfoUsdchoneylp
+                  : {
+                      endTime: 0,
+                      fixedApr: 0,
+                      impliedYield: 0,
+                      leverage: 0,
+                      otLiquidity: 0,
+                      durationRatio: 0,
+                      restakingYield: 0,
+                    };
 
   const vaultOTaddy =
     params.vaultToken === "weeth"
       ? contracts.weot.address
-        : params.vaultToken === "solvbtc"
-          ? contracts.solvbtcot.address
-          : params.vaultToken === "unibtc"
-            ? contracts.unibtcot.address
-            : params.vaultToken === "rusd"
-              ? contracts.rusdot.address
-              : params.vaultToken === "ebtc"
-                ? contracts.ebtcot.address
-              : "";
+      : params.vaultToken === "solvbtc"
+        ? contracts.solvbtcot.address
+        : params.vaultToken === "unibtc"
+          ? contracts.unibtcot.address
+          : params.vaultToken === "rusd"
+            ? contracts.rusdot.address
+            : params.vaultToken === "ebtc"
+              ? contracts.ebtcot.address
+              : params.vaultToken === "rseth"
+                ? contracts.rsethot.address
+                : params.vaultToken === "usdchoneylp"
+                  ? contracts.usdchoneylpot.address
+                  : "";
 
   const vaultYTaddy =
     params.vaultToken === "weeth"
       ? contracts.weyt.address
-        : params.vaultToken === "solvbtc"
-          ? contracts.solvbtcyt.address
-          : params.vaultToken === "unibtc"
-            ? contracts.unibtcyt.address
-            : params.vaultToken === "rusd"
-              ? contracts.rusdyt.address
-              : params.vaultToken === "ebtc"
-                ? contracts.ebtcyt.address
-              : "";
+      : params.vaultToken === "solvbtc"
+        ? contracts.solvbtcyt.address
+        : params.vaultToken === "unibtc"
+          ? contracts.unibtcyt.address
+          : params.vaultToken === "rusd"
+            ? contracts.rusdyt.address
+            : params.vaultToken === "ebtc"
+              ? contracts.ebtcyt.address
+              : params.vaultToken === "rseth"
+                ? contracts.rsethyt.address
+                : params.vaultToken === "usdchoneylp"
+                  ? contracts.usdchoneylpyt.address
+                  : "";
 
   const vaultaddy =
     params.vaultToken === "weeth"
       ? contracts.weethVault.address
-        : params.vaultToken === "solvbtc"
-          ? contracts.solvbtcVault.address
-          : params.vaultToken === "unibtc"
-            ? contracts.unibtcVault.address
-            : params.vaultToken === "rusd"
-              ? contracts.rusdVault.address
-              : params.vaultToken === "ebtc"
-                ? contracts.ebtcVault.address
-              : "";
-  
+      : params.vaultToken === "solvbtc"
+        ? contracts.solvbtcVault.address
+        : params.vaultToken === "unibtc"
+          ? contracts.unibtcVault.address
+          : params.vaultToken === "rusd"
+            ? contracts.rusdVault.address
+            : params.vaultToken === "ebtc"
+              ? contracts.ebtcVault.address
+              : params.vaultToken === "rseth"
+                ? contracts.rsethVault.address
+                : params.vaultToken === "usdchoneylp"
+                  ? contracts.usdchoneylpVault.address
+                  : "";
+
   const vaultLPaddy =
     params.vaultToken === "rusd"
-      ? "0x1a2A927F758AE242fB967481CF293D2a36883be6"
+      ? contracts.vaultLPaddys.rusd
       : params.vaultToken === "weeth"
-        ? "0xD26503C0447bEF83e978e7b872cb2d6b9B35262c"
+        ? contracts.vaultLPaddys.weeth
         : params.vaultToken === "ebtc"
-          ? "0x339b8859a691eb5c8E8E576E6Caf4c3556711e34"
-          : ""
+          ? contracts.vaultLPaddys.ebtc
+          : params.vaultToken === "rseth"
+            ? contracts.vaultLPaddys.rseth
+            : params.vaultToken === "unibtc"
+              ? contracts.vaultLPaddys.unibtc
+              : params.vaultToken === "solvbtc"
+                ? contracts.vaultLPaddys.solvbtc
+                : params.vaultToken === "usdchoneylp"
+                  ? contracts.vaultLPaddys.usdchoneylp
+                  : "";
 
   const loadingElement = () => {
     return <span className="loader-small m-auto"></span>;
@@ -137,13 +165,9 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
     }
   };
 
-  const formatAsString = (num: number): string => {
-    return num.toLocaleString("en-US", { maximumFractionDigits: 2 });
-  };
-
   return (
     <div
-      className={`${showInfo ? "" : "hidden"} absolute left-[71%] top-[18%] flex h-[47%] w-[20%] flex-col border-b-2 border-r-2 border-t-2 border-black bg-[#D5A774] bg-opacity-30 pt-[0.75%] font-baloo text-[0.85vw] font-medium text-white`}
+      className={`${showInfo ? "" : "hidden"} absolute left-[71%] top-[18%] flex h-[47%] w-1/5 flex-col border-y-2 border-r-2 border-black bg-[#D5A774]/30 pt-[0.75%] font-baloo text-[0.85vw] font-medium text-white`}
     >
       <h1 className="mb-[1%] pl-[4%] text-[1.5vw]">
         Vault Info{" "}
@@ -156,8 +180,8 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
       {infoLoading ? (
         loadingElement()
       ) : (
-        <div className="flex h-full w-[100%] flex-col overflow-y-auto">
-          <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
+        <div className="flex size-full flex-col overflow-y-auto">
+          <div className="my-[1%] flex w-full flex-row items-center justify-between px-[4%]">
             <span
               className="cursor-pointer hover:text-gray-400"
               onMouseEnter={() => enableInfoPopup("vaultmaturity")}
@@ -169,7 +193,7 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
               {formatDate(data.endTime)} ({getRelativeDate(data.endTime)})
             </span>
           </div>
-          <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
+          <div className="my-[1%] flex w-full flex-row items-center justify-between px-[4%]">
             <span
               className="cursor-pointer hover:text-gray-400"
               onMouseEnter={() => enableInfoPopup("fixedaprweeth")}
@@ -181,7 +205,7 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
           </div>
           {params.vaultToken === "weeth" ? (
             <>
-              <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
+              <div className="my-[1%] flex w-full flex-row items-center justify-between px-[4%]">
                 <span
                   className="cursor-pointer hover:text-gray-400"
                   onMouseEnter={() => enableInfoPopup("pointsmultiplierweeth")}
@@ -191,7 +215,7 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
                 </span>
                 <span>4x</span>
               </div>
-              <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
+              <div className="my-[1%] flex w-full flex-row items-center justify-between px-[4%]">
                 <span
                   className="cursor-pointer hover:text-gray-400"
                   onMouseEnter={() => enableInfoPopup("pointsleverage")}
@@ -204,7 +228,7 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
             </>
           ) : params.vaultToken === "ebtc" ? (
             <>
-              <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
+              <div className="my-[1%] flex w-full flex-row items-center justify-between px-[4%]">
                 <span
                   className="cursor-pointer hover:text-gray-400"
                   onMouseEnter={() => enableInfoPopup("pointsmultiplierebtc")}
@@ -214,7 +238,7 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
                 </span>
                 <span>1x</span>
               </div>
-              <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
+              <div className="my-[1%] flex w-full flex-row items-center justify-between px-[4%]">
                 <span
                   className="cursor-pointer hover:text-gray-400"
                   onMouseEnter={() => enableInfoPopup("pointsleverage")}
@@ -224,7 +248,7 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
                 </span>
                 <span>{formatAsString(data.babylonLeverage)}x</span>
               </div>
-              <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
+              <div className="my-[1%] flex w-full flex-row items-center justify-between px-[4%]">
                 <span
                   className="cursor-pointer hover:text-gray-400"
                   onMouseEnter={() => enableInfoPopup("pointsmultiplierebtc")}
@@ -234,7 +258,7 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
                 </span>
                 <span>2x</span>
               </div>
-              <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
+              <div className="my-[1%] flex w-full flex-row items-center justify-between px-[4%]">
                 <span
                   className="cursor-pointer hover:text-gray-400"
                   onMouseEnter={() => enableInfoPopup("pointsleverage")}
@@ -244,7 +268,7 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
                 </span>
                 <span>{formatAsString(data.lombardLeverage)}x</span>
               </div>
-              <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
+              <div className="my-[1%] flex w-full flex-row items-center justify-between px-[4%]">
                 <span
                   className="cursor-pointer hover:text-gray-400"
                   onMouseEnter={() => enableInfoPopup("pointsmultiplierebtc")}
@@ -254,7 +278,7 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
                 </span>
                 <span>1x</span>
               </div>
-              <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
+              <div className="my-[1%] flex w-full flex-row items-center justify-between px-[4%]">
                 <span
                   className="cursor-pointer hover:text-gray-400"
                   onMouseEnter={() => enableInfoPopup("pointsleverage")}
@@ -264,7 +288,7 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
                 </span>
                 <span>{formatAsString(data.symbioticLeverage)}x</span>
               </div>
-              <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
+              <div className="my-[1%] flex w-full flex-row items-center justify-between px-[4%]">
                 <span
                   className="cursor-pointer hover:text-gray-400"
                   onMouseEnter={() => enableInfoPopup("pointsmultiplierebtc")}
@@ -274,7 +298,7 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
                 </span>
                 <span>3x</span>
               </div>
-              <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
+              <div className="my-[1%] flex w-full flex-row items-center justify-between px-[4%]">
                 <span
                   className="cursor-pointer hover:text-gray-400"
                   onMouseEnter={() => enableInfoPopup("pointsleverage")}
@@ -284,7 +308,7 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
                 </span>
                 <span>{formatAsString(data.vedaLeverage)}x</span>
               </div>
-              <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
+              <div className="my-[1%] flex w-full flex-row items-center justify-between px-[4%]">
                 <span
                   className="cursor-pointer hover:text-gray-400"
                   onMouseEnter={() => enableInfoPopup("pointsmultiplierebtc")}
@@ -294,7 +318,7 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
                 </span>
                 <span>2x</span>
               </div>
-              <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
+              <div className="my-[1%] flex w-full flex-row items-center justify-between px-[4%]">
                 <span
                   className="cursor-pointer hover:text-gray-400"
                   onMouseEnter={() => enableInfoPopup("pointsleverage")}
@@ -307,7 +331,7 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
             </>
           ) : params.vaultToken === "rseth" ? (
             <>
-              <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
+              <div className="my-[1%] flex w-full flex-row items-center justify-between px-[4%]">
                 <span
                   className="cursor-pointer hover:text-gray-400"
                   onMouseEnter={() => enableInfoPopup("pointsmultiplierrseth")}
@@ -317,7 +341,7 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
                 </span>
                 <span>2x</span>
               </div>
-              <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
+              <div className="my-[1%] flex w-full flex-row items-center justify-between px-[4%]">
                 <span
                   className="cursor-pointer hover:text-gray-400"
                   onMouseEnter={() => enableInfoPopup("pointsleverage")}
@@ -325,9 +349,9 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
                 >
                   KelpDAO Points Leverage:
                 </span>
-                <span>69x</span>
+                <span>{formatAsString(data.kelpLeverage)}x</span>
               </div>
-              <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
+              <div className="my-[1%] flex w-full flex-row items-center justify-between px-[4%]">
                 <span
                   className="cursor-pointer hover:text-gray-400"
                   onMouseEnter={() => enableInfoPopup("pointsmultiplierrseth")}
@@ -337,7 +361,7 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
                 </span>
                 <span>1x</span>
               </div>
-              <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
+              <div className="my-[1%] flex w-full flex-row items-center justify-between px-[4%]">
                 <span
                   className="cursor-pointer hover:text-gray-400"
                   onMouseEnter={() => enableInfoPopup("pointsleverage")}
@@ -345,22 +369,24 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
                 >
                   EigenLayer Points Leverage:
                 </span>
-                <span>69x</span>
+                <span>{formatAsString(data.eigenLeverage)}x</span>
               </div>
             </>
           ) : params.vaultToken === "unibtc" ? (
             <>
-              <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
+              <div className="my-[1%] flex w-full flex-row items-center justify-between px-[4%]">
                 <span
                   className="cursor-pointer hover:text-gray-400"
                   onMouseEnter={() => enableInfoPopup("pointsmultiplierunibtc")}
-                  onMouseLeave={() => disableInfoPopup("pointsmultiplierunibtc")}
+                  onMouseLeave={() =>
+                    disableInfoPopup("pointsmultiplierunibtc")
+                  }
                 >
                   Bedrock Points Multiplier:
                 </span>
                 <span>4x</span>
               </div>
-              <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
+              <div className="my-[1%] flex w-full flex-row items-center justify-between px-[4%]">
                 <span
                   className="cursor-pointer hover:text-gray-400"
                   onMouseEnter={() => enableInfoPopup("pointsleverage")}
@@ -370,17 +396,19 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
                 </span>
                 <span>{formatAsString(data.bedrockLeverage)}x</span>
               </div>
-              <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
+              <div className="my-[1%] flex w-full flex-row items-center justify-between px-[4%]">
                 <span
                   className="cursor-pointer hover:text-gray-400"
                   onMouseEnter={() => enableInfoPopup("pointsmultiplierunibtc")}
-                  onMouseLeave={() => disableInfoPopup("pointsmultiplierunibtc")}
+                  onMouseLeave={() =>
+                    disableInfoPopup("pointsmultiplierunibtc")
+                  }
                 >
                   Babylon Points Multiplier:
                 </span>
                 <span>1x</span>
               </div>
-              <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
+              <div className="my-[1%] flex w-full flex-row items-center justify-between px-[4%]">
                 <span
                   className="cursor-pointer hover:text-gray-400"
                   onMouseEnter={() => enableInfoPopup("pointsleverage")}
@@ -393,7 +421,7 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
             </>
           ) : params.vaultToken === "rusd" ? (
             <>
-              <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
+              <div className="my-[1%] flex w-full flex-row items-center justify-between px-[4%]">
                 <span
                   className="cursor-pointer hover:text-gray-400"
                   onMouseEnter={() => enableInfoPopup("pointsmultiplierrusd")}
@@ -403,7 +431,7 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
                 </span>
                 <span>2.25x</span>
               </div>
-              <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
+              <div className="my-[1%] flex w-full flex-row items-center justify-between px-[4%]">
                 <span
                   className="cursor-pointer hover:text-gray-400"
                   onMouseEnter={() => enableInfoPopup("pointsleverage")}
@@ -413,7 +441,7 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
                 </span>
                 <span>{formatAsString(data.reservoirLeverage)}x</span>
               </div>
-              <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
+              <div className="my-[1%] flex w-full flex-row items-center justify-between px-[4%]">
                 <span
                   className="cursor-pointer hover:text-gray-400"
                   onMouseEnter={() => enableInfoPopup("lpapr")}
@@ -421,12 +449,15 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
                 >
                   LP APR:
                 </span>
-                <span>{`>`}{formatAsString(data.fixedApr)}%</span>
+                <span>
+                  {`>`}
+                  {formatAsString(data.fixedApr)}%
+                </span>
               </div>
             </>
           ) : (
             <>
-              <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
+              <div className="my-[1%] flex w-full flex-row items-center justify-between px-[4%]">
                 <span
                   className="cursor-pointer hover:text-gray-400"
                   onMouseEnter={() => enableInfoPopup("pointsmultiplier")}
@@ -436,7 +467,7 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
                 </span>
                 <span>1x</span>
               </div>
-              <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
+              <div className="my-[1%] flex w-full flex-row items-center justify-between px-[4%]">
                 <span
                   className="cursor-pointer hover:text-gray-400"
                   onMouseEnter={() => enableInfoPopup("pointsleverage")}
@@ -444,9 +475,9 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
                 >
                   Babylon Points Leverage:
                 </span>
-                <span>69x</span>
+                <span>{formatAsString(data.babylonLeverage)}x</span>
               </div>
-              <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
+              <div className="my-[1%] flex w-full flex-row items-center justify-between px-[4%]">
                 <span
                   className="cursor-pointer hover:text-gray-400"
                   onMouseEnter={() => enableInfoPopup("pointsmultiplier")}
@@ -456,7 +487,7 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
                 </span>
                 <span>4x</span>
               </div>
-              <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
+              <div className="my-[1%] flex w-full flex-row items-center justify-between px-[4%]">
                 <span
                   className="cursor-pointer hover:text-gray-400"
                   onMouseEnter={() => enableInfoPopup("pointsleverage")}
@@ -464,21 +495,21 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
                 >
                   Solv Points Leverage:
                 </span>
-                <span>69x</span>
+                <span>{formatAsString(data.solvLeverage)}x</span>
               </div>
             </>
           )}
-          <div className="my-[1%] flex w-[100%] flex-row items-center justify-between bg-[#DEB486] bg-opacity-50 px-[4%]">
+          <div className="my-[1%] flex w-full flex-row items-center justify-between bg-[#DEB486]/50 px-[4%]">
             <span>Liquidity:</span>
             <span>${formatAsString(data.otLiquidity)}</span>
           </div>
           {(params.vaultToken === "weeth" || params.vaultToken === "rseth") && (
-            <div className="my-[1%] flex w-[100%] flex-row items-center justify-between bg-[#DEB486] bg-opacity-50 px-[4%]">
+            <div className="my-[1%] flex w-full flex-row items-center justify-between bg-[#DEB486]/50 px-[4%]">
               <span>Current restaking yield:</span>
               <span>{formatAsString(data.restakingYield)}%</span>
             </div>
           )}
-          <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
+          <div className="my-[1%] flex w-full flex-row items-center justify-between px-[4%]">
             <span>Contract addresses:</span>
             <a
               href={`https://berascan.com/address/${vaultaddy}`}
@@ -509,13 +540,21 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
               <span className="cursor-pointer hover:opacity-50">LP</span>
             </a>
           </div>
-          {(params.vaultToken === "rusd") && (
+          {params.vaultToken === "rusd" && (
             <>
-              <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
+              <div className="my-[1%] flex w-full flex-row items-center justify-between px-[4%]">
                 <span>Automated liquidity manager:</span>
-                <a href="https://app.aquabera.com/vault/0x20a49a266AE70d07Ba066Ef1F8b6e670216Ab2a6" target="_blank"><span className="cursor-pointer hover:opacity-50">Aquabera</span></a>
+                <a
+                  href="https://app.aquabera.com/vault/0x20a49a266AE70d07Ba066Ef1F8b6e670216Ab2a6"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <span className="cursor-pointer hover:opacity-50">
+                    Aquabera
+                  </span>
+                </a>
               </div>
-              <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
+              <div className="my-[1%] flex w-full flex-row items-center justify-between px-[4%]">
                 <span
                   className="cursor-pointer hover:text-gray-400"
                   onMouseEnter={() => enableInfoPopup("fees")}
@@ -527,7 +566,7 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
               </div>
             </>
           )}
-          <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
+          <div className="my-[1%] flex w-full flex-row items-center justify-between px-[4%]">
             <a href={params.dexLink} target="_blank" rel="noreferrer">
               <span className="cursor-pointer hover:opacity-50">
                 Link to OT chart
@@ -535,7 +574,7 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
             </a>
             <span></span>
           </div>
-          <div className="my-[1%] flex w-[100%] flex-row items-center justify-between px-[4%]">
+          <div className="my-[1%] flex w-full flex-row items-center justify-between px-[4%]">
             <a href={params.protocolUrl} target="_blank" rel="noreferrer">
               <span className="cursor-pointer hover:opacity-50">
                 Link to underlying protocol

@@ -62,7 +62,7 @@ export const LiqManagerTabMobile = ({ params }: LiqManagerTabProps) => {
         </div>
         <div className="mt-[5%] flex h-[50%] w-[100%] flex-row items-center justify-between border-2 border-black bg-white pl-[3.5%] pr-[1%]">
           <input
-            className="h-[100%] w-full border-none bg-transparent font-baloo text-[5.5vw] font-bold focus:outline-none"
+            className="h-[100%] w-full border-none bg-transparent font-baloo text-[5.5vw] font-bold focus:outline-hidden"
             type="number"
             id="number-input"
             placeholder="0.00"

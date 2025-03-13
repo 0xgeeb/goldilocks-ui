@@ -1,10 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+
 import { useAccount } from "wagmi";
-import { useBorrow } from "../../../providers";
+
+import { formatAsString } from "@/app/_components/utils";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+
 import { useBorrowTx } from "../../../hooks";
+import { useBorrow } from "../../../providers";
 
 export const BorrowButton = () => {
   const { address, isConnected } = useAccount();
@@ -31,10 +35,6 @@ export const BorrowButton = () => {
     useBorrowTx();
 
   const [buttonLoadingColor, setButtonLoadingColor] = useState<boolean>(false);
-
-  const formatAsString = (num: number): string => {
-    return num.toLocaleString("en-US", { maximumFractionDigits: 2 });
-  };
 
   const refreshInfo = () => {
     setDisplayString("");
@@ -207,14 +207,14 @@ export const BorrowButton = () => {
       {allowanceButtons && (
         <div>
           <button
-            className="absolute left-[24%] top-[60%] h-[8%] w-[24%] border-2 border-black bg-[#E7B941] font-amaticbold text-[4vw] hover:scale-110 hover:bg-[#634C43] hover:text-[#E7B941] md:text-[2.75vw] lg:left-[30.9%] lg:top-[54.8%] lg:w-[16.6%] lg:text-[2vw] xl:text-[1.5vw] 2xl:top-[55%]"
+            className="cursor-pointer absolute left-[24%] top-[60%] h-[8%] w-[24%] border-2 border-black bg-[#E7B941] font-amaticbold text-[4vw] hover:scale-110 hover:bg-[#634C43] hover:text-[#E7B941] md:text-[2.75vw] lg:left-[30.9%] lg:top-[54.8%] lg:w-[16.6%] lg:text-[2vw] xl:text-[1.5vw] 2xl:top-[55%]"
             id="left-approve-button"
             onClick={() => handleLeftButtonClick()}
           >
             approve tx
           </button>
           <button
-            className="absolute left-[52%] top-[60%] h-[8%] w-[24%] border-2 border-black bg-[#E7B941] font-amaticbold text-[4vw] hover:scale-110 hover:bg-[#634C43] hover:text-[#E7B941] md:text-[2.75vw] lg:left-[52.5%] lg:top-[54.8%] lg:w-[16.6%] lg:text-[2vw] xl:text-[1.5vw] 2xl:top-[55%]"
+            className="cursor-pointer absolute left-[52%] top-[60%] h-[8%] w-[24%] border-2 border-black bg-[#E7B941] font-amaticbold text-[4vw] hover:scale-110 hover:bg-[#634C43] hover:text-[#E7B941] md:text-[2.75vw] lg:left-[52.5%] lg:top-[54.8%] lg:w-[16.6%] lg:text-[2vw] xl:text-[1.5vw] 2xl:top-[55%]"
             id="right-approve-button"
             onClick={() => handleRightButtonClick()}
           >
@@ -227,7 +227,7 @@ export const BorrowButton = () => {
           {({ account, chain, openChainModal, openConnectModal }) => {
             return (
               <button
-                className={`absolute left-[32%] top-[60%] h-[8%] w-[36%] md:left-[37%] md:w-[26%] lg:left-[41.6%] lg:top-[54.8%] lg:w-[16.6%] 2xl:top-[55%] ${buttonLoadingColor ? "bg-[#634C43] text-[#E7B941]" : "bg-[#E7B941] text-black"} border-2 border-black font-amaticbold text-[5vw] hover:scale-110 hover:bg-[#634C43] hover:text-[#E7B941] md:text-[4vw] lg:text-[3vw] xl:text-[2.25vw] 2xl:text-[1.9vw] tall:text-[6vw] tall:md:text-[4vw] tall:lg:text-[3vw] tall:xl:text-[2.5vw] tall:2xl:text-[1.9vw]`}
+                className={`cursor-pointer absolute left-[32%] top-[60%] h-[8%] w-[36%] md:left-[37%] md:w-[26%] lg:left-[41.6%] lg:top-[54.8%] lg:w-[16.6%] 2xl:top-[55%] ${buttonLoadingColor ? "bg-[#634C43] text-[#E7B941]" : "bg-[#E7B941] text-black"} border-2 border-black font-amaticbold text-[5vw] hover:scale-110 hover:bg-[#634C43] hover:text-[#E7B941] md:text-[4vw] lg:text-[3vw] xl:text-[2.25vw] 2xl:text-[1.9vw] tall:text-[6vw] tall:md:text-[4vw] tall:lg:text-[3vw] tall:xl:text-[2.5vw] tall:2xl:text-[1.9vw]`}
                 id="borrow-button"
                 onClick={() => {
                   const button = document.getElementById("borrow-button");

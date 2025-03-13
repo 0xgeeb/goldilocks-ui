@@ -1,14 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+
+import { formatEther, parseEther } from "viem";
 import { useAccount } from "wagmi";
-import { useGoldivault } from "../../../providers";
+
+import { formatAsString } from "@/app/_components/utils";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { getPublicClient } from "@wagmi/core";
+
 import { useGoldivaultTx } from "../../../hooks";
-import { contracts } from "../../../utils/addressi";
-import { formatEther, parseEther } from "viem"
-import { getPublicClient } from "@wagmi/core"
+import { useGoldivault } from "../../../providers";
 import { config } from "../../../providers/WagmiProvider";
+import { contracts } from "../../../utils/addressi";
 
 type VaultButtonProps = {
   params: {
@@ -19,6 +23,7 @@ type VaultButtonProps = {
   };
 };
 
+// todo: needs to be updated for staking deposits
 export const VaultButtonMobile = ({ params }: VaultButtonProps) => {
   const [honeyApproved, setHoneyApproved] = useState<boolean>(false);
 
@@ -58,6 +63,12 @@ export const VaultButtonMobile = ({ params }: VaultButtonProps) => {
     refreshGoldivaultInfoEbtc,
     refreshGoldivaultWalletInfoEbtc,
     goldivaultWalletInfoEbtc,
+    refreshGoldivaultInfoRseth,
+    refreshGoldivaultWalletInfoRseth,
+    goldivaultWalletInfoRseth,
+    refreshGoldivaultInfoUsdchoneylp,
+    refreshGoldivaultWalletInfoUsdchoneylp,
+    goldivaultWalletInfoUsdchoneylp,
     vaultSwapTxAmount,
     honeyApprovalAmount,
     otApprovalAmount,
@@ -78,110 +89,115 @@ export const VaultButtonMobile = ({ params }: VaultButtonProps) => {
     sendBuyYTTx,
     sendSellYTTx,
     sendAddLiqTx,
-    sendRemoveLiqTx
+    sendRemoveLiqTx,
   } = useGoldivaultTx();
 
   const { address, isConnected } = useAccount();
 
-  const formatAsString = (num: number): string => {
-    return num.toLocaleString("en-US", { maximumFractionDigits: 2 });
-  };
-
   const vaultOT =
     params.vaultToken === "weeth"
       ? goldivaultWalletInfoWeeth.weot
-        : params.vaultToken === "solvbtc"
-          ? goldivaultWalletInfoSolvbtc.solvbtcot
-          : params.vaultToken === "unibtc"
-            ? goldivaultWalletInfoUnibtc.unibtcot
-            : params.vaultToken === "rusd"
-              ? goldivaultWalletInfoRusd.rusdot
-              : params.vaultToken === "ebtc"
-                ? goldivaultWalletInfoEbtc.ebtcot
-              : {};
+      : params.vaultToken === "solvbtc"
+        ? goldivaultWalletInfoSolvbtc.solvbtcot
+        : params.vaultToken === "unibtc"
+          ? goldivaultWalletInfoUnibtc.unibtcot
+          : params.vaultToken === "rusd"
+            ? goldivaultWalletInfoRusd.rusdot
+            : params.vaultToken === "ebtc"
+              ? goldivaultWalletInfoEbtc.ebtcot
+              : params.vaultToken === "rseth"
+                ? goldivaultWalletInfoRseth.rsethot
+                : params.vaultToken === "usdchoneylp"
+                  ? goldivaultWalletInfoUsdchoneylp.usdchoneylpot
+                  : {};
 
   const vaultYT =
     params.vaultToken === "weeth"
       ? goldivaultWalletInfoWeeth.weyt
-        : params.vaultToken === "solvbtc"
-          ? goldivaultWalletInfoSolvbtc.solvbtcyt
-          : params.vaultToken === "unibtc"
-            ? goldivaultWalletInfoUnibtc.unibtcyt
-            : params.vaultToken === "rusd"
-              ? goldivaultWalletInfoRusd.rusdyt
-              : params.vaultToken === "ebtc"
-                ? goldivaultWalletInfoEbtc.ebtcyt
-              : {};
+      : params.vaultToken === "solvbtc"
+        ? goldivaultWalletInfoSolvbtc.solvbtcyt
+        : params.vaultToken === "unibtc"
+          ? goldivaultWalletInfoUnibtc.unibtcyt
+          : params.vaultToken === "rusd"
+            ? goldivaultWalletInfoRusd.rusdyt
+            : params.vaultToken === "ebtc"
+              ? goldivaultWalletInfoEbtc.ebtcyt
+              : params.vaultToken === "rseth"
+                ? goldivaultWalletInfoRseth.rsethyt
+                : params.vaultToken === "usdchoneylp"
+                  ? goldivaultWalletInfoUsdchoneylp.usdchoneylpyt
+                  : {};
 
   const vaultDT =
     params.vaultToken === "weeth"
       ? goldivaultWalletInfoWeeth.weeth
-        : params.vaultToken === "solvbtc"
-          ? goldivaultWalletInfoSolvbtc.solvbtc
-          : params.vaultToken === "unibtc"
-            ? goldivaultWalletInfoUnibtc.unibtc
-            : params.vaultToken === "rusd"
-              ? goldivaultWalletInfoRusd.rusd
-              : params.vaultToken === "ebtc"
-                ? goldivaultWalletInfoEbtc.ebtc
-              : {};
+      : params.vaultToken === "solvbtc"
+        ? goldivaultWalletInfoSolvbtc.solvbtc
+        : params.vaultToken === "unibtc"
+          ? goldivaultWalletInfoUnibtc.unibtc
+          : params.vaultToken === "rusd"
+            ? goldivaultWalletInfoRusd.rusd
+            : params.vaultToken === "ebtc"
+              ? goldivaultWalletInfoEbtc.ebtc
+              : params.vaultToken === "rseth"
+                ? goldivaultWalletInfoRseth.rseth
+                : params.vaultToken === "usdchoneylp"
+                  ? goldivaultWalletInfoUsdchoneylp.usdchoneylp
+                  : {};
 
   const vaultOTaddy =
     params.vaultToken === "weeth"
       ? contracts.weot.address
-        : params.vaultToken === "solvbtc"
-          ? contracts.solvbtcot.address
-          : params.vaultToken === "unibtc"
-            ? contracts.unibtcot.address
-            : params.vaultToken === "rusd"
-              ? contracts.rusdot.address
-              : params.vaultToken === "ebtc"
-                ? contracts.ebtcot.address
-              : "";
+      : params.vaultToken === "solvbtc"
+        ? contracts.solvbtcot.address
+        : params.vaultToken === "unibtc"
+          ? contracts.unibtcot.address
+          : params.vaultToken === "rusd"
+            ? contracts.rusdot.address
+            : params.vaultToken === "ebtc"
+              ? contracts.ebtcot.address
+              : params.vaultToken === "rseth"
+                ? contracts.rsethot.address
+                : params.vaultToken === "usdchoneylp"
+                  ? contracts.usdchoneylpot.address
+                  : "";
 
   const vaultDTaddy =
     params.vaultToken === "weeth"
       ? contracts.weeth.address
-        : params.vaultToken === "solvbtc"
-          ? contracts.solvbtc.address
-          : params.vaultToken === "unibtc"
-            ? contracts.unibtc.address
-            : params.vaultToken === "rusd"
-              ? contracts.rusd.address
-              : params.vaultToken === "ebtc"
-                ? contracts.ebtc.address
-              : "";
+      : params.vaultToken === "solvbtc"
+        ? contracts.solvbtc.address
+        : params.vaultToken === "unibtc"
+          ? contracts.unibtc.address
+          : params.vaultToken === "rusd"
+            ? contracts.rusd.address
+            : params.vaultToken === "ebtc"
+              ? contracts.ebtc.address
+              : params.vaultToken === "rseth"
+                ? contracts.rseth.address
+                : params.vaultToken === "usdchoneylp"
+                  ? contracts.usdchoneylp.address
+                  : "";
 
   const vaultDTAllowance =
     params.vaultToken === "weeth"
       ? goldivaultWalletInfoWeeth.weethVaultAllowance
-        : params.vaultToken === "solvbtc"
-          ? goldivaultWalletInfoSolvbtc.solvbtcAllowance
-          : params.vaultToken === "unibtc"
-            ? goldivaultWalletInfoUnibtc.unibtcAllowance
-            : params.vaultToken === "rusd"
-              ? goldivaultWalletInfoRusd.rusdAllowance
-              : params.vaultToken === "ebtc"
-                ? goldivaultWalletInfoEbtc.ebtcAllowance
-              : 0;
-
-  const vaultDTBalance =
-    params.vaultToken === "weeth"
-      ? goldivaultWalletInfoWeeth.weeth
-        : params.vaultToken === "solvbtc"
-          ? goldivaultWalletInfoSolvbtc.solvbtc
-          : params.vaultToken === "unibtc"
-            ? goldivaultWalletInfoUnibtc.unibtc
-            : params.vaultToken === "rusd"
-              ? goldivaultWalletInfoRusd.rusd
-              : params.vaultToken === "ebtc"
-                ? goldivaultWalletInfoEbtc.ebtc
-              : 0;
+      : params.vaultToken === "solvbtc"
+        ? goldivaultWalletInfoSolvbtc.solvbtcAllowance
+        : params.vaultToken === "unibtc"
+          ? goldivaultWalletInfoUnibtc.unibtcAllowance
+          : params.vaultToken === "rusd"
+            ? goldivaultWalletInfoRusd.rusdAllowance
+            : params.vaultToken === "ebtc"
+              ? goldivaultWalletInfoEbtc.ebtcAllowance
+              : params.vaultToken === "rseth"
+                ? goldivaultWalletInfoRseth.rsethAllowance
+                : params.vaultToken === "usdchoneylp"
+                  ? goldivaultWalletInfoUsdchoneylp.usdchoneylpAllowance
+                  : 0;
 
   const vaultLPBalance =
-    params.vaultToken === "rusd"
-      ? goldivaultWalletInfoRusd.rusdaquabera
-      : 0
+    params.vaultToken === "rusd" ? goldivaultWalletInfoRusd.rusdaquabera : 0;
 
   const refreshInfo = () => {
     if (params.vaultToken === "weeth") {
@@ -196,6 +212,12 @@ export const VaultButtonMobile = ({ params }: VaultButtonProps) => {
     } else if (params.vaultToken === "ebtc") {
       refreshGoldivaultInfoEbtc();
       refreshGoldivaultWalletInfoEbtc();
+    } else if (params.vaultToken === "rseth") {
+      refreshGoldivaultInfoRseth();
+      refreshGoldivaultWalletInfoRseth();
+    } else if (params.vaultToken === "usdchoneylp") {
+      refreshGoldivaultInfoUsdchoneylp()
+      refreshGoldivaultWalletInfoUsdchoneylp()
     } else {
       refreshGoldivaultInfoUnibtc();
       refreshGoldivaultWalletInfoUnibtc();
@@ -228,10 +250,10 @@ export const VaultButtonMobile = ({ params }: VaultButtonProps) => {
       tradeYTFlow(button);
     }
     if (activeToggle === "ADDLIQ") {
-      addLiqFlow(button)
+      addLiqFlow(button);
     }
     if (activeToggle === "REMOVELIQ") {
-      removeLiqFlow(button)
+      removeLiqFlow(button);
     }
   };
 
@@ -461,7 +483,7 @@ export const VaultButtonMobile = ({ params }: VaultButtonProps) => {
             openNotification(
               true,
               `You've successfully sold ${params.dt} yield tokens`,
-              `You sold ${formatAsString(tradeInput)} YTs for ${formatAsString(afterBalance - vaultDTBalance)} ${params.dt}`,
+              `You sold ${formatAsString(tradeInput)} YTs for ${formatAsString(afterBalance - vaultDT)} ${params.dt}`,
               sellTx,
             );
             if (button) {
@@ -517,7 +539,7 @@ export const VaultButtonMobile = ({ params }: VaultButtonProps) => {
               openNotification(
                 true,
                 `You've successfully bought ${params.dt} yield tokens`,
-                `You bought ${formatAsString(calledDtAmountMin)} YTs for ${formatAsString(vaultDTBalance - afterBalance)} ${params.dt}`,
+                `You bought ${formatAsString(calledDtAmountMin)} YTs for ${formatAsString(vaultDT - afterBalance)} ${params.dt}`,
                 buyTx,
               );
               if (button) {
@@ -544,135 +566,153 @@ export const VaultButtonMobile = ({ params }: VaultButtonProps) => {
     }
   };
 
-    const addLiqFlow = async (button: HTMLElement | null) => {
-      if (tradeInput == 0) {
-        button && (button.innerHTML = "add liq");
-        return;
-      }
-      if (tradeInput > vaultDT) {
-        button && (button.innerHTML = "not enough");
-        return;
-      } else {
-        const sufficientAllowance: boolean | void = await checkAllowance(
+  const addLiqFlow = async (button: HTMLElement | null) => {
+    if (tradeInput == 0) {
+      button && (button.innerHTML = "add liq");
+      return;
+    }
+    if (tradeInput > vaultDT) {
+      button && (button.innerHTML = "not enough");
+      return;
+    } else {
+      const sufficientAllowance: boolean | void = await checkAllowance(
+        tradeInput,
+        "rusdaqua",
+        address as string,
+      );
+      if (sufficientAllowance) {
+        setTxConfirming(true);
+        if (button) {
+          button.innerHTML = "confirming...";
+        }
+        const client = getPublicClient(config);
+        const lpAmountResult = await client.simulateContract({
+          address: contracts.depositGuard.address as `0x${string}`,
+          abi: contracts.depositGuard.abi,
+          functionName: "forwardDepositToICHIVault",
+          args: [
+            "0x20a49a266AE70d07Ba066Ef1F8b6e670216Ab2a6",
+            "0x9Fbba6c87923af2561A2391198166b51Cf5736E8",
+            contracts.rusd.address,
+            parseEther(`${tradeInput}`),
+            parseEther(`${0}`),
+            address,
+          ],
+          account: address,
+        });
+        const lpAmount =
+          parseFloat(formatEther(lpAmountResult.result as unknown as bigint)) *
+          (1 - slippage.amount / 100);
+        const addLiqTx = await sendAddLiqTx(
           tradeInput,
-          "rusdaqua",
-          address as string,
+          lpAmount,
+          address as `0x${string}`,
         );
-        if (sufficientAllowance) {
-          setTxConfirming(true);
+        if (addLiqTx.substring(0, 2) === "0x") {
+          setTxConfirming(false);
+          openNotification(
+            true,
+            `You've successfully deposited ${params.dt} tokens into the LP`,
+            `You deposited ${formatAsString(tradeInput)} ${params.dt}`,
+            addLiqTx,
+          );
           if (button) {
-            button.innerHTML = "confirming...";
+            button.innerHTML = "add liq";
           }
-          const client = getPublicClient(config);
-          const lpAmountResult = await client.simulateContract({
-            address: contracts.depositGuard.address as `0x${string}`,
-            abi: contracts.depositGuard.abi,
-            functionName: 'forwardDepositToICHIVault',
-            args: [
-              "0x20a49a266AE70d07Ba066Ef1F8b6e670216Ab2a6",
-              "0x9Fbba6c87923af2561A2391198166b51Cf5736E8",
-              contracts.rusd.address,
-              parseEther(`${tradeInput}`),
-              parseEther(`${0}`),
-              address
-            ],
-            account: address
-          })
-          const lpAmount = parseFloat(formatEther(lpAmountResult.result as unknown as bigint)) * (1 - slippage.amount / 100)
-          const addLiqTx = await sendAddLiqTx(tradeInput, lpAmount, address as `0x${string}`);
-          if (addLiqTx.substring(0, 2) === "0x") {
-            setTxConfirming(false);
-            openNotification(
-              true,
-              `You've successfully deposited ${params.dt} tokens into the LP`,
-              `You deposited ${formatAsString(tradeInput)} ${params.dt}`,
-              addLiqTx,
-            );
-            if (button) {
-              button.innerHTML = "add liq";
-            }
-            refreshInfo();
-            setTimeout(() => {
-              openNotification(false, "", "", "");
-            }, 10000);
-          } else {
-            if (button) {
-              button.innerHTML = "add liq";
-            }
-            refreshInfo();
-            setTxConfirming(false);
-          }
+          refreshInfo();
+          setTimeout(() => {
+            openNotification(false, "", "", "");
+          }, 10000);
         } else {
-          setAllowanceButtons(true);
-        }
-      }
-    }
-  
-    const removeLiqFlow = async (button: HTMLElement | null) => {
-      if (tradeInput == 0) {
-        button && (button.innerHTML = "remove liq");
-        return;
-      }
-      if (tradeInput > vaultLPBalance) {
-        button && (button.innerHTML = "not enough");
-        return;
-      } else {
-        const sufficientAllowance: boolean | void = await checkAllowance(
-          tradeInput,
-          "rusdaqualp",
-          address as string,
-        );
-        if(sufficientAllowance) {
-          setTxConfirming(true);
           if (button) {
-            button.innerHTML = "confirming...";
+            button.innerHTML = "add liq";
           }
-          const client = getPublicClient(config);
-          const lpAmountResult = await client.simulateContract({
-            address: contracts.depositGuard.address as `0x${string}`,
-            abi: contracts.depositGuard.abi,
-            functionName: 'forwardWithdrawFromICHIVault',
-            args: [
-              "0x20a49a266AE70d07Ba066Ef1F8b6e670216Ab2a6",
-              "0x9Fbba6c87923af2561A2391198166b51Cf5736E8",
-              parseEther(`${tradeInput}`),
-              address,
-              parseEther(`${0}`),
-              parseEther(`${0}`)
-            ],
-            account: address
-          })
-          const lpAmt1 = parseFloat(formatEther(lpAmountResult.result[0] as unknown as bigint)) * (1 - slippage.amount / 100)
-          const lpAmt2 = parseFloat(formatEther(lpAmountResult.result[1] as unknown as bigint)) * (1 - slippage.amount / 100)
-          const removeLiqTX = await sendRemoveLiqTx(tradeInput, address as `0x${string}`, lpAmt1, lpAmt2);
-          if (removeLiqTX.substring(0, 2) === "0x") {
-            setTxConfirming(false);
-            openNotification(
-              true,
-              `You've successfully withdrew your LP`,
-              `You withdrew liquidity with ${formatAsString(tradeInput)} LP tokens`,
-              removeLiqTX,
-            );
-            if (button) {
-              button.innerHTML = "remove liq";
-            }
-            refreshInfo();
-            setTimeout(() => {
-              openNotification(false, "", "", "");
-            }, 10000);
-          } else {
-            if (button) {
-              button.innerHTML = "remove liq"
-            }
-            refreshInfo();
-            setTxConfirming(false);
-          }
+          refreshInfo();
+          setTxConfirming(false);
         }
-        else {
-          setAllowanceButtons(true)
-        }
+      } else {
+        setAllowanceButtons(true);
       }
     }
+  };
+
+  const removeLiqFlow = async (button: HTMLElement | null) => {
+    if (tradeInput == 0) {
+      button && (button.innerHTML = "remove liq");
+      return;
+    }
+    if (tradeInput > vaultLPBalance) {
+      button && (button.innerHTML = "not enough");
+      return;
+    } else {
+      const sufficientAllowance: boolean | void = await checkAllowance(
+        tradeInput,
+        "rusdaqualp",
+        address as string,
+      );
+      if (sufficientAllowance) {
+        setTxConfirming(true);
+        if (button) {
+          button.innerHTML = "confirming...";
+        }
+        const client = getPublicClient(config);
+        const lpAmountResult = await client.simulateContract({
+          address: contracts.depositGuard.address as `0x${string}`,
+          abi: contracts.depositGuard.abi,
+          functionName: "forwardWithdrawFromICHIVault",
+          args: [
+            "0x20a49a266AE70d07Ba066Ef1F8b6e670216Ab2a6",
+            "0x9Fbba6c87923af2561A2391198166b51Cf5736E8",
+            parseEther(`${tradeInput}`),
+            address,
+            parseEther(`${0}`),
+            parseEther(`${0}`),
+          ],
+          account: address,
+        });
+        const lpAmt1 =
+          parseFloat(
+            formatEther(lpAmountResult.result[0] as unknown as bigint),
+          ) *
+          (1 - slippage.amount / 100);
+        const lpAmt2 =
+          parseFloat(
+            formatEther(lpAmountResult.result[1] as unknown as bigint),
+          ) *
+          (1 - slippage.amount / 100);
+        const removeLiqTX = await sendRemoveLiqTx(
+          tradeInput,
+          address as `0x${string}`,
+          lpAmt1,
+          lpAmt2,
+        );
+        if (removeLiqTX.substring(0, 2) === "0x") {
+          setTxConfirming(false);
+          openNotification(
+            true,
+            `You've successfully withdrew your LP`,
+            `You withdrew liquidity with ${formatAsString(tradeInput)} LP tokens`,
+            removeLiqTX,
+          );
+          if (button) {
+            button.innerHTML = "remove liq";
+          }
+          refreshInfo();
+          setTimeout(() => {
+            openNotification(false, "", "", "");
+          }, 10000);
+        } else {
+          if (button) {
+            button.innerHTML = "remove liq";
+          }
+          refreshInfo();
+          setTxConfirming(false);
+        }
+      } else {
+        setAllowanceButtons(true);
+      }
+    }
+  };
 
   const handleLeftButtonClick = async () => {
     const swapButton = document.getElementById("swap-button");
@@ -720,9 +760,9 @@ export const VaultButtonMobile = ({ params }: VaultButtonProps) => {
         }
       }
     } else if (activeToggle === "ADDLIQ") {
-      await sendApproveTx(tradeInput, "rusdaqua", false)
+      await sendApproveTx(tradeInput, "rusdaqua", false);
     } else if (activeToggle === "REMOVELIQ") {
-      await sendApproveTx(tradeInput, "rusdaqualp", false)
+      await sendApproveTx(tradeInput, "rusdaqualp", false);
     } else {
       await sendApproveTx(deposit, params.vaultToken, false);
     }
@@ -780,7 +820,7 @@ export const VaultButtonMobile = ({ params }: VaultButtonProps) => {
     } else if (activeToggle === "ADDLIQ") {
       await sendApproveTx(0, "rusdaqua", true);
     } else if (activeToggle === "REMOVELIQ") {
-      await sendApproveTx(0, "rusdaqualp", true)
+      await sendApproveTx(0, "rusdaqualp", true);
     } else {
       await sendApproveTx(0, params.vaultToken, true);
     }

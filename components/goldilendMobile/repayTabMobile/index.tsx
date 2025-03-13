@@ -1,12 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+
 import { useAccount } from "wagmi";
-import { LendNotificationMobile } from "../../goldilendMobile";
-import { useGoldilend } from "../../../providers";
+
+import { formatAsString } from "@/app/_components/utils";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+
 import { useGoldilendTx } from "../../../hooks";
+import { useGoldilend } from "../../../providers";
 import { contracts } from "../../../utils/addressi";
+import { LendNotificationMobile } from "../../goldilendMobile";
 
 type InputValuesType = {
   [key: number]: string;
@@ -46,7 +50,7 @@ export const RepayTabMobile = () => {
   const { address, isConnected } = useAccount();
 
   const loadingElement = () => {
-    return <span className="loader-small mx-auto my-auto"></span>;
+    return <span className="loader-small m-auto"></span>;
   };
 
   const formatDate = (timestamp: number): string => {
@@ -58,10 +62,6 @@ export const RepayTabMobile = () => {
   };
 
   const formatNum = (num: number): string => {
-    return num.toLocaleString("en-US", { maximumFractionDigits: 2 });
-  };
-
-  const formatAsString = (num: number): string => {
     return num.toLocaleString("en-US", { maximumFractionDigits: 2 });
   };
 
@@ -216,11 +216,11 @@ export const RepayTabMobile = () => {
       <div className="absolute right-0 top-3 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
       <div className="absolute bottom-3 right-0 w-6 skew-y-[45deg] border-b-2 border-black"></div>
       <div
-        className={`absolute inset-3 ${txConfirming ? "border-l-2 border-r-2 border-black" : "border-2 border-black"} bg-[#D9C6BA]`}
+        className={`absolute inset-3 ${txConfirming ? "border-x-2 border-black" : "border-2 border-black"} bg-[#D9C6BA]`}
       >
         {txConfirming ? (
           <img
-            className="h-[100%] w-[100%]"
+            className="size-full"
             src="/images/bg-transaction-mobile.png"
             alt="tx"
           />
@@ -228,18 +228,18 @@ export const RepayTabMobile = () => {
           <LendNotificationMobile />
         ) : (
           <div
-            className="flex h-[100%] w-[100%] flex-wrap overflow-y-auto"
+            className="flex size-full flex-wrap overflow-y-auto"
             id="hide-scrollbar"
           >
-            <div className="w-[100%] border-b-2 border-black">
+            <div className="w-full border-b-2 border-black">
               <h1 className="ml-[4%] font-amaticbold text-[7vw]">my loans</h1>
             </div>
             {infoLoading && isConnected ? (
               loadingElement()
             ) : !isConnected || userLoans.length == 0 ? (
-              <div className="flex h-[100%] w-[100%] flex-col items-center opacity-50">
+              <div className="flex size-full flex-col items-center opacity-50">
                 <img
-                  className="my-[10%] h-[40%]"
+                  className="my-[10%] h-2/5"
                   src="/images/icon-not-found.png"
                   alt="not-found"
                 />
@@ -249,10 +249,10 @@ export const RepayTabMobile = () => {
               userLoans.map((loan, index) =>
                 collateralFlags[loan.loanId] ? (
                   <div
-                    className="flex h-[50%] w-[100%] flex-col border-b-2 border-black p-[3%] font-baloo font-semibold"
+                    className="flex h-[50%] w-full flex-col border-b-2 border-black p-[3%] font-baloo font-semibold"
                     key={index}
                   >
-                    <div className="flex h-[10%] w-[100%] flex-row items-center justify-between">
+                    <div className="flex h-[10%] w-full flex-row items-center justify-between">
                       <h1 className="text-[4.5vw]">Loan {loan.loanId}</h1>
                       <h1
                         className="text-[3.5vw] text-[#9C4924]"
@@ -262,13 +262,13 @@ export const RepayTabMobile = () => {
                       </h1>
                     </div>
                     <div
-                      className="flex h-[90%] w-[100%] flex-wrap overflow-y-auto"
+                      className="flex h-[90%] w-full flex-wrap overflow-y-auto"
                       id="hide-scrollbar"
                     >
                       {loan.collateralNFTs.map((nft, index) => (
                         <div key={index} className="h-[45%] w-[50%] py-2">
                           <img
-                            className="ml-[5%] h-[100%] w-[90%] border-2 border-black"
+                            className="ml-[5%] h-full w-[90%] border-2 border-black"
                             src={
                               nft === contracts.bondbear.address
                                 ? "/images/icon-bondbear.png"
@@ -282,7 +282,7 @@ export const RepayTabMobile = () => {
                   </div>
                 ) : (
                   <div
-                    className="relative flex h-[50%] w-[100%] flex-col border-b-2 border-black p-[3%] font-baloo font-semibold"
+                    className="relative flex h-[50%] w-full flex-col border-b-2 border-black p-[3%] font-baloo font-semibold"
                     key={index}
                   >
                     {loan.borrowedAmount == 0 && (
@@ -300,7 +300,7 @@ export const RepayTabMobile = () => {
                         LIQUIDATED
                       </div>
                     )}
-                    <div className="flex w-[100%] flex-row items-center justify-between">
+                    <div className="flex w-full flex-row items-center justify-between">
                       <h1 className="text-[4.5vw]">Loan {loan.loanId}</h1>
                       <h1
                         className="text-[3.5vw] text-[#9C4924]"
@@ -309,33 +309,33 @@ export const RepayTabMobile = () => {
                         View Collateral
                       </h1>
                     </div>
-                    <div className="mt-[3%] flex w-[100%] flex-col text-[3vw]">
-                      <div className="flex w-[100%] flex-row items-center justify-between">
+                    <div className="mt-[3%] flex w-full flex-col text-[3vw]">
+                      <div className="flex w-full flex-row items-center justify-between">
                         <span>total amount to repay:</span>
                         <span>{formatNum(loan.borrowedAmount)} iBGT</span>
                       </div>
-                      <div className="flex w-[100%] flex-row items-center justify-between">
+                      <div className="flex w-full flex-row items-center justify-between">
                         <span>interest:</span>
                         <span>{formatNum(loan.interest)} iBGT</span>
                       </div>
-                      <div className="flex w-[100%] flex-row items-center justify-between">
+                      <div className="flex w-full flex-row items-center justify-between">
                         <span>expiration date:</span>
                         <span>{formatDate(loan.endDate)}</span>
                       </div>
                     </div>
                     <h1 className="mt-[3%] text-[4vw]">Amount to Repay:</h1>
-                    <div className="mt-[1%] flex h-[15%] w-[100%] flex-row bg-red-500">
+                    <div className="mt-[1%] flex h-[15%] w-full flex-row bg-red-500">
                       <div
-                        className="flex h-[100%] w-[25%] items-center justify-center border-b-2 border-l-2 border-t-2 border-black bg-[#CC8634] text-[4vw]"
+                        className="flex h-full w-[25%] items-center justify-center border-y-2 border-l-2 border-black bg-[#CC8634] text-[4vw]"
                         onClick={() =>
                           handleMaxClick(loan.loanId, loan.borrowedAmount)
                         }
                       >
                         MAX
                       </div>
-                      <div className="flex h-[100%] w-[75%] flex-row items-center justify-between border-2 border-black bg-white px-[4%]">
+                      <div className="flex h-full w-[75%] flex-row items-center justify-between border-2 border-black bg-white px-[4%]">
                         <input
-                          className="h-[100%] w-[70%] text-[4.5vw] focus:outline-none"
+                          className="h-full w-[70%] text-[4.5vw] focus:outline-hidden"
                           type="text"
                           id="number-input"
                           placeholder="0.00"
@@ -349,11 +349,11 @@ export const RepayTabMobile = () => {
                         </span>
                       </div>
                     </div>
-                    <div className="relative mt-[6%] h-[15%] w-[100%]">
+                    <div className="relative mt-[6%] h-[15%] w-full">
                       {allowanceFlags[loan.loanId] && (
                         <div>
                           <button
-                            className="absolute left-[0%] h-[100%] w-[42%] border-2 border-black bg-[#E7B941] text-[3vw]"
+                            className="absolute left-0 h-full w-[42%] border-2 border-black bg-[#E7B941] text-[3vw]"
                             id={`left-approve-button${loan.loanId}`}
                             onClick={() =>
                               handleLeftButtonClick(
@@ -365,7 +365,7 @@ export const RepayTabMobile = () => {
                             approve tx
                           </button>
                           <button
-                            className="absolute left-[58%] h-[100%] w-[42%] border-2 border-black bg-[#E7B941] text-[3vw]"
+                            className="absolute left-[58%] h-full w-[42%] border-2 border-black bg-[#E7B941] text-[3vw]"
                             id={`right-approve-button${loan.loanId}`}
                             onClick={() => handleRightButtonClick(loan.loanId)}
                           >
@@ -383,7 +383,7 @@ export const RepayTabMobile = () => {
                           }) => {
                             return (
                               <button
-                                className="absolute right-[0%] h-[100%] w-[62%] border-2 border-black bg-[#E7B941] text-[3vw]"
+                                className="absolute right-0 h-full w-[62%] border-2 border-black bg-[#E7B941] text-[3vw]"
                                 id={`repay-button${loan.loanId}`}
                                 onClick={() => {
                                   const button = document.getElementById(

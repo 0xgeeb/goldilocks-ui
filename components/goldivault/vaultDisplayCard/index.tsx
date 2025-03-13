@@ -1,5 +1,7 @@
 "use client";
 
+import { formatAsString } from "@/app/_components/utils";
+
 import { useGoldivault } from "../../../providers";
 
 type VaultDisplayCardProps = {
@@ -20,10 +22,6 @@ export const VaultDisplayCard = ({ params }: VaultDisplayCardProps) => {
     return <span className="loader-small m-auto"></span>;
   };
 
-  const formatAsString = (num: number): string => {
-    return num.toLocaleString("en-US", { maximumFractionDigits: 2 });
-  };
-
   const vaultInfo =
     params.tokenName === "weETH"
       ? vaultDisplayInfo.weeth
@@ -37,16 +35,18 @@ export const VaultDisplayCard = ({ params }: VaultDisplayCardProps) => {
               ? vaultDisplayInfo.solvbtc
               : params.tokenName === "rUSD"
                 ? vaultDisplayInfo.rusd
-                : {
-                    fixedApr: 0,
-                    daysTil: "ooga booga",
-                    liquidity: 0,
-                    ytPrice: 0,
-                  };
+                : params.tokenName === "rsETH"
+                  ? vaultDisplayInfo.rseth
+                  : {
+                      fixedApr: 0,
+                      daysTil: "ooga booga",
+                      liquidity: 0,
+                      ytPrice: 0,
+                    };
 
   return (
     <a
-      className="min-h-[302px] w-full p-5 lg:aspect-[3/2] lg:p-2"
+      className="min-h-[302px] w-full p-5 lg:aspect-3/2 lg:p-2"
       href={`/goldivault/vault/${params.address}`}
       onMouseEnter={() => enableInfoPopup(params.mouseFlag)}
       onMouseLeave={() => disableInfoPopup(params.mouseFlag)}
@@ -55,11 +55,11 @@ export const VaultDisplayCard = ({ params }: VaultDisplayCardProps) => {
         className="relative size-full cursor-pointer border-2 border-[#FFCD00] bg-[#9A5816] hover:scale-105"
         id="card-div-shadow"
       >
-        <div className="absolute left-0 top-2 w-4 skew-y-[45deg] border-b-2 border-[#FFCD00]"></div>
+        <div className="absolute top-2 left-0 w-4 skew-y-[45deg] border-b-2 border-[#FFCD00]"></div>
         <div className="absolute bottom-2 left-0 w-4 -skew-y-[45deg] border-b-2 border-[#FFCD00]"></div>
-        <div className="absolute right-0 top-2 w-4 -skew-y-[45deg] border-b-2 border-[#FFCD00]"></div>
-        <div className="absolute bottom-2 right-0 w-4 skew-y-[45deg] border-b-2 border-[#FFCD00]"></div>
-        <div className="absolute inset-4 flex flex-col items-center justify-between border-2 border-[#FFCD00] bg-[#C8894A] px-[2.5%] py-[0.5%] font-baloo font-semibold">
+        <div className="absolute top-2 right-0 w-4 -skew-y-[45deg] border-b-2 border-[#FFCD00]"></div>
+        <div className="absolute right-0 bottom-2 w-4 skew-y-[45deg] border-b-2 border-[#FFCD00]"></div>
+        <div className="font-baloo absolute inset-4 flex flex-col items-center justify-between border-2 border-[#FFCD00] bg-[#C8894A] px-[2.5%] py-[0.5%] font-semibold">
           <div className="flex w-full flex-row items-center justify-between">
             <span className="font-amatic text-[5vw] font-semibold md:text-[3.5vw] lg:text-[3.5vw]">
               {params.tokenName}

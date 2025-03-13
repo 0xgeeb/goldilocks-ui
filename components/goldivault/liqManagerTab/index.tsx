@@ -62,7 +62,7 @@ export const LiqManagerTab = ({ params }: LiqManagerTabProps) => {
         </div>
         <div className="flex h-[50%] w-[100%] flex-row items-center justify-between border-2 border-black bg-white pl-[3.5%] pr-[1%]">
           <input
-            className="h-[100%] w-full border-none bg-transparent font-baloo text-[4vw] font-bold focus:outline-none lg:text-[2vw]"
+            className="h-[100%] w-full border-none bg-transparent font-baloo text-[4vw] font-bold focus:outline-hidden lg:text-[2vw]"
             type="number"
             id="number-input"
             placeholder="0.00"

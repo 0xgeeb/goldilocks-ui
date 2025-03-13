@@ -1,5 +1,7 @@
-import { useStake } from "../../../providers";
+import { formatAsString } from "@/app/_components/utils";
+
 import { useGoldiswapMath } from "../../../hooks";
+import { useStake } from "../../../providers";
 
 export const Stats = () => {
   const { stakeInfo, infoLoading } = useStake();
@@ -8,10 +10,6 @@ export const Stats = () => {
 
   const loadingElement = () => {
     return <span className="loader-small ml-3 mt-2"></span>;
-  };
-
-  const formatAsString = (num: number): string => {
-    return num.toLocaleString("en-US", { maximumFractionDigits: 2 });
   };
 
   const formatAsPrice = (num: number): string => {
@@ -49,8 +47,8 @@ export const Stats = () => {
   };
 
   return (
-    <div className="absolute left-[5%] top-[84%] flex w-[90%] flex-col items-center justify-between font-baloo text-[2.5vw] text-white md:left-[15%] md:top-[82%] md:w-[70%] md:text-[2vw] lg:text-[1.75vw] xl:left-[20%] xl:top-[80%] xl:w-[60%] xl:text-[1.5vw] 2xl:left-[27.5%] 2xl:w-[45%] 2xl:text-[1.1vw]">
-      <div className="flex h-[50%] w-[100%] flex-row items-center justify-between">
+    <div className="absolute left-[5%] top-[84%] flex w-[90%] flex-col items-center justify-between font-baloo text-[2.5vw] text-white md:left-[15%] md:top-[82%] md:w-[70%] md:text-[2vw] lg:text-[1.75vw] xl:left-[20%] xl:top-[80%] xl:w-3/5 xl:text-[1.5vw] 2xl:left-[27.5%] 2xl:w-[45%] 2xl:text-[1.1vw]">
+      <div className="flex h-[50%] w-full flex-row items-center justify-between">
         <div className="flex flex-row items-center">
           <span className="mr-2">locks supply:</span>
           <span className={handleColors(stakeInfo.supply, stakeInfo.supply)}>
@@ -70,7 +68,7 @@ export const Stats = () => {
           </span>
         </div>
       </div>
-      <div className="flex h-[50%] w-[100%] flex-row items-center justify-between tall:mt-[1%]">
+      <div className="flex h-[50%] w-full flex-row items-center justify-between tall:mt-[1%]">
         <div className="flex flex-row items-center">
           <span className="mr-2">floor price:</span>
           <span
@@ -83,18 +81,18 @@ export const Stats = () => {
           </span>
         </div>
         <div className="flex flex-row items-center">
-          <span className="mr-2">market price:</span>
+          <span className="mr-2">PSL/FSL ratio:</span>
           <span
             className={handleColors(
-              marketPrice(stakeInfo.fsl, stakeInfo.psl, stakeInfo.supply),
-              marketPrice(stakeInfo.fsl, stakeInfo.psl, stakeInfo.supply),
+              (stakeInfo.psl / stakeInfo.fsl) * 100,
+              (stakeInfo.psl / stakeInfo.fsl) * 100,
             )}
           >
-            $
             {handlePrice(
-              marketPrice(stakeInfo.fsl, stakeInfo.psl, stakeInfo.supply),
+              (stakeInfo.psl / stakeInfo.fsl) * 100,
             )}
           </span>
+          %
         </div>
         <div className="flex flex-row items-center">
           <span className="mr-2">target ratio:</span>

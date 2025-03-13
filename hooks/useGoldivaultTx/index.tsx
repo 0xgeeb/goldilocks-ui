@@ -7,6 +7,7 @@ import { parseEther, formatEther, parseUnits, formatUnits } from "viem";
 import { config } from "../../providers/WagmiProvider";
 import { contracts } from "../../utils/addressi";
 
+// todo: needs to be updated for staking deposits
 export const useGoldivaultTx = () => {
   const checkAllowance = async (
     amt: number,
@@ -108,6 +109,24 @@ export const useGoldivaultTx = () => {
         abi: contracts.rusdot.abi,
         functionName: 'allowance',
         args: [wallet, contracts.rusdVault.address]
+      })
+      allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
+    }
+    else if(vault === "usdchoneylp") {
+      allowanceResult = await readContract(config, {
+        address: contracts.usdchoneylp.address as `0x${string}`,
+        abi: contracts.usdchoneylp.abi,
+        functionName: 'allowance',
+        args: [wallet, contracts.usdchoneylpVault.address]
+      })
+      allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
+    }
+    else if(vault === "UHIOT") {
+      allowanceResult = await readContract(config, {
+        address: contracts.usdchoneylpot.address as `0x${string}`,
+        abi: contracts.usdchoneylpot.abi,
+        functionName: 'allowance',
+        args: [wallet, contracts.usdchoneylpVault.address]
       })
       allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
     }
@@ -417,6 +436,36 @@ export const useGoldivaultTx = () => {
         console.log("or: ", e);
       }
     }
+    else if (vault === "usdchoneylp") {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.usdchoneylp.address as `0x${string}`,
+          abi: contracts.usdchoneylp.abi,
+          functionName: 'approve',
+          args: [contracts.usdchoneylpVault.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
+        })
+        await waitForTransactionReceipt(config, { hash })
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+    else if (vault === "UHIOT") {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.usdchoneylpot.address as `0x${string}`,
+          abi: contracts.usdchoneylpot.abi,
+          functionName: 'approve',
+          args: [contracts.usdchoneylpVault.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
+        })
+        await waitForTransactionReceipt(config, { hash })
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
   };
 
   const sendRouterApproveTx = async (
@@ -526,6 +575,21 @@ export const useGoldivaultTx = () => {
         console.log("or: ", e);
       }
     }
+    else if(vault === "usdchoneylp") {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.usdchoneylpVault.address as `0x${string}`,
+          abi: contracts.usdchoneylpVault.abi,
+          functionName: "deposit",
+          args: [parseEther(`${depositAmt}`)],
+        });
+        const data = await waitForTransactionReceipt(config, { hash });
+        return data.transactionHash;
+      } catch (e) {
+        console.log("user denied tx");
+        console.log("or: ", e);
+      }
+    }
     else if(vault === 'rusd') {
       try {
         const hash = await writeContract(config, {
@@ -614,6 +678,22 @@ export const useGoldivaultTx = () => {
         const hash = await writeContract(config, {
           address: contracts.rusdVault.address as `0x${string}`,
           abi: contracts.rusdVault.abi,
+          functionName: 'redeemOwnership',
+          args: [parseEther(`${redeemOTAmt}`)]
+        })
+        const data = await waitForTransactionReceipt(config, { hash })
+        return data.transactionHash
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+    else if(vault === "usdchoneylp") {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.usdchoneylpVault.address as `0x${string}`,
+          abi: contracts.usdchoneylpVault.abi,
           functionName: 'redeemOwnership',
           args: [parseEther(`${redeemOTAmt}`)]
         })
@@ -771,7 +851,11 @@ export const useGoldivaultTx = () => {
             ? contracts.unibtcVault.address
             : vault === "ebtc"
               ? contracts.ebtcVault.address
-              : vault === "rusd" ? contracts.rusdVault.address : "";
+              : vault === "rusd"
+              ? contracts.rusdVault.address
+              : vault === "usdchoneylp"
+                ? contracts.usdchoneylpVault.address
+                : "";
     const vaultDTaddy =
       vault === "weeth"
         ? contracts.weeth.address
@@ -781,7 +865,11 @@ export const useGoldivaultTx = () => {
             ? contracts.unibtc.address
             : vault === "ebtc"
               ? contracts.ebtc.address
-              : vault === "rusd" ? contracts.rusd.address : "";
+              : vault === "rusd"
+              ? contracts.rusd.address
+              : vault === "usdchoneylp"
+                ? contracts.usdchoneylp.address
+                : "";
 
     try {
       const hash = await writeContract(config, {
@@ -840,7 +928,11 @@ export const useGoldivaultTx = () => {
             ? contracts.unibtcVault.address
             : vault === "ebtc"
               ? contracts.ebtcVault.address
-              : vault === "rusd" ? contracts.rusdVault.address : "";
+              : vault === "rusd"
+              ? contracts.rusdVault.address
+              : vault === "usdchoneylp"
+                ? contracts.usdchoneylpVault.address
+                : "";
     const vaultDTaddy =
       vault === "weeth"
         ? contracts.weeth.address
@@ -850,7 +942,11 @@ export const useGoldivaultTx = () => {
             ? contracts.unibtc.address
             : vault === "ebtc"
               ? contracts.ebtc.address
-              : vault === "rusd" ? contracts.rusd.address : "";
+              : vault === "rusd"
+              ? contracts.rusd.address
+              : vault === "usdchoneylp"
+                ? contracts.usdchoneylp.address
+                : "";
 
     try {
       const hash = await writeContract(config, {

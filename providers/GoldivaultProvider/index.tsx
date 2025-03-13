@@ -15,7 +15,6 @@ import { EtherfiAPIResponse } from "../../utils/interfaces";
 const INITIAL_STATE: any = {
   goldivaultInfoWeeth: {
     endTime: 0,
-    vaultDeposits: 0,
     fixedApr: 0,
     impliedYield: 0,
     leverage: 0,
@@ -49,6 +48,8 @@ const INITIAL_STATE: any = {
     endTime: 0,
     fixedApr: 0,
     otLiquidity: 0,
+    babylonLeverage: 0,
+    solvLeverage: 0,
   },
   goldivaultWalletInfoSolvbtc: {
     solvbtc: 0,
@@ -82,6 +83,30 @@ const INITIAL_STATE: any = {
     rusdot: 0,
     rusdyt: 0,
     rusdaquabera: 0,
+  },
+  goldivaultInfoRseth: {
+    endTime: 0,
+    fixedApr: 0,
+    otLiquidity: 0,
+    kelpLeverage: 0,
+    eigenLeverage: 0,
+  },
+  goldivaultWalletInfoRseth: {
+    rseth: 0,
+    rsethAllowance: 0,
+    rsethot: 0,
+    rsethyt: 0,
+  },
+  goldivaultInfoUsdchoneylp: {
+    endTime: 0,
+    fixedApr: 0,
+    otLiquidity: 0
+  },
+  goldivaultWalletInfoUsdchoneylp: {
+    usdchoneylp: 0,
+    usdchoneylpAllowance: 0,
+    usdchoneylpot: 0,
+    usdchoneylpyt: 0
   },
   vaultDisplayInfo: {
     weeth: {
@@ -198,6 +223,10 @@ const INITIAL_STATE: any = {
   refreshGoldivaultWalletInfoUnibtc: async () => {},
   refreshGoldivaultInfoRusd: async () => {},
   refreshGoldivaultWalletInfoRusd: async () => {},
+  refreshGoldivaultInfoRseth: async () => {},
+  refreshGoldivaultWalletInfoRseth: async () => {},
+  refreshGoldivaultInfoUsdchoneylp: async () => {},
+  refreshGoldivaultWalletInfoUsdchoneylp: async () => {},
   refreshVaultDisplayInfo: async () => {},
   calculateDeposit: async (_vault: string) => {},
   calculateOTRedeem: async (_vault: string) => {},
@@ -291,6 +320,13 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
   );
   const [goldivaultWalletInfoRusdState, setGoldivaultWalletInfoRusdState] =
     useState(INITIAL_STATE.goldivaultWalletInfoRusd);
+  const [goldivaultInfoRsethState, setGoldivaultInfoRsethState] = useState(
+    INITIAL_STATE.goldivaultInfoRseth,
+  );
+  const [goldivaultWalletInfoRsethState, setGoldivaultWalletInfoRsethState] =
+    useState(INITIAL_STATE.goldivaultWalletInfoRseth);
+  const [goldivaultInfoUsdchoneylpState, setGoldivaultInfoUsdchoneylpState] = useState(INITIAL_STATE.goldivaultInfoUsdchoneylp)
+  const [goldivaultWalletInfoUsdchoneylpState, setGoldivaultWalletInfoUsdchoneylpState] = useState(INITIAL_STATE.goldivaultWalletInfoUsdchoneylp)
   const [vaultDisplayInfoState, setVaultDisplayInfoState] = useState(
     INITIAL_STATE.vaultDisplayInfo,
   );
@@ -409,7 +445,6 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
     const duration = parseFloat(durationResult);
     const remainingTime = timestamp > endTime ? 0 : endTime - timestamp;
     const ratio = remainingTime / duration;
-
     let buyingOTQuoteResult: any;
     let buyingOTPrice;
     try {
@@ -434,25 +469,12 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       buyingOTQuoteResult = 0;
       buyingOTPrice = 0;
     }
-
     const impliedYieldResult =
       (1 - buyingOTPrice) * (31536000 / duration) * 100;
-    ``;
-    const weethVaultBalanceResult = await readContract(config, {
-      address: contracts.weeth.address as `0x${string}`,
-      abi: contracts.weeth.abi,
-      functionName: "balanceOf",
-      args: [contracts.weethVault.address],
-    });
-    const vaultDepositsResult =
-      parseFloat(formatEther(weethVaultBalanceResult as unknown as bigint)) *
-      4000;
-
     const timeDifference = parseFloat(endTimeResult) * 1000 - Date.now();
     const fixedDaysDifference = timeDifference / (1000 * 60 * 60 * 24);
     const daysTil = parseFloat(fixedDaysDifference.toFixed(2));
     const fixedAprResponse = ((1 - buyingOTPrice) / 1) * 100 * (365 / daysTil);
-
     const currentYtPrice = 1 - buyingOTPrice;
     const leverageResult = (1 / currentYtPrice) * 4;
 
@@ -460,13 +482,13 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       address: contracts.weeth.address as `0x${string}`,
       abi: contracts.weeth.abi,
       functionName: "balanceOf",
-      args: ["0xd7e3962974993870C28C25D031BF202021bf635B"],
+      args: [contracts.vaultLPaddys.weeth],
     });
     const weethLiquidity = await readContract(config, {
       address: contracts.weot.address as `0x${string}`,
       abi: contracts.weot.abi,
       functionName: "balanceOf",
-      args: ["0xd7e3962974993870C28C25D031BF202021bf635B"],
+      args: [contracts.vaultLPaddys.weeth],
     });
     const weethPriceResult: any = await readContract(config, {
       address: contracts.quoterv2.address as `0x${string}`,
@@ -482,10 +504,10 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         ],
       ],
     });
-
     const weethPrice = parseFloat(
       formatEther(weethPriceResult[0] as unknown as bigint),
     );
+
     const liquidityResult =
       (parseFloat(formatEther(weethOTLiquidity as unknown as bigint)) +
         parseFloat(formatEther(weethLiquidity as unknown as bigint))) *
@@ -494,7 +516,6 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
 
     const response = {
       endTime: parseFloat(endTimeResult),
-      vaultDeposits: vaultDepositsResult,
       fixedApr: fixedAprResponse,
       impliedYield: impliedYieldResult,
       leverage: leverageResult,
@@ -616,13 +637,13 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       address: contracts.ebtc.address as `0x${string}`,
       abi: contracts.ebtc.abi,
       functionName: "balanceOf",
-      args: ["0x339b8859a691eb5c8E8E576E6Caf4c3556711e34"],
+      args: [contracts.vaultLPaddys.ebtc],
     });
     const ebtcOTLiquidity = await readContract(config, {
       address: contracts.ebtcot.address as `0x${string}`,
       abi: contracts.ebtcot.abi,
       functionName: "balanceOf",
-      args: ["0x339b8859a691eb5c8E8E576E6Caf4c3556711e34"],
+      args: [contracts.vaultLPaddys.ebtc],
     });
     const wbtcPriceResult: any = await readContract(config, {
       address: contracts.quoterv2.address as `0x${string}`,
@@ -716,11 +737,78 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       functionName: "endTime",
       args: [],
     });
+    let buyingOTQuoteResult: any;
+    let buyingOTPrice;
+    try {
+      buyingOTQuoteResult = await readContract(config, {
+        address: contracts.quoterv2.address as `0x${string}`,
+        abi: contracts.quoterv2.abi,
+        functionName: "quoteExactOutputSingle",
+        args: [
+          [
+            contracts.solvbtc.address,
+            contracts.solvbtcot.address,
+            parseEther("1"),
+            500,
+            0,
+          ],
+        ],
+      });
+      buyingOTPrice = parseFloat(
+        formatEther(buyingOTQuoteResult[0] as unknown as bigint),
+      );
+    } catch (e) {
+      buyingOTQuoteResult = 0;
+      buyingOTPrice = 0;
+    }
+    const currentYtPrice = 1 - buyingOTPrice;
+
+    const timeDifference = parseFloat(endTimeResult) * 1000 - Date.now();
+    const fixedDaysDifference = timeDifference / (1000 * 60 * 60 * 24);
+    const daysTil = parseFloat(fixedDaysDifference.toFixed(2));
+    const fixedAprResponse = ((1 - buyingOTPrice) / 1) * 100 * (365 / daysTil);
+
+    const solvbtcLiquidity = await readContract(config, {
+      address: contracts.solvbtc.address as `0x${string}`,
+      abi: contracts.solvbtc.abi,
+      functionName: "balanceOf",
+      args: [contracts.vaultLPaddys.solvbtc],
+    });
+    const solvbtcOTLiquidity = await readContract(config, {
+      address: contracts.solvbtcot.address as `0x${string}`,
+      abi: contracts.solvbtcot.abi,
+      functionName: "balanceOf",
+      args: [contracts.vaultLPaddys.solvbtc],
+    });
+    const wbtcPriceResult: any = await readContract(config, {
+      address: contracts.quoterv2.address as `0x${string}`,
+      abi: contracts.quoterv2.abi,
+      functionName: "quoteExactOutputSingle",
+      args: [
+        [
+          contracts.honey.address,
+          "0x0555E30da8f98308EdB960aa94C0Db47230d2B9c",
+          parseUnits(`1`, 8),
+          3000,
+          0,
+        ],
+      ],
+    });
+    const wbtcPrice = parseFloat(
+      formatEther(wbtcPriceResult[0] as unknown as bigint),
+    );
+
+    const liquidityResult =
+      (parseFloat(formatEther(solvbtcOTLiquidity as unknown as bigint)) +
+        parseFloat(formatEther(solvbtcLiquidity as unknown as bigint))) *
+      wbtcPrice;
 
     const response = {
       endTime: parseFloat(endTimeResult),
-      fixedApr: 0,
-      otLiquidity: 0,
+      fixedApr: fixedAprResponse,
+      otLiquidity: liquidityResult,
+      babylonLeverage: (1 / currentYtPrice) * 1,
+      solvLeverage: (1 / currentYtPrice) * 4,
     };
 
     setGoldivaultInfoSolvbtcState(response);
@@ -809,18 +897,35 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       address: contracts.unibtc.address as `0x${string}`,
       abi: contracts.unibtc.abi,
       functionName: "balanceOf",
-      args: ["0xa4b4B53f4F8f17E5c5003f8aA87a5E4a90a1715f"],
+      args: [contracts.vaultLPaddys.unibtc],
     });
     const unibtcOTLiquidity = await readContract(config, {
       address: contracts.unibtcot.address as `0x${string}`,
       abi: contracts.unibtcot.abi,
       functionName: "balanceOf",
-      args: ["0xa4b4B53f4F8f17E5c5003f8aA87a5E4a90a1715f"],
+      args: [contracts.vaultLPaddys.unibtc],
     });
+    const wbtcPriceResult: any = await readContract(config, {
+      address: contracts.quoterv2.address as `0x${string}`,
+      abi: contracts.quoterv2.abi,
+      functionName: "quoteExactOutputSingle",
+      args: [
+        [
+          contracts.honey.address,
+          "0x0555E30da8f98308EdB960aa94C0Db47230d2B9c",
+          parseUnits(`1`, 8),
+          3000,
+          0,
+        ],
+      ],
+    });
+    const wbtcPrice = parseFloat(
+      formatEther(wbtcPriceResult[0] as unknown as bigint),
+    );
     const liquidityResult =
       (parseFloat((unibtcOTLiquidity as unknown as bigint).toString()) / 1e8 +
         parseFloat((unibtcLiquidity as unknown as bigint).toString()) / 1e8) *
-      100000;
+      wbtcPrice;
 
     const response = {
       endTime: parseFloat(endTimeResult),
@@ -915,13 +1020,13 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       address: contracts.rusd.address as `0x${string}`,
       abi: contracts.rusd.abi,
       functionName: "balanceOf",
-      args: ["0x1a2A927F758AE242fB967481CF293D2a36883be6"],
+      args: [contracts.vaultLPaddys.rusd],
     });
     const rusdOTLiquidity = await readContract(config, {
       address: contracts.rusdot.address as `0x${string}`,
       abi: contracts.rusdot.abi,
       functionName: "balanceOf",
-      args: ["0x1a2A927F758AE242fB967481CF293D2a36883be6"],
+      args: [contracts.vaultLPaddys.rusd],
     });
     const liqManagerRusdLiquidity = await readContract(config, {
       address: contracts.rusd.address as `0x${string}`,
@@ -996,6 +1101,188 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
     }
   };
 
+  const refreshGoldivaultInfoRseth = async () => {
+    setInfoLoadingState(true);
+    const endTimeResult: any = await readContract(config, {
+      address: contracts.rsethVault.address as `0x${string}`,
+      abi: contracts.rsethVault.abi,
+      functionName: "endTime",
+      args: [],
+    });
+    const buyingOTQuoteResult: any = await readContract(config, {
+      address: contracts.quoterv2.address as `0x${string}`,
+      abi: contracts.quoterv2.abi,
+      functionName: "quoteExactOutputSingle",
+      args: [
+        [
+          contracts.rseth.address,
+          contracts.rsethot.address,
+          parseEther("1"),
+          500,
+          0,
+        ],
+      ],
+    });
+    const buyingOTPrice = parseFloat(
+      formatEther(buyingOTQuoteResult[0] as unknown as bigint),
+    );
+    const currentYtPrice = 1 - buyingOTPrice;
+
+    const timeDifference = parseFloat(endTimeResult) * 1000 - Date.now();
+    const fixedDaysDifference = timeDifference / (1000 * 60 * 60 * 24);
+    const daysTil = parseFloat(fixedDaysDifference.toFixed(2));
+    const fixedAprResponse = ((1 - buyingOTPrice) / 1) * 100 * (365 / daysTil);
+
+    const rsethLiquidity = await readContract(config, {
+      address: contracts.rseth.address as `0x${string}`,
+      abi: contracts.rseth.abi,
+      functionName: "balanceOf",
+      args: [contracts.vaultLPaddys.rseth],
+    });
+    const rsethOTLiquidity = await readContract(config, {
+      address: contracts.rsethot.address as `0x${string}`,
+      abi: contracts.rsethot.abi,
+      functionName: "balanceOf",
+      args: [contracts.vaultLPaddys.rseth],
+    });
+    const weethPriceResult: any = await readContract(config, {
+      address: contracts.quoterv2.address as `0x${string}`,
+      abi: contracts.quoterv2.abi,
+      functionName: "quoteExactOutputSingle",
+      args: [
+        [
+          contracts.honey.address,
+          contracts.weth.address,
+          parseEther(`1`),
+          3000,
+          0,
+        ],
+      ],
+    });
+    const weethPrice = parseFloat(
+      formatEther(weethPriceResult[0] as unknown as bigint),
+    );
+
+    const liquidityResult =
+      (parseFloat(formatEther(rsethOTLiquidity as unknown as bigint)) +
+        parseFloat(formatEther(rsethLiquidity as unknown as bigint))) *
+      weethPrice;
+
+    const response = {
+      endTime: parseFloat(endTimeResult),
+      fixedApr: fixedAprResponse,
+      otLiquidity: liquidityResult,
+      kelpLeverage: (1 / currentYtPrice) * 2,
+      eigenLeverage: (1 / currentYtPrice) * 1,
+    };
+
+    setGoldivaultInfoRsethState(response);
+    setInfoLoadingState(false);
+  };
+
+  const refreshGoldivaultWalletInfoRseth = async () => {
+    if (address) {
+      setInfoLoadingState(true);
+      const rsethBalResult = await readContract(config, {
+        address: contracts.rseth.address as `0x${string}`,
+        abi: contracts.rseth.abi,
+        functionName: "balanceOf",
+        args: [address],
+      });
+      const rsethAllResult = await readContract(config, {
+        address: contracts.rseth.address as `0x${string}`,
+        abi: contracts.rseth.abi,
+        functionName: "allowance",
+        args: [address, contracts.rsethVault.address],
+      });
+      const rsethotBalResult = await readContract(config, {
+        address: contracts.rsethot.address as `0x${string}`,
+        abi: contracts.rsethot.abi,
+        functionName: "balanceOf",
+        args: [address],
+      });
+      const rsethytBalResult = await readContract(config, {
+        address: contracts.rsethyt.address as `0x${string}`,
+        abi: contracts.rsethyt.abi,
+        functionName: "balanceOf",
+        args: [address],
+      });
+
+      const response = {
+        rseth: parseFloat(formatEther(rsethBalResult as unknown as bigint)),
+        rsethAllowance: parseFloat(
+          formatEther(rsethAllResult as unknown as bigint),
+        ),
+        rsethot: parseFloat(formatEther(rsethotBalResult as unknown as bigint)),
+        rsethyt: parseFloat(formatEther(rsethytBalResult as unknown as bigint)),
+      };
+
+      setGoldivaultWalletInfoRsethState(response);
+      setInfoLoadingState(false);
+    }
+  };
+
+  const refreshGoldivaultInfoUsdchoneylp = async () => {
+    setInfoLoadingState(true);
+    const endTimeResult: any = await readContract(config, {
+      address: contracts.usdchoneylpVault.address as `0x${string}`,
+      abi: contracts.usdchoneylpVault.abi,
+      functionName: "endTime",
+      args: [],
+    });
+
+    const response = {
+      endTime: parseFloat(endTimeResult),
+      fixedApr: 0,
+      otLiquidity: 0
+    };
+
+    setGoldivaultInfoUsdchoneylpState(response);
+    setInfoLoadingState(false);
+  }
+  
+  const refreshGoldivaultWalletInfoUsdchoneylp = async () => {
+    if (address) {
+      setInfoLoadingState(true);
+      const usdchoneylpBalResult = await readContract(config, {
+        address: contracts.usdchoneylp.address as `0x${string}`,
+        abi: contracts.usdchoneylp.abi,
+        functionName: "balanceOf",
+        args: [address],
+      });
+      const usdchoneylpAllResult = await readContract(config, {
+        address: contracts.usdchoneylp.address as `0x${string}`,
+        abi: contracts.usdchoneylp.abi,
+        functionName: "allowance",
+        args: [address, contracts.usdchoneylpVault.address],
+      });
+      const usdchoneylpotBalResult = await readContract(config, {
+        address: contracts.usdchoneylpot.address as `0x${string}`,
+        abi: contracts.usdchoneylpot.abi,
+        functionName: "balanceOf",
+        args: [address],
+      });
+      const usdchoneylpytBalResult = await readContract(config, {
+        address: contracts.usdchoneylpyt.address as `0x${string}`,
+        abi: contracts.usdchoneylpyt.abi,
+        functionName: "balanceOf",
+        args: [address],
+      });
+
+      const response = {
+        usdchoneylp: parseFloat(formatEther(usdchoneylpBalResult as unknown as bigint)),
+        usdchoneylpAllowance: parseFloat(
+          formatEther(usdchoneylpAllResult as unknown as bigint),
+        ),
+        usdchoneylpot: parseFloat(formatEther(usdchoneylpotBalResult as unknown as bigint)),
+        usdchoneylpyt: parseFloat(formatEther(usdchoneylpytBalResult as unknown as bigint)),
+      };
+
+      setGoldivaultWalletInfoUsdchoneylpState(response);
+      setInfoLoadingState(false);
+    }
+  }
+
   const refreshVaultDisplayInfo = async () => {
     setInfoLoadingState(true);
 
@@ -1034,13 +1321,13 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       address: contracts.weeth.address as `0x${string}`,
       abi: contracts.weeth.abi,
       functionName: "balanceOf",
-      args: ["0xd7e3962974993870C28C25D031BF202021bf635B"],
+      args: [contracts.vaultLPaddys.weeth],
     });
     const weethLiquidity = await readContract(config, {
       address: contracts.weot.address as `0x${string}`,
       abi: contracts.weot.abi,
       functionName: "balanceOf",
-      args: ["0xd7e3962974993870C28C25D031BF202021bf635B"],
+      args: [contracts.vaultLPaddys.weeth],
     });
     const weethPriceResult: any = await readContract(config, {
       address: contracts.quoterv2.address as `0x${string}`,
@@ -1071,6 +1358,55 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
     const fixedAprResponseWeeth =
       ((1 - buyingOTPriceWeeth) / 1) * 100 * (365 / daysTilWeeth);
     const ytPriceWeeth = 1 - buyingOTPriceWeeth;
+
+    // rseth
+    const endTimeResultRseth: any = await readContract(config, {
+      address: contracts.rsethVault.address as `0x${string}`,
+      abi: contracts.rsethVault.abi,
+      functionName: "endTime",
+      args: [],
+    });
+    const buyingOTQuoteResultRseth: any = await readContract(config, {
+      address: contracts.quoterv2.address as `0x${string}`,
+      abi: contracts.quoterv2.abi,
+      functionName: "quoteExactOutputSingle",
+      args: [
+        [
+          contracts.rseth.address,
+          contracts.rsethot.address,
+          parseEther(`1`),
+          500,
+          0,
+        ],
+      ],
+    });
+    const rsethOTLiquidity = await readContract(config, {
+      address: contracts.rsethot.address as `0x${string}`,
+      abi: contracts.rsethot.abi,
+      functionName: "balanceOf",
+      args: [contracts.vaultLPaddys.rseth],
+    });
+    const rsethLiquidity = await readContract(config, {
+      address: contracts.rseth.address as `0x${string}`,
+      abi: contracts.rseth.abi,
+      functionName: "balanceOf",
+      args: [contracts.vaultLPaddys.rseth],
+    });
+    const liquidityResultRseth =
+      (parseFloat(formatEther(rsethOTLiquidity as unknown as bigint)) +
+        parseFloat(formatEther(rsethLiquidity as unknown as bigint))) *
+      weethPrice;
+    const buyingOTPriceRseth = parseFloat(
+      formatEther(buyingOTQuoteResultRseth[0] as unknown as bigint),
+    );
+    const timeDifferenceRseth =
+      parseFloat(endTimeResultRseth) * 1000 - Date.now();
+    const fixedDaysDifferenceRseth =
+      timeDifferenceRseth / (1000 * 60 * 60 * 24);
+    const daysTilRseth = parseFloat(fixedDaysDifferenceRseth.toFixed(2));
+    const fixedAprResponseRseth =
+      ((1 - buyingOTPriceRseth) / 1) * 100 * (365 / daysTilRseth);
+    const ytPriceRseth = 1 - buyingOTPriceRseth;
 
     // ebtc
     const endTimeResultEbtc: any = await readContract(config, {
@@ -1116,13 +1452,13 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       address: contracts.ebtc.address as `0x${string}`,
       abi: contracts.ebtc.abi,
       functionName: "balanceOf",
-      args: ["0x339b8859a691eb5c8E8E576E6Caf4c3556711e34"],
+      args: [contracts.vaultLPaddys.ebtc],
     });
     const ebtcOTLiquidity = await readContract(config, {
       address: contracts.ebtcot.address as `0x${string}`,
       abi: contracts.ebtcot.abi,
       functionName: "balanceOf",
-      args: ["0x339b8859a691eb5c8E8E576E6Caf4c3556711e34"],
+      args: [contracts.vaultLPaddys.ebtc],
     });
     const wbtcPriceResult: any = await readContract(config, {
       address: contracts.quoterv2.address as `0x${string}`,
@@ -1147,43 +1483,109 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       wbtcPrice;
 
     // unibtc
-    // const endTimeResultUnibtc: any = await readContract(config, {
-    //   address: contracts.unibtcVault.address as `0x${string}`,
-    //   abi: contracts.unibtcVault.abi,
-    //   functionName: "endTime",
-    //   args: [],
-    // });
-    // const buyingOTQuoteResultUnibtc: any = await readContract(config, {
-    //   address: contracts.quoterv2.address as `0x${string}`,
-    //   abi: contracts.quoterv2.abi,
-    //   functionName: 'quoteExactOutputSingle',
-    //   args: [[
-    //     contracts.unibtc.address,
-    //     contracts.unibtcot.address,
-    //     parseUnits(`1`, 8),
-    //     500,
-    //     0
-    //   ]]
-    // })
-    // const unibtcOTLiquidity = await readContract(config, {
-    //   address: contracts.unibtc.address as `0x${string}`,
-    //   abi: contracts.unibtc.abi,
-    //   functionName: 'balanceOf',
-    //   args: ['0xa4b4B53f4F8f17E5c5003f8aA87a5E4a90a1715f']
-    // })
-    // const unibtcLiquidity = await readContract(config, {
-    //   address: contracts.unibtcot.address as `0x${string}`,
-    //   abi: contracts.unibtcot.abi,
-    //   functionName: 'balanceOf',
-    //   args: ['0xa4b4B53f4F8f17E5c5003f8aA87a5E4a90a1715f']
-    // })
-    // const liquidityResultUnibtc = ((parseFloat((unibtcOTLiquidity as unknown as bigint).toString()) / 1e8) + (parseFloat((unibtcLiquidity as unknown as bigint).toString()) / 1e8)) * 100000
-    // const buyingOTPriceUnibtc = parseFloat((buyingOTQuoteResultUnibtc[0] as unknown as bigint).toString())
-    // const timeDifferenceUnibtc = (parseFloat(endTimeResultUnibtc)*1000) - Date.now()
-    // const fixedDaysDifferenceUnibtc = timeDifferenceUnibtc / (1000 * 60 * 60 * 24)
-    // const daysTilUnibtc = parseFloat(fixedDaysDifferenceUnibtc.toFixed(2))
-    // const fixedAprResponseUnibtc = (((1 - buyingOTPriceUnibtc) / 1) * 100) * (365 / daysTilUnibtc)
-    // const ytPriceUnibtc = 1 - buyingOTPriceUnibtc
+    const endTimeResultUnibtc: any = await readContract(config, {
+      address: contracts.unibtcVault.address as `0x${string}`,
+      abi: contracts.unibtcVault.abi,
+      functionName: "endTime",
+      args: [],
+    });
+    const buyingOTQuoteResultUnibtc: any = await readContract(config, {
+      address: contracts.quoterv2.address as `0x${string}`,
+      abi: contracts.quoterv2.abi,
+      functionName: "quoteExactOutputSingle",
+      args: [
+        [
+          contracts.unibtc.address,
+          contracts.unibtcot.address,
+          parseUnits(`1`, 8),
+          500,
+          0,
+        ],
+      ],
+    });
+    const unibtcOTLiquidity = await readContract(config, {
+      address: contracts.unibtc.address as `0x${string}`,
+      abi: contracts.unibtc.abi,
+      functionName: "balanceOf",
+      args: [contracts.vaultLPaddys.unibtc],
+    });
+    const unibtcLiquidity = await readContract(config, {
+      address: contracts.unibtcot.address as `0x${string}`,
+      abi: contracts.unibtcot.abi,
+      functionName: "balanceOf",
+      args: [contracts.vaultLPaddys.unibtc],
+    });
+    const liquidityResultUnibtc =
+      (parseFloat((unibtcOTLiquidity as unknown as bigint).toString()) / 1e8 +
+        parseFloat((unibtcLiquidity as unknown as bigint).toString()) / 1e8) *
+      wbtcPrice;
+    const buyingOTPriceUnibtc = parseFloat(
+      formatUnits(buyingOTQuoteResultUnibtc[0] as unknown as bigint, 8),
+    );
+    const timeDifferenceUnibtc =
+      parseFloat(endTimeResultUnibtc) * 1000 - Date.now();
+    const fixedDaysDifferenceUnibtc =
+      timeDifferenceUnibtc / (1000 * 60 * 60 * 24);
+    const daysTilUnibtc = parseFloat(fixedDaysDifferenceUnibtc.toFixed(2));
+    const fixedAprResponseUnibtc =
+      ((1 - buyingOTPriceUnibtc) / 1) * 100 * (365 / daysTilUnibtc);
+    const ytPriceUnibtc = 1 - buyingOTPriceUnibtc;
+
+    // solvbtc
+    const endTimeResultSolvbtc: any = await readContract(config, {
+      address: contracts.solvbtcVault.address as `0x${string}`,
+      abi: contracts.solvbtcVault.abi,
+      functionName: "endTime",
+      args: [],
+    });
+    let buyingOTQuoteResultSolvbtc: any;
+    let buyingOTPriceSolvbtc;
+    try {
+      buyingOTQuoteResultSolvbtc = await readContract(config, {
+        address: contracts.quoterv2.address as `0x${string}`,
+        abi: contracts.quoterv2.abi,
+        functionName: "quoteExactOutputSingle",
+        args: [
+          [
+            contracts.solvbtc.address,
+            contracts.solvbtcot.address,
+            parseEther(`1`),
+            500,
+            0,
+          ],
+        ],
+      });
+      buyingOTPriceSolvbtc = parseFloat(
+        formatEther(buyingOTQuoteResultSolvbtc[0] as unknown as bigint),
+      );
+    } catch (e) {
+      buyingOTQuoteResultSolvbtc = 0;
+      buyingOTPriceSolvbtc = 0;
+    }
+    const solvbtcOTLiquidity = await readContract(config, {
+      address: contracts.solvbtcot.address as `0x${string}`,
+      abi: contracts.solvbtcot.abi,
+      functionName: "balanceOf",
+      args: [contracts.vaultLPaddys.solvbtc],
+    });
+    const solvbtcLiquidity = await readContract(config, {
+      address: contracts.solvbtc.address as `0x${string}`,
+      abi: contracts.solvbtc.abi,
+      functionName: "balanceOf",
+      args: [contracts.vaultLPaddys.solvbtc],
+    });
+    const liquidityResultSolvbtc =
+      (parseFloat(formatEther(solvbtcOTLiquidity as unknown as bigint)) +
+        parseFloat(formatEther(solvbtcLiquidity as unknown as bigint))) *
+      wbtcPrice;
+    const timeDifferenceSolvbtc =
+      parseFloat(endTimeResultSolvbtc) * 1000 - Date.now();
+    const fixedDaysDifferenceSolvbtc =
+      timeDifferenceSolvbtc / (1000 * 60 * 60 * 24);
+    const daysTilSolvbtc = parseFloat(fixedDaysDifferenceSolvbtc.toFixed(2));
+    const fixedAprResponseSolvbtc =
+      ((1 - buyingOTPriceSolvbtc) / 1) * 100 * (365 / daysTilSolvbtc);
+    const ytPriceSolvbtc = 1 - buyingOTPriceSolvbtc;
 
     // rusd
     const endTimeResultRusd: any = await readContract(config, {
@@ -1210,13 +1612,13 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       address: contracts.rusdot.address as `0x${string}`,
       abi: contracts.rusdot.abi,
       functionName: "balanceOf",
-      args: ["0x1a2A927F758AE242fB967481CF293D2a36883be6"],
+      args: [contracts.vaultLPaddys.rusd],
     });
     const rusdLiquidity = await readContract(config, {
       address: contracts.rusd.address as `0x${string}`,
       abi: contracts.rusd.abi,
       functionName: "balanceOf",
-      args: ["0x1a2A927F758AE242fB967481CF293D2a36883be6"],
+      args: [contracts.vaultLPaddys.rusd],
     });
     const liqManagerRusdLiquidity = await readContract(config, {
       address: contracts.rusd.address as `0x${string}`,
@@ -1247,10 +1649,10 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         ytPrice: ytPriceWeeth,
       },
       rseth: {
-        fixedApr: 0,
-        daysTil: "",
-        liquidity: 0,
-        ytPrice: 0,
+        fixedApr: fixedAprResponseRseth,
+        daysTil: getRelativeDate(parseFloat(endTimeResultRseth)),
+        liquidity: liquidityResultRseth,
+        ytPrice: ytPriceRseth,
       },
       ebtc: {
         fixedApr: fixedAprResponseEbtc,
@@ -1259,20 +1661,16 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         ytPrice: ytPriceEbtc,
       },
       unibtc: {
-        // fixedApr: fixedAprResponseUnibtc,
-        // daysTil: getRelativeDate(parseFloat(endTimeResultUnibtc)),
-        // liquidity: liquidityResultUnibtc,
-        // ytPrice: ytPriceUnibtc
-        fixedApr: 0,
-        daysTil: "",
-        liquidity: 0,
-        ytPrice: 0,
+        fixedApr: fixedAprResponseUnibtc,
+        daysTil: getRelativeDate(parseFloat(endTimeResultUnibtc)),
+        liquidity: liquidityResultUnibtc,
+        ytPrice: ytPriceUnibtc,
       },
       solvbtc: {
-        fixedApr: 0,
-        daysTil: "",
-        liquidity: 0,
-        ytPrice: 0,
+        fixedApr: fixedAprResponseSolvbtc,
+        daysTil: getRelativeDate(parseFloat(endTimeResultSolvbtc)),
+        liquidity: liquidityResultSolvbtc,
+        ytPrice: ytPriceSolvbtc,
       },
       rusd: {
         fixedApr: fixedAprResponseRusd,
@@ -1330,7 +1728,11 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
               ? goldivaultWalletInfoRusdState.rusdot
               : vault === "ebtc"
                 ? goldivaultWalletInfoEbtcState.ebtcot
-                : {};
+                : vault === "rseth"
+                  ? goldivaultWalletInfoRsethState.rsethot
+                  : vault === "usdchoneylp"
+                    ? goldivaultWalletInfoUsdchoneylpState.usdchoneylpot
+                    : {};
     const vaultYT =
       vault === "weeth"
         ? goldivaultWalletInfoWeethState.weyt
@@ -1342,7 +1744,11 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
               ? goldivaultWalletInfoRusdState.rusdyt
               : vault === "ebtc"
                 ? goldivaultWalletInfoEbtcState.ebtcyt
-                : {};
+                : vault === "rseth"
+                  ? goldivaultWalletInfoRsethState.rsethyt
+                  : vault === "usdchoneylp"
+                    ? goldivaultWalletInfoUsdchoneylpState.usdchoneylpyt
+                    : {};
     const vaultDT =
       vault === "weeth"
         ? goldivaultWalletInfoWeethState.weeth
@@ -1354,7 +1760,11 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
               ? goldivaultWalletInfoRusdState.rusd
               : vault === "ebtc"
                 ? goldivaultWalletInfoEbtcState.ebtc
-                : {};
+                : vault === "rseth"
+                  ? goldivaultWalletInfoRsethState.rseth
+                  : vault === "usdchoneylp"
+                    ? goldivaultWalletInfoUsdchoneylpState.usdchoneylp
+                    : {};
     const vaultLP =
       vault === "rusd" ? goldivaultWalletInfoRusdState.rusdaquabera : 0;
 
@@ -1367,11 +1777,11 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       setRedeemOTState(vaultOT - 0.0000001);
       setOutputTokensLoadingState(true);
     } else if (activeToggleState === "ADDLIQ") {
-      setDisplayStringState(vaultDT.toFixed(4))
-      setTradeInputState(vaultDT - 0.0000001)
+      setDisplayStringState(vaultDT.toFixed(4));
+      setTradeInputState(vaultDT - 0.0000001);
     } else if (activeToggleState === "REMOVELIQ") {
-      setDisplayStringState(vaultLP.toFixed(4))
-      setTradeInputState(vaultLP - 0.0000001)
+      setDisplayStringState(vaultLP.toFixed(4));
+      setTradeInputState(vaultLP - 0.0000001);
     } else {
       let num;
       if (activeToggleState === "TRADEOT") {
@@ -1469,13 +1879,15 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
     if (vault === "weeth") {
       return contracts.weot.address;
     } else if (vault === "rseth") {
-      return "";
+      return contracts.rsethot.address;
     } else if (vault === "ebtc") {
       return contracts.ebtcot.address;
     } else if (vault === "unibtc") {
       return contracts.unibtcot.address;
     } else if (vault === "rusd") {
       return contracts.rusdot.address;
+    } else if (vault === "usdchoneylp") {
+      return contracts.usdchoneylpot.address;
     } else {
       return contracts.solvbtcot.address;
     }
@@ -1485,13 +1897,15 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
     if (vault === "weeth") {
       return contracts.weeth.address;
     } else if (vault === "rseth") {
-      return "";
+      return contracts.rseth.address;
     } else if (vault === "ebtc") {
       return contracts.ebtc.address;
     } else if (vault === "unibtc") {
       return contracts.unibtc.address;
     } else if (vault === "rusd") {
       return contracts.rusd.address;
+    } else if (vault === "usdchoneylp") {
+      return contracts.usdchoneylp.address;
     } else {
       return contracts.solvbtc.address;
     }
@@ -1501,13 +1915,15 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
     if (vault === "weeth") {
       return contracts.weethVault.address;
     } else if (vault === "rseth") {
-      return "";
+      return contracts.rsethVault.address;
     } else if (vault === "ebtc") {
       return contracts.ebtcVault.address;
     } else if (vault === "unibtc") {
       return contracts.unibtcVault.address;
     } else if (vault === "rusd") {
       return contracts.rusdVault.address;
+    } else if (vault === "usdchoneylp") {
+      return contracts.usdchoneylpVault.address;
     } else {
       return contracts.solvbtcVault.address;
     }
@@ -1517,13 +1933,15 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
     if (vault === "weeth") {
       return goldivaultInfoWeethState.fixedApr;
     } else if (vault === "rseth") {
-      return 0;
+      return goldivaultInfoRsethState.fixedApr;
     } else if (vault === "ebtc") {
       return goldivaultInfoEbtcState.fixedApr;
     } else if (vault === "unibtc") {
       return goldivaultInfoUnibtcState.fixedApr;
     } else if (vault === "rusd") {
       return goldivaultInfoRusdState.fixedApr;
+    } else if (vault === "usdchoneylp") {
+      return goldivaultInfoUsdchoneylpState.fixedApr;
     } else {
       return goldivaultInfoSolvbtcState.fixedApr;
     }
@@ -1540,9 +1958,9 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       const endTimeResult: any = await readContract(config, {
         address: vaultAddy as `0x${string}`,
         abi: contracts.weethVault.abi,
-        functionName: 'endTime',
-        args: []
-      })
+        functionName: "endTime",
+        args: [],
+      });
       if (tradeDirectionState === "OUT") {
         quoteResult = await readContract(config, {
           address: contracts.quoterv2.address as `0x${string}`,
@@ -1618,7 +2036,7 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       const timeDifference = parseFloat(endTimeResult) * 1000 - Date.now();
       const fixedDaysDifference = timeDifference / (1000 * 60 * 60 * 24);
       const daysTil = parseFloat(fixedDaysDifference.toFixed(2));
-      const impliedApr = ((1 - executionPrice) * (365 / daysTil)) * 100
+      const impliedApr = (1 - executionPrice) * (365 / daysTil) * 100;
 
       setPriceImpactState(predictedPriceImpact);
       setImpliedAprState(impliedApr);
@@ -2117,7 +2535,7 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
     }
     if (info === "rsethvaultinfo") {
       setInfoPopupTextState(
-        `2x Kelp DAO points and 1x Eigenlayer restaking rewards;69x Kelp DAO point leverage and 69x Eigenlayer point leverage`,
+        `2x Kelp DAO points and 1x Eigenlayer restaking rewards;${formatLeverageNum(vaultDisplayInfoState.rseth.ytPrice, 2)}x Kelp DAO point leverage and ${formatLeverageNum(vaultDisplayInfoState.rseth.ytPrice, 1)}x Eigenlayer point leverage`,
       );
       setInfoPopupToggleState(true);
     }
@@ -2129,13 +2547,13 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
     }
     if (info === "unibtcvaultinfo") {
       setInfoPopupTextState(
-        `4x Bedrock points and 1x Babylon points;69x Bedrock point leverage and 69x Babylon point leverage`,
+        `4x Bedrock points and 1x Babylon points;${formatLeverageNum(vaultDisplayInfoState.unibtc.ytPrice, 4)}x Bedrock point leverage and ${formatLeverageNum(vaultDisplayInfoState.unibtc.ytPrice, 1)}x Babylon point leverage`,
       );
       setInfoPopupToggleState(true);
     }
     if (info === "solvbtcvaultinfo") {
       setInfoPopupTextState(
-        `1x Babylon points and 4x Solv points;69x Babylon point leverage and 69x Solv point leverage`,
+        `1x Babylon points and 4x Solv points;${formatLeverageNum(vaultDisplayInfoState.solvbtc.ytPrice, 1)}x Babylon point leverage and ${formatLeverageNum(vaultDisplayInfoState.solvbtc.ytPrice, 4)}x Solv point leverage`,
       );
       setInfoPopupToggleState(true);
     }
@@ -2164,11 +2582,13 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       setInfoPopupToggleState(true);
     }
     if (info === "redeemotinfo") {
-      setInfoPopupTextState("Burn ownership and yield tokens to receive underlying assets from the vault")
+      setInfoPopupTextState(
+        "Burn ownership and yield tokens to receive underlying assets from the vault",
+      );
       setInfoPopupToggleState(true);
     }
     if (info === "redeemytinfo") {
-      setInfoPopupTextState("Only available after vault expiration")
+      setInfoPopupTextState("Only available after vault expiration");
       setInfoPopupToggleState(true);
     }
   };
@@ -2191,6 +2611,10 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         goldivaultWalletInfoUnibtc: goldivaultWalletInfoUnibtcState,
         goldivaultInfoRusd: goldivaultInfoRusdState,
         goldivaultWalletInfoRusd: goldivaultWalletInfoRusdState,
+        goldivaultInfoRseth: goldivaultInfoRsethState,
+        goldivaultWalletInfoRseth: goldivaultWalletInfoRsethState,
+        goldivaultInfoUsdchoneylp: goldivaultInfoUsdchoneylpState,
+        goldivaultWalletInfoUsdchoneylp: goldivaultWalletInfoUsdchoneylpState,
         vaultDisplayInfo: vaultDisplayInfoState,
         slippage: slippageState,
         debouncedSlippage: debouncedSlippageState,
@@ -2204,6 +2628,10 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         refreshGoldivaultWalletInfoUnibtc,
         refreshGoldivaultInfoRusd,
         refreshGoldivaultWalletInfoRusd,
+        refreshGoldivaultInfoRseth,
+        refreshGoldivaultWalletInfoRseth,
+        refreshGoldivaultInfoUsdchoneylp,
+        refreshGoldivaultWalletInfoUsdchoneylp,
         refreshVaultDisplayInfo,
         deposit: depositState,
         setDeposit: setDepositState,

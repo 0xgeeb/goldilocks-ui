@@ -1,9 +1,12 @@
 "use client";
 
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
-import { useGoldilend } from "../../../providers";
+
+import { formatAsString } from "@/app/_components/utils";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+
 import { useGoldilendTx } from "../../../hooks";
+import { useGoldilend } from "../../../providers";
 import { contracts } from "../../../utils/addressi";
 
 export const BorrowButtonMobile = () => {
@@ -36,10 +39,6 @@ export const BorrowButtonMobile = () => {
     sendBoostTx,
     sendWithdrawBoostTx,
   } = useGoldilendTx();
-
-  const formatAsString = (num: number): string => {
-    return num.toLocaleString("en-US", { maximumFractionDigits: 2 });
-  };
 
   const checkSelectedPartners = (partnerName: string): boolean => {
     for (let i = 0; i < selectedPartners.length; i++) {
@@ -332,7 +331,7 @@ export const BorrowButtonMobile = () => {
       {({ account, chain, openChainModal, openConnectModal }) => {
         return (
           <button
-            className="absolute left-[22.5%] top-[75%] flex h-[7.5%] w-[55%] items-center justify-center border-2 border-black bg-[#E7B941] font-amaticbold text-[9vw] hover:scale-110 hover:bg-[#C9E3B9] tall:top-[67.5%]"
+            className="absolute left-[22.5%] top-3/4 flex h-[7.5%] w-[55%] items-center justify-center border-2 border-black bg-[#E7B941] font-amaticbold text-[9vw] hover:scale-110 hover:bg-[#C9E3B9] tall:top-[67.5%]"
             id="borrow-button"
             onClick={() => {
               const button = document.getElementById("borrow-button");

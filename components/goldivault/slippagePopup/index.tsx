@@ -11,7 +11,7 @@ export const SlippagePopup = () => {
         </span>
         <div className="relative h-[60%] w-[70%] border-2 border-black bg-white md:w-[60%]">
           <input
-            className="absolute left-[6%] top-[2%] h-[50%] w-[100%] bg-transparent text-[3vw] focus:outline-none xl:text-[2.2vw] 2xl:left-[10%] 2xl:text-[1.4vw]"
+            className="absolute left-[6%] top-[2%] h-[50%] w-[100%] bg-transparent text-[3vw] focus:outline-hidden xl:text-[2.2vw] 2xl:left-[10%] 2xl:text-[1.4vw]"
             type="number"
             id="number-input"
             value={slippage.displayString}

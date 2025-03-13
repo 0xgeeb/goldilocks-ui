@@ -7,7 +7,8 @@ import {
   TradeTabMobile,
   NotificationMobile,
   VaultInfoMobile,
-  LiqManagerTabMobile
+  LiqManagerTabMobile,
+  PoolsPopupMobile
 } from "..";
 
 type VaultBoxProps = {
@@ -25,6 +26,7 @@ type VaultBoxProps = {
 };
 
 export const VaultBoxMobile = ({ params }: VaultBoxProps) => {
+
   const {
     displayString,
     handleChange,
@@ -56,6 +58,12 @@ export const VaultBoxMobile = ({ params }: VaultBoxProps) => {
     refreshGoldivaultInfoEbtc,
     refreshGoldivaultWalletInfoEbtc,
     goldivaultWalletInfoEbtc,
+    refreshGoldivaultInfoRseth,
+    refreshGoldivaultWalletInfoRseth,
+    goldivaultWalletInfoRseth,
+    refreshGoldivaultInfoUsdchoneylp,
+    refreshGoldivaultWalletInfoUsdchoneylp,
+    goldivaultWalletInfoUsdchoneylp,
     activeToggle,
     calculateOTRedeem,
     notification,
@@ -83,7 +91,11 @@ export const VaultBoxMobile = ({ params }: VaultBoxProps) => {
               ? goldivaultWalletInfoRusd.rusdot
               : params.vaultToken === "ebtc"
                 ? goldivaultWalletInfoEbtc.ebtcot
-              : {};
+                : params.vaultToken === "rseth"
+                  ? goldivaultWalletInfoRseth.rsethot
+                  : params.vaultToken === "usdchoneylp"
+                    ? goldivaultWalletInfoUsdchoneylp.usdchoneylpot
+                    : {};
 
   const vaultYT =
     params.vaultToken === "weeth"
@@ -96,7 +108,11 @@ export const VaultBoxMobile = ({ params }: VaultBoxProps) => {
               ? goldivaultWalletInfoRusd.rusdyt
               : params.vaultToken === "ebtc"
                 ? goldivaultWalletInfoEbtc.ebtcyt
-              : {};
+                : params.vaultToken === "rseth"
+                  ? goldivaultWalletInfoRseth.rsethyt
+                  : params.vaultToken === "usdchoneylp"
+                    ? goldivaultWalletInfoUsdchoneylp.usdchoneylpyt
+                    : {};
 
   const vaultDT =
     params.vaultToken === "weeth"
@@ -109,7 +125,11 @@ export const VaultBoxMobile = ({ params }: VaultBoxProps) => {
               ? goldivaultWalletInfoRusd.rusd
               : params.vaultToken === "ebtc"
                 ? goldivaultWalletInfoEbtc.ebtc
-              : {};
+                : params.vaultToken === "rseth"
+                  ? goldivaultWalletInfoRseth.rseth
+                  : params.vaultToken === "usdchoneylp"
+                    ? goldivaultWalletInfoUsdchoneylp.usdchoneylp
+                    : {};
 
   useEffect(() => {
     if (params.vaultToken === "weeth") {
@@ -124,6 +144,12 @@ export const VaultBoxMobile = ({ params }: VaultBoxProps) => {
     } else if (params.vaultToken === "ebtc") {
       refreshGoldivaultInfoEbtc();
       refreshGoldivaultWalletInfoEbtc();
+    } else if (params.vaultToken === "rseth") {
+      refreshGoldivaultInfoRseth()
+      refreshGoldivaultWalletInfoRseth()
+    } else if (params.vaultToken === "usdchoneylp") {
+      refreshGoldivaultInfoUsdchoneylp()
+      refreshGoldivaultWalletInfoUsdchoneylp()
     } else {
       refreshGoldivaultInfoUnibtc();
       refreshGoldivaultWalletInfoUnibtc();
@@ -228,17 +254,16 @@ export const VaultBoxMobile = ({ params }: VaultBoxProps) => {
                 vaultToken: params.vaultToken,
               }}
             />
+          ) : activeToggle === "POOLS" ? (
+            <PoolsPopupMobile
+              params={{
+                vaultToken: params.vaultToken,
+                poolUrl: params.poolUrl,
+                poolName: params.poolName,
+                liqManagerUrl: params.liqManagerUrl
+              }}
+            />
           ) : (
-          // ) : activeToggle === "POOLS" ? (
-          //   <PoolsPopupMobile
-          //     params={{
-          //       vaultToken: params.vaultToken,
-          //       poolUrl: params.poolUrl,
-          //       poolName: params.poolName,
-          //       liqManagerUrl: params.liqManagerUrl
-          //     }}
-          //   />
-          // ) : (
             <div className="relative flex h-[100%] w-[100%] flex-col">
               <div className="absolute left-[42.5%] top-[45%] z-10 flex h-10 w-10 items-center justify-center rounded-3xl border-2 border-[#FFCD00] bg-[#033E5E]">
                 <svg
@@ -262,7 +287,7 @@ export const VaultBoxMobile = ({ params }: VaultBoxProps) => {
                 </h1>
                 <div className="mt-[5%] flex h-[50%] w-[100%] flex-row items-center justify-between border-2 border-black bg-white pl-[3.5%] pr-[1%]">
                   <input
-                    className="h-[100%] w-full border-none bg-transparent font-baloo text-[5.5vw] font-bold focus:outline-none"
+                    className="h-[100%] w-full border-none bg-transparent font-baloo text-[5.5vw] font-bold focus:outline-hidden"
                     type="number"
                     id="number-input"
                     placeholder="0.00"

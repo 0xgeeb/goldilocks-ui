@@ -29,7 +29,7 @@ export const NavBarButtons = () => {
             }}
           </ConnectButton.Custom>
           <a
-            href="https://goldilocks.gitbook.io/docs"
+            href="https://goldilocks.gitbook.io/goldidocs"
             target="_blank"
             className="cursor-pointer hover:scale-[150%]"
             rel="noreferrer"
@@ -172,7 +172,8 @@ export const NavBarButtons = () => {
                 <span>Vaults</span>
               </a>
             </>
-          ) : pathname === "/goldivault/pools" ? (
+          ) : pathname ===
+            "/goldivault/vault/rusd" ? (
             <>
               <a className="text-[#DB7200]">
                 <span>Goldivaults</span>
@@ -184,32 +185,32 @@ export const NavBarButtons = () => {
                 <span>Vaults</span>
               </a>
               <a
-                href="/goldivault/pools"
+                href="/goldivault/vault/rusd"
                 className="cursor-pointer text-[7vw] text-[#DB7200] underline underline-offset-8 hover:scale-[150%]"
               >
-                <span>Pools</span>
+                <span>rUSD</span>
               </a>
             </>
           ) : pathname ===
-            "/goldivault/vault/0x281F698b0969904Df5476CC4031B4C886dE86323" ? (
-            <>
-              <a className="text-[#DB7200]">
-                <span>Goldivaults</span>
-              </a>
-              <a
-                href="/goldivault/vaults"
-                className="cursor-pointer text-[7vw] hover:scale-[150%]"
-              >
-                <span>Vaults</span>
-              </a>
-              <a
-                href="/goldivault/vault/0x281F698b0969904Df5476CC4031B4C886dE86323"
-                className="cursor-pointer text-[7vw] text-[#DB7200] underline underline-offset-8 hover:scale-[150%]"
-              >
-                <span>weETH</span>
-              </a>
-            </>
-          ) : (
+          "/goldivault/vault/unibtc" ? (
+          <>
+            <a className="text-[#DB7200]">
+              <span>Goldivaults</span>
+            </a>
+            <a
+              href="/goldivault/vaults"
+              className="cursor-pointer text-[7vw] hover:scale-[150%]"
+            >
+              <span>Vaults</span>
+            </a>
+            <a
+              href="/goldivault/vault/unibtc"
+              className="cursor-pointer text-[7vw] text-[#DB7200] underline underline-offset-8 hover:scale-[150%]"
+            >
+              <span>uniBTC</span>
+            </a>
+          </>
+          )  : (
             <a
               href="/goldivault/vaults"
               className="cursor-pointer hover:scale-[150%]"

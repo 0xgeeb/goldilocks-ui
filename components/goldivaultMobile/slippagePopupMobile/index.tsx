@@ -9,7 +9,7 @@ export const SlippagePopupMobile = () => {
         <span className="mt-[8%] text-[4vw] text-white">Set Slippage:</span>
         <div className="relative mt-[4%] h-[50%] w-[60%] border-2 border-black bg-white">
           <input
-            className="absolute left-[10%] top-[2%] h-[50%] w-[100%] bg-transparent text-[4vw] focus:outline-none"
+            className="absolute left-[10%] top-[2%] h-[50%] w-[100%] bg-transparent text-[4vw] focus:outline-hidden"
             type="number"
             id="number-input"
             value={slippage.displayString}

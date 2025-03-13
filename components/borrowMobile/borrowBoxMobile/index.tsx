@@ -87,7 +87,7 @@ export const BorrowBoxMobile = () => {
             <div className="absolute left-[8%] top-[43%] h-[30%] w-[84%] border-2 border-black bg-white">
               <div className="relative h-[100%] w-[100%]">
                 <input
-                  className="absolute left-[5%] top-[18%] w-[90%] border-none bg-transparent font-baloo text-[8vw] font-medium focus:outline-none"
+                  className="absolute left-[5%] top-[18%] w-[90%] border-none bg-transparent font-baloo text-[8vw] font-medium focus:outline-hidden"
                   type="number"
                   id="number-input"
                   placeholder="0.00"

@@ -203,3 +203,9 @@ export interface EtherfiAPIResponse {
   tvl: number;
   buffer_eth: number;
 }
+
+export interface ChartDataEntry {
+  floor: number;
+  market: number;
+  date: string;
+}

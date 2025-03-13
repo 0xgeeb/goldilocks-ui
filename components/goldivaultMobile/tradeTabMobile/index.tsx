@@ -21,6 +21,8 @@ export const TradeTabMobile = ({ params }: TradeTabProps) => {
     goldivaultWalletInfoUnibtc,
     goldivaultWalletInfoRusd,
     goldivaultWalletInfoEbtc,
+    goldivaultWalletInfoRseth,
+    goldivaultWalletInfoUsdchoneylp,
     handleBalanceClick,
     outputTokensLoading,
     debouncedTradeInput,
@@ -44,7 +46,11 @@ export const TradeTabMobile = ({ params }: TradeTabProps) => {
               ? goldivaultWalletInfoRusd.rusdot
               : params.vaultToken === "ebtc"
                 ? goldivaultWalletInfoEbtc.ebtcot
-              : {};
+                : params.vaultToken === "rseth"
+                  ? goldivaultWalletInfoRseth.rsethot
+                  : params.vaultToken === "usdchoneylp"
+                    ? goldivaultWalletInfoUsdchoneylp.usdchoneylpot
+                    : {};
 
   const vaultYT =
     params.vaultToken === "weeth"
@@ -57,7 +63,11 @@ export const TradeTabMobile = ({ params }: TradeTabProps) => {
               ? goldivaultWalletInfoRusd.rusdyt
               : params.vaultToken === "ebtc"
                 ? goldivaultWalletInfoEbtc.ebtcyt
-              : {};
+                : params.vaultToken === "rseth"
+                  ? goldivaultWalletInfoRseth.rsethyt
+                  : params.vaultToken === "usdchoneylp"
+                    ? goldivaultWalletInfoUsdchoneylp.usdchoneylpyt
+                    : {};
 
   const vaultDT =
     params.vaultToken === "weeth"
@@ -70,7 +80,11 @@ export const TradeTabMobile = ({ params }: TradeTabProps) => {
               ? goldivaultWalletInfoRusd.rusd
               : params.vaultToken === "ebtc"
                 ? goldivaultWalletInfoEbtc.ebtc
-              : {};
+                : params.vaultToken === "rseth"
+                  ? goldivaultWalletInfoRseth.rseth
+                  : params.vaultToken === "usdchoneylp"
+                    ? goldivaultWalletInfoUsdchoneylp.usdchoneylp
+                    : {};
 
   const loadingElement = () => {
     return <span className="loader-balance mt-1"></span>;
@@ -220,6 +234,36 @@ export const TradeTabMobile = ({ params }: TradeTabProps) => {
         }
       }
     }
+    else if (params.vaultToken === "rseth") {
+      if (activeToggle === "TRADEOT") {
+        if (tradeDirection === "OUT") {
+          return "rsETHOT";
+        } else {
+          return "rsETH";
+        }
+      } else {
+        if (tradeDirection === "OUT") {
+          return "rsETHYT";
+        } else {
+          return "rsETH";
+        }
+      }
+    }
+    else if (params.vaultToken === "usdchoneylp") {
+      if (activeToggle === "TRADEOT") {
+        if (tradeDirection === "OUT") {
+          return "UHIOT";
+        } else {
+          return "usdc-honey LP";
+        }
+      } else {
+        if (tradeDirection === "OUT") {
+          return "UHIYT";
+        } else {
+          return "usdc-honey LP";
+        }
+      }
+    }
 
     return ''
   };
@@ -297,6 +341,36 @@ export const TradeTabMobile = ({ params }: TradeTabProps) => {
         }
       }
     }
+    else if (params.vaultToken === "rseth") {
+      if (activeToggle === "TRADEOT") {
+        if (tradeDirection === "OUT") {
+          return "rsETH";
+        } else {
+          return "rsETHOT";
+        }
+      } else {
+        if (tradeDirection === "OUT") {
+          return "rsETH";
+        } else {
+          return "rsETHYT";
+        }
+      }
+    }
+    else if (params.vaultToken === "usdchoneylp") {
+      if (activeToggle === "TRADEOT") {
+        if (tradeDirection === "OUT") {
+          return "usdc-honey LP";
+        } else {
+          return "UHIOT";
+        }
+      } else {
+        if (tradeDirection === "OUT") {
+          return "usdc-honey LP";
+        } else {
+          return "UHIYT";
+        }
+      }
+    }
 
     return ''
   };
@@ -336,7 +410,7 @@ export const TradeTabMobile = ({ params }: TradeTabProps) => {
         </div>
         <div className="mt-[5%] flex h-[50%] w-[100%] flex-row items-center justify-between border-2 border-black bg-white pl-[3.5%] pr-[1%]">
           <input
-            className="h-[100%] w-full border-none bg-transparent font-baloo text-[5.5vw] font-bold focus:outline-none"
+            className="h-[100%] w-full border-none bg-transparent font-baloo text-[5.5vw] font-bold focus:outline-hidden"
             type="number"
             id="number-input"
             placeholder="0.00"

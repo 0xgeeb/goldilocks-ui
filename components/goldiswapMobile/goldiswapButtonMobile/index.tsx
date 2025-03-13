@@ -1,8 +1,11 @@
 "use client";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
-import { useGoldiswap } from "../../../providers";
+
+import { formatAsString } from "@/app/_components/utils";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+
 import { useGoldiswapTx } from "../../../hooks";
+import { useGoldiswap } from "../../../providers";
 
 export const GoldiswapButtonMobile = () => {
   const { address, isConnected } = useAccount();
@@ -37,10 +40,6 @@ export const GoldiswapButtonMobile = () => {
 
   const { checkAllowance, sendApproveTx, sendBuyTx, sendSellTx, sendRedeemTx } =
     useGoldiswapTx();
-
-  const formatAsString = (num: number): string => {
-    return num.toLocaleString("en-US", { maximumFractionDigits: 2 });
-  };
 
   const refreshInfo = () => {
     setDisplayString("");

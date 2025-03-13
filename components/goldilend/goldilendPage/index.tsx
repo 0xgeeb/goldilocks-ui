@@ -2,14 +2,15 @@
 
 import { useEffect } from "react";
 
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 
+import { geoAtom } from "@/app/_components/atoms/geoAtom";
 import { pageLoadingAtom } from "@/app/_components/atoms/pageLoadingAtom";
 import CsrPageLayout from "@/app/_components/CsrPageLayout";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 
 import { BoostPopup, BorrowBox, BorrowFetcher, Toggles } from "../";
-import { useDesktop, useGeo, useGoldilend } from "../../../providers";
+import { useDesktop, useGoldilend } from "../../../providers";
 import { GoldilendPageMobile } from "../../goldilendMobile";
 import { Loading, MintNFTs, TAndCs } from "../../utils";
 
@@ -21,7 +22,7 @@ export const GoldilendPage = () => {
 
   const { isDesktop } = useDesktop();
 
-  const { signed } = useGeo();
+  const signed = useAtomValue(geoAtom);
 
   useEffect(() => {
     setPageLoading(false);

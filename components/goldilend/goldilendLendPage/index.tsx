@@ -2,14 +2,15 @@
 
 import { useEffect } from "react";
 
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { useAccount } from "wagmi";
 
+import { geoAtom } from "@/app/_components/atoms/geoAtom";
 import { pageLoadingAtom } from "@/app/_components/atoms/pageLoadingAtom";
 import CsrPageLayout from "@/app/_components/CsrPageLayout";
 
 import { LendBox, LendToggles } from "../";
-import { useDesktop, useGeo, useGoldilend } from "../../../providers";
+import { useDesktop, useGoldilend } from "../../../providers";
 import { GoldilendLendPageMobile } from "../../goldilendMobile";
 import { Loading, TAndCs } from "../../utils";
 
@@ -29,7 +30,7 @@ export const GoldilendLendPage = () => {
 
   const { isDesktop } = useDesktop();
 
-  const { signed } = useGeo();
+  const signed = useAtomValue(geoAtom);
 
   useEffect(() => {
     refreshGoldilendInfo();
