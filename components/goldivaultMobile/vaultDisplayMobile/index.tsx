@@ -23,21 +23,13 @@ export const VaultDisplayMobile = () => {
           }}
         />
         <VaultDisplayCardMobile
-            params={{
-              address: "rseth",
-              tokenName: "rsETH",
-              imageUrl: "rseth_logo.png",
-              vaultName: "KelpDAO Points Vault",
-            }}
-          />
-        <VaultDisplayCardMobile
-          params={{
+        params={{
             address: "solvbtcbbn",
             tokenName: "SolvBTC.BBN",
             imageUrl: "solvbtc-logo.png",
             vaultName: "Solv Points Vault",
-          }}
-        /> */}
+            }}
+            /> */}
         <VaultDisplayCardMobile
           params={{
             address: "rusd",
@@ -52,6 +44,14 @@ export const VaultDisplayMobile = () => {
             tokenName: "uniBTC",
             imageUrl: "unibtc-logo.png",
             vaultName: "Bedrock Points Vault",
+          }}
+        />
+        <VaultDisplayCardMobile
+          params={{
+            address: "rseth",
+            tokenName: "rsETH",
+            imageUrl: "rseth_logo.png",
+            vaultName: "KelpDAO Points Vault",
           }}
         />
         {/* <VaultDisplayCardMobile

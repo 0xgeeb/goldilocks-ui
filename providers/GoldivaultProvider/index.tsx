@@ -90,6 +90,7 @@ const INITIAL_STATE: any = {
     otLiquidity: 0,
     kelpLeverage: 0,
     eigenLeverage: 0,
+    restakingYield: 0
   },
   goldivaultWalletInfoRseth: {
     rseth: 0,
@@ -1168,17 +1169,34 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         parseFloat(formatEther(rsethLiquidity as unknown as bigint))) *
       weethPrice;
 
+    const kelpdaoDataResult = await getKelpdaoData()
+
     const response = {
       endTime: parseFloat(endTimeResult),
       fixedApr: fixedAprResponse,
       otLiquidity: liquidityResult,
       kelpLeverage: (1 / currentYtPrice) * 2,
       eigenLeverage: (1 / currentYtPrice) * 1,
+      restakingYield: kelpdaoDataResult ? kelpdaoDataResult : 0
     };
 
     setGoldivaultInfoRsethState(response);
     setInfoLoadingState(false);
   };
+
+  const getKelpdaoData = async (): Promise<any> => {
+    let rsethResponse: any | null = null
+    try {
+      const response = await fetch("/api/kelpdao")
+      const responseJson = await response.json()
+      rsethResponse = responseJson.data[responseJson.data.length - 1].apy
+    }
+    catch {
+      console.log('rseth api error')
+    }
+
+    return rsethResponse
+  }
 
   const refreshGoldivaultWalletInfoRseth = async () => {
     if (address) {
