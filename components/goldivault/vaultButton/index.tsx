@@ -66,9 +66,9 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
     refreshGoldivaultInfoRseth,
     refreshGoldivaultWalletInfoRseth,
     goldivaultWalletInfoRseth,
-    refreshGoldivaultInfoUsdchoneylp,
-    refreshGoldivaultWalletInfoUsdchoneylp,
-    goldivaultWalletInfoUsdchoneylp,
+    refreshGoldivaultInfoOribgt,
+    refreshGoldivaultWalletInfoOribgt,
+    goldivaultWalletInfoOribgt,
     vaultSwapTxAmount,
     honeyApprovalAmount,
     otApprovalAmount,
@@ -90,6 +90,9 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
     sendSellYTTx,
     sendAddLiqTx,
     sendRemoveLiqTx,
+    sendStakeYTTx,
+    sendUnstakeYTTx,
+    sendClaimTx
   } = useGoldivaultTx();
 
   const { address, isConnected } = useAccount();
@@ -107,8 +110,8 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
               ? goldivaultWalletInfoEbtc.ebtcot
               : params.vaultToken === "rseth"
                 ? goldivaultWalletInfoRseth.rsethot
-                : params.vaultToken === "usdchoneylp"
-                  ? goldivaultWalletInfoUsdchoneylp.usdchoneylpot
+                : params.vaultToken === "oribgt"
+                  ? goldivaultWalletInfoOribgt.oribgtot
                   : {};
 
   const vaultYT =
@@ -124,8 +127,8 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
               ? goldivaultWalletInfoEbtc.ebtcyt
               : params.vaultToken === "rseth"
                 ? goldivaultWalletInfoRseth.rsethyt
-                : params.vaultToken === "usdchoneylp"
-                  ? goldivaultWalletInfoUsdchoneylp.usdchoneylpyt
+                : params.vaultToken === "oribgt"
+                  ? goldivaultWalletInfoOribgt.oribgtyt
                   : {};
 
   const vaultDT =
@@ -141,8 +144,8 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
               ? goldivaultWalletInfoEbtc.ebtc
               : params.vaultToken === "rseth"
                 ? goldivaultWalletInfoRseth.rseth
-                : params.vaultToken === "usdchoneylp"
-                  ? goldivaultWalletInfoUsdchoneylp.usdchoneylp
+                : params.vaultToken === "oribgt"
+                  ? goldivaultWalletInfoOribgt.ibgt
                   : {};
 
   const vaultOTaddy =
@@ -158,8 +161,8 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
               ? contracts.ebtcot.address
               : params.vaultToken === "rseth"
                 ? contracts.rsethot.address
-                : params.vaultToken === "usdchoneylp"
-                  ? contracts.usdchoneylpot.address
+                : params.vaultToken === "oribgt"
+                  ? contracts.oribgtot.address
                   : "";
 
   const vaultDTaddy =
@@ -175,8 +178,8 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
               ? contracts.ebtc.address
               : params.vaultToken === "rseth"
                 ? contracts.rseth.address
-                : params.vaultToken === "usdchoneylp"
-                  ? contracts.usdchoneylp.address
+                : params.vaultToken === "oribgt"
+                  ? contracts.ibgt.address
                   : "";
 
   const vaultDTAllowance =
@@ -192,12 +195,13 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
               ? goldivaultWalletInfoEbtc.ebtcAllowance
               : params.vaultToken === "rseth"
                 ? goldivaultWalletInfoRseth.rsethAllowance
-                : params.vaultToken === "usdchoneylp"
-                  ? goldivaultWalletInfoUsdchoneylp.usdchoneylpAllowance
+                : params.vaultToken === "oribgt"
+                  ? goldivaultWalletInfoOribgt.ibgtAllowance
                   : 0;
 
-  const vaultLPBalance =
-    params.vaultToken === "rusd" ? goldivaultWalletInfoRusd.rusdaquabera : 0;
+  const vaultLPBalance = params.vaultToken === "rusd" ? goldivaultWalletInfoRusd.rusdaquabera : 0;
+
+  const four626bool = params.vaultToken === "oribgt"
 
   const refreshInfo = () => {
     if (params.vaultToken === "weeth") {
@@ -215,9 +219,9 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
     } else if (params.vaultToken === "rseth") {
       refreshGoldivaultInfoRseth();
       refreshGoldivaultWalletInfoRseth();
-    } else if (params.vaultToken === "usdchoneylp") {
-      refreshGoldivaultInfoUsdchoneylp()
-      refreshGoldivaultWalletInfoUsdchoneylp()
+    } else if (params.vaultToken === "oribgt") {
+      refreshGoldivaultInfoOribgt()
+      refreshGoldivaultWalletInfoOribgt()
     } else {
       refreshGoldivaultInfoUnibtc();
       refreshGoldivaultWalletInfoUnibtc();
@@ -238,7 +242,7 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
       return;
     }
     if (activeToggle === "DEPOSIT") {
-      if(params.vaultToken === "usdchoneylp") {
+      if(params.vaultToken === "oribgt") {
         stakingDepositTxFlow(button);
       }
       else {
@@ -259,6 +263,15 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
     }
     if (activeToggle === "REMOVELIQ") {
       removeLiqFlow(button);
+    }
+    if (activeToggle === "STAKE") {
+      stakeYTFlow(button)
+    }
+    if (activeToggle === "UNSTAKE") {
+      unstakeYTFlow(button)
+    }
+    if (activeToggle === "CLAIM") {
+      claimFlow(button)
     }
   };
 
@@ -450,12 +463,12 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
       button && (button.innerHTML = "trade yt");
       return;
     }
-    if (
-      !checkVaultLiquidity(params.vaultToken, getVaultType(params.vaultToken))
-    ) {
-      button && (button.innerHTML = "not enuf liq");
-      return;
-    }
+    // if (
+    //   !checkVaultLiquidity(params.vaultToken, getVaultType(params.vaultToken))
+    // ) {
+    //   button && (button.innerHTML = "not enuf liq");
+    //   return;
+    // }
     if (priceImpact > slippage.amount) {
       button && (button.innerHTML = "raise slippage");
       return;
@@ -464,7 +477,8 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
       if (tradeInput > vaultYT) {
         button && (button.innerHTML = "not enough");
         return;
-      } else {
+      }
+      else {
         const sufficientAllowance: boolean | void = await checkAllowance(
           honeyApprovalAmount,
           params.vaultToken,
@@ -514,19 +528,19 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
         button && (button.innerHTML = "not enough");
         return;
       } else {
-        const sufficientAllowanceHoney: boolean | void = await checkAllowance(
+        const sufficientAllowanceDT: boolean | void = await checkAllowance(
           honeyApprovalAmount,
           params.vaultToken,
           address as string,
         );
-        if (sufficientAllowanceHoney) {
+        if (sufficientAllowanceDT) {
           setHoneyApproved(true);
           const sufficientAllowanceOT: boolean | void = await checkAllowance(
             otApprovalAmount,
             params.ot,
             address as string,
           );
-          if (sufficientAllowanceOT) {
+          if (sufficientAllowanceOT || four626bool) {
             setTxConfirming(true);
             if (button) {
               button.innerHTML = "confirming...";
@@ -778,6 +792,127 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
     }
   };
 
+  const stakeYTFlow = async (button: HTMLElement | null) => {
+    if (tradeInput == 0) {
+      button && (button.innerHTML = "stake yt");
+      return;
+    }
+    if (tradeInput > goldivaultWalletInfoOribgt.justYt) {
+      button && (button.innerHTML = "not enough");
+      return;
+    } else {
+      const sufficientAllowance: boolean | void = await checkAllowance(
+        tradeInput,
+        'oriBGT-YT',
+        address as string,
+      );
+      if (sufficientAllowance) {
+        setTxConfirming(true);
+        if (button) {
+          button.innerHTML = "confirming...";
+        }
+        const stakeTx = await sendStakeYTTx(tradeInput);
+        if (stakeTx.substring(0, 2) === "0x") {
+          setTxConfirming(false);
+          openNotification(
+            true,
+            `You've successfully staked oriBGT-YT`,
+            `You staked ${formatAsString(tradeInput)} oriBGT-YT`,
+            stakeTx,
+          );
+          if (button) {
+            button.innerHTML = "stake yt";
+          }
+          refreshInfo();
+          setTimeout(() => {
+            openNotification(false, "", "", "");
+          }, 10000);
+        } else {
+          if (button) {
+            button.innerHTML = "stake yt";
+          }
+          refreshInfo();
+          setTxConfirming(false);
+        }
+      } else {
+        setAllowanceButtons(true);
+      }
+    }
+  }
+
+  const unstakeYTFlow = async (button: HTMLElement | null) => {
+    if (tradeInput == 0) {
+      button && (button.innerHTML = "unstake yt");
+      return;
+    }
+    if (tradeInput > goldivaultWalletInfoOribgt.stakedYt) {
+      button && (button.innerHTML = "not enough");
+      return;
+    } else {
+      setTxConfirming(true);
+      if (button) {
+        button.innerHTML = "confirming...";
+      }
+      const unstakeTx = await sendUnstakeYTTx(tradeInput);
+      if (unstakeTx.substring(0, 2) === "0x") {
+        setTxConfirming(false);
+        openNotification(
+          true,
+          "You've successfully unstaked oriBGT-YT",
+          `You unstaked ${formatAsString(tradeInput)} oriBGT-YT`,
+          unstakeTx,
+        );
+        if (button) {
+          button.innerHTML = "unstake yt";
+        }
+        refreshInfo();
+        setTimeout(() => {
+          openNotification(false, "", "", "");
+        }, 10000);
+      } else {
+        if (button) {
+          button.innerHTML = "unstake yt";
+        }
+        refreshInfo();
+        setTxConfirming(false);
+      }
+    }
+  }
+
+  const claimFlow = async (button: HTMLElement | null) => {
+    if (goldivaultWalletInfoOribgt.claiamble == 0) {
+      button && (button.innerHTML = "claim");
+      return;
+    }
+    setTxConfirming(true);
+    if (button) {
+      button.innerHTML = "confirming...";
+    }
+    const claimTx = await sendClaimTx();
+    if (claimTx.substring(0, 2) === "0x") {
+      setTxConfirming(false);
+      openNotification(
+        true,
+        "You've successfully claim oriBGT yield",
+        `You claimed ${formatAsString(goldivaultWalletInfoOribgt.claimable)} oriBGT`,
+        claimTx,
+      );
+      if (button) {
+        button.innerHTML = "claim";
+      }
+      refreshInfo();
+      setTimeout(() => {
+        openNotification(false, "", "", "");
+      }, 10000);
+    } else {
+      if (button) {
+        button.innerHTML = "claim";
+      }
+      refreshInfo();
+      setTxConfirming(false);
+    }
+  }
+
   const handleLeftButtonClick = async () => {
     const swapButton = document.getElementById("swap-button");
     const leftButton = document.getElementById("left-approve-button");
@@ -827,8 +962,15 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
       await sendApproveTx(tradeInput, "rusdaqua", false);
     } else if (activeToggle === "REMOVELIQ") {
       await sendApproveTx(tradeInput, "rusdaqualp", false);
+    } else if (activeToggle === "STAKE") {
+      await sendApproveTx(tradeInput, "oriBGT-YT", false);
     } else {
-      await sendApproveTx(deposit, params.vaultToken, false);
+      if(depositDTApproved) {
+        await sendApproveTx(deposit, params.yt, false);
+      }
+      else {
+        await sendApproveTx(deposit, params.vaultToken, false);
+      }
     }
     //todo: wat
     // updateAllowance(honeyBuy + 0.01)
@@ -885,9 +1027,15 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
       await sendApproveTx(0, "rusdaqua", true);
     } else if (activeToggle === "REMOVELIQ") {
       await sendApproveTx(0, "rusdaqualp", true);
-    } // todo: needs something here for staking deposits  
-    else {
-      await sendApproveTx(0, params.vaultToken, true);
+    } else if (activeToggle === "STAKE") {
+      await sendApproveTx(0, "oriBGT-YT", true)
+    } else {
+      if(depositDTApproved) {
+        await sendApproveTx(0, params.yt, true);
+      }
+      else {
+        await sendApproveTx(0, params.vaultToken, true);
+      }
     }
     // updateAllowance(100000000)
     swapButton && (swapButton.innerHTML = "deposit");
@@ -913,6 +1061,12 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
       return "add liq";
     } else if (activeToggle === "REMOVELIQ") {
       return "remove liq";
+    } else if (activeToggle === "STAKE") {
+      return "stake yt";
+    } else if (activeToggle === "UNSTAKE") {
+      return "unstake yt";
+    } else if (activeToggle === "CLAIM") {
+      return "claim";
     } else {
       return "trade yt";
     }
@@ -923,14 +1077,14 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
       {allowanceButtons && (
         <div>
           <button
-            className="absolute left-[24%] top-[73.5%] h-[8%] w-[24%] border-2 border-black bg-[#E7B941] font-amaticbold text-[4vw] hover:scale-110 hover:border-[#E7B941] hover:bg-[#033E5E] hover:text-[#E7B941] md:top-[71.5%] md:text-[2.75vw] lg:left-[30.9%] lg:top-[72.5%] lg:w-[16.6%] lg:text-[2vw] xl:top-[72.5%] xl:text-[1.75vw] 2xl:text-[1.5vw]"
+            className="cursor-pointer absolute left-[24%] top-[73.5%] h-[8%] w-[24%] border-2 border-black bg-[#E7B941] font-amaticbold text-[4vw] hover:scale-110 hover:border-[#E7B941] hover:bg-[#033E5E] hover:text-[#E7B941] md:top-[71.5%] md:text-[2.75vw] lg:left-[30.9%] lg:top-[72.5%] lg:w-[16.6%] lg:text-[2vw] xl:top-[72.5%] xl:text-[1.75vw] 2xl:text-[1.5vw]"
             id="left-approve-button"
             onClick={() => handleLeftButtonClick()}
           >
             approve tx
           </button>
           <button
-            className="absolute left-[52%] top-[73.5%] h-[8%] w-[24%] border-2 border-black bg-[#E7B941] font-amaticbold text-[4vw] hover:scale-110 hover:border-[#E7B941] hover:bg-[#033E5E] hover:text-[#E7B941] md:top-[71.5%] md:text-[2.75vw] lg:left-[52.5%] lg:top-[72.5%] lg:w-[16.6%] lg:text-[2vw] xl:top-[72.5%] xl:text-[1.75vw] 2xl:text-[1.5vw]"
+            className="cursor-pointer absolute left-[52%] top-[73.5%] h-[8%] w-[24%] border-2 border-black bg-[#E7B941] font-amaticbold text-[4vw] hover:scale-110 hover:border-[#E7B941] hover:bg-[#033E5E] hover:text-[#E7B941] md:top-[71.5%] md:text-[2.75vw] lg:left-[52.5%] lg:top-[72.5%] lg:w-[16.6%] lg:text-[2vw] xl:top-[72.5%] xl:text-[1.75vw] 2xl:text-[1.5vw]"
             id="right-approve-button"
             onClick={() => handleRightButtonClick()}
           >

@@ -7,7 +7,7 @@ import { useAccount } from "wagmi";
 import { useDebounce, useGoldiswapMath } from "../../hooks";
 import { config } from "../../providers/WagmiProvider";
 import { contracts } from "../../utils/addressi";
-import { ChartDataEntry } from "../..//utils/interfaces";
+import { ChartDataEntry, LocksChartData } from "../../utils/interfaces";
 
 const INITIAL_STATE = {
   goldiswapInfo: {
@@ -150,8 +150,7 @@ const INITIAL_STATE = {
 
   balanceMobileToggle: false,
   setBalanceMobileToggle: (_toggle: boolean) => {},
-  chartData: [] as ChartDataEntry[],
-  updateChartData: (_chartData: {}) => {},
+  chartData: {} as LocksChartData,
   getChartData: async () => {}
 };
 
@@ -215,7 +214,7 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
     useState<string>(INITIAL_STATE.bottomDisplayString);
 
   const [chartDataState, setChartDataState] = useState<
-    any[]
+    any
   >(INITIAL_STATE.chartData);
   const [chartOpenState, setChartOpenState] = useState<boolean>(
     INITIAL_STATE.chartOpen,
@@ -940,92 +939,45 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
     return `${month}/${day}`;
   };
 
-  const updateChartData = (chartData: any) => {
-    const tempChartData: any[] = [];
-    const days = [
-      "firstDay",
-      "secondDay",
-      "thirdDay",
-      "fourthDay",
-      "fifthDay",
-      "sixthDay",
-      "seventhDay",
-    ];
-    for (const day of days) {
-      const dayData = chartData[day];
-      const item = dayData.items[0];
-      if (item) {
-        const marketResult = marketPrice(
-          parseFloat(formatEther(item.fsl)),
-          parseFloat(formatEther(item.psl)),
-          parseFloat(formatEther(item.supply)),
-        );
-        const floorResult = floorPrice(
-          parseFloat(formatEther(item.fsl)),
-          parseFloat(formatEther(item.supply)),
-        );
-        tempChartData.push({
-          [`${day}`]: marketResult,
-          marketPrice: marketResult.toLocaleString("en-US", {
-            maximumFractionDigits: 6,
-          }),
-          floorPrice: floorResult.toLocaleString("en-US", {
-            maximumFractionDigits: 6,
-          }),
-          date: formatTimestamp(item.timestamp),
-        });
-      } else {
-        tempChartData.push({
-          [`${day}`]: 0,
-          marketPrice: 0,
-          floorPrice: 0,
-          date: formatTimestamp(item.timestamp),
-        });
-      }
-    }
-    let fallbackNumber: number | null = null;
-    for (let i = 0; i < tempChartData.length; i++) {
-      if (tempChartData[i][`${days[i]}`] !== 0) {
-        fallbackNumber = tempChartData[i][`${days[i]}`];
-        break;
-      }
-    }
-    let farthestNumber: number | null = fallbackNumber;
-    for (let i = tempChartData.length - 1; i >= 0; i--) {
-      if (tempChartData[i][`${days[i]}`] !== 0) {
-        farthestNumber = tempChartData[i][`${days[i]}`];
-      } else if (farthestNumber !== null) {
-        tempChartData[i][`${days[i]}`] = farthestNumber;
-        tempChartData[i].marketPrice = farthestNumber;
-      }
-    }
-
-    setChartDataState(tempChartData);
-  };
-
   const getFormattedDate = (timestamp: number): string => {
     const date = new Date(timestamp * 1000);
     const day = date.getDate();
     const month = date.getMonth() + 1;
-    return `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}`;
+    return `${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')}`
+  }
+
+  const getFormattedTime = (timestamp: number): string => {
+    const date = new Date(timestamp * 1000);
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
   }
 
   const getChartData = async () => {
-    const response = await fetch("/api/lockschart")
+    const response = await fetch("/api/lockschartdata")
     const responseJson: any = await response.json()
-    console.log(responseJson)
-    const newChartData = []
-    for(let node of responseJson.locksDaily) {
-      const entry = {
-        floorPrice: node.floor,
-        marketPrice: node.market,
-        date: getFormattedDate(node.timestamp)
-      }
+    const hourlyLocks = responseJson.locksHourly.map((node: any) => ({
+      floorPrice: parseFloat(node.floor),
+      marketPrice: parseFloat(node.market),
+      date: getFormattedTime(node.timestamp)
+    }))
+    const dailyLocks = responseJson.locksDaily.map((node: any) => ({
+      floorPrice: parseFloat(node.floor),
+      marketPrice: parseFloat(node.market),
+      date: getFormattedDate(node.timestamp)
+    }))
+    const weeklyLocks = responseJson.locksWeekly.map((node: any) => ({
+      floorPrice: parseFloat(node.floor),
+      marketPrice: parseFloat(node.market),
+      date: getFormattedDate(node.timestamp)
+    }))
 
-      newChartData.push(entry)
+    const newChartData = {
+      hourly: hourlyLocks.reverse(),
+      daily: dailyLocks.reverse(),
+      weekly: weeklyLocks.reverse()
     }
-
-    setChartDataState(newChartData.reverse())
+    setChartDataState(newChartData)
   }
 
   return (
@@ -1094,7 +1046,6 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
         balanceMobileToggle: balanceMobileToggleState,
         setBalanceMobileToggle: setBalanceMobileToggleState,
         chartData: chartDataState,
-        updateChartData,
         getChartData,
         wutPopup: wutPopupState,
         setWutPopup: setWutPopupState,

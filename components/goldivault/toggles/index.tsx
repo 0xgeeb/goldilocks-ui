@@ -13,6 +13,37 @@ export const Toggles = ({ params }: TogglesProps) => {
   return (
     <>
       {
+        params.vaultToken === "oribgt" &&
+        <>
+          <div className="absolute right-[89%] top-[68%] h-[15%] w-[10%] lg:right-[71%] lg:top-[69%] lg:h-[8%] lg:w-[20%]">
+            <div className="relative flex h-[100%] w-[100%] flex-col items-center justify-start lg:flex-row lg:justify-center">
+              <div
+                className={`mb-[12.5%] mr-[0%] h-[30%] w-[100%] border-2 border-[#FFCD00] lg:mb-[0%] lg:mr-[2.5%] lg:h-[100%] lg:w-[30%] ${activeToggle === "STAKE" ? "bg-[#033E5E]" : "bg-[#995816]"} flex cursor-pointer items-center justify-center font-amaticbold text-[2.5vw] font-medium text-[#FFCD00] hover:border-black hover:bg-[#FFCD00] hover:text-black lg:text-[1.5vw]`}
+                onClick={() => changeActiveToggle("STAKE")}
+              >
+                STAKE
+              </div>
+              <div
+                className={`ml-[0%] h-[30%] w-[100%] border-2 border-[#FFCD00] lg:ml-[2.5%] lg:h-[100%] lg:w-[30%] ${activeToggle === "UNSTAKE" ? "bg-[#033E5E]" : "bg-[#995816]"} flex cursor-pointer items-center justify-center font-amaticbold text-[2.5vw] font-medium text-[#FFCD00] hover:border-black hover:bg-[#FFCD00] hover:text-black lg:text-[1.5vw]`}
+                onClick={() => changeActiveToggle("UNSTAKE")}
+              >
+                UNSTAKE
+              </div>
+            </div>
+          </div>
+          <div className="absolute right-[89%] top-[80%] h-[15%] w-[10%] lg:right-[71%] lg:top-[79%] lg:h-[8%] lg:w-[20%]">
+            <div className="relative flex h-[100%] w-[100%] flex-col items-center justify-start lg:flex-row lg:justify-center">
+              <div
+                className={`mb-[12.5%] mr-[0%] h-[30%] w-[100%] border-2 border-[#FFCD00] lg:mb-[0%] lg:mr-[2.5%] lg:h-[100%] lg:w-[30%] ${activeToggle === "CLAIM" ? "bg-[#033E5E]" : "bg-[#995816]"} flex cursor-pointer items-center justify-center font-amaticbold text-[2.5vw] font-medium text-[#FFCD00] hover:border-black hover:bg-[#FFCD00] hover:text-black lg:text-[1.5vw]`}
+                onClick={() => changeActiveToggle("CLAIM")}
+              >
+                CLAIM
+              </div>
+            </div>
+          </div>
+        </>
+      }
+      {
         params.vaultToken === "rusd" &&
         <>
           <div

@@ -204,6 +204,12 @@ export interface EtherfiAPIResponse {
   buffer_eth: number;
 }
 
+export interface LocksChartData {
+  hourly: ChartDataEntry[];
+  daily: ChartDataEntry[];
+  weekly: ChartDataEntry[];
+}
+
 export interface ChartDataEntry {
   floor: number;
   market: number;

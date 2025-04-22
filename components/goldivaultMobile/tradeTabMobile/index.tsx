@@ -22,7 +22,7 @@ export const TradeTabMobile = ({ params }: TradeTabProps) => {
     goldivaultWalletInfoRusd,
     goldivaultWalletInfoEbtc,
     goldivaultWalletInfoRseth,
-    goldivaultWalletInfoUsdchoneylp,
+    goldivaultWalletInfoOribgt,
     handleBalanceClick,
     outputTokensLoading,
     debouncedTradeInput,
@@ -48,8 +48,8 @@ export const TradeTabMobile = ({ params }: TradeTabProps) => {
                 ? goldivaultWalletInfoEbtc.ebtcot
                 : params.vaultToken === "rseth"
                   ? goldivaultWalletInfoRseth.rsethot
-                  : params.vaultToken === "usdchoneylp"
-                    ? goldivaultWalletInfoUsdchoneylp.usdchoneylpot
+                  : params.vaultToken === "oribgt"
+                    ? goldivaultWalletInfoOribgt.oribgtot
                     : {};
 
   const vaultYT =
@@ -65,8 +65,8 @@ export const TradeTabMobile = ({ params }: TradeTabProps) => {
                 ? goldivaultWalletInfoEbtc.ebtcyt
                 : params.vaultToken === "rseth"
                   ? goldivaultWalletInfoRseth.rsethyt
-                  : params.vaultToken === "usdchoneylp"
-                    ? goldivaultWalletInfoUsdchoneylp.usdchoneylpyt
+                  : params.vaultToken === "oribgt"
+                    ? goldivaultWalletInfoOribgt.oribgtyt
                     : {};
 
   const vaultDT =
@@ -82,8 +82,8 @@ export const TradeTabMobile = ({ params }: TradeTabProps) => {
                 ? goldivaultWalletInfoEbtc.ebtc
                 : params.vaultToken === "rseth"
                   ? goldivaultWalletInfoRseth.rseth
-                  : params.vaultToken === "usdchoneylp"
-                    ? goldivaultWalletInfoUsdchoneylp.usdchoneylp
+                  : params.vaultToken === "oribgt"
+                    ? goldivaultWalletInfoOribgt.ibgt
                     : {};
 
   const loadingElement = () => {
@@ -110,9 +110,18 @@ export const TradeTabMobile = ({ params }: TradeTabProps) => {
     }
   };
 
+  const getfour626Bool = (vault: string): boolean => {
+    if (vault === "oribgt") {
+      return true
+    }
+    else {
+      return false
+    }
+  }
+
   useEffect(() => {
     if (debouncedTradeInput > 0) {
-      quoteV3Swap(params.vaultToken, getVaultType(params.vaultToken));
+      quoteV3Swap(params.vaultToken, getVaultType(params.vaultToken), getfour626Bool(params.vaultToken));
     } else {
       setTradeOutput(0);
       setOutputTokensLoading(false);
@@ -121,7 +130,7 @@ export const TradeTabMobile = ({ params }: TradeTabProps) => {
 
   useEffect(() => {
     if(debouncedTradeInput > 0) {
-      quoteV3Swap(params.vaultToken, getVaultType(params.vaultToken))
+      quoteV3Swap(params.vaultToken, getVaultType(params.vaultToken), getfour626Bool(params.vaultToken));
     }
     else {
       setTradeOutput(0)
@@ -249,18 +258,18 @@ export const TradeTabMobile = ({ params }: TradeTabProps) => {
         }
       }
     }
-    else if (params.vaultToken === "usdchoneylp") {
+    else if (params.vaultToken === "oribgt") {
       if (activeToggle === "TRADEOT") {
         if (tradeDirection === "OUT") {
-          return "UHIOT";
+          return "oriBGT-OT";
         } else {
-          return "usdc-honey LP";
+          return "iBGT";
         }
       } else {
         if (tradeDirection === "OUT") {
-          return "UHIYT";
+          return "oriBGT-YT";
         } else {
-          return "usdc-honey LP";
+          return "iBGT";
         }
       }
     }
@@ -356,18 +365,18 @@ export const TradeTabMobile = ({ params }: TradeTabProps) => {
         }
       }
     }
-    else if (params.vaultToken === "usdchoneylp") {
+    else if (params.vaultToken === "oribgt") {
       if (activeToggle === "TRADEOT") {
         if (tradeDirection === "OUT") {
-          return "usdc-honey LP";
+          return "iBGT";
         } else {
-          return "UHIOT";
+          return "oriBGT-OT";
         }
       } else {
         if (tradeDirection === "OUT") {
-          return "usdc-honey LP";
+          return "iBGT";
         } else {
-          return "UHIYT";
+          return "oriBGT-YT";
         }
       }
     }

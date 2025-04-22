@@ -61,9 +61,9 @@ export const VaultBoxMobile = ({ params }: VaultBoxProps) => {
     refreshGoldivaultInfoRseth,
     refreshGoldivaultWalletInfoRseth,
     goldivaultWalletInfoRseth,
-    refreshGoldivaultInfoUsdchoneylp,
-    refreshGoldivaultWalletInfoUsdchoneylp,
-    goldivaultWalletInfoUsdchoneylp,
+    refreshGoldivaultInfoOribgt,
+    refreshGoldivaultWalletInfoOribgt,
+    goldivaultWalletInfoOribgt,
     activeToggle,
     calculateOTRedeem,
     notification,
@@ -93,8 +93,8 @@ export const VaultBoxMobile = ({ params }: VaultBoxProps) => {
                 ? goldivaultWalletInfoEbtc.ebtcot
                 : params.vaultToken === "rseth"
                   ? goldivaultWalletInfoRseth.rsethot
-                  : params.vaultToken === "usdchoneylp"
-                    ? goldivaultWalletInfoUsdchoneylp.usdchoneylpot
+                  : params.vaultToken === "oribgt"
+                    ? goldivaultWalletInfoOribgt.oribgtot
                     : {};
 
   const vaultYT =
@@ -110,8 +110,8 @@ export const VaultBoxMobile = ({ params }: VaultBoxProps) => {
                 ? goldivaultWalletInfoEbtc.ebtcyt
                 : params.vaultToken === "rseth"
                   ? goldivaultWalletInfoRseth.rsethyt
-                  : params.vaultToken === "usdchoneylp"
-                    ? goldivaultWalletInfoUsdchoneylp.usdchoneylpyt
+                  : params.vaultToken === "oribgt"
+                    ? goldivaultWalletInfoOribgt.oribgtyt
                     : {};
 
   const vaultDT =
@@ -127,8 +127,8 @@ export const VaultBoxMobile = ({ params }: VaultBoxProps) => {
                 ? goldivaultWalletInfoEbtc.ebtc
                 : params.vaultToken === "rseth"
                   ? goldivaultWalletInfoRseth.rseth
-                  : params.vaultToken === "usdchoneylp"
-                    ? goldivaultWalletInfoUsdchoneylp.usdchoneylp
+                  : params.vaultToken === "oribgt"
+                    ? goldivaultWalletInfoOribgt.ibgt
                     : {};
 
   useEffect(() => {
@@ -147,9 +147,9 @@ export const VaultBoxMobile = ({ params }: VaultBoxProps) => {
     } else if (params.vaultToken === "rseth") {
       refreshGoldivaultInfoRseth()
       refreshGoldivaultWalletInfoRseth()
-    } else if (params.vaultToken === "usdchoneylp") {
-      refreshGoldivaultInfoUsdchoneylp()
-      refreshGoldivaultWalletInfoUsdchoneylp()
+    } else if (params.vaultToken === "oribgt") {
+      refreshGoldivaultInfoOribgt()
+      refreshGoldivaultWalletInfoOribgt()
     } else {
       refreshGoldivaultInfoUnibtc();
       refreshGoldivaultWalletInfoUnibtc();

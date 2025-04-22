@@ -24,7 +24,7 @@ export const PoolsPopup = ({ params }: PoolsPopupProps) => {
     goldivaultInfoRusd,
     goldivaultInfoEbtc,
     goldivaultInfoRseth,
-    goldivaultInfoUsdchoneylp
+    goldivaultInfoOribgt
   } = useGoldivault();
 
   const loadingElement = () => {
@@ -44,8 +44,8 @@ export const PoolsPopup = ({ params }: PoolsPopupProps) => {
               ? goldivaultInfoEbtc
               : params.vaultToken === "rseth"
                 ? goldivaultInfoRseth
-                : params.vaultToken === "usdchoneylp"
-                  ? goldivaultInfoUsdchoneylp
+                : params.vaultToken === "oribgt"
+                  ? goldivaultInfoOribgt
                   : {};
 
   return (

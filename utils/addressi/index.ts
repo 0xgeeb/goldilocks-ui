@@ -18,7 +18,8 @@ import routerv2ABI from "../abi/RouterV2.json";
 import goldigovABI from "../abi/Goldigovernor.json";
 import govlocksABI from "../abi/GovLocks.json";
 import depositguardABI from "../abi/DepositGuard.json"
-import goldivaultstakingABI from "../abi/GoldivaultStaking.json"
+import goldivault4626ABI from "../abi/Goldivault4626.json"
+import oriBGTABI from "../abi/oriBGT.json"
 
 export const contracts = {
   goldiswap: {
@@ -37,8 +38,12 @@ export const contracts = {
     address: "0xFCBD14DC51f0A4d49d5E53C2E0950e0bC26d0Dce",
     abi: honeyABI.abi,
   },
+  wbera: {
+    address: "0x6969696969696969696969696969696969696969",
+    abi: ibgtABI.abi
+  },
   ibgt: {
-    address: "0x46eFC86F0D7455F135CC9df501673739d513E982",
+    address: "0xac03CABA51e17c86c921E1f6CBFBdC91F8BB2E6b",
     abi: ibgtABI.abi,
   },
   bandbear: {
@@ -193,20 +198,20 @@ export const contracts = {
     address: "0xfb8283E50c89e367674BC566db3070D9e9Ff2fDd",
     abi: ibgtABI.abi
   },
-  usdchoneylp: {
-    address: "0xF961a8f6d8c69E7321e78d254ecAfBcc3A637621",
+  oribgt: {
+    address: "0x69f1E971257419B1E9C405A553f252c64A29A30a",
+    abi: oriBGTABI.abi
+  },
+  oribgtVault: {
+    address: "0xdAfAE06A4D32f44Ec395d2664eB18432D39bd358",
+    abi: goldivault4626ABI.abi
+  },
+  oribgtot: {
+    address: "0xc0c088Bf14fe151C8AfEd52a8bFD3ef82d84280C",
     abi: ibgtABI.abi
   },
-  usdchoneylpVault: {
-    address: "0xE712A065Aae828D6654ccBc96c4dD9152eEdFeA5",
-    abi: goldivaultstakingABI.abi
-  },
-  usdchoneylpot: {
-    address: "0xbAa40B380B283E8B1B7aA2Cd7f8b1ac6186be74B",
-    abi: ibgtABI.abi
-  },
-  usdchoneylpyt: {
-    address: "0xe2cA693a47C32bd33949120d31d42b9e5Ef5c7Ef",
+  oribgtyt: {
+    address: "0x10C2BBaCECC5ed3e61198Ec4a4a6b199A2f48826",
     abi: ibgtABI.abi
   },
   goldigov: {
@@ -232,6 +237,6 @@ export const contracts = {
     solvbtc: "0x8F513Fb5C947C20a01Dee083Cdb9250FBe73A6A8",
     rseth: "0xE457b56a1f9379B604dFBcE809Da6fEA1dECE717",
     rusd: "0x1a2A927F758AE242fB967481CF293D2a36883be6",
-    usdchoneylp: ""
+    oribgt: "0x457449a2358E02e4FCbDA03dC70306F629D9304F"
   }
 };

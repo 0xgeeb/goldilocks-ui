@@ -46,11 +46,11 @@ export const VAULTS = [
     vaultName: "KelpDAO Points Vault",
   },
   // {
-  //   address: "usdchoneylp",
-  //   mouseFlag: "usdchoneylpvaultinfo",
-  //   tokenName: "USDC-HONEY LP",
-  //   imageUrl: "logo-honey.png",
-  //   vaultName: "USDC-HONEY LP Vault",
+  //   address: "oribgt",
+  //   mouseFlag: "oribgtinfo",
+  //   tokenName: "iBGT",
+  //   imageUrl: "logo-ibgt.svg",
+  //   vaultName: "oriBGT Vault",
   // }
 ] as const;
 

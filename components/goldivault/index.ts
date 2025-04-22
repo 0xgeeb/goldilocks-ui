@@ -15,3 +15,4 @@ export * from "./vaultButton";
 export * from "./infoDisplayPopup";
 export * from "./vaultDisplayCard";
 export * from './liqManagerTab'
+export * from './stakingTab'

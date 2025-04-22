@@ -60,7 +60,7 @@ export const VaultPage = ({ params }: Props) => {
     params.address !== "unibtc" &&
     params.address !== "solvbtcbbn" &&
     params.address !== "rusd" &&
-    params.address !== "usdchoneylp"
+    params.address !== "oribgt"
   ) {
     notFound();
   }
@@ -273,47 +273,47 @@ export const VaultPage = ({ params }: Props) => {
                 }}
               />
             </>
-          ) : params.address === "usdchoneylp" ? (
+          ) : params.address === "oribgt" ? (
             <>
               <h1
                 className="absolute right-[60%] top-[1%] font-amaticbold text-[8vw] font-medium text-[#FFCD00] md:top-0 md:text-[7vw] lg:right-[78.25%] lg:top-1/4 lg:text-[6vw]"
                 id="page-title"
               >
-                USDC-HONEY LP
+                oriBGT
               </h1>
               <Toggles
                 params={{
-                  vaultToken: "usdchoneylp",
+                  vaultToken: "oribgt",
                 }}
               />
               <VaultBox
                 params={{
-                  vaultToken: "usdchoneylp",
-                  dt: "USDC-HONEY LP",
-                  ot: "UHIOT",
-                  yt: "UHIYT",
+                  vaultToken: "oribgt",
+                  dt: "iBGT",
+                  ot: "oriBGT-OT",
+                  yt: "oriBGT-YT",
                 }}
               />
               <VaultButton
                 params={{
-                  vaultToken: "usdchoneylp",
-                  dt: "USDC-HONEY LP",
-                  ot: "UHIOT",
-                  yt: "UHIYT",
+                  vaultToken: "oribgt",
+                  dt: "iBGT",
+                  ot: "oriBGT-OT",
+                  yt: "oriBGT-YT",
                 }}
               />
               <VaultInfo
                 params={{
-                  vaultToken: "usdchoneylp",
-                  protocolUrl: "https://infrared.finance/",
-                  dexLink: `https://dexscreener.com/berachain/${contracts.vaultLPaddys.usdchoneylp}`,
+                  vaultToken: "oribgt",
+                  protocolUrl: "https://origami.finance/",
+                  dexLink: `https://dexscreener.com/berachain/${contracts.vaultLPaddys.oribgt}`,
                 }}
               />
               <PoolsPopup
                 params={{
-                  vaultToken: "usdchoneylp",
-                  poolUrl: `https://berascan.com/address/${contracts.vaultLPaddys.usdchoneylp}`,
-                  poolName: "USDC-HONEY LP / UHIOT LP",
+                  vaultToken: "oribgt",
+                  poolUrl: `https://berascan.com/address/${contracts.vaultLPaddys.oribgt}`,
+                  poolName: "iBGT LP / oriBGT-OT LP",
                   liqManagerUrl:
                     "",
                 }}

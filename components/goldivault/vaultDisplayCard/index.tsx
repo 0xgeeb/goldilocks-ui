@@ -37,12 +37,14 @@ export const VaultDisplayCard = ({ params }: VaultDisplayCardProps) => {
                 ? vaultDisplayInfo.rusd
                 : params.tokenName === "rsETH"
                   ? vaultDisplayInfo.rseth
-                  : {
-                      fixedApr: 0,
-                      daysTil: "ooga booga",
-                      liquidity: 0,
-                      ytPrice: 0,
-                    };
+                  : params.tokenName === "iBGT"
+                    ? vaultDisplayInfo.oribgt
+                    : {
+                        fixedApr: 0,
+                        daysTil: "ooga booga",
+                        liquidity: 0,
+                        ytPrice: 0,
+                      };
 
   return (
     <a

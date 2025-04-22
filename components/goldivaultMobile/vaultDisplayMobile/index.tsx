@@ -24,12 +24,12 @@ export const VaultDisplayMobile = () => {
         />
         <VaultDisplayCardMobile
         params={{
-            address: "solvbtcbbn",
-            tokenName: "SolvBTC.BBN",
-            imageUrl: "solvbtc-logo.png",
-            vaultName: "Solv Points Vault",
-            }}
-            /> */}
+          address: "solvbtcbbn",
+          tokenName: "SolvBTC.BBN",
+          imageUrl: "solvbtc-logo.png",
+          vaultName: "Solv Points Vault",
+          }}
+          /> */}
         <VaultDisplayCardMobile
           params={{
             address: "rusd",
@@ -56,10 +56,10 @@ export const VaultDisplayMobile = () => {
         />
         {/* <VaultDisplayCardMobile
           params={{
-            address: "usdchoneylp",
-            tokenName: "USDC-HONEY LP",
-            imageUrl: "logo-honey.png",
-            vaultName: "USDC-HONEY LP Vault",
+            address: "oribgt",
+            tokenName: "iBGT",
+            imageUrl: "logo-ibgt.svg",
+            vaultName: "oriBGT Vault",
           }}
         /> */}
       </div>

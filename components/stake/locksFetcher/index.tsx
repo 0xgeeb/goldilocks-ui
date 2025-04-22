@@ -7,7 +7,7 @@ import { useStake } from "../../../providers";
 export const LocksFetcher = () => {
   const [skip, setSkip] = useState<boolean>(false);
 
-  const { updateChartData } = useStake();
+  // const { updateChartData } = useStake();
 
   const last7DaysTimestamps = (): { start: number; end: number }[] => {
     const timestamps = [];
@@ -49,7 +49,7 @@ export const LocksFetcher = () => {
 
   useEffect(() => {
     if (!loading && !!data) {
-      updateChartData(data);
+      // updateChartData(data);
       setSkip(true);
     }
   }, [data, loading]);

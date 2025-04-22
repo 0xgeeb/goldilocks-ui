@@ -23,9 +23,9 @@ type VaultButtonProps = {
   };
 };
 
-// todo: needs to be updated for staking deposits
 export const VaultButtonMobile = ({ params }: VaultButtonProps) => {
   const [honeyApproved, setHoneyApproved] = useState<boolean>(false);
+  const [depositDTApproved, setDepositDTApproved] = useState<boolean>(false);
 
   const {
     deposit,
@@ -66,9 +66,9 @@ export const VaultButtonMobile = ({ params }: VaultButtonProps) => {
     refreshGoldivaultInfoRseth,
     refreshGoldivaultWalletInfoRseth,
     goldivaultWalletInfoRseth,
-    refreshGoldivaultInfoUsdchoneylp,
-    refreshGoldivaultWalletInfoUsdchoneylp,
-    goldivaultWalletInfoUsdchoneylp,
+    refreshGoldivaultInfoOribgt,
+    refreshGoldivaultWalletInfoOribgt,
+    goldivaultWalletInfoOribgt,
     vaultSwapTxAmount,
     honeyApprovalAmount,
     otApprovalAmount,
@@ -107,8 +107,8 @@ export const VaultButtonMobile = ({ params }: VaultButtonProps) => {
               ? goldivaultWalletInfoEbtc.ebtcot
               : params.vaultToken === "rseth"
                 ? goldivaultWalletInfoRseth.rsethot
-                : params.vaultToken === "usdchoneylp"
-                  ? goldivaultWalletInfoUsdchoneylp.usdchoneylpot
+                : params.vaultToken === "oribgt"
+                  ? goldivaultWalletInfoOribgt.oribgtot
                   : {};
 
   const vaultYT =
@@ -124,8 +124,8 @@ export const VaultButtonMobile = ({ params }: VaultButtonProps) => {
               ? goldivaultWalletInfoEbtc.ebtcyt
               : params.vaultToken === "rseth"
                 ? goldivaultWalletInfoRseth.rsethyt
-                : params.vaultToken === "usdchoneylp"
-                  ? goldivaultWalletInfoUsdchoneylp.usdchoneylpyt
+                : params.vaultToken === "oribgt"
+                  ? goldivaultWalletInfoOribgt.oribgtyt
                   : {};
 
   const vaultDT =
@@ -141,8 +141,8 @@ export const VaultButtonMobile = ({ params }: VaultButtonProps) => {
               ? goldivaultWalletInfoEbtc.ebtc
               : params.vaultToken === "rseth"
                 ? goldivaultWalletInfoRseth.rseth
-                : params.vaultToken === "usdchoneylp"
-                  ? goldivaultWalletInfoUsdchoneylp.usdchoneylp
+                : params.vaultToken === "oribgt"
+                  ? goldivaultWalletInfoOribgt.ibgt
                   : {};
 
   const vaultOTaddy =
@@ -158,8 +158,8 @@ export const VaultButtonMobile = ({ params }: VaultButtonProps) => {
               ? contracts.ebtcot.address
               : params.vaultToken === "rseth"
                 ? contracts.rsethot.address
-                : params.vaultToken === "usdchoneylp"
-                  ? contracts.usdchoneylpot.address
+                : params.vaultToken === "oribgt"
+                  ? contracts.oribgtot.address
                   : "";
 
   const vaultDTaddy =
@@ -175,8 +175,8 @@ export const VaultButtonMobile = ({ params }: VaultButtonProps) => {
               ? contracts.ebtc.address
               : params.vaultToken === "rseth"
                 ? contracts.rseth.address
-                : params.vaultToken === "usdchoneylp"
-                  ? contracts.usdchoneylp.address
+                : params.vaultToken === "oribgt"
+                  ? contracts.ibgt.address
                   : "";
 
   const vaultDTAllowance =
@@ -192,8 +192,8 @@ export const VaultButtonMobile = ({ params }: VaultButtonProps) => {
               ? goldivaultWalletInfoEbtc.ebtcAllowance
               : params.vaultToken === "rseth"
                 ? goldivaultWalletInfoRseth.rsethAllowance
-                : params.vaultToken === "usdchoneylp"
-                  ? goldivaultWalletInfoUsdchoneylp.usdchoneylpAllowance
+                : params.vaultToken === "oribgt"
+                  ? goldivaultWalletInfoOribgt.ibgtAllowance
                   : 0;
 
   const vaultLPBalance =
@@ -215,9 +215,9 @@ export const VaultButtonMobile = ({ params }: VaultButtonProps) => {
     } else if (params.vaultToken === "rseth") {
       refreshGoldivaultInfoRseth();
       refreshGoldivaultWalletInfoRseth();
-    } else if (params.vaultToken === "usdchoneylp") {
-      refreshGoldivaultInfoUsdchoneylp()
-      refreshGoldivaultWalletInfoUsdchoneylp()
+    } else if (params.vaultToken === "oribgt") {
+      refreshGoldivaultInfoOribgt()
+      refreshGoldivaultWalletInfoOribgt()
     } else {
       refreshGoldivaultInfoUnibtc();
       refreshGoldivaultWalletInfoUnibtc();
@@ -238,7 +238,12 @@ export const VaultButtonMobile = ({ params }: VaultButtonProps) => {
       return;
     }
     if (activeToggle === "DEPOSIT") {
-      depositTxFlow(button);
+      if(params.vaultToken === "oribgt") {
+        stakingDepositTxFlow(button);
+      }
+      else {
+        depositTxFlow(button);
+      }
     }
     if (activeToggle === "REDEEMOT") {
       redeemOTFlow(button);
@@ -445,12 +450,12 @@ export const VaultButtonMobile = ({ params }: VaultButtonProps) => {
       button && (button.innerHTML = "trade yt");
       return;
     }
-    if (
-      !checkVaultLiquidity(params.vaultToken, getVaultType(params.vaultToken))
-    ) {
-      button && (button.innerHTML = "not enuf liq");
-      return;
-    }
+    // if (
+    //   !checkVaultLiquidity(params.vaultToken, getVaultType(params.vaultToken))
+    // ) {
+    //   button && (button.innerHTML = "not enuf liq");
+    //   return;
+    // }
     if (priceImpact > slippage.amount) {
       button && (button.innerHTML = "raise slippage");
       return;
@@ -714,6 +719,65 @@ export const VaultButtonMobile = ({ params }: VaultButtonProps) => {
     }
   };
 
+  const stakingDepositTxFlow = async (button: HTMLElement | null) => {
+    if (deposit == 0) {
+      button && (button.innerHTML = "deposit");
+      return;
+    }
+    if (deposit > vaultDT) {
+      button && (button.innerHTML = "not enough");
+      return;
+    } else {
+      const sufficientDTAllowance: boolean | void = await checkAllowance(
+        deposit,
+        params.vaultToken,
+        address as string,
+      );
+      if (sufficientDTAllowance) {
+        setDepositDTApproved(true);
+        const sufficientYTAllowance: boolean | void = await checkAllowance(
+          deposit,
+          params.yt,
+          address as string
+        );
+        if(sufficientYTAllowance) {
+          setTxConfirming(true);
+          if (button) {
+            button.innerHTML = "confirming...";
+          }
+          const depositTx = await sendDepositTx(deposit, params.vaultToken);
+          if (depositTx.substring(0, 2) === "0x") {
+            setTxConfirming(false);
+            openNotification(
+              true,
+              `You've successfully deposited ${params.dt} tokens`,
+              `You deposited ${formatAsString(deposit)} ${params.dt}`,
+              depositTx,
+            );
+            if (button) {
+              button.innerHTML = "deposit";
+            }
+            refreshInfo();
+            setTimeout(() => {
+              openNotification(false, "", "", "");
+            }, 10000);
+          } else {
+            if (button) {
+              button.innerHTML = "deposit";
+            }
+            refreshInfo();
+            setTxConfirming(false);
+          }
+        }
+        else {
+          setAllowanceButtons(true);
+        }
+      } else {
+        setAllowanceButtons(true);
+      }
+    }
+  };
+
   const handleLeftButtonClick = async () => {
     const swapButton = document.getElementById("swap-button");
     const leftButton = document.getElementById("left-approve-button");
@@ -764,7 +828,12 @@ export const VaultButtonMobile = ({ params }: VaultButtonProps) => {
     } else if (activeToggle === "REMOVELIQ") {
       await sendApproveTx(tradeInput, "rusdaqualp", false);
     } else {
-      await sendApproveTx(deposit, params.vaultToken, false);
+      if(depositDTApproved) {
+        await sendApproveTx(deposit, params.yt, false);
+      }
+      else {
+        await sendApproveTx(deposit, params.vaultToken, false);
+      }
     }
     //todo: wat
     // updateAllowance(honeyBuy + 0.01)
@@ -822,7 +891,12 @@ export const VaultButtonMobile = ({ params }: VaultButtonProps) => {
     } else if (activeToggle === "REMOVELIQ") {
       await sendApproveTx(0, "rusdaqualp", true);
     } else {
-      await sendApproveTx(0, params.vaultToken, true);
+      if(depositDTApproved) {
+        await sendApproveTx(0, params.yt, true);
+      }
+      else {
+        await sendApproveTx(0, params.vaultToken, true);
+      }
     }
     // updateAllowance(100000000)
     swapButton && (swapButton.innerHTML = "deposit");

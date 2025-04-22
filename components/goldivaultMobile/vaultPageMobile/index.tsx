@@ -147,38 +147,38 @@ export const VaultPageMobile = ({ address }: PageProps) => {
                 }}
               />
             </>
-          ) : address === "usdchoneylp" ? (
+          ) : address === "oribgt" ? (
             <>
               <h1
                 className="absolute left-[43%] top-0 font-amaticbold text-[9vw] text-[#E7B941]"
                 id="page-title"
               >
-                USDC-HONEY LP
+                oriBGT
               </h1>
               <VaultBoxMobile
                 params={{
-                  vaultToken: "usdchoneylp",
-                  dt: "USDC-HONEY LP",
-                  ot: "UHIOT",
-                  yt: "UHIYT",
-                  poolUrl: `https://berascan.com/address/${contracts.vaultLPaddys.usdchoneylp}`,
-                  poolName: "uniBTC / uniBTC OT LP",
-                  protocolUrl: "https://infrared.finance/",
-                  dexLink: `https://dexscreener.com/berachain/${contracts.vaultLPaddys.usdchoneylp}`,
+                  vaultToken: "oribgt",
+                  dt: "iBGT",
+                  ot: "oriBGT-OT",
+                  yt: "oriBGT-YT",
+                  poolUrl: `https://berascan.com/address/${contracts.vaultLPaddys.oribgt}`,
+                  poolName: "iBGT / oriBGT-OT LP",
+                  protocolUrl: "https://origami.finance/",
+                  dexLink: `https://dexscreener.com/berachain/${contracts.vaultLPaddys.oribgt}`,
                   liqManagerUrl: ""
                 }}
               />
               <VaultButtonMobile
                 params={{
-                  vaultToken: "unibtc",
-                  dt: "uniBTC",
-                  ot: "uniBTC-OT",
-                  yt: "uniBTC-YT",
+                  vaultToken: "oribgt",
+                  dt: "iBGT",
+                  ot: "oriBGT-OT",
+                  yt: "oriBGT-YT",
                 }}
               />
               <TogglesMobile
                 params={{
-                  vaultToken: "unibtc"
+                  vaultToken: "oribgt"
                 }}
               />
             </>

@@ -26,7 +26,7 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
     goldivaultInfoRusd,
     goldivaultInfoEbtc,
     goldivaultInfoRseth,
-    goldivaultInfoUsdchoneylp,
+    goldivaultInfoOribgt,
     activeToggle,
   } = useGoldivault();
 
@@ -59,8 +59,8 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
               ? goldivaultInfoEbtc
               : params.vaultToken === "rseth"
                 ? goldivaultInfoRseth
-                : params.vaultToken === "usdchoneylp"
-                  ? goldivaultInfoUsdchoneylp
+                : params.vaultToken === "oribgt"
+                  ? goldivaultInfoOribgt
                   : {
                       endTime: 0,
                       fixedApr: 0,
@@ -84,8 +84,8 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
               ? contracts.ebtcot.address
               : params.vaultToken === "rseth"
                 ? contracts.rsethot.address
-                : params.vaultToken === "usdchoneylp"
-                  ? contracts.usdchoneylpot.address
+                : params.vaultToken === "oribgt"
+                  ? contracts.oribgtot.address
                   : "";
 
   const vaultYTaddy =
@@ -101,8 +101,8 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
               ? contracts.ebtcyt.address
               : params.vaultToken === "rseth"
                 ? contracts.rsethyt.address
-                : params.vaultToken === "usdchoneylp"
-                  ? contracts.usdchoneylpyt.address
+                : params.vaultToken === "oribgt"
+                  ? contracts.oribgtyt.address
                   : "";
 
   const vaultaddy =
@@ -118,8 +118,8 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
               ? contracts.ebtcVault.address
               : params.vaultToken === "rseth"
                 ? contracts.rsethVault.address
-                : params.vaultToken === "usdchoneylp"
-                  ? contracts.usdchoneylpVault.address
+                : params.vaultToken === "oribgt"
+                  ? contracts.oribgtVault.address
                   : "";
 
   const vaultLPaddy =
@@ -135,8 +135,8 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
               ? contracts.vaultLPaddys.unibtc
               : params.vaultToken === "solvbtc"
                 ? contracts.vaultLPaddys.solvbtc
-                : params.vaultToken === "usdchoneylp"
-                  ? contracts.vaultLPaddys.usdchoneylp
+                : params.vaultToken === "oribgt"
+                  ? contracts.vaultLPaddys.oribgt
                   : "";
 
   const loadingElement = () => {
@@ -455,7 +455,7 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
                 </span>
               </div>
             </>
-          ) : (
+          ) :  params.vaultToken === "solvbtc" ? (
             <>
               <div className="my-[1%] flex w-full flex-row items-center justify-between px-[4%]">
                 <span
@@ -497,6 +497,9 @@ export const VaultInfo = ({ params }: VaultInfoProps) => {
                 </span>
                 <span>{formatAsString(data.solvLeverage)}x</span>
               </div>
+            </>
+          ) : (
+            <>
             </>
           )}
           <div className="my-[1%] flex w-full flex-row items-center justify-between bg-[#DEB486]/50 px-[4%]">

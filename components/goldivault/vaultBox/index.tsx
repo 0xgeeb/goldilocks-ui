@@ -6,7 +6,8 @@ import { useGoldivault } from "../../../providers";
 import {
   TradeTab,
   Notification,
-  LiqManagerTab
+  LiqManagerTab,
+  StakingTab
 } from "..";
 
 type VaultBoxProps = {
@@ -54,9 +55,9 @@ export const VaultBox = ({ params }: VaultBoxProps) => {
     refreshGoldivaultInfoRseth,
     refreshGoldivaultWalletInfoRseth,
     goldivaultWalletInfoRseth,
-    refreshGoldivaultInfoUsdchoneylp,
-    refreshGoldivaultWalletInfoUsdchoneylp,
-    goldivaultWalletInfoUsdchoneylp,
+    refreshGoldivaultInfoOribgt,
+    refreshGoldivaultWalletInfoOribgt,
+    goldivaultWalletInfoOribgt,
     activeToggle,
     calculateOTRedeem,
     notification,
@@ -88,8 +89,8 @@ export const VaultBox = ({ params }: VaultBoxProps) => {
                 ? goldivaultWalletInfoEbtc.ebtcot
                 : params.vaultToken === "rseth"
                   ? goldivaultWalletInfoRseth.rsethot
-                  : params.vaultToken === "usdchoneylp"
-                    ? goldivaultWalletInfoUsdchoneylp.usdchoneylpot
+                  : params.vaultToken === "oribgt"
+                    ? goldivaultWalletInfoOribgt.oribgtot
                     : {};
 
   const vaultYT =
@@ -105,8 +106,8 @@ export const VaultBox = ({ params }: VaultBoxProps) => {
                 ? goldivaultWalletInfoEbtc.ebtcyt
                 : params.vaultToken === "rseth"
                   ? goldivaultWalletInfoRseth.rsethyt
-                  : params.vaultToken === "usdchoneylp"
-                    ? goldivaultWalletInfoUsdchoneylp.usdchoneylpyt
+                  : params.vaultToken === "oribgt"
+                    ? goldivaultWalletInfoOribgt.oribgtyt
                     : {};
 
   const vaultDT =
@@ -122,8 +123,8 @@ export const VaultBox = ({ params }: VaultBoxProps) => {
                 ? goldivaultWalletInfoEbtc.ebtc
                 : params.vaultToken === "rseth"
                   ? goldivaultWalletInfoRseth.rseth
-                  : params.vaultToken === "usdchoneylp"
-                    ? goldivaultWalletInfoUsdchoneylp.usdchoneylp
+                  : params.vaultToken === "oribgt"
+                    ? goldivaultWalletInfoOribgt.ibgt
                     : {};
 
   useEffect(() => {
@@ -142,9 +143,9 @@ export const VaultBox = ({ params }: VaultBoxProps) => {
     } else if (params.vaultToken === "rseth") {
       refreshGoldivaultInfoRseth()
       refreshGoldivaultWalletInfoRseth()
-    } else if (params.vaultToken === "usdchoneylp") {
-      refreshGoldivaultInfoUsdchoneylp()
-      refreshGoldivaultWalletInfoUsdchoneylp()
+    } else if (params.vaultToken === "oribgt") {
+      refreshGoldivaultInfoOribgt()
+      refreshGoldivaultWalletInfoOribgt()
     } else {
       refreshGoldivaultInfoUnibtc();
       refreshGoldivaultWalletInfoUnibtc();
@@ -241,6 +242,8 @@ export const VaultBox = ({ params }: VaultBoxProps) => {
                 vaultToken: params.vaultToken
               }}
             />
+          ) : activeToggle === "STAKE" || activeToggle === "UNSTAKE" || activeToggle === "CLAIM" ? (
+            <StakingTab />
           ) : (
             <div className="relative flex h-[100%] w-[100%] flex-col">
               <div className="absolute left-[47.27%] top-[44%] z-10 flex h-10 w-10 items-center justify-center rounded-3xl border-2 border-[#FFCD00] bg-[#033E5E]">
