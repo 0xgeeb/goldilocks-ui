@@ -146,7 +146,7 @@ const VaultInfoPane: React.FC<{ vaultToken: string}> = ({ vaultToken }) => {
           <>
             <InfoRow textA="Underlying protocol link" textB="Origami" linkB="https://origami.finance/" />
             <InfoRow textA="Automated Liquidity Manager" textB="Steer Protocol" linkB="https://app.steer.finance/vault/0xDB78B4166580917c9604f8DdfBea5F49B493845c" />
-            <InfoRow textA="OT chart link" textB="Dexscreener" linkB="https://dexscreener.com/berachain/0x457449a2358E02e4FCbDA03dC70306F629D9304F" />
+            <InfoRow textA="OT chart link" textB="Dexscreener" linkB="https://dexscreener.com/berachain/0xCb2A95c52E718A6BA6AAb6587f1a3aFF4BfB0648" />
           </>
         }
         { vaultToken === "rusd" && 
