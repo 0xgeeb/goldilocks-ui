@@ -6,4 +6,3 @@ export * from "./togglesMobile";
 export * from "./walletBalanceMobilePopup";
 export * from "./walletBalanceMobile";
 export * from "./notificationMobile";
-export * from "./chartSmallMobile";

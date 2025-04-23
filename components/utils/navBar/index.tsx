@@ -2,8 +2,8 @@ import { Fragment } from "react";
 
 import { usePathname } from "next/navigation";
 
+import { VAULTS } from "@/app/(geo-check)/goldivault/_components/constant/vaults";
 import { cn } from "@/app/_components/utils";
-import { VAULTS } from "@/components/goldivault";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 import { WutPopup } from "../";
@@ -20,6 +20,7 @@ const NavLinks = () => {
   } = {
     goldiswap: {
       title: "Goldiswap",
+      defaultPath: "/goldiswap/swap",
       links: [
         { path: "/goldiswap/swap", text: "Swap" },
         { path: "/goldiswap/stake", text: "Stake" },
@@ -28,6 +29,7 @@ const NavLinks = () => {
     },
     goldilend: {
       title: "Goldilend",
+      defaultPath: "/goldilend/borrow",
       links: [
         { path: "/goldilend/borrow", text: "Borrow" },
         { path: "/goldilend/lend", text: "Lend" },
@@ -56,10 +58,8 @@ const NavLinks = () => {
           <Fragment key={title}>
             <a
               className={cn(
-                (isSubPath || isParentPath) && "text-[#DB7200]",
-                hasDefaultPath &&
-                  !isParentPath &&
-                  "cursor-pointer hover:scale-[150%]",
+                //                (isSubPath || isParentPath) && "text-[#DB7200]",
+                hasDefaultPath && !isParentPath && "cursor-pointer hover:scale-110",
                 isParentPath && "underline underline-offset-8",
               )}
               href={
@@ -78,9 +78,8 @@ const NavLinks = () => {
                   key={link.text}
                   href={link.path}
                   className={cn(
-                    "cursor-pointer text-[2.1vw] hover:scale-[150%] xl:text-[1.6vw]",
-                    pathname === link.path &&
-                      "text-[#DB7200] underline underline-offset-8",
+                    "cursor-pointer text-[2.1vw]",
+                    pathname === link.path && "underline underline-offset-8", //  text-[#DB7200]
                   )}
                 >
                   <span>{link.text}</span>
@@ -97,117 +96,71 @@ type NavBarProps = {
   wutPopup: boolean;
   setWutPopup: ((_popup: boolean) => void) | null;
   hideConnectButton?: boolean;
+  lighter?: boolean;
 };
 
 export const NavBar = ({
   wutPopup,
   setWutPopup,
   hideConnectButton,
+  lighter = false,
 }: NavBarProps) => {
-
-  const pathname = usePathname();
+  // const pathname = usePathname();
 
   return (
     <>
       {wutPopup && <WutPopup />}
-      <header className="flex h-[11%] w-full flex-row items-center justify-between bg-[#EEDCD2] px-[2%] font-amaticbold xl:h-[15%] xl:px-[4%]">
-        <a href="/" className="w-1/4 xl:w-[18%]">
+      <header className="font-amaticbold z-20 flex w-full flex-row items-center justify-between px-[2%] py-5">
+        <a href="/" className="w-1/4">
           <div className="flex w-full cursor-pointer flex-row items-center hover:opacity-30">
-            <img
-              className="h-[70%] w-[30%] xl:w-[37%]"
-              src="/images/logo-goldilocks.png"
-              alt="logo"
-            />
-            <h1 className="text-[3vw] xl:text-[2.4vw]">Goldilocks DAO</h1>
+            <img className="h-12 md:h-16 lg:h-20" src="/images/logo-goldilocks.png" alt="logo" />
+            <h1
+              className={cn(
+                "text-3xl md:text-4xl lg:text-6xl font-bold",
+                lighter ? "text-white" : "text-HoneyYellow",
+              )}
+            >
+              Goldilocks
+            </h1>
           </div>
         </a>
-        <div className="flex h-full w-4/5 flex-row items-center justify-between text-[2.8vw] xl:w-[65.2%] xl:text-[2.2vw]">
-          <span
+        <div
+          className={cn(
+            "font-amatic flex h-full items-center justify-between gap-5 text-2xl md:text-3xl lg:text-4xl",
+            lighter ? "text-white" : "text-Teak",
+          )}
+        >
+          {/* <span
             className="cursor-pointer hover:scale-[150%]"
             onClick={() => setWutPopup?.(!wutPopup)}
           >
             Wut is this?
-          </span>
-          {
-            pathname === '/goldiswap/swap' ?
-            <>
-              <a className="text-[#DB7200]"><span>Goldiswap</span></a>
-              <a href="/goldiswap/swap" className="hover:scale-[150%] cursor-pointer text-[#DB7200] underline underline-offset-8 text-[2.1vw] xl:text-[1.6vw]"><span>Swap</span></a>
-              <a href="/goldiswap/stake" className="hover:scale-[150%] cursor-pointer text-[2.1vw] xl:text-[1.6vw]"><span>Stake</span></a>
-              <a href="/goldiswap/borrow" className="hover:scale-[150%] cursor-pointer text-[2.1vw] xl:text-[1.6vw]"><span>Borrow</span></a>
-            </> :
-            pathname === '/goldiswap/stake' ?
-            <>
-              <a className="text-[#DB7200]"><span>Goldiswap</span></a>
-              <a href="/goldiswap/swap" className="hover:scale-[150%] cursor-pointer text-[2.1vw] xl:text-[1.6vw]"><span>Swap</span></a>
-              <a href="/goldiswap/stake" className="hover:scale-[150%] cursor-pointer text-[#DB7200] underline underline-offset-8 text-[2.1vw] xl:text-[1.6vw]"><span>Stake</span></a>
-              <a href="/goldiswap/borrow" className="hover:scale-[150%] cursor-pointer text-[2.1vw] xl:text-[1.6vw]"><span>Borrow</span></a>
-            </> :
-            pathname === '/goldiswap/borrow' ?
-            <>
-              <a className="text-[#DB7200]"><span>Goldiswap</span></a>
-              <a href="/goldiswap/swap" className="hover:scale-[150%] cursor-pointer text-[2.1vw] xl:text-[1.6vw]"><span>Swap</span></a>
-              <a href="/goldiswap/stake" className="hover:scale-[150%] cursor-pointer text-[2.1vw] xl:text-[1.6vw]"><span>Stake</span></a>
-              <a href="/goldiswap/borrow" className="hover:scale-[150%] cursor-pointer text-[#DB7200] underline underline-offset-8 text-[2.1vw] xl:text-[1.6vw]"><span>Borrow</span></a>
-            </> :
-            <a href="/goldiswap/swap" className="hover:scale-[150%] cursor-pointer"><span>Goldiswap</span></a>
-          }
-          {
-            pathname === '/goldilend/borrow' ?
-            <>
-              <a className="text-[#DB7200]"><span>Goldilend</span></a>
-              <a href="/goldilend/borrow" className="hover:scale-[150%] cursor-pointer text-[#DB7200] underline underline-offset-8 text-[2.1vw] xl:text-[1.6vw]"><span>Borrow</span></a>
-              <a href="/goldilend/lend" className="hover:scale-[150%] cursor-pointer text-[2.1vw] xl:text-[1.6vw]"><span>Lend</span></a>
-            </> :
-            pathname === '/goldilend/lend' ?
-            <>
-              <a className="text-[#DB7200]"><span>Goldilend</span></a>
-              <a href="/goldilend/borrow" className="hover:scale-[150%] cursor-pointer text-[2.1vw] xl:text-[1.6vw]"><span>Borrow</span></a>
-              <a href="/goldilend/lend" className="hover:scale-[150%] cursor-pointer text-[#DB7200] underline underline-offset-8 text-[2.1vw] xl:text-[1.6vw]"><span>Lend</span></a>
-            </> :
-            <a href="/goldilend/borrow" className="hover:scale-[150%] cursor-pointer"><span>Goldilend</span></a>
-          }
-          {
-            pathname === '/goldivault/vaults' ?
-            <>
-              <a className="text-[#DB7200]"><span>Goldivaults</span></a>
-              <a href="/goldivault/vaults" className="hover:scale-[150%] cursor-pointer text-[#DB7200] underline underline-offset-8 text-[2.1vw] xl:text-[1.6vw]"><span>Vaults</span></a>
-            </> :
-            pathname === '/goldivault/vault/rusd' ?
-            <>
-              <a className="text-[#DB7200]"><span>Goldivaults</span></a>
-              <a href="/goldivault/vaults" className="hover:scale-[150%] cursor-pointer text-[2.1vw] xl:text-[1.6vw]"><span>Vaults</span></a>
-              <a href="/goldivault/vault/rusd" className="hover:scale-[150%] cursor-pointer text-[#DB7200] underline underline-offset-8 text-[2.1vw] xl:text-[1.6vw]"><span>rUSD</span></a>
-            </> :
-            pathname === '/goldivault/vault/unibtc' ?
-            <>
-              <a className="text-[#DB7200]"><span>Goldivaults</span></a>
-              <a href="/goldivault/vaults" className="hover:scale-[150%] cursor-pointer text-[2.1vw] xl:text-[1.6vw]"><span>Vaults</span></a>
-              <a href="/goldivault/vault/unibtc" className="hover:scale-[150%] cursor-pointer text-[#DB7200] underline underline-offset-8 text-[2.1vw] xl:text-[1.6vw]"><span>uniBTC</span></a>
-            </> :
-            <a href="/goldivault/vaults" className="hover:scale-[150%] cursor-pointer"><span>Goldivaults</span></a>
-          }
+          </span> */}
+          <NavLinks />
           {!hideConnectButton && (
-            <ConnectButton.Custom>
-              {({ account, mounted, openConnectModal }) => {
-                return !mounted ? (
-                  <button className="flex w-[15.7%] cursor-pointer items-center justify-center border-2 border-black bg-[#E7B941] px-9 py-2 hover:scale-[110%] hover:bg-[#F3AA8A]">
-                    ...
-                  </button>
-                ) : !account ? (
+            <div className="text-BeraBrown">
+              <ConnectButton.Custom>
+                {({ account, mounted, openConnectModal }) => (
                   <button
-                    className="flex w-[15.7%] cursor-pointer items-center justify-center border-2 border-black bg-[#E7B941] px-9 py-2 hover:scale-[110%] hover:bg-[#F3AA8A]"
-                    onClick={openConnectModal}
+                    className={cn(
+                      "font-amaticbold flex cursor-pointer items-center justify-center rounded-xl border-2 border-black px-6",
+                      !mounted || !account
+                        ? "bg-[#E7B941] hover:bg-[#F3AA8A]"
+                        : "bg-[#F3AA8A]",
+                    )}
+                    onClick={() =>
+                      !mounted ? null : !account ? openConnectModal() : null
+                    }
                   >
-                    Connect
+                    {(() => {
+                      if (!mounted) return "...";
+                      if (!account) return "Connect";
+                      return `${account.address.slice(0, 5)}...${account.address.slice(-3)}`;
+                    })()}
                   </button>
-                ) : (
-                  <button className="flex w-[15.7%] cursor-pointer items-center justify-center border-2 border-black bg-[#F3AA8A] px-4 py-2 hover:scale-[110%]">
-                    {`${account.address.slice(0, 5)}...${account?.address.slice(-3)}`}
-                  </button>
-                );
-              }}
-            </ConnectButton.Custom>
+                )}
+              </ConnectButton.Custom>
+            </div>
           )}
         </div>
       </header>

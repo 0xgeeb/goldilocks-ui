@@ -9,10 +9,211 @@ import { getPublicClient, readContract } from "@wagmi/core";
 
 import { useDebounce } from "../../hooks";
 import { config } from "../../providers/WagmiProvider";
-import { contracts } from "../../utils/addressi";
-import { EtherfiAPIResponse } from "../../utils/interfaces";
+import { vault_contracts } from "../../data/contracts";
+import { EtherfiAPIResponse, ChartDataEntry } from "../../utils/interfaces";
+import { beraScanLink, dexLink } from "@/utils/links";
+import { contracts } from "@/utils/addressi";
+import { VaultType } from "@/app/(geo-check)/goldivault/_components/constant/vaults";
 
-const INITIAL_STATE: any = {
+/**
+ * contracts and vaultDisplayInfo are standardized across all vaults,
+ * while vaultInfo and walletInfo are specific to each vault
+*/
+export type HoverLabel = {
+  label: string;
+  hoverText: string;
+}
+
+type VaultLabels = {
+  [key: string]: {
+    goldivaultInfo: {
+      [key: string]: string | HoverLabel;
+    },
+    goldivaultWalletInfo: {
+      [key: string]: string | HoverLabel;
+    }
+  };
+};
+
+type LinkLabel = {
+  label: string;
+  link: string;
+}
+
+export type CommonVaultLabels = (key: VaultType) => {
+  contracts: {
+    vault: LinkLabel;
+    ot: LinkLabel;
+    yt: LinkLabel;
+    vaultLP: LinkLabel;
+  },
+  otherLinks: {
+    protocolUrl: LinkLabel;
+    vaultLPDexLink: LinkLabel;
+  },
+  vaultDisplayInfo: {
+    fixedApr: string;
+    daysTil: string;
+    liquidity: string;
+    ytPrice: string;
+  },
+}
+
+export type VaultTab =
+  "DEPOSIT" | "REDEEMOT" | "REDEEMYT" | "TRADEOT" | "TRADEYT" |
+  "ADDLIQ" | "REMOVELIQ" | "STAKE" | "UNSTAKE" | "CLAIM" |
+  "POOLS" | "INFO" // Idk how relevant these are
+
+// The same for all vaults
+export const COMMON_LABELS: CommonVaultLabels = (key) => {
+  const labels = {
+    vaultDisplayInfo: {
+      fixedApr: "Fixed APR",
+      daysTil: "Days until maturity",
+      liquidity: "Liquidity",
+      ytPrice: "YT Price",
+    },
+    contracts: {
+      vault: {
+        label: "Vault",
+        link: beraScanLink(vault_contracts[key as string].vault.address),
+      },
+      ot: {
+        label: "OT",
+        link: beraScanLink(vault_contracts[key as string].ot.address),
+      },
+      yt: {
+        label: "YT",
+        link: beraScanLink(vault_contracts[key as string].yt.address),
+      },
+      vaultLP: {
+        label: "LP",
+        link: beraScanLink(vault_contracts[key as string].vaultLP),
+      },
+    },
+    otherLinks: {
+      protocolUrl: {
+        label: "Protocol URL",
+        link: "https://www.kelpdao.xyz/",
+      },
+      vaultLPDexLink: {
+        label: "OT Chart",
+        link: dexLink(vault_contracts[key as string].vaultLP),
+      }
+    }
+  } as const;
+  return labels
+}
+
+// Valid Vaults: rusd, unibtc, rseth, oribgt
+// The other vaults are not going to be implemented yet
+export const VAULT_LABELS: VaultLabels = {
+  rusd: {
+    goldivaultInfo: {
+      endTime: {
+        label: "Vault Maturity",
+        hoverText: "The date the vault will mature and you can redeem your tokens"
+      },
+      fixedApr: "Fixed APR/Implied Yield",
+      otLiquidity: "Liquidity",
+      reservoirLeverage: {
+        label: "Reservoir Leverage",
+        hoverText: "2.25x Reservoir Points Multiplier"
+      }
+    },
+    goldivaultWalletInfo: {
+      rusd: "RUSD",
+      rusdAllowance: "RUSD Allowance",
+      rusdot: "RUSD OT",
+      rusdyt: "RUSD YT",
+      rusdaquabera: "RUSD Aquabera",
+    },
+  },
+  unibtc: {
+    goldivaultInfo: {
+      endTime: {
+        label: "Vault Maturity",
+        hoverText: "The date the vault will mature and you can redeem your tokens"
+      },
+      fixedApr: "Fixed APR/Implied Yield",
+      otLiquidity: "Liquidity",
+      bedrockLeverage: {
+        label: "Bedrock Leverage",
+        hoverText: "4x Bedrock Points Multiplier"
+      },
+      babylonLeverage: {
+        label: "Babylon Leverage",
+        hoverText: "1x Babylon Points Multiplier"
+      },
+    },
+    goldivaultWalletInfo: {
+      unibtc: "UniBTC",
+      unibtcAllowance: "UniBTC Allowance",
+      unibtcot: "UniBTC OT",
+      unibtcyt: "UniBTC YT",
+    },
+  },
+  rseth: {
+    goldivaultInfo: {
+      endTime: {
+        label: "Vault Maturity",
+        hoverText: "The date the vault will mature and you can redeem your tokens"
+      },
+      fixedApr: "Fixed APR/Implied Yield",
+      otLiquidity: "Liquidity",
+      kelpLeverage: {
+        label: "KelpDAO Points Leverage",
+        hoverText: "2x KelpDAO Points Multiplier"
+      },
+      eigenLeverage: {
+        label: "EigenLayer Points Leverage",
+        hoverText: "1x EigenLayer Points Multiplier"
+      },
+      restakingYield: "Current restaking yield"
+    },
+    goldivaultWalletInfo: {
+      rseth: "rsETH",
+      rsethAllowance: "rsETH Allowance",
+      rsethot: "rsETH OT",
+      rsethyt: "rsETH YT",
+    },
+  },
+  oribgt: {
+    goldivaultInfo: {
+      endTime: {
+        label: "Vault Maturity",
+        hoverText: "The date the vault will mature and you can redeem your tokens"
+      },
+      fixedApr: "Fixed APR/Implied Yield",
+      otLiquidity: "Liquidity",
+      origamiLeverage: {
+        label: "Origami Points Leverage",
+        hoverText: "10x Origami Points Multiplier"
+      },
+      infraredLeverage: {
+        label: "Infrared Points Leverage",
+        hoverText: "1x Infrared Points Multiplier"
+      }
+    },
+    goldivaultWalletInfo: {
+      ibgt: "iBGT",
+      ibgtAllowance: "iBGT Allowance",
+      oribgtot: "OriBGT OT",
+      oribgtyt: "OriBGT YT",
+      claimable: "Claimable",
+      justYt: "Yield Token",
+      stakedYt: "Staked Yield Token"
+    },
+  },
+};
+
+// Define types only as needed
+const INITIAL_STATE: {
+  activeToggle: VaultTab;
+  changeActiveToggle: (toggle: VaultTab) => void;
+  // @ts-ignore
+  [key: string]: any;
+} = {
   goldivaultInfoWeeth: {
     endTime: 0,
     fixedApr: 0,
@@ -101,11 +302,14 @@ const INITIAL_STATE: any = {
   goldivaultInfoOribgt: {
     endTime: 0,
     fixedApr: 0,
-    otLiquidity: 0
+    otLiquidity: 0,
+    origamiLeverage: 0,
+    infraredLeverage: 0
   },
   goldivaultWalletInfoOribgt: {
     ibgt: 0,
     ibgtAllowance: 0,
+    oribgt: 0,
     oribgtot: 0,
     oribgtyt: 0,
     claimable: 0,
@@ -219,6 +423,10 @@ const INITIAL_STATE: any = {
   walletInfoLoading: false,
   txConfirming: false,
   setTxConfirming: (_confirming: boolean) => {},
+  buyOtPopup: false,
+  setBuyOtPopup: (_popup: boolean) => {},
+  sellOtPopup: false,
+  setSellOtPopup: (_popup: boolean) => {},
   allowanceButtons: false,
   setAllowanceButtons: (_allowance: boolean) => {},
   handleChange: (_input: string) => {},
@@ -253,7 +461,9 @@ const INITIAL_STATE: any = {
   disableInfoPopup: (_info: string) => {},
   infoPopupText: "",
   checkVaultLiquidity: async () => false,
-};
+  chartData: [] as ChartDataEntry[],
+  getChartData: async () => {}
+} as const;
 
 const GoldivaultContext = createContext(INITIAL_STATE);
 
@@ -343,7 +553,7 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
   const [notificationState, setNotificationState] = useState(
     INITIAL_STATE.notification,
   );
-  const [activeToggleState, setActiveToggleState] = useState<string>(
+  const [activeToggleState, setActiveToggleState] = useState<VaultTab>(
     INITIAL_STATE.activeToggle,
   );
   const [tradeDirectionState, setTradeDirectionState] = useState<string>(
@@ -363,6 +573,8 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
   const [txConfirmingState, setTxConfirmingState] = useState<boolean>(
     INITIAL_STATE.txConfirming,
   );
+  const [buyOtPopupState, setBuyOtPopupState] = useState<boolean>(INITIAL_STATE.buyOtPopup)
+  const [sellOtPopupState, setSellOtPopupState] = useState<boolean>(INITIAL_STATE.sellOtPopup)
   const [allowanceButtonsState, setAllowanceButtonsState] = useState<boolean>(
     INITIAL_STATE.allowanceButtons,
   );
@@ -384,6 +596,9 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
   const [infoPopupTextState, setInfoPopupTextState] = useState<string>(
     INITIAL_STATE.infoPopupText,
   );
+  const [chartDataState, setChartDataState] = useState<
+    any[]
+  >(INITIAL_STATE.chartData);
 
   const formatDate = (timestamp: number): string => {
     const date = new Date(timestamp * 1000);
@@ -1255,24 +1470,24 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         [
           contracts.oribgt.address,
           contracts.oribgtot.address,
-          parseEther("0.001"),
+          parseEther("1"),
           500,
           0,
         ],
       ],
     })
-    const buyingOTPrice = parseFloat(formatEther(buyingOTQuoteResult[0] as unknown as bigint)) * 1000
-
+    const buyingOTPrice = parseFloat(formatEther(buyingOTQuoteResult[0] as unknown as bigint))
     const timeDifference = parseFloat(endTimeResult) * 1000 - Date.now();
     const fixedDaysDifference = timeDifference / (1000 * 60 * 60 * 24);
     const daysTil = parseFloat(fixedDaysDifference.toFixed(2));
-    const convertedBuyingOTPrice = await readContract(config, {
+    const convertedQuote = await readContract(config, {
       address: contracts.oribgt.address as `0x${string}`,
       abi: contracts.oribgt.abi,
       functionName: 'convertToAssets',
       args: [parseEther(`${buyingOTPrice}`)]
     })
-    const fixedAprResponse = ((1 - parseFloat(formatEther(convertedBuyingOTPrice as unknown as bigint))) / 1) * 100 * (365 / daysTil);
+    const currentYtPrice = 1 - parseFloat(formatEther(convertedQuote as unknown as bigint))
+    const fixedAprResponse = currentYtPrice * 100 * (365 / daysTil);
 
     const oribgtLiquidity = await readContract(config, {
       address: contracts.oribgt.address as `0x${string}`,
@@ -1301,13 +1516,14 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       ],
     });
     const beraPrice = parseFloat(formatEther(beraPriceResult[0] as unknown as bigint))
-
     const liquidityResult = (parseFloat(formatEther(oribgtLiquidity as unknown as bigint)) + parseFloat(formatEther(oribgtOTLiquidity as unknown as bigint))) * beraPrice;
 
     const response = {
       endTime: parseFloat(endTimeResult),
       fixedApr: fixedAprResponse,
-      otLiquidity: liquidityResult
+      otLiquidity: liquidityResult,
+      origamiLeverage: (1 / currentYtPrice) * 10,
+      infraredLeverage: (1 / currentYtPrice) * 1
     }
 
     setGoldivaultInfoOribgtState(response);
@@ -1329,6 +1545,12 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         functionName: "allowance",
         args: [address, contracts.oribgtVault.address],
       });
+      const oribgtBalResult = await readContract(config, {
+        address: contracts.oribgt.address as `0x${string}`,
+        abi: contracts.oribgt.abi,
+        functionName: "balanceOf",
+        args: [address],
+      })
       const oribgtotBalResult = await readContract(config, {
         address: contracts.oribgtot.address as `0x${string}`,
         abi: contracts.oribgtot.abi,
@@ -1357,6 +1579,7 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       const response = {
         ibgt: parseFloat(formatEther(ibgtBalResult as unknown as bigint)),
         ibgtAllowance: parseFloat(formatEther(ibgtAllResult as unknown as bigint)),
+        oribgt: parseFloat(formatEther(oribgtBalResult as unknown as bigint)),
         oribgtot: parseFloat(formatEther(oribgtotBalResult as unknown as bigint)),
         oribgtyt: parseFloat(formatEther(oribgtytBalResult as unknown as bigint)) + parseFloat(formatEther(oribgtYtStakedResult as unknown as bigint)),
         claimable: parseFloat(formatEther(claimableResult as unknown as bigint)),
@@ -1726,6 +1949,68 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
     const fixedAprResponseRusd =
       ((1 - buyingOTPriceRusd) / 1) * 100 * (365 / daysTilRusd);
     const ytPriceRusd = 1 - buyingOTPriceRusd;
+    
+    // oribgt
+    const endTimeResultOribgt: any = await readContract(config, {
+      address: contracts.oribgtVault.address as `0x${string}`,
+      abi: contracts.oribgtVault.abi,
+      functionName: "endTime",
+      args: [],
+    });
+    const oribgtOTLiquidity = await readContract(config, {
+      address: contracts.oribgtot.address as `0x${string}`,
+      abi: contracts.oribgtot.abi,
+      functionName: "balanceOf",
+      args: [contracts.vaultLPaddys.oribgt],
+    });
+    const oribgtLiquidity = await readContract(config, {
+      address: contracts.oribgt.address as `0x${string}`,
+      abi: contracts.oribgt.abi,
+      functionName: "balanceOf",
+      args: [contracts.vaultLPaddys.oribgt],
+    });
+    const beraPriceResult: any = await readContract(config, {
+      address: contracts.quoterv2.address as `0x${string}`,
+      abi: contracts.quoterv2.abi,
+      functionName: "quoteExactOutputSingle",
+      args: [
+        [
+          contracts.honey.address,
+          contracts.wbera.address,
+          parseEther(`1`),
+          3000,
+          0,
+        ],
+      ],
+    });
+    const beraPrice = parseFloat(formatEther(beraPriceResult[0] as unknown as bigint))
+    const liquidityResultOribgt = (parseFloat(formatEther(oribgtLiquidity as unknown as bigint)) + parseFloat(formatEther(oribgtOTLiquidity as unknown as bigint))) * beraPrice
+    const buyingOTQuoteResultOribgt: any = await readContract(config, {
+      address: contracts.quoterv2.address as `0x${string}`,
+      abi: contracts.quoterv2.abi,
+      functionName: "quoteExactOutputSingle",
+      args: [
+        [
+          contracts.oribgt.address,
+          contracts.oribgtot.address,
+          parseEther("1"),
+          500,
+          0,
+        ],
+      ],
+    })
+    const buyingOTPriceOribgt = parseFloat(formatEther(buyingOTQuoteResultOribgt[0] as unknown as bigint))
+    const timeDifferenceOribgt = parseFloat(endTimeResultOribgt) * 1000 - Date.now();
+    const fixedDaysDifferenceOribgt = timeDifferenceOribgt / (1000 * 60 * 60 * 24);
+    const daysTilOribgt = parseFloat(fixedDaysDifferenceOribgt.toFixed(2));
+    const convertedQuoteOribgt = await readContract(config, {
+      address: contracts.oribgt.address as `0x${string}`,
+      abi: contracts.oribgt.abi,
+      functionName: 'convertToAssets',
+      args: [parseEther(`${buyingOTPriceOribgt}`)]
+    })
+    const ytPriceOribgt = 1 - parseFloat(formatEther(convertedQuoteOribgt as unknown as bigint))
+    const fixedAprResponseOribgt = ytPriceOribgt * 100 * (365 / daysTilOribgt);
 
     const response = {
       weeth: {
@@ -1765,9 +2050,10 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         ytPrice: ytPriceRusd,
       },
       oribgt: {
-        fixedApr: 0,
-        daysTil: '',
-        ytPrice: 0
+        fixedApr: fixedAprResponseOribgt,
+        daysTil: getRelativeDate(parseFloat(endTimeResultOribgt)),
+        liquidity: liquidityResultOribgt,
+        ytPrice: ytPriceOribgt
       }
     };
 
@@ -1775,7 +2061,7 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
     setInfoLoadingState(false);
   };
 
-  const handleChange = (input: string) => {
+  const handleChange = (input: VaultTab) => {
     if (activeToggleState === "DEPOSIT") {
       setDisplayStringState(input);
       !input ? setDepositState(0) : setDepositState(parseFloat(input));
@@ -1827,7 +2113,7 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
                   ? goldivaultWalletInfoRsethState.rsethot
                   : vault === "oribgt"
                     ? goldivaultWalletInfoOribgtState.oribgtot
-                    : {};
+                    : {}; // @note
     const vaultYT =
       vault === "weeth"
         ? goldivaultWalletInfoWeethState.weyt
@@ -1843,7 +2129,7 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
                   ? goldivaultWalletInfoRsethState.rsethyt
                   : vault === "oribgt"
                     ? goldivaultWalletInfoOribgtState.oribgtyt
-                    : {};
+                    : {}; // @note
     const vaultDT =
       vault === "weeth"
         ? goldivaultWalletInfoWeethState.weeth
@@ -1859,7 +2145,7 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
                   ? goldivaultWalletInfoRsethState.rseth
                   : vault === "oribgt"
                     ? goldivaultWalletInfoOribgtState.ibgt
-                    : {};
+                    : {}; // @note This should be a number, not {}
     const vaultLP =
       vault === "rusd" ? goldivaultWalletInfoRusdState.rusdaquabera : 0;
 
@@ -1919,7 +2205,7 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
   };
 
   const calculateDeposit = async (vault: string) => {
-    setOtAmountState(depositState);
+    setOtAmountState(parseFloat(depositState.toFixed(4)));
     setYtAmountState(depositState);
     setOutputTokensLoadingState(false);
   };
@@ -1968,13 +2254,13 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
     setRedeemYTAmountsState(response);
   };
 
-  const getDaysUntil = (timestamp: number): number => {
-    const now = new Date();
-    const futureDate = new Date(timestamp * 1000);
-    const differenceInMs = futureDate.getTime() - now.getTime();
-    const daysLeft = Math.floor(differenceInMs / (1000 * 60 * 60 * 24));
-    return daysLeft >= 0 ? daysLeft : 0;
-  };
+  // const getDaysUntil = (timestamp: number): number => {
+  //   const now = new Date();
+  //   const futureDate = new Date(timestamp * 1000);
+  //   const differenceInMs = futureDate.getTime() - now.getTime();
+  //   const daysLeft = Math.floor(differenceInMs / (1000 * 60 * 60 * 24));
+  //   return daysLeft >= 0 ? daysLeft : 0;
+  // };
 
   const getVaultOT = (vault: string): string => {
     if (vault === "weeth") {
@@ -2084,7 +2370,26 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
             ? parseFloat(formatEther(quoteResult[0] as unknown as bigint))
             : parseFloat((quoteResult[0] as unknown as bigint).toString()) /
               1e8;
+        if(four626bool) {
+          const outputResult = await readContract(config, {
+            address: contracts.oribgt.address as `0x${string}`,
+            abi: contracts.oribgt.abi,
+            functionName: 'convertToAssets',
+            args: [parseEther(`${quoteForOutput}`)]
+          })
+          quoteForOutput = parseFloat(formatEther(outputResult as unknown as bigint))
+        }
       } else {
+        let convertedInput: number = 0
+        if(four626bool) {
+          const inputResult = await readContract(config, {
+            address: contracts.oribgt.address as `0x${string}`,
+            abi: contracts.oribgt.abi,
+            functionName: 'convertToShares',
+            args: [parseEther(`${tradeInputState}`)]
+          })
+          convertedInput = parseFloat(formatEther(inputResult as unknown as bigint))
+        }
         quoteResult = await readContract(config, {
           address: contracts.quoterv2.address as `0x${string}`,
           abi: contracts.quoterv2.abi,
@@ -2094,8 +2399,8 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
               vaultDT,
               vaultOT,
               vaultType === "eth"
-                ? parseEther(tradeInputState.toString())
-                : parseUnits(tradeInputState.toString(), 8),
+                ? parseEther(`${four626bool ? convertedInput : tradeInputState}`)
+                : parseUnits(`${four626bool ? convertedInput : tradeInputState}`, 8),
               500,
               0,
             ],
@@ -2124,12 +2429,40 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       const buyingOTPrice = vaultType === "eth"
           ? parseFloat(formatEther(buyingOTQuoteResult[0] as unknown as bigint))
           : parseFloat((buyingOTQuoteResult[0] as unknown as bigint).toString()) / 1e8;
+      const newbuyingOTQuoteResult: any = await readContract(config, {
+        address: contracts.quoterv2.address as `0x${string}`,
+        abi: contracts.quoterv2.abi,
+        functionName: "quoteExactOutputSingle",
+        args: [
+          [
+            vaultDT,
+            vaultOT,
+            vaultType === "eth" ? parseEther(`0.0001`) : parseUnits(`0.0001`, 8),
+            500,
+            0,
+          ],
+        ],
+      });
+      const newbuyingOTPrice = vaultType === "eth"
+        ? parseFloat(formatEther(newbuyingOTQuoteResult[0] as unknown as bigint)) * 10000
+        : parseFloat(formatUnits(newbuyingOTQuoteResult[0] as unknown as bigint, 8)) * 10000
       const executionPrice = tradeDirectionState === "OUT"
           ? quoteForOutput / tradeInputState
           : tradeInputState / quoteForOutput;
-      const predictedPriceImpact = Math.abs(
-        ((executionPrice - buyingOTPrice) / buyingOTPrice) * 100,
-      );
+      let correctOtPrice = 0
+      if(four626bool) {
+        const inputResult = await readContract(config, {
+          address: contracts.oribgt.address as `0x${string}`,
+          abi: contracts.oribgt.abi,
+          functionName: 'convertToAssets',
+          args: [parseEther(`${newbuyingOTPrice}`)]
+        })
+        correctOtPrice = parseFloat(formatEther(inputResult as unknown as bigint))
+      }
+      else {
+        correctOtPrice = newbuyingOTPrice
+      }
+      const predictedPriceImpact = Math.abs(((executionPrice - correctOtPrice) / correctOtPrice) * 100)
       const timeDifference = parseFloat(endTimeResult) * 1000 - Date.now();
       const fixedDaysDifference = timeDifference / (1000 * 60 * 60 * 24);
       const daysTil = parseFloat(fixedDaysDifference.toFixed(2));
@@ -2477,7 +2810,7 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
     setRedeemYTAmountsState(response);
     setAllowanceButtonsState(false);
     setOutputTokensLoadingState(false);
-    setActiveToggleState(toggle);
+    setActiveToggleState(toggle as VaultTab);
   };
 
   const formatLeverageNum = (num: number, leverage: number): string => {
@@ -2490,194 +2823,198 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
   };
 
   const enableInfoPopup = (info: string) => {
-    if (info === "tvl") {
-      setInfoPopupTextState(
-        "Total value of all assets deposited to vault and the yield it has accumulated so far",
-      );
-      setInfoPopupToggleState(true);
-    }
-    if (info === "yield") {
-      setInfoPopupTextState(
-        "Total yield accumulated by this vault over its lifetime",
-      );
-      setInfoPopupToggleState(true);
-    }
-    if (info === "historicalapr") {
-      setInfoPopupTextState(
-        "Estimate of APR of underlying protocol based on yield since beginning of vault",
-      );
-      setInfoPopupToggleState(true);
-    }
-    if (info === "currentapr") {
-      setInfoPopupTextState(
-        "Underlying protocol's current estimate of its APR",
-      );
-      setInfoPopupToggleState(true);
-    }
-    if (info === "fixedapr") {
-      setInfoPopupTextState(
-        "Guaranteed annualized APR for buying OT and holding until expiry, assuming positive yield",
-      );
-      setInfoPopupToggleState(true);
-    }
-    if (info === "ytimpliedvaluehistorical") {
-      setInfoPopupTextState(
-        "Estimate of value of one YT based on yield accrued by vault over its lifetime",
-      );
-      setInfoPopupToggleState(true);
-    }
-    if (info === "ytimpliedvaluecurrent") {
-      setInfoPopupTextState(
-        "Estimate of value of one YT based on the underlying protocol estimated yield",
-      );
-      setInfoPopupToggleState(true);
-    }
-    if (info === "longyieldhistorical") {
-      setInfoPopupTextState(
-        "Estimated annualized return of buying YT at current market price, given YT historical implied value",
-      );
-      setInfoPopupToggleState(true);
-    }
-    if (info === "longyieldaprcurrent") {
-      setInfoPopupTextState(
-        "Estimated annualized return of buying YT at current market price, given YT current implied value",
-      );
-      setInfoPopupToggleState(true);
-    }
-    if (info === "otlpapr") {
-      setInfoPopupTextState(
-        "Current APR for LPing the OT/Honey pair and staking LP token on Beradrome",
-      );
-      setInfoPopupToggleState(true);
-    }
-    if (info === "ytlpapr") {
-      setInfoPopupTextState(
-        "Current APR for LPing the YT/Honey pair and staking LP token on Beradrome",
-      );
-      setInfoPopupToggleState(true);
-    }
-    if (info === "pointsmultiplierweeth") {
-      setInfoPopupTextState(
-        "Points multiplier given to YT holders and weETH in the LP",
-      );
-      setInfoPopupToggleState(true);
-    }
-    if (info === "pointsmultiplierunibtc") {
-      setInfoPopupTextState(
-        "Points multiplier given to YT holders and uniBTC in the LP",
-      );
-      setInfoPopupToggleState(true);
-    }
-    if (info === "pointsmultiplierrusd") {
-      setInfoPopupTextState(
-        "Points multiplier given to YT holders and rUSD in the LP",
-      );
-      setInfoPopupToggleState(true);
-    }
-    if (info === "pointsperyt") {
-      setInfoPopupTextState(
-        "Amount of Etherfi points assigned to 1 YT at expiration of the vault",
-      );
-      setInfoPopupToggleState(true);
-    }
-    if (info === "pointsleverage") {
-      setInfoPopupTextState(
-        "Effective points leverage achieved by holding 1 YT",
-      );
-      setInfoPopupToggleState(true);
-    }
-    if (info === "vaultmaturity") {
-      setInfoPopupTextState(
-        "At maturity, YT tokens stop receiving yield and OT tokens become redeemable 1:1 for the underlying asset.",
-      );
-      setInfoPopupToggleState(true);
-    }
-    if (info === "tvlweeth") {
-      setInfoPopupTextState("Amount of weETH currently held in vault");
-      setInfoPopupToggleState(true);
-    }
-    if (info === "fixedaprweeth") {
-      setInfoPopupTextState(
-        "Guaranteed annualized APR for buying OT at current price and holding until maturity. Alternatively: the expected apr implied by the current YT price",
-      );
-      setInfoPopupToggleState(true);
-    }
-    if (info === "impliedyieldweeth") {
-      setInfoPopupTextState(
-        "Implied APR of points/yield based on current YT price",
-      );
-      setInfoPopupToggleState(true);
-    }
-    if (info === "weethvaultinfo") {
-      setInfoPopupTextState(
-        `4x Etherfi points and LRT^2 staking rewards;${formatLeverageNum(vaultDisplayInfoState.weeth.ytPrice, 4)}x Etherfi point leverage`,
-      );
-      setInfoPopupToggleState(true);
-    }
-    if (info === "rsethvaultinfo") {
-      setInfoPopupTextState(
-        `2x Kelp DAO points and 1x Eigenlayer restaking rewards;${formatLeverageNum(vaultDisplayInfoState.rseth.ytPrice, 2)}x Kelp DAO point leverage and ${formatLeverageNum(vaultDisplayInfoState.rseth.ytPrice, 1)}x Eigenlayer point leverage`,
-      );
-      setInfoPopupToggleState(true);
-    }
-    if (info === "ebtcvaultinfo") {
-      setInfoPopupTextState(
-        `1x Babylon points, 2x Lombard points, 1x Symbiotic points, 3x Veda points, and 2x Karak points;${formatLeverageNum(vaultDisplayInfoState.ebtc.ytPrice, 1)}x Babylon point leverage, ${formatLeverageNum(vaultDisplayInfoState.ebtc.ytPrice, 2)}x Lombard point leverage, ${formatLeverageNum(vaultDisplayInfoState.ebtc.ytPrice, 1)}x Symbiotic point leverage, ${formatLeverageNum(vaultDisplayInfoState.ebtc.ytPrice, 3)}x Veda point leverage, and ${formatLeverageNum(vaultDisplayInfoState.ebtc.ytPrice, 2)}x Karak point leverage`,
-      );
-      setInfoPopupToggleState(true);
-    }
-    if (info === "unibtcvaultinfo") {
-      setInfoPopupTextState(
-        `4x Bedrock points and 1x Babylon points;${formatLeverageNum(vaultDisplayInfoState.unibtc.ytPrice, 4)}x Bedrock point leverage and ${formatLeverageNum(vaultDisplayInfoState.unibtc.ytPrice, 1)}x Babylon point leverage`,
-      );
-      setInfoPopupToggleState(true);
-    }
-    if (info === "solvbtcvaultinfo") {
-      setInfoPopupTextState(
-        `1x Babylon points and 4x Solv points;${formatLeverageNum(vaultDisplayInfoState.solvbtc.ytPrice, 1)}x Babylon point leverage and ${formatLeverageNum(vaultDisplayInfoState.solvbtc.ytPrice, 4)}x Solv point leverage`,
-      );
-      setInfoPopupToggleState(true);
-    }
-    if (info === "rusdvaultinfo") {
-      setInfoPopupTextState(
-        `2.25x Reservoir points;${formatLeverageNum(vaultDisplayInfoState.rusd.ytPrice, 2.25)}x Reservoir point leverage`,
-      );
-      setInfoPopupToggleState(true);
-    }
-    if (info === "impliedapr") {
-      setInfoPopupTextState(
-        "The apr implied by the price at which your trade is predicted to execute",
-      );
-      setInfoPopupToggleState(true);
-    }
-    if (info === "lpapr") {
-      setInfoPopupTextState(
-        "Providing liquidity earns a mixture of points, the fixed apr, trading fees and liquidity incentives through Beradrome",
-      );
-      setInfoPopupToggleState(true);
-    }
-    if (info === "fees") {
-      setInfoPopupTextState(
-        "3% of points and 33% of LP trading fees (0.05%) and 0.5% fee on proceeds from YT trades",
-      );
-      setInfoPopupToggleState(true);
-    }
-    if (info === "redeemotinfo") {
-      setInfoPopupTextState(
-        "Burn ownership and yield tokens to receive underlying assets from the vault",
-      );
-      setInfoPopupToggleState(true);
-    }
-    if (info === "redeemytinfo") {
-      setInfoPopupTextState("Only available after vault expiration");
-      setInfoPopupToggleState(true);
-    }
+    setInfoPopupTextState((prev) =>
+      (() => {
+        switch (info) {
+          case "tvl":
+            return "Total value of all assets deposited to vault and the yield it has accumulated so far";
+          case "yield":
+            return "Total yield accumulated by this vault over its lifetime";
+          case "historicalapr":
+            return "Estimate of APR of underlying protocol based on yield since beginning of vault";
+          case "currentapr":
+            return "Underlying protocol's current estimate of its APR";
+          case "fixedapr":
+            return "Guaranteed annualized APR for buying OT and holding until expiry, assuming positive yield";
+          case "ytimpliedvaluehistorical":
+            return "Estimate of value of one YT based on yield accrued by vault over its lifetime";
+          case "ytimpliedvaluecurrent":
+            return "Estimate of value of one YT based on the underlying protocol estimated yield";
+          case "longyieldhistorical":
+            return "Estimated annualized return of buying YT at current market price, given YT historical implied value";
+          case "longyieldaprcurrent":
+            return "Estimated annualized return of buying YT at current market price, given YT current implied value";
+          case "otlpapr":
+            return "Current APR for LPing the OT/Honey pair and staking LP token on Beradrome";
+          case "ytlpapr":
+            return "Current APR for LPing the YT/Honey pair and staking LP token on Beradrome";
+          case "pointsmultiplierweeth":
+            return "Points multiplier given to YT holders and weETH in the LP";
+          case "pointsmultiplierunibtc":
+            return "Points multiplier given to YT holders and uniBTC in the LP";
+          case "pointsmultiplierrusd":
+            return "Points multiplier given to YT holders and rUSD in the LP";
+          case "pointsperyt":
+            return "Amount of Etherfi points assigned to 1 YT at expiration of the vault";
+          case "pointsleverage":
+            return "Effective points leverage achieved by holding 1 YT";
+          case "vaultmaturity":
+            return "At maturity, YT tokens stop receiving yield and OT tokens become redeemable 1:1 for the underlying asset.";
+          case "tvlweeth":
+            return "Amount of weETH currently held in vault";
+          case "fixedaprweeth":
+            return "Guaranteed annualized APR for buying OT at current price and holding until maturity. Alternatively: the expected apr implied by the current YT price";
+          case "impliedyieldweeth":
+            return "Implied APR of points/yield based on current YT price";
+          case "weethvaultinfo":
+            return `4x Etherfi points and LRT^2 staking rewards;${formatLeverageNum(vaultDisplayInfoState.weeth.ytPrice, 4)}x Etherfi point leverage`;
+          case "rsethvaultinfo":
+            return `2x Kelp DAO points and 1x Eigenlayer restaking rewards;${formatLeverageNum(vaultDisplayInfoState.rseth.ytPrice, 2)}x Kelp DAO point leverage and ${formatLeverageNum(vaultDisplayInfoState.rseth.ytPrice, 1)}x Eigenlayer point leverage`;
+          case "ebtcvaultinfo":
+            return `1x Babylon points, 2x Lombard points, 1x Symbiotic points, 3x Veda points, and 2x Karak points;${formatLeverageNum(vaultDisplayInfoState.ebtc.ytPrice, 1)}x Babylon point leverage, ${formatLeverageNum(vaultDisplayInfoState.ebtc.ytPrice, 2)}x Lombard point leverage, ${formatLeverageNum(vaultDisplayInfoState.ebtc.ytPrice, 1)}x Symbiotic point leverage, ${formatLeverageNum(vaultDisplayInfoState.ebtc.ytPrice, 3)}x Veda point leverage, and ${formatLeverageNum(vaultDisplayInfoState.ebtc.ytPrice, 2)}x Karak point leverage`;
+          case "unibtcvaultinfo":
+            return `4x Bedrock points and 1x Babylon points;${formatLeverageNum(vaultDisplayInfoState.unibtc.ytPrice, 4)}x Bedrock point leverage and ${formatLeverageNum(vaultDisplayInfoState.unibtc.ytPrice, 1)}x Babylon point leverage`;
+          case "solvbtcvaultinfo":
+            return `1x Babylon points and 4x Solv points;${formatLeverageNum(vaultDisplayInfoState.solvbtc.ytPrice, 1)}x Babylon point leverage and ${formatLeverageNum(vaultDisplayInfoState.solvbtc.ytPrice, 4)}x Solv point leverage`;
+          case "rusdvaultinfo":
+            return `2.25x Reservoir points;${formatLeverageNum(vaultDisplayInfoState.rusd.ytPrice, 2.25)}x Reservoir point leverage`;
+          case "oribgtvaultinfo":
+            return `10x Origami points and 1x Infrared points;${formatLeverageNum(vaultDisplayInfoState.oribgt.ytPrice, 10)}x Origami point leverage and ${formatLeverageNum(vaultDisplayInfoState.oribgt.ytPrice, 1)}x Infrared point leverage`
+          case "impliedapr":
+            return "The apr implied by the price at which your trade is predicted to execute";
+          case "lpapr":
+            return "Providing liquidity earns a mixture of points, the fixed apr, trading fees and liquidity incentives through Beradrome";
+          case "fees":
+            return "3% of points and 33% of LP trading fees (0.05%) and 0.5% fee on proceeds from YT trades";
+          case "redeemotinfo":
+            return "Burn ownership and yield tokens to receive underlying assets from the vault";
+          case "redeemytinfo":
+            return "Only available after vault expiration";
+          default:
+            return prev;
+        }
+      })(),
+    );
+    setInfoPopupToggleState(true);
   };
 
   const disableInfoPopup = (info: string) => {
     setInfoPopupTextState("");
     setInfoPopupToggleState(false);
   };
+
+  // @momo
+  const getVaultInfo = (vault: string) => {
+    switch (vault.toLowerCase()) {
+      case "weeth":
+        return goldivaultInfoWeethState;
+      case "ebtc":
+        return goldivaultInfoEbtcState;
+      case "solvbtc":
+        return goldivaultInfoSolvbtcState;
+      case "unibtc":
+        return goldivaultInfoUnibtcState;
+      case "rusd":
+        return goldivaultInfoRusdState;
+      case "rseth":
+        return goldivaultInfoRsethState;
+      case "oribgt":
+        return goldivaultInfoOribgtState;
+      default:
+        return null;
+    }
+  };
+
+  // @momo
+  const getVaultWalletInfo = (vault: string) => {
+    switch (vault.toLowerCase()) {
+      case "weeth":
+        return goldivaultWalletInfoWeethState;
+      case "ebtc":
+        return goldivaultWalletInfoEbtcState;
+      case "solvbtc":
+        return goldivaultWalletInfoSolvbtcState;
+      case "unibtc":
+        return goldivaultWalletInfoUnibtcState;
+      case "rusd":
+        return goldivaultWalletInfoRusdState;
+      case "rseth":
+        return goldivaultWalletInfoRsethState;
+      case "oribgt":
+        return goldivaultWalletInfoOribgtState;
+      default:
+        return null;
+    }
+  };
+
+  // @momo
+  const refreshVaultInfo = async (vault: VaultType) => {
+    switch (vault.toLowerCase()) {
+      case "weeth":
+        return refreshGoldivaultInfoWeeth();
+      case "ebtc":
+        return refreshGoldivaultInfoEbtc();
+      case "solvbtc":
+        return refreshGoldivaultInfoSolvbtc();
+      case "unibtc":
+        return refreshGoldivaultInfoUnibtc();
+      case "rusd":
+        return refreshGoldivaultInfoRusd();
+      case "rseth":
+        return refreshGoldivaultInfoRseth();
+      case "oribgt":
+        return refreshGoldivaultInfoOribgt();
+      default:
+        return;
+    }
+  };
+
+  // @momo
+  const refreshVaultWalletInfo = async (vault: VaultType) => {
+    switch (vault.toLowerCase()) {
+      case "weeth":
+        return refreshGoldivaultWalletInfoWeeth();
+      case "ebtc":
+        return refreshGoldivaultWalletInfoEbtc();
+      case "solvbtc":
+        return refreshGoldivaultWalletInfoSolvbtc();
+      case "unibtc":
+        return refreshGoldivaultWalletInfoUnibtc();
+      case "rusd":
+        return refreshGoldivaultWalletInfoRusd();
+      case "rseth":
+        return refreshGoldivaultWalletInfoRseth();
+      case "oribgt":
+        return refreshGoldivaultWalletInfoOribgt();
+      default:
+        return;
+    }
+  };
+
+  const getFormattedDate = (timestamp: number): string => {
+    const date = new Date(timestamp * 1000);
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    return `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}`;
+  }
+
+  const getChartData = async () => {
+    // const response = await fetch("/api/rusdytchart")
+    // const responseJson: any = await response.json()
+    // // console.log(responseJson)
+    // const newChartData = []
+    // for(let node of responseJson.rusdytDaily) {
+    //   const entry = {
+    //     ytPrice: parseFloat(node.ytPrice.toFixed(5)),
+    //     fixedApr: parseFloat(node.fixedApr.toFixed(3)),
+    //     date: getFormattedDate(node.timestamp)
+    //   }
+
+    //   newChartData.push(entry)
+    // }
+    
+    // setChartDataState(newChartData.reverse())
+  }
 
   return (
     <GoldivaultContext.Provider
@@ -2757,6 +3094,10 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         walletInfoLoading: walletInfoLoadingState,
         txConfirming: txConfirmingState,
         setTxConfirming: setTxConfirmingState,
+        buyOtPopup: buyOtPopupState,
+        setBuyOtPopup: setBuyOtPopupState,
+        sellOtPopup: sellOtPopupState,
+        setSellOtPopup: setSellOtPopupState,
         allowanceButtons: allowanceButtonsState,
         setAllowanceButtons: setAllowanceButtonsState,
         handleChange,
@@ -2776,6 +3117,12 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         disableInfoPopup,
         infoPopupText: infoPopupTextState,
         checkVaultLiquidity,
+        getVaultInfo,
+        getVaultWalletInfo,
+        refreshVaultInfo,
+        refreshVaultWalletInfo,
+        chartData: chartDataState,
+        getChartData
       }}
     >
       {children}

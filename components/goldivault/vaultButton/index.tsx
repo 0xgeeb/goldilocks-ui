@@ -23,6 +23,35 @@ type VaultButtonProps = {
   };
 };
 
+const COLORS = {
+  button: {
+    base: "#322514",
+    hover: "#4A3A23",
+    active: "#5C462A",
+    text: "#EFEFEF",
+    disabled: "#4A4339",
+    disabledText: "#808080",
+  },
+  beraBrown: {
+    base: "#231A0F",
+    dark: "#1A140C",
+    border: "#352A1C",
+  },
+  teak: "#CFA08B",
+  honeyYellow: "#E7B941",
+  warmText: "#4A4339",
+}
+
+const BUTTON_CLASSES = `
+    w-full h-[54px] rounded-xl transition duration-150
+    bg-[${COLORS.button.base}] 
+    text-${COLORS.button.text} font-inter text-lg font-bold
+    disabled:text-${COLORS.button.disabledText}
+    disabled:bg-[${COLORS.button.disabled}]
+    hover:bg-[${COLORS.button.hover}]
+    active:bg-[${COLORS.button.active}]
+  `;
+
 export const VaultButton = ({ params }: VaultButtonProps) => {
   const [honeyApproved, setHoneyApproved] = useState<boolean>(false);
   const [depositDTApproved, setDepositDTApproved] = useState<boolean>(false);
@@ -48,31 +77,21 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
     setTradeInput,
     setTradeOutput,
     tradeDirection,
-    refreshGoldivaultInfoWeeth,
-    refreshGoldivaultWalletInfoWeeth,
     goldivaultWalletInfoWeeth,
-    refreshGoldivaultInfoSolvbtc,
-    refreshGoldivaultWalletInfoSolvbtc,
     goldivaultWalletInfoSolvbtc,
-    refreshGoldivaultInfoUnibtc,
-    refreshGoldivaultWalletInfoUnibtc,
     goldivaultWalletInfoUnibtc,
-    refreshGoldivaultInfoRusd,
-    refreshGoldivaultWalletInfoRusd,
     goldivaultWalletInfoRusd,
-    refreshGoldivaultInfoEbtc,
-    refreshGoldivaultWalletInfoEbtc,
     goldivaultWalletInfoEbtc,
-    refreshGoldivaultInfoRseth,
-    refreshGoldivaultWalletInfoRseth,
     goldivaultWalletInfoRseth,
-    refreshGoldivaultInfoOribgt,
-    refreshGoldivaultWalletInfoOribgt,
+    // getVaultWalletInfo,
+    refreshVaultInfo,
+    refreshVaultWalletInfo,
+
     goldivaultWalletInfoOribgt,
     vaultSwapTxAmount,
     honeyApprovalAmount,
     otApprovalAmount,
-    checkVaultLiquidity,
+    // checkVaultLiquidity,
     slippage,
     priceImpact,
     calledDtAmountMin,
@@ -201,31 +220,13 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
 
   const vaultLPBalance = params.vaultToken === "rusd" ? goldivaultWalletInfoRusd.rusdaquabera : 0;
 
+  // @note what is this?
   const four626bool = params.vaultToken === "oribgt"
 
   const refreshInfo = () => {
-    if (params.vaultToken === "weeth") {
-      refreshGoldivaultInfoWeeth();
-      refreshGoldivaultWalletInfoWeeth();
-    } else if (params.vaultToken === "solvbtc") {
-      refreshGoldivaultInfoSolvbtc();
-      refreshGoldivaultWalletInfoSolvbtc();
-    } else if (params.vaultToken === "rusd") {
-      refreshGoldivaultInfoRusd();
-      refreshGoldivaultWalletInfoRusd();
-    } else if (params.vaultToken === "ebtc") {
-      refreshGoldivaultInfoEbtc();
-      refreshGoldivaultWalletInfoEbtc();
-    } else if (params.vaultToken === "rseth") {
-      refreshGoldivaultInfoRseth();
-      refreshGoldivaultWalletInfoRseth();
-    } else if (params.vaultToken === "oribgt") {
-      refreshGoldivaultInfoOribgt()
-      refreshGoldivaultWalletInfoOribgt()
-    } else {
-      refreshGoldivaultInfoUnibtc();
-      refreshGoldivaultWalletInfoUnibtc();
-    }
+    refreshVaultInfo(params.vaultToken);
+    refreshVaultWalletInfo(params.vaultToken);
+
     setDisplayString("");
     setDeposit(0);
     setRedeemOT(0);
@@ -277,11 +278,11 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
 
   const depositTxFlow = async (button: HTMLElement | null) => {
     if (deposit == 0) {
-      button && (button.innerHTML = "deposit");
+      button && (button.innerHTML = "Deposit");
       return;
     }
     if (deposit > vaultDT) {
-      button && (button.innerHTML = "not enough");
+      button && (button.innerHTML = "Not enough");
       return;
     } else {
       const sufficientAllowance: boolean | void = await checkAllowance(
@@ -292,7 +293,7 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
       if (sufficientAllowance) {
         setTxConfirming(true);
         if (button) {
-          button.innerHTML = "confirming...";
+          button.innerHTML = "Confirming...";
         }
         const depositTx = await sendDepositTx(deposit, params.vaultToken);
         if (depositTx.substring(0, 2) === "0x") {
@@ -304,7 +305,7 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
             depositTx,
           );
           if (button) {
-            button.innerHTML = "deposit";
+            button.innerHTML = "Deposit";
           }
           refreshInfo();
           setTimeout(() => {
@@ -312,7 +313,7 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
           }, 10000);
         } else {
           if (button) {
-            button.innerHTML = "deposit";
+            button.innerHTML = "Deposit";
           }
           refreshInfo();
           setTxConfirming(false);
@@ -443,18 +444,20 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
   };
 
   const getVaultType = (vault: string): string => {
-    if (vault === "weeth") {
-      return "eth";
-    } else if (vault === "rseth") {
-      return "eth";
-    } else if (vault === "ebtc") {
-      return "btc";
-    } else if (vault === "unibtc") {
-      return "btc";
-    } else if (vault === "rusd") {
-      return "eth";
-    } else {
-      return "eth";
+    switch (vault) {
+      // ETH Vaults
+      case "weeth":
+      case "rseth":
+      case "rusd":
+      case "oribgt":
+        return "eth";
+      // BTC Vaults
+      case "ebtc":
+      case "unibtc":
+        return "btc";
+      // Default to ETH
+      default:
+        return "eth";
     }
   };
 
@@ -587,11 +590,11 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
 
   const addLiqFlow = async (button: HTMLElement | null) => {
     if (tradeInput == 0) {
-      button && (button.innerHTML = "add liq");
+      button && (button.innerHTML = "Add Liq");
       return;
     }
     if (tradeInput > vaultDT) {
-      button && (button.innerHTML = "not enough");
+      button && (button.innerHTML = "Not Enough");
       return;
     } else {
       const sufficientAllowance: boolean | void = await checkAllowance(
@@ -657,11 +660,11 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
 
   const removeLiqFlow = async (button: HTMLElement | null) => {
     if (tradeInput == 0) {
-      button && (button.innerHTML = "remove liq");
+      button && (button.innerHTML = "Remove Liq");
       return;
     }
     if (tradeInput > vaultLPBalance) {
-      button && (button.innerHTML = "not enough");
+      button && (button.innerHTML = "Not Enough");
       return;
     } else {
       const sufficientAllowance: boolean | void = await checkAllowance(
@@ -672,7 +675,7 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
       if (sufficientAllowance) {
         setTxConfirming(true);
         if (button) {
-          button.innerHTML = "confirming...";
+          button.innerHTML = "Confirming...";
         }
         const client = getPublicClient(config);
         const lpAmountResult = await client.simulateContract({
@@ -714,7 +717,7 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
             removeLiqTX,
           );
           if (button) {
-            button.innerHTML = "remove liq";
+            button.innerHTML = "Remove Liq";
           }
           refreshInfo();
           setTimeout(() => {
@@ -722,7 +725,7 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
           }, 10000);
         } else {
           if (button) {
-            button.innerHTML = "remove liq";
+            button.innerHTML = "Remove Liq";
           }
           refreshInfo();
           setTxConfirming(false);
@@ -735,11 +738,11 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
 
   const stakingDepositTxFlow = async (button: HTMLElement | null) => {
     if (deposit == 0) {
-      button && (button.innerHTML = "deposit");
+      button && (button.innerHTML = "Deposit");
       return;
     }
     if (deposit > vaultDT) {
-      button && (button.innerHTML = "not enough");
+      button && (button.innerHTML = "Not Enough");
       return;
     } else {
       const sufficientDTAllowance: boolean | void = await checkAllowance(
@@ -769,7 +772,7 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
               depositTx,
             );
             if (button) {
-              button.innerHTML = "deposit";
+              button.innerHTML = "Deposit";
             }
             refreshInfo();
             setTimeout(() => {
@@ -777,7 +780,7 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
             }, 10000);
           } else {
             if (button) {
-              button.innerHTML = "deposit";
+              button.innerHTML = "Deposit";
             }
             refreshInfo();
             setTxConfirming(false);
@@ -794,11 +797,11 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
 
   const stakeYTFlow = async (button: HTMLElement | null) => {
     if (tradeInput == 0) {
-      button && (button.innerHTML = "stake yt");
+      button && (button.innerHTML = "Stake YT");
       return;
     }
     if (tradeInput > goldivaultWalletInfoOribgt.justYt) {
-      button && (button.innerHTML = "not enough");
+      button && (button.innerHTML = "Not Enough");
       return;
     } else {
       const sufficientAllowance: boolean | void = await checkAllowance(
@@ -821,7 +824,7 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
             stakeTx,
           );
           if (button) {
-            button.innerHTML = "stake yt";
+            button.innerHTML = "Stake YT";
           }
           refreshInfo();
           setTimeout(() => {
@@ -829,7 +832,7 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
           }, 10000);
         } else {
           if (button) {
-            button.innerHTML = "stake yt";
+            button.innerHTML = "Stake YT";
           }
           refreshInfo();
           setTxConfirming(false);
@@ -842,16 +845,16 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
 
   const unstakeYTFlow = async (button: HTMLElement | null) => {
     if (tradeInput == 0) {
-      button && (button.innerHTML = "unstake yt");
+      button && (button.innerHTML = "Unstake YT");
       return;
     }
     if (tradeInput > goldivaultWalletInfoOribgt.stakedYt) {
-      button && (button.innerHTML = "not enough");
+      button && (button.innerHTML = "Not Enough");
       return;
     } else {
       setTxConfirming(true);
       if (button) {
-        button.innerHTML = "confirming...";
+        button.innerHTML = "Confirming...";
       }
       const unstakeTx = await sendUnstakeYTTx(tradeInput);
       if (unstakeTx.substring(0, 2) === "0x") {
@@ -863,7 +866,7 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
           unstakeTx,
         );
         if (button) {
-          button.innerHTML = "unstake yt";
+          button.innerHTML = "Unstake YT";
         }
         refreshInfo();
         setTimeout(() => {
@@ -871,7 +874,7 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
         }, 10000);
       } else {
         if (button) {
-          button.innerHTML = "unstake yt";
+          button.innerHTML = "Unstake YT";
         }
         refreshInfo();
         setTxConfirming(false);
@@ -881,7 +884,7 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
 
   const claimFlow = async (button: HTMLElement | null) => {
     if (goldivaultWalletInfoOribgt.claiamble == 0) {
-      button && (button.innerHTML = "claim");
+      button && (button.innerHTML = "Claim");
       return;
     }
     setTxConfirming(true);
@@ -898,7 +901,7 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
         claimTx,
       );
       if (button) {
-        button.innerHTML = "claim";
+        button.innerHTML = "Claim";
       }
       refreshInfo();
       setTimeout(() => {
@@ -906,7 +909,7 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
       }, 10000);
     } else {
       if (button) {
-        button.innerHTML = "claim";
+        button.innerHTML = "Claim";
       }
       refreshInfo();
       setTxConfirming(false);
@@ -918,14 +921,14 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
     const leftButton = document.getElementById("left-approve-button");
     const rightButton = document.getElementById("right-approve-button");
     if (leftButton) {
-      leftButton.innerHTML = "approving...";
-      leftButton.style.backgroundColor = "#033E5E";
-      leftButton.style.color = "#E7B941";
+      leftButton.innerHTML = "Approving...";
+      leftButton.style.backgroundColor = COLORS.button.disabled;
+      leftButton.style.color = COLORS.button.disabledText;
     }
     if (rightButton) {
-      rightButton.innerHTML = "approving...";
-      rightButton.style.backgroundColor = "#033E5E";
-      rightButton.style.color = "#E7B941";
+      rightButton.innerHTML = "Approving...";
+      rightButton.style.backgroundColor = COLORS.button.disabled;
+      rightButton.style.color = COLORS.button.disabledText;
     }
     let addy;
     if (activeToggle === "TRADEOT") {
@@ -983,14 +986,14 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
     const rightButton = document.getElementById("right-approve-button");
     const leftButton = document.getElementById("left-approve-button");
     if (leftButton) {
-      leftButton.innerHTML = "approving...";
-      leftButton.style.backgroundColor = "#033E5E";
-      leftButton.style.color = "#E7B941";
+      leftButton.innerHTML = "Approving...";
+      leftButton.style.backgroundColor = COLORS.button.disabled;
+      leftButton.style.color = COLORS.button.disabledText;
     }
     if (rightButton) {
-      rightButton.innerHTML = "approving...";
-      rightButton.style.backgroundColor = "#033E5E";
-      rightButton.style.color = "#E7B941";
+      rightButton.innerHTML = "Approving...";
+      rightButton.style.backgroundColor = COLORS.button.disabled;
+      rightButton.style.color = COLORS.button.disabledText;
     }
     let addy;
     if (activeToggle === "TRADEOT") {
@@ -1050,25 +1053,25 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
         vaultDT >= debouncedDeposit &&
         deposit > vaultDT
       ) {
-        return `approve ${params.vaultToken}`;
+        return `Approve ${params.vaultToken}`;
       }
-      return "deposit";
+      return "Deposit";
     } else if (activeToggle === "REDEEMOT") {
-      return "redeem ot";
+      return "Redeem OT";
     } else if (activeToggle === "TRADEOT") {
-      return "trade ot";
+      return "Trade OT";
     } else if (activeToggle === "ADDLIQ") {
-      return "add liq";
+      return "Add Liquidity";
     } else if (activeToggle === "REMOVELIQ") {
-      return "remove liq";
+      return "Remove Liquidity";
     } else if (activeToggle === "STAKE") {
-      return "stake yt";
+      return "Stake YT";
     } else if (activeToggle === "UNSTAKE") {
-      return "unstake yt";
+      return "Unstake YT";
     } else if (activeToggle === "CLAIM") {
-      return "claim";
+      return "Claim";
     } else {
-      return "trade yt";
+      return "Trade YT";
     }
   };
 
@@ -1077,18 +1080,18 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
       {allowanceButtons && (
         <div>
           <button
-            className="cursor-pointer absolute left-[24%] top-[73.5%] h-[8%] w-[24%] border-2 border-black bg-[#E7B941] font-amaticbold text-[4vw] hover:scale-110 hover:border-[#E7B941] hover:bg-[#033E5E] hover:text-[#E7B941] md:top-[71.5%] md:text-[2.75vw] lg:left-[30.9%] lg:top-[72.5%] lg:w-[16.6%] lg:text-[2vw] xl:top-[72.5%] xl:text-[1.75vw] 2xl:text-[1.5vw]"
+            className={BUTTON_CLASSES}
             id="left-approve-button"
             onClick={() => handleLeftButtonClick()}
           >
-            approve tx
+            Approve Tx
           </button>
           <button
-            className="cursor-pointer absolute left-[52%] top-[73.5%] h-[8%] w-[24%] border-2 border-black bg-[#E7B941] font-amaticbold text-[4vw] hover:scale-110 hover:border-[#E7B941] hover:bg-[#033E5E] hover:text-[#E7B941] md:top-[71.5%] md:text-[2.75vw] lg:left-[52.5%] lg:top-[72.5%] lg:w-[16.6%] lg:text-[2vw] xl:top-[72.5%] xl:text-[1.75vw] 2xl:text-[1.5vw]"
+            className={BUTTON_CLASSES}
             id="right-approve-button"
             onClick={() => handleRightButtonClick()}
           >
-            approve infinite
+            Approve Infinite
           </button>
         </div>
       )}
@@ -1096,8 +1099,14 @@ export const VaultButton = ({ params }: VaultButtonProps) => {
         <ConnectButton.Custom>
           {({ account, chain, openChainModal, openConnectModal }) => {
             return (
+              /**
+               * uppercase min-w-64 min-h-12 cursor-pointer border-2 border-black
+                  bg-[#E7B941] font-baloo text-[4vw] text-black hover:scale-110 
+                  hover:border-[#E7B941] hover:bg-[#033E5E] hover:text-[#E7B941]
+                  md:text-[3vw] lg:left-[41.6%] lg:top-[72.5%] lg:w-[16.6%] lg:text-[2vw
+               */
               <button
-                className="absolute left-[37%] top-[70%] h-[8%] w-[26%] cursor-pointer border-2 border-black bg-[#E7B941] font-amaticbold text-[4vw] text-black hover:scale-110 hover:border-[#E7B941] hover:bg-[#033E5E] hover:text-[#E7B941] md:text-[3vw] lg:left-[41.6%] lg:top-[72.5%] lg:w-[16.6%] lg:text-[2vw]"
+                className={BUTTON_CLASSES}
                 id="deposit-button"
                 onClick={() => {
                   const button = document.getElementById("deposit-button");

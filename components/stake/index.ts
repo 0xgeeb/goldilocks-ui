@@ -5,8 +5,8 @@ export * from "./stakeButton";
 export * from "./stats";
 export * from "./stirPopup";
 export * from "./notification";
-export * from "./chart";
 export * from "./unstakePopup";
 export * from "./claimTab";
 export * from "./walletBalance";
 export * from "./locksFetcher";
+export * from './navBar'

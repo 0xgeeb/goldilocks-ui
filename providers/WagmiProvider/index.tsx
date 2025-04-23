@@ -68,11 +68,12 @@ const connectors = connectorsForWallets(
 );
 
 export const config = createConfig({
-  chains: [BerachainMainnet],
+  chains: [BerachainMainnet, BerachainBartioTestnet],
   ssr: true,
   connectors: connectors,
   transports: {
     [BerachainMainnet.id]: http(),
+    [BerachainBartioTestnet.id]: http(),
   },
 });
 

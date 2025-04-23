@@ -203,15 +203,15 @@ export const contracts = {
     abi: oriBGTABI.abi
   },
   oribgtVault: {
-    address: "0xdAfAE06A4D32f44Ec395d2664eB18432D39bd358",
+    address: "0x66090e34c9192Ee9927f44f978246be3e5365D36",
     abi: goldivault4626ABI.abi
   },
   oribgtot: {
-    address: "0xc0c088Bf14fe151C8AfEd52a8bFD3ef82d84280C",
+    address: "0x978448A7866Aed0146Ad5C5E5d3d8424e2b16356",
     abi: ibgtABI.abi
   },
   oribgtyt: {
-    address: "0x10C2BBaCECC5ed3e61198Ec4a4a6b199A2f48826",
+    address: "0xB345a602c2e24051a57e2339a98c815a6e45059c",
     abi: ibgtABI.abi
   },
   goldigov: {
@@ -237,6 +237,6 @@ export const contracts = {
     solvbtc: "0x8F513Fb5C947C20a01Dee083Cdb9250FBe73A6A8",
     rseth: "0xE457b56a1f9379B604dFBcE809Da6fEA1dECE717",
     rusd: "0x1a2A927F758AE242fB967481CF293D2a36883be6",
-    oribgt: "0x457449a2358E02e4FCbDA03dC70306F629D9304F"
+    oribgt: "0xCb2A95c52E718A6BA6AAb6587f1a3aFF4BfB0648"
   }
 };

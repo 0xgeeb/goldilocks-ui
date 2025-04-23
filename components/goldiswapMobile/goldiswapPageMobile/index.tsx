@@ -134,7 +134,7 @@ export const GoldiswapPageMobile = () => {
           </div>
           <GoldiswapButtonMobile />
           <StatsMobile />
-          <FooterMobile />
+          {/* <FooterMobile /> */}
           {/* <LocksFetcher /> */}
         </div>
       )}

@@ -7,4 +7,3 @@ export * from "./stakeBoxMobile";
 export * from "./walletBalanceMobilePopup";
 export * from "./notificationMobile";
 export * from "./claimTabMobile";
-export * from "./chartSmallMobile";

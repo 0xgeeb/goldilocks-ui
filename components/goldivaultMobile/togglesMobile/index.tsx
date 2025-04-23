@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useGoldivault } from "../../../providers";
+import { useGoldivault, VaultTab } from "../../../providers";
 
 type TogglesProps = {
   params: {
@@ -14,7 +14,7 @@ export const TogglesMobile = ({ params }: TogglesProps) => {
 
   const { activeToggle, changeActiveToggle } = useGoldivault();
 
-  const changeToggle = (toggle: string) => {
+  const changeToggle = (toggle: VaultTab) => {
     changeActiveToggle(toggle);
     setTogglesOpen(false);
   };

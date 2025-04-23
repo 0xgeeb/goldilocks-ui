@@ -45,7 +45,7 @@ export const BorrowPageMobile = () => {
           </div> */}
           <BorrowButtonMobile />
           <StatsMobile />
-          <FooterMobile />
+          {/* <FooterMobile /> */}
           {/* <LocksFetcher /> */}
         </div>
       )}

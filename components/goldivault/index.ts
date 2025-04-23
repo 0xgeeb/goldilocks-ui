@@ -1,10 +1,8 @@
 export * from "./goldivaultPage";
 export * from "./stats";
-export * from "./vaultDisplay";
 export * from "./vaultPage";
 export * from "./poolsPage";
 export * from "./poolsPopup";
-export * from "./toggles";
 export * from "./notification";
 export * from "./infoPopup";
 export * from "./tradeTab";
@@ -16,3 +14,6 @@ export * from "./infoDisplayPopup";
 export * from "./vaultDisplayCard";
 export * from './liqManagerTab'
 export * from './stakingTab'
+export * from './buyOTPopup'
+export * from './sellOTPopup'
+export * from './ytChart'

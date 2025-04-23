@@ -9,3 +9,4 @@ export * from "./stats";
 export * from "./chart";
 export * from "./walletBalance";
 export * from "./locksFetcher";
+export * from './navBar'

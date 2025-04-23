@@ -1,7 +1,17 @@
 "use client";
 
-import { useEffect } from "react";
-import { useGoldivault } from "../../../providers";
+import { useEffect, useRef } from "react";
+import { useGoldivault } from "@/providers";
+import {
+  FieldWithLabel,
+  Label,
+  LabelSet,
+  Container,
+  FormWrapper,
+  GearIcon
+} from "@/app/(geo-check)/goldivault/vault/[address]/_components/FormComponents";
+import { HoverText } from "@/app/(geo-check)/goldivault/vault/[address]/_components/InfoHover";
+import { cn } from "@/app/_components/utils";
 
 type TradeTabProps = {
   params: {
@@ -38,6 +48,15 @@ export const TradeTab = ({ params }: TradeTabProps) => {
     disableInfoPopup,
     debouncedSlippage
   } = useGoldivault();
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Focus the input on mount
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
 
   const vaultOT =
     params.vaultToken === "weeth"
@@ -161,15 +180,15 @@ export const TradeTab = ({ params }: TradeTabProps) => {
   const renderBottomBalance = () => {
     if (activeToggle === "TRADEOT") {
       if (tradeDirection === "OUT") {
-        return vaultDT;
-      } else {
         return vaultOT;
+      } else {
+        return vaultDT;
       }
     } else {
       if (tradeDirection === "OUT") {
-        return vaultDT;
-      } else {
         return vaultYT;
+      } else {
+        return vaultDT;
       }
     }
   };
@@ -389,90 +408,98 @@ export const TradeTab = ({ params }: TradeTabProps) => {
   };
 
   return (
-    <div className="relative flex h-[100%] w-[100%] flex-col">
-      <img
-        className="absolute left-[89%] top-[16%] h-6 w-6 cursor-pointer hover:animate-spin lg:left-[87.5%] lg:top-[5%] lg:h-8 lg:w-8"
-        src="/images/icon-settings.png"
-        alt="settings"
-        onClick={() => changeSlippageToggle(true)}
+    <FormWrapper>
+      <LabelSet>
+        <Label>
+          Trade {activeToggle === "TRADEOT" ? "Ownership" : "Yield"} Tokens
+        </Label>
+        <GearIcon
+          onClick={() => changeSlippageToggle(true)}
+        />
+      </LabelSet>
+      <FieldWithLabel
+        id="number-input"
+        ref={inputRef}
+        label={renderTopBalanceLabel()}
+        value={displayString}
+        onChange={(e) => handleChange(e.target.value)}
       />
-      <div
-        className="absolute left-[47.27%] top-[44%] z-10 flex h-10 w-10 cursor-pointer items-center justify-center rounded-3xl border-2 border-[#FFCD00] bg-[#033E5E] hover:scale-[140%]"
-        onClick={() => flipTokens()}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="#FFCD00"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <line x1="12" y1="5" x2="12" y2="19"></line>
-          <polyline points="19 12 12 19 5 12"></polyline>
-        </svg>
-      </div>
-      <div className="relative mx-auto h-[50%] w-[75%] py-[3.5%]">
-        <h1 className="mb-[2.5%] font-baloo text-[2.5vw] font-medium text-white md:text-[2vw] lg:text-[1vw]">
-          Trade Tokens
-        </h1>
-        <div className="flex h-[50%] w-[100%] flex-row items-center justify-between border-2 border-black bg-white pl-[3.5%] pr-[1%]">
-          <input
-            className="h-[100%] w-full border-none bg-transparent font-baloo text-[4vw] font-bold focus:outline-hidden lg:text-[2vw]"
-            type="number"
-            id="number-input"
-            placeholder="0.00"
-            value={displayString}
-            onChange={(e) => handleChange(e.target.value)}
-          />
-          <span className="text-nowrap font-baloo text-[2.5vw] font-bold md:text-[2vw] lg:text-[1vw]">
-            {renderTopBalanceLabel()}
-          </span>
-        </div>
-        <h1
-          className="absolute right-0 mt-[2.5%] cursor-pointer font-baloo text-[2.5vw] font-medium text-white hover:scale-110 md:text-[2vw] lg:mt-[1%] lg:text-[1vw]"
+      {/* <Container align="right">
+        <Label
+          className="cursor-pointer"
           onClick={() => handleBalanceClick(params.vaultToken)}
         >
-          balance:{" "}
+          Balance <span className="text-teak font-semibold">{" "}
           {walletInfoLoading
             ? loadingElement()
             : formatBalance(renderTopBalance())}
-        </h1>
-      </div>
-      <div className="h-[50%] w-[100%] border-t-2 border-[#FFCD00] px-[12.5%] py-[3.5%]">
-        <h1 className="mb-[2.5%] font-baloo text-[2.5vw] font-medium text-white md:text-[2vw] lg:text-[1vw]">Minimum tokens received</h1>
-        <div className="flex h-[50%] w-[100%] flex-row items-center justify-between border-2 border-black bg-slate-200 pl-[3.5%] pr-[1%]">
-          <span className="text-nowrap font-baloo text-[4vw] font-bold lg:text-[2vw]">
-            {outputTokensLoading
-              ? loadingElement()
-              : formatBalance(tradeOutput)}
-          </span>
-          <span className="text-nowrap font-baloo text-[2.5vw] font-bold md:text-[2vw] lg:text-[1vw]">
-            {renderBottomBalanceLabel()}
-          </span>
+            </span>
+        </Label>
+      </Container> */}
+      <Container padding="sm" align="center">
+        <div
+          className={cn(
+            "border-4 border-bera-brown absolute size-10 rounded-full",
+            "bg-input-base hover:bg-input-hover flex items-center justify-center z-10",
+            "stroke-teak hover:stroke-teak",
+            "cursor-pointer",
+          )}
+          onClick={() => flipTokens()}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} className="absolute size-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3" />
+          </svg>
         </div>
-        <h1 className="absolute right-0 mt-[2.5%] pr-[12.5%] font-baloo text-[2.5vw] font-medium text-white md:text-[2vw] lg:mt-[1%] lg:text-[1vw]">
-          balance:{" "}
-          {walletInfoLoading
+      </Container>
+      {/* <LabelSet>
+        <Label>
+          Minimum tokens received
+        </Label>
+      </LabelSet> */}
+      <FieldWithLabel
+        id="number-input"
+        label={renderBottomBalanceLabel()}
+        value={formatBalance(tradeOutput)}
+        disabled={true}
+      />
+      <Container align="right">
+        <Label
+          className="cursor-pointer"
+          onClick={() => handleBalanceClick(params.vaultToken)}
+        >
+          Balance
+          <span className="text-teak font-semibold">{" "}
+          {
+            walletInfoLoading
             ? loadingElement()
-            : formatBalance(renderBottomBalance())}
-        </h1>
-      </div>
-      {tradeOutput > 0 && (
-        <div className="absolute bottom-0 left-[1%] z-50 flex flex-col font-baloo text-[1.5vw] font-medium text-white lg:text-[0.8vw]">
-          <span
-            className="cursor-pointer hover:text-gray-400"
-            onMouseEnter={() => enableInfoPopup("impliedapr")}
-            onMouseLeave={() => disableInfoPopup("impliedapr")}
-          >
-            implied apr: {formatBalance(impliedApr)}%
+            : formatBalance(renderBottomBalance())
+          }
           </span>
-          <span>predicted price impact: {formatBalance(priceImpact)}%</span>
-        </div>
+        </Label>
+      </Container>
+      {tradeOutput >= 0 && (
+        <Container direction="col" padding="md" align="center">
+          <div className="flex flex-row justify-between items-center w-full">
+            <Label>
+              Predicted price impact
+            </Label>
+            <Label>
+              {formatBalance(priceImpact)}%
+            </Label>
+          </div>
+          <div className="flex flex-row justify-between items-center w-full">
+            <Label className="cursor-pointer">
+              Implied APR
+              <HoverText hoverText="The apr implied by the price at which your trade is predicted to execute" />
+            </Label>
+            <Label>
+              {formatBalance(impliedApr)}%
+            </Label>
+          </div>
+        </Container>
       )}
-    </div>
+    </FormWrapper>
   );
 };
+
+TradeTab.displayName = "TradeTab";

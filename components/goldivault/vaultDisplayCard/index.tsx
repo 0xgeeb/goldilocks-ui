@@ -1,6 +1,8 @@
 "use client";
 
-import { formatAsString } from "@/app/_components/utils";
+import { useRouter } from "next/navigation";
+
+import { formatAsCurrency, formatAsPercent } from "@/app/_components/utils";
 
 import { useGoldivault } from "../../../providers";
 
@@ -14,76 +16,93 @@ type VaultDisplayCardProps = {
   };
 };
 
+function Divider() {
+  return <hr className="w-[140px] border-1 border-[#352A1C]" />;
+}
+
+function VaultInfoItem({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex flex-col items-center">
+      <div className="text-WarmText text-lg">{label}</div>
+      <div className="text-HoneyYellow text-2xl">{value || <>&nbsp;</>}</div>
+    </div>
+  );
+}
 export const VaultDisplayCard = ({ params }: VaultDisplayCardProps) => {
   const { enableInfoPopup, disableInfoPopup, infoLoading, vaultDisplayInfo } =
     useGoldivault();
 
-  const loadingElement = () => {
-    return <span className="loader-small m-auto"></span>;
-  };
+  const vaultInfo = (() => {
+    switch (params.tokenName) {
+      case "weETH":
+        return vaultDisplayInfo.weeth;
+      case "rsETH":
+        return vaultDisplayInfo.rseth;
+      case "eBTC":
+        return vaultDisplayInfo.ebtc;
+      case "uniBTC":
+        return vaultDisplayInfo.unibtc;
+      case "SolvBTC.BBN":
+        return vaultDisplayInfo.solvbtc;
+      case "rUSD":
+        return vaultDisplayInfo.rusd;
+      case "oriBGT":
+        return vaultDisplayInfo.oribgt;
+      default:
+        return {
+          fixedApr: 0,
+          daysTil: "ooga booga",
+          liquidity: 0,
+          ytPrice: 0,
+        };
+    }
+  })();
 
-  const vaultInfo =
-    params.tokenName === "weETH"
-      ? vaultDisplayInfo.weeth
-      : params.tokenName === "rsETH"
-        ? vaultDisplayInfo.rseth
-        : params.tokenName === "eBTC"
-          ? vaultDisplayInfo.ebtc
-          : params.tokenName === "uniBTC"
-            ? vaultDisplayInfo.unibtc
-            : params.tokenName === "SolvBTC.BBN"
-              ? vaultDisplayInfo.solvbtc
-              : params.tokenName === "rUSD"
-                ? vaultDisplayInfo.rusd
-                : params.tokenName === "rsETH"
-                  ? vaultDisplayInfo.rseth
-                  : params.tokenName === "iBGT"
-                    ? vaultDisplayInfo.oribgt
-                    : {
-                        fixedApr: 0,
-                        daysTil: "ooga booga",
-                        liquidity: 0,
-                        ytPrice: 0,
-                      };
+  const router = useRouter();
 
   return (
     <a
-      className="min-h-[302px] w-full p-5 lg:aspect-3/2 lg:p-2"
-      href={`/goldivault/vault/${params.address}`}
+      className="block h-full mx-auto min-w-[300px] sm:min-w-[360px]"
+      onClick={() => router.push(`/goldivault/vault/${params.address}`)}
       onMouseEnter={() => enableInfoPopup(params.mouseFlag)}
       onMouseLeave={() => disableInfoPopup(params.mouseFlag)}
     >
       <div
-        className="relative size-full cursor-pointer border-2 border-[#FFCD00] bg-[#9A5816] hover:scale-105"
+        className="rounded-xl5 size-full cursor-pointer rounded-2xl border-2 border-bera-brown-border bg-bera-brown-dark p-2 transition-all duration-300 ease-in-out hover:scale-[1.03]"
         id="card-div-shadow"
       >
-        <div className="absolute top-2 left-0 w-4 skew-y-[45deg] border-b-2 border-[#FFCD00]"></div>
-        <div className="absolute bottom-2 left-0 w-4 -skew-y-[45deg] border-b-2 border-[#FFCD00]"></div>
-        <div className="absolute top-2 right-0 w-4 -skew-y-[45deg] border-b-2 border-[#FFCD00]"></div>
-        <div className="absolute right-0 bottom-2 w-4 skew-y-[45deg] border-b-2 border-[#FFCD00]"></div>
-        <div className="font-baloo absolute inset-4 flex flex-col items-center justify-between border-2 border-[#FFCD00] bg-[#C8894A] px-[2.5%] py-[0.5%] font-semibold">
-          <div className="flex w-full flex-row items-center justify-between">
-            <span className="font-amatic text-[5vw] font-semibold md:text-[3.5vw] lg:text-[3.5vw]">
+        <div className="font-baloo flex h-full flex-col items-center justify-between gap-2.5 rounded-xl border-2 border-bera-brown-border p-6 font-semibold text-white">
+          <div className="flex w-full flex-row items-center justify-center gap-3">
+            <span className="font-amatic text-4xl font-semibold">
               {params.tokenName}
             </span>
             <img
-              className={`size-[32px] rounded-full border-2 border-[#FFCD00] md:size-[48px] lg:size-[64px]`}
+              className="size-[48px] rounded-full border-2 border-[#FFCD00]"
               src={`/images/${params.imageUrl}`}
               alt="token-logo"
             />
           </div>
+          <Divider />
           {infoLoading ? (
-            loadingElement()
+            <span className="loading loading-spinner loading-sm text-WarmText m-auto"></span>
           ) : (
-            <div className="flex w-[75%] flex-row items-start justify-between text-[1.5vw] lg:w-full lg:flex-col lg:text-[1vw]">
-              <span>fixed APR: {formatAsString(vaultInfo.fixedApr)}%</span>
-              <span>days until maturity: {vaultInfo.daysTil}</span>
-              <span>liquidity: ${formatAsString(vaultInfo.liquidity)}</span>
+            <div className="flex flex-col items-center gap-3 p-2.5">
+              <VaultInfoItem
+                label="Fixed APR"
+                value={`${formatAsPercent(vaultInfo.fixedApr / 100)}`}
+              />
+              <VaultInfoItem
+                label="days until maturity"
+                value={vaultInfo.daysTil}
+              />
+              <VaultInfoItem
+                label="liquidity"
+                value={`${formatAsCurrency(vaultInfo.liquidity) || ""}`}
+              />
             </div>
           )}
-          <div className="flex w-full flex-row items-center justify-between">
-            <span className="text-[1.5vw]">{params.vaultName}</span>
-          </div>
+          <Divider />
+          <div className="text-WarmText text-base">{params.vaultName}</div>
         </div>
       </div>
     </a>

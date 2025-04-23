@@ -7,6 +7,7 @@ import { useGoldivault } from "../../../providers";
 type VaultDisplayCardProps = {
   params: {
     address: string;
+    mouseFlag: string;
     tokenName: string;
     imageUrl: string;
     vaultName: string;
@@ -15,10 +16,6 @@ type VaultDisplayCardProps = {
 
 export const VaultDisplayCardMobile = ({ params }: VaultDisplayCardProps) => {
   const { infoLoading, vaultDisplayInfo } = useGoldivault();
-
-  const loadingElement = () => {
-    return <span className="loader-small m-auto"></span>;
-  };
 
   const vaultInfo =
     params.tokenName === "weETH"
@@ -44,44 +41,60 @@ export const VaultDisplayCardMobile = ({ params }: VaultDisplayCardProps) => {
                         ytPrice: 0,
                       };
 
+  function Divider() {
+    return <hr className="w-full border-1 border-[#352A1C]" />;
+  }
+
+  function VaultInfoItem({ label, value }: { label: string; value: string }) {
+    return (
+      <div className="flex flex-col items-center">
+        <div className="text-WarmText text-base">{label}</div>
+        <div className="text-HoneyYellow text-lg">{value}</div>
+      </div>
+    );
+  }
+  
   return (
     <a
-      className="my-2 h-[32%] w-full"
+      className="block w-full"
       href={`/goldivault/vault/${params.address}`}
     >
       <div
-        className="relative size-full cursor-pointer border-2 border-[#FFCD00] bg-[#9A5816]"
+        className="rounded-xl5 w-full cursor-pointer rounded-xl border-2 border-[#352A1C] bg-[#1A140C] p-2 transition-all duration-300 ease-in-out hover:scale-[1.03]"
         id="card-div-shadow"
       >
-        <div className="absolute left-0 top-1 w-2 skew-y-[45deg] border-b-2 border-[#FFCD00]"></div>
-        <div className="absolute bottom-1 left-0 w-2 -skew-y-[45deg] border-b-2 border-[#FFCD00]"></div>
-        <div className="absolute right-0 top-1 w-2 -skew-y-[45deg] border-b-2 border-[#FFCD00]"></div>
-        <div className="absolute bottom-1 right-0 w-2 skew-y-[45deg] border-b-2 border-[#FFCD00]"></div>
-        <div className="absolute inset-2 flex flex-col items-center justify-between border-2 border-[#FFCD00] bg-[#C8894A] p-[2%] font-baloo font-semibold">
-          <div className="flex w-full flex-row justify-between">
-            <span className="font-amatic text-[8vw] font-semibold tall:text-[10vw]">
+        <div className="font-baloo flex flex-col items-center justify-between gap-2 rounded-xl border-2 border-[#352A1C] p-4 font-semibold text-white">
+          <div className="flex w-full flex-row items-center justify-center gap-2">
+            <span className="font-amatic text-3xl font-semibold">
               {params.tokenName}
             </span>
             <img
-              className="size-10 rounded-full border-2 border-[#FFCD00] tall:size-12"
+              className="size-[40px] rounded-full border-2 border-[#FFCD00]"
               src={`/images/${params.imageUrl}`}
               alt="token-logo"
             />
           </div>
+          <Divider />
           {infoLoading ? (
-            loadingElement()
+            <span className="loading loading-spinner loading-sm text-WarmText m-auto"></span>
           ) : (
-            <div className="flex w-full flex-col items-start justify-between text-[3vw]">
-              <span>fixed APR: {formatAsString(vaultInfo.fixedApr)}%</span>
-              <span>days until maturity: {vaultInfo.daysTil}</span>
-              <span>liquidity: ${formatAsString(vaultInfo.liquidity)}</span>
+            <div className="flex flex-col items-center gap-2 p-2">
+              <VaultInfoItem
+                label="Fixed APR"
+                value={`${formatAsString(vaultInfo.fixedApr)}%`}
+              />
+              <VaultInfoItem
+                label="days until maturity"
+                value={vaultInfo.daysTil}
+              />
+              <VaultInfoItem
+                label="liquidity"
+                value={`$${formatAsString(vaultInfo.liquidity)}`}
+              />
             </div>
           )}
-          <div className="flex w-full flex-row items-center justify-between">
-            <span className="text-[4vw] tall:text-[5vw]">
-              {params.vaultName}
-            </span>
-          </div>
+          <Divider />
+          <div className="text-WarmText text-sm">{params.vaultName}</div>
         </div>
       </div>
     </a>

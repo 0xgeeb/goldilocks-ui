@@ -44,7 +44,7 @@ export const HomePageMobile = () => {
               <div className="mt-2 flex h-[100%] w-[40%] flex-row items-center">
                 <a
                   className="mr-2 w-[55%] cursor-pointer hover:scale-[150%]"
-                  href="https:x.com/goldilocksmoney"
+                  href="https://x.com/goldilocksmoney"
                   target="_blank"
                   rel="noreferrer"
                 >

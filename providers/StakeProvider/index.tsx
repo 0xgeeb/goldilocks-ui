@@ -4,10 +4,8 @@ import { createContext, PropsWithChildren, useContext, useState } from "react";
 import { useAccount } from "wagmi";
 import { readContract } from "@wagmi/core";
 import { formatEther } from "viem";
-import { useGoldiswapMath } from "../../hooks";
 import { config } from "../../providers/WagmiProvider";
 import { contracts } from "../../utils/addressi";
-import { ChartDataEntry } from "../../utils/interfaces";
 
 const INITIAL_STATE = {
   stakeInfo: {
@@ -60,9 +58,6 @@ const INITIAL_STATE = {
   infoLoading: false,
   walletInfoLoading: false,
 
-  chartOpen: false,
-  setChartOpen: (_chart: boolean) => {},
-
   stirPopupToggle: false,
   setStirPopupToggle: (_bool: boolean) => {},
 
@@ -88,10 +83,7 @@ const INITIAL_STATE = {
   setBalanceMobileToggle: (_toggle: boolean) => {},
 
   wutPopup: false,
-  setWutPopup: (_popup: boolean) => {},
-
-  chartData: [] as ChartDataEntry[],
-  getChartData: async () => {}
+  setWutPopup: (_popup: boolean) => {}
 };
 
 const StakeContext = createContext(INITIAL_STATE);
@@ -100,8 +92,6 @@ export const StakeProvider = (props: PropsWithChildren<{}>) => {
   const { children } = props;
 
   const { address, isConnected } = useAccount();
-
-  const { marketPrice, floorPrice } = useGoldiswapMath();
 
   const [stakeInfoState, setStakeInfoState] = useState(INITIAL_STATE.stakeInfo);
   const [stakeWalletInfoState, setStakeWalletInfoState] = useState(
@@ -131,12 +121,6 @@ export const StakeProvider = (props: PropsWithChildren<{}>) => {
   const [unstakePopupToggleState, setUnstakePopupToggleState] =
     useState<boolean>(INITIAL_STATE.unstakePopupToggle);
 
-  const [chartDataState, setChartDataState] = useState<
-    any[]
-  >(INITIAL_STATE.chartData);
-  const [chartOpenState, setChartOpenState] = useState<boolean>(
-    INITIAL_STATE.chartOpen,
-  );
   const [infoLoadingState, setInfoLoadingState] = useState<boolean>(
     INITIAL_STATE.infoLoading,
   );
@@ -467,31 +451,6 @@ export const StakeProvider = (props: PropsWithChildren<{}>) => {
       }));
     }
   };
-  
-  const getFormattedDate = (timestamp: number): string => {
-    const date = new Date(timestamp * 1000);
-    const day = date.getDate();
-    const month = date.getMonth() + 1;
-    return `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}`;
-  }
-
-  const getChartData = async () => {
-    const response = await fetch("/api/lockschart")
-    const responseJson: any = await response.json()
-    console.log(responseJson)
-    const newChartData = []
-    for(let node of responseJson.locksDaily) {
-      const entry = {
-        floorPrice: node.floor,
-        marketPrice: node.market,
-        date: getFormattedDate(node.timestamp)
-      }
-
-      newChartData.push(entry)
-    }
-
-    setChartDataState(newChartData.reverse())
-  }
 
   return (
     <StakeContext.Provider
@@ -510,8 +469,6 @@ export const StakeProvider = (props: PropsWithChildren<{}>) => {
         walletInfoLoading: walletInfoLoadingState,
         refreshStakeInfo,
         refreshStakeWalletInfo,
-        chartOpen: chartOpenState,
-        setChartOpen: setChartOpenState,
         stirPopupToggle: stirPopupToggleState,
         setStirPopupToggle: setStirPopupToggleState,
         unstakePopupToggle: unstakePopupToggleState,
@@ -533,8 +490,6 @@ export const StakeProvider = (props: PropsWithChildren<{}>) => {
         setBalanceMobileToggle: setBalanceMobileToggleState,
         wutPopup: wutPopupState,
         setWutPopup: setWutPopupState,
-        chartData: chartDataState,
-        getChartData,
       }}
     >
       {children}

@@ -101,7 +101,7 @@ export const Chart = () => {
         }
         <CartesianGrid stroke="#000000" vertical={false} />
         <XAxis dataKey="date" stroke="#000000" />
-        <YAxis key={`${timeframeSelection}${chartSelection}`} type="number" domain={["auto", "auto"]} stroke="#000000" tickFormatter={(value) => value.toFixed(7)} />
+        <YAxis key={`${timeframeSelection}${chartSelection}`} type="number" domain={['auto', 'auto']} stroke="#000000" tickFormatter={(value) => value.toFixed(7)} />
         <Tooltip />
       </LineChart>
       <p

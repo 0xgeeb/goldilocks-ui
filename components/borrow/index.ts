@@ -5,6 +5,6 @@ export * from "./borrowButton";
 export * from "./toggles";
 export * from "./borrowPopup";
 export * from "./notification";
-export * from "./chart";
 export * from "./walletBalance";
 export * from "./locksFetcher";
+export * from './navBar'

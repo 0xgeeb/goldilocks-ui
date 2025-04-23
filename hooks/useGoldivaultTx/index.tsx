@@ -218,7 +218,6 @@ export const useGoldivaultTx = () => {
     vault: string,
     infinite: boolean,
   ) => {
-    console.log(vault)
     if (vault === "weeth") {
       try {
         const hash = await writeContract(config, {
@@ -481,6 +480,21 @@ export const useGoldivaultTx = () => {
           abi: contracts.oribgtyt.abi,
           functionName: 'approve',
           args: [contracts.oribgtVault.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
+        })
+        await waitForTransactionReceipt(config, { hash })
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+    else if (vault === "iBGT") {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.ibgt.address as `0x${string}`,
+          abi: contracts.ibgt.abi,
+          functionName: 'approve',
+          args: [contracts.oribgt.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
         })
         await waitForTransactionReceipt(config, { hash })
       }
@@ -1124,6 +1138,46 @@ export const useGoldivaultTx = () => {
     return ''
   }
 
+  const sendOribgtDepositTx = async (depositAmt: number, wallet: string): Promise<string> => {
+    try {
+      const hash = await writeContract(config, {
+        address: contracts.oribgt.address as `0x${string}`,
+        abi: contracts.oribgt.abi,
+        functionName: "deposit",
+        args: [parseEther(`${depositAmt}`), wallet]
+      })
+
+      const receipt = await waitForTransactionReceipt(config, { hash })
+      return receipt.transactionHash;
+    }
+    catch (e) {
+      console.log("user denied tx")
+      console.log("or: ", e)
+    }
+
+    return ''
+  }
+
+  const sendOribgtRedeemTx = async (redeemAmt: number, wallet: string): Promise<string> => {
+    try {
+      const hash = await writeContract(config, {
+        address: contracts.oribgt.address as `0x${string}`,
+        abi: contracts.oribgt.abi,
+        functionName: "redeem",
+        args: [parseEther(`${redeemAmt}`), wallet, wallet]
+      })
+
+      const receipt = await waitForTransactionReceipt(config, { hash })
+      return receipt.transactionHash;
+    }
+    catch (e) {
+      console.log("user denied tx")
+      console.log("or: ", e)
+    }
+
+    return ''
+  }
+
   return {
     checkAllowance,
     checkRouterAllowance,
@@ -1142,6 +1196,8 @@ export const useGoldivaultTx = () => {
     sendRemoveLiqTx,
     sendStakeYTTx,
     sendUnstakeYTTx,
-    sendClaimTx
+    sendClaimTx,
+    sendOribgtDepositTx,
+    sendOribgtRedeemTx
   };
 };

@@ -4,10 +4,8 @@ import { PropsWithChildren, createContext, useContext, useState } from "react";
 import { readContract } from "@wagmi/core";
 import { formatEther } from "viem";
 import { useAccount } from "wagmi";
-import { useGoldiswapMath } from "../../hooks";
 import { config } from "../../providers/WagmiProvider";
 import { contracts } from "../../utils/addressi";
-import { ChartDataEntry } from "../../utils/interfaces";
 
 const INITIAL_STATE = {
   borrowInfo: {
@@ -60,9 +58,6 @@ const INITIAL_STATE = {
   borrowPopupToggle: false,
   setBorrowPopupToggle: (_bool: boolean) => {},
 
-  chartOpen: false,
-  setChartOpen: (_chart: boolean) => {},
-
   infoLoading: false,
   walletInfoLoading: false,
 
@@ -80,10 +75,7 @@ const INITIAL_STATE = {
   setWutPopup: (_popup: boolean) => {},
 
   balanceMobileToggle: false,
-  setBalanceMobileToggle: (_toggle: boolean) => {},
-
-  chartData: [] as ChartDataEntry[],
-  getChartData: async () => {}
+  setBalanceMobileToggle: (_toggle: boolean) => {}
 };
 
 const BorrowContext = createContext(INITIAL_STATE);
@@ -92,8 +84,6 @@ export const BorrowProvider = (props: PropsWithChildren<{}>) => {
   const { children } = props;
 
   const { address, isConnected } = useAccount();
-
-  const { marketPrice, floorPrice } = useGoldiswapMath();
 
   const [borrowInfoState, setBorrowInfoState] = useState(
     INITIAL_STATE.borrowInfo,
@@ -120,12 +110,6 @@ export const BorrowProvider = (props: PropsWithChildren<{}>) => {
     INITIAL_STATE.borrowPopupToggle,
   );
 
-  const [chartDataState, setChartDataState] = useState<
-    any[]
-  >(INITIAL_STATE.chartData);
-  const [chartOpenState, setChartOpenState] = useState<boolean>(
-    INITIAL_STATE.chartOpen,
-  );
   const [infoLoadingState, setInfoLoadingState] = useState<boolean>(
     INITIAL_STATE.infoLoading,
   );
@@ -368,31 +352,6 @@ export const BorrowProvider = (props: PropsWithChildren<{}>) => {
     }));
   };
 
-  const getFormattedDate = (timestamp: number): string => {
-    const date = new Date(timestamp * 1000);
-    const day = date.getDate();
-    const month = date.getMonth() + 1;
-    return `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}`;
-  }
-
-  const getChartData = async () => {
-    const response = await fetch("/api/lockschart")
-    const responseJson: any = await response.json()
-    console.log(responseJson)
-    const newChartData = []
-    for(let node of responseJson.locksDaily) {
-      const entry = {
-        floorPrice: node.floor,
-        marketPrice: node.market,
-        date: getFormattedDate(node.timestamp)
-      }
-
-      newChartData.push(entry)
-    }
-
-    setChartDataState(newChartData.reverse())
-  }
-
   return (
     <BorrowContext.Provider
       value={{
@@ -400,8 +359,6 @@ export const BorrowProvider = (props: PropsWithChildren<{}>) => {
         borrowWalletInfo: borrowWalletInfoState,
         activeToggle: activeToggleState,
         changeActiveToggle,
-        chartOpen: chartOpenState,
-        setChartOpen: setChartOpenState,
         infoLoading: infoLoadingState,
         walletInfoLoading: walletInfoLoadingState,
         refreshBorrowInfo,
@@ -428,8 +385,6 @@ export const BorrowProvider = (props: PropsWithChildren<{}>) => {
         setBalanceMobileToggle: setBalanceMobileToggleState,
         wutPopup: wutPopupState,
         setWutPopup: setWutPopupState,
-        chartData: chartDataState,
-        getChartData,
       }}
     >
       {children}
