@@ -170,7 +170,7 @@ const VaultInfoPane: React.FC<{ vaultToken: string}> = ({ vaultToken }) => {
         }
         <div className="flex w-full">
           <dt className="text-sm font-semibold text-left font-baloo text-warm-text flex items-center">
-            Fees <HoverText hoverText={"3% of points and 33% of LP trading fees (0.05%) and 0.5% fee on proceeds from YT trades"} />
+            Fees <HoverText hoverText={"3% of yield and points and 33% of LP trading fees (0.05%) and 0.5% fee on proceeds from YT trades"} />
           </dt>
         </div>
       </dl>

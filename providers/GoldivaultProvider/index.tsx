@@ -190,10 +190,10 @@ export const VAULT_LABELS: VaultLabels = {
         label: "Origami Points Leverage",
         hoverText: "10x Origami Points Multiplier"
       },
-      infraredLeverage: {
-        label: "Infrared Points Leverage",
-        hoverText: "1x Infrared Points Multiplier"
-      }
+      // infraredLeverage: {
+      //   label: "Infrared Points Leverage",
+      //   hoverText: "1x Infrared Points Multiplier"
+      // }
     },
     goldivaultWalletInfo: {
       ibgt: "iBGT",
@@ -2879,13 +2879,14 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
           case "rusdvaultinfo":
             return `2.25x Reservoir points;${formatLeverageNum(vaultDisplayInfoState.rusd.ytPrice, 2.25)}x Reservoir point leverage`;
           case "oribgtvaultinfo":
-            return `10x Origami points and 1x Infrared points;${formatLeverageNum(vaultDisplayInfoState.oribgt.ytPrice, 10)}x Origami point leverage and ${formatLeverageNum(vaultDisplayInfoState.oribgt.ytPrice, 1)}x Infrared point leverage`
+            // return `10x Origami points and 1x Infrared points;${formatLeverageNum(vaultDisplayInfoState.oribgt.ytPrice, 10)}x Origami point leverage and ${formatLeverageNum(vaultDisplayInfoState.oribgt.ytPrice, 1)}x Infrared point leverage`
+            return `10x Origami points;${formatLeverageNum(vaultDisplayInfoState.oribgt.ytPrice, 10)}x Origami point leverage`
           case "impliedapr":
             return "The apr implied by the price at which your trade is predicted to execute";
           case "lpapr":
             return "Providing liquidity earns a mixture of points, the fixed apr, trading fees and liquidity incentives through Beradrome";
           case "fees":
-            return "3% of points and 33% of LP trading fees (0.05%) and 0.5% fee on proceeds from YT trades";
+            return "3% of yield and points and 33% of LP trading fees (0.05%) and 0.5% fee on proceeds from YT trades";
           case "redeemotinfo":
             return "Burn ownership and yield tokens to receive underlying assets from the vault";
           case "redeemytinfo":

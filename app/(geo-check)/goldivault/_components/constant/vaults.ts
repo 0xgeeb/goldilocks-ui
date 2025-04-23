@@ -1,5 +1,12 @@
 export const VAULTS = [
   {
+    address: "oribgt",
+    mouseFlag: "oribgtvaultinfo",
+    tokenName: "oriBGT",
+    imageUrl: "logo-oribgt.svg",
+    vaultName: "oriBGT Vault",
+  },
+  {
     address: "rusd",
     mouseFlag: "rusdvaultinfo",
     tokenName: "rUSD",
@@ -19,13 +26,6 @@ export const VAULTS = [
     tokenName: "rsETH",
     imageUrl: "rseth_logo.png",
     vaultName: "KelpDAO Points Vault",
-  },
-  {
-    address: "oribgt",
-    mouseFlag: "oribgtvaultinfo",
-    tokenName: "oriBGT",
-    imageUrl: "logo-oribgt.svg",
-    vaultName: "oriBGT Vault",
   },
 ] as const;
 
