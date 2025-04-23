@@ -73,7 +73,7 @@ export const ChartMobile = () => {
         }
         <CartesianGrid stroke="#000000" vertical={false} />
         <XAxis dataKey="date" stroke="#000000" />
-        <YAxis type="number" domain={["auto", "auto"]} stroke="#000000" tickFormatter={(value) => value.toFixed(6)} />
+        <YAxis key={`${timeframeSelection}${chartSelection}`} type="number" domain={["auto", "auto"]} stroke="#000000" tickFormatter={(value) => value.toFixed(6)} />
         <Tooltip />
       </LineChart>
     </div>

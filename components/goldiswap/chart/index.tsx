@@ -64,7 +64,7 @@ export const Chart = () => {
     <div className="flex h-[100%] w-[100%] flex-col justify-between bg-[#F3AA8A] font-baloo text-[1.4vw] lg:pb-[2.5%] lg:text-[1vw]">
       <div className="font-amaticbold flex flex-row items-center justify-between pl-[3%] pr-[10%]">
         <h1 className="text-[5.2vw] lg:text-[3vw]">{chartSelection} price chart</h1>
-        <div className="flex flex-col text-[2vw] items-center">
+        <div className="flex flex-col text-[2.5vw] lg:text-[2vw] items-center">
           <div className="flex flex-row items-center">
             <span onClick={() => setChartSelection('FLOOR')} className={`cursor-pointer ${chartSelection === "FLOOR" && "underline"}`}>floor</span>
             <span onClick={() => setChartSelection('MARKET')} className={`ml-4 cursor-pointer ${chartSelection === "MARKET" && "underline"}`}>market</span>
@@ -101,7 +101,7 @@ export const Chart = () => {
         }
         <CartesianGrid stroke="#000000" vertical={false} />
         <XAxis dataKey="date" stroke="#000000" />
-        <YAxis type="number" domain={["auto", "auto"]} stroke="#000000" tickFormatter={(value) => value.toFixed(7)} />
+        <YAxis key={`${timeframeSelection}${chartSelection}`} type="number" domain={["auto", "auto"]} stroke="#000000" tickFormatter={(value) => value.toFixed(7)} />
         <Tooltip />
       </LineChart>
       <p
