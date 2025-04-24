@@ -1489,7 +1489,7 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
     const currentYtPrice = 1 - parseFloat(formatEther(convertedQuote as unknown as bigint))
     const fixedAprResponse = currentYtPrice * 100 * (365 / daysTil);
 
-    const oribgtLiquidity = await readContract(config, {
+    const oribgtBalance = await readContract(config, {
       address: contracts.oribgt.address as `0x${string}`,
       abi: contracts.oribgt.abi,
       functionName: "balanceOf",
@@ -1501,6 +1501,12 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       functionName: "balanceOf",
       args: [contracts.vaultLPaddys.oribgt],
     });
+    const oribgtLiquidity = await readContract(config, {
+      address: contracts.oribgt.address as `0x${string}`,
+      abi: contracts.oribgt.abi,
+      functionName: "convertToAssets",
+      args: [oribgtBalance],
+    })
     const beraPriceResult: any = await readContract(config, {
       address: contracts.quoterv2.address as `0x${string}`,
       abi: contracts.quoterv2.abi,
@@ -1516,7 +1522,23 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       ],
     });
     const beraPrice = parseFloat(formatEther(beraPriceResult[0] as unknown as bigint))
-    const liquidityResult = (parseFloat(formatEther(oribgtLiquidity as unknown as bigint)) + parseFloat(formatEther(oribgtOTLiquidity as unknown as bigint))) * beraPrice;
+    const ibgtPriceResult: any = await readContract(config, {
+      address: contracts.quoterv2.address as `0x${string}`,
+      abi: contracts.quoterv2.abi,
+      functionName: "quoteExactOutputSingle",
+      args: [
+        [
+          contracts.wbera.address,
+          contracts.ibgt.address,
+          parseEther(`1`),
+          3000,
+          0,
+        ],
+      ],
+    });
+    const ibgtPrice = parseFloat(formatEther(ibgtPriceResult[0] as unknown as bigint))
+    const liquidityTokens = (parseFloat(formatEther(oribgtLiquidity as unknown as bigint)) + parseFloat(formatEther(oribgtOTLiquidity as unknown as bigint)))
+    const liquidityResult = liquidityTokens * (ibgtPrice * beraPrice)
 
     const response = {
       endTime: parseFloat(endTimeResult),
@@ -1963,12 +1985,18 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       functionName: "balanceOf",
       args: [contracts.vaultLPaddys.oribgt],
     });
-    const oribgtLiquidity = await readContract(config, {
+    const oribgtBalance = await readContract(config, {
       address: contracts.oribgt.address as `0x${string}`,
       abi: contracts.oribgt.abi,
       functionName: "balanceOf",
       args: [contracts.vaultLPaddys.oribgt],
     });
+    const oribgtLiquidity = await readContract(config, {
+      address: contracts.oribgt.address as `0x${string}`,
+      abi: contracts.oribgt.abi,
+      functionName: "convertToAssets",
+      args: [oribgtBalance],
+    })
     const beraPriceResult: any = await readContract(config, {
       address: contracts.quoterv2.address as `0x${string}`,
       abi: contracts.quoterv2.abi,
@@ -1984,7 +2012,23 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       ],
     });
     const beraPrice = parseFloat(formatEther(beraPriceResult[0] as unknown as bigint))
-    const liquidityResultOribgt = (parseFloat(formatEther(oribgtLiquidity as unknown as bigint)) + parseFloat(formatEther(oribgtOTLiquidity as unknown as bigint))) * beraPrice
+    const ibgtPriceResult: any = await readContract(config, {
+      address: contracts.quoterv2.address as `0x${string}`,
+      abi: contracts.quoterv2.abi,
+      functionName: "quoteExactOutputSingle",
+      args: [
+        [
+          contracts.wbera.address,
+          contracts.ibgt.address,
+          parseEther(`1`),
+          3000,
+          0,
+        ],
+      ],
+    });
+    const ibgtPrice = parseFloat(formatEther(ibgtPriceResult[0] as unknown as bigint))
+    const liquidityTokens = (parseFloat(formatEther(oribgtLiquidity as unknown as bigint)) + parseFloat(formatEther(oribgtOTLiquidity as unknown as bigint)))
+    const liquidityResultOribgt = liquidityTokens * (ibgtPrice * beraPrice)
     const buyingOTQuoteResultOribgt: any = await readContract(config, {
       address: contracts.quoterv2.address as `0x${string}`,
       abi: contracts.quoterv2.abi,
