@@ -74,7 +74,7 @@ export const YtChart = () => {
         }
         <CartesianGrid stroke="#000000" vertical={false} />
         <XAxis dataKey="date" stroke="#ffffff" />
-        <YAxis key={`${timeframeSelection}${chartSelection}`} type="number" domain={['auto', 'auto']} stroke="#ffffff" tickFormatter={(value) => chartSelection === "YTPRICE" ? value.toFixed(6) : value.toFixed(2)} />
+        <YAxis key={`${timeframeSelection}${chartSelection}`} type="number" domain={['auto', 'auto']} stroke="#ffffff" tickFormatter={(value) => chartSelection === "YTPRICE" ? value.toFixed(6) : `${value.toFixed(2)}%`} />
         <Tooltip />
       </LineChart>
     </div>
