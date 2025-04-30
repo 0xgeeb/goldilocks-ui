@@ -10,8 +10,10 @@ import * as fs from "fs";
 const BASE_URL =
   // "https://berachain.gateway.tenderly.co/68PuRwmVDZYcNN563BYBHj";
   "https://api.tenderly.co/api/v1/account/konkaliquid/project/fury";
-const ACCESS_KEY = "DI43o6QBoa4oE8Jve-fh7PZEf20KZKLa";
+const ACCESS_KEY =
+  process.env.TENDERLY_ACCESS_KEY || "DI43o6QBoa4oE8Jve-fh7PZEf20KZKLa";
 
+// Mock : Tenderly SDK instance
 // const tenderlyInstance = new Tenderly({
 //   accountName: "konkaliquid",
 //   projectName: "fury",
@@ -19,11 +21,31 @@ const ACCESS_KEY = "DI43o6QBoa4oE8Jve-fh7PZEf20KZKLa";
 //   network: 80094, // Replace with the appropriate network
 // });
 
-const FROM = "0xd6d83e479359766f21a63b20d6af43a138356eba" as `0x${string}`;
+export const impersonatedUser =
+  "0xd6d83e479359766f21a63b20d6af43a138356eba" as `0x${string}`; // impersonated account
 
-const RUSD = contracts.rusd.address;
+const DEPOSIT_TOKEN = contracts.rusd.address;
 
 const VAULT = contracts.rusdVault.address;
+
+export type AssetChange = {
+  token_info: {
+    contract_address: string;
+    standard: string;
+    type: string;
+    symbol?: string;
+    name?: string;
+    decimals?: number;
+  };
+  type: string;
+  from: string;
+  to: string;
+  amount: string | null;
+  raw_amount: string;
+  dollar_value: string | null;
+  from_before_balance: string;
+  to_before_balance: string;
+};
 
 test("Simulate approve + deposit + check balances (via Tenderly)", async () => {
   const depositAmount = parseEther("500");
@@ -34,16 +56,6 @@ test("Simulate approve + deposit + check balances (via Tenderly)", async () => {
     chain: berachain,
     transport: http(),
   });
-
-  //   const client = createPublicClient({
-  //     chain: berachain,
-  //     transport: http(
-  //       "https://berachain.gateway.tenderly.co/68PuRwmVDZYcNN563BYBHj",
-  //       {
-  //         batch: true,
-  //       },
-  //     ),
-  //   });
 
   const OT = (await client.readContract({
     address: VAULT as `0x${string}`,
@@ -61,37 +73,9 @@ test("Simulate approve + deposit + check balances (via Tenderly)", async () => {
 
   console.log("YT", YT);
 
-  console.log("RUSD", RUSD);
+  console.log("RUSD", DEPOSIT_TOKEN);
 
-  //   const simulation = await client.request({
-  //     method: "eth_simulateV1",
-  //     params: [
-  //       {
-  //         blockStateCalls: [
-  //           {
-  //             calls: [
-  //               {
-  //                 from: FROM,
-  //                 to: RUSD,
-  //                 gas: "0x20000000" as `0x${string}`,
-  //                 gasPrice: "0x19419609232" as `0x${string}`,
-  //                 value: "0x0" as `0x${string}`,
-  //                 data: encodeFunctionData({
-  //                   abi: ERC20_ABI,
-  //                   functionName: "approve",
-  //                   args: [VAULT, depositAmount],
-  //                 }),
-  //               },
-  //             ],
-  //           },
-  //         ],
-  //       },
-  //       "latest",
-  //     ],
-  //   });
-
-  //   console.log("simulation", simulation);
-
+  // Usage of Tenderly SDK
   //   const transaction = await tenderlyInstance.simulator.simulateTransaction({
   //     transaction: {
   //       from: FROM,
@@ -142,8 +126,8 @@ test("Simulate approve + deposit + check balances (via Tenderly)", async () => {
   function getTxSequence() {
     return [
       {
-        from: FROM,
-        to: RUSD,
+        from: impersonatedUser,
+        to: DEPOSIT_TOKEN,
         input: encodeFunctionData({
           abi: ERC20_ABI.abi,
           functionName: "approve",
@@ -151,7 +135,7 @@ test("Simulate approve + deposit + check balances (via Tenderly)", async () => {
         }),
       },
       {
-        from: FROM,
+        from: impersonatedUser,
         to: VAULT,
         input: encodeFunctionData({
           abi: VAULT_ABI.abi,
@@ -191,7 +175,7 @@ test("Simulate approve + deposit + check balances (via Tenderly)", async () => {
   //     "depositSequence.json",
   //     JSON.stringify(depositSequence, null, 2),
   //   );
-  const simId = depositSequence.simulation_results[0].simulation.id;
+
   const simulationSuccessful =
     depositSequence.simulation_results[0].simulation.status === true;
 
@@ -201,32 +185,13 @@ test("Simulate approve + deposit + check balances (via Tenderly)", async () => {
   const asset_changes =
     depositSequence.simulation_results[1].transaction.transaction_info
       .asset_changes;
-  console.log("asset_changes", asset_changes);
-
-  type AssetChange = {
-    token_info: {
-      contract_address: string;
-      standard: string;
-      type: string;
-      symbol?: string;
-      name?: string;
-      decimals?: number;
-    };
-    type: string;
-    from: string;
-    to: string;
-    amount: string | null;
-    raw_amount: string;
-    dollar_value: string | null;
-    from_before_balance: string;
-    to_before_balance: string;
-  };
 
   // Extract final balances from asset_changes
   const rusdFinal = BigInt(
     asset_changes.find(
       (change: AssetChange) =>
-        change.token_info.contract_address.toLowerCase() === RUSD.toLowerCase(),
+        change.token_info.contract_address.toLowerCase() ===
+        DEPOSIT_TOKEN.toLowerCase(),
     )?.raw_amount || "0",
   );
 

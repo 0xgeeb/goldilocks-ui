@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect } from "react"
 import { useGoldivault } from "@/providers"
 import {
   FieldWithLabel,
@@ -26,8 +27,30 @@ export const LiqManagerTab = ({ params }: LiqManagerTabProps) => {
     activeToggle,
     walletInfoLoading,
     goldivaultWalletInfoRusd,
-    handleBalanceClick
+    goldivaultWalletInfoOribgt,
+    handleBalanceClick,
+    tradeOutput,
+    setTradeOutput,
+    setOtAmount,
+    setYtAmount,
+    calculateLiquidity,
+    debouncedTradeInput,
+    setOutputTokensLoading,
+    otAmount,
+    ytAmount
   } = useGoldivault()
+
+  useEffect(() => {
+    if(debouncedTradeInput > 0) {
+      calculateLiquidity(activeToggle)
+    }
+    else {
+      setTradeOutput(0)
+      setOtAmount(0)
+      setYtAmount(0)
+      setOutputTokensLoading(false)
+    }
+  }, [debouncedTradeInput])
 
   const loadingElement = () => {
     return <span className="loader-balance mt-1"></span>;
@@ -39,19 +62,45 @@ export const LiqManagerTab = ({ params }: LiqManagerTabProps) => {
 
   const renderTopBalance = () => {
     if (activeToggle === "ADDLIQ") {
-      return goldivaultWalletInfoRusd.rusd
+      if(params.vaultToken === "rusd") {
+        return goldivaultWalletInfoRusd.rusd
+      }
+      else {
+        return goldivaultWalletInfoOribgt.oribgt
+      }
     }
     else {
-      return goldivaultWalletInfoRusd.rusdaquabera
+      if(params.vaultToken === "rusd") {
+        return goldivaultWalletInfoRusd.rusdaquabera
+      }
+      else {
+        return goldivaultWalletInfoOribgt.steerLP
+      }
+    }
+  }
+
+  const renderBottomBalance = () => {
+    if (activeToggle === "ADDLIQ") {
+      return goldivaultWalletInfoOribgt.oribgtot
     }
   }
 
   const renderTopBalanceLabel = (): string => {
     if (activeToggle === "ADDLIQ") {
-      return "rUSD"
+      if(params.vaultToken === "rusd") {
+        return "rUSD"
+      }
+      else {
+        return "oriBGT"
+      }
     }
     else {
-      return "rUSD / rUSD-OT LP"
+      if(params.vaultToken === "rusd") {
+        return "rUSD / rUSD-OT LP"
+      }
+      else {
+        return "oriBGT / oriBGT-OT LP"
+      }
     }
   }
 
@@ -61,9 +110,7 @@ export const LiqManagerTab = ({ params }: LiqManagerTabProps) => {
         <Label>
           {activeToggle === 'ADDLIQ' ? "Deposit" : "Withdraw"} Liquidity
         </Label>
-        <GearIcon
-          onClick={() => changeSlippageToggle(true)}
-        />
+        { params.vaultToken === "rusd" && <GearIcon onClick={() => changeSlippageToggle(true)}/> }
       </LabelSet>
       <FieldWithLabel
         id="number-input"
@@ -83,6 +130,46 @@ export const LiqManagerTab = ({ params }: LiqManagerTabProps) => {
             </span>
         </Label>
       </Container>
+      {
+        (activeToggle === "ADDLIQ" && params.vaultToken === "oribgt") &&
+        <>
+          <div className='my-2'></div>
+          <FieldWithLabel
+            id="number-input"
+            label={"oriBGT-OT"}
+            value={tradeOutput}
+            disabled={true}
+          />
+          <Container align="right" padding="sm">
+            <Label>
+              Balance <span className="text-teak">{" "}
+              {walletInfoLoading
+                ? loadingElement()
+                : formatBalance(renderBottomBalance())}
+                </span>
+            </Label>
+          </Container>
+        </>
+      }
+      {
+        (activeToggle === "REMOVELIQ" && params.vaultToken === "oribgt") &&
+        <>
+          <div className='my-2'></div>
+          <FieldWithLabel
+            id="number-input"
+            label={"oriBGT"}
+            value={otAmount}
+            disabled={true}
+          />
+          <div className='my-1'></div>
+          <FieldWithLabel
+            id="number-input"
+            label={"oriBGT-OT"}
+            value={ytAmount}
+            disabled={true}
+          />
+        </>
+      }
     </FormWrapper>
   )
 }

@@ -48,7 +48,7 @@ export const VaultPage = ({ params }: Props) => {
 
   useEffect(() => {
     checkSlippageAmount();
-    getChartData();
+    getChartData(params.address);
     setPageLoading(false);
   }, []);
 
@@ -178,7 +178,7 @@ export const VaultPage = ({ params }: Props) => {
           {sellOtPopup && <SellOTPopup />}
         <VaultsDetail address={params.address as VaultDetailKey} />
       </VaultsCardLayout>
-      {/* <YtChart /> */}
+      { params.address !== "oribgt" && <YtChart /> }
     </CsrPageLayout>
   );
 };

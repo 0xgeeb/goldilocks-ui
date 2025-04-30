@@ -10,7 +10,7 @@ import { getPublicClient, readContract } from "@wagmi/core";
 import { useDebounce } from "../../hooks";
 import { config } from "../../providers/WagmiProvider";
 import { vault_contracts } from "../../data/contracts";
-import { EtherfiAPIResponse, ChartDataEntry } from "../../utils/interfaces";
+import { EtherfiAPIResponse, YtChartData } from "../../utils/interfaces";
 import { beraScanLink, dexLink } from "@/utils/links";
 import { contracts } from "@/utils/addressi";
 import { VaultType } from "@/app/(geo-check)/goldivault/_components/constant/vaults";
@@ -314,7 +314,8 @@ const INITIAL_STATE: {
     oribgtyt: 0,
     claimable: 0,
     justYt: 0,
-    stakedYt: 0
+    stakedYt: 0,
+    steerLP: 0
   },
   vaultDisplayInfo: {
     weeth: {
@@ -449,6 +450,7 @@ const INITIAL_STATE: {
   calculateDeposit: async (_vault: string) => {},
   calculateOTRedeem: async (_vault: string) => {},
   calculateYTRedeem: async () => {},
+  calculateLiquidity: async (_direction: string) => {},
   quoteV3Swap: async () => {},
   wutPopup: false,
   setWutPopup: (_popup: boolean) => {},
@@ -461,8 +463,8 @@ const INITIAL_STATE: {
   disableInfoPopup: (_info: string) => {},
   infoPopupText: "",
   checkVaultLiquidity: async () => false,
-  chartData: [] as ChartDataEntry[],
-  getChartData: async () => {}
+  chartData: {} as YtChartData,
+  getChartData: async (_vault: string) => {}
 } as const;
 
 const GoldivaultContext = createContext(INITIAL_STATE);
@@ -597,7 +599,7 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
     INITIAL_STATE.infoPopupText,
   );
   const [chartDataState, setChartDataState] = useState<
-    any[]
+    any
   >(INITIAL_STATE.chartData);
 
   const formatDate = (timestamp: number): string => {
@@ -1597,6 +1599,12 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         functionName: "userClaimableUnderlying",
         args: [address],
       })
+      const steerLPResult = await readContract(config, {
+        address: contracts.steerOribgtPool.address as `0x${string}`,
+        abi: contracts.ibgt.abi,
+        functionName: 'balanceOf',
+        args: [address]
+      })
 
       const response = {
         ibgt: parseFloat(formatEther(ibgtBalResult as unknown as bigint)),
@@ -1606,7 +1614,8 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         oribgtyt: parseFloat(formatEther(oribgtytBalResult as unknown as bigint)) + parseFloat(formatEther(oribgtYtStakedResult as unknown as bigint)),
         claimable: parseFloat(formatEther(claimableResult as unknown as bigint)),
         justYt: parseFloat(formatEther(oribgtytBalResult as unknown as bigint)),
-        stakedYt: parseFloat(formatEther(oribgtYtStakedResult as unknown as bigint))
+        stakedYt: parseFloat(formatEther(oribgtYtStakedResult as unknown as bigint)),
+        steerLP: parseFloat(formatEther(steerLPResult as unknown as bigint))
       };
 
       setGoldivaultWalletInfoOribgtState(response);
@@ -2191,7 +2200,11 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
                     ? goldivaultWalletInfoOribgtState.ibgt
                     : {}; // @note This should be a number, not {}
     const vaultLP =
-      vault === "rusd" ? goldivaultWalletInfoRusdState.rusdaquabera : 0;
+      vault === "rusd"
+        ? goldivaultWalletInfoRusdState.rusdaquabera
+        : vault === "oribgt"
+          ? goldivaultWalletInfoOribgtState.steerLP
+          : 0
 
     if (activeToggleState === "DEPOSIT") {
       setDisplayStringState(vaultDT.toFixed(4));
@@ -2202,8 +2215,14 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       setRedeemOTState(vaultOT - 0.0000001);
       setOutputTokensLoadingState(true);
     } else if (activeToggleState === "ADDLIQ") {
-      setDisplayStringState(vaultDT.toFixed(4));
-      setTradeInputState(vaultDT - 0.0000001);
+      if(vault === "oribgt") {
+        setDisplayStringState(goldivaultWalletInfoOribgtState.oribgt.toFixed(4))
+        setTradeInputState(goldivaultWalletInfoOribgtState.oribgt - 0.0000001)
+      }
+      else {
+        setDisplayStringState(vaultDT.toFixed(4));
+        setTradeInputState(vaultDT - 0.0000001);
+      }
     } else if (activeToggleState === "REMOVELIQ") {
       setDisplayStringState(vaultLP.toFixed(4));
       setTradeInputState(vaultLP - 0.0000001);
@@ -2287,6 +2306,42 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
     // setRedeemYTAmountsState(response);
     // setOutputTokensLoadingState(false);
   };
+
+  const calculateLiquidity = async (direction: string) => {
+    if(direction === "ADDLIQ") {
+      const slot0: any = await readContract(config, {
+        address: contracts.vaultLPaddys.oribgt as `0x${string}`,
+        abi: contracts.UniswapV3Pool.abi,
+        functionName: 'slot0',
+        args: []
+      })
+      const sqrtPrice = parseFloat(slot0[0].toString()) / Math.pow(2, 96)
+      const price = sqrtPrice * sqrtPrice
+
+      setTradeOutputState(debouncedTradeInputState * price)
+      setOutputTokensLoadingState(false)
+    }
+    else {
+      const lpSupply = await readContract(config, {
+        address: contracts.steerOribgtPool.address as `0x${string}`,
+        abi: contracts.ibgt.abi,
+        functionName: 'totalSupply',
+        args: []
+      })
+      const vaultDetails: any = await readContract(config, {
+        address: contracts.steerPeriphery.address as `0x${string}`,
+        abi: contracts.steerPeriphery.abi,
+        functionName: 'vaultDetailsByAddress',
+        args: [contracts.steerOribgtPool.address as `0x${string}`]
+      })
+      const oribgtBal = vaultDetails.token0Balance
+      const oribgtotBal = vaultDetails.token1Balance
+      const share = debouncedTradeInputState / parseFloat(formatEther(lpSupply as unknown as bigint))
+
+      setOtAmountState(parseFloat(formatEther(oribgtBal as unknown as bigint)) * share)
+      setYtAmountState(parseFloat(formatEther(oribgtotBal as unknown as bigint)) * share)
+    }
+  } 
 
   const resetYTAmounts = () => {
     const response = {
@@ -2923,7 +2978,7 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
           case "rusdvaultinfo":
             return `2.25x Reservoir points;${formatLeverageNum(vaultDisplayInfoState.rusd.ytPrice, 2.25)}x Reservoir point leverage`;
           case "oribgtvaultinfo":
-            // return `10x Origami points and 1x Infrared points;${formatLeverageNum(vaultDisplayInfoState.oribgt.ytPrice, 10)}x Origami point leverage and ${formatLeverageNum(vaultDisplayInfoState.oribgt.ytPrice, 1)}x Infrared point leverage`
+             // return `10x Origami points and 1x Infrared points;${formatLeverageNum(vaultDisplayInfoState.oribgt.ytPrice, 10)}x Origami point leverage and ${formatLeverageNum(vaultDisplayInfoState.oribgt.ytPrice, 1)}x Infrared point leverage`
             return `10x Origami points;${formatLeverageNum(vaultDisplayInfoState.oribgt.ytPrice, 10)}x Origami point leverage`
           case "impliedapr":
             return "The apr implied by the price at which your trade is predicted to execute";
@@ -3040,25 +3095,60 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
     const date = new Date(timestamp * 1000);
     const day = date.getDate();
     const month = date.getMonth() + 1;
-    return `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}`;
+    return `${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')}`
   }
 
-  const getChartData = async () => {
-    // const response = await fetch("/api/rusdytchart")
-    // const responseJson: any = await response.json()
-    // // console.log(responseJson)
-    // const newChartData = []
-    // for(let node of responseJson.rusdytDaily) {
-    //   const entry = {
-    //     ytPrice: parseFloat(node.ytPrice.toFixed(5)),
-    //     fixedApr: parseFloat(node.fixedApr.toFixed(3)),
-    //     date: getFormattedDate(node.timestamp)
-    //   }
+  const getFormattedTime = (timestamp: number): string => {
+    const date = new Date(timestamp * 1000);
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+  }
 
-    //   newChartData.push(entry)
-    // }
-    
-    // setChartDataState(newChartData.reverse())
+  const getChartData = async (vault: string) => {
+    const endpointMap: Record<string, string> = {
+      rusd: "/api/rusdytchartdata",
+      rseth: "/api/rsethytchartdata",
+      unibtc: "/api/unibtcytchartdata",
+    }
+    const keyMap: Record<string, string> = {
+      rusd: "rusdyt",
+      rseth: "rsethyt",
+      unibtc: "unibtcyt",
+    }
+    const endpoint = endpointMap[vault]
+    const key = keyMap[vault]
+    const response = await fetch(endpoint)
+    const responseJson = await response.json()
+    const hourly = responseJson[`${key}Hourly`]
+    const daily = responseJson[`${key}Daily`]
+    const weekly = responseJson[`${key}Weekly`]
+
+    const hourlyYt = hourly.map((node: any) => ({
+      fixedApr: parseFloat(node.fixedApr),
+      ytPrice: parseFloat(node.ytPrice),
+      daysTil: parseFloat(node.daysTil),
+      date: getFormattedTime(node.timestamp)
+    }))
+    const dailyYt = daily.map((node: any) => ({
+      fixedApr: parseFloat(node.fixedApr),
+      ytPrice: parseFloat(node.ytPrice),
+      daysTil: parseFloat(node.daysTil),
+      date: getFormattedDate(node.timestamp)
+    }))
+    const weeklyYt = weekly.map((node: any) => ({
+      fixedApr: parseFloat(node.fixedApr),
+      ytPrice: parseFloat(node.ytPrice),
+      daysTil: parseFloat(node.daysTil),
+      date: getFormattedDate(node.timestamp)
+    }))
+
+    const newChartData = {
+      hourly: hourlyYt.reverse(),
+      daily: dailyYt.reverse(),
+      weekly: weeklyYt.reverse()
+    }
+    setChartDataState(newChartData)
   }
 
   return (
@@ -3150,6 +3240,7 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         calculateDeposit,
         calculateOTRedeem,
         calculateYTRedeem,
+        calculateLiquidity,
         quoteV3Swap,
         poolsPopupToggle: poolsPopupToggleState,
         setPoolsPopupToggle: setPoolsPopupToggleState,

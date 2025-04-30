@@ -20,6 +20,18 @@ const nextConfig = {
       {
         source: '/api/lockschartdata',
         destination: 'http://52.23.253.24:3001/lockschartdata'
+      },
+      {
+        source: '/api/rusdytchartdata',
+        destination: 'http://52.23.253.24:3001/rusdytchartdata'
+      },
+      {
+        source: '/api/rsethytchartdata',
+        destination: 'http://52.23.253.24:3001/rsethytchartdata'
+      },
+      {
+        source: '/api/unibtcytchartdata',
+        destination: 'http://52.23.253.24:3001/unibtcytchartdata'
       }
     ]
   }

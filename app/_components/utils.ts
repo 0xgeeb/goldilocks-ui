@@ -13,6 +13,10 @@ export const formatAsString = (num: number): string => {
   return num?.toLocaleString("en-US", { maximumFractionDigits: 2 });
 };
 
+export const formatAsSmallNum = (num: number): string => {
+  return num?.toLocaleString("en-US", { maximumFractionDigits: 5 });
+};
+
 export const formatAsCurrency = (
   num: number,
   currency: string = "USD",

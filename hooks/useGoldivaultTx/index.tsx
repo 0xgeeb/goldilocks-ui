@@ -156,6 +156,24 @@ export const useGoldivaultTx = () => {
       })
       allowanceNum = parseFloat((allowanceResult as unknown as bigint).toString()) / 1e8;
     }
+    else if(vault === 'steeroribgt') {
+      allowanceResult = await readContract(config, {
+        address: contracts.oribgt.address as `0x${string}`,
+        abi: contracts.oribgt.abi,
+        functionName: 'allowance',
+        args: [wallet, contracts.steerPeriphery.address]
+      })
+      allowanceNum = parseFloat((allowanceResult as unknown as bigint).toString()) / 1e8;
+    }
+    else if(vault === 'steeroribgtot') {
+      allowanceResult = await readContract(config, {
+        address: contracts.oribgtot.address as `0x${string}`,
+        abi: contracts.oribgtot.abi,
+        functionName: 'allowance',
+        args: [wallet, contracts.steerPeriphery.address]
+      })
+      allowanceNum = parseFloat((allowanceResult as unknown as bigint).toString()) / 1e8;
+    }
     else {
       allowanceNum = 0
     }
@@ -495,6 +513,36 @@ export const useGoldivaultTx = () => {
           abi: contracts.ibgt.abi,
           functionName: 'approve',
           args: [contracts.oribgt.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
+        })
+        await waitForTransactionReceipt(config, { hash })
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+    else if (vault === "steeroribgt") {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.oribgt.address as `0x${string}`,
+          abi: contracts.oribgt.abi,
+          functionName: 'approve',
+          args: [contracts.steerPeriphery.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
+        })
+        await waitForTransactionReceipt(config, { hash })
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+    else if (vault === "steeroribgtot") {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.oribgtot.address as `0x${string}`,
+          abi: contracts.oribgtot.abi,
+          functionName: 'approve',
+          args: [contracts.steerPeriphery.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
         })
         await waitForTransactionReceipt(config, { hash })
       }
@@ -1178,6 +1226,59 @@ export const useGoldivaultTx = () => {
     return ''
   }
 
+  const sendAddSteerLiqTx = async (amount0: number, amount1: number, wallet: string): Promise<string> => {
+    try {
+      const hash = await writeContract(config, {
+        address: contracts.steerPeriphery.address as `0x${string}`,
+        abi: contracts.steerPeriphery.abi,
+        functionName: "deposit",
+        args: [
+          contracts.steerOribgtPool.address as `0x${string}`,
+          parseEther(`${amount0}`),
+          parseEther(`${amount1}`),
+          parseEther(`${0}`),
+          parseEther(`${0}`),
+          wallet as `0x${string}`
+        ]
+      })
+
+      const receipt = await waitForTransactionReceipt(config, { hash })
+      return receipt.transactionHash;
+    }
+    catch (e) {
+      console.log("user denied tx")
+      console.log("or: ", e)
+    }
+
+    return ''
+  }
+
+  const sendRemoveSteerLiqTx = async (withdrawAmt: number, wallet: string): Promise<string> => {
+    try {
+      const hash = await writeContract(config, {
+        address: contracts.steerOribgtPool.address as `0x${string}`,
+        abi: [{"inputs":[{"internalType":"uint256","name":"shares","type":"uint256"},{"internalType":"uint256","name":"amount0Min","type":"uint256"},{"internalType":"uint256","name":"amount1Min","type":"uint256"},{"internalType":"address","name":"to","type":"address"}],"name":"withdraw","outputs":[],"stateMutability":"nonpayable","type":"function"}],
+        functionName: "withdraw",
+        args: [
+          parseEther(`${withdrawAmt}`),
+          parseEther(`${0}`),
+          parseEther(`${0}`),
+          wallet as `0x${string}`
+        ]
+      })
+
+      const receipt = await waitForTransactionReceipt(config, { hash })
+      return receipt.transactionHash;
+    }
+    catch (e) {
+      console.log("user denied tx")
+      console.log("or: ", e)
+    }
+
+    return ''
+
+  }
+
   return {
     checkAllowance,
     checkRouterAllowance,
@@ -1198,6 +1299,8 @@ export const useGoldivaultTx = () => {
     sendUnstakeYTTx,
     sendClaimTx,
     sendOribgtDepositTx,
-    sendOribgtRedeemTx
+    sendOribgtRedeemTx,
+    sendAddSteerLiqTx,
+    sendRemoveSteerLiqTx
   };
 };

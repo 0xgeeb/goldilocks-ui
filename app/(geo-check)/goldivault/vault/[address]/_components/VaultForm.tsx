@@ -160,6 +160,7 @@ function VaultForm({ params }: VaultBoxProps) {
       return "Deposit Tokens"
     } else if (activeToggle === "REDEEMOT") {
       return "Redeem Ownership Tokens & Burn Yield Tokens"
+      // return "Redeem Ownership Tokens" // uncomment this to switch to mature vault ui
     } else {
       return "Redeem Yield Tokens"
     }
@@ -180,6 +181,7 @@ function VaultForm({ params }: VaultBoxProps) {
       return params.dt;
     } else if (activeToggle === "REDEEMOT") {
       return "OT & YT";
+      // return "OT"; // uncomment this to switch to mature vault ui 
     } else {
       return params.yt;
     }
@@ -235,6 +237,7 @@ function VaultForm({ params }: VaultBoxProps) {
                 {
                   activeToggle === "REDEEMOT" && (
                     <HoverText hoverText="Burn ownership and yield tokens to receive underlying assets from the vault" />
+                    // <HoverText hoverText="Burn ownership tokens to receive underlying assets from the vault" />  // uncomment this to switch to mature vault ui 
                   )
                 }
               </Label>

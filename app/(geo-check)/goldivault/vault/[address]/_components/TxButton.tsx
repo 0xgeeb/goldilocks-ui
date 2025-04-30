@@ -5,7 +5,7 @@ import { useState } from "react";
 import { formatEther, parseEther } from "viem";
 import { useAccount } from "wagmi";
 
-import { formatAsString } from "@/app/_components/utils";
+import { formatAsString, formatAsSmallNum } from "@/app/_components/utils";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { getPublicClient } from "@wagmi/core";
 
@@ -30,8 +30,8 @@ const BUTTON_TEXT = {
   // Deposit
   deposit: "Deposit",
   // LIQ
-  addLiq: "Adding Liquidity",
-  removeLiq: "Removing Liquidity",
+  addLiq: "Add Liquidity",
+  removeLiq: "Remove Liquidity",
   // OT
   tradeOT: "Trade OT",
   redeemOT: "Redeem OT",
@@ -65,6 +65,8 @@ function TxButton({ params }: VaultButtonProps) {
     redeemOT,
     tradeInput,
     tradeOutput,
+    otAmount,
+    ytAmount,
     debouncedDeposit,
     outputTokensLoading,
     setTxConfirming,
@@ -117,7 +119,9 @@ function TxButton({ params }: VaultButtonProps) {
     sendRemoveLiqTx,
     sendStakeYTTx,
     sendUnstakeYTTx,
-    sendClaimTx
+    sendClaimTx,
+    sendAddSteerLiqTx,
+    sendRemoveSteerLiqTx
   } = useGoldivaultTx();
 
   const { address, isConnected } = useAccount();
@@ -276,10 +280,20 @@ function TxButton({ params }: VaultButtonProps) {
       tradeYTFlow(button);
     }
     if (activeToggle === "ADDLIQ") {
-      addLiqFlow(button);
+      if(params.vaultToken === "oribgt") {
+        addSteerLiqFlow(button)
+      }
+      else {
+        addLiqFlow(button);
+      }
     }
     if (activeToggle === "REMOVELIQ") {
-      removeLiqFlow(button);
+      if(params.vaultToken === "oribgt") {
+        removeSteerLiqFlow(button)
+      }
+      else {
+        removeLiqFlow(button);
+      }
     }
     if (activeToggle === "STAKE") {
       stakeYTFlow(button)
@@ -768,6 +782,109 @@ function TxButton({ params }: VaultButtonProps) {
     }
   };
 
+  const addSteerLiqFlow = async (button: HTMLElement | null) => {
+    if(tradeInput == 0) {
+      button && (button.innerHTML = BUTTON_TEXT.addLiq);
+      return;
+    }
+    if(tradeInput > goldivaultWalletInfoOribgt.oribgt) {
+      button && (button.innerHTML = BUTTON_TEXT.notEnough);
+      return;
+    }
+    if(tradeOutput > goldivaultWalletInfoOribgt.oribgtot) {
+      button && (button.innerHTML = BUTTON_TEXT.notEnoughOT);
+      return;
+    }
+    const sufficientDTAllowance: boolean | void = await checkAllowance(
+      tradeInput,
+      'steeroribgt',
+      address as string
+    )
+    if(sufficientDTAllowance) {
+      setDepositDTApproved(true)
+      const sufficientOTAllowance: boolean | void = await checkAllowance(
+        tradeOutput,
+        'steeroribgtot',
+        address as string
+      )
+      if(sufficientOTAllowance) {
+        setTxConfirming(true)
+        if (button) {
+          button.innerHTML = BUTTON_TEXT.confirming;
+        }
+        const addLiqTx = await sendAddSteerLiqTx(tradeInput, tradeOutput, address as `0x${string}`)
+        if(addLiqTx.substring(0, 2) === "0x") {
+          setTxConfirming(false)
+          openNotification(
+            true,
+            "You've successfully added liquidity",
+            `You added ${formatAsSmallNum(tradeInput)} oriBGT and ${formatAsSmallNum(tradeOutput)} oriBGT-OT of liquidity`,
+            addLiqTx
+          )
+          if (button) {
+            button.innerHTML = BUTTON_TEXT.addLiq;
+          }
+          refreshInfo();
+          setTimeout(() => {
+            openNotification(false, "", "", "");
+          }, 10000);
+        }
+        else {
+          if (button) {
+            button.innerHTML = BUTTON_TEXT.addLiq;
+          }
+          refreshInfo();
+          setTxConfirming(false);
+        }
+      }
+      else {
+        setAllowanceButtons(true)
+      }
+    }
+    else {
+      setAllowanceButtons(true)
+    }
+  }
+
+  const removeSteerLiqFlow = async (button: HTMLElement | null) => {
+    if(tradeInput == 0) {
+      button && (button.innerHTML = BUTTON_TEXT.removeLiq);
+      return;
+    }
+    if(tradeInput > goldivaultWalletInfoOribgt.steerLP) {
+      button && (button.innerHTML = BUTTON_TEXT.notEnough);
+      return;
+    }
+    setTxConfirming(true);
+    if (button) {
+      button.innerHTML = BUTTON_TEXT.confirming;
+    }
+    const removeLiqTx = await sendRemoveSteerLiqTx(tradeInput, address as `0x${string}`)
+    if(removeLiqTx.substring(0, 2) === "0x") {
+      setTxConfirming(false)
+      openNotification(
+        true,
+        "You've successfully removed liquidity",
+        `You removed ${formatAsSmallNum(otAmount)} oriBGT and ${formatAsSmallNum(ytAmount)} oriBGT-OT of liquidity`,
+        removeLiqTx
+      )
+      if (button) {
+        button.innerHTML = BUTTON_TEXT.removeLiq;
+      }
+      refreshInfo()
+      setTimeout(() => {
+        openNotification(false, "", "", "");
+      }, 10000);
+    }
+    else {
+      if (button) {
+        button.innerHTML = BUTTON_TEXT.removeLiq;
+      }
+      refreshInfo();
+      setTxConfirming(false);
+    }
+  }
+
   const stakingDepositTxFlow = async (button: HTMLElement | null) => {
     if (deposit == 0) {
       button && (button.innerHTML = BUTTON_TEXT.deposit);
@@ -994,7 +1111,17 @@ function TxButton({ params }: VaultButtonProps) {
         }
       }
     } else if (activeToggle === "ADDLIQ") {
-      await sendApproveTx(tradeInput, "rusdaqua", false);
+      if(params.vaultToken === "rusd") {
+        await sendApproveTx(tradeInput, "rusdaqua", false);
+      }
+      else {
+        if(depositDTApproved) {
+          await sendApproveTx(tradeOutput, "steeroribgtot", false)
+        }
+        else {
+          await sendApproveTx(tradeInput, "steeroribgt", false)
+        }
+      }
     } else if (activeToggle === "REMOVELIQ") {
       await sendApproveTx(tradeInput, "rusdaqualp", false);
     } else if (activeToggle === "STAKE") {
@@ -1059,7 +1186,17 @@ function TxButton({ params }: VaultButtonProps) {
         }
       }
     } else if (activeToggle === "ADDLIQ") {
-      await sendApproveTx(0, "rusdaqua", true);
+      if(params.vaultToken === "rusd") {
+        await sendApproveTx(0, "rusdaqua", true);
+      }
+      else {
+        if(depositDTApproved) {
+          await sendApproveTx(0, "steeroribgtot", true)
+        }
+        else {
+          await sendApproveTx(0, "steeroribgt", true)
+        }
+      }
     } else if (activeToggle === "REMOVELIQ") {
       await sendApproveTx(0, "rusdaqualp", true);
     } else if (activeToggle === "STAKE") {

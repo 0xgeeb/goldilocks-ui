@@ -15,11 +15,6 @@ function VaultsDetailTabs({ currentTab, vaultToken, setTab, }: { currentTab: str
 
   const { changeActiveToggle } = useGoldivault();
   const filteredLabels = 
-    vaultToken === "oriBGT"
-    ? Object.fromEntries(
-        Object.entries(TAB_LABELS).filter(([key]) => key !== "LIQUIDITY")
-      )
-    : 
     vaultToken === "rsETH"
     ? Object.fromEntries(
         Object.entries(TAB_LABELS).filter(([key]) => key !== "YIELD" && key !== "LIQUIDITY")

@@ -20,21 +20,6 @@ console.error = (...args) => {
   originalConsoleError(...args);
 };
 
-// Global mocks that will apply to all tests
-// Mock localStorage
-Object.defineProperty(window, "localStorage", {
-  value: {
-    getItem: vi.fn((key) => {
-      if (key === "wagmi.connected") return "true";
-      return null;
-    }),
-    setItem: vi.fn(),
-    removeItem: vi.fn(),
-    clear: vi.fn(),
-  },
-  writable: true,
-});
-
 // Global cleanup after tests
 afterEach(() => {
   vi.clearAllMocks();

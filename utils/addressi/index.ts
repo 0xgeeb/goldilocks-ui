@@ -20,6 +20,8 @@ import govlocksABI from "../abi/GovLocks.json";
 import depositguardABI from "../abi/DepositGuard.json"
 import goldivault4626ABI from "../abi/Goldivault4626.json"
 import oriBGTABI from "../abi/oriBGT.json"
+import uniswapV3PoolABI from "../abi/UniswapV3Pool.json"
+import steerPeripheryABI from "../abi/SteerPeriphery.json"
 
 export const contracts = {
   goldiswap: {
@@ -229,6 +231,16 @@ export const contracts = {
   rusdaquabera: {
     address: "0x20a49a266AE70d07Ba066Ef1F8b6e670216Ab2a6",
     abi: ibgtABI.abi
+  },
+  UniswapV3Pool: {
+    abi: uniswapV3PoolABI.abi 
+  },
+  steerOribgtPool: {
+    address: "0xDB78B4166580917c9604f8DdfBea5F49B493845c"
+  },
+  steerPeriphery: {
+    address: "0x71bE4708C86B8AFd6Aa47929Ce073e400B5B7747",
+    abi: steerPeripheryABI.abi
   },
   vaultLPaddys: {
     weeth: "0xd7e3962974993870C28C25D031BF202021bf635B",

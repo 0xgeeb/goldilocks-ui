@@ -1,37 +1,46 @@
 "use client";
 import React, { useEffect } from "react";
-import { useGoldivault, COMMON_LABELS, VAULT_LABELS, HoverLabel } from "../../../../../../providers";
+import {
+  useGoldivault,
+  COMMON_LABELS,
+  VAULT_LABELS,
+  HoverLabel,
+} from "../../../../../../providers";
 // import { vault_contracts } from "@/data/contracts";
 import { VaultType } from "../../../_components/constant/vaults";
 import { formatAsString } from "@/app/_components/utils";
 import { HoverText } from "./InfoHover";
+import { YtRoiCalculator } from "@/components/calculators/YtRoiCalculator";
+import { PointsAprCalculator } from "@/components/calculators/PointsAprCalculator";
 
 type InfoRowProps = {
   textA: string;
   textB: string;
   linkB: string;
-}
+};
 const InfoRow: React.FC<InfoRowProps> = ({ textA, textB, linkB }) => {
   return (
-    <div className="flex justify-between items-center w-full">
-      <dt className="text-sm font-semibold text-left font-baloo text-warm-text flex items-center">
+    <div className="flex w-full items-center justify-between">
+      <dt className="font-baloo text-warm-text flex items-center text-left text-sm font-semibold">
         {textA}
       </dt>
-      <dd className="text-md font-semibold text-right font-baloo text-HoneyYellow">
-        <a className="mx-1 hover:underline" key="steer" href={linkB} target="_blank" rel="noopener noreferrer">
+      <dd className="text-md font-baloo text-HoneyYellow text-right font-semibold">
+        <a
+          className="mx-1 hover:underline"
+          key="steer"
+          href={linkB}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           {textB}
         </a>
       </dd>
     </div>
-  )
-}
+  );
+};
 
-const VaultInfoPane: React.FC<{ vaultToken: string}> = ({ vaultToken }) => {
-  const {
-    infoLoading,
-    getVaultInfo,
-    refreshVaultInfo
-  } = useGoldivault();
+const VaultInfoPane: React.FC<{ vaultToken: string }> = ({ vaultToken }) => {
+  const { infoLoading, getVaultInfo, refreshVaultInfo } = useGoldivault();
 
   useEffect(() => {
     refreshVaultInfo(vaultToken);
@@ -39,11 +48,24 @@ const VaultInfoPane: React.FC<{ vaultToken: string}> = ({ vaultToken }) => {
 
   const formatDate = (timestamp: number): string => {
     const date = new Date(timestamp * 1000);
-    const monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+    const monthNames = [
+      "JAN",
+      "FEB",
+      "MAR",
+      "APR",
+      "MAY",
+      "JUN",
+      "JUL",
+      "AUG",
+      "SEP",
+      "OCT",
+      "NOV",
+      "DEC",
+    ];
     const month = monthNames[date.getUTCMonth()];
     const day = date.getUTCDate();
     const year = date.getUTCFullYear();
-  
+
     return `${month}-${day}-${year}`;
   };
 
@@ -59,7 +81,8 @@ const VaultInfoPane: React.FC<{ vaultToken: string}> = ({ vaultToken }) => {
 
   // console.log("DATA", data);
   // Push data to details array
-  const details: Array<{ label: string; value: string; hoverText?: string }> = [];
+  const details: Array<{ label: string; value: string; hoverText?: string }> =
+    [];
   Object.keys(VAULT_LABELS[vaultToken].goldivaultInfo).forEach((key) => {
     // Depending on type of data (which we know based on the key), format the value.
     const formatData = (key: string, data: number) => {
@@ -71,22 +94,24 @@ const VaultInfoPane: React.FC<{ vaultToken: string}> = ({ vaultToken }) => {
         case "otLiquidity":
           return `$${formatAsString(data)}`;
         case "restakingYield":
-          return `${formatAsString(data)}%`
+          return `${formatAsString(data)}%`;
         default:
           return `${formatAsString(data)}x`;
       }
-    }
-    if (typeof VAULT_LABELS[vaultToken].goldivaultInfo[key] === "string") {  
+    };
+    if (typeof VAULT_LABELS[vaultToken].goldivaultInfo[key] === "string") {
       details.push({
         label: VAULT_LABELS[vaultToken].goldivaultInfo[key] as string,
-        value: formatData(key, data[key])
+        value: formatData(key, data[key]),
       });
     } else {
       // If a hover label exists, we will add an icon next to the label that you can hover.
       details.push({
-        label: (VAULT_LABELS[vaultToken].goldivaultInfo[key] as HoverLabel).label,
+        label: (VAULT_LABELS[vaultToken].goldivaultInfo[key] as HoverLabel)
+          .label,
         value: formatData(key, data[key]),
-        hoverText: (VAULT_LABELS[vaultToken].goldivaultInfo[key] as HoverLabel).hoverText
+        hoverText: (VAULT_LABELS[vaultToken].goldivaultInfo[key] as HoverLabel)
+          .hoverText,
       });
     }
   });
@@ -97,86 +122,145 @@ const VaultInfoPane: React.FC<{ vaultToken: string}> = ({ vaultToken }) => {
   // unfortunately, it's not possible for us to get compelete type safety here, as we cannot
   // change the type of the vaultToken parameter to be a `keyof typeof VAULTS` across the entire
   // codebase.
-  Object.keys(COMMON_LABELS(vaultToken as VaultType).contracts).forEach((key) => {
-    const contractKey = key as 'vault' | 'ot' | 'yt' | 'vaultLP';
-    links.push({ 
-      label: COMMON_LABELS(vaultToken as VaultType).contracts[contractKey].label, 
-      link: COMMON_LABELS(vaultToken as VaultType).contracts[contractKey].link, 
-    });
-  });
+  Object.keys(COMMON_LABELS(vaultToken as VaultType).contracts).forEach(
+    (key) => {
+      const contractKey = key as "vault" | "ot" | "yt" | "vaultLP";
+      links.push({
+        label: COMMON_LABELS(vaultToken as VaultType).contracts[contractKey]
+          .label,
+        link: COMMON_LABELS(vaultToken as VaultType).contracts[contractKey]
+          .link,
+      });
+    },
+  );
 
   return (
-    <aside className="
-      flex flex-col justify-center gap-2.5 items-center p-5 rounded-xl border-2 border-[rgba(0,0,0,0)] lg:border-[#352A1C] min-w-80 w-full h-full max-w-none sm:max-w-96 lg:max-w-none max-md:w-full
-    ">
-      <h2 className="text-4xl font-amaticbold font-bold text-center text-white">
+    <aside className="flex h-full w-full max-w-none min-w-80 flex-col items-center justify-center gap-2.5 rounded-xl border-2 border-[rgba(0,0,0,0)] p-5 max-md:w-full sm:max-w-96 lg:max-w-none lg:border-[#352A1C]">
+      <h2 className="font-amaticbold text-center text-4xl font-bold text-white">
         Vault Details
       </h2>
-      <div className="h-0.5 bg-stone-800 w-[140px]" />
-      <dl className="h-full flex flex-col gap-3 items-center w-full">
+      <div className="h-0.5 w-[140px] bg-stone-800" />
+      <dl className="flex h-full w-full flex-col items-center gap-3">
         {details.map((detail, index) => (
-          <div key={index} className="flex justify-between items-center w-full">
-            <dt className="text-xs font-semibold text-left text-stone-700 flex items-center">
+          <div key={index} className="flex w-full items-center justify-between">
+            <dt className="flex items-center text-left text-xs font-semibold text-stone-700">
               {detail.label}
               {detail.hoverText && <HoverText hoverText={detail.hoverText} />}
             </dt>
-            <dd className="text-sm font-semibold text-right text-amber-300">
-              {infoLoading ?
-              // @todo Improve this. The loading state should be those greyed out pulsing boxes that represent loading values.
-                <span className="w-5 h-2 rounded-md bg-stone-700 transition-all animate-pulse"></span>
-              :
+            <dd className="text-right text-sm font-semibold text-amber-300">
+              {infoLoading ? (
+                // @todo Improve this. The loading state should be those greyed out pulsing boxes that represent loading values.
+                <span className="h-2 w-5 animate-pulse rounded-md bg-stone-700 transition-all"></span>
+              ) : (
                 detail.value
-              }
+              )}
             </dd>
           </div>
         ))}
-        <div className="flex justify-between items-center w-full">
-          <dt className="text-sm font-semibold text-left font-baloo text-warm-text flex items-center">
+        <div className="flex w-full items-center justify-between">
+          <dt className="font-baloo text-warm-text flex items-center text-left text-sm font-semibold">
             Contracts
           </dt>
-          <dd className="text-md font-semibold text-right font-baloo text-HoneyYellow">
+          <dd className="text-md font-baloo text-HoneyYellow text-right font-semibold">
             {links.map((link, index) => (
-              <a className="mx-1 hover:underline" key={index} href={link.link} target="_blank" rel="noopener noreferrer">
+              <a
+                className="mx-1 hover:underline"
+                key={index}
+                href={link.link}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 {link.label}
               </a>
             ))}
           </dd>
         </div>
-        { vaultToken === "oribgt" &&
+        {vaultToken === "oribgt" && (
           <>
-            <InfoRow textA="Underlying protocol link" textB="Origami" linkB="https://origami.finance/" />
-            <InfoRow textA="Automated Liquidity Manager" textB="Steer Protocol" linkB="https://app.steer.finance/vault/0xDB78B4166580917c9604f8DdfBea5F49B493845c" />
-            <InfoRow textA="OT chart link" textB="Dexscreener" linkB="https://dexscreener.com/berachain/0xCb2A95c52E718A6BA6AAb6587f1a3aFF4BfB0648" />
+            <InfoRow
+              textA="Underlying protocol link"
+              textB="Origami"
+              linkB="https://origami.finance/collections/berachain-collection/80094-0x69f1E971257419B1E9C405A553f252c64A29A30a/info"
+            />
+            <InfoRow
+              textA="Automated Liquidity Manager"
+              textB="Steer Protocol"
+              linkB="https://app.steer.finance/vault/0xDB78B4166580917c9604f8DdfBea5F49B493845c"
+            />
+            <InfoRow
+              textA="OT chart link"
+              textB="Dexscreener"
+              linkB="https://dexscreener.com/berachain/0xCb2A95c52E718A6BA6AAb6587f1a3aFF4BfB0648"
+            />
           </>
-        }
-        { vaultToken === "rusd" && 
+        )}
+        {vaultToken === "rusd" && (
           <>
-            <InfoRow textA="Underlying protocol link" textB="Reservoir" linkB="https://app.reservoir.xyz/" />
-            <InfoRow textA="Automated Liquidity Manager" textB="Aquabera" linkB="https://app.aquabera.com/vault/0x20a49a266AE70d07Ba066Ef1F8b6e670216Ab2a6" />
-            <InfoRow textA="OT chart link" textB="Dexscreener" linkB="https://dexscreener.com/berachain/0x1a2A927F758AE242fB967481CF293D2a36883be6" />
+            <InfoRow
+              textA="Underlying protocol link"
+              textB="Reservoir"
+              linkB="https://app.reservoir.xyz/"
+            />
+            <InfoRow
+              textA="Automated Liquidity Manager"
+              textB="Aquabera"
+              linkB="https://app.aquabera.com/vault/0x20a49a266AE70d07Ba066Ef1F8b6e670216Ab2a6"
+            />
+            <InfoRow
+              textA="OT chart link"
+              textB="Dexscreener"
+              linkB="https://dexscreener.com/berachain/0x1a2A927F758AE242fB967481CF293D2a36883be6"
+            />
           </>
-        }
-        { vaultToken === "rseth" && 
+        )}
+        {vaultToken === "rseth" && (
           <>
-            <InfoRow textA="Underlying protocol link" textB="KelpDAO" linkB="https://kerneldao.com/kelp/" />
-            <InfoRow textA="OT chart link" textB="Dexscreener" linkB="https://dexscreener.com/berachain/0xE457b56a1f9379B604dFBcE809Da6fEA1dECE717" />
+            <InfoRow
+              textA="Underlying protocol link"
+              textB="KelpDAO"
+              linkB="https://kerneldao.com/kelp/"
+            />
+            <InfoRow
+              textA="OT chart link"
+              textB="Dexscreener"
+              linkB="https://dexscreener.com/berachain/0xE457b56a1f9379B604dFBcE809Da6fEA1dECE717"
+            />
           </>
-        }
-        { vaultToken === "unibtc" && 
+        )}
+        {vaultToken === "unibtc" && (
           <>
-            <InfoRow textA="Underlying protocol link" textB="Bedrock" linkB="https://app.bedrock.technology/" />
-            <InfoRow textA="OT chart link" textB="Dexscreener" linkB="https://dexscreener.com/berachain/0x54577C10Dee86BE94Daf4706224cf5952D54C191" />
+            <InfoRow
+              textA="Underlying protocol link"
+              textB="Bedrock"
+              linkB="https://app.bedrock.technology/"
+            />
+            <InfoRow
+              textA="OT chart link"
+              textB="Dexscreener"
+              linkB="https://dexscreener.com/berachain/0x54577C10Dee86BE94Daf4706224cf5952D54C191"
+            />
           </>
-        }
+        )}
+        <div className="flex w-full items-center justify-between">
+          <dt className="font-baloo text-warm-text flex items-center text-left text-sm font-semibold">
+            Calculators
+          </dt>
+          <dd className="flex text-md font-semibold font-baloo">
+            <YtRoiCalculator currentApr={data.fixedApr} />
+            {/* <PointsAprCalculator data={data} vault={vaultToken} /> */}
+          </dd>
+        </div>
         <div className="flex w-full">
-          <dt className="text-sm font-semibold text-left font-baloo text-warm-text flex items-center">
-            Fees <HoverText hoverText={"3% of yield and points and 33% of LP trading fees (0.05%) and 0.5% fee on proceeds from YT trades"} />
+          <dt className="font-baloo text-warm-text flex items-center text-left text-sm font-semibold">
+            Fees{" "}
+            <HoverText
+              hoverText={
+                "3% of yield and points and 33% of LP trading fees (0.05%) and 0.5% fee on proceeds from YT trades"
+              }
+            />
           </dt>
         </div>
       </dl>
-      {/* <dl className="flex flex-col gap-3 items-center w-full">
-        
-      </dl> */}
     </aside>
   );
 };

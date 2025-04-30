@@ -7,7 +7,7 @@ import { useAccount } from "wagmi";
 import { useDebounce, useGoldiswapMath } from "../../hooks";
 import { config } from "../../providers/WagmiProvider";
 import { contracts } from "../../utils/addressi";
-import { ChartDataEntry, LocksChartData } from "../../utils/interfaces";
+import { LocksChartData } from "../../utils/interfaces";
 
 const INITIAL_STATE = {
   goldiswapInfo: {

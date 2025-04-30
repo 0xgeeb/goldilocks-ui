@@ -205,13 +205,26 @@ export interface EtherfiAPIResponse {
 }
 
 export interface LocksChartData {
-  hourly: ChartDataEntry[];
-  daily: ChartDataEntry[];
-  weekly: ChartDataEntry[];
+  hourly: LocksChartDataEntry[];
+  daily: LocksChartDataEntry[];
+  weekly: LocksChartDataEntry[];
 }
 
-export interface ChartDataEntry {
+export interface LocksChartDataEntry {
   floor: number;
   market: number;
+  date: string;
+}
+
+export interface YtChartData {
+  hourly: YtChartDataEntry[];
+  daily: YtChartDataEntry[];
+  weekly: YtChartDataEntry[];
+}
+
+export interface YtChartDataEntry {
+  fixedApr: number;
+  ytPrice: number;
+  daysTil: number;
   date: string;
 }
