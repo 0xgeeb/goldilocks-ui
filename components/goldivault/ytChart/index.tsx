@@ -11,7 +11,11 @@ import {
 } from "recharts";
 import { useGoldivault } from "../../../providers";
 
-export const YtChart = () => {
+interface YtChartProps {
+  token: string;
+}
+
+export const YtChart = ({ token }: YtChartProps) => {
 
   const [chartSelection, setChartSelection] = useState<string>('APR')
   const [timeframeSelection, setTimeframeSelection] = useState<string>('DAILY')
@@ -34,10 +38,10 @@ export const YtChart = () => {
   }
 
   return (
-    <div className="mx-auto w-full max-w-5xl flex flex-col items-center gap-2.5 rounded-2xl border-2 border-[#352A1C] p-2 mb-[20px] bg-bera-brown-dark">
+    <div className="mx-auto w-7/8 sm:w-full max-w-5xl flex flex-col items-center gap-2.5 rounded-2xl border-2 border-[#352A1C] p-2 mb-[20px] bg-bera-brown-dark">
       <div className="font-amaticbold w-full flex flex-row items-center justify-between px-[5%]">
-        <h1 className="text-[5.2vw] lg:text-[3vw] text-HoneyYellow">{chartSelection === "APR" ? "Fixed APR" : "YT Price"} chart</h1>
-        <div className="flex flex-col items-center text-white text-[2vw]">
+        <h1 className="text-[6vw] sm:text-[3vw] text-HoneyYellow">{chartSelection === "APR" ? "Fixed APR" : "YT Price"} chart</h1>
+        <div className="flex flex-col items-center text-white text-[4.5vw] sm:text-[2vw]">
           <div className="flex flex-row items-center">
             <span onClick={() => setChartSelection('APR')} className={`cursor-pointer ${chartSelection === "APR" && "underline"}`}>apr</span>
             <span onClick={() => setChartSelection('YTPRICE')} className={`cursor-pointer ml-4 ${chartSelection === "YTPRICE" && "underline"}`}>price</span>
@@ -45,15 +49,15 @@ export const YtChart = () => {
           <div className="flex flex-row items-center">
             <span onClick={() => setTimeframeSelection('HOURLY')} className={`cursor-pointer ${timeframeSelection === "HOURLY" && "underline"}`}>1H</span>
             <span onClick={() => setTimeframeSelection('DAILY')} className={`mx-4 cursor-pointer ${timeframeSelection === "DAILY" && "underline"}`}>1D</span>
-            <span onClick={() => setTimeframeSelection('WEEKLY')} className={`cursor-pointer ${timeframeSelection === "WEEKLY" && "underline"}`}>1W</span>
+            { token !== "oribgt" && <span onClick={() => setTimeframeSelection('WEEKLY')} className={`cursor-pointer ${timeframeSelection === "WEEKLY" && "underline"}`}>1W</span> }
           </div>
         </div>
       </div>
       <LineChart
-        width={900}
+        width={window.innerWidth > 500 ? 900 : 300}
         height={500}
         data={getCorrectData()}
-        margin={{ top: 0, right: 0, bottom: 0, left: chartSelection === "YTPRICE" ? 20 : 0 }}
+        margin={{ top: 0, right: 0, bottom: 0, left: chartSelection === "YTPRICE" ? 20 : 10 }}
       >
         {
           chartSelection === 'APR' ?

@@ -24,7 +24,8 @@ export const PointsAprCalculator: React.FC<PointsAprCalculatorProps> = ({ vault 
     vault === "unibtc" ? 4 :
     vault === "rusd" ? 2.25 :
     vault === "rseth" ? 2 :
-    vault === "oribgt" ? 10
+    vault === "oribgt" ? 10 :
+    vault === "solvbtc" ? 4
     : 0
   
   useEffect(() => {

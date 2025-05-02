@@ -58,7 +58,8 @@ export const VaultPage = ({ params }: Props) => {
     params.address !== "rseth" &&
     params.address !== "unibtc" &&
     params.address !== "rusd" &&
-    params.address !== "oribgt"
+    params.address !== "oribgt" &&
+    params.address !== "solvbtc"
   ) {
     notFound();
   }
@@ -180,7 +181,7 @@ export const VaultPage = ({ params }: Props) => {
           {sellOtPopup && <SellOTPopup />}
         <VaultsDetail address={params.address as VaultDetailKey} />
       </VaultsCardLayout>
-      { params.address !== "oribgt" && <YtChart /> }
+      <YtChart token={params.address} />
     </CsrPageLayout>
   );
 };

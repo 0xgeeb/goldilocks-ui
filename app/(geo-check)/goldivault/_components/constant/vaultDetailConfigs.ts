@@ -81,7 +81,7 @@ export const VAULT_DETAIL_CONFIGS = {
       poolUrl: `https://berascan.com/address/${contracts.vaultLPaddys.unibtc}`,
     },
   },
-  solvbtcbbn: {
+  solvbtc: {
     title: "solvBTC.BBN",
     titleSize: "text-[7.5vw] md:text-[6.5vw] lg:text-[5.5vw]",
     params: {

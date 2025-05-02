@@ -29,6 +29,11 @@ function VaultsDetailTabs({ currentTab, vaultToken, setTab, }: { currentTab: str
     ? Object.fromEntries(
         Object.entries(TAB_LABELS).filter(([key]) => key !== "YIELD")
       )
+    :
+    vaultToken === "solvBTC.BBN"
+    ? Object.fromEntries(
+      Object.entries(TAB_LABELS).filter(([key]) => key !== "YIELD" && key !== "LIQUIDITY")
+    )
     : TAB_LABELS
 
   return (

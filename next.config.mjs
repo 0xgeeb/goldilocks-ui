@@ -32,6 +32,14 @@ const nextConfig = {
       {
         source: '/api/unibtcytchartdata',
         destination: 'http://52.23.253.24:3001/unibtcytchartdata'
+      },
+      {
+        source: '/api/solvbtcytchartdata',
+        destination: 'http://52.23.253.24:3001/solvbtcytchartdata'
+      },
+      {
+        source: '/api/oribgtytchartdata',
+        destination: 'http://52.23.253.24:3001/oribgtytchartdata'
       }
     ]
   }

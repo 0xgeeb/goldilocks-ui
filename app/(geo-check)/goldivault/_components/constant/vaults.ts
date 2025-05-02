@@ -27,6 +27,13 @@ export const VAULTS = [
     imageUrl: "rseth_logo.png",
     vaultName: "KelpDAO Points Vault",
   },
+  {
+    address: "solvbtc",
+    mouseFlag: "solvbtcvaultinfo",
+    tokenName: "SolvBTC.BBN",
+    imageUrl: "solvbtc-logo.png",
+    vaultName: "Solv Points Vault",
+  }
 ] as const;
 
 export type VaultType = (typeof VAULTS)[number]["address"];

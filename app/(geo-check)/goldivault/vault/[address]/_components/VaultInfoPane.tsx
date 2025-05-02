@@ -241,6 +241,20 @@ const VaultInfoPane: React.FC<{ vaultToken: string }> = ({ vaultToken }) => {
             />
           </>
         )}
+        {vaultToken === "solvbtc" && (
+          <>
+            <InfoRow
+              textA="Underlying protocol link"
+              textB="Solv"
+              linkB="https://app.solv.finance/solvbtc?network=bera"
+            />
+            <InfoRow
+              textA="OT chart link"
+              textB="Dexscreener"
+              linkB="https://dexscreener.com/berachain/0x8F513Fb5C947C20a01Dee083Cdb9250FBe73A6A8"
+            />
+          </>
+        )}
         <div className="flex w-full items-center justify-between">
           <dt className="font-baloo text-warm-text flex items-center text-left text-sm font-semibold">
             Calculators
