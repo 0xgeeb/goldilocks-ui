@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useGoldivault } from "../../providers"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,23 +10,28 @@ interface PointsAprCalculatorProps {
   vault: string;
 }
 
-export const PointsAprCalculator: React.FC<PointsAprCalculatorProps> = ({ data, vault }) => {
+export const PointsAprCalculator: React.FC<PointsAprCalculatorProps> = ({ vault }) => {
   const [fdv, setFdv] = useState<string>("");
   const [totalPoints, setTotalPoints] = useState<string>("");
   const [airdropPercent, setAirdropPercent] = useState<string>("");
-  const [pointsMultiplier, setPointsMultiplier] = useState<string>("");
-  const [depositAssetPrice, setDepositAssetPrice] = useState<string>("");
   const [valuePerPoint, setValuePerPoint] = useState<number | null>(null);
   const [pointsApr, setPointsApr] = useState<number | null>(null);
-  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false)
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+
+  const { assetPrice } = useGoldivault()
+
+  const multiplier = 
+    vault === "unibtc" ? 4 :
+    vault === "rusd" ? 2.25 :
+    vault === "rseth" ? 2 :
+    vault === "oribgt" ? 10
+    : 0
   
   useEffect(() => {
     if(!isDialogOpen) {
       setFdv("")
       setTotalPoints("")
       setAirdropPercent("")
-      setPointsMultiplier("")
-      setDepositAssetPrice("")
       setValuePerPoint(null)
       setPointsApr(null)
     }
@@ -35,8 +41,8 @@ export const PointsAprCalculator: React.FC<PointsAprCalculatorProps> = ({ data, 
     const fdvNum = parseFloat(fdv);
     const totalPointsNum = parseFloat(totalPoints);
     const airdropPercentNum = parseFloat(airdropPercent);
-    const pointsMultiplierNum = parseFloat(pointsMultiplier);
-    const depositAssetPriceNum = parseFloat(depositAssetPrice);
+    const pointsMultiplierNum = multiplier;
+    const depositAssetPriceNum = assetPrice;
 
     if (
       !isNaN(fdvNum) &&
@@ -117,8 +123,8 @@ export const PointsAprCalculator: React.FC<PointsAprCalculatorProps> = ({ data, 
             </Label>
             <Input
               type="number"
-              value={pointsMultiplier}
-              onChange={(e) => setPointsMultiplier(e.target.value)}
+              value={multiplier}
+              disabled={true}
               className="col-span-3 bg-input-base"
               placeholder="Enter points multiplier"
             />
@@ -129,8 +135,8 @@ export const PointsAprCalculator: React.FC<PointsAprCalculatorProps> = ({ data, 
             </Label>
             <Input
               type="number"
-              value={depositAssetPrice}
-              onChange={(e) => setDepositAssetPrice(e.target.value)}
+              value={assetPrice.toFixed(4)}
+              disabled={true}
               className="col-span-3 bg-input-base"
               placeholder="Enter deposit asset price"
             />

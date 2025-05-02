@@ -464,7 +464,9 @@ const INITIAL_STATE: {
   infoPopupText: "",
   checkVaultLiquidity: async () => false,
   chartData: {} as YtChartData,
-  getChartData: async (_vault: string) => {}
+  getChartData: async (_vault: string) => {},
+  assetPrice: 0,
+  getAssetPrice: async (_vault: string) => {}
 } as const;
 
 const GoldivaultContext = createContext(INITIAL_STATE);
@@ -601,6 +603,7 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
   const [chartDataState, setChartDataState] = useState<
     any
   >(INITIAL_STATE.chartData);
+  const [assetPriceState, setAssetPriceState] = useState<number>(INITIAL_STATE.assetPrice)
 
   const formatDate = (timestamp: number): string => {
     const date = new Date(timestamp * 1000);
@@ -2353,13 +2356,131 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
     setRedeemYTAmountsState(response);
   };
 
-  // const getDaysUntil = (timestamp: number): number => {
-  //   const now = new Date();
-  //   const futureDate = new Date(timestamp * 1000);
-  //   const differenceInMs = futureDate.getTime() - now.getTime();
-  //   const daysLeft = Math.floor(differenceInMs / (1000 * 60 * 60 * 24));
-  //   return daysLeft >= 0 ? daysLeft : 0;
-  // };
+  const getAssetPrice = async (vault: string) => {
+    if (vault === "rseth") {
+      const beraEth = '0x6fc6545d5cDE268D5C7f1e476D444F39c995120d'
+      const weth = '0x2F6F07CDcf3588944Bf4C42aC74ff24bF56e7590'
+      const rsethPriceResult: any = await readContract(config, {
+        address: contracts.quoterv2.address as `0x${string}`,
+        abi: contracts.quoterv2.abi,
+        functionName: "quoteExactOutputSingle",
+        args: [
+          [
+            beraEth,
+            contracts.rseth.address,
+            parseEther(`1`),
+            500,
+            0
+          ]
+        ]
+      })
+      const beraethPriceResult: any = await readContract(config, {
+        address: contracts.quoterv2.address as `0x${string}`,
+        abi: contracts.quoterv2.abi,
+        functionName: "quoteExactOutputSingle",
+        args: [
+          [
+            weth,
+            beraEth,
+            parseEther(`1`),
+            500,
+            0
+          ]
+        ]
+      })
+      const wethPriceResult: any = await readContract(config, {
+        address: contracts.quoterv2.address as `0x${string}`,
+        abi: contracts.quoterv2.abi,
+        functionName: "quoteExactOutputSingle",
+        args: [
+          [
+            contracts.honey.address,
+            weth,
+            parseEther(`1`),
+            3000,
+            0
+          ]
+        ]
+      })
+      setAssetPriceState(parseFloat(formatEther(wethPriceResult[0] as unknown as bigint)) * parseFloat(formatEther(beraethPriceResult[0] as unknown as bigint)) * parseFloat(formatEther(rsethPriceResult[0] as unknown as bigint)))
+    } else if (vault === "unibtc") {
+      const wbtc = '0x0555E30da8f98308EdB960aa94C0Db47230d2B9c'
+      const unibtcPriceResult: any = await readContract(config, {
+        address: contracts.quoterv2.address as `0x${string}`,
+        abi: contracts.quoterv2.abi,
+        functionName: "quoteExactOutputSingle",
+        args: [
+          [
+            wbtc,
+            contracts.unibtc.address,
+            parseUnits(`1`, 8),
+            500,
+            0
+          ]
+        ]
+      })
+      const unibtcPrice = parseFloat(formatUnits(unibtcPriceResult[0] as unknown as bigint, 8))
+      const wbtcPriceResult: any = await readContract(config, {
+        address: contracts.quoterv2.address as `0x${string}`,
+        abi: contracts.quoterv2.abi,
+        functionName: "quoteExactOutputSingle",
+        args: [
+          [
+            contracts.honey.address,
+            wbtc,
+            parseUnits(`1`, 8),
+            3000,
+            0
+          ]
+        ]
+      })
+      const wbtcPrice = parseFloat(formatEther(wbtcPriceResult[0] as unknown as bigint))
+      setAssetPriceState(unibtcPrice * wbtcPrice)
+    } else if (vault === "rusd") {
+      setAssetPriceState(1)
+    } else if (vault === "oribgt") {
+      const beraPriceResult: any = await readContract(config, {
+        address: contracts.quoterv2.address as `0x${string}`,
+        abi: contracts.quoterv2.abi,
+        functionName: "quoteExactOutputSingle",
+        args: [
+          [
+            contracts.honey.address,
+            contracts.wbera.address,
+            parseEther(`1`),
+            3000,
+            0,
+          ],
+        ],
+      });
+      const beraPrice = parseFloat(formatEther(beraPriceResult[0] as unknown as bigint))
+      const ibgtPriceResult: any = await readContract(config, {
+        address: contracts.quoterv2.address as `0x${string}`,
+        abi: contracts.quoterv2.abi,
+        functionName: "quoteExactOutputSingle",
+        args: [
+          [
+            contracts.wbera.address,
+            contracts.ibgt.address,
+            parseEther(`1`),
+            3000,
+            0,
+          ],
+        ],
+      });
+      const ibgtPrice = parseFloat(formatEther(ibgtPriceResult[0] as unknown as bigint))
+      const oribgtPrice: any = await readContract(config, {
+        address: contracts.oribgt.address as `0x${string}`,
+        abi: contracts.oribgt.abi,
+        functionName: 'convertToAssets',
+        args: [parseEther(`1`)]
+      })
+      
+      console.log(ibgtPrice, beraPrice, ibgtPrice * beraPrice)
+      console.log(oribgtPrice)
+      setAssetPriceState(parseFloat(formatEther(oribgtPrice as unknown as bigint)) * ibgtPrice * beraPrice)
+    }
+  }
 
   const getVaultOT = (vault: string): string => {
     if (vault === "weeth") {
@@ -3258,7 +3379,9 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         refreshVaultInfo,
         refreshVaultWalletInfo,
         chartData: chartDataState,
-        getChartData
+        getChartData,
+        getAssetPrice,
+        assetPrice: assetPriceState
       }}
     >
       {children}

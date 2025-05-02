@@ -41,7 +41,8 @@ export const VaultPage = ({ params }: Props) => {
     changeSlippageToggle,
     buyOtPopup,
     sellOtPopup,
-    getChartData
+    getChartData,
+    getAssetPrice
   } = useGoldivault();
 
   const signed = useAtomValue(geoAtom);
@@ -49,6 +50,7 @@ export const VaultPage = ({ params }: Props) => {
   useEffect(() => {
     checkSlippageAmount();
     getChartData(params.address);
+    getAssetPrice(params.address)
     setPageLoading(false);
   }, []);
 

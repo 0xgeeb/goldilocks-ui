@@ -247,7 +247,7 @@ const VaultInfoPane: React.FC<{ vaultToken: string }> = ({ vaultToken }) => {
           </dt>
           <dd className="flex text-md font-semibold font-baloo">
             <YtRoiCalculator currentApr={data.fixedApr} />
-            {/* <PointsAprCalculator data={data} vault={vaultToken} /> */}
+            <PointsAprCalculator data={data} vault={vaultToken} />
           </dd>
         </div>
         <div className="flex w-full">
