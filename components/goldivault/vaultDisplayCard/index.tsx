@@ -89,7 +89,7 @@ export const VaultDisplayCard = ({ params }: VaultDisplayCardProps) => {
             <div className="flex flex-col items-center gap-3 p-2.5">
               <VaultInfoItem
                 label="Fixed APR"
-                value={`${formatAsPercent(vaultInfo.fixedApr / 100)}`}
+                value={`${params.tokenName === "oriBGT" ? formatAsPercent(vaultInfo.fixedApr / 100) : "N/A"}`}
               />
               <VaultInfoItem
                 label="days until maturity"

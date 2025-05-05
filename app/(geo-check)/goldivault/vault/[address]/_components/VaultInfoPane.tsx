@@ -69,6 +69,15 @@ const VaultInfoPane: React.FC<{ vaultToken: string }> = ({ vaultToken }) => {
     return `${month}-${day}-${year}`;
   };
 
+  const formatTime = (timestamp: number): string => {
+    const date = new Date(timestamp * 1000); // convert to milliseconds
+    const hours = date.getUTCHours().toString().padStart(2, '0');
+    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+    const seconds = date.getUTCSeconds().toString().padStart(2, '0');
+  
+    return `${hours}:${minutes}:${seconds} UTC`;
+  }
+
   // DYNAMICALLY fetch the vault info based on the vault token
   const data = getVaultInfo(vaultToken);
 
@@ -88,9 +97,9 @@ const VaultInfoPane: React.FC<{ vaultToken: string }> = ({ vaultToken }) => {
     const formatData = (key: string, data: number) => {
       switch (key) {
         case "endTime":
-          return formatDate(data);
+          return vaultToken === "oribgt" ? formatDate(data) : formatTime(data);
         case "fixedApr":
-          return `${formatAsString(data)}%`;
+          return `${vaultToken === "oribgt" ? formatAsString(data) + "%" : "N/A"}`;
         case "otLiquidity":
           return `$${formatAsString(data)}`;
         case "restakingYield":
