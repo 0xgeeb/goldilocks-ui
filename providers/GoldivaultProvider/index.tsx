@@ -1090,13 +1090,13 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       const response = {
         solvbtc: parseFloat(formatEther(solvbtcBalResult as unknown as bigint)),
         solvbtcAllowance: parseFloat(
-          formatEther(solvbtcotBalResult as unknown as bigint),
+          formatEther(solvbtcAllResult as unknown as bigint),
         ),
         solvbtcot: parseFloat(
-          formatEther(solvbtcytBalResult as unknown as bigint),
+          formatEther(solvbtcotBalResult as unknown as bigint),
         ),
         solvbtcyt: parseFloat(
-          formatEther(solvbtcAllResult as unknown as bigint),
+          formatEther(solvbtcytBalResult as unknown as bigint),
         ),
       };
 
