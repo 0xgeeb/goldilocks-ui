@@ -806,6 +806,22 @@ export const useGoldivaultTx = () => {
         console.log('or: ', e)
       }
     }
+    else if(vault === "rseth") {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.rsethVault.address as `0x${string}`,
+          abi: contracts.rsethVault.abi,
+          functionName: 'redeemOwnership',
+          args: [parseEther(`${redeemOTAmt}`)]
+        })
+        const data = await waitForTransactionReceipt(config, { hash })
+        return data.transactionHash
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
 
     return "";
   };
