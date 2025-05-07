@@ -1121,15 +1121,15 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         [
           contracts.unibtc.address,
           contracts.unibtcot.address,
-          parseUnits("1", 8),
+          parseUnits("0.0001", 8),
           500,
           0,
         ],
       ],
     });
     const buyingOTPrice =
-      parseFloat((buyingOTQuoteResult[0] as unknown as bigint).toString()) /
-      1e8;
+    (parseFloat((buyingOTQuoteResult[0] as unknown as bigint).toString()) /
+    1e8) * 10000
     const currentYtPrice = 1 - buyingOTPrice;
 
     const timeDifference = parseFloat(endTimeResult) * 1000 - Date.now();
@@ -1864,7 +1864,7 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         [
           contracts.unibtc.address,
           contracts.unibtcot.address,
-          parseUnits(`1`, 8),
+          parseUnits(`0.0001`, 8),
           500,
           0,
         ],
@@ -1888,7 +1888,7 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       wbtcPrice;
     const buyingOTPriceUnibtc = parseFloat(
       formatUnits(buyingOTQuoteResultUnibtc[0] as unknown as bigint, 8),
-    );
+    ) * 10000
     const timeDifferenceUnibtc =
       parseFloat(endTimeResultUnibtc) * 1000 - Date.now();
     const fixedDaysDifferenceUnibtc =
