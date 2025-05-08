@@ -957,7 +957,7 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
     const response = await fetch("/api/lockschartdata")
     const responseJson: any = await response.json()
     const hourlyLocks = responseJson.locksHourly.map((node: any) => ({
-      floorPrice: parseFloat(node.floor),
+      floorPrice: parseFloat(parseFloat(node.floor).toFixed(15)),
       marketPrice: parseFloat(node.market),
       date: getFormattedTime(node.timestamp)
     }))
