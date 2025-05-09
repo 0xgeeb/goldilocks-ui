@@ -55,52 +55,76 @@ export const GoldivaultPage = () => {
     return (
       <TAndCs />
     )
-  } 
+  }
+
+  const ORIBGT_VAULT = VAULTS.filter(vault => vault.address === "oribgt");
+  const OTHER_VAULTS = VAULTS.filter(vault => vault.address !== "oribgt");
 
   return (
-      <CsrPageLayout
-        onPageClick={() => handlePopups()}
-        wutPopup={wutPopup}
-        setWutPopup={setWutPopup}
-        bgImageUrl="/images/bg-goldivault-2.png"
-      >
-        {infoPopupToggle && <InfoDisplayPopup />}
-        <div className="w-full px-8 md:px-20 py-6 md:py-10">
-          <div
-            style={{
-              backdropFilter: "blur(18px)",
-              backgroundColor: "rgba(26,20,12, 0.75)",
-            }}
-            className=" flex flex-col gap-3 rounded-3xl p-6 ">
-            <div className="flex flex-row items-center gap-3">
-              <h1
-                id="page-title"
-                className="text-HoneyYellow font-amaticbold text-6xl"
-              >
-                Goldivaults
-              </h1>
-              <img src="/images/icons/box.svg" alt="box" />
-            </div>
-            <div className="text-WarmText h-9 text-lg mb-6 sm:mb-0">
-              Ooga booga. Money printer go brrrrr haha.
-            </div>
-
-            {/* <Vaults /> */}
-            <div className="w-full relative flex flex-wrap gap-6">
-              {VAULTS.map(
-                ({ address, mouseFlag, tokenName, imageUrl, vaultName }) => (
-                  <VaultDisplayCard
-                    key={address}
-                    params={{ address, mouseFlag, tokenName, imageUrl, vaultName }}
-                  />
-                ),
-              )}
-            </div>
+    <CsrPageLayout
+      onPageClick={() => handlePopups()}
+      wutPopup={wutPopup}
+      setWutPopup={setWutPopup}
+      bgImageUrl="/images/bg-goldivault-2.png"
+    >
+      {infoPopupToggle && <InfoDisplayPopup />}
+      <div className="w-full px-8 md:px-20 py-6 md:py-10">
+        <div
+          style={{
+            backdropFilter: "blur(18px)",
+            backgroundColor: "rgba(26,20,12, 0.75)",
+          }}
+          className=" flex flex-col gap-3 rounded-3xl p-6 ">
+          <div className="flex flex-row items-center gap-3">
+            <h1
+              id="page-title"
+              className="text-HoneyYellow font-amaticbold text-6xl"
+            >
+              Goldivaults
+            </h1>
+            <img src="/images/icons/box.svg" alt="box" />
+          </div>
+          <div className="text-WarmText h-9 text-lg mb-6 sm:mb-0">
+            Ooga booga. Money printer go brrrrr haha.
+          </div>
+          <div className="flex flex-row items-center gap-3 mx-auto mt-4">
+            <h1
+              id="page-title"
+              className="text-HoneyYellow font-amaticbold text-4xl"
+            >
+              Live Vaults
+            </h1>
+          </div>
+          <div className="w-full relative flex flex-wrap gap-6">
+            {ORIBGT_VAULT.map(
+              ({ address, mouseFlag, tokenName, imageUrl, vaultName }) => (
+                <VaultDisplayCard
+                  key={address}
+                  params={{ address, mouseFlag, tokenName, imageUrl, vaultName }}
+                />
+              )
+            )}
+          </div>
+          <div className="flex flex-row items-center gap-3 mx-auto mt-4">
+            <h1
+              id="page-title"
+              className="text-HoneyYellow font-amaticbold text-4xl"
+            >
+              Matured Vaults
+            </h1>
+          </div>
+          <div className="w-full relative flex flex-wrap gap-6">
+            {OTHER_VAULTS.map(
+              ({ address, mouseFlag, tokenName, imageUrl, vaultName }) => (
+                <VaultDisplayCard
+                  key={address}
+                  params={{ address, mouseFlag, tokenName, imageUrl, vaultName }}
+                />
+              ),
+            )}
           </div>
         </div>
-      </CsrPageLayout>
+      </div>
+    </CsrPageLayout>
   )
-    // We don't need this anymore
-    //   <GoldivaultPageMobile />
-    //
 };
