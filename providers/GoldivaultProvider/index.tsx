@@ -2344,16 +2344,26 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
 
   const calculateLiquidity = async (direction: string) => {
     if(direction === "ADDLIQ") {
-      const slot0: any = await readContract(config, {
-        address: contracts.vaultLPaddys.oribgt as `0x${string}`,
-        abi: contracts.UniswapV3Pool.abi,
-        functionName: 'slot0',
+      const totalAmountsResult = await readContract(config, {
+        address: contracts.steerOribgtPool.address as `0x${string}`,
+        abi: [{"type":"function","name":"getTotalAmounts","stateMutability":"view","inputs":[],"outputs":[{"name":"total0","type":"uint256"},{"name":"total1","type":"uint256"}]}],
+        functionName: 'getTotalAmounts',
         args: []
       })
-      const sqrtPrice = parseFloat(slot0[0].toString()) / Math.pow(2, 96)
-      const price = sqrtPrice * sqrtPrice
+      const totalSupplyResult = await readContract(config, {
+        address: contracts.steerOribgtPool.address as `0x${string}`,
+        abi: [{"type":"function","name":"totalSupply","stateMutability":"view","inputs":[],"outputs":[{"type":"uint256"}]}],
+        functionName: 'totalSupply',
+        args: []
+      })
+      const token0 = parseFloat(formatEther(totalAmountsResult[0] as unknown as bigint))
+      const token1 = parseFloat(formatEther(totalAmountsResult[1] as unknown as bigint))
+      const supply = parseFloat(formatEther(totalSupplyResult as unknown as bigint))
+      const token0PerShare = token0 / supply
+      const token1PerShare = token1 / supply
+      const priceRatio = token1PerShare / token0PerShare
 
-      setTradeOutputState(debouncedTradeInputState * price)
+      setTradeOutputState(debouncedTradeInputState * priceRatio)
       setOutputTokensLoadingState(false)
     }
     else {
