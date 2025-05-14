@@ -97,7 +97,7 @@ const VaultInfoPane: React.FC<{ vaultToken: string }> = ({ vaultToken }) => {
     const formatData = (key: string, data: number) => {
       switch (key) {
         case "endTime":
-          return vaultToken === "oribgt" ? formatDate(data) : formatTime(data);
+          return formatDate(data);
         case "fixedApr":
           return `${vaultToken === "oribgt" ? formatAsString(data) + "%" : "N/A"}`;
         case "otLiquidity":
