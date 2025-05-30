@@ -10,6 +10,7 @@ import {
   GearIcon,
   FormWrapper
 } from "@/app/(geo-check)/goldivault/vault/[address]/_components/FormComponents";
+import { HoverText } from "@/app/(geo-check)/goldivault/vault/[address]/_components/InfoHover"
 
 
 type LiqManagerTabProps = {
@@ -106,6 +107,18 @@ export const LiqManagerTab = ({ params }: LiqManagerTabProps) => {
 
   return (
     <FormWrapper>
+      {
+        (params.vaultToken === "oribgt" && activeToggle === "ADDLIQ") &&
+        <Container align="right" padding="sm">
+          <Label>
+            <a href="https://origami.finance/collections/berachain-collection/80094-0x69f1E971257419B1E9C405A553f252c64A29A30a/info" target="_blank">
+              <div className="rounded-xl bg-button-base hover:bg-button-hover font-inter text-md cursor-pointer text-teak p-2">
+                Get oriBGT
+              </div>
+            </a>
+          </Label>
+        </Container>
+      }
       <LabelSet>
         <Label>
           {activeToggle === 'ADDLIQ' ? "Deposit" : "Withdraw"} Liquidity
@@ -142,6 +155,7 @@ export const LiqManagerTab = ({ params }: LiqManagerTabProps) => {
           />
           <Container align="right" padding="sm">
             <Label>
+              <HoverText hoverText="Click the deposit tab to get oriBGT-OT" />
               Balance <span className="text-teak">{" "}
               {walletInfoLoading
                 ? loadingElement()
