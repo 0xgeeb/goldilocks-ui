@@ -20,7 +20,7 @@ export const Notification = () => {
         className="h-[25%] w-[30%] border-2 border-black bg-[#E7B941] hover:scale-110 xl:h-[25%]"
         rel="noreferrer"
       >
-        <button className="h-[100%] w-[100%] font-amaticbold text-[4vw] md:text-[3vw] lg:text-[2.5vw] xl:text-[1.5vw]">
+        <button className="h-[100%] w-[100%] font-amaticbold text-[4vw] md:text-[3vw] lg:text-[2.5vw] xl:text-[1.5vw] cursor-pointer">
           VIEW TX
         </button>
       </a>
