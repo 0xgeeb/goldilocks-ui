@@ -452,6 +452,8 @@ const INITIAL_STATE: {
   setBuyOtPopup: (_popup: boolean) => {},
   sellOtPopup: false,
   setSellOtPopup: (_popup: boolean) => {},
+  descriptionPopup: false,
+  setDescriptionPopup: (_popup: boolean) => {},
   allowanceButtons: false,
   setAllowanceButtons: (_allowance: boolean) => {},
   handleChange: (_input: string) => {},
@@ -603,6 +605,7 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
   );
   const [buyOtPopupState, setBuyOtPopupState] = useState<boolean>(INITIAL_STATE.buyOtPopup)
   const [sellOtPopupState, setSellOtPopupState] = useState<boolean>(INITIAL_STATE.sellOtPopup)
+  const [descriptionPopupState, setDescriptionPopupState] = useState<boolean>(INITIAL_STATE.descriptionPopup)
   const [allowanceButtonsState, setAllowanceButtonsState] = useState<boolean>(
     INITIAL_STATE.allowanceButtons,
   );
@@ -3456,6 +3459,8 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         setBuyOtPopup: setBuyOtPopupState,
         sellOtPopup: sellOtPopupState,
         setSellOtPopup: setSellOtPopupState,
+        descriptionPopup: descriptionPopupState,
+        setDescriptionPopup: setDescriptionPopupState,
         allowanceButtons: allowanceButtonsState,
         setAllowanceButtons: setAllowanceButtonsState,
         handleChange,

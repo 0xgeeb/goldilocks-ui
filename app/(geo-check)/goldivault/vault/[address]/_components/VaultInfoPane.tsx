@@ -40,7 +40,7 @@ const InfoRow: React.FC<InfoRowProps> = ({ textA, textB, linkB }) => {
 };
 
 const VaultInfoPane: React.FC<{ vaultToken: string }> = ({ vaultToken }) => {
-  const { infoLoading, getVaultInfo, refreshVaultInfo } = useGoldivault();
+  const { infoLoading, getVaultInfo, refreshVaultInfo, setDescriptionPopup } = useGoldivault();
 
   useEffect(() => {
     refreshVaultInfo(vaultToken);
@@ -150,6 +150,12 @@ const VaultInfoPane: React.FC<{ vaultToken: string }> = ({ vaultToken }) => {
       </h2>
       <div className="h-0.5 w-[140px] bg-stone-800" />
       <dl className="flex h-full w-full flex-col items-center gap-3">
+        <div
+          className="rounded-xl bg-button-base hover:bg-button-hover font-inter text-sm cursor-pointer text-teak p-2"
+          onClick={() => setDescriptionPopup(true)}
+        >
+          Vault Description
+        </div>
         {details.map((detail, index) => (
           <div key={index} className="flex w-full items-center justify-between">
             <dt className="flex items-center text-left text-xs font-semibold text-stone-700">

@@ -16,7 +16,7 @@ import { geoAtom } from "@/app/_components/atoms/geoAtom";
 import { pageLoadingAtom } from "@/app/_components/atoms/pageLoadingAtom";
 import CsrPageLayout from "@/app/_components/CsrPageLayout";
 
-import { InfoPopup, SlippagePopup, BuyOTPopup, SellOTPopup, YtChart } from "../";
+import { InfoPopup, SlippagePopup, BuyOTPopup, SellOTPopup, YtChart, DescriptionPopup } from "../";
 import { useGoldivault } from "../../../providers";
 import { Loading, TAndCs } from "../../utils";
 
@@ -41,6 +41,7 @@ export const VaultPage = ({ params }: Props) => {
     changeSlippageToggle,
     buyOtPopup,
     sellOtPopup,
+    descriptionPopup,
     getChartData,
     getAssetPrice
   } = useGoldivault();
@@ -179,6 +180,7 @@ export const VaultPage = ({ params }: Props) => {
           {slippage.toggle && <SlippagePopup />}
           {buyOtPopup && <BuyOTPopup />}
           {sellOtPopup && <SellOTPopup />}
+          {descriptionPopup && <DescriptionPopup />}
         <VaultsDetail address={params.address as VaultDetailKey} />
       </VaultsCardLayout>
       <YtChart token={params.address} />
