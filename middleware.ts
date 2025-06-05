@@ -9,11 +9,11 @@ export function middleware(request: NextRequest) {
   //   return NextResponse.next();
   // }
 
-  const country = request.headers.get('x-vercel-ip-country') || 'unknown';
-  const blockedCountries = ['US'];
-  if (blockedCountries.includes(country.toUpperCase())) {
-    return NextResponse.redirect(new URL('/geo', request.url));
-  }
+  // const country = request.headers.get('x-vercel-ip-country') || 'unknown';
+  // const blockedCountries = ['US'];
+  // if (blockedCountries.includes(country.toUpperCase())) {
+  //   return NextResponse.redirect(new URL('/geo', request.url));
+  // }
   return NextResponse.next();
 }
 

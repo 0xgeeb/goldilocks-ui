@@ -1,23 +1,35 @@
 "use client";
 
 import { useSetAtom } from "jotai";
-
+import { animateScroll as scroll } from "react-scroll"
 import { geoAtom } from "@/app/_components/atoms/geoAtom";
 
 export const TAndCs = () => {
   const setGeo = useSetAtom(geoAtom);
 
+  const scrollToBottom = () => {
+    const element = document.getElementById("gimme-scrollbar");
+    if (element) {
+      scroll.scrollToBottom({
+        containerId: "gimme-scrollbar",
+        duration: 1000,
+        smooth: true,
+        offset: 0,
+      });
+    }
+  };
+
   return (
     <main className="relative h-screen w-screen bg-[url('/images/bg-goldiswap.png')] bg-cover bg-bottom">
-      <div className="absolute left-[20%] top-[7.5%] h-[85%] w-3/5 border-2 border-black bg-[#EEDCD2]">
-        <div className="absolute left-0 top-3 w-6 skew-y-[45deg] border-b-2 border-black"></div>
+      <div className="absolute top-[7.5%] left-[5%] md:left-[20%] h-[85%] w-9/10 md:w-3/5 border-2 border-black bg-[#EEDCD2]">
+        <div className="absolute top-3 left-0 w-6 skew-y-[45deg] border-b-2 border-black"></div>
         <div className="absolute bottom-3 left-0 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
-        <div className="absolute right-0 top-3 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
-        <div className="absolute bottom-3 right-0 w-6 skew-y-[45deg] border-b-2 border-black"></div>
+        <div className="absolute top-3 right-0 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
+        <div className="absolute right-0 bottom-3 w-6 skew-y-[45deg] border-b-2 border-black"></div>
         <div className="absolute inset-6 border-2 border-black bg-[#D9C6BA]">
           <div className="relative size-full">
             <div
-              className="flex size-full flex-col overflow-y-auto p-[7.5%] text-center font-amaticbold text-[3vw] font-medium text-black lg:text-[1.5vw]"
+              className="font-amaticbold flex size-full flex-col overflow-y-auto p-[7.5%] text-center text-[3vw] font-medium text-black lg:text-[1.5vw]"
               id="gimme-scrollbar"
             >
               <p className="text-[7.5vw] font-bold lg:text-[5vw]">
@@ -862,6 +874,26 @@ export const TAndCs = () => {
                 please click here to sign
               </p>
             </div>
+            <button
+              onClick={scrollToBottom}
+              className="fixed right-8 bottom-4 md:bottom-8 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border-2 border-black bg-[#EEDCD2] shadow-lg transition-colors duration-200 hover:bg-[#D9C6BA]"
+              aria-label="Scroll to bottom"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                />
+              </svg>
+            </button>
           </div>
         </div>
       </div>
