@@ -207,6 +207,11 @@ const VaultInfoPane: React.FC<{ vaultToken: string }> = ({ vaultToken }) => {
               textB="Dexscreener"
               linkB="https://dexscreener.com/berachain/0xCb2A95c52E718A6BA6AAb6587f1a3aFF4BfB0648"
             />
+            <InfoRow
+              textA="LP Reward Vault"
+              textB="Reward Vault"
+              linkB="https://hub.berachain.com/vaults/0xeee277a91f9f50cda5d188522c921820a848cd99/"
+            />
           </>
         )}
         {vaultToken === "rusd" && (
