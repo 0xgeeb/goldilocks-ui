@@ -149,7 +149,7 @@ const VaultInfoPane: React.FC<{ vaultToken: string }> = ({ vaultToken }) => {
         Vault Details
       </h2>
       <div className="h-0.5 w-[140px] bg-stone-800" />
-      <dl className="flex h-full w-full flex-col items-center gap-3">
+      <dl className="flex h-full w-full flex-col items-center gap-2">
         <div
           className="rounded-xl bg-button-base hover:bg-button-hover font-inter text-sm cursor-pointer text-teak p-2"
           onClick={() => setDescriptionPopup(true)}
