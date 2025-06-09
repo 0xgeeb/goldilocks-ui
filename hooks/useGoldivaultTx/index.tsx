@@ -163,7 +163,7 @@ export const useGoldivaultTx = () => {
         functionName: 'allowance',
         args: [wallet, contracts.steerPeriphery.address]
       })
-      allowanceNum = parseFloat((allowanceResult as unknown as bigint).toString()) / 1e8;
+      allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
     }
     else if(vault === 'steeroribgtot') {
       allowanceResult = await readContract(config, {
@@ -172,7 +172,7 @@ export const useGoldivaultTx = () => {
         functionName: 'allowance',
         args: [wallet, contracts.steerPeriphery.address]
       })
-      allowanceNum = parseFloat((allowanceResult as unknown as bigint).toString()) / 1e8;
+      allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
     }
     else {
       allowanceNum = 0
