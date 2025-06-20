@@ -190,10 +190,10 @@ export const VAULT_LABELS: VaultLabels = {
         label: "Origami Leverage",
         hoverText: "10x Origami Points Multiplier"
       },
-      // infraredLeverage: {
-      //   label: "Infrared Points Leverage",
-      //   hoverText: "1x Infrared Points Multiplier"
-      // }
+      infraredLeverage: {
+        label: "Infrared Points Leverage",
+        hoverText: "1x Infrared Points Multiplier"
+      }
     },
     goldivaultWalletInfo: {
       ibgt: "iBGT",
@@ -3191,8 +3191,7 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
           case "rusdvaultinfo":
             return `2.25x Reservoir points;${formatLeverageNum(vaultDisplayInfoState.rusd.ytPrice, 2.25)}x Reservoir point leverage`;
           case "oribgtvaultinfo":
-             // return `10x Origami points and 1x Infrared points;${formatLeverageNum(vaultDisplayInfoState.oribgt.ytPrice, 10)}x Origami point leverage and ${formatLeverageNum(vaultDisplayInfoState.oribgt.ytPrice, 1)}x Infrared point leverage`
-            return `10x Origami points;${formatLeverageNum(vaultDisplayInfoState.oribgt.ytPrice, 10)}x Origami point leverage`
+             return `10x Origami points and 1x Infrared points;${formatLeverageNum(vaultDisplayInfoState.oribgt.ytPrice, 10)}x Origami point leverage and ${formatLeverageNum(vaultDisplayInfoState.oribgt.ytPrice, 1)}x Infrared point leverage`
           case "impliedapr":
             return "The apr implied by the price at which your trade is predicted to execute";
           case "lpapr":
