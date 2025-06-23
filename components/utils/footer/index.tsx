@@ -42,7 +42,7 @@ export const Footer = () => {
         </div>
       </div>
       <div className="mt-1 text-base text-[#8D8D8D]">
-        © 2024 Goldilocks DAO. All rights reserved.
+        © 2025 Goldilocks DAO. All rights reserved.
       </div>
     </div>
   );

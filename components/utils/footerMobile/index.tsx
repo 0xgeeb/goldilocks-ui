@@ -31,7 +31,7 @@ export const FooterMobile = () => {
         </a>
       </div>
       <div className="text-lg text-[#8D8D8D] mt-2">
-        © 2024 Goldilocks DAO. All rights reserved.
+        © 2025 Goldilocks DAO. All rights reserved.
       </div>
     </div>
   );
