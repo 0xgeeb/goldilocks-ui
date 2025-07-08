@@ -8,8 +8,10 @@ import { useAccount } from "wagmi";
 import { formatAsString, formatAsSmallNum } from "@/app/_components/utils";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { getPublicClient } from "@wagmi/core";
+import { createWalletClient, custom } from "viem"
+import { BerachainMainnet } from "@/utils/customChains";
 
-import { useGoldivaultTx } from "@/hooks";
+import { useGoldivaultTx, useVaultInfoConfig } from "@/hooks";
 import { useGoldivault } from "@/providers";
 import { config } from "@/providers/WagmiProvider";
 import { contracts } from "@/utils/addressi";
@@ -42,6 +44,9 @@ const BUTTON_TEXT = {
   redeemYT: "Redeem YT",
   stakeYT: "Stake YT",
   unstakeYT: "Unstake YT",
+  // Zap
+  zapIn: "Zap Liquidity",
+  zapOut: "Unzap Liquidity",
   // Not enough
   notEnough: "Not Enough...",
   notEnoughOT: "Not Enough OT",
@@ -50,6 +55,8 @@ const BUTTON_TEXT = {
   approving: "Approving...",
   confirming: "Confirming...",
   // Dynamic
+  ybgt: "getting styBGT...",
+  withdrawybgt: "withdrawing yBGT...",
   approve: (token: string) => `Approve ${token}`,
   raiseSlippage: "Raise Slippage",
   claim: "Claim",
@@ -59,6 +66,13 @@ const BUTTON_TEXT = {
 function TxButton({ params }: VaultButtonProps) {
   const [honeyApproved, setHoneyApproved] = useState<boolean>(false);
   const [depositDTApproved, setDepositDTApproved] = useState<boolean>(false);
+
+  const rewardVault = '0xeEE277a91F9F50cda5d188522C921820a848cD99'
+
+  const walletClient = createWalletClient({
+  chain: BerachainMainnet,
+  transport: custom(window.ethereum!)
+})
 
   const {
     deposit,
@@ -83,16 +97,9 @@ function TxButton({ params }: VaultButtonProps) {
     setTradeInput,
     setTradeOutput,
     tradeDirection,
-    goldivaultWalletInfoWeeth,
-    goldivaultWalletInfoSolvbtc,
-    goldivaultWalletInfoUnibtc,
     goldivaultWalletInfoRusd,
-    goldivaultWalletInfoEbtc,
-    goldivaultWalletInfoRseth,
-    // getVaultWalletInfo,
     refreshVaultInfo,
     refreshVaultWalletInfo,
-
     goldivaultWalletInfoOribgt,
     vaultSwapTxAmount,
     honeyApprovalAmount,
@@ -102,8 +109,30 @@ function TxButton({ params }: VaultButtonProps) {
     priceImpact,
     calledDtAmountMin,
     setBuyOtPopup,
-    setSellOtPopup
+    setSellOtPopup,
+    zapPopup,
+    zap,
+    zapInfo,
+    debouncedZap
   } = useGoldivault();
+
+  const {
+    vaultOT,
+    vaultYT,
+    vaultDT,
+    vaultOTaddy,
+    vaultDTAllowance,
+    stakedYt,
+    justYt,
+    claimable,
+    four626bool,
+    vaultYTLabel,
+    vaultDTLabel,
+    LPasset,
+    LPassetaddy,
+    LPassetLabel,
+    zapOutAssetLabel
+  } = useVaultInfoConfig({ vaultToken: params.vaultToken})
 
   const {
     checkAllowance,
@@ -121,117 +150,14 @@ function TxButton({ params }: VaultButtonProps) {
     sendUnstakeYTTx,
     sendClaimTx,
     sendAddSteerLiqTx,
-    sendRemoveSteerLiqTx
+    sendRemoveSteerLiqTx,
+    send4626DepositTx,
+    send4626RedeemTx
   } = useGoldivaultTx();
 
   const { address, isConnected } = useAccount();
 
-  const vaultOT =
-    params.vaultToken === "weeth"
-      ? goldivaultWalletInfoWeeth.weot
-      : params.vaultToken === "solvbtc"
-        ? goldivaultWalletInfoSolvbtc.solvbtcot
-        : params.vaultToken === "unibtc"
-          ? goldivaultWalletInfoUnibtc.unibtcot
-          : params.vaultToken === "rusd"
-            ? goldivaultWalletInfoRusd.rusdot
-            : params.vaultToken === "ebtc"
-              ? goldivaultWalletInfoEbtc.ebtcot
-              : params.vaultToken === "rseth"
-                ? goldivaultWalletInfoRseth.rsethot
-                : params.vaultToken === "oribgt"
-                  ? goldivaultWalletInfoOribgt.oribgtot
-                  : {};
-
-  const vaultYT =
-    params.vaultToken === "weeth"
-      ? goldivaultWalletInfoWeeth.weyt
-      : params.vaultToken === "solvbtc"
-        ? goldivaultWalletInfoSolvbtc.solvbtcyt
-        : params.vaultToken === "unibtc"
-          ? goldivaultWalletInfoUnibtc.unibtcyt
-          : params.vaultToken === "rusd"
-            ? goldivaultWalletInfoRusd.rusdyt
-            : params.vaultToken === "ebtc"
-              ? goldivaultWalletInfoEbtc.ebtcyt
-              : params.vaultToken === "rseth"
-                ? goldivaultWalletInfoRseth.rsethyt
-                : params.vaultToken === "oribgt"
-                  ? goldivaultWalletInfoOribgt.oribgtyt
-                  : {};
-
-  const vaultDT =
-    params.vaultToken === "weeth"
-      ? goldivaultWalletInfoWeeth.weeth
-      : params.vaultToken === "solvbtc"
-        ? goldivaultWalletInfoSolvbtc.solvbtc
-        : params.vaultToken === "unibtc"
-          ? goldivaultWalletInfoUnibtc.unibtc
-          : params.vaultToken === "rusd"
-            ? goldivaultWalletInfoRusd.rusd
-            : params.vaultToken === "ebtc"
-              ? goldivaultWalletInfoEbtc.ebtc
-              : params.vaultToken === "rseth"
-                ? goldivaultWalletInfoRseth.rseth
-                : params.vaultToken === "oribgt"
-                  ? goldivaultWalletInfoOribgt.ibgt
-                  : {};
-
-  const vaultOTaddy =
-    params.vaultToken === "weeth"
-      ? contracts.weot.address
-      : params.vaultToken === "solvbtc"
-        ? contracts.solvbtcot.address
-        : params.vaultToken === "unibtc"
-          ? contracts.unibtcot.address
-          : params.vaultToken === "rusd"
-            ? contracts.rusdot.address
-            : params.vaultToken === "ebtc"
-              ? contracts.ebtcot.address
-              : params.vaultToken === "rseth"
-                ? contracts.rsethot.address
-                : params.vaultToken === "oribgt"
-                  ? contracts.oribgtot.address
-                  : "";
-
-  const vaultDTaddy =
-    params.vaultToken === "weeth"
-      ? contracts.weeth.address
-      : params.vaultToken === "solvbtc"
-        ? contracts.solvbtc.address
-        : params.vaultToken === "unibtc"
-          ? contracts.unibtc.address
-          : params.vaultToken === "rusd"
-            ? contracts.rusd.address
-            : params.vaultToken === "ebtc"
-              ? contracts.ebtc.address
-              : params.vaultToken === "rseth"
-                ? contracts.rseth.address
-                : params.vaultToken === "oribgt"
-                  ? contracts.ibgt.address
-                  : "";
-
-  const vaultDTAllowance =
-    params.vaultToken === "weeth"
-      ? goldivaultWalletInfoWeeth.weethVaultAllowance
-      : params.vaultToken === "solvbtc"
-        ? goldivaultWalletInfoSolvbtc.solvbtcAllowance
-        : params.vaultToken === "unibtc"
-          ? goldivaultWalletInfoUnibtc.unibtcAllowance
-          : params.vaultToken === "rusd"
-            ? goldivaultWalletInfoRusd.rusdAllowance
-            : params.vaultToken === "ebtc"
-              ? goldivaultWalletInfoEbtc.ebtcAllowance
-              : params.vaultToken === "rseth"
-                ? goldivaultWalletInfoRseth.rsethAllowance
-                : params.vaultToken === "oribgt"
-                  ? goldivaultWalletInfoOribgt.ibgtAllowance
-                  : 0;
-
   const vaultLPBalance = params.vaultToken === "rusd" ? goldivaultWalletInfoRusd.rusdaquabera : 0;
-
-  // @note what is this?
-  const four626bool = params.vaultToken === "oribgt"
 
   const refreshInfo = () => {
     refreshVaultInfo(params.vaultToken);
@@ -253,23 +179,33 @@ function TxButton({ params }: VaultButtonProps) {
       return;
     }
     if (activeToggle === "DEPOSIT") {
-      if(params.vaultToken === "oribgt") {
-        stakingDepositTxFlow(button);
+      if(four626bool) {
+        if(params.vaultToken === "ybgt") {
+          ybgtDepositTxFlow(button)
+        }
+        else {
+          stakingDepositTxFlow(button);
+        }
       }
       else {
         depositTxFlow(button);
       }
     }
     if (activeToggle === "REDEEMOT") {
-      redeemOTFlow(button);
+      if(params.vaultToken === "ybgt") {
+        redeemYbgtOTFlow(button)
+      }
+      else {
+        redeemOTFlow(button);
+      }
     }
     if (activeToggle === "TRADEOT") {
-      if(params.vaultToken === "oribgt") {
+      if(params.vaultToken === "oribgt" || params.vaultToken === "stlbgt") {
         if(tradeDirection === "IN") {
-          buyOribgtOTFlow(button)
+          buyDepositOTFlow(button)
         }
         else {
-          sellOribgtOTFlow(button)
+          sellRedeemOTFlow(button)
         }
       }
       else {
@@ -280,7 +216,10 @@ function TxButton({ params }: VaultButtonProps) {
       tradeYTFlow(button);
     }
     if (activeToggle === "ADDLIQ") {
-      if(params.vaultToken === "oribgt") {
+      if(zapPopup) {
+        zapInFlow(button)
+      }
+      else if(params.vaultToken === "oribgt") {
         addSteerLiqFlow(button)
       }
       else {
@@ -288,7 +227,10 @@ function TxButton({ params }: VaultButtonProps) {
       }
     }
     if (activeToggle === "REMOVELIQ") {
-      if(params.vaultToken === "oribgt") {
+      if(zapPopup) {
+        zapOutFlow(button)
+      }
+      else if(params.vaultToken === "oribgt") {
         removeSteerLiqFlow(button)
       }
       else {
@@ -404,8 +346,8 @@ function TxButton({ params }: VaultButtonProps) {
       num = vaultOT;
       addy = vaultOTaddy;
     } else {
-      num = vaultDT;
-      addy = vaultDTaddy;
+      num = LPasset;
+      addy = LPassetaddy;
     }
     if (tradeInput > num) {
       button && (button.innerHTML = BUTTON_TEXT.notEnough);
@@ -428,13 +370,13 @@ function TxButton({ params }: VaultButtonProps) {
         let tokenTwo;
         if (tradeDirection === "OUT") {
           pathOne = vaultOTaddy;
-          pathTwo = vaultDTaddy;
+          pathTwo = LPassetaddy;
           tokenOne = params.ot;
-          tokenTwo = params.dt;
+          tokenTwo = LPassetLabel;
         } else {
-          pathOne = vaultDTaddy;
+          pathOne = LPassetaddy;
           pathTwo = vaultOTaddy;
-          tokenOne = params.dt;
+          tokenOne = LPassetLabel;
           tokenTwo = params.ot;
         }
         const tradeTx = await sendV3TradeTx(
@@ -473,7 +415,7 @@ function TxButton({ params }: VaultButtonProps) {
     }
   };
 
-  const buyOribgtOTFlow = async (button: HTMLElement | null) => {
+  const buyDepositOTFlow = async (button: HTMLElement | null) => {
     if (tradeInput == 0) {
       button && (button.innerHTML = BUTTON_TEXT.tradeOT);
       return;
@@ -481,7 +423,7 @@ function TxButton({ params }: VaultButtonProps) {
     setBuyOtPopup(true)
   }
 
-  const sellOribgtOTFlow = async (button: HTMLElement | null) => {
+  const sellRedeemOTFlow = async (button: HTMLElement | null) => {
     if (tradeInput == 0) {
       button && (button.innerHTML = BUTTON_TEXT.tradeOT);
       return;
@@ -492,13 +434,11 @@ function TxButton({ params }: VaultButtonProps) {
   const getVaultType = (vault: string): string => {
     switch (vault) {
       // ETH Vaults
-      case "weeth":
       case "rseth":
       case "rusd":
       case "oribgt":
         return "eth";
       // BTC Vaults
-      case "ebtc":
       case "unibtc":
         return "btc";
       // Default to ETH
@@ -550,8 +490,8 @@ function TxButton({ params }: VaultButtonProps) {
             setTxConfirming(false);
             openNotification(
               true,
-              `You've successfully sold ${params.dt} yield tokens`,
-              `You sold ${formatAsString(tradeInput)} YTs for ${formatAsString(afterBalance - vaultDT)} ${params.dt}`,
+              `You've successfully sold ${LPassetLabel} yield tokens`,
+              `You sold ${formatAsString(tradeInput)} YTs for ${formatAsString(afterBalance - LPasset)} ${LPassetLabel}`,
               sellTx,
             );
             if (button) {
@@ -944,18 +884,125 @@ function TxButton({ params }: VaultButtonProps) {
     }
   };
 
+  const ybgtDepositTxFlow = async (button: HTMLElement | null) => {
+    if (deposit == 0) {
+      button && (button.innerHTML = BUTTON_TEXT.deposit);
+      return;
+    }
+    if (deposit > vaultDT) {
+      button && (button.innerHTML = BUTTON_TEXT.notEnough);
+      return;
+    } else {
+      const sufficientDTAllowance: boolean | void = await checkAllowance(
+        deposit,
+        params.vaultToken,
+        address as string,
+      );
+      if (sufficientDTAllowance) {
+        setDepositDTApproved(true);
+        const sufficientYTAllowance: boolean | void = await checkAllowance(
+          deposit,
+          params.yt,
+          address as string
+        );
+        if(sufficientYTAllowance) {
+          if (button) {
+            button.innerHTML = BUTTON_TEXT.ybgt;
+          }
+          await sendApproveTx(deposit, "yBGT", false)
+          await send4626DepositTx(deposit, address as `0x${string}`, "ybgt")
+          setTxConfirming(true);
+          if (button) {
+            button.innerHTML = BUTTON_TEXT.confirming;
+          }
+          const depositTx = await sendDepositTx(deposit, params.vaultToken);
+          if (depositTx.substring(0, 2) === "0x") {
+            setTxConfirming(false);
+            openNotification(
+              true,
+              `You've successfully deposited ${params.dt} tokens`,
+              `You deposited ${formatAsString(deposit)} ${params.dt}`,
+              depositTx,
+            );
+            if (button) {
+              button.innerHTML = BUTTON_TEXT.deposit;
+            }
+            refreshInfo();
+            setTimeout(() => {
+              openNotification(false, "", "", "");
+            }, 10000);
+          } else {
+            if (button) {
+              button.innerHTML = BUTTON_TEXT.deposit;
+            }
+            refreshInfo();
+            setTxConfirming(false);
+          }
+        }
+        else {
+          setAllowanceButtons(true);
+        }
+      } else {
+        setAllowanceButtons(true);
+      }
+    }
+  }
+
+  const redeemYbgtOTFlow = async (button: HTMLElement | null) => {
+    if (redeemOT == 0) {
+      button && (button.innerHTML = BUTTON_TEXT.redeemOT);
+      return;
+    }
+    if (redeemOT > vaultOT) {
+      button && (button.innerHTML = BUTTON_TEXT.notEnoughOT);
+      return;
+    } else {
+      setTxConfirming(true);
+      if (button) {
+        button.innerHTML = BUTTON_TEXT.confirming;
+      }
+      const redeemOTTx = await sendRedeemOTTx(redeemOT, params.vaultToken);
+      if(button) {
+        button.innerHTML = BUTTON_TEXT.withdrawybgt
+      }
+      await send4626RedeemTx(redeemOT, address as `0x${string}`, "ybgt")
+      if (redeemOTTx.substring(0, 2) === "0x") {
+        setTxConfirming(false);
+        openNotification(
+          true,
+          "You've successfully redeemed your ownership tokens",
+          `You redeemed ${formatAsString(redeemOT)} ownership tokens`,
+          redeemOTTx,
+        );
+        if (button) {
+          button.innerHTML = "Redeem OT";
+        }
+        refreshInfo();
+        setTimeout(() => {
+          openNotification(false, "", "", "");
+        }, 10000);
+      } else {
+        if (button) {
+          button.innerHTML = "Redeem OT";
+        }
+        refreshInfo();
+        setTxConfirming(false);
+      }
+    }
+  };
+
   const stakeYTFlow = async (button: HTMLElement | null) => {
     if (tradeInput == 0) {
       button && (button.innerHTML = BUTTON_TEXT.stakeYT);
       return;
     }
-    if (tradeInput > goldivaultWalletInfoOribgt.justYt) {
+    if (tradeInput > justYt) {
       button && (button.innerHTML = BUTTON_TEXT.notEnough);
       return;
     } else {
       const sufficientAllowance: boolean | void = await checkAllowance(
         tradeInput,
-        'oriBGT-YT',
+        vaultYTLabel,
         address as string,
       );
       if (sufficientAllowance) {
@@ -963,13 +1010,13 @@ function TxButton({ params }: VaultButtonProps) {
         if (button) {
           button.innerHTML = BUTTON_TEXT.confirming;
         }
-        const stakeTx = await sendStakeYTTx(tradeInput);
+        const stakeTx = await sendStakeYTTx(tradeInput, params.vaultToken);
         if (stakeTx.substring(0, 2) === "0x") {
           setTxConfirming(false);
           openNotification(
             true,
-            `You've successfully staked oriBGT-YT`,
-            `You staked ${formatAsString(tradeInput)} oriBGT-YT`,
+            `You've successfully staked ${vaultYTLabel}`,
+            `You staked ${formatAsString(tradeInput)} ${vaultYTLabel}`,
             stakeTx,
           );
           if (button) {
@@ -997,7 +1044,7 @@ function TxButton({ params }: VaultButtonProps) {
       button && (button.innerHTML = BUTTON_TEXT.unstakeYT);
       return;
     }
-    if (tradeInput > goldivaultWalletInfoOribgt.stakedYt) {
+    if (tradeInput > stakedYt) {
       button && (button.innerHTML = BUTTON_TEXT.notEnough);
       return;
     } else {
@@ -1005,13 +1052,13 @@ function TxButton({ params }: VaultButtonProps) {
       if (button) {
         button.innerHTML = BUTTON_TEXT.confirming;
       }
-      const unstakeTx = await sendUnstakeYTTx(tradeInput);
+      const unstakeTx = await sendUnstakeYTTx(tradeInput, params.vaultToken);
       if (unstakeTx.substring(0, 2) === "0x") {
         setTxConfirming(false);
         openNotification(
           true,
-          "You've successfully unstaked oriBGT-YT",
-          `You unstaked ${formatAsString(tradeInput)} oriBGT-YT`,
+          `You've successfully unstaked ${vaultYTLabel}`,
+          `You unstaked ${formatAsString(tradeInput)} ${vaultYTLabel}`,
           unstakeTx,
         );
         if (button) {
@@ -1032,7 +1079,7 @@ function TxButton({ params }: VaultButtonProps) {
   }
 
   const claimFlow = async (button: HTMLElement | null) => {
-    if (goldivaultWalletInfoOribgt.claiamble == 0) {
+    if (claimable == 0) {
       button && (button.innerHTML = BUTTON_TEXT.claim);
       return;
     }
@@ -1040,13 +1087,19 @@ function TxButton({ params }: VaultButtonProps) {
     if (button) {
       button.innerHTML = BUTTON_TEXT.confirming;
     }
-    const claimTx = await sendClaimTx();
+    const claimTx = await sendClaimTx(params.vaultToken);
+    if(params.vaultToken === "ybgt") {
+      if(button) {
+        button.innerHTML = BUTTON_TEXT.withdrawybgt
+      }
+      await send4626RedeemTx(claimable, address as `0x${string}`, "ybgt")
+    }
     if (claimTx.substring(0, 2) === "0x") {
       setTxConfirming(false);
       openNotification(
         true,
-        "You've successfully claimed oriBGT yield",
-        `You claimed ${formatAsString(goldivaultWalletInfoOribgt.claimable)} oriBGT`,
+        `You've successfully claimed ${vaultDTLabel} yield`,
+        `You claimed ${formatAsString(claimable)} ${vaultDTLabel}`,
         claimTx,
       );
       if (button) {
@@ -1059,6 +1112,198 @@ function TxButton({ params }: VaultButtonProps) {
     } else {
       if (button) {
         button.innerHTML = BUTTON_TEXT.claim;
+      }
+      refreshInfo();
+      setTxConfirming(false);
+    }
+  }
+
+  const zapInFlow = async (button: HTMLElement | null) => {
+    // (i) Deposit % (determined by current ratio) into origami for oriBGT
+    // (ii) Deposit remainder into goldivault for oriBGT-OT/YT
+    // (iii) Deposit both into Steer to get the LP token
+    // (iv) stake LP token in reward vault
+    if(zap == 0) {
+      button && (button.innerHTML = BUTTON_TEXT.zapIn);
+      return;
+    }
+    setTxConfirming(true);
+    if (button) {
+      button.innerHTML = BUTTON_TEXT.confirming;
+    }
+    const [account] = await walletClient.getAddresses()
+    const { id: zapTx } = await walletClient.sendCalls({
+      account: account,
+      calls: [
+        {
+          // approve ibgt for oribgt
+          to: contracts.ibgt.address as `0x${string}`,
+          abi: contracts.ibgt.abi,
+          functionName: 'approve',
+          args: [contracts.oribgt.address, parseEther(`${zapInfo.ibgtOribgt}`)]
+        },
+        {
+          // deposit to oribgt
+          to: contracts.oribgt.address as `0x${string}`,
+          abi: contracts.oribgt.abi,
+          functionName: 'deposit',
+          args: [parseEther(`${zapInfo.ibgtOribgt}`), account]
+        },
+        {
+          // approve ibgt for goldivault
+          to: contracts.ibgt.address as `0x${string}`,
+          abi: contracts.ibgt.abi,
+          functionName: 'approve',
+          args: [contracts.oribgtVault.address, parseEther(`${zapInfo.ibgtGoldivault}`)]
+        },
+        {
+          // deposit to goldivault
+          to: contracts.oribgtVault.address as `0x${string}`,
+          abi: contracts.oribgtVault.abi,
+          functionName: 'deposit',
+          args: [parseEther(`${zapInfo.ibgtGoldivault}`)]
+        },
+        {
+          // approve oribgt for steer
+          to: contracts.oribgt.address as `0x${string}`,
+          abi: contracts.oribgt.abi,
+          functionName: 'approve',
+          args: [contracts.steerPeriphery.address, parseEther(`${zapInfo.oribgtSteer}`)]
+        },
+        {
+          // approve oribgt-ot for steer
+          to: contracts.oribgtot.address as `0x${string}`,
+          abi: contracts.oribgtot.abi,
+          functionName: 'approve',
+          args: [contracts.steerPeriphery.address, parseEther(`${zapInfo.ibgtGoldivault}`)]
+        },
+        {
+          // add liq to steer
+          to: contracts.steerPeriphery.address as `0x${string}`,
+          abi: contracts.steerPeriphery.abi,
+          functionName: "deposit",
+          args: [
+            contracts.steerOribgtPool.address as `0x${string}`,
+            parseEther(`${zapInfo.oribgtSteer}`),
+            parseEther(`${zapInfo.ibgtGoldivault}`),
+            parseEther(`${0}`),
+            parseEther(`${0}`),
+            account as `0x${string}`
+          ]
+        },
+        {
+          // approve lp token for reward vault
+          to: contracts.steerOribgtPool.address as `0x${string}`,
+          abi: contracts.ibgt.abi,
+          functionName: 'approve',
+          args: [rewardVault, parseEther(`${zapInfo.steerLP}`)]
+        },
+        {
+          // stake lp token in reward vault
+          // example https://berascan.com/tx/0x81c784f3800fce4396e9438efadde89aad03903ede89a43542130830c3264cea
+          to: rewardVault as `0x${string}`,
+          abi: [{ "name": "stake", "type": "function", "stateMutability": "nonpayable", "inputs": [{ "name": "amount", "type": "uint256" }], "outputs": [] }],
+          functionName: 'stake',
+          args: [parseEther(`${zapInfo.steerLP * .99}`)]
+        }
+      ]
+    })
+    if(zapTx.substring(0, 2) === "0x") {
+      setTxConfirming(false)
+      openNotification(
+        true,
+        "You have successfully zapped liquidity",
+        `You zapped ${formatAsString(zap)} ${vaultDTLabel}`,
+        zapTx
+      )
+      if (button) {
+        button.innerHTML = BUTTON_TEXT.zapIn
+      }
+      refreshInfo();
+      setTimeout(() => {
+        openNotification(false, "", "", "");
+      }, 10000);
+    }
+    else {
+      if (button) {
+        button.innerHTML = BUTTON_TEXT.zapIn;
+      }
+      refreshInfo();
+      setTxConfirming(false);
+    }
+  }
+
+  const zapOutFlow = async (button: HTMLElement | null) => {
+    // (i) unstake from reward vault
+    // (ii) withdraw LP from steer
+    // (iii) redeem OT/YT for iBGT
+    // (iv) redeem oriBGT for iBGT
+    if(zap == 0) {
+      button && (button.innerHTML = BUTTON_TEXT.zapOut);
+      return;
+    }
+    setTxConfirming(true)
+    if (button) {
+      button.innerHTML = BUTTON_TEXT.confirming;
+    }
+    const [account] = await walletClient.getAddresses()
+    const { id: zapOutTx } = await walletClient.sendCalls({
+      account: account,
+      calls: [
+        {
+          // unstake from reward vault
+          to: rewardVault as `0x${string}`,
+          abi: [{ "name": "withdraw", "type": "function", "stateMutability": "nonpayable", "inputs": [{ "name": "amount", "type": "uint256" }], "outputs": [] }],
+          functionName: 'withdraw',
+          args: [parseEther(`${debouncedZap}`)]
+        },
+        {
+          // remove liquidity from steer
+          to: contracts.steerOribgtPool.address as `0x${string}`,
+          abi: [{"inputs":[{"internalType":"uint256","name":"shares","type":"uint256"},{"internalType":"uint256","name":"amount0Min","type":"uint256"},{"internalType":"uint256","name":"amount1Min","type":"uint256"},{"internalType":"address","name":"to","type":"address"}],"name":"withdraw","outputs":[],"stateMutability":"nonpayable","type":"function"}],
+          functionName: 'withdraw',
+          args: [
+            parseEther(`${debouncedZap}`),
+            parseEther(`${0}`),
+            parseEther(`${0}`),
+            address as `0x${string}`
+          ]
+        },
+        {
+          // redeem from origami
+          to: contracts.oribgt.address as `0x${string}`,
+          abi: contracts.oribgt.abi,
+          functionName: 'redeem',
+          args: [parseEther(`${zapInfo.oribgtOut}`), address, address]
+        },
+        {
+          // redeem from goldilocks
+          to: contracts.oribgtVault.address as `0x${string}`,
+          abi: contracts.oribgtVault.abi,
+          functionName: 'redeemOwnership',
+          args: [parseEther(`${zapInfo.oribgtotOut}`)]
+        }
+      ]
+    })
+    if(zapOutTx.substring(0, 2) === "0x") {
+      setTxConfirming(false)
+      openNotification(
+        true,
+        "You have successfully unzapped liquidity",
+        `You unzapped ${formatAsString(zap)} ${zapOutAssetLabel}`,
+        zapOutTx
+      )
+      if (button) {
+        button.innerHTML = BUTTON_TEXT.zapOut
+      }
+      refreshInfo();
+      setTimeout(() => {
+        openNotification(false, "", "", "");
+      }, 10000);
+    }
+    else {
+      if (button) {
+        button.innerHTML = BUTTON_TEXT.zapOut;
       }
       refreshInfo();
       setTxConfirming(false);
@@ -1084,13 +1329,13 @@ function TxButton({ params }: VaultButtonProps) {
       if (tradeDirection === "OUT") {
         addy = vaultOTaddy;
       } else {
-        addy = vaultDTaddy;
+        addy = LPassetaddy;
       }
     } else {
       if (tradeDirection === "OUT") {
-        addy = vaultDTaddy;
+        addy = LPassetaddy;
       } else {
-        addy = vaultDTaddy;
+        addy = LPassetaddy;
       }
     }
     if (activeToggle === "TRADEOT") {
@@ -1125,7 +1370,7 @@ function TxButton({ params }: VaultButtonProps) {
     } else if (activeToggle === "REMOVELIQ") {
       await sendApproveTx(tradeInput, "rusdaqualp", false);
     } else if (activeToggle === "STAKE") {
-      await sendApproveTx(tradeInput, "oriBGT-YT", false);
+      await sendApproveTx(tradeInput, vaultYTLabel, false);
     } else {
       if(depositDTApproved) {
         await sendApproveTx(deposit, params.yt, false);
@@ -1159,13 +1404,13 @@ function TxButton({ params }: VaultButtonProps) {
       if (tradeDirection === "OUT") {
         addy = vaultOTaddy;
       } else {
-        addy = vaultDTaddy;
+        addy = LPassetaddy;
       }
     } else {
       if (tradeDirection === "OUT") {
-        addy = vaultDTaddy;
+        addy = LPassetaddy;
       } else {
-        addy = vaultDTaddy;
+        addy = LPassetaddy;
       }
     }
     if (activeToggle === "TRADEOT") {
@@ -1200,7 +1445,7 @@ function TxButton({ params }: VaultButtonProps) {
     } else if (activeToggle === "REMOVELIQ") {
       await sendApproveTx(0, "rusdaqualp", true);
     } else if (activeToggle === "STAKE") {
-      await sendApproveTx(0, "oriBGT-YT", true)
+      await sendApproveTx(0, vaultYTLabel, true)
     } else {
       if(depositDTApproved) {
         await sendApproveTx(0, params.yt, true);
@@ -1229,10 +1474,14 @@ function TxButton({ params }: VaultButtonProps) {
       return BUTTON_TEXT.redeemOT;
     } else if (activeToggle === "TRADEOT") {
       return BUTTON_TEXT.tradeOT;
-    } else if (activeToggle === "ADDLIQ") {
+    } else if (activeToggle === "ADDLIQ" && !zapPopup) {
       return BUTTON_TEXT.addLiq;
-    } else if (activeToggle === "REMOVELIQ") {
+    } else if (activeToggle === "ADDLIQ" && zapPopup) {
+      return BUTTON_TEXT.zapIn;
+    } else if (activeToggle === "REMOVELIQ" && !zapPopup) {
       return BUTTON_TEXT.removeLiq;
+    } else if (activeToggle === "REMOVELIQ" && zapPopup) {
+      return BUTTON_TEXT.zapOut;
     } else if (activeToggle === "STAKE") {
       return BUTTON_TEXT.stakeYT;
     } else if (activeToggle === "UNSTAKE") {

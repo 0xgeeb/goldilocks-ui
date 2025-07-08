@@ -44,23 +44,17 @@ export const LendWalletBalance = () => {
         className={`absolute left-[61%] top-[14%] h-[32%] w-[19%] xl:left-[60%] xl:w-[16%] ${walletOpen ? "translate-x-full border-r-2" : ""} flex flex-col items-center justify-center border-y-2 border-black bg-[#D5A774]/30 px-[0.5%] py-[1.5%] font-baloo text-[1.5vw] font-semibold text-white transition-transform ease-linear xl:text-[1vw]`}
       >
         <div className="flex w-full flex-row items-center justify-between">
-          <span className="">ibgt balance:</span>
-          <span className="">{handleInfo(goldilendWalletInfo.ibgt)}</span>
+          <span className="">wbera balance:</span>
+          <span className="">{handleInfo(goldilendWalletInfo.wbera)}</span>
         </div>
         <div className="flex w-full flex-row items-center justify-between">
-          <span className="">gibgt balance:</span>
-          <span className="">{handleInfo(goldilendWalletInfo.gibgt)}</span>
+          <span className="">glwbera balance:</span>
+          <span className="">{handleInfo(goldilendWalletInfo.glwbera)}</span>
         </div>
-        <div className="flex w-full flex-row items-center justify-between">
+        {/* <div className="flex w-full flex-row items-center justify-between">
           <span className="">staked gibgt:</span>
           <span className="">{handleInfo(goldilendWalletInfo.lendStaked)}</span>
-        </div>
-        <div className="flex w-full flex-row items-center justify-between">
-          <span className="">claimable prg:</span>
-          <span className="">
-            {handleInfoClaimable(goldilendWalletInfo.lendClaimable)}
-          </span>
-        </div>
+        </div> */}
       </div>
     </>
   );

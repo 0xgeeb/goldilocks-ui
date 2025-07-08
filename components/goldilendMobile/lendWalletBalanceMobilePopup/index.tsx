@@ -30,25 +30,19 @@ export const LendWalletBalanceMobilePopup = () => {
       <div className="flex size-full flex-col justify-around">
         <div className="flex w-full flex-row items-center justify-between">
           <span className="">ibgt balance:</span>
-          <span className="">{handleInfo(goldilendWalletInfo.ibgt)}</span>
+          <span className="">{handleInfo(goldilendWalletInfo.wbera)}</span>
         </div>
         <div className="w-full border-t-2 border-black"></div>
         <div className="flex w-full flex-row items-center justify-between">
           <span className="">gibgt balance:</span>
-          <span className="">{handleInfo(goldilendWalletInfo.gibgt)}</span>
+          <span className="">{handleInfo(goldilendWalletInfo.glwbera)}</span>
         </div>
         <div className="w-full border-t-2 border-black"></div>
-        <div className="flex w-full flex-row items-center justify-between">
+        {/* <div className="flex w-full flex-row items-center justify-between">
           <span className="">staked gibgt:</span>
           <span className="">{handleInfo(goldilendWalletInfo.lendStaked)}</span>
-        </div>
+        </div> */}
         <div className="w-full border-t-2 border-black"></div>
-        <div className="flex w-full flex-row items-center justify-between">
-          <span className="">claimable prg:</span>
-          <span className="">
-            {handleInfoClaimable(goldilendWalletInfo.lendClaimable)}
-          </span>
-        </div>
         <div className="w-full border-t-2 border-black"></div>
       </div>
       <p

@@ -91,28 +91,17 @@ export interface LoanData {
   liquidated: boolean;
 }
 
-export interface BoostData {
-  partnerNFTs: string[];
-  partnerNFTIds: bigint[];
-  boostMagnitude: bigint;
-  expiry: bigint;
-}
-
 export interface GoldilendInitialState {
   goldilendInfo: {
-    gibgtSupply: number;
-    stakedGibgt: number;
+    glwberaSupply: number;
+    stakedglwbera: number;
     poolSize: number;
     outstandingDebt: number;
   };
   goldilendWalletInfo: {
-    ibgt: number;
-    gibgt: number;
-    lendStaked: number;
-    lendClaimable: number;
-    lendInfraredClaimable: number;
-    ibgtGoldilendAllowance: number;
-    gibgtGoldilendAllowance: number;
+    wbera: number;
+    glwbera: number;
+    wberaGoldilendAllowance: number;
   };
   lock: number;
   stake: number;
@@ -189,9 +178,6 @@ export interface GoldilendInitialState {
   debouncedLoanExpiration: string;
   findLoans: () => void;
   findBeras: (_beras: any) => void;
-  findBoost: () => void;
-  findPartners: (_partners: any) => void;
-  findLiquidatableLoans: () => void;
   getInterestRate: () => void;
   updateOwnedBeras: (_borrowedAgainstBera: BeraInfo) => void;
   updateOwnedPartners: (_nfts: PartnerInfo | PartnerInfo[]) => void;

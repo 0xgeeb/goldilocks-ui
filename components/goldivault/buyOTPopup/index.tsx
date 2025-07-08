@@ -10,10 +10,16 @@ import { contracts } from "@/utils/addressi";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { BUTTON_CLASSES } from "../../../app/(geo-check)/goldivault/vault/[address]/_components/styles"
 import { cn } from "@/app/_components/utils";
-import { useGoldivaultTx } from "@/hooks";
+import { useGoldivaultTx, useVaultInfoConfig } from "@/hooks";
 import { FormWrapper } from "../../../app/(geo-check)/goldivault/vault/[address]/_components/FormComponents"
 
-export const BuyOTPopup = () => {
+type BuyOTPopupProps = {
+  params: {
+    vaultToken: string;
+  }
+}
+
+export const BuyOTPopup = ({ params }: BuyOTPopupProps) => {
 
   const [approvalLoading, setApprovalLoading] = useState<boolean>(false)
   const [approved, setApproved] = useState<boolean>(false)
@@ -24,8 +30,8 @@ export const BuyOTPopup = () => {
   const [tradeLoading, setTradeLoading] = useState<boolean>(false)
   const [traded, setTraded] = useState<boolean>(false)
   const [depositProceeds, setDepositProceeds] = useState<number>(0)
-  const [ibgtAllowance, setibgtAllowance] = useState<number>(0)
-  const [oribgtAllowance, setoribgtAllowance] = useState<number>(0)
+  const [dtAllowance, setDtAllowance] = useState<number>(0)
+  const [lpAllowance, setLpAllowance] = useState<number>(0)
 
   useEffect(() => {
     getAllowances()
@@ -45,49 +51,60 @@ export const BuyOTPopup = () => {
     sendV3TradeTx,
     sendRouterV2ApproveTx,
     sendApproveTx,
-    sendOribgtDepositTx
+    send4626DepositTx
   } = useGoldivaultTx()
+
+  const {
+    popupLPAssetAddy,
+    vaultDTaddy,
+    vaultOTaddy,
+    vaultDTLabel,
+    vaultOTLabel,
+    popupLPAssetLabel,
+    dtPicSrc,
+    lpPicSrc
+  } = useVaultInfoConfig({ vaultToken: params.vaultToken })
 
   const { address } = useAccount()
 
   const getAllowances = async () => {
-    const ibgtResult = await readContract(config, {
-      address: contracts.ibgt.address as `0x${string}`,
+    const dtResult = await readContract(config, {
+      address: vaultDTaddy as `0x${string}`,
       abi: contracts.ibgt.abi,
       functionName: 'allowance',
-      args: [address, contracts.oribgt.address]
+      args: [address, popupLPAssetAddy]
     })
-    setibgtAllowance(parseFloat(formatEther(ibgtResult as unknown as bigint)))
-    const oribgtResult = await readContract(config, {
-      address: contracts.oribgt.address as `0x${string}`,
+    setDtAllowance(parseFloat(formatEther(dtResult as unknown as bigint)))
+    const lpResult = await readContract(config, {
+      address: popupLPAssetAddy as `0x${string}`,
       abi: contracts.oribgt.abi,
       functionName: 'allowance',
       args: [address, contracts.routerv2.address]
     })
-    setoribgtAllowance(parseFloat(formatEther(oribgtResult as unknown as bigint)))
+    setLpAllowance(parseFloat(formatEther(lpResult as unknown as bigint)))
   }
 
   const handleLeftButtonClick = async () => {
     if(approved) {
-      if(oribgtAllowance >= depositProceeds) {
+      if(lpAllowance >= depositProceeds) {
         setTradeApprovalLoading(false)
         setTradeApproved(true)
       }
       else {
         setTradeApprovalLoading(true)
-        await sendRouterV2ApproveTx(tradeInput, contracts.oribgt.address, false, 'eth')
+        await sendRouterV2ApproveTx(tradeInput, popupLPAssetAddy, false, 'eth')
         setTradeApprovalLoading(false)
         setTradeApproved(true)
       }
     }
     else {
-      if(ibgtAllowance >= tradeInput) {
+      if(dtAllowance >= tradeInput) {
         setApprovalLoading(false)
         setApproved(true)
       }
       else {
         setApprovalLoading(true)
-        await sendApproveTx(tradeInput, "iBGT", false)
+        await sendApproveTx(tradeInput, vaultDTLabel, false)
         setApprovalLoading(false)
         setApproved(true)
       }
@@ -96,25 +113,25 @@ export const BuyOTPopup = () => {
 
   const handleRightButtonClick = async () => {
     if(approved) {
-      if(oribgtAllowance >= depositProceeds) {
+      if(lpAllowance >= depositProceeds) {
         setTradeApprovalLoading(false)
         setTradeApproved(true)  
       }
       else {
         setTradeApprovalLoading(true)
-        await sendRouterV2ApproveTx(0, contracts.oribgt.address, true, 'eth')
+        await sendRouterV2ApproveTx(0, popupLPAssetAddy, true, 'eth')
         setTradeApprovalLoading(false)
         setTradeApproved(true)
       }
     }
     else {
-      if(ibgtAllowance >= tradeInput) {
+      if(dtAllowance >= tradeInput) {
         setApprovalLoading(false)
         setApproved(true)
       }
       else {
         setApprovalLoading(true)
-        await sendApproveTx(0, "iBGT", true)
+        await sendApproveTx(0, vaultDTLabel, true)
         setApprovalLoading(false)
         setApproved(true)
       }
@@ -125,15 +142,15 @@ export const BuyOTPopup = () => {
     if(!deposited) {
       setDepositLoading(true)
       const beforeBalResult = await readContract(config, {
-        address: contracts.oribgt.address as `0x${string}`,
+        address: popupLPAssetAddy as `0x${string}`,
         abi: contracts.oribgt.abi,
         functionName: 'balanceOf',
         args: [address]
       })
       const beforeBal = parseFloat(formatEther(beforeBalResult as unknown as bigint))
-      await sendOribgtDepositTx(tradeInput, address as `0x${string}`)
+      await send4626DepositTx(tradeInput, address as `0x${string}`, params.vaultToken)
       const afterBalResult = await readContract(config, {
-        address: contracts.oribgt.address as `0x${string}`,
+        address: popupLPAssetAddy as `0x${string}`,
         abi: contracts.oribgt.abi,
         functionName: 'balanceOf',
         args: [address]
@@ -151,8 +168,8 @@ export const BuyOTPopup = () => {
         functionName: "quoteExactInputSingle",
         args: [
           [
-            contracts.oribgt.address,
-            contracts.oribgtot.address,
+            popupLPAssetAddy,
+            vaultOTaddy,
             parseEther(depositProceeds.toString()),
             500,
             0
@@ -163,8 +180,8 @@ export const BuyOTPopup = () => {
       await sendV3TradeTx(
         depositProceeds,
         quoteForOutput * (1 - slippage.amount / 100),
-        contracts.oribgt.address,
-        contracts.oribgtot.address,
+        popupLPAssetAddy,
+        vaultOTaddy,
         address as `0x${string}`,
         'eth'
       )
@@ -183,17 +200,17 @@ export const BuyOTPopup = () => {
   return (
     <div className="absolute w-full max-w-5xl z-60 flex flex-col items-center gap-2.5 rounded-2xl border-2 border-[#352A1C] p-2 bg-bera-brown-dark">
       <FormWrapper>
-        <h1 id="page-title" className="text-HoneyYellow font-amaticbold text-4xl">Deposit your iBGT into oriBGT then swap into oriBGT-OT</h1>
+        <h1 id="page-title" className="text-HoneyYellow font-amaticbold text-4xl">Deposit your {vaultDTLabel} into {popupLPAssetLabel} then swap into {vaultOTLabel}</h1>
         <div className="flex flex-row items-center mx-auto mt-8 w-[60%] justify-between">
-          <img className="w-[80px] h-[80px]" src="/images/logo-ibgt.svg" alt="ibgt" />
+          <img className="w-[80px] h-[80px]" src={dtPicSrc} alt={vaultDTLabel} />
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="white" className="size-10 -scale-x-100">
             <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
           </svg>
-          <img className="w-[80px] h-[80px]" src="/images/logo-oribgt.svg" alt="oribgt" />
+          <img className="w-[80px] h-[80px]" src={lpPicSrc} alt={popupLPAssetLabel} />
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="white" className="size-10 -scale-x-100">
             <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
           </svg>
-          <img className="w-[80px] h-[80px]" src="/images/logo-ot.png" alt="oribgtot" />
+          <img className="w-[80px] h-[80px]" src="/images/logo-ot.png" alt={vaultOTLabel} />
         </div>
         <div className="flex flex-row items-center mx-auto mt-8 w-[85%] justify-between text-2xl">
           <span className={`${approvalLoading ? "text-HoneyYellow" : approved ? "text-green-500" : "text-white"}`}>approv{approvalLoading ? "ing..." : "e"}</span>

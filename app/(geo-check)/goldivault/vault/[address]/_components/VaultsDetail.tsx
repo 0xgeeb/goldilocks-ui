@@ -61,7 +61,7 @@ export const TAB_LABELS:
       { mode: "STAKE", label: "Stake" },
       { mode: "UNSTAKE", label: "Unstake" }
     ],
-  },
+  }
 }
 
 function VaultsDetail({ address }: Props) {

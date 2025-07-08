@@ -12,7 +12,7 @@ import {
 import { FooterMobile, NavBarButtons, NavBarMobile } from "../../utils";
 
 export const StakePageMobile = () => {
-  const { chartOpen, setChartOpen, activeToggle } = useStake();
+  const { activeToggle } = useStake();
 
   const { navButtonsOpen } = useDesktop();
 

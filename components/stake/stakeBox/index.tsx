@@ -4,12 +4,11 @@ import { formatAsString } from "@/app/_components/utils";
 
 import { useGoldiswapMath } from "../../../hooks";
 import { useStake } from "../../../providers";
-import { Chart, Notification } from "../../stake";
+import { Notification } from "../../stake";
 
 export const StakeBox = () => {
   const {
     txConfirming,
-    chartOpen,
     notification,
     handlePercentageButtons,
     displayString,
@@ -48,9 +47,7 @@ export const StakeBox = () => {
       <div
         className={`absolute inset-6 ${txConfirming ? "" : "border-2 border-black"} bg-[#D9C6BA]`}
       >
-        {chartOpen ? (
-          <Chart />
-        ) : txConfirming ? (
+        {txConfirming ? (
           <img
             className="size-full"
             src="/images/bg-transaction.png"

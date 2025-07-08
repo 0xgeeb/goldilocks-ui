@@ -29,9 +29,9 @@ export const StatsMobile = () => {
       <div className="h-full w-[5%]"></div>
       <div className="flex flex-col items-start">
         <span>{handleInfo(goldilendInfo.poolSize)}</span>
-        <span>{handleInfo(goldilendInfo.stakedGibgt)}</span>
+        <span>{handleInfo(goldilendInfo.stakedglwbera)}</span>
         <span>
-          {handleInfo(goldilendInfo.poolSize / goldilendInfo.gibgtSupply)}
+          {handleInfo(goldilendInfo.poolSize / goldilendInfo.glwberaSupply)}
         </span>
       </div>
     </div>

@@ -35,3 +35,21 @@ export const BerachainMainnet = {
     },
   },
 } as const satisfies Chain;
+
+export const Bepolia = {
+  id: 80069,
+  name: "Berachain Bepolia",
+  nativeCurrency: {
+    name: "BERA",
+    symbol: "BERA",
+    decimals: 18,
+  },
+  rpcUrls: {
+    default: {
+      http: ["https://bepolia.rpc.berachain.com/"],
+    },
+    public: {
+      http: ["https://bepolia.rpc.berachain.com/"],
+    },
+  },
+} as const satisfies Chain;

@@ -6,3 +6,4 @@ export * from "./useStakeTx";
 export * from "./useGoldilendTx";
 export * from "./useGoldivaultTx";
 export * from "./useGovTx";
+export * from "./useVaultInfoConfig";

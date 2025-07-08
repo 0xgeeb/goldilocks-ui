@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { formatAsCurrency, formatAsPercent } from "@/app/_components/utils";
 
 import { useGoldivault } from "../../../providers";
+import { useVaultInfoConfig } from "@/hooks"
 
 type VaultDisplayCardProps = {
   params: {
@@ -31,6 +32,8 @@ function VaultInfoItem({ label, value }: { label: string; value: string }) {
 export const VaultDisplayCard = ({ params }: VaultDisplayCardProps) => {
   const { enableInfoPopup, disableInfoPopup, infoLoading, vaultDisplayInfo } =
     useGoldivault();
+  
+  const { activeVaults } = useVaultInfoConfig({ vaultToken: params.tokenName})
 
   const vaultInfo = (() => {
     switch (params.tokenName) {
@@ -48,6 +51,8 @@ export const VaultDisplayCard = ({ params }: VaultDisplayCardProps) => {
         return vaultDisplayInfo.rusd;
       case "oriBGT":
         return vaultDisplayInfo.oribgt;
+      case "LBGT":
+        return vaultDisplayInfo.stlbgt;
       default:
         return {
           fixedApr: 0,
@@ -89,7 +94,7 @@ export const VaultDisplayCard = ({ params }: VaultDisplayCardProps) => {
             <div className="flex flex-col items-center gap-3 p-2.5">
               <VaultInfoItem
                 label="Fixed APR"
-                value={`${params.tokenName === "oriBGT" ? formatAsPercent(vaultInfo.fixedApr / 100) : "N/A"}`}
+                value={`${activeVaults.includes(params.tokenName) ? formatAsPercent(vaultInfo.fixedApr / 100) : "N/A"}`}
               />
               <VaultInfoItem
                 label="days until maturity"

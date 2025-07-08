@@ -1,11 +1,10 @@
 "use client";
 
 import { useBorrow } from "../../../providers";
-import { Notification, Chart } from "../../borrow";
+import { Notification } from "../../borrow";
 
 export const BorrowBox = () => {
   const {
-    chartOpen,
     handlePercentageButtons,
     activeToggle,
     displayString,
@@ -29,9 +28,7 @@ export const BorrowBox = () => {
       <div
         className={`absolute inset-6 ${txConfirming ? "" : "border-2 border-black"} bg-[#D9C6BA]`}
       >
-        {chartOpen ? (
-          <Chart />
-        ) : txConfirming ? (
+        {txConfirming ? (
           <img
             className="h-[100%] w-[100%]"
             src="/images/bg-transaction.png"

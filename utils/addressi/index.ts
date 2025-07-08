@@ -22,6 +22,7 @@ import goldivault4626ABI from "../abi/Goldivault4626.json"
 import oriBGTABI from "../abi/oriBGT.json"
 import uniswapV3PoolABI from "../abi/UniswapV3Pool.json"
 import steerPeripheryABI from "../abi/SteerPeriphery.json"
+import wberaABI from "../abi/WBERA.json"
 
 export const contracts = {
   goldiswap: {
@@ -33,12 +34,20 @@ export const contracts = {
     abi: goldilockedABI.abi,
   },
   goldilend: {
-    address: "0x7c45E398A5c98046719F0D24C4F7e3f44b71588c",
+    address: "0xce1bB8cAafE287aE04cDFa46a85641d8FF9E1dBB",
     abi: goldilendABI.abi,
+  },
+  glwbera: {
+    address: "0xcbDFC6D4CBbeD4EA806151C9f8F1E76Ab9356700",
+    abi: ibgtABI.abi
   },
   honey: {
     address: "0xFCBD14DC51f0A4d49d5E53C2E0950e0bC26d0Dce",
     abi: honeyABI.abi,
+  },
+  fakewbera: {
+    address: "0x22CDf6a60Af48C600043583F6Ff5F5DEb074c980",
+    abi: wberaABI.abi
   },
   wbera: {
     address: "0x6969696969696969696969696969696969696969",
@@ -49,7 +58,7 @@ export const contracts = {
     abi: ibgtABI.abi,
   },
   bandbear: {
-    address: "0xF21F3139BD4aD005aAba2ef2d6F319058bFA7230",
+    address: "0x5C590b62F6c91d7DE4B92F9F3Ee527568380829A",
     abi: bandbearABI.abi,
   },
   bondbear: {
@@ -216,6 +225,66 @@ export const contracts = {
     address: "0xB345a602c2e24051a57e2339a98c815a6e45059c",
     abi: ibgtABI.abi
   },
+  wberaibgtisland: {
+    address: "0x564f011D557aAd1cA09BFC956Eb8a17C35d490e0",
+    abi: ibgtABI.abi
+  },
+  origamiwberaibgtisland: {
+    address: "0x32BC5E87297E148f70867005fFdC91a9022FC1F6",
+    abi: ibgtABI.abi
+  },
+  wberaibgtlpot: {
+    address: "0x3d72c07427a56Cbb4eE837cD0C86d1C6eC52e95d",
+    abi: ibgtABI.abi
+  },
+  wberaibgtlpyt: {
+    address: "0x6b5F3aA8a5EAF4f1291bf740eCA212185Ae7e013",
+    abi: ibgtABI.abi
+  },
+  wberaibgtlpVault: {
+    address: "0x53C73D721c38E8eb663E060d3D3c7DA452fbE70f",
+    abi: goldivault4626ABI.abi
+  },
+  lbgt: {
+    address: "0xBaadCC2962417C01Af99fb2B7C75706B9bd6Babe",
+    abi: ibgtABI.abi
+  },
+  stlbgt: {
+    address: "0xFace73a169e2CA2934036C8Af9f464b5De9eF0ca",
+    abi: ibgtABI.abi
+  },
+  stlbgtot: {
+    address: "0x2bbC181CDF9917350A91C586260D92240Fea05aB",
+    abi: ibgtABI.abi
+  },
+  stlbgtyt: {
+    address: "0x56cA20942Ca3099E29c8a4F83E25173DDECbfed3",
+    abi: ibgtABI.abi
+  },
+  stlbgtVault: {
+    address: "0x52e9d38068D1F2F7B5E8fDf30c3C315dAA4067fc",
+    abi: goldivault4626ABI.abi
+  },
+  ybgt: {
+    address: "0x7e768f47dfDD5DAe874Aac233f1Bc5817137E453",
+    abi: ibgtABI.abi
+  },
+  stybgt: {
+    address: "0x6f8cEAF347dA79287e49A5C9F0a03b20BDFCB7D3",
+    abi: ibgtABI.abi
+  },
+  ybgtot: {
+    address: "0x9CFbAbE5646ac013432809d1ED3E29138fec2457",
+    abi: ibgtABI.abi
+  },
+  ybgtyt: {
+    address: "0x5Eb587C38028edDF62003E4A1b2D9C70680c6C00",
+    abi: ibgtABI.abi
+  },
+  ybgtVault: {
+    address: "0xfc6F48846f86D6B3acd9B8FdDCE059A383f1e7A6",
+    abi: goldivault4626ABI.abi
+  },
   goldigov: {
     address: "0x6c00d68Dc6BCC3D47d698F4B566CcBe893D34Fed",
     abi: goldigovABI.abi,
@@ -249,6 +318,9 @@ export const contracts = {
     solvbtc: "0x8F513Fb5C947C20a01Dee083Cdb9250FBe73A6A8",
     rseth: "0xE457b56a1f9379B604dFBcE809Da6fEA1dECE717",
     rusd: "0x1a2A927F758AE242fB967481CF293D2a36883be6",
-    oribgt: "0xCb2A95c52E718A6BA6AAb6587f1a3aFF4BfB0648"
+    oribgt: "0xCb2A95c52E718A6BA6AAb6587f1a3aFF4BfB0648",
+    wberaibgtlp: "0x59007956D237F76D40200d3948E23102a59C2213",
+    stlbgt: "0x23549f334CD72cE0ba5f6051bf8602eBf12652Da",
+    ybgt: "0x23549f334CD72cE0ba5f6051bf8602eBf12652Da",
   }
 };

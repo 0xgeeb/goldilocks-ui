@@ -34,6 +34,7 @@ export const LendButton = () => {
     checkStakeAllowance,
     sendiBGTApproveTx,
     sendGiBGTApproveTx,
+    sendWBERAApproveTx,
     sendLockTx,
     sendStakeTx,
     sendUnstakeTx,
@@ -54,9 +55,9 @@ export const LendButton = () => {
 
   const handleButtonClick = () => {
     const button = document.getElementById("lend-button");
-    if (lendActiveToggle === "LOCK") {
-      lockTxFlow(button);
-    }
+    // if (lendActiveToggle === "LOCK") {
+    //   lockTxFlow(button);
+    // }
     if (lendActiveToggle === "STAKE") {
       stakeTxFlow(button);
     }
@@ -65,62 +66,62 @@ export const LendButton = () => {
     }
   };
 
-  const lockTxFlow = async (button: HTMLElement | null) => {
-    if (lock == 0) {
-      button && (button.innerHTML = "lock");
-      return;
-    }
-    if (lock > goldilendWalletInfo.ibgt) {
-      button && (button.innerHTML = "not enough");
-      return;
-    } else {
-      const sufficientAllowance: boolean | void = await checkLockAllowance(
-        lock,
-        address as `0x${string}`,
-      );
-      if (sufficientAllowance) {
-        setTxConfirming(true);
-        if (button) {
-          button.innerHTML = "confirming...";
-          setButtonLoadingColor(true);
-        }
-        const lockTx = await sendLockTx(lock);
-        if (lockTx.substring(0, 2) === "0x") {
-          setTxConfirming(false);
-          openNotification(
-            true,
-            "You've successfully locked $iBGT",
-            `You locked ${formatAsString(lock)} iBGT`,
-            lockTx,
-          );
-          if (button) {
-            button.innerHTML = "lock";
-            setButtonLoadingColor(false);
-          }
-          refreshInfo();
-          setTimeout(() => {
-            openNotification(false, "", "", "");
-          }, 10000);
-        } else {
-          if (button) {
-            button.innerHTML = "lock";
-            setButtonLoadingColor(false);
-          }
-          refreshInfo();
-          setTxConfirming(false);
-        }
-      } else {
-        setAllowanceButtons(true);
-      }
-    }
-  };
+  // const lockTxFlow = async (button: HTMLElement | null) => {
+  //   if (lock == 0) {
+  //     button && (button.innerHTML = "lock");
+  //     return;
+  //   }
+  //   if (lock > goldilendWalletInfo.ibgt) {
+  //     button && (button.innerHTML = "not enough");
+  //     return;
+  //   } else {
+  //     const sufficientAllowance: boolean | void = await checkLockAllowance(
+  //       lock,
+  //       address as `0x${string}`,
+  //     );
+  //     if (sufficientAllowance) {
+  //       setTxConfirming(true);
+  //       if (button) {
+  //         button.innerHTML = "confirming...";
+  //         setButtonLoadingColor(true);
+  //       }
+  //       const lockTx = await sendLockTx(lock);
+  //       if (lockTx.substring(0, 2) === "0x") {
+  //         setTxConfirming(false);
+  //         openNotification(
+  //           true,
+  //           "You've successfully locked $iBGT",
+  //           `You locked ${formatAsString(lock)} iBGT`,
+  //           lockTx,
+  //         );
+  //         if (button) {
+  //           button.innerHTML = "lock";
+  //           setButtonLoadingColor(false);
+  //         }
+  //         refreshInfo();
+  //         setTimeout(() => {
+  //           openNotification(false, "", "", "");
+  //         }, 10000);
+  //       } else {
+  //         if (button) {
+  //           button.innerHTML = "lock";
+  //           setButtonLoadingColor(false);
+  //         }
+  //         refreshInfo();
+  //         setTxConfirming(false);
+  //       }
+  //     } else {
+  //       setAllowanceButtons(true);
+  //     }
+  //   }
+  // };
 
   const stakeTxFlow = async (button: HTMLElement | null) => {
     if (stake == 0) {
       button && (button.innerHTML = "stake");
       return;
     }
-    if (stake > goldilendWalletInfo.gibgt) {
+    if (stake > goldilendWalletInfo.wbera) {
       button && (button.innerHTML = "not enough");
       return;
     } else {
@@ -139,8 +140,8 @@ export const LendButton = () => {
           setTxConfirming(false);
           openNotification(
             true,
-            "You've successfully staked $GiBGT",
-            `You staked ${formatAsString(stake)} GiBGT`,
+            "You've successfully staked $WBERA",
+            `You staked ${formatAsString(stake)} WBERA`,
             stakeTx,
           );
           if (button) {
@@ -170,7 +171,7 @@ export const LendButton = () => {
       button && (button.innerHTML = "unstake");
       return;
     }
-    if (unstake > goldilendWalletInfo.lendStaked) {
+    if (unstake > goldilendWalletInfo.glwbera) {
       button && (button.innerHTML = "not enough");
       return;
     } else {
@@ -184,8 +185,8 @@ export const LendButton = () => {
         setTxConfirming(false);
         openNotification(
           true,
-          "You've successfully unstaked $GiBGT",
-          `You unstaked ${formatAsString(unstake)} GiBGT`,
+          "You've successfully unstaked $glWBERA",
+          `You unstaked ${formatAsString(unstake)} glWBERA`,
           unstakeTx,
         );
         if (button) {
@@ -226,7 +227,8 @@ export const LendButton = () => {
       swapButton && (swapButton.innerHTML = "lock");
       setAllowanceButtons(false);
     } else {
-      await sendGiBGTApproveTx(stake, false);
+      await sendWBERAApproveTx(stake, false)
+      // await sendGiBGTApproveTx(stake, false);
       // updateAllowance(honeyBuy + 0.01)
       swapButton && (swapButton.innerHTML = "stake");
       setAllowanceButtons(false);
@@ -251,7 +253,8 @@ export const LendButton = () => {
       swapButton && (swapButton.innerHTML = "lock");
       setAllowanceButtons(false);
     } else {
-      await sendGiBGTApproveTx(0, true);
+      await sendWBERAApproveTx(0, true)
+      // await sendGiBGTApproveTx(0, true);
       // updateAllowance(100000000)
       swapButton && (swapButton.innerHTML = "stake");
       setAllowanceButtons(false);
@@ -276,14 +279,14 @@ export const LendButton = () => {
       {allowanceButtons && (
         <div>
           <button
-            className="absolute left-[25.5%] top-[61%] h-[8%] w-[22%] border-2 border-black bg-[#E7B941] font-amaticbold text-[3.5vw] hover:scale-110 hover:bg-[#C9E3B9] hover:text-black xl:left-[33.9%] xl:top-[59%] xl:w-[16.6%] xl:text-[1.5vw]"
+            className="absolute left-[25.5%] top-[61%] h-[8%] w-[22%] border-2 border-black bg-[#E7B941] font-amaticbold text-[3.5vw] hover:scale-110 hover:bg-[#C9E3B9] hover:text-black xl:left-[33.9%] xl:top-[59%] xl:w-[16.6%] xl:text-[1.5vw] cursor-pointer"
             id="left-approve-button"
             onClick={() => handleLeftButtonClick()}
           >
             approve tx
           </button>
           <button
-            className="absolute left-[53.5%] top-[61%] h-[8%] w-[22%] border-2 border-black bg-[#E7B941] font-amaticbold text-[3.5vw] hover:scale-110 hover:bg-[#C9E3B9] hover:text-black xl:left-[55.5%] xl:top-[59%] xl:w-[16.6%] xl:text-[1.5vw]"
+            className="absolute left-[53.5%] top-[61%] h-[8%] w-[22%] border-2 border-black bg-[#E7B941] font-amaticbold text-[3.5vw] hover:scale-110 hover:bg-[#C9E3B9] hover:text-black xl:left-[55.5%] xl:top-[59%] xl:w-[16.6%] xl:text-[1.5vw] cursor-pointer"
             id="right-approve-button"
             onClick={() => handleRightButtonClick()}
           >
@@ -296,7 +299,7 @@ export const LendButton = () => {
           {({ account, chain, openChainModal, openConnectModal }) => {
             return (
               <button
-                className={`absolute left-[39%] top-[61%] h-[8%] w-[22%] xl:left-[44.7%] xl:top-[59%] xl:w-[16.6%] ${buttonLoadingColor ? "bg-[#C9E3B9] text-black" : "bg-[#E7B941] text-black"} border-2 border-black font-amaticbold text-[4vw] hover:scale-110 hover:bg-[#C9E3B9] hover:text-black xl:text-[1.9vw]`}
+                className={`absolute left-[39%] top-[61%] h-[8%] w-[22%] xl:left-[44.7%] xl:top-[59%] xl:w-[16.6%] ${buttonLoadingColor ? "bg-[#C9E3B9] text-black" : "bg-[#E7B941] text-black"} border-2 border-black font-amaticbold text-[4vw] hover:scale-110 hover:bg-[#C9E3B9] hover:text-black xl:text-[1.9vw] cursor-pointer`}
                 id="lend-button"
                 onClick={() => {
                   const button = document.getElementById("lend-button");

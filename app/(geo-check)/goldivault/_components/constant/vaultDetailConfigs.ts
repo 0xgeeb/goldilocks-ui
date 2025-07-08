@@ -17,38 +17,6 @@ export const VAULT_DETAIL_CONFIGS = {
       poolUrl: `https://berascan.com/address/${contracts.vaultLPaddys.rseth}`,
     },
   },
-  ebtc: {
-    title: "eBTC",
-    titleSize: "text-[8vw] md:text-[7vw] lg:text-[6vw]",
-    params: {
-      vaultToken: "ebtc",
-      dt: "eBTC",
-      ot: "eBTC-OT",
-      yt: "eBTC-YT",
-      protocolUrl: "https://app.ether.fi/ebtc",
-      dexLink: `https://dexscreener.com/berachain/${contracts.vaultLPaddys.ebtc}`,
-      poolName: "eBTC / eBTC OT LP",
-      liqManagerUrl:
-        "https://app.kodiak.finance/#/liquidity/v3/add/0x657e8C867D8B37dCC18fA4Caead9C45EB088C642/0x96284cCFd80E546b8239b44f653b4B5Db3f21371/500?chain=berachain_mainnet",
-      poolUrl: `https://berascan.com/address/${contracts.vaultLPaddys.ebtc}`,
-    },
-  },
-  weeth: {
-    title: "weETH",
-    titleSize: "text-[8vw] md:text-[7vw] lg:text-[6vw]",
-    params: {
-      vaultToken: "weeth",
-      dt: "weETH",
-      ot: "weETH-OT",
-      yt: "weETH-YT",
-      protocolUrl: "https://app.ether.fi/weeth",
-      dexLink: `https://dexscreener.com/berachain/${contracts.vaultLPaddys.weeth}`,
-      poolName: "weETH / weETH OT LP",
-      liqManagerUrl:
-        "https://app.kodiak.finance/#/liquidity/v3/add/0x5D8a5599D781CC50A234D73ac94F4da62c001D8B/0xE021C1dA35a6d93D79C4a432E6E96c8667dB8959/500?chain=berachain_mainnet",
-      poolUrl: `https://berascan.com/address/${contracts.vaultLPaddys.weeth}`,
-    },
-  },
   oribgt: {
     title: "oriBGT",
     titleSize: "text-[8vw] md:text-[7vw] lg:text-[6vw]",
@@ -112,6 +80,51 @@ export const VAULT_DETAIL_CONFIGS = {
       poolUrl: `https://berascan.com/address/${contracts.vaultLPaddys.rusd}`,
     },
   },
+  // stlbgt: {
+  //   title: "LBGT",
+  //   titleSize: "text-[7.5vw] md:text-[6.5vw] lg:text-[5.5vw]",
+  //   params: {
+  //     vaultToken: "stlbgt",
+  //     dt: "LBGT",
+  //     ot: "stLBGT-OT",
+  //     yt: "stLBGT-YT",
+  //     protocolUrl: "https://www.berapaw.com/",
+  //     dexLink: `https://dexscreener.com/berachain/${contracts.vaultLPaddys.stlbgt}`,
+  //     poolName: "stLBGT / stLBGT-OT",
+  //     liqManagerUrl: "",
+  //     poolUrl: `https://berascan.com/address/${contracts.vaultLPaddys.stlbgt}`,
+  //   }
+  // },
+  // ybgt: {
+  //   title: "yBGT",
+  //   titleSize: "text-[7.5vw] md:text-[6.5vw] lg:text-[5.5vw]",
+  //   params: {
+  //     vaultToken: "ybgt",
+  //     dt: "yBGT",
+  //     ot: "yBGT-OT",
+  //     yt: "yBGT-YT",
+  //     protocolUrl: "https://bearn.sucks/",
+  //     dexLink: `https://dexscreener.com/berachain/${contracts.vaultLPaddys.ybgt}`,
+  //     poolName: "styBGT / yBGT-OT",
+  //     liqManagerUrl: "",
+  //     poolUrl: `https://berascan.com/address/${contracts.vaultLPaddys.ybgt}`,
+  //   }
+  // },
+  // wberaibgtlp: {
+  //   title: "WBERA-iBGT LP",
+  //   titleSize: "text-[7.5vw] md:text-[6.5vw] lg:text-[5.5vw]",
+  //   params: {
+  //     vaultToken: "wberaibgtlp",
+  //     dt: "WBERA-iBGT LP",
+  //     ot: "WBERA-iBGT LP-OT",
+  //     yt: "WBERA-iBGT LP-YT",
+  //     protocolUrl: "https://origami.finance/",
+  //     dexLink: `https://dexscreener.com/berachain/${contracts.vaultLPaddys.wberaibgtlp}`,
+  //     poolName: "WBERA-iBGT LP / WBERA-iBGT OT LP",
+  //     liqManagerUrl: "",
+  //     poolUrl: `https://berascan.com/address/${contracts.vaultLPaddys.wberaibgtlp}`,
+  //   },
+  // },
 } as const;
 
 export type VaultDetailKey = keyof typeof VAULT_DETAIL_CONFIGS;

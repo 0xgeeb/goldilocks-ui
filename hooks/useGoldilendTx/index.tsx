@@ -35,8 +35,8 @@ export const useGoldilendTx = () => {
     wallet: string,
   ): Promise<boolean> => {
     const allowanceResult = await readContract(config, {
-      address: contracts.goldilend.address as `0x${string}`,
-      abi: contracts.goldilend.abi,
+      address: contracts.wbera.address as `0x${string}`,
+      abi: contracts.wbera.abi,
       functionName: "allowance",
       args: [wallet, contracts.goldilend.address],
     });
@@ -171,6 +171,28 @@ export const useGoldilendTx = () => {
     }
   };
 
+  const sendWBERAApproveTx = async (amt: number, infinite: boolean) => {
+    try {
+      const hash = await writeContract(config, {
+        address: contracts.wbera.address as `0x${string}`,
+        abi: contracts.wbera.abi,
+        functionName: "approve",
+        args: [
+          contracts.goldilend.address,
+          infinite
+            ? parseEther(
+                "115792089237316195423570985008687907853269984665640564039457",
+              )
+            : parseEther(`${amt + 0.01}`),
+        ],
+      });
+      await waitForTransactionReceipt(config, { hash });
+    } catch (e) {
+      console.log("user denied tx");
+      console.log("or: ", e);
+    }
+  };
+
   const sendLockTx = async (lockAmt: number): Promise<string> => {
     try {
       const hash = await writeContract(config, {
@@ -189,12 +211,30 @@ export const useGoldilendTx = () => {
     return "";
   };
 
+  const sendUnlockTx = async (unlockAmt: number): Promise<string> => {
+    try {
+      const hash = await writeContract(config, {
+        address: contracts.goldilend.address as `0x${string}`,
+        abi: contracts.goldilend.abi,
+        functionName: "unlock",
+        args: [parseEther(`${unlockAmt}`)],
+      });
+      const data = await waitForTransactionReceipt(config, { hash });
+      return data.transactionHash;
+    } catch (e) {
+      console.log("user denied tx");
+      console.log("or: ", e);
+    }
+
+    return "";
+  };
+
   const sendStakeTx = async (stakeAmt: number): Promise<string> => {
     try {
       const hash = await writeContract(config, {
         address: contracts.goldilend.address as `0x${string}`,
         abi: contracts.goldilend.abi,
-        functionName: "stake",
+        functionName: "lock",
         args: [parseEther(`${stakeAmt}`)],
       });
       const data = await waitForTransactionReceipt(config, { hash });
@@ -212,7 +252,7 @@ export const useGoldilendTx = () => {
       const hash = await writeContract(config, {
         address: contracts.goldilend.address as `0x${string}`,
         abi: contracts.goldilend.abi,
-        functionName: "unstake",
+        functionName: "unlock",
         args: [parseEther(`${unstakeAmt}`)],
       });
       const data = await waitForTransactionReceipt(config, { hash });
@@ -434,6 +474,24 @@ export const useGoldilendTx = () => {
     return "";
   };
 
+  const sendMintWBERATx = async (addy: string): Promise<string> => {
+    try {
+      const hash = await writeContract(config, {
+        address: contracts.wbera.address as `0x${string}`,
+        abi: contracts.wbera.abi,
+        functionName: 'mint',
+        args: [addy, parseEther('1000000')]
+      })
+      const data = await waitForTransactionReceipt(config, { hash })
+      return data.transactionHash
+    }
+    catch (e) {
+      console.log("user denied tx");
+      console.log("or: ", e);
+      return ''
+    }
+  }
+
   return {
     checkBoostAllowance,
     checkLoanAllowance,
@@ -447,11 +505,14 @@ export const useGoldilendTx = () => {
     checkStakeAllowance,
     sendiBGTApproveTx,
     sendGiBGTApproveTx,
+    sendWBERAApproveTx,
     sendLockTx,
+    sendUnlockTx,
     sendStakeTx,
     sendUnstakeTx,
     sendClaimTx,
     sendLiquidateTx,
     sendMintNFTTx,
+    sendMintWBERATx
   };
 };

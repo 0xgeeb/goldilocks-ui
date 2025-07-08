@@ -4,7 +4,6 @@ import { formatAsString } from "@/app/_components/utils";
 
 import { useStake } from "../../../providers";
 import {
-  ChartSmallMobile,
   NotificationMobile,
   WalletBalanceMobilePopup,
 } from "../../stakeMobile";
@@ -12,7 +11,6 @@ import {
 export const StakeBoxMobile = () => {
   const {
     txConfirming,
-    chartOpen,
     notification,
     handlePercentageButtons,
     displayString,
@@ -39,9 +37,7 @@ export const StakeBoxMobile = () => {
       <div
         className={`absolute inset-3 ${txConfirming ? "" : "border-2 border-black"} bg-[#D9C6BA]`}
       >
-        {chartOpen ? (
-          <ChartSmallMobile />
-        ) : txConfirming ? (
+        {txConfirming ? (
           <img
             className="size-full"
             src="/images/bg-transaction-mobile-small.png"

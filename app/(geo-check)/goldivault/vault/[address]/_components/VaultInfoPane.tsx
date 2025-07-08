@@ -68,7 +68,7 @@ const VaultInfoPane: React.FC<{ vaultToken: string }> = ({ vaultToken }) => {
 
     return `${month}-${day}-${year}`;
   };
-
+  
   const formatTime = (timestamp: number): string => {
     const date = new Date(timestamp * 1000); // convert to milliseconds
     const hours = date.getUTCHours().toString().padStart(2, '0');
@@ -76,6 +76,20 @@ const VaultInfoPane: React.FC<{ vaultToken: string }> = ({ vaultToken }) => {
     const seconds = date.getUTCSeconds().toString().padStart(2, '0');
   
     return `${hours}:${minutes}:${seconds} UTC`;
+  }
+
+  const formatFixedApr = (data: any): string => {
+    if(
+      vaultToken === "rusd" ||
+      vaultToken === "unibtc" ||  
+      vaultToken === "rseth" ||  
+      vaultToken === "solvbtc"  
+    ) {
+      return "N/A"
+    }
+    else {
+      return formatAsString(data) + "%"
+    }
   }
 
   // DYNAMICALLY fetch the vault info based on the vault token
@@ -99,7 +113,7 @@ const VaultInfoPane: React.FC<{ vaultToken: string }> = ({ vaultToken }) => {
         case "endTime":
           return formatDate(data);
         case "fixedApr":
-          return `${vaultToken === "oribgt" ? formatAsString(data) + "%" : "N/A"}`;
+          return formatFixedApr(data);
         case "otLiquidity":
           return `$${formatAsString(data)}`;
         case "restakingYield":
@@ -190,6 +204,27 @@ const VaultInfoPane: React.FC<{ vaultToken: string }> = ({ vaultToken }) => {
             ))}
           </dd>
         </div>
+        {
+          vaultToken === "stlbgt" && (
+            <>
+              <InfoRow
+                textA="Underlying protocol link"
+                textB="Berapaw"
+                linkB="https://www.berapaw.com/stake"
+              />
+              <InfoRow
+                textA="Automated Liquidity Manager"
+                textB="Kodiak"
+                linkB="https://app.kodiak.finance/#/liquidity/pools/0x078E5010752b01CCbC8868cf00Cd73E8eFe29fE5?chain=berachain_mainnet"
+              />
+              <InfoRow
+                textA="OT chart link"
+                textB="Dexscreener"
+                linkB="https://dexscreener.com/berachain/0x23549f334cd72ce0ba5f6051bf8602ebf12652da"
+              />
+            </>
+          )
+        }
         {vaultToken === "oribgt" && (
           <>
             <InfoRow

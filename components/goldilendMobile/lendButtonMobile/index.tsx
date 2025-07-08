@@ -50,9 +50,9 @@ export const LendButtonMobile = () => {
 
   const handleButtonClick = () => {
     const button = document.getElementById("lend-button");
-    if (lendActiveToggle === "LOCK") {
-      lockTxFlow(button);
-    }
+    // if (lendActiveToggle === "LOCK") {
+    //   lockTxFlow(button);
+    // }
     if (lendActiveToggle === "STAKE") {
       stakeTxFlow(button);
     }
@@ -61,64 +61,64 @@ export const LendButtonMobile = () => {
     }
   };
 
-  const lockTxFlow = async (button: HTMLElement | null) => {
-    if (lock == 0) {
-      button && (button.innerHTML = "lock");
-      return;
-    }
-    if (lock > goldilendWalletInfo.ibgt) {
-      button && (button.innerHTML = "not enough");
-      return;
-    } else {
-      const sufficientAllowance: boolean | void = await checkLockAllowance(
-        lock,
-        address as `0x${string}`,
-      );
-      if (sufficientAllowance) {
-        setTxConfirming(true);
-        if (button) {
-          button.innerHTML = "confirming...";
-          button.style.backgroundColor = "#C9E3B9";
-        }
-        const lockTx = await sendLockTx(lock);
-        if (lockTx.substring(0, 2) === "0x") {
-          setTxConfirming(false);
-          openNotification(
-            true,
-            "You've successfully locked $iBGT",
-            `You locked ${formatAsString(lock)} iBGT`,
-            lockTx,
-          );
-          if (button) {
-            button.innerHTML = "lock";
-            button.style.backgroundColor = "#E7B941";
-            button.style.color = "black";
-          }
-          refreshInfo();
-          setTimeout(() => {
-            openNotification(false, "", "", "");
-          }, 10000);
-        } else {
-          if (button) {
-            button.innerHTML = "lock";
-            button.style.backgroundColor = "#E7B941";
-            button.style.color = "black";
-          }
-          refreshInfo();
-          setTxConfirming(false);
-        }
-      } else {
-        setAllowanceButtons(true);
-      }
-    }
-  };
+  // const lockTxFlow = async (button: HTMLElement | null) => {
+  //   if (lock == 0) {
+  //     button && (button.innerHTML = "lock");
+  //     return;
+  //   }
+  //   if (lock > goldilendWalletInfo.ibgt) {
+  //     button && (button.innerHTML = "not enough");
+  //     return;
+  //   } else {
+  //     const sufficientAllowance: boolean | void = await checkLockAllowance(
+  //       lock,
+  //       address as `0x${string}`,
+  //     );
+  //     if (sufficientAllowance) {
+  //       setTxConfirming(true);
+  //       if (button) {
+  //         button.innerHTML = "confirming...";
+  //         button.style.backgroundColor = "#C9E3B9";
+  //       }
+  //       const lockTx = await sendLockTx(lock);
+  //       if (lockTx.substring(0, 2) === "0x") {
+  //         setTxConfirming(false);
+  //         openNotification(
+  //           true,
+  //           "You've successfully locked $iBGT",
+  //           `You locked ${formatAsString(lock)} iBGT`,
+  //           lockTx,
+  //         );
+  //         if (button) {
+  //           button.innerHTML = "lock";
+  //           button.style.backgroundColor = "#E7B941";
+  //           button.style.color = "black";
+  //         }
+  //         refreshInfo();
+  //         setTimeout(() => {
+  //           openNotification(false, "", "", "");
+  //         }, 10000);
+  //       } else {
+  //         if (button) {
+  //           button.innerHTML = "lock";
+  //           button.style.backgroundColor = "#E7B941";
+  //           button.style.color = "black";
+  //         }
+  //         refreshInfo();
+  //         setTxConfirming(false);
+  //       }
+  //     } else {
+  //       setAllowanceButtons(true);
+  //     }
+  //   }
+  // };
 
   const stakeTxFlow = async (button: HTMLElement | null) => {
     if (stake == 0) {
       button && (button.innerHTML = "stake");
       return;
     }
-    if (stake > goldilendWalletInfo.gibgt) {
+    if (stake > goldilendWalletInfo.wbera) {
       button && (button.innerHTML = "not enough");
       return;
     } else {
@@ -170,7 +170,7 @@ export const LendButtonMobile = () => {
       button && (button.innerHTML = "unstake");
       return;
     }
-    if (unstake > goldilendWalletInfo.lendStaked) {
+    if (unstake > goldilendWalletInfo.glwbera) {
       button && (button.innerHTML = "not enough");
       return;
     } else {

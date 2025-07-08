@@ -10,8 +10,6 @@ export const BorrowFetcher = () => {
 
   const {
     findBeras,
-    findPartners,
-    findBoost,
     findLoans,
     setInfoLoading,
     refreshGoldilendInfo,
@@ -30,14 +28,12 @@ export const BorrowFetcher = () => {
   useEffect(() => {
     if (!loading && !!data) {
       findBeras(data);
-      findPartners(data);
       setSkip(true);
       setInfoLoading(false);
     }
   }, [data, loading]);
 
   useEffect(() => {
-    findBoost();
     findLoans();
     refreshGoldilendInfo();
     refreshGoldilendWalletInfo();

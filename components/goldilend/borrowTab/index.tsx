@@ -168,7 +168,7 @@ export const BorrowTab = () => {
       openNotification(
         true,
         "You've successfully created a loan",
-        `You borrowed ${formatAsString(loanAmount)} iBGT against your bera`,
+        `You borrowed ${formatAsString(loanAmount)} WBERA against your bera`,
         borrowTx,
       );
       button && (button.innerHTML = "create loan");
@@ -271,7 +271,7 @@ export const BorrowTab = () => {
           <div className="absolute bottom-[5%] left-[20%] flex w-3/5 flex-row items-center justify-between font-baloo text-[2vw] font-semibold xl:text-[0.8vw]">
             <span>borrow limit:</span>
             <span>
-              {borrowLimit > 0 ? formatAsString(borrowLimit) : "0.00"} iBGT
+              {borrowLimit > 0 ? formatAsString(borrowLimit) : "0.00"} WBERA
             </span>
           </div>
         </div>
@@ -324,13 +324,13 @@ export const BorrowTab = () => {
         </div>
         <div className="flex w-[85%] flex-row items-center justify-between bg-[#EFD9CA] px-2 font-baloo text-[1.6vw] font-semibold xl:text-[0.8vw]">
           <span>Total Amount to Repay:</span>
-          <span>{formatAsString(loanAmount + loanInterest)} iBGT</span>
+          <span>{formatAsString(loanAmount + loanInterest)} WBERA</span>
         </div>
         <ConnectButton.Custom>
           {({ account, chain, openChainModal, openConnectModal }) => {
             return (
               <button
-                className={`h-[12%] w-[48%] ${buttonLoadingColor ? "bg-[#C9E3B9] text-black" : "bg-[#E7B941] text-black"} flex items-center justify-center border-2 border-black font-amaticbold text-[4vw] hover:scale-110 hover:bg-[#C9E3B9] hover:text-black xl:text-[1.7vw]`}
+                className={`h-[12%] w-[48%] ${buttonLoadingColor ? "bg-[#C9E3B9] text-black" : "bg-[#E7B941] text-black"} flex items-center justify-center border-2 border-black font-amaticbold text-[4vw] hover:scale-110 hover:bg-[#C9E3B9] hover:text-black xl:text-[1.7vw] cursor-pointer`}
                 id="borrow-button"
                 onClick={() => {
                   const button = document.getElementById("borrow-button");

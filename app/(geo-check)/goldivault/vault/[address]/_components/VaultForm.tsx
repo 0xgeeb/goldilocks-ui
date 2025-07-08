@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useAccount } from "wagmi";
 import { useGoldivault } from "@/providers";
+import { useVaultInfoConfig } from "@/hooks";
 import {
   TradeTab,
   LiqManagerTab,
@@ -36,28 +37,23 @@ function VaultForm({ params }: VaultBoxProps) {
     calculateDeposit,
     calculateYTRedeem,
     debouncedRedeemYT,
-    outputTokensLoading,
     setOutputTokensLoading,
     otAmount,
-    ytAmount,
     setOtAmount,
     setYtAmount,
     txConfirming,
-    goldivaultWalletInfoWeeth,
-    goldivaultWalletInfoSolvbtc,
-    goldivaultWalletInfoUnibtc,
-    goldivaultWalletInfoRusd,
-    goldivaultWalletInfoEbtc,
-    goldivaultWalletInfoRseth,
-    goldivaultWalletInfoOribgt,
     refreshVaultInfo,
     refreshVaultWalletInfo,
     activeToggle,
     calculateOTRedeem,
-    notification,
     walletInfoLoading,
-    redeemYTAmounts,
   } = useGoldivault();
+
+  const {
+    vaultOT,
+    vaultYT,
+    vaultDT
+  } = useVaultInfoConfig({ vaultToken: params.vaultToken })
 
   const { isConnected } = useAccount();
 
@@ -68,57 +64,6 @@ function VaultForm({ params }: VaultBoxProps) {
   const formatBalance = (num: number): string => {
     return num.toLocaleString("en-US", { maximumFractionDigits: 4 });
   };
-
-  const vaultOT =
-    params.vaultToken === "weeth"
-      ? goldivaultWalletInfoWeeth.weot
-        : params.vaultToken === "solvbtc"
-          ? goldivaultWalletInfoSolvbtc.solvbtcot
-          : params.vaultToken === "unibtc"
-            ? goldivaultWalletInfoUnibtc.unibtcot
-            : params.vaultToken === "rusd"
-              ? goldivaultWalletInfoRusd.rusdot
-              : params.vaultToken === "ebtc"
-                ? goldivaultWalletInfoEbtc.ebtcot
-                : params.vaultToken === "rseth"
-                  ? goldivaultWalletInfoRseth.rsethot
-                  : params.vaultToken === "oribgt"
-                    ? goldivaultWalletInfoOribgt.oribgtot
-                    : {};
-
-  const vaultYT =
-    params.vaultToken === "weeth"
-      ? goldivaultWalletInfoWeeth.weyt
-        : params.vaultToken === "solvbtc"
-          ? goldivaultWalletInfoSolvbtc.solvbtcyt
-          : params.vaultToken === "unibtc"
-            ? goldivaultWalletInfoUnibtc.unibtcyt
-            : params.vaultToken === "rusd"
-              ? goldivaultWalletInfoRusd.rusdyt
-              : params.vaultToken === "ebtc"
-                ? goldivaultWalletInfoEbtc.ebtcyt
-                : params.vaultToken === "rseth"
-                  ? goldivaultWalletInfoRseth.rsethyt
-                  : params.vaultToken === "oribgt"
-                    ? goldivaultWalletInfoOribgt.oribgtyt
-                    : {};
-
-  const vaultDT =
-    params.vaultToken === "weeth"
-      ? goldivaultWalletInfoWeeth.weeth
-        : params.vaultToken === "solvbtc"
-          ? goldivaultWalletInfoSolvbtc.solvbtc
-          : params.vaultToken === "unibtc"
-            ? goldivaultWalletInfoUnibtc.unibtc
-            : params.vaultToken === "rusd"
-              ? goldivaultWalletInfoRusd.rusd
-              : params.vaultToken === "ebtc"
-                ? goldivaultWalletInfoEbtc.ebtc
-                : params.vaultToken === "rseth"
-                  ? goldivaultWalletInfoRseth.rseth
-                  : params.vaultToken === "oribgt"
-                    ? goldivaultWalletInfoOribgt.ibgt
-                    : {};
 
   useEffect(() => {
     refreshVaultInfo(params.vaultToken);
@@ -159,10 +104,7 @@ function VaultForm({ params }: VaultBoxProps) {
     if (activeToggle === "DEPOSIT") {
       return "Deposit Tokens"
     } else if (activeToggle === "REDEEMOT") {
-      const text = params.vaultToken === "oribgt" ?
-      "Redeem Ownership Tokens & Burn Yield Tokens" : 
-      "Redeem Ownership Tokens" // uncomment this to switch to mature vault ui
-      return text
+      return "Redeem Ownership Tokens & Burn Yield Tokens"
     } else {
       return "Redeem Yield Tokens"
     }
@@ -182,10 +124,7 @@ function VaultForm({ params }: VaultBoxProps) {
     if (activeToggle === "DEPOSIT") {
       return params.dt;
     } else if (activeToggle === "REDEEMOT") {
-      const text = params.vaultToken === "oribgt" ?
-      "OT & YT" :
-      "OT" // uncomment this to switch to mature vault ui 
-      return text
+      return "OT & YT"
     } else {
       return params.yt;
     }
@@ -238,13 +177,7 @@ function VaultForm({ params }: VaultBoxProps) {
             <LabelSet>
               <Label>
                 {renderTopLabel()}
-                {
-                  activeToggle === "REDEEMOT" && (
-                    params.vaultToken === "oribgt" ?
-                    <HoverText hoverText="Burn ownership and yield tokens to receive underlying assets from the vault" /> :
-                    <HoverText hoverText="Burn ownership tokens to receive underlying assets from the vault" />  // uncomment this to switch to mature vault ui 
-                  )
-                }
+                { activeToggle === "REDEEMOT" && <HoverText hoverText="Burn ownership tokens (and yield tokens before maturity) to receive underlying assets from the vault" /> }
               </Label>
             </LabelSet>
             <FieldWithLabel

@@ -4,12 +4,10 @@ import { useBorrow } from "../../../providers";
 import {
   WalletBalanceMobilePopup,
   NotificationMobile,
-  ChartSmallMobile,
 } from "../../borrowMobile";
 
 export const BorrowBoxMobile = () => {
   const {
-    chartOpen,
     handlePercentageButtons,
     activeToggle,
     displayString,
@@ -34,9 +32,7 @@ export const BorrowBoxMobile = () => {
       <div
         className={`absolute inset-3 ${txConfirming ? "" : "border-2 border-black"} bg-[#D9C6BA]`}
       >
-        {chartOpen ? (
-          <ChartSmallMobile />
-        ) : txConfirming ? (
+        {txConfirming ? (
           <img
             className="h-[100%] w-[100%]"
             src="/images/bg-transaction-mobile-small.png"

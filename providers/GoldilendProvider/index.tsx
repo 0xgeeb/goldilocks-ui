@@ -13,25 +13,20 @@ import {
   PartnerInfo,
   LoanInfo,
   LoanData,
-  BoostData,
   BoostInfo,
 } from "../../utils/interfaces";
 
 const INITIAL_STATE: GoldilendInitialState = {
   goldilendInfo: {
-    gibgtSupply: 0,
-    stakedGibgt: 0,
+    glwberaSupply: 0,
+    stakedglwbera: 0,
     poolSize: 0,
     outstandingDebt: 0,
   },
   goldilendWalletInfo: {
-    ibgt: 0,
-    gibgt: 0,
-    lendStaked: 0,
-    lendClaimable: 0,
-    lendInfraredClaimable: 0,
-    ibgtGoldilendAllowance: 0,
-    gibgtGoldilendAllowance: 0,
+    wbera: 0,
+    glwbera: 0,
+    wberaGoldilendAllowance: 0,
   },
   lock: 0,
   stake: 0,
@@ -83,7 +78,7 @@ const INITIAL_STATE: GoldilendInitialState = {
   ) => {},
   activeToggle: "BORROW",
   changeActiveToggle: (_toggle: string) => {},
-  lendActiveToggle: "LOCK",
+  lendActiveToggle: "STAKE",
   changeLendActiveToggle: (_toggle: string) => {},
   refreshGoldilendInfo: async () => {},
   refreshGoldilendWalletInfo: async () => {},
@@ -114,9 +109,6 @@ const INITIAL_STATE: GoldilendInitialState = {
   findSelectedPartnerIdxs: () => [],
   findBeras: (_beras: any) => {},
   findLoans: () => {},
-  findBoost: () => {},
-  findLiquidatableLoans: () => {},
-  findPartners: (_partners: any) => {},
   updateBorrowLimit: () => {},
   updateBoostMag: () => {},
   handleBorrowChange: (_input: string) => {},
@@ -258,69 +250,69 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
   const handlePercentageButtons = (action: number) => {
     if (!isConnected) return;
     if (action == 1) {
-      if (lendActiveToggleState === "LOCK") {
-        setDisplayStringState((goldilendWalletInfoState.ibgt / 4).toFixed(4));
-        setLockState(goldilendWalletInfoState.ibgt / 4);
-      }
+      // if (lendActiveToggleState === "LOCK") {
+      //   setDisplayStringState((goldilendWalletInfoState.ibgt / 4).toFixed(4));
+      //   setLockState(goldilendWalletInfoState.ibgt / 4);
+      // }
       if (lendActiveToggleState === "STAKE") {
-        setDisplayStringState((goldilendWalletInfoState.gibgt / 4).toFixed(4));
-        setStakeState(goldilendWalletInfoState.gibgt / 4);
+        setDisplayStringState((goldilendWalletInfoState.wbera / 4).toFixed(4));
+        setStakeState(goldilendWalletInfoState.wbera / 4);
       }
       if (lendActiveToggleState === "UNSTAKE") {
         setDisplayStringState(
-          (goldilendWalletInfoState.lendStaked / 4).toFixed(4),
+          (goldilendWalletInfoState.glwbera / 4).toFixed(4),
         );
-        setUnstakeState(goldilendWalletInfoState.lendStaked / 4);
+        setUnstakeState(goldilendWalletInfoState.glwbera / 4);
       }
     }
     if (action == 2) {
-      if (lendActiveToggleState === "LOCK") {
-        setDisplayStringState((goldilendWalletInfoState.ibgt / 2).toFixed(4));
-        setLockState(goldilendWalletInfoState.ibgt / 2);
-      }
+      // if (lendActiveToggleState === "LOCK") {
+      //   setDisplayStringState((goldilendWalletInfoState.ibgt / 2).toFixed(4));
+      //   setLockState(goldilendWalletInfoState.ibgt / 2);
+      // }
       if (lendActiveToggleState === "STAKE") {
-        setDisplayStringState((goldilendWalletInfoState.gibgt / 2).toFixed(4));
-        setStakeState(goldilendWalletInfoState.gibgt / 2);
+        setDisplayStringState((goldilendWalletInfoState.wbera / 2).toFixed(4));
+        setStakeState(goldilendWalletInfoState.wbera / 2);
       }
       if (lendActiveToggleState === "UNSTAKE") {
         setDisplayStringState(
-          (goldilendWalletInfoState.lendStaked / 2).toFixed(4),
+          (goldilendWalletInfoState.glwbera / 2).toFixed(4),
         );
-        setUnstakeState(goldilendWalletInfoState.lendStaked / 2);
+        setUnstakeState(goldilendWalletInfoState.glwbera / 2);
       }
     }
     if (action == 3) {
-      if (lendActiveToggleState === "LOCK") {
-        setDisplayStringState(
-          (goldilendWalletInfoState.ibgt * 0.75).toFixed(4),
-        );
-        setLockState(goldilendWalletInfoState.ibgt * 0.75);
-      }
+      // if (lendActiveToggleState === "LOCK") {
+      //   setDisplayStringState(
+      //     (goldilendWalletInfoState.ibgt * 0.75).toFixed(4),
+      //   );
+      //   setLockState(goldilendWalletInfoState.ibgt * 0.75);
+      // }
       if (lendActiveToggleState === "STAKE") {
         setDisplayStringState(
-          (goldilendWalletInfoState.gibgt * 0.75).toFixed(4),
+          (goldilendWalletInfoState.wbera * 0.75).toFixed(4),
         );
-        setStakeState(goldilendWalletInfoState.gibgt * 0.75);
+        setStakeState(goldilendWalletInfoState.wbera * 0.75);
       }
       if (lendActiveToggleState === "UNSTAKE") {
         setDisplayStringState(
-          (goldilendWalletInfoState.lendStaked * 0.75).toFixed(4),
+          (goldilendWalletInfoState.glwbera * 0.75).toFixed(4),
         );
-        setUnstakeState(goldilendWalletInfoState.lendStaked * 0.75);
+        setUnstakeState(goldilendWalletInfoState.glwbera * 0.75);
       }
     }
     if (action == 4) {
-      if (lendActiveToggleState === "LOCK") {
-        setDisplayStringState(goldilendWalletInfoState.ibgt.toFixed(4));
-        setLockState(goldilendWalletInfoState.ibgt - 0.0001);
-      }
+      // if (lendActiveToggleState === "LOCK") {
+      //   setDisplayStringState(goldilendWalletInfoState.ibgt.toFixed(4));
+      //   setLockState(goldilendWalletInfoState.ibgt - 0.0001);
+      // }
       if (lendActiveToggleState === "STAKE") {
-        setDisplayStringState(goldilendWalletInfoState.gibgt.toFixed(4));
-        setStakeState(goldilendWalletInfoState.gibgt - 0.0001);
+        setDisplayStringState(goldilendWalletInfoState.wbera.toFixed(4));
+        setStakeState(goldilendWalletInfoState.wbera - 0.0001);
       }
       if (lendActiveToggleState === "UNSTAKE") {
-        setDisplayStringState(goldilendWalletInfoState.lendStaked.toFixed(4));
-        setUnstakeState(goldilendWalletInfoState.lendStaked - 0.0001);
+        setDisplayStringState(goldilendWalletInfoState.glwbera.toFixed(4));
+        setUnstakeState(goldilendWalletInfoState.glwbera - 0.0001);
       }
     }
   };
@@ -372,23 +364,23 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
   };
 
   const handleStakeBalance = (tab: string): string => {
-    if (tab === "LOCK") {
-      return goldilendWalletInfoState.ibgt > 0
-        ? goldilendWalletInfoState.ibgt.toLocaleString("en-US", {
-            maximumFractionDigits: 4,
-          })
-        : "0.00";
-    }
+    // if (tab === "LOCK") {
+    //   return goldilendWalletInfoState.ibgt > 0
+    //     ? goldilendWalletInfoState.ibgt.toLocaleString("en-US", {
+    //         maximumFractionDigits: 4,
+    //       })
+    //     : "0.00";
+    // }
     if (tab === "STAKE") {
-      return goldilendWalletInfoState.gibgt > 0
-        ? goldilendWalletInfoState.gibgt.toLocaleString("en-US", {
+      return goldilendWalletInfoState.wbera > 0
+        ? goldilendWalletInfoState.wbera.toLocaleString("en-US", {
             maximumFractionDigits: 4,
           })
         : "0.00";
     }
     if (tab === "UNSTAKE") {
-      return goldilendWalletInfoState.lendStaked > 0
-        ? goldilendWalletInfoState.lendStaked.toLocaleString("en-US", {
+      return goldilendWalletInfoState.glwbera > 0
+        ? goldilendWalletInfoState.glwbera.toLocaleString("en-US", {
             maximumFractionDigits: 4,
           })
         : "0.00";
@@ -457,30 +449,6 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
     }
   };
 
-  const findPartners = async (partners: any) => {
-    let partnerIndex = 0;
-    for (const drome of partners.beradromes.items) {
-      const dromeInfo = {
-        name: "Beradrome",
-        id: drome.id,
-        boost: 9,
-        index: partnerIndex,
-      };
-      setOwnedPartnersState((curr) => [...curr, dromeInfo]);
-      partnerIndex++;
-    }
-    for (const honeycomb of partners.honeycombs.items) {
-      const combInfo = {
-        name: "HoneyComb",
-        id: honeycomb.id,
-        boost: 6,
-        index: partnerIndex,
-      };
-      setOwnedPartnersState((curr) => [...curr, combInfo]);
-      partnerIndex++;
-    }
-  };
-
   const findLoans = async () => {
     if (address) {
       const userLoans: LoanInfo[] = [];
@@ -510,49 +478,24 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
     }
   };
 
-  const findBoost = async () => {
-    if (address) {
-      const boost = await readContract(config, {
-        address: contracts.goldilend.address as `0x${string}`,
-        abi: contracts.goldilend.abi,
-        functionName: "lookupBoost",
-        args: [address],
-      });
-      const boostData = boost as unknown as BoostData;
-      const userBoost = {
-        partnerNFTs: boostData.partnerNFTs,
-        partnerNFTIds: boostData.partnerNFTIds.map((id) =>
-          parseInt(id.toString(), 16),
-        ),
-        boostMagnitude: Number(boostData.boostMagnitude),
-        expiry: Number(boostData.expiry),
-      };
-
-      setUserBoostState(userBoost);
-    }
-  };
-
-  //todo: need indexer for this
-  const findLiquidatableLoans = () => {};
-
   const refreshGoldilendInfo = async () => {
     setInfoLoadingState(true);
-    const stakedGibgtResult = await readContract(config, {
-      address: contracts.goldilend.address as `0x${string}`,
-      abi: contracts.goldilend.abi,
-      functionName: "balanceOf",
-      args: [contracts.goldilend.address],
+    // const stakedGibgtResult = await readContract(config, {
+    //   address: contracts.goldilend.address as `0x${string}`,
+    //   abi: contracts.goldilend.abi,
+    //   functionName: "balanceOf",
+    //   args: [contracts.goldilend.address],
+    // });
+    const glwberaSupplyResult = await readContract(config, {
+      address: contracts.glwbera.address as `0x${string}`,
+      abi: contracts.glwbera.abi,
+      functionName: "totalSupply",
+      args: [],
     });
     const poolSizeResult = await readContract(config, {
       address: contracts.goldilend.address as `0x${string}`,
       abi: contracts.goldilend.abi,
       functionName: "poolSize",
-      args: [],
-    });
-    const gibgtSupplyResult = await readContract(config, {
-      address: contracts.goldilend.address as `0x${string}`,
-      abi: contracts.goldilend.abi,
-      functionName: "totalSupply",
       args: [],
     });
     const debtResult = await readContract(config, {
@@ -563,12 +506,8 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
     });
 
     const response = {
-      gibgtSupply: parseFloat(
-        formatEther(gibgtSupplyResult as unknown as bigint),
-      ),
-      stakedGibgt: parseFloat(
-        formatEther(stakedGibgtResult as unknown as bigint),
-      ),
+      glwberaSupply: parseFloat(formatEther(glwberaSupplyResult as unknown as bigint)),
+      stakedglwbera: 0,
       poolSize: parseFloat(formatEther(poolSizeResult as unknown as bigint)),
       outstandingDebt: parseFloat(formatEther(debtResult as unknown as bigint)),
     };
@@ -580,65 +519,30 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
   const refreshGoldilendWalletInfo = async () => {
     if (address) {
       setWalletInfoLoadingState(true);
-      const ibgtResult = await readContract(config, {
-        address: contracts.ibgt.address as `0x${string}`,
-        abi: contracts.ibgt.abi,
+      const wberaResult = await readContract(config, {
+        address: contracts.wbera.address as `0x${string}`,
+        abi: contracts.wbera.abi,
         functionName: "balanceOf",
         args: [address],
       });
-      const gibgtResult = await readContract(config, {
-        address: contracts.goldilend.address as `0x${string}`,
-        abi: contracts.goldilend.abi,
+      const glwberaResult = await readContract(config, {
+        address: contracts.glwbera.address as `0x${string}`,
+        abi: contracts.glwbera.abi,
         functionName: "balanceOf",
         args: [address],
       });
-      const stakedResult = await readContract(config, {
-        address: contracts.goldilend.address as `0x${string}`,
-        abi: contracts.goldilend.abi,
-        functionName: "stakedGiBGT",
-        args: [address],
-      });
-      const claimableResult = await readContract(config, {
-        address: contracts.goldilend.address as `0x${string}`,
-        abi: contracts.goldilend.abi,
-        functionName: "userClaimablePrg",
-        args: [address],
-      });
-      const ibgtGoldilendAllowanceResult = await readContract(config, {
-        address: contracts.ibgt.address as `0x${string}`,
-        abi: contracts.ibgt.abi,
+      const wberaGoldilendAllowanceResult = await readContract(config, {
+        address: contracts.wbera.address as `0x${string}`,
+        abi: contracts.wbera.abi,
         functionName: "allowance",
         args: [address, contracts.goldilend.address],
-      });
-      const gibgtGoldilendAllowanceResult = await readContract(config, {
-        address: contracts.goldilend.address as `0x${string}`,
-        abi: contracts.goldilend.abi,
-        functionName: "allowance",
-        args: [address, contracts.goldilend.address],
-      });
-      const claimableInfraredResult = await readContract(config, {
-        address: contracts.goldilend.address as `0x${string}`,
-        abi: contracts.goldilend.abi,
-        functionName: "userClaimableRewards",
-        args: [address],
       });
 
+
       const response = {
-        ibgt: parseFloat(formatEther(ibgtResult as unknown as bigint)),
-        gibgt: parseFloat(formatEther(gibgtResult as unknown as bigint)),
-        lendStaked: parseFloat(formatEther(stakedResult as unknown as bigint)),
-        lendClaimable: parseFloat(
-          formatEther(claimableResult as unknown as bigint),
-        ),
-        lendInfraredClaimable: parseFloat(
-          formatEther(claimableInfraredResult as unknown as bigint),
-        ),
-        ibgtGoldilendAllowance: parseFloat(
-          formatEther(ibgtGoldilendAllowanceResult as unknown as bigint),
-        ),
-        gibgtGoldilendAllowance: parseFloat(
-          formatEther(gibgtGoldilendAllowanceResult as unknown as bigint),
-        ),
+        wbera: parseFloat(formatEther(wberaResult as unknown as bigint)),
+        glwbera: parseFloat(formatEther(glwberaResult as unknown as bigint)),
+        wberaGoldilendAllowance: parseFloat(formatEther(wberaGoldilendAllowanceResult as unknown as bigint))
       };
 
       setGoldilendWalletInfoState(response);
@@ -780,9 +684,6 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
         setLoansLoading: setLoansLoadingState,
         findLoans,
         findBeras,
-        findBoost,
-        findLiquidatableLoans,
-        findPartners,
         userBoost: userBoostState,
         selectedPartners: selectedPartnersState,
         ownedPartners: ownedPartnersState,

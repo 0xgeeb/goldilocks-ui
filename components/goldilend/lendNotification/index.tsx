@@ -23,7 +23,7 @@ export const LendNotification = () => {
           className={`${lendActiveToggle === "CLAIM" ? "h-[15%] w-[30%]" : "h-[20%] w-[19%]"} mt-[3%] border-2 border-black bg-[#E7B941] hover:scale-110`}
           rel="noreferrer"
         >
-          <button className="h-[100%] w-[100%] font-amaticbold text-[3vw] xl:text-[1.2vw]">
+          <button className="h-[100%] w-[100%] font-amaticbold text-[3vw] xl:text-[1.2vw] cursor-pointer">
             VIEW TX
           </button>
         </a>

@@ -57,8 +57,9 @@ export const GoldivaultPage = () => {
     )
   }
 
-  const ORIBGT_VAULT = VAULTS.filter(vault => vault.address === "oribgt");
-  const OTHER_VAULTS = VAULTS.filter(vault => vault.address !== "oribgt");
+  const MATURE_ADDRESSES = ["rusd", "solvbtc", "unibtc", "rseth"];
+  const MATURE_VAULTS = VAULTS.filter(vault => MATURE_ADDRESSES.includes(vault.address));
+  const LIVE_VAULTS = VAULTS.filter(vault => !MATURE_ADDRESSES.includes(vault.address));
 
   return (
     <CsrPageLayout
@@ -96,7 +97,7 @@ export const GoldivaultPage = () => {
             </h1>
           </div>
           <div className="w-full relative flex flex-wrap gap-6">
-            {ORIBGT_VAULT.map(
+            {LIVE_VAULTS.map(
               ({ address, mouseFlag, tokenName, imageUrl, vaultName }) => (
                 <VaultDisplayCard
                   key={address}
@@ -114,7 +115,7 @@ export const GoldivaultPage = () => {
             </h1>
           </div>
           <div className="w-full relative flex flex-wrap gap-6">
-            {OTHER_VAULTS.map(
+            {MATURE_VAULTS.map(
               ({ address, mouseFlag, tokenName, imageUrl, vaultName }) => (
                 <VaultDisplayCard
                   key={address}

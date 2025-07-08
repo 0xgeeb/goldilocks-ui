@@ -22,17 +22,17 @@ export const Stats = () => {
   return (
     <div className="absolute left-[5%] top-[80%] flex w-[90%] flex-row items-center justify-between font-baloo text-[2vw] text-white xl:left-[25.5%] xl:top-[83%] xl:w-[55%] xl:text-[1.1vw]">
       <div className="flex flex-row items-center">
-        <span className="mr-2">total iBGT locked:</span>
+        <span className="mr-2">total WBERA locked:</span>
         <span>{handleInfo(goldilendInfo.poolSize)}</span>
       </div>
+      {/* <div className="flex flex-row items-center">
+        <span className="mr-2">total WBERA staked:</span>
+        <span>{handleInfo(goldilendInfo.stakedglwbera)}</span>
+      </div> */}
       <div className="flex flex-row items-center">
-        <span className="mr-2">total GiBGT staked:</span>
-        <span>{handleInfo(goldilendInfo.stakedGibgt)}</span>
-      </div>
-      <div className="flex flex-row items-center">
-        <span className="mr-2">iBGT backing per GiBGT:</span>
+        <span className="mr-2">WBERA backing per glWBERA:</span>
         <span>
-          {handleInfo(goldilendInfo.poolSize / goldilendInfo.gibgtSupply)}
+          {handleInfo(goldilendInfo.poolSize / goldilendInfo.glwberaSupply)}
         </span>
       </div>
     </div>

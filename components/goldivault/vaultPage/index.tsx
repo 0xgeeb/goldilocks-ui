@@ -18,6 +18,7 @@ import CsrPageLayout from "@/app/_components/CsrPageLayout";
 
 import { InfoPopup, SlippagePopup, BuyOTPopup, SellOTPopup, YtChart, DescriptionPopup } from "../";
 import { useGoldivault } from "../../../providers";
+import { useVaultInfoConfig } from "@/hooks";
 import { Loading, TAndCs } from "../../utils";
 
 type Props = {
@@ -46,6 +47,8 @@ export const VaultPage = ({ params }: Props) => {
     getAssetPrice
   } = useGoldivault();
 
+  const { invalidVault } = useVaultInfoConfig({ vaultToken: params.address})
+
   const signed = useAtomValue(geoAtom);
 
   useEffect(() => {
@@ -56,11 +59,7 @@ export const VaultPage = ({ params }: Props) => {
   }, []);
 
   if (
-    params.address !== "rseth" &&
-    params.address !== "unibtc" &&
-    params.address !== "rusd" &&
-    params.address !== "oribgt" &&
-    params.address !== "solvbtc"
+    invalidVault
   ) {
     notFound();
   }
@@ -178,9 +177,9 @@ export const VaultPage = ({ params }: Props) => {
         >
           {infoPopupToggle && <InfoPopup />}
           {slippage.toggle && <SlippagePopup />}
-          {buyOtPopup && <BuyOTPopup />}
-          {sellOtPopup && <SellOTPopup />}
-          {descriptionPopup && <DescriptionPopup />}
+          {buyOtPopup && <BuyOTPopup params={{ vaultToken: params.address }} />}
+          {sellOtPopup && <SellOTPopup params={{ vaultToken: params.address }} />}
+          {descriptionPopup && <DescriptionPopup params={{ vaultToken: params.address }} />}
         <VaultsDetail address={params.address as VaultDetailKey} />
       </VaultsCardLayout>
       <YtChart token={params.address} />

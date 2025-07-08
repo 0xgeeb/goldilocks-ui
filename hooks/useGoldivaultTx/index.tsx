@@ -5,9 +5,16 @@ import {
 } from "@wagmi/core";
 import { parseEther, formatEther, parseUnits, formatUnits } from "viem";
 import { config } from "../../providers/WagmiProvider";
+import { useVaultInfoConfig } from "../"
 import { contracts } from "../../utils/addressi";
 
 export const useGoldivaultTx = () => {
+
+  const {
+    vaultDTaddy,
+    vaultaddy
+  } = useVaultInfoConfig({ vaultToken: "" })
+
   const checkAllowance = async (
     amt: number,
     vault: string,
@@ -171,6 +178,87 @@ export const useGoldivaultTx = () => {
         abi: contracts.oribgtot.abi,
         functionName: 'allowance',
         args: [wallet, contracts.steerPeriphery.address]
+      })
+      allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
+    }
+    else if(vault === "wberaibgtlp") {
+      allowanceResult = await readContract(config, {
+        address: contracts.wberaibgtisland.address as `0x${string}`,
+        abi: contracts.wberaibgtisland.abi,
+        functionName: 'allowance',
+        args: [wallet, contracts.wberaibgtlpVault.address]
+      })
+      allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
+    }
+    else if(vault === "WBERA-iBGT LP-YT") {
+      allowanceResult = await readContract(config, {
+        address: contracts.wberaibgtlpyt.address as `0x${string}`,
+        abi: contracts.wberaibgtlpyt.abi,
+        functionName: 'allowance',
+        args: [wallet, contracts.wberaibgtlpVault.address]
+      })
+      allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
+    }
+    else if(vault === "WBERA-iBGT LP-OT") {
+      allowanceResult = await readContract(config, {
+        address: contracts.wberaibgtlpot.address as `0x${string}`,
+        abi: contracts.wberaibgtlpot.abi,
+        functionName: 'allowance',
+        args: [wallet, contracts.wberaibgtlpVault.address]
+      })
+      allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
+    }
+    else if(vault === "stlbgt") {
+      allowanceResult = await readContract(config, {
+        address: contracts.lbgt.address as `0x${string}`,
+        abi: contracts.lbgt.abi,
+        functionName: 'allowance',
+        args: [wallet, contracts.stlbgtVault.address]
+      })
+      allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
+    }
+    else if(vault === "stLBGT-OT") {
+      allowanceResult = await readContract(config, {
+        address: contracts.stlbgtot.address as `0x${string}`,
+        abi: contracts.lbgt.abi,
+        functionName: 'allowance',
+        args: [wallet, contracts.stlbgtVault.address]
+      })
+      allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
+    }
+    else if(vault === "stLBGT-YT") {
+      allowanceResult = await readContract(config, {
+        address: contracts.stlbgtyt.address as `0x${string}`,
+        abi: contracts.lbgt.abi,
+        functionName: 'allowance',
+        args: [wallet, contracts.stlbgtVault.address]
+      })
+      allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
+    }
+    else if(vault === "ybgt") {
+      allowanceResult = await readContract(config, {
+        address: contracts.stybgt.address as `0x${string}`,
+        abi: contracts.stybgt.abi,
+        functionName: 'allowance',
+        args: [wallet, contracts.ybgtVault.address]
+      })
+      allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
+    }
+    else if(vault === "yBGT-OT") {
+      allowanceResult = await readContract(config, {
+        address: contracts.ybgtot.address as `0x${string}`,
+        abi: contracts.ybgtot.abi,
+        functionName: 'allowance',
+        args: [wallet, contracts.ybgtVault.address]
+      })
+      allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
+    }
+    else if(vault === "yBGT-YT") {
+      allowanceResult = await readContract(config, {
+        address: contracts.ybgtyt.address as `0x${string}`,
+        abi: contracts.ybgtyt.abi,
+        functionName: 'allowance',
+        args: [wallet, contracts.ybgtVault.address]
       })
       allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
     }
@@ -551,6 +639,171 @@ export const useGoldivaultTx = () => {
         console.log('or: ', e)
       }
     }
+    else if(vault === 'wberaibgtlp') {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.wberaibgtisland.address as `0x${string}`,
+          abi: contracts.wberaibgtisland.abi,
+          functionName: 'approve',
+          args: [contracts.wberaibgtlpVault.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
+        })
+        await waitForTransactionReceipt(config, { hash })
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+    else if(vault === "WBERA-iBGT LP-YT") {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.wberaibgtlpyt.address as `0x${string}`,
+          abi: contracts.wberaibgtlpyt.abi,
+          functionName: 'approve',
+          args: [contracts.wberaibgtlpVault.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
+        })
+        await waitForTransactionReceipt(config, { hash })
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+    else if(vault === "WBERA-iBGT LP-OT") {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.wberaibgtlpot.address as `0x${string}`,
+          abi: contracts.wberaibgtlpot.abi,
+          functionName: 'approve',
+          args: [contracts.wberaibgtlpVault.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
+        })
+        await waitForTransactionReceipt(config, { hash })
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+    else if(vault === "stlbgt") {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.lbgt.address as `0x${string}`,
+          abi: contracts.lbgt.abi,
+          functionName: 'approve',
+          args: [contracts.stlbgtVault.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
+        })
+        await waitForTransactionReceipt(config, { hash })
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+    else if(vault === "stLBGT-OT") {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.stlbgtot.address as `0x${string}`,
+          abi: contracts.stlbgtot.abi,
+          functionName: 'approve',
+          args: [contracts.stlbgtVault.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
+        })
+        await waitForTransactionReceipt(config, { hash })
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+    else if(vault === "stLBGT-YT") {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.stlbgtyt.address as `0x${string}`,
+          abi: contracts.stlbgtyt.abi,
+          functionName: 'approve',
+          args: [contracts.stlbgtVault.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
+        })
+        await waitForTransactionReceipt(config, { hash })
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+    else if(vault === "LBGT") {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.lbgt.address as `0x${string}`,
+          abi: contracts.lbgt.abi,
+          functionName: 'approve',
+          args: [contracts.stlbgt.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
+        })
+        await waitForTransactionReceipt(config, { hash })
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+    else if (vault === "ybgt") {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.stybgt.address as `0x${string}`,
+          abi: contracts.stybgt.abi,
+          functionName: 'approve',
+          args: [contracts.ybgtVault.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
+        })
+        await waitForTransactionReceipt(config, { hash })
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+    else if (vault === "yBGT-OT") {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.ybgtot.address as `0x${string}`,
+          abi: contracts.ybgtot.abi,
+          functionName: 'approve',
+          args: [contracts.ybgtVault.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
+        })
+        await waitForTransactionReceipt(config, { hash })
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+    else if (vault === "yBGT-YT") {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.ybgtyt.address as `0x${string}`,
+          abi: contracts.ybgtyt.abi,
+          functionName: 'approve',
+          args: [contracts.ybgtVault.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
+        })
+        await waitForTransactionReceipt(config, { hash })
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+    else if(vault === "yBGT") {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.ybgt.address as `0x${string}`,
+          abi: contracts.ybgt.abi,
+          functionName: 'approve',
+          args: [contracts.stybgt.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
+        })
+        await waitForTransactionReceipt(config, { hash })
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
   };
 
   const sendRouterApproveTx = async (
@@ -617,21 +870,8 @@ export const useGoldivaultTx = () => {
     depositAmt: number,
     vault: string,
   ): Promise<string> => {
-    if (vault === "weeth") {
-      try {
-        const hash = await writeContract(config, {
-          address: contracts.weethVault.address as `0x${string}`,
-          abi: contracts.weethVault.abi,
-          functionName: "deposit",
-          args: [parseEther(`${depositAmt}`)],
-        });
-        const data = await waitForTransactionReceipt(config, { hash });
-        return data.transactionHash;
-      } catch (e) {
-        console.log("user denied tx");
-        console.log("or: ", e);
-      }
-    } else if (vault === "unibtc") {
+    const correctVault = vaultaddy(vault)
+    if (vault === "unibtc") {
       try {
         const hash = await writeContract(config, {
           address: contracts.unibtcVault.address as `0x${string}`,
@@ -645,11 +885,12 @@ export const useGoldivaultTx = () => {
         console.log("user denied tx");
         console.log("or: ", e);
       }
-    } else if (vault === "solvbtc") {
+    }
+    else {
       try {
         const hash = await writeContract(config, {
-          address: contracts.solvbtcVault.address as `0x${string}`,
-          abi: contracts.solvbtcVault.abi,
+          address: correctVault as `0x${string}`,
+          abi: contracts.unibtcVault.abi,
           functionName: "deposit",
           args: [parseEther(`${depositAmt}`)],
         });
@@ -660,53 +901,7 @@ export const useGoldivaultTx = () => {
         console.log("or: ", e);
       }
     }
-    else if(vault === "oribgt") {
-      try {
-        const hash = await writeContract(config, {
-          address: contracts.oribgtVault.address as `0x${string}`,
-          abi: contracts.oribgtVault.abi,
-          functionName: "deposit",
-          args: [parseEther(`${depositAmt}`)],
-        });
-        const data = await waitForTransactionReceipt(config, { hash });
-        return data.transactionHash;
-      } catch (e) {
-        console.log("user denied tx");
-        console.log("or: ", e);
-      }
-    }
-    else if(vault === 'rusd') {
-      try {
-        const hash = await writeContract(config, {
-          address: contracts.rusdVault.address as `0x${string}`,
-          abi: contracts.rusdVault.abi,
-          functionName: 'deposit',
-          args: [parseEther(`${depositAmt}`)]
-        })
-        const data = await waitForTransactionReceipt(config, { hash })
-        return data.transactionHash
-      }
-      catch (e) {
-        console.log('user denied tx')
-        console.log('or: ', e)
-      }
-    }
-    else if(vault === 'ebtc') {
-      try {
-        const hash = await writeContract(config, {
-          address: contracts.ebtcVault.address as `0x${string}`,
-          abi: contracts.ebtcVault.abi,
-          functionName: 'deposit',
-          args: [parseUnits(`${depositAmt}`, 8)]
-        })
-        const data = await waitForTransactionReceipt(config, { hash })
-        return data.transactionHash
-      }
-      catch (e) {
-        console.log('user denied tx')
-        console.log('or: ', e)
-      }
-    }
+
 
     return "";
   };
@@ -715,21 +910,8 @@ export const useGoldivaultTx = () => {
     redeemOTAmt: number,
     vault: string,
   ): Promise<string> => {
-    if (vault === "weeth") {
-      try {
-        const hash = await writeContract(config, {
-          address: contracts.weethVault.address as `0x${string}`,
-          abi: contracts.weethVault.abi,
-          functionName: "redeemOwnership",
-          args: [parseEther(`${redeemOTAmt}`)],
-        });
-        const data = await waitForTransactionReceipt(config, { hash });
-        return data.transactionHash;
-      } catch (e) {
-        console.log("user denied tx");
-        console.log("or: ", e);
-      }
-    } else if (vault === "unibtc") {
+    const correctVault = vaultaddy(vault)
+    if (vault === "unibtc") {
       try {
         const hash = await writeContract(config, {
           address: contracts.unibtcVault.address as `0x${string}`,
@@ -743,11 +925,12 @@ export const useGoldivaultTx = () => {
         console.log("user denied tx");
         console.log("or: ", e);
       }
-    } else if (vault === "solvbtc") {
+    }
+    else {
       try {
         const hash = await writeContract(config, {
-          address: contracts.solvbtcVault.address as `0x${string}`,
-          abi: contracts.solvbtcVault.abi,
+          address: correctVault as `0x${string}`,
+          abi: contracts.unibtcVault.abi,
           functionName: "redeemOwnership",
           args: [parseEther(`${redeemOTAmt}`)],
         });
@@ -756,70 +939,6 @@ export const useGoldivaultTx = () => {
       } catch (e) {
         console.log("user denied tx");
         console.log("or: ", e);
-      }
-    }
-    else if(vault === 'rusd') {
-      try {
-        const hash = await writeContract(config, {
-          address: contracts.rusdVault.address as `0x${string}`,
-          abi: contracts.rusdVault.abi,
-          functionName: 'redeemOwnership',
-          args: [parseEther(`${redeemOTAmt}`)]
-        })
-        const data = await waitForTransactionReceipt(config, { hash })
-        return data.transactionHash
-      }
-      catch (e) {
-        console.log('user denied tx')
-        console.log('or: ', e)
-      }
-    }
-    else if(vault === "oribgt") {
-      try {
-        const hash = await writeContract(config, {
-          address: contracts.oribgtVault.address as `0x${string}`,
-          abi: contracts.oribgtVault.abi,
-          functionName: 'redeemOwnership',
-          args: [parseEther(`${redeemOTAmt}`)]
-        })
-        const data = await waitForTransactionReceipt(config, { hash })
-        return data.transactionHash
-      }
-      catch (e) {
-        console.log('user denied tx')
-        console.log('or: ', e)
-      }
-    }
-    else if(vault === 'ebtc') {
-      try {
-        const hash = await writeContract(config, {
-          address: contracts.ebtcVault.address as `0x${string}`,
-          abi: contracts.ebtcVault.abi,
-          functionName: 'redeemOwnership',
-          args: [parseUnits(`${redeemOTAmt}`, 8)]
-        })
-        const data = await waitForTransactionReceipt(config, { hash })
-        return data.transactionHash
-      }
-      catch (e) {
-        console.log('user denied tx')
-        console.log('or: ', e)
-      }
-    }
-    else if(vault === "rseth") {
-      try {
-        const hash = await writeContract(config, {
-          address: contracts.rsethVault.address as `0x${string}`,
-          abi: contracts.rsethVault.abi,
-          functionName: 'redeemOwnership',
-          args: [parseEther(`${redeemOTAmt}`)]
-        })
-        const data = await waitForTransactionReceipt(config, { hash })
-        return data.transactionHash
-      }
-      catch (e) {
-        console.log('user denied tx')
-        console.log('or: ', e)
       }
     }
 
@@ -942,39 +1061,11 @@ export const useGoldivaultTx = () => {
     vaultType: string,
     vault: string,
   ): Promise<[string, number]> => {
-    console.log(ytAmount, dtAmountMax, amountOutMin, address, vaultType);
-    const vaultaddy =
-      vault === "weeth"
-        ? contracts.weethVault.address
-        : vault === "solvbtc"
-          ? contracts.solvbtcVault.address
-          : vault === "unibtc"
-            ? contracts.unibtcVault.address
-            : vault === "ebtc"
-              ? contracts.ebtcVault.address
-              : vault === "rusd"
-              ? contracts.rusdVault.address
-              : vault === "oribgt"
-                ? contracts.oribgtVault.address
-                : "";
-    const vaultDTaddy =
-      vault === "weeth"
-        ? contracts.weeth.address
-        : vault === "solvbtc"
-          ? contracts.solvbtc.address
-          : vault === "unibtc"
-            ? contracts.unibtc.address
-            : vault === "ebtc"
-              ? contracts.ebtc.address
-              : vault === "rusd"
-              ? contracts.rusd.address
-              : vault === "oribgt"
-                ? contracts.ibgt.address
-                : "";
-
+    // console.log(ytAmount, dtAmountMax, amountOutMin, address, vaultType);
+    const correctVault = vaultaddy(vault)
     try {
       const hash = await writeContract(config, {
-        address: vaultaddy as `0x${string}`,
+        address: correctVault as `0x${string}`,
         abi: contracts.weethVault.abi,
         functionName: "buyYT",
         args: [
@@ -1019,39 +1110,11 @@ export const useGoldivaultTx = () => {
     vaultType: string,
     vault: string,
   ): Promise<[string, number]> => {
-    console.log(ytAmount, dtAmountMin, amountInMax, address, vaultType);
-    const vaultaddy =
-      vault === "weeth"
-        ? contracts.weethVault.address
-        : vault === "solvbtc"
-          ? contracts.solvbtcVault.address
-          : vault === "unibtc"
-            ? contracts.unibtcVault.address
-            : vault === "ebtc"
-              ? contracts.ebtcVault.address
-              : vault === "rusd"
-              ? contracts.rusdVault.address
-              : vault === "oribgt"
-                ? contracts.oribgtVault.address
-                : "";
-    const vaultDTaddy =
-      vault === "weeth"
-        ? contracts.weeth.address
-        : vault === "solvbtc"
-          ? contracts.solvbtc.address
-          : vault === "unibtc"
-            ? contracts.unibtc.address
-            : vault === "ebtc"
-              ? contracts.ebtc.address
-              : vault === "rusd"
-              ? contracts.rusd.address
-              : vault === "oribgt"
-                ? contracts.ibgt.address
-                : "";
-
+    // console.log(ytAmount, dtAmountMin, amountInMax, address, vaultType);
+    const correctVault = vaultaddy(vault)
     try {
       const hash = await writeContract(config, {
-        address: vaultaddy as `0x${string}`,
+        address: correctVault as `0x${string}`,
         abi: contracts.weethVault.abi,
         functionName: "sellYT",
         args: [
@@ -1142,10 +1205,11 @@ export const useGoldivaultTx = () => {
     return ''
   }
 
-  const sendStakeYTTx = async (stakeAmt: number): Promise<string> => {
+  const sendStakeYTTx = async (stakeAmt: number, vault: string): Promise<string> => {
+    const correctVault = vaultaddy(vault)
     try {
       const hash = await writeContract(config, {
-        address: contracts.oribgtVault.address as `0x${string}`,
+        address: correctVault as `0x${string}`,
         abi: contracts.oribgtVault.abi,
         functionName: "stakeYT",
         args: [parseEther(`${stakeAmt}`)]
@@ -1162,10 +1226,11 @@ export const useGoldivaultTx = () => {
     return ''
   }
 
-  const sendUnstakeYTTx = async (unstakeAmt: number): Promise<string> => {
+  const sendUnstakeYTTx = async (unstakeAmt: number, vault: string): Promise<string> => {
+    const correctVault = vaultaddy(vault)
     try {
       const hash = await writeContract(config, {
-        address: contracts.oribgtVault.address as `0x${string}`,
+        address: correctVault as `0x${string}`,
         abi: contracts.oribgtVault.abi,
         functionName: "unstakeYT",
         args: [parseEther(`${unstakeAmt}`)]
@@ -1182,10 +1247,11 @@ export const useGoldivaultTx = () => {
     return ''
   }
 
-  const sendClaimTx = async (): Promise<string> => {
+  const sendClaimTx = async (vault: string): Promise<string> => {
+    const correctVault = vaultaddy(vault)
     try {
       const hash = await writeContract(config, {
-        address: contracts.oribgtVault.address as `0x${string}`,
+        address: correctVault as `0x${string}`,
         abi: contracts.oribgtVault.abi,
         functionName: "claim",
         args: []
@@ -1202,10 +1268,18 @@ export const useGoldivaultTx = () => {
     return ''
   }
 
-  const sendOribgtDepositTx = async (depositAmt: number, wallet: string): Promise<string> => {
+  const send4626DepositTx = async (depositAmt: number, wallet: string, vault: string): Promise<string> => {
+    const vaultaddy =
+      vault === "oribgt"
+        ? contracts.oribgt.address
+        : vault === "stlbgt"
+          ? contracts.stlbgt.address
+          : vault === "ybgt"
+            ? contracts.stybgt.address
+            : ""
     try {
       const hash = await writeContract(config, {
-        address: contracts.oribgt.address as `0x${string}`,
+        address: vaultaddy as `0x${string}`,
         abi: contracts.oribgt.abi,
         functionName: "deposit",
         args: [parseEther(`${depositAmt}`), wallet]
@@ -1222,10 +1296,18 @@ export const useGoldivaultTx = () => {
     return ''
   }
 
-  const sendOribgtRedeemTx = async (redeemAmt: number, wallet: string): Promise<string> => {
+  const send4626RedeemTx = async (redeemAmt: number, wallet: string, vault: string): Promise<string> => {
+    const vaultaddy =
+      vault === "oribgt"
+        ? contracts.oribgt.address
+        : vault === "stlbgt"
+          ? contracts.stlbgt.address
+          : vault === "ybgt"
+            ? contracts.stybgt.address
+            : ""
     try {
       const hash = await writeContract(config, {
-        address: contracts.oribgt.address as `0x${string}`,
+        address: vaultaddy as `0x${string}`,
         abi: contracts.oribgt.abi,
         functionName: "redeem",
         args: [parseEther(`${redeemAmt}`), wallet, wallet]
@@ -1314,8 +1396,8 @@ export const useGoldivaultTx = () => {
     sendStakeYTTx,
     sendUnstakeYTTx,
     sendClaimTx,
-    sendOribgtDepositTx,
-    sendOribgtRedeemTx,
+    send4626DepositTx,
+    send4626RedeemTx,
     sendAddSteerLiqTx,
     sendRemoveSteerLiqTx
   };

@@ -1,7 +1,7 @@
 "use client";
 
 import { useSetAtom } from "jotai";
-import { animateScroll as scroll } from "react-scroll"
+import { animateScroll as scroll } from "react-scroll";
 import { geoAtom } from "@/app/_components/atoms/geoAtom";
 
 export const TAndCs = () => {

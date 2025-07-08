@@ -20,8 +20,6 @@ export const PoolsPage = () => {
     wutPopup,
     setWutPopup,
     infoLoading,
-    goldivaultInfoWeeth,
-    refreshGoldivaultInfoWeeth,
   } = useGoldivault();
 
   const { isDesktop } = useDesktop();
@@ -34,7 +32,6 @@ export const PoolsPage = () => {
 
   useEffect(() => {
     setPageLoading(false);
-    refreshGoldivaultInfoWeeth();
   }, []);
 
   const handlePopups = () => {
@@ -106,7 +103,7 @@ export const PoolsPage = () => {
                             </span>
                           </a>
                           <span>
-                            ${formatAsString(goldivaultInfoWeeth.otLiquidity)}
+                            ${formatAsString(69)}
                           </span>
                           <span>~%</span>
                         </div>

@@ -11,6 +11,7 @@ import {
   FormWrapper
 } from "@/app/(geo-check)/goldivault/vault/[address]/_components/FormComponents";
 import { HoverText } from "@/app/(geo-check)/goldivault/vault/[address]/_components/InfoHover"
+import { ZapTab } from "../"
 
 
 type LiqManagerTabProps = {
@@ -38,7 +39,12 @@ export const LiqManagerTab = ({ params }: LiqManagerTabProps) => {
     debouncedTradeInput,
     setOutputTokensLoading,
     otAmount,
-    ytAmount
+    ytAmount,
+    setZapPopup,
+    zapPopup,
+    setZap,
+    setDisplayString,
+    resetZapInfo
   } = useGoldivault()
 
   useEffect(() => {
@@ -105,20 +111,23 @@ export const LiqManagerTab = ({ params }: LiqManagerTabProps) => {
     }
   }
 
+  const handleZapButton = () => {
+    setZapPopup(true)
+    setZap(0)
+    resetZapInfo()
+    setDisplayString('')
+  }
+
   return (
+    zapPopup ? <ZapTab params={{ vaultToken: params.vaultToken}} /> :
     <FormWrapper>
-      {
-        (params.vaultToken === "oribgt" && activeToggle === "ADDLIQ") &&
-        <Container align="right" padding="sm">
-          <Label>
-            <a href="https://origami.finance/collections/berachain-collection/80094-0x69f1E971257419B1E9C405A553f252c64A29A30a/info" target="_blank">
-              <div className="rounded-xl bg-button-base hover:bg-button-hover font-inter text-md cursor-pointer text-teak p-2">
-                Get oriBGT
-              </div>
-            </a>
-          </Label>
-        </Container>
-      }
+      <Container align="right" padding="sm">
+        <Label>
+          <div className="rounded-xl bg-button-base hover:bg-button-hover font-inter text-md cursor-pointer text-teak p-2" onClick={() => handleZapButton()}>
+            zap to reward vault
+          </div>
+        </Label>
+      </Container>
       <LabelSet>
         <Label>
           {activeToggle === 'ADDLIQ' ? "Deposit" : "Withdraw"} Liquidity

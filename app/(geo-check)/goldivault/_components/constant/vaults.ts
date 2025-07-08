@@ -33,7 +33,28 @@ export const VAULTS = [
     tokenName: "SolvBTC.BBN",
     imageUrl: "solvbtc-logo.png",
     vaultName: "Solv Points Vault",
-  }
+  },
+  // {
+  //   address: "stlbgt",
+  //   mouseFlag: "stlbgtinfo",
+  //   tokenName: "LBGT",
+  //   imageUrl: "logo-lbgt.svg",
+  //   vaultName: "Staked LBGT Vault"
+  // },
+  // {
+  //   address: "ybgt",
+  //   mouseFlag: "ybgtinfo",
+  //   tokenName: "yBGT",
+  //   imageUrl: "logo-oribgt.svg",
+  //   vaultName: "Staked yBGT Vault"
+  // },
+  // {
+  //   address: "wberaibgtlp",
+  //   mouseFlag: "wberaibgtlpinfo",
+  //   tokenName: "WBERA-iBGT",
+  //   imageUrl: "logo-oribgt.svg",
+  //   vaultName: "WBERA-iBGT LP Vault"
+  // },
 ] as const;
 
 export type VaultType = (typeof VAULTS)[number]["address"];

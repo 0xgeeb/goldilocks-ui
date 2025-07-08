@@ -11,7 +11,7 @@ import {
 import { FooterMobile, NavBarButtons, NavBarMobile } from "../../utils";
 
 export const BorrowPageMobile = () => {
-  const { chartOpen, setChartOpen, activeToggle } = useBorrow();
+  const { activeToggle } = useBorrow();
 
   const { navButtonsOpen } = useDesktop();
 

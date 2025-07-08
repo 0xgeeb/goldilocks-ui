@@ -13,18 +13,30 @@ import { BoostPopup, BorrowBox, BorrowFetcher, Toggles } from "../";
 import { useDesktop, useGoldilend } from "../../../providers";
 import { GoldilendPageMobile } from "../../goldilendMobile";
 import { Loading, MintNFTs, TAndCs } from "../../utils";
+import { NavBar } from "../../goldiswap"
 
 export const GoldilendPage = () => {
   const [pageLoading, setPageLoading] = useAtom(pageLoadingAtom);
 
-  const { activeToggle, wutPopup, setWutPopup, boostPopup, setBoostPopup } =
-    useGoldilend();
+  const {
+    activeToggle,
+    wutPopup,
+    setWutPopup,
+    boostPopup,
+    setBoostPopup,
+    findLoans,
+    refreshGoldilendInfo,
+    refreshGoldilendWalletInfo
+  } = useGoldilend();
 
   const { isDesktop } = useDesktop();
 
   const signed = useAtomValue(geoAtom);
 
   useEffect(() => {
+    // findLoans();
+    refreshGoldilendInfo();
+    refreshGoldilendWalletInfo();
     setPageLoading(false);
   }, []);
 
@@ -45,44 +57,38 @@ export const GoldilendPage = () => {
     }
   };
 
+  if(pageLoading) {
+    return <Loading />
+  }
+
+  if(signed !== "TRUE") {
+    return <TAndCs />
+  }
+
   return (
-    <ApolloProvider client={client}>
-      {pageLoading ? (
-        <Loading />
-      ) : isDesktop ? (
-        signed !== "TRUE" ? (
-          <TAndCs />
-        ) : (
-          <CsrPageLayout
-            onPageClick={() => handlePopups()}
-            wutPopup={wutPopup}
-            setWutPopup={setWutPopup}
-            bgImageUrl="/images/bg-goldilend.png"
-          >
-            <>
-              <Toggles />
-              {boostPopup && <BoostPopup />}
-              <h1
-                className="absolute right-[70%] top-[1.5%] font-amaticbold text-[9vw] text-[#D9C6BA] lg:right-[73%] lg:top-0 lg:text-[7.5vw] xl:top-[15%]"
-                id="page-title"
-              >
-                GOLDILEND
-              </h1>
-              <h1
-                className={`absolute top-[3%] lg:top-[1%] xl:top-[36%] ${activeToggle === "BORROW" ? "right-[52.5%] lg:right-[58%] xl:right-[78%]" : "right-[57.5%] lg:right-[60%] xl:right-[80%]"} font-amaticbold text-[7vw] text-[#E7B941] lg:text-[6vw]`}
-                id="page-title"
-              >
-                {activeToggle}
-              </h1>
-              <BorrowBox />
-              <BorrowFetcher />
-              <MintNFTs />
-            </>
-          </CsrPageLayout>
-        )
-      ) : (
-        <GoldilendPageMobile />
-      )}
-    </ApolloProvider>
+    isDesktop ?
+    <main className="w-screen h-screen" onClick={() => handlePopups()}>
+      <NavBar wutPopup={wutPopup} setWutPopup={setWutPopup} />
+      <div className="w-[100%] h-[89%] xl:h-[85%] bg-cover bg-bottom bg-[url('/images/bg-goldilend.png')] relative">
+        <Toggles />
+        {boostPopup && <BoostPopup />}
+        <h1
+          className="absolute right-[70%] top-[1.5%] font-amaticbold text-[9vw] text-[#D9C6BA] lg:right-[73%] lg:top-0 lg:text-[7.5vw] xl:top-[15%]"
+          id="page-title"
+        >
+          GOLDILEND
+        </h1>
+        <h1
+          className={`absolute top-[3%] lg:top-[1%] xl:top-[36%] ${activeToggle === "BORROW" ? "right-[52.5%] lg:right-[58%] xl:right-[78%]" : "right-[57.5%] lg:right-[60%] xl:right-[80%]"} font-amaticbold text-[7vw] text-[#E7B941] lg:text-[6vw]`}
+          id="page-title"
+        >
+          {activeToggle}
+        </h1>
+        <BorrowBox />
+        {/* <BorrowFetcher /> */}
+        <MintNFTs />
+      </div>
+    </main>
+    : <GoldilendPageMobile />
   );
 };

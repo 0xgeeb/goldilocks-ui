@@ -55,8 +55,8 @@ export const StakeTab = () => {
       </div>
       <div className="absolute left-[2%] top-[38%] flex flex-row items-center xl:left-[3%]">
         <img className="h-8 w-8" src="/images/logo-gibgt.png" alt="coinlogo" />
-        <h1 className="ml-3 mt-1 font-baloo text-[3vw] font-semibold xl:text-[1.8vw]">
-          GiBGT
+        <h1 className="ml-1 mt-1 font-baloo text-[3vw] font-semibold xl:text-[1.8vw]">
+          WBERA
         </h1>
       </div>
       <div className="absolute left-[30%] top-[30%] h-[36%] w-[65%] border-2 border-black bg-white xl:left-[22%] xl:w-[55.6%]">
@@ -70,7 +70,7 @@ export const StakeTab = () => {
             onChange={(e) => handleStakeChange(e.target.value, "STAKE")}
           />
           <span className="absolute bottom-0 right-[3%] font-baloo text-[1.8vw] font-bold text-[#7F7F7F] xl:text-[0.9vw]">
-            {lendActiveToggle === "UNSTAKE" ? "staked gibgt" : "balance"}:{" "}
+            {lendActiveToggle === "UNSTAKE" ? "staked wbera" : "balance"}:{" "}
             {walletInfoLoading ? loadingElement() : handleStakeBalance("STAKE")}
           </span>
         </div>

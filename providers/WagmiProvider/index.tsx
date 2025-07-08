@@ -8,8 +8,9 @@ import {
   createConfig,
 } from "wagmi";
 import {
-  BerachainBartioTestnet,
   BerachainMainnet,
+  Bepolia,
+  BerachainBartioTestnet,
 } from "../../utils/customChains";
 import {
   RainbowKitProvider,
@@ -28,23 +29,6 @@ import {
 
 const appName = "goldilocks";
 const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_ID as string;
-
-// export const config = getDefaultConfig({
-//   appName: 'Goldilocks',
-//   projectId,
-//   chains: [baseSepolia],
-//   ssr: true,
-//   transports: {
-//     [baseSepolia.id]: http()
-//   }
-// })
-
-// export const viemClient = createWalletClient({
-//   chain: BerachainBartioTestnet,
-//   transport: viemHttp()
-// }).extend(publicActions)
-
-// const connectors = connectorsForWallets(wallets, {appName, projectId})
 
 const connectors = connectorsForWallets(
   [
@@ -68,12 +52,11 @@ const connectors = connectorsForWallets(
 );
 
 export const config = createConfig({
-  chains: [BerachainMainnet, BerachainBartioTestnet],
+  chains: [BerachainMainnet],
   ssr: true,
   connectors: connectors,
   transports: {
-    [BerachainMainnet.id]: http(),
-    [BerachainBartioTestnet.id]: http(),
+    [BerachainMainnet.id]: http()
   },
 });
 

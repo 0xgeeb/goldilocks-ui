@@ -1,6 +1,7 @@
 "use client"
 
 import { useGoldivault} from "../../../providers"
+import { useVaultInfoConfig } from "@/hooks";
 import { HoverText } from "@/app/(geo-check)/goldivault/vault/[address]/_components/InfoHover"
 import {
   FieldWithLabel,
@@ -26,8 +27,15 @@ export const StakingTab = ({ params }: StakingTabProps) => {
     walletInfoLoading,
     activeToggle,
     handleBalanceClick,
-    goldivaultWalletInfoOribgt
   } = useGoldivault()
+
+  const {
+    vaultDTLabel,
+    vaultYTLabel,
+    justYt,
+    stakedYt,
+    claimable
+  } = useVaultInfoConfig({ vaultToken: params.vaultToken })
 
   const loadingElement = () => {
     return <span className="loader-balance mt-1"></span>;
@@ -43,22 +51,22 @@ export const StakingTab = ({ params }: StakingTabProps) => {
 
   const renderTopBalanceLabel = () => {
     if(activeToggle === "STAKE") {
-      return 'oriBGT-YT'
+      return vaultYTLabel
     }
     else if(activeToggle === "UNSTAKE") {
-      return 'staked oriBGT-YT'
+      return `staked ${vaultYTLabel}`
     }
     else {
-      return 'claimable oriBGT'
+      return `claimable ${vaultDTLabel}`
     }
   }
 
   const renderBalance = () => {
     if (activeToggle === "STAKE") {
-      return goldivaultWalletInfoOribgt.justYt
+      return justYt
     }
     else {
-      return goldivaultWalletInfoOribgt.stakedYt
+      return stakedYt
     } 
   }
 
@@ -87,8 +95,8 @@ export const StakingTab = ({ params }: StakingTabProps) => {
         activeToggle === "CLAIM" ?
         <FieldWithLabel
           id="number-input"
-          label={"claimable iBGT"}
-          value={formatClaimable(goldivaultWalletInfoOribgt.claimable)}
+          label={`claimable ${vaultDTLabel}`}
+          value={formatClaimable(claimable)}
           disabled={true}
         /> :
         <>

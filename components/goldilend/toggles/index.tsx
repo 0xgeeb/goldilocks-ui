@@ -17,7 +17,7 @@ export const Toggles = () => {
       >
         REPAY
       </div>
-      <div
+      {/* <div
         className={`h-[100%] w-[30%] border-2 border-black font-baloo text-[2vw] font-semibold xl:text-[1vw] ${activeToggle === "BOOST" ? "bg-[#E7B941]" : "bg-[#E2D6CF]"} flex cursor-pointer items-center justify-center hover:bg-[#C9E3B9]`}
         onClick={() => changeActiveToggle("BOOST")}
       >
@@ -31,7 +31,7 @@ export const Toggles = () => {
         >
           ?
         </span>
-      </div>
+      </div> */}
     </div>
   );
 };
