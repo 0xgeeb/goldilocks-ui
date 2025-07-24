@@ -53,6 +53,8 @@ export const VaultDisplayCard = ({ params }: VaultDisplayCardProps) => {
         return vaultDisplayInfo.oribgt;
       case "LBGT":
         return vaultDisplayInfo.stlbgt;
+      case "yBGT":
+        return vaultDisplayInfo.ybgt
       default:
         return {
           fixedApr: 0,

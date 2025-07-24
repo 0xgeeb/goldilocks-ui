@@ -316,7 +316,7 @@ export const vaultLPaddresses: Record<string, Address> = {
     oribgt: "0xCb2A95c52E718A6BA6AAb6587f1a3aFF4BfB0648",
     wberaibgtlp: "0x59007956D237F76D40200d3948E23102a59C2213",
     stlbgt: "0x23549f334CD72cE0ba5f6051bf8602eBf12652Da",
-    ybgt: "0x23549f334CD72cE0ba5f6051bf8602eBf12652Da",
+    ybgt: "0x04780c47fbEC89BC797a702ce0FcE7E64e62CbFe",
 } as const;
 
 export const vault_contracts: Record<string, VaultContracts> = {
@@ -388,6 +388,6 @@ export const vault_contracts: Record<string, VaultContracts> = {
     ot: contracts.ybgtot,
     yt: contracts.ybgtyt,
     vault: contracts.ybgtVault,
-    vaultLP: vaultLPaddresses.stybgt
+    vaultLP: vaultLPaddresses.ybgt
   }
 } as const;

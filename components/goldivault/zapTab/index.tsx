@@ -32,23 +32,29 @@ export const ZapTab = ({ params }: ZapTabProps) => {
     setDisplayString,
     resetZapInfo,
     handleBalanceClick,
-    activeToggle
+    activeToggle,
+    selectedZapAsset,
+    setSelectedZapAsset,
+    goldivaultWalletInfoStlbgt,
+    changeActiveToggle
   } = useGoldivault()
 
   const {
     vaultDTLabel,
     vaultDT,
     zapOutAsset,
-    zapOutAssetLabel
+    zapOutAssetLabel,
+    zapInSteps,
+    zapOutSteps
   } = useVaultInfoConfig({ vaultToken: params.vaultToken})
 
   useEffect(() => {
     if(debouncedZap > 0) {
       if(activeToggle === "ADDLIQ") {
-        calculateZapIn()
+        calculateZapIn(params.vaultToken)
       }
       else {
-        calculateZapOut()
+        calculateZapOut(params.vaultToken)
       }
     }
     else {
@@ -72,28 +78,90 @@ export const ZapTab = ({ params }: ZapTabProps) => {
     resetZapInfo()
   }
 
+  const getAssetLabel = () => {
+    if(params.vaultToken === "stlbgt" && activeToggle === "ADDLIQ") {
+      return selectedZapAsset
+    }
+    return activeToggle === "ADDLIQ" ? vaultDTLabel : zapOutAssetLabel
+  }
+
+  const getAssetBalance = () => {
+    if(params.vaultToken === "stlbgt" && activeToggle === "ADDLIQ") {
+      return selectedZapAsset === "LBGT" ? goldivaultWalletInfoStlbgt.lbgt : goldivaultWalletInfoStlbgt.stlbgt
+    }
+    return activeToggle === "ADDLIQ" ? vaultDT : zapOutAsset
+  }
+
   return (
     <FormWrapper>
-      <Container align="right" padding="lg">
-        <Label>
-          <div className="rounded-xl bg-button-base hover:bg-button-hover font-inter text-md cursor-pointer text-teak p-2" onClick={() => handleButton()}>
-            add liq manually
+      {params.vaultToken === "stlbgt" && activeToggle === "ADDLIQ" ? (
+        <>
+        <LabelSet>
+          <Label>
+            Select Zap Asset
+          </Label>
+        </LabelSet>
+        <Container align="left" padding="sm">
+          <div className="w-full flex flex-row items-center justify-between">
+            <div className="flex rounded-lg bg-input-base p-1">
+              <button
+                className={`px-3 py-1 rounded text-sm font-medium text-teak transition-colors ${
+                  selectedZapAsset === 'LBGT' 
+                    ? 'border-b-2 border-white text-white' 
+                    : 'cursor-pointer'
+                }`}
+                onClick={() => {
+                  setSelectedZapAsset('LBGT')
+                  changeActiveToggle("ADDLIQ")
+                }}
+              >
+                LBGT
+              </button>
+              <button
+                className={`px-3 py-1 rounded text-sm font-medium text-teak transition-colors ${
+                  selectedZapAsset === 'stLBGT' 
+                    ? 'border-b-2 border-white text-white'
+                    : 'cursor-pointer'
+                }`}
+                onClick={() => {
+                  setSelectedZapAsset('stLBGT')
+                  changeActiveToggle("ADDLIQ")
+                }}
+              >
+                stLBGT
+              </button>
+            </div>
+            <Label>
+              <div className="rounded-xl bg-button-base hover:bg-button-hover font-inter text-md cursor-pointer text-teak p-2" onClick={() => handleButton()}>
+                {activeToggle === "ADDLIQ" ? "add" : "remove"} liq manually
+              </div>
+            </Label>
           </div>
-        </Label>
-      </Container>
+        </Container>
+        </>
+      ) :
+        <Container align="right" padding="sm">
+          <Label>
+            <div className="rounded-xl bg-button-base hover:bg-button-hover font-inter text-md cursor-pointer text-teak p-2" onClick={() => handleButton()}>
+              {activeToggle === "ADDLIQ" ? "add" : "remove"} liq manually
+            </div>
+          </Label>
+        </Container>
+      }
       <LabelSet>
         <Label>
-          {activeToggle === "ADDLIQ" ? `Zap ${vaultDTLabel}` : `Unzap ${zapOutAssetLabel}`}
+          {activeToggle === "ADDLIQ" ? `Zap ${getAssetLabel()}` : `Unzap ${getAssetLabel()}`}
           {
             activeToggle === "ADDLIQ" ?
-            <HoverText hoverText="1. Deposit iBGT into Origami for oriBGT 2. Deposit oriBGT into Goldilocks for oriBGT-OT 3. LP oriBGT and oriBGT-OT into Steer 4. Stake Steer LP tokens into reward vault" /> :
-            <HoverText hoverText="1. Unstake Steer LP tokens from reward vault 2. Remove oriBGT and oriBGT-OT liquidity from Steer 3. Redeem oriBGT-OT from Goldilocks 4. Redeem oriBGT from Origami" />
+            <HoverText hoverText={zapInSteps} /> :
+            <HoverText hoverText={zapOutSteps} />
           }
+          <HoverText hoverText="Zaps are only compatible with Metamask" />
         </Label>
       </LabelSet>
       <FieldWithLabel
         id="number-input"
-        label={activeToggle === "ADDLIQ" ? vaultDTLabel : zapOutAssetLabel}
+        label={getAssetLabel()}
         value={displayString}
         onChange={(e) => handleChange(e.target.value)}
       />
@@ -103,27 +171,10 @@ export const ZapTab = ({ params }: ZapTabProps) => {
           onClick={() => handleBalanceClick(params.vaultToken)}
         >
           Balance <span className="text-teak">{" "}
-          {formatOutput(activeToggle === "ADDLIQ" ? vaultDT : zapOutAsset)}
+          {formatOutput(getAssetBalance())}
             </span>
         </Label>
       </Container>
-      {/* <Container align="center" padding="lg">
-        {
-          activeToggle === "ADDLIQ" ?
-          <div className="flex flex-col items-center justify-center text-md text-teak">
-            <h2 className="">Deposit {formatOutput(zapInfo.ibgtOribgt)} into Origami for oriBGT</h2>
-            <h2 className="">Deposit {formatOutput(zapInfo.ibgtGoldivault)} into Goldivault for oriBGT-OT</h2>
-            <h2 className="">LP {formatOutput(zapInfo.oribgtSteer)} oriBGT and {formatOutput(zapInfo.ibgtGoldivault)} oriBGT-OT into Steer</h2>
-            <h2 className="">Stake {formatOutput(zapInfo.steerLP)} Steer LP tokens into reward vault</h2>
-          </div> :
-          <div className="flex flex-col items-center justify-center text-md text-teak">
-            <h2 className="">Unstake {formatOutput(zapInfo.steerLP)} Steer LP tokens from reward vault</h2>
-            <h2 className="">Remove {formatOutput(zapInfo.oribgtSteer)} oriBGT and {formatOutput(zapInfo.ibgtGoldivault)} oriBGT-OT from Steer</h2>
-            <h2 className="">Redeem {formatOutput(zapInfo.ibgtGoldivault)} oriBGT-OT from Goldivault</h2>
-            <h2 className="">Redeem {formatOutput(zapInfo.ibgtOribgt)} oriBGT from Origami</h2>
-          </div>
-        }
-      </Container> */}
     </FormWrapper>
   )
 }

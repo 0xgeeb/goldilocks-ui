@@ -58,7 +58,7 @@ export const BuyOTPopup = ({ params }: BuyOTPopupProps) => {
     popupLPAssetAddy,
     vaultDTaddy,
     vaultOTaddy,
-    vaultDTLabel,
+    popupDTLabel,
     vaultOTLabel,
     popupLPAssetLabel,
     dtPicSrc,
@@ -104,7 +104,7 @@ export const BuyOTPopup = ({ params }: BuyOTPopupProps) => {
       }
       else {
         setApprovalLoading(true)
-        await sendApproveTx(tradeInput, vaultDTLabel, false)
+        await sendApproveTx(tradeInput, popupDTLabel, false)
         setApprovalLoading(false)
         setApproved(true)
       }
@@ -131,7 +131,7 @@ export const BuyOTPopup = ({ params }: BuyOTPopupProps) => {
       }
       else {
         setApprovalLoading(true)
-        await sendApproveTx(0, vaultDTLabel, true)
+        await sendApproveTx(0, popupDTLabel, true)
         setApprovalLoading(false)
         setApproved(true)
       }
@@ -200,9 +200,9 @@ export const BuyOTPopup = ({ params }: BuyOTPopupProps) => {
   return (
     <div className="absolute w-full max-w-5xl z-60 flex flex-col items-center gap-2.5 rounded-2xl border-2 border-[#352A1C] p-2 bg-bera-brown-dark">
       <FormWrapper>
-        <h1 id="page-title" className="text-HoneyYellow font-amaticbold text-4xl">Deposit your {vaultDTLabel} into {popupLPAssetLabel} then swap into {vaultOTLabel}</h1>
+        <h1 id="page-title" className="text-HoneyYellow font-amaticbold text-4xl">Deposit your {popupDTLabel} into {popupLPAssetLabel} then swap into {vaultOTLabel}</h1>
         <div className="flex flex-row items-center mx-auto mt-8 w-[60%] justify-between">
-          <img className="w-[80px] h-[80px]" src={dtPicSrc} alt={vaultDTLabel} />
+          <img className="w-[80px] h-[80px]" src={dtPicSrc} alt={popupDTLabel} />
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="white" className="size-10 -scale-x-100">
             <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
           </svg>

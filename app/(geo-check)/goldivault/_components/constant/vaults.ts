@@ -36,16 +36,16 @@ export const VAULTS = [
   },
   // {
   //   address: "stlbgt",
-  //   mouseFlag: "stlbgtinfo",
+  //   mouseFlag: "stlbgtvaultinfo",
   //   tokenName: "LBGT",
   //   imageUrl: "logo-lbgt.svg",
   //   vaultName: "Staked LBGT Vault"
   // },
   // {
   //   address: "ybgt",
-  //   mouseFlag: "ybgtinfo",
+  //   mouseFlag: "ybgtvaultinfo",
   //   tokenName: "yBGT",
-  //   imageUrl: "logo-oribgt.svg",
+  //   imageUrl: "logo-ybgt.png",
   //   vaultName: "Staked yBGT Vault"
   // },
   // {

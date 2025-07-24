@@ -39,11 +39,6 @@ function VaultsDetailTabs({ currentTab, vaultToken, setTab, }: { currentTab: str
     ? Object.fromEntries(
         Object.entries(TAB_LABELS).filter(([key]) => key !== "LIQUIDITY")
       )
-    :
-    vaultToken === "stLBGT"
-    ? Object.fromEntries(
-        Object.entries(TAB_LABELS).filter(([key]) => key !== "LIQUIDITY")
-      )
     : TAB_LABELS
 
   return (
@@ -51,8 +46,8 @@ function VaultsDetailTabs({ currentTab, vaultToken, setTab, }: { currentTab: str
       {/* Mobile */}
       <div className="flex md:hidden flex-col gap-2 font-semibold">
       <Drawer>
-        <DrawerTrigger>
-          <button className="rounded-md border-2 px-3.5 py-2 text-xl cursor-pointer hover:scale-105 text-Teak border-[#FFFFFF0D] hover:text-white">Open Navigation</button>
+        <DrawerTrigger asChild>
+          <div className="rounded-md border-2 px-3.5 py-2 text-xl cursor-pointer hover:scale-105 text-Teak border-[#FFFFFF0D] hover:text-white">Open Navigation</div>
         </DrawerTrigger>
         <DrawerContent className="bg-bera-brown border-bera-brown-border">
           <DrawerHeader className="flex flex-col gap-2 justify-center items-center">

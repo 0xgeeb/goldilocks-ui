@@ -205,27 +205,44 @@ const VaultInfoPane: React.FC<{ vaultToken: string }> = ({ vaultToken }) => {
             ))}
           </dd>
         </div>
-        {
-          vaultToken === "stlbgt" && (
-            <>
-              <InfoRow
-                textA="Underlying protocol link"
-                textB="Berapaw"
-                linkB="https://www.berapaw.com/stake"
-              />
-              <InfoRow
-                textA="Automated Liquidity Manager"
-                textB="Kodiak"
-                linkB="https://app.kodiak.finance/#/liquidity/pools/0x078E5010752b01CCbC8868cf00Cd73E8eFe29fE5?chain=berachain_mainnet"
-              />
-              <InfoRow
-                textA="OT chart link"
-                textB="Dexscreener"
-                linkB="https://dexscreener.com/berachain/0x23549f334cd72ce0ba5f6051bf8602ebf12652da"
-              />
-            </>
-          )
-        }
+        {vaultToken === "ybgt" && (
+          <>
+            <InfoRow
+              textA="Underlying protocol link"
+              textB="Bearn"
+              linkB="https://bearn.sucks/"
+            />
+            <InfoRow
+              textA="Kodiak Island"
+              textB="Kodiak"
+              linkB="https://app.kodiak.finance/#/liquidity/pools/0x1CfA34313547e490C73abca033a575F083fc44D1?chain=berachain_mainnet"
+            />
+            <InfoRow
+              textA="OT chart link"
+              textB="Dexscreener"
+              linkB="https://dexscreener.com/berachain/0x04780c47fbEC89BC797a702ce0FcE7E64e62CbFe"
+            />
+          </>
+        )}
+        {vaultToken === "stlbgt" && (
+          <>
+            <InfoRow
+              textA="Underlying protocol link"
+              textB="Berapaw"
+              linkB="https://www.berapaw.com/stake"
+            />
+            <InfoRow
+              textA="Kodiak Island"
+              textB="Kodiak"
+              linkB="https://app.kodiak.finance/#/liquidity/pools/0x078E5010752b01CCbC8868cf00Cd73E8eFe29fE5?chain=berachain_mainnet"
+            />
+            <InfoRow
+              textA="OT chart link"
+              textB="Dexscreener"
+              linkB="https://dexscreener.com/berachain/0x23549f334cd72ce0ba5f6051bf8602ebf12652da"
+            />
+          </>
+        )}
         {vaultToken === "oribgt" && (
           <>
             <InfoRow
@@ -325,7 +342,7 @@ const VaultInfoPane: React.FC<{ vaultToken: string }> = ({ vaultToken }) => {
             Fees{" "}
             <HoverText
               hoverText={
-                "3% of yield and points and 33% of LP trading fees (0.05%) and 0.5% fee on proceeds from YT trades"
+                "3% of yield and points and 0.5% fee on proceeds from YT trades"
               }
             />
           </dt>

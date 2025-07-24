@@ -23,6 +23,7 @@ import oriBGTABI from "../abi/oriBGT.json"
 import uniswapV3PoolABI from "../abi/UniswapV3Pool.json"
 import steerPeripheryABI from "../abi/SteerPeriphery.json"
 import wberaABI from "../abi/WBERA.json"
+import baultRouterABI from "../abi/BaultRouter.json"
 
 export const contracts = {
   goldiswap: {
@@ -265,13 +266,17 @@ export const contracts = {
     address: "0x52e9d38068D1F2F7B5E8fDf30c3C315dAA4067fc",
     abi: goldivault4626ABI.abi
   },
+  ysysybgt: {
+    address: "0x6Fd7f15a0d7babe0A1a752564a591e1Cb6117F80",
+    abi: oriBGTABI.abi
+  },
   ybgt: {
     address: "0x7e768f47dfDD5DAe874Aac233f1Bc5817137E453",
     abi: ibgtABI.abi
   },
   stybgt: {
     address: "0x6f8cEAF347dA79287e49A5C9F0a03b20BDFCB7D3",
-    abi: ibgtABI.abi
+    abi: oriBGTABI.abi
   },
   ybgtot: {
     address: "0x9CFbAbE5646ac013432809d1ED3E29138fec2457",
@@ -311,6 +316,18 @@ export const contracts = {
     address: "0x71bE4708C86B8AFd6Aa47929Ce073e400B5B7747",
     abi: steerPeripheryABI.abi
   },
+  stlbgtKodiakIsland: {
+    address: "0x078E5010752b01CCbC8868cf00Cd73E8eFe29fE5",
+    abi: ibgtABI.abi
+  },
+  baultRouter: {
+    address: "0x89c8c594f8Dea5600bf8A30877E921a5E63DCCF3",
+    abi: baultRouterABI.abi
+  },
+  ybgtKodiakIsland: {
+    address: "0x1CfA34313547e490C73abca033a575F083fc44D1",
+    abi: ibgtABI.abi
+  },
   vaultLPaddys: {
     weeth: "0xd7e3962974993870C28C25D031BF202021bf635B",
     ebtc: "0x339b8859a691eb5c8E8E576E6Caf4c3556711e34",
@@ -321,6 +338,6 @@ export const contracts = {
     oribgt: "0xCb2A95c52E718A6BA6AAb6587f1a3aFF4BfB0648",
     wberaibgtlp: "0x59007956D237F76D40200d3948E23102a59C2213",
     stlbgt: "0x23549f334CD72cE0ba5f6051bf8602eBf12652Da",
-    ybgt: "0x23549f334CD72cE0ba5f6051bf8602eBf12652Da",
+    ybgt: "0x04780c47fbEC89BC797a702ce0FcE7E64e62CbFe",
   }
 };

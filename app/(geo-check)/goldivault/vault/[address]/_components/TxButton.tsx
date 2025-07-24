@@ -67,8 +67,6 @@ function TxButton({ params }: VaultButtonProps) {
   const [honeyApproved, setHoneyApproved] = useState<boolean>(false);
   const [depositDTApproved, setDepositDTApproved] = useState<boolean>(false);
 
-  const rewardVault = '0xeEE277a91F9F50cda5d188522C921820a848cD99'
-
   const walletClient = createWalletClient({
   chain: BerachainMainnet,
   transport: custom(window.ethereum!)
@@ -112,8 +110,9 @@ function TxButton({ params }: VaultButtonProps) {
     setSellOtPopup,
     zapPopup,
     zap,
-    zapInfo,
-    debouncedZap
+    debouncedZap,
+    redeemYT,
+    selectedZapAsset
   } = useGoldivault();
 
   const {
@@ -128,10 +127,19 @@ function TxButton({ params }: VaultButtonProps) {
     four626bool,
     vaultYTLabel,
     vaultDTLabel,
+    vaultOTLabel,
     LPasset,
     LPassetaddy,
     LPassetLabel,
-    zapOutAssetLabel
+    zapOutAssetLabel,
+    popupLPAsset,
+    zapInCalls,
+    zapOutCalls,
+    zapOutAsset,
+    zapInAssetLabel,
+    popupLPAssetLabel,
+    islandSlug,
+    kodiakIslandAddy
   } = useVaultInfoConfig({ vaultToken: params.vaultToken})
 
   const {
@@ -152,7 +160,9 @@ function TxButton({ params }: VaultButtonProps) {
     sendAddSteerLiqTx,
     sendRemoveSteerLiqTx,
     send4626DepositTx,
-    send4626RedeemTx
+    send4626RedeemTx,
+    sendAddKodiakLiqTx,
+    sendRemoveKodiakLiqTx
   } = useGoldivaultTx();
 
   const { address, isConnected } = useAccount();
@@ -200,7 +210,7 @@ function TxButton({ params }: VaultButtonProps) {
       }
     }
     if (activeToggle === "TRADEOT") {
-      if(params.vaultToken === "oribgt" || params.vaultToken === "stlbgt") {
+      if(params.vaultToken === "oribgt" || params.vaultToken === "stlbgt" || params.vaultToken === "ybgt") {
         if(tradeDirection === "IN") {
           buyDepositOTFlow(button)
         }
@@ -222,8 +232,11 @@ function TxButton({ params }: VaultButtonProps) {
       else if(params.vaultToken === "oribgt") {
         addSteerLiqFlow(button)
       }
+      else if(params.vaultToken === "stlbgt" || params.vaultToken === "ybgt") {
+        addKodiakLiqFlow(button)
+      }
       else {
-        addLiqFlow(button);
+        addAquaberaLiqFlow(button);
       }
     }
     if (activeToggle === "REMOVELIQ") {
@@ -233,8 +246,11 @@ function TxButton({ params }: VaultButtonProps) {
       else if(params.vaultToken === "oribgt") {
         removeSteerLiqFlow(button)
       }
+      else if(params.vaultToken === "stlbgt" || params.vaultToken === "ybgt") {
+        removeKodiakLiqFlow(button)
+      }
       else {
-        removeLiqFlow(button);
+        removeAquaberaLiqFlow(button);
       }
     }
     if (activeToggle === "STAKE") {
@@ -574,7 +590,7 @@ function TxButton({ params }: VaultButtonProps) {
     }
   };
 
-  const addLiqFlow = async (button: HTMLElement | null) => {
+  const addAquaberaLiqFlow = async (button: HTMLElement | null) => {
     if (tradeInput == 0) {
       button && (button.innerHTML = BUTTON_TEXT.addLiq);
       return;
@@ -644,7 +660,7 @@ function TxButton({ params }: VaultButtonProps) {
     }
   };
 
-  const removeLiqFlow = async (button: HTMLElement | null) => {
+  const removeAquaberaLiqFlow = async (button: HTMLElement | null) => {
     if (tradeInput == 0) {
       button && (button.innerHTML = BUTTON_TEXT.removeLiq);
       return;
@@ -786,6 +802,72 @@ function TxButton({ params }: VaultButtonProps) {
     }
   }
 
+  const addKodiakLiqFlow = async (button: HTMLElement | null) => {
+    if(tradeInput == 0) {
+      button && (button.innerHTML = BUTTON_TEXT.addLiq);
+      return;
+    }
+    if(tradeInput > popupLPAsset) {
+      button && (button.innerHTML = BUTTON_TEXT.notEnough);
+      return;
+    }
+    if(tradeOutput > vaultOT) {
+      button && (button.innerHTML = BUTTON_TEXT.notEnoughOT);
+      return;
+    }
+    const sufficientDTAllowance: boolean | void = await checkAllowance(
+      tradeInput,
+      islandSlug,
+      address as string
+    )
+    if(sufficientDTAllowance) {
+      setDepositDTApproved(true)
+      const sufficientOTAllowance: boolean | void = await checkAllowance(
+        tradeOutput,
+        islandSlug + 'ot',
+        address as string
+      )
+      if(sufficientOTAllowance) {
+        setTxConfirming(true)
+        if (button) {
+          button.innerHTML = BUTTON_TEXT.confirming;
+        }
+        const token0 = params.vaultToken === "stlbgt" ? tradeOutput : tradeInput
+        const token1 = params.vaultToken === "stlbgt" ? tradeInput : tradeOutput
+        const addLiqTx = await sendAddKodiakLiqTx(token0, token1, redeemYT, address as `0x${string}`, kodiakIslandAddy)
+        if(addLiqTx.substring(0, 2) === "0x") {
+          setTxConfirming(false)
+          openNotification(
+            true,
+            "You've successfully added liquidity",
+            `You added ${formatAsSmallNum(tradeInput)} ${popupLPAssetLabel} and ${formatAsSmallNum(tradeOutput)} ${vaultOTLabel} of liquidity`,
+            addLiqTx
+          )
+          if (button) {
+            button.innerHTML = BUTTON_TEXT.addLiq;
+          }
+          refreshInfo();
+          setTimeout(() => {
+            openNotification(false, "", "", "");
+          }, 10000);
+        }
+        else {
+          if (button) {
+            button.innerHTML = BUTTON_TEXT.addLiq;
+          }
+          refreshInfo();
+          setTxConfirming(false);
+        }
+      }
+      else {
+        setAllowanceButtons(true)
+      }
+    }
+    else {
+      setAllowanceButtons(true)
+    }
+  }
+
   const removeSteerLiqFlow = async (button: HTMLElement | null) => {
     if(tradeInput == 0) {
       button && (button.innerHTML = BUTTON_TEXT.removeLiq);
@@ -822,6 +904,57 @@ function TxButton({ params }: VaultButtonProps) {
       }
       refreshInfo();
       setTxConfirming(false);
+    }
+  }
+
+  const removeKodiakLiqFlow = async (button: HTMLElement | null) => {
+    if(tradeInput == 0) {
+      button && (button.innerHTML = BUTTON_TEXT.removeLiq);
+      return;
+    }
+    if(tradeInput > zapOutAsset) {
+      button && (button.innerHTML = BUTTON_TEXT.notEnough);
+      return;
+    }
+    const sufficientAllowance: boolean | void = await checkAllowance(
+      tradeInput,
+      islandSlug + 'lp',
+      address as string
+    )
+    if(sufficientAllowance) {
+      setTxConfirming(true);
+      if (button) {
+        button.innerHTML = BUTTON_TEXT.confirming;
+      }
+      const token0 = params.vaultToken === "stlbgt" ? ytAmount : otAmount
+      const token1 = params.vaultToken === "stlbgt" ? otAmount : ytAmount
+      const removeLiqTx = await sendRemoveKodiakLiqTx(tradeInput, token0, token1, address as `0x${string}`, kodiakIslandAddy)
+      if(removeLiqTx.substring(0, 2) === "0x") {
+        setTxConfirming(false)
+        openNotification(
+          true,
+          "You've successfully removed liquidity",
+          `You removed ${formatAsSmallNum(otAmount)} ${popupLPAssetLabel} and ${formatAsSmallNum(ytAmount)} ${vaultOTLabel} of liquidity`,
+          removeLiqTx
+        )
+        if (button) {
+          button.innerHTML = BUTTON_TEXT.removeLiq;
+        }
+        refreshInfo()
+        setTimeout(() => {
+          openNotification(false, "", "", "");
+        }, 10000);
+      }
+      else {
+        if (button) {
+          button.innerHTML = BUTTON_TEXT.removeLiq;
+        }
+        refreshInfo();
+        setTxConfirming(false);
+      }
+    }
+    else {
+      setAllowanceButtons(true)
     }
   }
 
@@ -1134,86 +1267,14 @@ function TxButton({ params }: VaultButtonProps) {
     const [account] = await walletClient.getAddresses()
     const { id: zapTx } = await walletClient.sendCalls({
       account: account,
-      calls: [
-        {
-          // approve ibgt for oribgt
-          to: contracts.ibgt.address as `0x${string}`,
-          abi: contracts.ibgt.abi,
-          functionName: 'approve',
-          args: [contracts.oribgt.address, parseEther(`${zapInfo.ibgtOribgt}`)]
-        },
-        {
-          // deposit to oribgt
-          to: contracts.oribgt.address as `0x${string}`,
-          abi: contracts.oribgt.abi,
-          functionName: 'deposit',
-          args: [parseEther(`${zapInfo.ibgtOribgt}`), account]
-        },
-        {
-          // approve ibgt for goldivault
-          to: contracts.ibgt.address as `0x${string}`,
-          abi: contracts.ibgt.abi,
-          functionName: 'approve',
-          args: [contracts.oribgtVault.address, parseEther(`${zapInfo.ibgtGoldivault}`)]
-        },
-        {
-          // deposit to goldivault
-          to: contracts.oribgtVault.address as `0x${string}`,
-          abi: contracts.oribgtVault.abi,
-          functionName: 'deposit',
-          args: [parseEther(`${zapInfo.ibgtGoldivault}`)]
-        },
-        {
-          // approve oribgt for steer
-          to: contracts.oribgt.address as `0x${string}`,
-          abi: contracts.oribgt.abi,
-          functionName: 'approve',
-          args: [contracts.steerPeriphery.address, parseEther(`${zapInfo.oribgtSteer}`)]
-        },
-        {
-          // approve oribgt-ot for steer
-          to: contracts.oribgtot.address as `0x${string}`,
-          abi: contracts.oribgtot.abi,
-          functionName: 'approve',
-          args: [contracts.steerPeriphery.address, parseEther(`${zapInfo.ibgtGoldivault}`)]
-        },
-        {
-          // add liq to steer
-          to: contracts.steerPeriphery.address as `0x${string}`,
-          abi: contracts.steerPeriphery.abi,
-          functionName: "deposit",
-          args: [
-            contracts.steerOribgtPool.address as `0x${string}`,
-            parseEther(`${zapInfo.oribgtSteer}`),
-            parseEther(`${zapInfo.ibgtGoldivault}`),
-            parseEther(`${0}`),
-            parseEther(`${0}`),
-            account as `0x${string}`
-          ]
-        },
-        {
-          // approve lp token for reward vault
-          to: contracts.steerOribgtPool.address as `0x${string}`,
-          abi: contracts.ibgt.abi,
-          functionName: 'approve',
-          args: [rewardVault, parseEther(`${zapInfo.steerLP}`)]
-        },
-        {
-          // stake lp token in reward vault
-          // example https://berascan.com/tx/0x81c784f3800fce4396e9438efadde89aad03903ede89a43542130830c3264cea
-          to: rewardVault as `0x${string}`,
-          abi: [{ "name": "stake", "type": "function", "stateMutability": "nonpayable", "inputs": [{ "name": "amount", "type": "uint256" }], "outputs": [] }],
-          functionName: 'stake',
-          args: [parseEther(`${zapInfo.steerLP * .99}`)]
-        }
-      ]
+      calls: zapInCalls(account)
     })
     if(zapTx.substring(0, 2) === "0x") {
       setTxConfirming(false)
       openNotification(
         true,
         "You have successfully zapped liquidity",
-        `You zapped ${formatAsString(zap)} ${vaultDTLabel}`,
+        `You zapped ${formatAsString(zap)} ${zapInAssetLabel(selectedZapAsset)}`,
         zapTx
       )
       if (button) {
@@ -1249,41 +1310,7 @@ function TxButton({ params }: VaultButtonProps) {
     const [account] = await walletClient.getAddresses()
     const { id: zapOutTx } = await walletClient.sendCalls({
       account: account,
-      calls: [
-        {
-          // unstake from reward vault
-          to: rewardVault as `0x${string}`,
-          abi: [{ "name": "withdraw", "type": "function", "stateMutability": "nonpayable", "inputs": [{ "name": "amount", "type": "uint256" }], "outputs": [] }],
-          functionName: 'withdraw',
-          args: [parseEther(`${debouncedZap}`)]
-        },
-        {
-          // remove liquidity from steer
-          to: contracts.steerOribgtPool.address as `0x${string}`,
-          abi: [{"inputs":[{"internalType":"uint256","name":"shares","type":"uint256"},{"internalType":"uint256","name":"amount0Min","type":"uint256"},{"internalType":"uint256","name":"amount1Min","type":"uint256"},{"internalType":"address","name":"to","type":"address"}],"name":"withdraw","outputs":[],"stateMutability":"nonpayable","type":"function"}],
-          functionName: 'withdraw',
-          args: [
-            parseEther(`${debouncedZap}`),
-            parseEther(`${0}`),
-            parseEther(`${0}`),
-            address as `0x${string}`
-          ]
-        },
-        {
-          // redeem from origami
-          to: contracts.oribgt.address as `0x${string}`,
-          abi: contracts.oribgt.abi,
-          functionName: 'redeem',
-          args: [parseEther(`${zapInfo.oribgtOut}`), address, address]
-        },
-        {
-          // redeem from goldilocks
-          to: contracts.oribgtVault.address as `0x${string}`,
-          abi: contracts.oribgtVault.abi,
-          functionName: 'redeemOwnership',
-          args: [parseEther(`${zapInfo.oribgtotOut}`)]
-        }
-      ]
+      calls: zapOutCalls(account, debouncedZap)
     })
     if(zapOutTx.substring(0, 2) === "0x") {
       setTxConfirming(false)
@@ -1361,14 +1388,19 @@ function TxButton({ params }: VaultButtonProps) {
       }
       else {
         if(depositDTApproved) {
-          await sendApproveTx(tradeOutput, "steeroribgtot", false)
+          await sendApproveTx(tradeOutput, islandSlug + 'ot', false)
         }
         else {
-          await sendApproveTx(tradeInput, "steeroribgt", false)
+          await sendApproveTx(tradeInput, islandSlug, false)
         }
       }
     } else if (activeToggle === "REMOVELIQ") {
-      await sendApproveTx(tradeInput, "rusdaqualp", false);
+      if(params.vaultToken === "rusd") {
+        await sendApproveTx(tradeInput, "rusdaqualp", false);
+      }
+      else {
+        await sendApproveTx(tradeInput, islandSlug + 'lp', false)
+      }
     } else if (activeToggle === "STAKE") {
       await sendApproveTx(tradeInput, vaultYTLabel, false);
     } else {
@@ -1443,7 +1475,12 @@ function TxButton({ params }: VaultButtonProps) {
         }
       }
     } else if (activeToggle === "REMOVELIQ") {
-      await sendApproveTx(0, "rusdaqualp", true);
+      if(params.vaultToken === "rusd") {
+        await sendApproveTx(0, "rusdaqualp", true);
+      }
+      else {
+        await sendApproveTx(0, islandSlug + 'ot', true)
+      }
     } else if (activeToggle === "STAKE") {
       await sendApproveTx(0, vaultYTLabel, true)
     } else {

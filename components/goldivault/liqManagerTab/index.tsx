@@ -2,6 +2,7 @@
 
 import { useEffect } from "react"
 import { useGoldivault } from "@/providers"
+import { useVaultInfoConfig } from "@/hooks"
 import {
   FieldWithLabel,
   Label,
@@ -30,6 +31,8 @@ export const LiqManagerTab = ({ params }: LiqManagerTabProps) => {
     walletInfoLoading,
     goldivaultWalletInfoRusd,
     goldivaultWalletInfoOribgt,
+    goldivaultWalletInfoStlbgt,
+    goldivaultWalletInfoYbgt,
     handleBalanceClick,
     tradeOutput,
     setTradeOutput,
@@ -47,9 +50,16 @@ export const LiqManagerTab = ({ params }: LiqManagerTabProps) => {
     resetZapInfo
   } = useGoldivault()
 
+  const {
+    vaultOTLabel,
+    popupLPAssetLabel,
+    vaultOT,
+    zappableVaults
+  } = useVaultInfoConfig({ vaultToken: params.vaultToken})
+
   useEffect(() => {
     if(debouncedTradeInput > 0) {
-      calculateLiquidity(activeToggle)
+      calculateLiquidity(activeToggle, params.vaultToken)
     }
     else {
       setTradeOutput(0)
@@ -72,6 +82,12 @@ export const LiqManagerTab = ({ params }: LiqManagerTabProps) => {
       if(params.vaultToken === "rusd") {
         return goldivaultWalletInfoRusd.rusd
       }
+      else if(params.vaultToken == "stlbgt") {
+        return goldivaultWalletInfoStlbgt.stlbgt
+      }
+      else if(params.vaultToken === "ybgt") {
+        return goldivaultWalletInfoYbgt.ysysybgt
+      }
       else {
         return goldivaultWalletInfoOribgt.oribgt
       }
@@ -79,6 +95,12 @@ export const LiqManagerTab = ({ params }: LiqManagerTabProps) => {
     else {
       if(params.vaultToken === "rusd") {
         return goldivaultWalletInfoRusd.rusdaquabera
+      }
+      else if(params.vaultToken == "stlbgt") {
+        return goldivaultWalletInfoStlbgt.kodiakIsland
+      }
+      else if(params.vaultToken === "ybgt") {
+        return goldivaultWalletInfoYbgt.kodiakIsland
       }
       else {
         return goldivaultWalletInfoOribgt.steerLP
@@ -88,26 +110,16 @@ export const LiqManagerTab = ({ params }: LiqManagerTabProps) => {
 
   const renderBottomBalance = () => {
     if (activeToggle === "ADDLIQ") {
-      return goldivaultWalletInfoOribgt.oribgtot
+      return vaultOT
     }
   }
 
   const renderTopBalanceLabel = (): string => {
     if (activeToggle === "ADDLIQ") {
-      if(params.vaultToken === "rusd") {
-        return "rUSD"
-      }
-      else {
-        return "oriBGT"
-      }
+      return popupLPAssetLabel
     }
     else {
-      if(params.vaultToken === "rusd") {
-        return "rUSD / rUSD-OT LP"
-      }
-      else {
-        return "oriBGT / oriBGT-OT LP"
-      }
+      return `${popupLPAssetLabel} / ${vaultOTLabel} LP`
     }
   }
 
@@ -119,15 +131,18 @@ export const LiqManagerTab = ({ params }: LiqManagerTabProps) => {
   }
 
   return (
-    zapPopup ? <ZapTab params={{ vaultToken: params.vaultToken}} /> :
+    (zapPopup && zappableVaults.includes(params.vaultToken)) ? <ZapTab params={{ vaultToken: params.vaultToken}} /> :
     <FormWrapper>
-      <Container align="right" padding="sm">
-        <Label>
-          <div className="rounded-xl bg-button-base hover:bg-button-hover font-inter text-md cursor-pointer text-teak p-2" onClick={() => handleZapButton()}>
-            zap to reward vault
-          </div>
-        </Label>
-      </Container>
+      {
+        zappableVaults.includes(params.vaultToken) &&
+        <Container align="right" padding="sm">
+          <Label>
+            <div className="rounded-xl bg-button-base hover:bg-button-hover font-inter text-md cursor-pointer text-teak p-2" onClick={() => handleZapButton()}>
+              {activeToggle === "ADDLIQ" ? "zap to" : "unzap from"} {params.vaultToken === "oribgt" ? "reward vault" : "LP"}
+            </div>
+          </Label>
+        </Container>
+      }
       <LabelSet>
         <Label>
           {activeToggle === 'ADDLIQ' ? "Deposit" : "Withdraw"} Liquidity
@@ -153,18 +168,18 @@ export const LiqManagerTab = ({ params }: LiqManagerTabProps) => {
         </Label>
       </Container>
       {
-        (activeToggle === "ADDLIQ" && params.vaultToken === "oribgt") &&
+        (activeToggle === "ADDLIQ" && (params.vaultToken === "oribgt" || params.vaultToken === "stlbgt" || params.vaultToken === "ybgt")) &&
         <>
           <div className='my-2'></div>
           <FieldWithLabel
             id="number-input"
-            label={"oriBGT-OT"}
+            label={vaultOTLabel}
             value={tradeOutput}
             disabled={true}
           />
           <Container align="right" padding="sm">
             <Label>
-              <HoverText hoverText="Click the deposit tab to get oriBGT-OT" />
+              <HoverText hoverText={`Click the deposit tab to get ${vaultOTLabel}`} />
               Balance <span className="text-teak">{" "}
               {walletInfoLoading
                 ? loadingElement()
@@ -175,19 +190,19 @@ export const LiqManagerTab = ({ params }: LiqManagerTabProps) => {
         </>
       }
       {
-        (activeToggle === "REMOVELIQ" && params.vaultToken === "oribgt") &&
+        (activeToggle === "REMOVELIQ" && (params.vaultToken === "oribgt" || params.vaultToken === "stlbgt" || params.vaultToken === "ybgt")) &&
         <>
           <div className='my-2'></div>
           <FieldWithLabel
             id="number-input"
-            label={"oriBGT"}
+            label={popupLPAssetLabel}
             value={otAmount}
             disabled={true}
           />
           <div className='my-1'></div>
           <FieldWithLabel
             id="number-input"
-            label={"oriBGT-OT"}
+            label={vaultOTLabel}
             value={ytAmount}
             disabled={true}
           />

@@ -235,6 +235,33 @@ export const useGoldivaultTx = () => {
       })
       allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
     }
+    else if(vault === 'kodiakstlbgt') {
+      allowanceResult = await readContract(config, {
+        address: contracts.stlbgt.address as `0x${string}`,
+        abi: contracts.stlbgt.abi,
+        functionName: 'allowance',
+        args: [wallet, contracts.baultRouter.address]
+      })
+      allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
+    }
+    else if(vault === 'kodiakstlbgtot') {
+      allowanceResult = await readContract(config, {
+        address: contracts.stlbgtot.address as `0x${string}`,
+        abi: contracts.stlbgtot.abi,
+        functionName: 'allowance',
+        args: [wallet, contracts.baultRouter.address]
+      })
+      allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
+    }
+    else if(vault === 'kodiakstlbgtlp') {
+      allowanceResult = await readContract(config, {
+        address: contracts.stlbgtKodiakIsland.address as `0x${string}`,
+        abi: contracts.stlbgtKodiakIsland.abi,
+        functionName: 'allowance',
+        args: [wallet, contracts.baultRouter.address]
+      })
+      allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
+    }
     else if(vault === "ybgt") {
       allowanceResult = await readContract(config, {
         address: contracts.stybgt.address as `0x${string}`,
@@ -259,6 +286,33 @@ export const useGoldivaultTx = () => {
         abi: contracts.ybgtyt.abi,
         functionName: 'allowance',
         args: [wallet, contracts.ybgtVault.address]
+      })
+      allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
+    }
+    else if(vault === 'kodiakybgtlp') {
+      allowanceResult = await readContract(config, {
+        address: contracts.ybgtKodiakIsland.address as `0x${string}`,
+        abi: contracts.ybgtKodiakIsland.abi,
+        functionName: 'allowance',
+        args: [wallet, contracts.baultRouter.address]
+      })
+      allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
+    }
+    else if(vault === 'kodiakybgt') {
+      allowanceResult = await readContract(config, {
+        address: contracts.ysysybgt.address as `0x${string}`,
+        abi: contracts.ysysybgt.abi,
+        functionName: 'allowance',
+        args: [wallet, contracts.baultRouter.address]
+      })
+      allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
+    }
+    else if(vault === 'kodiakybgtot') {
+      allowanceResult = await readContract(config, {
+        address: contracts.ybgtot.address as `0x${string}`,
+        abi: contracts.ybgtot.abi,
+        functionName: 'allowance',
+        args: [wallet, contracts.baultRouter.address]
       })
       allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
     }
@@ -699,6 +753,51 @@ export const useGoldivaultTx = () => {
         console.log('or: ', e)
       }
     }
+    else if(vault === "kodiakstlbgt") {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.stlbgt.address as `0x${string}`,
+          abi: contracts.stlbgt.abi,
+          functionName: 'approve',
+          args: [contracts.baultRouter.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
+        })
+        await waitForTransactionReceipt(config, { hash })
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+    else if(vault === "kodiakstlbgtot") {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.stlbgtot.address as `0x${string}`,
+          abi: contracts.stlbgtot.abi,
+          functionName: 'approve',
+          args: [contracts.baultRouter.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
+        })
+        await waitForTransactionReceipt(config, { hash })
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+    else if(vault === "kodiakstlbgtlp") {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.stlbgtKodiakIsland.address as `0x${string}`,
+          abi: contracts.stlbgtKodiakIsland.abi,
+          functionName: 'approve',
+          args: [contracts.baultRouter.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
+        })
+        await waitForTransactionReceipt(config, { hash })
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
     else if(vault === "stLBGT-OT") {
       try {
         const hash = await writeContract(config, {
@@ -796,6 +895,36 @@ export const useGoldivaultTx = () => {
           abi: contracts.ybgt.abi,
           functionName: 'approve',
           args: [contracts.stybgt.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
+        })
+        await waitForTransactionReceipt(config, { hash })
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+    else if(vault === "kodiakybgtlp") {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.ybgtKodiakIsland.address as `0x${string}`,
+          abi: contracts.ybgtKodiakIsland.abi,
+          functionName: 'approve',
+          args: [contracts.baultRouter.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
+        })
+        await waitForTransactionReceipt(config, { hash })
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+    else if (vault === "iBGT") {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.stybgt.address as `0x${string}`,
+          abi: contracts.stybgt.abi,
+          functionName: 'approve',
+          args: [contracts.ysysybgt.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
         })
         await waitForTransactionReceipt(config, { hash })
       }
@@ -1374,7 +1503,60 @@ export const useGoldivaultTx = () => {
     }
 
     return ''
+  }
 
+  const sendAddKodiakLiqTx = async (amount0: number, amount1: number, amountSharesMin: number, wallet: string, islandAddy: string): Promise<string> => {
+    try {
+      const hash = await writeContract(config, {
+        address: contracts.baultRouter.address as `0x${string}`,
+        abi: contracts.baultRouter.abi,
+        functionName: "addLiquidity",
+        args: [
+          islandAddy as `0x${string}`,
+          parseEther(`${amount0}`),
+          parseEther(`${amount1}`),
+          parseEther(`${amount0 * 0.99}`),
+          parseEther(`${amount1 * 0.99}`),
+          parseEther(`${amountSharesMin * 0.99}`),
+          wallet as `0x${string}`
+        ]
+      })
+
+      const receipt = await waitForTransactionReceipt(config, { hash })
+      return receipt.transactionHash;
+    }
+    catch (e) {
+      console.log("user denied tx")
+      console.log("or: ", e)
+    }
+    
+    return ''
+  }
+
+  const sendRemoveKodiakLiqTx = async (withdrawAmt: number, amount0: number, amount1: number, wallet: string, islandAddy: string): Promise<string> => {
+    try {
+      const hash = await writeContract(config, {
+        address: contracts.baultRouter.address as `0x${string}`,
+        abi: contracts.baultRouter.abi,
+        functionName: "removeLiquidity",
+        args: [
+          islandAddy as `0x${string}`,
+          parseEther(`${withdrawAmt}`),
+          parseEther(`${amount0 * 0.99}`),
+          parseEther(`${amount1 * 0.99}`),
+          wallet as `0x${string}`
+        ]
+      })
+
+      const receipt = await waitForTransactionReceipt(config, { hash })
+      return receipt.transactionHash;
+    }
+    catch (e) {
+      console.log("user denied tx")
+      console.log("or: ", e)
+    }
+    
+    return ''
   }
 
   return {
@@ -1399,6 +1581,8 @@ export const useGoldivaultTx = () => {
     send4626DepositTx,
     send4626RedeemTx,
     sendAddSteerLiqTx,
-    sendRemoveSteerLiqTx
+    sendRemoveSteerLiqTx,
+    sendAddKodiakLiqTx,
+    sendRemoveKodiakLiqTx
   };
 };

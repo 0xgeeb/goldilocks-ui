@@ -157,14 +157,14 @@ export const VaultPage = ({ params }: Props) => {
     return <TAndCs />;
   }
 
-  return (
+    return (
     <CsrPageLayout
       onPageClick={(e) => handlePopups(e)}
       wutPopup={wutPopup}
       setWutPopup={setWutPopup}
       bgImageUrl="/images/bg-goldivault-2.png"
         // maskBg={`linear-gradient(#1D160DE5, #1D160DE5)`}
-      >
+    >
         <VaultsCardLayout
           title={`${VAULT_DETAIL_CONFIGS[params.address as VaultDetailKey].title} Vault`}
           icon={
