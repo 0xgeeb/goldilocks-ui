@@ -83,7 +83,8 @@ const VaultInfoPane: React.FC<{ vaultToken: string }> = ({ vaultToken }) => {
       vaultToken === "rusd" ||
       vaultToken === "unibtc" ||  
       vaultToken === "rseth" ||  
-      vaultToken === "solvbtc"  
+      vaultToken === "solvbtc" ||
+      vaultToken === "oribgt"
     ) {
       return "N/A"
     }

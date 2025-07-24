@@ -366,7 +366,7 @@ export const useVaultInfoConfig = ({ vaultToken }: VaultInfoConfigHookProps) => 
                       ? "yBGT"
                       : "";
   
-  const activeVaults = ["oriBGT", "LBGT"]
+  const activeVaults = ["LBGT"]
 
   return {
     vaultOT,
