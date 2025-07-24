@@ -88,7 +88,7 @@ export const GoldivaultPage = () => {
           <div className="text-WarmText h-9 text-lg mb-6 sm:mb-0">
             Ooga booga. Money printer go brrrrr haha.
           </div>
-          {/* <div className="flex flex-row items-center gap-3 mx-auto mt-4">
+          <div className="flex flex-row items-center gap-3 mx-auto mt-4">
             <h1
               id="page-title"
               className="text-HoneyYellow font-amaticbold text-4xl"
@@ -105,7 +105,7 @@ export const GoldivaultPage = () => {
                 />
               )
             )}
-          </div> */}
+          </div>
           <div className="flex flex-row items-center gap-3 mx-auto mt-4">
             <h1
               id="page-title"

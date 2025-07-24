@@ -80,21 +80,21 @@ export const VAULT_DETAIL_CONFIGS = {
       poolUrl: `https://berascan.com/address/${contracts.vaultLPaddys.rusd}`,
     },
   },
-  // stlbgt: {
-  //   title: "LBGT",
-  //   titleSize: "text-[7.5vw] md:text-[6.5vw] lg:text-[5.5vw]",
-  //   params: {
-  //     vaultToken: "stlbgt",
-  //     dt: "LBGT",
-  //     ot: "stLBGT-OT",
-  //     yt: "stLBGT-YT",
-  //     protocolUrl: "https://www.berapaw.com/",
-  //     dexLink: `https://dexscreener.com/berachain/${contracts.vaultLPaddys.stlbgt}`,
-  //     poolName: "stLBGT / stLBGT-OT",
-  //     liqManagerUrl: "",
-  //     poolUrl: `https://berascan.com/address/${contracts.vaultLPaddys.stlbgt}`,
-  //   }
-  // },
+  stlbgt: {
+    title: "LBGT",
+    titleSize: "text-[7.5vw] md:text-[6.5vw] lg:text-[5.5vw]",
+    params: {
+      vaultToken: "stlbgt",
+      dt: "LBGT",
+      ot: "stLBGT-OT",
+      yt: "stLBGT-YT",
+      protocolUrl: "https://www.berapaw.com/",
+      dexLink: `https://dexscreener.com/berachain/${contracts.vaultLPaddys.stlbgt}`,
+      poolName: "stLBGT / stLBGT-OT",
+      liqManagerUrl: "",
+      poolUrl: `https://berascan.com/address/${contracts.vaultLPaddys.stlbgt}`,
+    }
+  },
   // ybgt: {
   //   title: "yBGT",
   //   titleSize: "text-[7.5vw] md:text-[6.5vw] lg:text-[5.5vw]",

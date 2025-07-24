@@ -34,13 +34,13 @@ export const VAULTS = [
     imageUrl: "solvbtc-logo.png",
     vaultName: "Solv Points Vault",
   },
-  // {
-  //   address: "stlbgt",
-  //   mouseFlag: "stlbgtvaultinfo",
-  //   tokenName: "LBGT",
-  //   imageUrl: "logo-lbgt.svg",
-  //   vaultName: "Staked LBGT Vault"
-  // },
+  {
+    address: "stlbgt",
+    mouseFlag: "stlbgtvaultinfo",
+    tokenName: "LBGT",
+    imageUrl: "logo-lbgt.svg",
+    vaultName: "Staked LBGT Vault"
+  },
   // {
   //   address: "ybgt",
   //   mouseFlag: "ybgtvaultinfo",
