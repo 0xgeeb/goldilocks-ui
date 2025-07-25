@@ -431,9 +431,10 @@ export const useVaultInfoConfig = ({ vaultToken }: VaultInfoConfigHookProps) => 
       ? contracts.stlbgtKodiakIsland.address
       : vaultToken === "ybgt"
         ? contracts.ybgtKodiakIsland.address
-        : ""   
+        : ""
   
   // const activeVaults = ["oriBGT", "LBGT", "yBGT"]
+  const activeVaultTokens = ["stlbgt"]
   const activeVaults = ["LBGT"]
   const zappableVaults = ["oribgt", "stlbgt", "ybgt"]
 
@@ -804,6 +805,7 @@ export const useVaultInfoConfig = ({ vaultToken }: VaultInfoConfigHookProps) => 
     zapOutAsset,
     zapOutAssetLabel,
     descriptionTitle,
+    activeVaultTokens,
     activeVaults,
     zapInSteps,
     zapOutSteps,

@@ -52,7 +52,8 @@ function VaultForm({ params }: VaultBoxProps) {
   const {
     vaultOT,
     vaultYT,
-    vaultDT
+    vaultDT,
+    activeVaultTokens
   } = useVaultInfoConfig({ vaultToken: params.vaultToken })
 
   const { isConnected } = useAccount();
@@ -104,7 +105,7 @@ function VaultForm({ params }: VaultBoxProps) {
     if (activeToggle === "DEPOSIT") {
       return "Deposit Tokens"
     } else if (activeToggle === "REDEEMOT") {
-      return "Redeem Ownership Tokens & Burn Yield Tokens"
+      return `Redeem Ownership Tokens${!activeVaultTokens.includes(params.vaultToken) ? "" : " & Burn Yield Tokens"}`
     } else {
       return "Redeem Yield Tokens"
     }
@@ -124,7 +125,7 @@ function VaultForm({ params }: VaultBoxProps) {
     if (activeToggle === "DEPOSIT") {
       return params.dt;
     } else if (activeToggle === "REDEEMOT") {
-      return "OT & YT"
+      return `OT${!activeVaultTokens.includes(params.vaultToken) ? "" : " & YT"}`
     } else {
       return params.yt;
     }
