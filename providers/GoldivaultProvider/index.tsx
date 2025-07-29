@@ -548,7 +548,7 @@ const INITIAL_STATE: {
   setSellOtPopup: (_popup: boolean) => {},
   descriptionPopup: false,
   setDescriptionPopup: (_popup: boolean) => {},
-  zapPopup: true,
+  zapPopup: false,
   setZapPopup: (_popup: boolean) => {},
   allowanceButtons: false,
   setAllowanceButtons: (_allowance: boolean) => {},
@@ -2500,7 +2500,7 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
                 : vault === "wberaibgtlp"
                   ? (activeToggleState === "TRADEOT" || activeToggleState === "TRADEYT") ? goldivaultWalletInfoWberaibgtlpState.origamiwberaibgtlp : goldivaultWalletInfoWberaibgtlpState.wberaibgtlp
                   : vault === "stlbgt"
-                    ? (activeToggleState === "TRADEOT" || activeToggleState === "TRADEYT") ? goldivaultWalletInfoStlbgtState.stlbgt : goldivaultWalletInfoStlbgtState.lbgt
+                    ? activeToggleState === "ADDLIQ" ? goldivaultWalletInfoStlbgtState.stlbgt : goldivaultWalletInfoStlbgtState.lbgt
                     : vault === "ybgt"
                       ? (activeToggleState === "TRADEOT" || activeToggleState === "TRADEYT") ? goldivaultWalletInfoYbgtState.stybgt : goldivaultWalletInfoYbgtState.ybgt
                       : {}; // @note This should be a number, not {}
