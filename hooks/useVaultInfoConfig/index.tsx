@@ -717,6 +717,13 @@ export const useVaultInfoConfig = ({ vaultToken }: VaultInfoConfigHookProps) => 
       : vaultToken === "stlbgt"
         ? [
             {
+              // approve LP from router
+              to: contracts.stlbgtKodiakIsland.address as `0x${string}`,
+              abi: contracts.stlbgtKodiakIsland.abi,
+              functionName: "approve",
+              args: [contracts.baultRouter.address, parseEther(`${debouncedZap}`)]
+            },
+            {
               // remove liquidity from kodiak
               to: contracts.baultRouter.address as `0x${string}`,
               abi: contracts.baultRouter.abi,
