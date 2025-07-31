@@ -1928,20 +1928,20 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       functionName: "endTime",
       args: [],
     });
-    const buyingOTQuoteResultRseth: any = await readContract(config, {
-      address: contracts.quoterv2.address as `0x${string}`,
-      abi: contracts.quoterv2.abi,
-      functionName: "quoteExactOutputSingle",
-      args: [
-        [
-          contracts.rseth.address,
-          contracts.rsethot.address,
-          parseEther(`1`),
-          500,
-          0,
-        ],
-      ],
-    });
+    // const buyingOTQuoteResultRseth: any = await readContract(config, {
+    //   address: contracts.quoterv2.address as `0x${string}`,
+    //   abi: contracts.quoterv2.abi,
+    //   functionName: "quoteExactOutputSingle",
+    //   args: [
+    //     [
+    //       contracts.rseth.address,
+    //       contracts.rsethot.address,
+    //       parseEther(`1`),
+    //       500,
+    //       0,
+    //     ],
+    //   ],
+    // });
     const rsethOTLiquidity = await readContract(config, {
       address: contracts.rsethot.address as `0x${string}`,
       abi: contracts.rsethot.abi,
@@ -1958,17 +1958,17 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       (parseFloat(formatEther(rsethOTLiquidity as unknown as bigint)) +
         parseFloat(formatEther(rsethLiquidity as unknown as bigint))) *
       weethPrice;
-    const buyingOTPriceRseth = parseFloat(
-      formatEther(buyingOTQuoteResultRseth[0] as unknown as bigint),
-    );
+    // const buyingOTPriceRseth = parseFloat(
+    //   formatEther(buyingOTQuoteResultRseth[0] as unknown as bigint),
+    // );
     const timeDifferenceRseth =
       parseFloat(endTimeResultRseth) * 1000 - Date.now();
     const fixedDaysDifferenceRseth =
       timeDifferenceRseth / (1000 * 60 * 60 * 24);
     const daysTilRseth = parseFloat(fixedDaysDifferenceRseth.toFixed(2));
-    const fixedAprResponseRseth =
-      ((1 - buyingOTPriceRseth) / 1) * 100 * (365 / daysTilRseth);
-    const ytPriceRseth = 1 - buyingOTPriceRseth;
+    // const fixedAprResponseRseth =
+    //   ((1 - buyingOTPriceRseth) / 1) * 100 * (365 / daysTilRseth);
+    // const ytPriceRseth = 1 - buyingOTPriceRseth;
 
     const wbtcPriceResult: any = await readContract(config, {
       address: contracts.quoterv2.address as `0x${string}`,
@@ -2356,10 +2356,10 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
 
     const response = {
       rseth: {
-        fixedApr: fixedAprResponseRseth,
+        fixedApr: 0,
         daysTil: getRelativeDate(parseFloat(endTimeResultRseth)),
         liquidity: liquidityResultRseth,
-        ytPrice: ytPriceRseth,
+        ytPrice: 0,
       },
       unibtc: {
         fixedApr: fixedAprResponseUnibtc,
