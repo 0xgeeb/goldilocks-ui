@@ -68,7 +68,7 @@ export const ProposalPage = ({ params }: Props) => {
           >
             <>
               <h1
-                className="absolute left-[5%] top-[-0.5%] font-amaticbold text-[7.5vw] text-[#D9C6BA] lg:text-[6vw]"
+                className="absolute left-[5%] top-[2.5%] lg:top-[8%] font-amaticbold text-[7.5vw] text-[#D9C6BA] lg:text-[4vw]"
                 id="page-title"
               >
                 Proposal #{params.number}

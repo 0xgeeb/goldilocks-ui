@@ -29,7 +29,7 @@ export const ProposalsBox = () => {
   };
 
   return (
-    <div className="absolute right-[5%] top-[15%] h-[70%] w-[90%] border-2 border-black bg-[#EEDCD2] lg:top-[10%] lg:w-[50%]">
+    <div className="absolute right-[5%] top-[15%] h-[70%] w-[90%] border-2 border-black bg-[#EEDCD2] lg:top-[12.5%] lg:w-[50%]">
       <div className="absolute left-0 top-3 w-6 skew-y-[45deg] border-b-2 border-black"></div>
       <div className="absolute bottom-3 left-0 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
       <div className="absolute right-0 top-3 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
