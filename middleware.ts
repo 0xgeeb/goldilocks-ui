@@ -9,6 +9,12 @@ export function middleware(request: NextRequest) {
   //   return NextResponse.next();
   // }
 
+  // Always let crawlers preview the target page to avoid cached geo pages in unfurls
+  const ua = request.headers.get('user-agent') || '';
+  const isCrawler = /(Discordbot|Slackbot|Twitterbot|facebookexternalhit|LinkedInBot|WhatsApp|TelegramBot|Googlebot|bingbot)/i.test(ua);
+  if (isCrawler) {
+    return NextResponse.next();
+  }
   const country = request.headers.get('x-vercel-ip-country') || 'unknown';
   const blockedCountries = ['US'];
   if (blockedCountries.includes(country.toUpperCase())) {
