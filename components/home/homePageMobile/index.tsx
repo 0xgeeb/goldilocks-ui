@@ -38,6 +38,12 @@ export const HomePageMobile = () => {
               >
                 <span>Goldivaults</span>
               </a>
+              <a
+                href="/goldigovernance/proposals"
+                className="cursor-pointer hover:scale-[150%]"
+              >
+                <span>Gov</span>
+              </a>
             </div>
             <div className="flex h-[10%] w-[50%] flex-row items-center justify-between">
               <h1 className="font-amaticbold text-[7vw]">ooga booga</h1>

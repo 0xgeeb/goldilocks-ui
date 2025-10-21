@@ -69,7 +69,7 @@ export const ProposeBoxMobile = () => {
   };
 
   return (
-    <div className="absolute left-[2.5%] top-[25%] h-[65%] w-[95%] border-2 border-black bg-[#EEDCD2]">
+    <div className="absolute left-[2.5%] top-[10%] h-[65%] w-[95%] border-2 border-black bg-[#EEDCD2]">
       <div className="absolute left-0 top-2 w-4 skew-y-[45deg] border-b-2 border-black"></div>
       <div className="absolute bottom-2 left-0 w-4 -skew-y-[45deg] border-b-2 border-black"></div>
       <div className="absolute right-0 top-2 w-4 -skew-y-[45deg] border-b-2 border-black"></div>
@@ -93,7 +93,7 @@ export const ProposeBoxMobile = () => {
               className="mt-auto cursor-pointer self-end font-amaticbold text-[8vw] hover:underline"
               onClick={() => addTitle()}
             >
-              add a action
+              add an action
             </h1>
           </div>
         ) : proposeTab === "ERROR" ? (

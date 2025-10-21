@@ -255,6 +255,32 @@ export const NavBarButtons = () => {
             <span>Goldivaults</span>
           </a>
         )}
+        {pathname?.startsWith("/goldigovernance") ? (
+          <>
+            <a className="text-[#DB7200]">
+              <span>Gov</span>  
+            </a>
+            <a
+              href="/goldigovernance/proposals"
+              className={`cursor-pointer text-[7vw] hover:scale-[150%] ${pathname === "/goldigovernance/proposals" || pathname?.startsWith("/goldigovernance/proposal/") ? "text-[#DB7200] underline underline-offset-8" : ""}`}
+            >
+              <span>Proposals</span>
+            </a>
+            <a
+              href="/goldigovernance/propose"
+              className={`cursor-pointer text-[7vw] hover:scale-[150%] ${pathname === "/goldigovernance/propose" ? "text-[#DB7200] underline underline-offset-8" : ""}`}
+            >
+              <span>Propose</span>
+            </a>
+          </>
+        ) : (
+          <a
+            href="/goldigovernance/proposals"
+            className="cursor-pointer hover:scale-[150%]"
+          >
+            <span>Gov</span>
+          </a>
+        )}
       </div>
       <div className="flex h-[10%] w-[50%] flex-row items-center justify-between">
         <h1 className="font-amaticbold text-[7vw]">ooga booga</h1>

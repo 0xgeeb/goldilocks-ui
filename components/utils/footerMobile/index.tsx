@@ -1,6 +1,6 @@
 export const FooterMobile = () => {
   return (
-    <div className="font-amatic flex w-full flex-col items-center justify-center bg-black py-4 mt-8">
+    <div className="font-amatic flex w-full flex-col items-center justify-center bg-black py-4">
       <div className="flex items-center gap-3 text-white">
         <div className="flex gap-4 uppercase font-bold text-xl">
           <div className="hover:text-HoneyYellow cursor-pointer">About</div>

@@ -8,15 +8,6 @@ export const NewProposalPreviewMobile = () => {
   return (
     <div className="absolute left-[1%] top-[8.5%] h-[15%] w-[98%]">
       <div className="flex h-[100%] w-[100%] flex-row justify-between p-0 font-amaticbold text-[#D9C6BA]">
-        <div className="flex h-[100%] w-[60%] flex-col overflow-x-auto">
-          <h1 className="text-[8vw]" id="page-title">
-            title: <span className="text-[5vw]">{newProposalInfo.title}</span>
-          </h1>
-          <h1 className="text-[8vw]" id="page-title">
-            description:{" "}
-            <span className="text-[5vw]">{newProposalInfo.description}</span>
-          </h1>
-        </div>
         <div className="flex h-[100%] w-[38%] flex-col overflow-x-auto">
           <h1 className="text-[8vw]" id="page-title">
             {newProposalInfo.actions.length > 1 ? "actions" : "action"}
