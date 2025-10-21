@@ -66,7 +66,7 @@ export const ProposalPage = ({ params }: Props) => {
             setWutPopup={setWutPopup}
             bgImageUrl="/images/bg-goldiswap.png"
           >
-            <>
+            <div className="relative min-h-screen flex flex-col items-center justify-center p-4 sm:p-8 md:px-20 md:py-6">
               <h1
                 className="absolute left-[5%] top-[2.5%] lg:top-[8%] font-amaticbold text-[7.5vw] text-[#D9C6BA] lg:text-[4vw]"
                 id="page-title"
@@ -77,7 +77,7 @@ export const ProposalPage = ({ params }: Props) => {
               <VoteBox number={params.number} />
               <ProposalButtons number={params.number} />
               <ProposalsFetcher />
-            </>
+            </div>
           </CsrPageLayout>
         )
       ) : (
