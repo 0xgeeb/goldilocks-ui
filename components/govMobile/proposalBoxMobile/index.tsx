@@ -111,18 +111,18 @@ export const ProposalBoxMobile = ({ number }: BoxProps) => {
   return (
     <>
       <div
-        className={`absolute left-[2.5%] top-[10%] h-[6%] w-[25%] border-2 border-[#FFCD00] ${activeToggle === "INFO" ? "bg-[#033E5E]" : "bg-[#995816]"} flex items-center justify-center font-amaticbold text-[6vw] font-medium text-[#FFCD00]`}
+        className={`absolute left-[2.5%] top-[14%] h-[6%] w-[25%] border-2 border-[#FFCD00] ${activeToggle === "INFO" ? "bg-[#033E5E]" : "bg-[#995816]"} flex items-center justify-center font-amaticbold text-[6vw] font-medium text-[#FFCD00]`}
         onClick={() => setActiveToggle("INFO")}
       >
         INFO
       </div>
       <div
-        className={`absolute left-[30%] top-[10%] h-[6%] w-[25%] border-2 border-[#FFCD00] ${activeToggle === "VOTE" ? "bg-[#033E5E]" : "bg-[#995816]"} flex items-center justify-center font-amaticbold text-[6vw] font-medium text-[#FFCD00]`}
+        className={`absolute left-[30%] top-[14%] h-[6%] w-[25%] border-2 border-[#FFCD00] ${activeToggle === "VOTE" ? "bg-[#033E5E]" : "bg-[#995816]"} flex items-center justify-center font-amaticbold text-[6vw] font-medium text-[#FFCD00]`}
         onClick={() => setActiveToggle("VOTE")}
       >
         VOTE
       </div>
-      <div className="absolute left-[5%] top-[19%] h-[70%] w-[90%] border-2 border-black bg-[#EEDCD2]">
+      <div className="absolute left-[5%] top-[24%] h-[70%] w-[90%] border-2 border-black bg-[#EEDCD2]">
         <div className="absolute left-0 top-2 w-4 skew-y-[45deg] border-b-2 border-black"></div>
         <div className="absolute bottom-2 left-0 w-4 -skew-y-[45deg] border-b-2 border-black"></div>
         <div className="absolute right-0 top-2 w-4 -skew-y-[45deg] border-b-2 border-black"></div>

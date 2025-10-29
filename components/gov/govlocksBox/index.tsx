@@ -267,7 +267,7 @@ export const GovLocksBox = () => {
                 <input
                   className="absolute top-[15%] w-[90%] border-none bg-transparent pl-[5%] font-baloo text-[4vw] font-bold focus:outline-hidden lg:text-[2vw]"
                   type="string"
-                  placeholder=""
+                  placeholder="0x..."
                   value={govlocksDisplayString}
                   onChange={(e) => handleGovlocksChange(e.target.value)}
                 />
