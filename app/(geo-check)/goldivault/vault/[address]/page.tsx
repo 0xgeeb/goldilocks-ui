@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   description: "Goldivaults",
 };
 
+export const runtime = 'edge';
+
 type Props = {
   params: {
     address: string;

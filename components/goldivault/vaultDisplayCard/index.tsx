@@ -33,27 +33,25 @@ export const VaultDisplayCard = ({ params }: VaultDisplayCardProps) => {
   const { enableInfoPopup, disableInfoPopup, infoLoading, vaultDisplayInfo } =
     useGoldivault();
   
-  const { activeVaults } = useVaultInfoConfig({ vaultToken: params.tokenName})
+  const { activeVaultTokens } = useVaultInfoConfig({ vaultToken: params.tokenName })
 
   const vaultInfo = (() => {
-    switch (params.tokenName) {
-      case "weETH":
-        return vaultDisplayInfo.weeth;
-      case "rsETH":
+    switch (params.address) {
+      case "rseth":
         return vaultDisplayInfo.rseth;
-      case "eBTC":
-        return vaultDisplayInfo.ebtc;
-      case "uniBTC":
+      case "unibtc":
         return vaultDisplayInfo.unibtc;
-      case "SolvBTC.BBN":
+      case "solvbtc":
         return vaultDisplayInfo.solvbtc;
-      case "rUSD":
+      case "rusd":
         return vaultDisplayInfo.rusd;
-      case "oriBGT":
+      case "oribgt":
         return vaultDisplayInfo.oribgt;
-      case "LBGT":
+      case "janoribgt":
+        return vaultDisplayInfo.janoribgt;
+      case "stlbgt":
         return vaultDisplayInfo.stlbgt;
-      case "yBGT":
+      case "ybgt":
         return vaultDisplayInfo.ybgt
       default:
         return {
@@ -96,7 +94,7 @@ export const VaultDisplayCard = ({ params }: VaultDisplayCardProps) => {
             <div className="flex flex-col items-center gap-3 p-2.5">
               <VaultInfoItem
                 label="Fixed APR"
-                value={`${activeVaults.includes(params.tokenName) ? formatAsPercent(vaultInfo.fixedApr / 100) : "N/A"}`}
+                value={`${activeVaultTokens.includes(params.address) ? formatAsPercent(vaultInfo.fixedApr / 100) : "N/A"}`}
               />
               <VaultInfoItem
                 label="days until maturity"

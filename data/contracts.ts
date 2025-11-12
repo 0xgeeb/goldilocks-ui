@@ -1,7 +1,7 @@
 import goldiswapABI from "@/utils/abi/Goldiswap.json";
 import goldilockedABI from "@/utils/abi/Goldilocked.json";
 import honeyABI from "@/utils/abi/Honey.json";
-import goldilendABI from "@/utils/abi/Goldilend.json";
+import goldilendABI from "@/utils/abi/GoldilendBase.json";
 import ibgtABI from "@/utils/abi/IBGT.json";
 import bandbearABI from "@/utils/abi/BandBear.json";
 import bondbearABI from "@/utils/abi/BondBear.json";
@@ -220,6 +220,18 @@ export const contracts: { [key: string]: Contract } = {
     address: "0xB345a602c2e24051a57e2339a98c815a6e45059c",
     abi: ibgtABI.abi
   },
+  janoribgtVault: {
+    address: "0x37b940d85D7070F4013B3443a7cA9f419f346c6f",
+    abi: goldivault4626ABI.abi
+  },
+  janoribgtot: {
+    address: "0xe8cD4E99967c7121F8f733D8bF38916D725dDcba",
+    abi: ibgtABI.abi
+  },
+  janoribgtyt: {
+    address: "0x95255D406520b1296Ad1C61c308997B76D3655E3",
+    abi: ibgtABI.abi
+  },
   wberaibgtisland: {
     address: "0x564f011D557aAd1cA09BFC956Eb8a17C35d490e0",
     abi: ibgtABI.abi
@@ -314,6 +326,7 @@ export const vaultLPaddresses: Record<string, Address> = {
     rseth: "0xE457b56a1f9379B604dFBcE809Da6fEA1dECE717",
     rusd: "0x1a2A927F758AE242fB967481CF293D2a36883be6",
     oribgt: "0xCb2A95c52E718A6BA6AAb6587f1a3aFF4BfB0648",
+    janoribgt: "0x6E881Aa722275B1f78CEF01217Ff0cc242FcE881",
     wberaibgtlp: "0x59007956D237F76D40200d3948E23102a59C2213",
     stlbgt: "0x23549f334CD72cE0ba5f6051bf8602eBf12652Da",
     ybgt: "0x04780c47fbEC89BC797a702ce0FcE7E64e62CbFe",
@@ -368,6 +381,13 @@ export const vault_contracts: Record<string, VaultContracts> = {
     yt: contracts.oribgtyt,
     vault: contracts.oribgtVault,
     vaultLP: vaultLPaddresses.oribgt,
+  },
+  janoribgt: {
+    base: contracts.ibgt,
+    ot: contracts.janoribgtot,
+    yt: contracts.janoribgtyt,
+    vault: contracts.janoribgtVault,
+    vaultLP: vaultLPaddresses.janoribgt,
   },
   wberaibgtlp: {
     base: contracts.wberaibgtisland,

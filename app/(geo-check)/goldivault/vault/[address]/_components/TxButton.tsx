@@ -210,7 +210,7 @@ function TxButton({ params }: VaultButtonProps) {
       }
     }
     if (activeToggle === "TRADEOT") {
-      if(params.vaultToken === "oribgt" || params.vaultToken === "stlbgt" || params.vaultToken === "ybgt") {
+      if(params.vaultToken === "oribgt" || params.vaultToken === "stlbgt" || params.vaultToken === "ybgt" || params.vaultToken === "janoribgt") {
         if(tradeDirection === "IN") {
           buyDepositOTFlow(button)
         }
@@ -232,7 +232,7 @@ function TxButton({ params }: VaultButtonProps) {
       else if(params.vaultToken === "oribgt") {
         addSteerLiqFlow(button)
       }
-      else if(params.vaultToken === "stlbgt" || params.vaultToken === "ybgt") {
+      else if(params.vaultToken === "stlbgt" || params.vaultToken === "ybgt" || params.vaultToken === "janoribgt") {
         addKodiakLiqFlow(button)
       }
       else {
@@ -246,7 +246,7 @@ function TxButton({ params }: VaultButtonProps) {
       else if(params.vaultToken === "oribgt") {
         removeSteerLiqFlow(button)
       }
-      else if(params.vaultToken === "stlbgt" || params.vaultToken === "ybgt") {
+      else if(params.vaultToken === "stlbgt" || params.vaultToken === "ybgt" || params.vaultToken === "janoribgt") {
         removeKodiakLiqFlow(button)
       }
       else {

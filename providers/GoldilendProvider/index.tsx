@@ -2,10 +2,10 @@
 
 import { createContext, PropsWithChildren, useContext, useState } from "react";
 import { readContract } from "@wagmi/core";
-import { formatEther } from "viem";
+import { formatEther, parseAbiItem } from "viem";
 import { useAccount } from "wagmi";
 import { useDebounce } from "../../hooks";
-import { config } from "../../providers/WagmiProvider";
+import { config, client } from "../../providers/WagmiProvider";
 import { contracts } from "../../utils/addressi";
 import {
   GoldilendInitialState,
@@ -18,15 +18,16 @@ import {
 
 const INITIAL_STATE: GoldilendInitialState = {
   goldilendInfo: {
-    glwberaSupply: 0,
-    stakedglwbera: 0,
+    glhoneySupply: 0,
     poolSize: 0,
     outstandingDebt: 0,
+    maxUtilization: 0,
+    protocolInterestRate: 0
   },
   goldilendWalletInfo: {
-    wbera: 0,
-    glwbera: 0,
-    wberaGoldilendAllowance: 0,
+    honey: 0,
+    glhoney: 0,
+    honeyGoldilendAllowance: 0,
   },
   lock: 0,
   stake: 0,
@@ -47,14 +48,61 @@ const INITIAL_STATE: GoldilendInitialState = {
   loanInterestRate: 0,
   setLoanInterest: (_interest: number) => {},
   setLoanInterestRate: (_interestRate: number) => {},
-  ownedBeras: [],
+  ownedBeras: [
+    // {
+    //   name: "BandBera",
+    //   id: 69,
+    //   valuation: 50,
+    //   index: 0
+    // }
+  ],
   selectedBera: {
     name: "",
     id: 0,
     valuation: 0,
     index: -1,
   },
-  userLoans: [],
+  userLoans: [
+    {
+      collateralNFTs: [contracts.bondbear.address],
+      collateralNFTIds: [15],
+      borrowedAmount: 3500,
+      interest: 175,
+      duration: 2592000,
+      endDate: Math.floor(Date.now() / 1000) + 86400 * 15, // 15 days from now
+      loanId: 1,
+      repaid: false,
+      liquidated: false,
+      realBorrowedAmount: BigInt("3500000000000000000000"),
+      realInterest: BigInt("175000000000000000000"),
+    },
+    {
+      collateralNFTs: [contracts.bandbear.address],
+      collateralNFTIds: [28],
+      borrowedAmount: 4200,
+      interest: 210,
+      duration: 2592000,
+      endDate: Math.floor(Date.now() / 1000) + 86400 * 8, // 8 days from now
+      loanId: 2,
+      repaid: false,
+      liquidated: false,
+      realBorrowedAmount: BigInt("4200000000000000000000"),
+      realInterest: BigInt("210000000000000000000"),
+    },
+    {
+      collateralNFTs: [contracts.bondbear.address],
+      collateralNFTIds: [33],
+      borrowedAmount: 2800,
+      interest: 140,
+      duration: 2592000,
+      endDate: Math.floor(Date.now() / 1000) + 86400 * 22, // 22 days from now
+      loanId: 3,
+      repaid: false,
+      liquidated: false,
+      realBorrowedAmount: BigInt("2800000000000000000000"),
+      realInterest: BigInt("140000000000000000000"),
+    },
+  ],
   ownedPartners: [],
   selectedPartners: [],
   userBoost: {
@@ -63,7 +111,47 @@ const INITIAL_STATE: GoldilendInitialState = {
     boostMagnitude: 0,
     expiry: 0,
   },
-  liquidatableLoans: [],
+  liquidatableLoans: [
+    {
+      collateralNFTs: [contracts.bondbear.address],
+      collateralNFTIds: [42],
+      borrowedAmount: 5000,
+      interest: 250,
+      duration: 2592000,
+      endDate: Math.floor(Date.now() / 1000) - 86400 * 3, // 3 days ago
+      loanId: 101,
+      repaid: false,
+      liquidated: false,
+      realBorrowedAmount: BigInt("5000000000000000000000"),
+      realInterest: BigInt("250000000000000000000"),
+    },
+    {
+      collateralNFTs: [contracts.bandbear.address],
+      collateralNFTIds: [57],
+      borrowedAmount: 3800,
+      interest: 190,
+      duration: 2592000,
+      endDate: Math.floor(Date.now() / 1000) - 86400 * 5, // 5 days ago
+      loanId: 102,
+      repaid: false,
+      liquidated: false,
+      realBorrowedAmount: BigInt("3800000000000000000000"),
+      realInterest: BigInt("190000000000000000000"),
+    },
+    {
+      collateralNFTs: [contracts.bondbear.address, contracts.bandbear.address],
+      collateralNFTIds: [88, 92],
+      borrowedAmount: 7500,
+      interest: 375,
+      duration: 2592000,
+      endDate: Math.floor(Date.now() / 1000) - 86400 * 1, // 1 day ago
+      loanId: 103,
+      repaid: false,
+      liquidated: false,
+      realBorrowedAmount: BigInt("7500000000000000000000"),
+      realInterest: BigInt("375000000000000000000"),
+    },
+  ],
   notification: {
     toggle: false,
     action: "",
@@ -76,12 +164,14 @@ const INITIAL_STATE: GoldilendInitialState = {
     _result: string,
     _hash: string,
   ) => {},
-  activeToggle: "BORROW",
+  activeToggle: "GHONEY", // changing to ghoney to only enable ghoney deposits
   changeActiveToggle: (_toggle: string) => {},
-  lendActiveToggle: "STAKE",
+  lendActiveToggle: "DEPOSIT",
   changeLendActiveToggle: (_toggle: string) => {},
   refreshGoldilendInfo: async () => {},
   refreshGoldilendWalletInfo: async () => {},
+  berasLoading: false,
+  setBerasLoading: (_loading: boolean) => {},
   infoLoading: false,
   setInfoLoading: (_loading: boolean) => {},
   walletInfoLoading: false,
@@ -107,10 +197,9 @@ const INITIAL_STATE: GoldilendInitialState = {
   handleBeraClick: (_bera: BeraInfo) => {},
   handlePartnerClick: (_partner: PartnerInfo) => {},
   findSelectedPartnerIdxs: () => [],
-  findBeras: (_beras: any) => {},
+  findBeras: () => {},
   findLoans: () => {},
   updateBorrowLimit: () => {},
-  updateBoostMag: () => {},
   handleBorrowChange: (_input: string) => {},
   handleLoanDateChange: (_input: string) => {},
   getInterestRate: () => {},
@@ -197,6 +286,7 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
   const [allowanceButtonsState, setAllowanceButtonsState] = useState<boolean>(
     INITIAL_STATE.allowanceButtons,
   );
+  const [berasLoadingState, setBerasLoadingState] = useState<boolean>(INITIAL_STATE.berasLoading)
   const [infoLoadingState, setInfoLoadingState] = useState<boolean>(
     INITIAL_STATE.infoLoading,
   );
@@ -254,15 +344,15 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
       //   setDisplayStringState((goldilendWalletInfoState.ibgt / 4).toFixed(4));
       //   setLockState(goldilendWalletInfoState.ibgt / 4);
       // }
-      if (lendActiveToggleState === "STAKE") {
-        setDisplayStringState((goldilendWalletInfoState.wbera / 4).toFixed(4));
-        setStakeState(goldilendWalletInfoState.wbera / 4);
+      if (lendActiveToggleState === "DEPOSIT") {
+        setDisplayStringState((goldilendWalletInfoState.honey / 4).toFixed(4));
+        setStakeState(goldilendWalletInfoState.honey / 4);
       }
-      if (lendActiveToggleState === "UNSTAKE") {
+      if (lendActiveToggleState === "WITHDRAW") {
         setDisplayStringState(
-          (goldilendWalletInfoState.glwbera / 4).toFixed(4),
+          (goldilendWalletInfoState.glhoney / 4).toFixed(4),
         );
-        setUnstakeState(goldilendWalletInfoState.glwbera / 4);
+        setUnstakeState(goldilendWalletInfoState.glhoney / 4);
       }
     }
     if (action == 2) {
@@ -270,15 +360,15 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
       //   setDisplayStringState((goldilendWalletInfoState.ibgt / 2).toFixed(4));
       //   setLockState(goldilendWalletInfoState.ibgt / 2);
       // }
-      if (lendActiveToggleState === "STAKE") {
-        setDisplayStringState((goldilendWalletInfoState.wbera / 2).toFixed(4));
-        setStakeState(goldilendWalletInfoState.wbera / 2);
+      if (lendActiveToggleState === "DEPOSIT") {
+        setDisplayStringState((goldilendWalletInfoState.honey / 2).toFixed(4));
+        setStakeState(goldilendWalletInfoState.honey / 2);
       }
-      if (lendActiveToggleState === "UNSTAKE") {
+      if (lendActiveToggleState === "WITHDRAW") {
         setDisplayStringState(
-          (goldilendWalletInfoState.glwbera / 2).toFixed(4),
+          (goldilendWalletInfoState.glhoney / 2).toFixed(4),
         );
-        setUnstakeState(goldilendWalletInfoState.glwbera / 2);
+        setUnstakeState(goldilendWalletInfoState.glhoney / 2);
       }
     }
     if (action == 3) {
@@ -288,17 +378,17 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
       //   );
       //   setLockState(goldilendWalletInfoState.ibgt * 0.75);
       // }
-      if (lendActiveToggleState === "STAKE") {
+      if (lendActiveToggleState === "DEPOSIT") {
         setDisplayStringState(
-          (goldilendWalletInfoState.wbera * 0.75).toFixed(4),
+          (goldilendWalletInfoState.honey * 0.75).toFixed(4),
         );
-        setStakeState(goldilendWalletInfoState.wbera * 0.75);
+        setStakeState(goldilendWalletInfoState.honey * 0.75);
       }
-      if (lendActiveToggleState === "UNSTAKE") {
+      if (lendActiveToggleState === "WITHDRAW") {
         setDisplayStringState(
-          (goldilendWalletInfoState.glwbera * 0.75).toFixed(4),
+          (goldilendWalletInfoState.glhoney * 0.75).toFixed(4),
         );
-        setUnstakeState(goldilendWalletInfoState.glwbera * 0.75);
+        setUnstakeState(goldilendWalletInfoState.glhoney * 0.75);
       }
     }
     if (action == 4) {
@@ -306,13 +396,13 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
       //   setDisplayStringState(goldilendWalletInfoState.ibgt.toFixed(4));
       //   setLockState(goldilendWalletInfoState.ibgt - 0.0001);
       // }
-      if (lendActiveToggleState === "STAKE") {
-        setDisplayStringState(goldilendWalletInfoState.wbera.toFixed(4));
-        setStakeState(goldilendWalletInfoState.wbera - 0.0001);
+      if (lendActiveToggleState === "DEPOSIT") {
+        setDisplayStringState(goldilendWalletInfoState.honey.toFixed(4));
+        setStakeState(goldilendWalletInfoState.honey - 0.0001);
       }
-      if (lendActiveToggleState === "UNSTAKE") {
-        setDisplayStringState(goldilendWalletInfoState.glwbera.toFixed(4));
-        setUnstakeState(goldilendWalletInfoState.glwbera - 0.0001);
+      if (lendActiveToggleState === "WITHDRAW") {
+        setDisplayStringState(goldilendWalletInfoState.glhoney.toFixed(4));
+        setUnstakeState(goldilendWalletInfoState.glhoney - 0.0001);
       }
     }
   };
@@ -333,20 +423,23 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
   };
 
   const updateBorrowLimit = () => {
-    let valLimit = 0;
-    const poolLimit = goldilendInfoState.poolSize * 0.1;
-    const debtLimit =
-      goldilendInfoState.poolSize - goldilendInfoState.outstandingDebt;
-    valLimit += selectedBeraState.valuation;
-    setBorrowLimitState(Math.min(poolLimit, debtLimit, valLimit));
-  };
-
-  const updateBoostMag = () => {
-    let mag = 0;
-    selectedPartnersState.forEach((partner) => {
-      mag += partner.boost;
-    });
-    setBoostMagState(mag);
+    const poolSize = goldilendInfoState.poolSize;
+    const outstandingDebt = goldilendInfoState.outstandingDebt;
+    const fairValue = selectedBeraState.valuation;
+    const maxUtilization = goldilendInfoState.maxUtilization;
+    
+    const maxLoanAmount = poolSize / 10;
+    const maxUtilizationLimit = (poolSize * maxUtilization / 100) - outstandingDebt;    
+    const availablePoolCapacity = poolSize - outstandingDebt;
+    const collateralLimit = fairValue;
+    const borrowLimit = Math.min(
+      maxLoanAmount,
+      maxUtilizationLimit,
+      availablePoolCapacity,
+      collateralLimit
+    );
+    
+    setBorrowLimitState(borrowLimit);
   };
 
   //todo: prolly the cause of approvals not going away. copy handleChange from stake
@@ -355,10 +448,10 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
     if (tab === "LOCK") {
       !input ? setLockState(0) : setLockState(parseFloat(input));
     }
-    if (tab === "STAKE") {
+    if (tab === "DEPOSIT") {
       !input ? setStakeState(0) : setStakeState(parseFloat(input));
     }
-    if (tab === "UNSTAKE") {
+    if (tab === "WITHDRAW") {
       !input ? setUnstakeState(0) : setUnstakeState(parseFloat(input));
     }
   };
@@ -371,16 +464,16 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
     //       })
     //     : "0.00";
     // }
-    if (tab === "STAKE") {
-      return goldilendWalletInfoState.wbera > 0
-        ? goldilendWalletInfoState.wbera.toLocaleString("en-US", {
+    if (tab === "DEPOSIT") {
+      return goldilendWalletInfoState.honey > 0
+        ? goldilendWalletInfoState.honey.toLocaleString("en-US", {
             maximumFractionDigits: 4,
           })
         : "0.00";
     }
-    if (tab === "UNSTAKE") {
-      return goldilendWalletInfoState.glwbera > 0
-        ? goldilendWalletInfoState.glwbera.toLocaleString("en-US", {
+    if (tab === "WITHDRAW") {
+      return goldilendWalletInfoState.glhoney > 0
+        ? goldilendWalletInfoState.glhoney.toLocaleString("en-US", {
             maximumFractionDigits: 4,
           })
         : "0.00";
@@ -425,127 +518,150 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
     setLoanExpirationState(input);
   };
 
-  const findBeras = async (beras: any) => {
-    let beraIndex = 0;
-    for (const bondbera of beras.bondBeras.items) {
-      const bondInfo = {
-        name: "BondBera",
-        id: bondbera.id,
-        valuation: 50,
-        index: beraIndex,
-      };
-      setOwnedBerasState((curr) => [...curr, bondInfo]);
-      beraIndex++;
-    }
-    for (const bandbera of beras.bandBeras.items) {
-      const bandInfo = {
-        name: "BandBera",
-        id: bandbera.id,
-        valuation: 50,
-        index: beraIndex,
-      };
-      setOwnedBerasState((curr) => [...curr, bandInfo]);
-      beraIndex++;
-    }
-  };
+  const findBeras = async () => {
+    // console.log('finding beras')
+    // if(address) {
+    //   setBerasLoadingState(true)
+    //   const response = await fetch(`/api/ownedBeras/${address}`)
+    //   const responseJson: any = await response.json()
+      
+    //   const nftIds = responseJson.nftIds
+    //   const ownedBeras: BeraInfo[] = nftIds.map((tokenId: any, index: any) => ({
+    //     name: "BandBera",
+    //     id: tokenId,
+    //     valuation: 50,
+    //     index: index
+    //   }))
+    //   setOwnedBerasState(ownedBeras)
+    //   setBerasLoadingState(false)
+    // }
+  }
 
   const findLoans = async () => {
+    console.log('finding loans', address)
     if (address) {
-      const userLoans: LoanInfo[] = [];
-      const loans = await readContract(config, {
-        address: contracts.goldilend.address as `0x${string}`,
-        abi: contracts.goldilend.abi,
-        functionName: "lookupLoans",
-        args: [address],
-      });
-      const loansData = loans as unknown as LoanData[];
-      for (let i = 0; i < loansData.length; i++) {
+      const userLoans: any[] = [];
+      for (let i = 1; i < 10; i++) {
+        const loanData: any = await readContract(config, {
+          address: contracts.goldilend.address as `0x${string}`,
+          abi: contracts.goldilend.abi,
+          functionName: "loans",
+          args: [address, i]
+        })
+        // console.log(`Loan ${i}:`, loanData)
         const userLoan = {
-          collateralNFTs: loansData[i].collateralNFTs,
-          collateralNFTIds: loansData[i].collateralNFTIds.map((id) =>
-            parseInt(id.toString(), 16),
-          ),
-          borrowedAmount: parseFloat(formatEther(loansData[i].borrowedAmount)),
-          interest: parseFloat(formatEther(loansData[i].interest)),
-          duration: Number(loansData[i].duration),
-          endDate: Number(loansData[i].endDate),
-          loanId: parseInt(loansData[i].loanId.toString(), 16),
-          liquidated: loansData[i].liquidated,
-        };
-        userLoans.push(userLoan);
+          collateralNFTs: loanData[0],
+          collateralNFTIds: parseInt(loanData[1], 16),
+          borrowedAmount: parseFloat(formatEther(loanData[2])),
+          interest: parseFloat(formatEther(loanData[3])),
+          duration: Number(loanData[4]),
+          endDate: Number(loanData[5]),
+          loanId: parseInt(loanData[6].toString(), 16),
+          repaid: loanData[7],
+          liquidated: loanData[8],
+          realBorrowedAmount: loanData[2],
+          realInterest: loanData[3]
+        }
+        if(userLoan.collateralNFTs !== "0x0000000000000000000000000000000000000000") {
+          userLoans.push(userLoan)
+        }
       }
+      console.log(userLoans)
       setUserLoansState(userLoans);
     }
   };
 
   const refreshGoldilendInfo = async () => {
-    setInfoLoadingState(true);
-    // const stakedGibgtResult = await readContract(config, {
-    //   address: contracts.goldilend.address as `0x${string}`,
-    //   abi: contracts.goldilend.abi,
-    //   functionName: "balanceOf",
-    //   args: [contracts.goldilend.address],
-    // });
-    const glwberaSupplyResult = await readContract(config, {
-      address: contracts.glwbera.address as `0x${string}`,
-      abi: contracts.glwbera.abi,
+    console.log('refreshing info')
+    setInfoLoadingState(true)
+    const glhoneySupplyResult = await readContract(config, {
+      address: contracts.glhoney.address as `0x${string}`,
+      abi: contracts.glhoney.abi,
       functionName: "totalSupply",
       args: [],
-    });
-    const poolSizeResult = await readContract(config, {
-      address: contracts.goldilend.address as `0x${string}`,
-      abi: contracts.goldilend.abi,
-      functionName: "poolSize",
-      args: [],
-    });
+    })
     const debtResult = await readContract(config, {
       address: contracts.goldilend.address as `0x${string}`,
       abi: contracts.goldilend.abi,
       functionName: "outstandingDebt",
       args: [],
     });
+    const maxUtilizationResult = await readContract(config, {
+      address: contracts.goldilend.address as `0x${string}`,
+      abi: contracts.goldilend.abi,
+      functionName: "maxUtilization",
+      args: [],
+    });
+    const rateResult = await readContract(config, {
+      address: contracts.goldilend.address as `0x${string}`,
+      abi: contracts.goldilend.abi,
+      functionName: "protocolInterestRate",
+      args: [],
+    })
 
     const response = {
-      glwberaSupply: parseFloat(formatEther(glwberaSupplyResult as unknown as bigint)),
-      stakedglwbera: 0,
-      poolSize: parseFloat(formatEther(poolSizeResult as unknown as bigint)),
+      glhoneySupply: parseFloat(formatEther(glhoneySupplyResult as unknown as bigint)),
+      poolSize: parseFloat(formatEther(glhoneySupplyResult as unknown as bigint)),
       outstandingDebt: parseFloat(formatEther(debtResult as unknown as bigint)),
-    };
+      maxUtilization: parseFloat(formatEther(maxUtilizationResult as unknown as bigint)),
+      protocolInterestRate: parseFloat(formatEther(rateResult as unknown as bigint)),
+    }
 
     setGoldilendInfoState(response);
     setInfoLoadingState(false);
   };
 
   const refreshGoldilendWalletInfo = async () => {
-    if (address) {
-      setWalletInfoLoadingState(true);
-      const wberaResult = await readContract(config, {
-        address: contracts.wbera.address as `0x${string}`,
-        abi: contracts.wbera.abi,
-        functionName: "balanceOf",
-        args: [address],
-      });
-      const glwberaResult = await readContract(config, {
-        address: contracts.glwbera.address as `0x${string}`,
-        abi: contracts.glwbera.abi,
-        functionName: "balanceOf",
-        args: [address],
-      });
-      const wberaGoldilendAllowanceResult = await readContract(config, {
-        address: contracts.wbera.address as `0x${string}`,
-        abi: contracts.wbera.abi,
-        functionName: "allowance",
-        args: [address, contracts.goldilend.address],
-      });
+    if (!address) {
+      setGoldilendWalletInfoState((prev) => ({
+        ...prev,
+        honey: 0,
+        glhoney: 0,
+        honeyGoldilendAllowance: 0,
+      }));
+      return;
+    }
 
+    setWalletInfoLoadingState(true);
+    try {
+      const [honeyResult, glhoneyResult, honeyAllowanceResult] =
+        await Promise.all([
+          readContract(config, {
+            address: contracts.honey.address as `0x${string}`,
+            abi: contracts.honey.abi,
+            functionName: "balanceOf",
+            args: [address],
+          }),
+          readContract(config, {
+            address: contracts.glhoney.address as `0x${string}`,
+            abi: contracts.glhoney.abi,
+            functionName: "balanceOf",
+            args: [address],
+          }),
+          readContract(config, {
+            address: contracts.honey.address as `0x${string}`,
+            abi: contracts.honey.abi,
+            functionName: "allowance",
+            args: [address, contracts.goldilend.address],
+          }),
+        ]);
 
-      const response = {
-        wbera: parseFloat(formatEther(wberaResult as unknown as bigint)),
-        glwbera: parseFloat(formatEther(glwberaResult as unknown as bigint)),
-        wberaGoldilendAllowance: parseFloat(formatEther(wberaGoldilendAllowanceResult as unknown as bigint))
-      };
-
-      setGoldilendWalletInfoState(response);
+      setGoldilendWalletInfoState({
+        honey: parseFloat(formatEther(honeyResult as unknown as bigint)),
+        glhoney: parseFloat(formatEther(glhoneyResult as unknown as bigint)),
+        honeyGoldilendAllowance: parseFloat(
+          formatEther(honeyAllowanceResult as unknown as bigint),
+        ),
+      });
+    } catch (error) {
+      console.error("Failed to refresh Goldilend wallet info", error);
+      setGoldilendWalletInfoState((prev) => ({
+        ...prev,
+        honey: 0,
+        glhoney: 0,
+        honeyGoldilendAllowance: 0,
+      }));
+    } finally {
       setWalletInfoLoadingState(false);
     }
   };
@@ -640,6 +756,8 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
         displayString: displayStringState,
         setDisplayString: setDisplayStringState,
         setInfoLoading: setInfoLoadingState,
+        berasLoading: berasLoadingState,
+        setBerasLoading: setBerasLoadingState,
         refreshGoldilendInfo,
         refreshGoldilendWalletInfo,
         activeToggle: activeToggleState,
@@ -675,7 +793,6 @@ export const GoldilendProvider = (props: PropsWithChildren<{}>) => {
         setLoanInterestRate: setLoanInterestRateState,
         loanAmount: loanAmountState,
         updateBorrowLimit,
-        updateBoostMag,
         borrowDisplayString: borrowDisplayStringState,
         handleBorrowChange,
         handleLoanDateChange,

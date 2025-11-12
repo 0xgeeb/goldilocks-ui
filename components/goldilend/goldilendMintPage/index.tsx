@@ -18,31 +18,13 @@ export const GoldilendMintPage = () => {
 
   const { wutPopup, setWutPopup } = useGoldilend();
   const { chain, address, isConnected } = useAccount();
-  const { sendMintNFTTx, sendMintWBERATx } = useGoldilendTx();
+  const { sendMintNFTTx, sendMintFakeHoneyTx } = useGoldilendTx();
 
   useEffect(() => {
     setPageLoading(false);
   }, []);
 
   const handleButtonClick = async (nft: string) => {
-    if (nft === "bond") {
-      const text = document.getElementById("bond-text");
-      if (!isConnected) {
-        text && (text.innerHTML = "no wallet");
-        return;
-      }
-      if (chain?.name !== "Berachain") {
-        text && (text.innerHTML = "no berachain");
-        return;
-      }
-      text && (text.innerHTML = "minting...");
-      const mintTx = await sendMintNFTTx(nft, address as `0x${string}`);
-      if (mintTx.substring(0, 2) === "0x") {
-        text && (text.innerHTML = "minted :)");
-      } else {
-        text && (text.innerHTML = "mint 1 bond bera");
-      }
-    }
     if (nft === "band") {
       const text = document.getElementById("band-text");
       if (!isConnected) {
@@ -61,46 +43,10 @@ export const GoldilendMintPage = () => {
         text && (text.innerHTML = "mint 1 band bera");
       }
     }
-    if (nft === "honeycomb") {
-      const text = document.getElementById("honeycomb-text");
-      if (!isConnected) {
-        text && (text.innerHTML = "no wallet");
-        return;
-      }
-      if (chain?.name !== "Berachain") {
-        text && (text.innerHTML = "no berachain");
-        return;
-      }
-      text && (text.innerHTML = "minting...");
-      const mintTx = await sendMintNFTTx(nft, address as `0x${string}`);
-      if (mintTx.substring(0, 2) === "0x") {
-        text && (text.innerHTML = "minted :)");
-      } else {
-        text && (text.innerHTML = "mint 1 honeycomb");
-      }
-    }
-    if (nft === "beradrome") {
-      const text = document.getElementById("beradrome-text");
-      if (!isConnected) {
-        text && (text.innerHTML = "no wallet");
-        return;
-      }
-      if (chain?.name !== "Berachain") {
-        text && (text.innerHTML = "no berachain");
-        return;
-      }
-      text && (text.innerHTML = "minting...");
-      const mintTx = await sendMintNFTTx(nft, address as `0x${string}`);
-      if (mintTx.substring(0, 2) === "0x") {
-        text && (text.innerHTML = "minted :)");
-      } else {
-        text && (text.innerHTML = "mint 1 beradrome");
-      }
-    }
   };
 
   const handleMintButtonClick = async () => {
-    const text = document.getElementById("wbera-text");
+    const text = document.getElementById("fakehoney-text");
     if (!isConnected) {
       text && (text.innerHTML = "no wallet");
       return;
@@ -110,11 +56,11 @@ export const GoldilendMintPage = () => {
       return;
     }
     text && (text.innerHTML = "minting...");
-    const mintTx = await sendMintWBERATx(address as `0x${string}`);
+    const mintTx = await sendMintFakeHoneyTx(address as `0x${string}`);
     if (mintTx.substring(0, 2) === "0x") {
       text && (text.innerHTML = "minted :)");
     } else {
-      text && (text.innerHTML = "mint 1m wbera");
+      text && (text.innerHTML = "mint 1m fake HONEY");
     }
   }
 
@@ -129,9 +75,14 @@ export const GoldilendMintPage = () => {
   }
 
   return (
-    <main className="w-screen h-screen" onClick={() => handlePopups()}>
-      <NavBar wutPopup={wutPopup} setWutPopup={setWutPopup} />
-      <div className="w-[100%] h-[89%] xl:h-[85%] bg-cover bg-bottom bg-[url('/images/bg-goldilend.png')] relative">
+    <CsrPageLayout
+      onPageClick={(e) => handlePopups()}
+      wutPopup={wutPopup}
+      setWutPopup={setWutPopup}
+      bgImageUrl="/images/bg-goldivault-2.png"
+      // maskBg={`linear-gradient(#1D160DE5, #1D160DE5)`}
+    >
+      <div className="w-[100%] h-[89%] xl:h-[85%] relative">
         <h1
           className="absolute right-[70%] top-[1.5%] font-amaticbold text-[9vw] text-[#D9C6BA] lg:right-[73%] lg:top-0 lg:text-[7.5vw] xl:top-[15%]"
           id="page-title"
@@ -157,9 +108,9 @@ export const GoldilendMintPage = () => {
               <div className="absolute inset-2 flex items-center justify-center border-2 border-black bg-[#D9C6BA]">
                 <h1
                   className="text-center font-amaticbold text-[5vw] font-medium lg:text-[3vw]"
-                  id="wbera-text"
+                  id="fakehoney-text"
                 >
-                  mint 1M WBERA
+                  mint 1M fake HONEY
                 </h1>
               </div>
             </div>
@@ -180,29 +131,12 @@ export const GoldilendMintPage = () => {
                 </h1>
               </div>
             </div>
-            {/* <div
-              className="absolute bottom-0 left-[26.25%] size-[47.5%] cursor-pointer border-2 border-black bg-[#EEDCD2] hover:scale-110"
-              onClick={() => handleButtonClick("honeycomb")}
-            >
-              <div className="absolute left-0 top-1 w-2 skew-y-[45deg] border-b-2 border-black"></div>
-              <div className="absolute bottom-1 left-0 w-2 -skew-y-[45deg] border-b-2 border-black"></div>
-              <div className="absolute right-0 top-1 w-2 -skew-y-[45deg] border-b-2 border-black"></div>
-              <div className="absolute bottom-1 right-0 w-2 skew-y-[45deg] border-b-2 border-black"></div>
-              <div className="absolute inset-2 flex items-center justify-center border-2 border-black bg-[#D9C6BA]">
-                <h1
-                  className="text-center font-amaticbold text-[5vw] font-medium lg:text-[3vw]"
-                  id="honeycomb-text"
-                >
-                  mint 1 honeycomb
-                </h1>
-              </div>
-            </div> */}
           </div>
         </div>
         <div className="absolute bottom-[1%] left-[1%] z-50 flex h-[6%] w-[30%] items-center justify-center border-2 border-black bg-[#FFE59F] px-2 text-center font-baloo text-[2vw] font-semibold lg:h-[8%] xl:w-[25%] xl:text-[1.5vw] 2xl:w-[15%] 2xl:text-[1vw]">
           <span>these NFTs are FAKE</span>
         </div>
       </div>
-    </main>
+    </CsrPageLayout>
   );
 };

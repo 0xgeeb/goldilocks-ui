@@ -77,7 +77,10 @@ export interface LoanInfo {
   duration: number;
   endDate: number;
   loanId: number;
+  repaid: boolean;
   liquidated: boolean;
+  realBorrowedAmount: bigint;
+  realInterest: bigint;
 }
 
 export interface LoanData {
@@ -88,20 +91,24 @@ export interface LoanData {
   duration: bigint;
   endDate: bigint;
   loanId: bigint;
+  repaid: boolean;
   liquidated: boolean;
+  realBorrowedAmount: bigint;
+  realInterest: bigint;
 }
 
 export interface GoldilendInitialState {
   goldilendInfo: {
-    glwberaSupply: number;
-    stakedglwbera: number;
+    glhoneySupply: number;
     poolSize: number;
     outstandingDebt: number;
+    maxUtilization: number;
+    protocolInterestRate: number;
   };
   goldilendWalletInfo: {
-    wbera: number;
-    glwbera: number;
-    wberaGoldilendAllowance: number;
+    honey: number;
+    glhoney: number;
+    honeyGoldilendAllowance: number;
   };
   lock: number;
   stake: number;
@@ -145,6 +152,8 @@ export interface GoldilendInitialState {
   changeLendActiveToggle: (_toggle: string) => void;
   refreshGoldilendInfo: () => void;
   refreshGoldilendWalletInfo: () => void;
+  berasLoading: boolean;
+  setBerasLoading: (_loading: boolean) => void;
   infoLoading: boolean;
   setInfoLoading: (_loading: boolean) => void;
   walletInfoLoading: boolean;
@@ -171,13 +180,12 @@ export interface GoldilendInitialState {
   handlePartnerClick: (_partner: PartnerInfo) => void;
   findSelectedPartnerIdxs: () => number[];
   updateBorrowLimit: () => void;
-  updateBoostMag: () => void;
   handleBorrowChange: (_input: string) => void;
   handleLoanDateChange: (_input: string) => void;
   loanExpiration: string;
   debouncedLoanExpiration: string;
   findLoans: () => void;
-  findBeras: (_beras: any) => void;
+  findBeras: () => void;
   getInterestRate: () => void;
   updateOwnedBeras: (_borrowedAgainstBera: BeraInfo) => void;
   updateOwnedPartners: (_nfts: PartnerInfo | PartnerInfo[]) => void;

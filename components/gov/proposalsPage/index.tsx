@@ -57,7 +57,7 @@ export const ProposalsPage = () => {
           >
             <div className="relative min-h-screen flex flex-col items-center justify-center p-4 sm:p-8 md:px-20 md:py-6">
               <h1
-                className="absolute left-[2.5%] top-[2.5%] lg:top-[8%] font-amaticbold text-[7.5vw] text-[#D9C6BA] lg:top-[16%] lg:text-[6vw] xl:left-[5%] 2xl:left-[7.5%] 2xl:top-[12.16%] tall:text-[10vw] tall:md:text-[7.5vw] tall:lg:text-[6vw]"
+                className="absolute left-[2.5%] top-[-0.5%] font-amaticbold text-[7.5vw] text-[#D9C6BA] lg:top-[16%] lg:text-[6vw] xl:left-[5%] 2xl:left-[7.5%] 2xl:top-[12.16%] tall:text-[10vw] tall:md:text-[7.5vw] tall:lg:text-[6vw]"
                 id="page-title"
               >
                 GoldiGovernance

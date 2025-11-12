@@ -16,6 +16,7 @@ export const useVaultInfoConfig = ({ vaultToken }: VaultInfoConfigHookProps) => 
     goldivaultWalletInfoRusd,
     goldivaultWalletInfoRseth,
     goldivaultWalletInfoOribgt,
+    goldivaultWalletInfoJanOribgt,
     goldivaultWalletInfoWberaibgtlp,
     goldivaultWalletInfoStlbgt,
     goldivaultWalletInfoYbgt,
@@ -34,13 +35,15 @@ export const useVaultInfoConfig = ({ vaultToken }: VaultInfoConfigHookProps) => 
               ? goldivaultWalletInfoRseth.rsethot
               : vaultToken === "oribgt"
                 ? goldivaultWalletInfoOribgt.oribgtot
-                : vaultToken === "wberaibgtlp"
-                  ? goldivaultWalletInfoWberaibgtlp.wberaibgtlpot
-                  : vaultToken === "stlbgt"
-                    ? goldivaultWalletInfoStlbgt.stlbgtot
-                    : vaultToken === "ybgt"
-                      ? goldivaultWalletInfoYbgt.ybgtot
-                      : {};
+                : vaultToken === "janoribgt"
+                  ? goldivaultWalletInfoJanOribgt.janoribgtot
+                  : vaultToken === "wberaibgtlp"
+                    ? goldivaultWalletInfoWberaibgtlp.wberaibgtlpot
+                    : vaultToken === "stlbgt"
+                      ? goldivaultWalletInfoStlbgt.stlbgtot
+                      : vaultToken === "ybgt"
+                        ? goldivaultWalletInfoYbgt.ybgtot
+                        : {};
 
   const vaultYT =
     vaultToken === "solvbtc"
@@ -53,13 +56,15 @@ export const useVaultInfoConfig = ({ vaultToken }: VaultInfoConfigHookProps) => 
               ? goldivaultWalletInfoRseth.rsethyt
               : vaultToken === "oribgt"
                 ? goldivaultWalletInfoOribgt.oribgtyt
-                : vaultToken === "wberaibgtlp"
-                  ? goldivaultWalletInfoWberaibgtlp.wberaibgtlpyt
-                  : vaultToken === "stlbgt"
-                    ? goldivaultWalletInfoStlbgt.stlbgtyt
-                    : vaultToken === "ybgt"
-                      ? goldivaultWalletInfoYbgt.ybgtyt
-                      : {};
+                : vaultToken === "janoribgt"
+                  ? goldivaultWalletInfoJanOribgt.janoribgtyt
+                  : vaultToken === "wberaibgtlp"
+                    ? goldivaultWalletInfoWberaibgtlp.wberaibgtlpyt
+                    : vaultToken === "stlbgt"
+                      ? goldivaultWalletInfoStlbgt.stlbgtyt
+                      : vaultToken === "ybgt"
+                        ? goldivaultWalletInfoYbgt.ybgtyt
+                        : {};
 
   const vaultDT =
     vaultToken === "solvbtc"
@@ -72,13 +77,15 @@ export const useVaultInfoConfig = ({ vaultToken }: VaultInfoConfigHookProps) => 
               ? goldivaultWalletInfoRseth.rseth
               : vaultToken === "oribgt"
                 ? goldivaultWalletInfoOribgt.ibgt
-                : vaultToken === "wberaibgtlp"
-                  ? goldivaultWalletInfoWberaibgtlp.wberaibgtlp
-                  : vaultToken === "stlbgt"
-                    ? goldivaultWalletInfoStlbgt.lbgt
-                    : vaultToken === "ybgt"
-                      ? goldivaultWalletInfoYbgt.ybgt
-                      : {};
+                : vaultToken === "janoribgt"
+                  ? goldivaultWalletInfoJanOribgt.ibgt
+                  : vaultToken === "wberaibgtlp"
+                    ? goldivaultWalletInfoWberaibgtlp.wberaibgtlp
+                    : vaultToken === "stlbgt"
+                      ? goldivaultWalletInfoStlbgt.lbgt
+                      : vaultToken === "ybgt"
+                        ? goldivaultWalletInfoYbgt.ybgt
+                        : {};
 
   const vaultOTaddy =
     vaultToken === "solvbtc"
@@ -91,13 +98,15 @@ export const useVaultInfoConfig = ({ vaultToken }: VaultInfoConfigHookProps) => 
               ? contracts.rsethot.address
               : vaultToken === "oribgt"
                 ? contracts.oribgtot.address
-                : vaultToken === "wberaibgtlp"
-                  ? contracts.wberaibgtlpot.address
-                  : vaultToken === "stlbgt"
-                    ? contracts.stlbgtot.address
-                    : vaultToken === "ybgt"
-                      ? contracts.ybgtot.address
-                      : "";
+                : vaultToken === "janoribgt"
+                  ? contracts.janoribgtot.address
+                  : vaultToken === "wberaibgtlp"
+                    ? contracts.wberaibgtlpot.address
+                    : vaultToken === "stlbgt"
+                      ? contracts.stlbgtot.address
+                      : vaultToken === "ybgt"
+                        ? contracts.ybgtot.address
+                        : "";
                 
   const vaultDTaddy =
     vaultToken === "solvbtc"
@@ -110,13 +119,15 @@ export const useVaultInfoConfig = ({ vaultToken }: VaultInfoConfigHookProps) => 
               ? contracts.rseth.address
               : vaultToken === "oribgt"
                 ? contracts.ibgt.address
-                : vaultToken === "wberaibgtlp"
-                  ? contracts.wberaibgtisland.address
-                  : vaultToken === "stlbgt"
-                    ? contracts.lbgt.address
-                    : vaultToken === "ybgt"
-                      ? contracts.ybgt.address
-                      : "";
+                : vaultToken === "janoribgt"
+                  ? contracts.ibgt.address
+                  : vaultToken === "wberaibgtlp"
+                    ? contracts.wberaibgtisland.address
+                    : vaultToken === "stlbgt"
+                      ? contracts.lbgt.address
+                      : vaultToken === "ybgt"
+                        ? contracts.ybgt.address
+                        : "";
 
   const vaultDTAllowance =
     vaultToken === "solvbtc"
@@ -129,13 +140,15 @@ export const useVaultInfoConfig = ({ vaultToken }: VaultInfoConfigHookProps) => 
               ? goldivaultWalletInfoRseth.rsethAllowance
               : vaultToken === "oribgt"
                 ? goldivaultWalletInfoOribgt.ibgtAllowance
-                : vaultToken === "wberaibgtlp"
-                  ? goldivaultWalletInfoWberaibgtlp.wberaibgtlpAllowance
-                  : vaultToken === "stlbgt"
-                    ? goldivaultWalletInfoStlbgt.lbgtAllowance
-                    : vaultToken === "ybgt"
-                      ? goldivaultWalletInfoYbgt.ybgtAllowance
-                      : 0;
+                : vaultToken === "janoribgt"
+                  ? goldivaultWalletInfoJanOribgt.ibgtAllowance
+                  : vaultToken === "wberaibgtlp"
+                    ? goldivaultWalletInfoWberaibgtlp.wberaibgtlpAllowance
+                    : vaultToken === "stlbgt"
+                      ? goldivaultWalletInfoStlbgt.lbgtAllowance
+                      : vaultToken === "ybgt"
+                        ? goldivaultWalletInfoYbgt.ybgtAllowance
+                        : 0;
 
   const vaultYTLabel = 
     vaultToken === "solvbtc"
@@ -148,13 +161,15 @@ export const useVaultInfoConfig = ({ vaultToken }: VaultInfoConfigHookProps) => 
               ? "rsETH-YT"
               : vaultToken === "oribgt"
                 ? "oriBGT-YT"
-                : vaultToken === "wberaibgtlp"
-                  ? "WBERA-iBGT LP-YT"
-                  : vaultToken === "stlbgt"
-                    ? "stLBGT-YT"
-                    : vaultToken === "ybgt"
-                      ? "yBGT-YT"
-                      : "";
+                : vaultToken === "janoribgt"
+                  ? "oriBGT-YT"
+                  : vaultToken === "wberaibgtlp"
+                    ? "WBERA-iBGT LP-YT"
+                    : vaultToken === "stlbgt"
+                      ? "stLBGT-YT"
+                      : vaultToken === "ybgt"
+                        ? "yBGT-YT"
+                        : "";
 
   const vaultOTLabel = 
     vaultToken === "solvbtc"
@@ -167,13 +182,15 @@ export const useVaultInfoConfig = ({ vaultToken }: VaultInfoConfigHookProps) => 
               ? "rsETH-OT"
               : vaultToken === "oribgt"
                 ? "oriBGT-OT"
-                : vaultToken === "wberaibgtlp"
-                  ? "WBERA-iBGT LP-OT"
-                  : vaultToken === "stlbgt"
-                    ? "stLBGT-OT"
-                    : vaultToken === "ybgt"
-                      ? "yBGT-OT"
-                      : "";
+                : vaultToken === "janoribgt"
+                  ? "oriBGT-OT"
+                  : vaultToken === "wberaibgtlp"
+                    ? "WBERA-iBGT LP-OT"
+                    : vaultToken === "stlbgt"
+                      ? "stLBGT-OT"
+                      : vaultToken === "ybgt"
+                        ? "yBGT-OT"
+                        : "";
 
   const vaultDTLabel = 
     vaultToken === "solvbtc"
@@ -182,56 +199,65 @@ export const useVaultInfoConfig = ({ vaultToken }: VaultInfoConfigHookProps) => 
         ? "uniBTC"
         : vaultToken === "rusd"
           ? "rUSD"
-            : vaultToken === "rseth"
-              ? "rsETH"
-              : vaultToken === "oribgt"
-                ? "iBGT"
-                : vaultToken === "wberaibgtlp"
-                  ? "WBERA-iBGT LP"
-                  : vaultToken === "stlbgt"
-                    ? "LBGT"
-                    : vaultToken === "ybgt"
-                      ? "yBGT"
-                      : "";
+          : vaultToken === "rseth"
+            ? "rsETH"
+            : vaultToken === "oribgt"
+              ? "iBGT"
+              : vaultToken === "janoribgt"
+                  ? "iBGT"
+                  : vaultToken === "wberaibgtlp"
+                    ? "WBERA-iBGT LP"
+                    : vaultToken === "stlbgt"
+                      ? "LBGT"
+                      : vaultToken === "ybgt"
+                        ? "yBGT"
+                        : "";
                     
   const stakedYt =
     vaultToken === "oribgt"
       ? goldivaultWalletInfoOribgt.stakedYt
-      : vaultToken === "wberaibgtlp"
-        ? goldivaultWalletInfoWberaibgtlp.stakedYt
-        : vaultToken === "stlbgt"
-          ? goldivaultWalletInfoStlbgt.stakedYt
-          : vaultToken === "ybgt"
-            ? goldivaultWalletInfoYbgt.stakedYt
-            : 0
+      : vaultToken === "janoribgt"
+        ? goldivaultWalletInfoJanOribgt.stakedYt
+        : vaultToken === "wberaibgtlp"
+          ? goldivaultWalletInfoWberaibgtlp.stakedYt
+          : vaultToken === "stlbgt"
+            ? goldivaultWalletInfoStlbgt.stakedYt
+            : vaultToken === "ybgt"
+              ? goldivaultWalletInfoYbgt.stakedYt
+              : 0
   const justYt = 
     vaultToken === "oribgt"
       ? goldivaultWalletInfoOribgt.justYt
-      : vaultToken === "wberaibgtlp"
-        ? goldivaultWalletInfoWberaibgtlp.justYt
-        : vaultToken === "stlbgt"
-          ? goldivaultWalletInfoStlbgt.justYt
-          : vaultToken === "ybgt"
-            ? goldivaultWalletInfoYbgt.justYt
-            : 0
+      : vaultToken === "janoribgt"
+        ? goldivaultWalletInfoJanOribgt.justYt
+        : vaultToken === "wberaibgtlp"
+          ? goldivaultWalletInfoWberaibgtlp.justYt
+          : vaultToken === "stlbgt"
+            ? goldivaultWalletInfoStlbgt.justYt
+            : vaultToken === "ybgt"
+              ? goldivaultWalletInfoYbgt.justYt
+              : 0
   const claimable =
     vaultToken === "oribgt"
       ? goldivaultWalletInfoOribgt.claimable
-      : vaultToken === "wberaibgtlp"
-        ? goldivaultWalletInfoWberaibgtlp.claimable
-        : vaultToken === "stlbgt"
-          ? goldivaultWalletInfoStlbgt.claimable
-          : vaultToken === "ybgt"
-            ? goldivaultWalletInfoYbgt.claimable
-            : 0
+      : vaultToken === "janoribgt"
+        ? goldivaultWalletInfoJanOribgt.claimable
+        : vaultToken === "wberaibgtlp"
+          ? goldivaultWalletInfoWberaibgtlp.claimable
+          : vaultToken === "stlbgt"
+            ? goldivaultWalletInfoStlbgt.claimable
+            : vaultToken === "ybgt"
+              ? goldivaultWalletInfoYbgt.claimable
+              : 0
 
-  const four626bool = vaultToken === "oribgt" || vaultToken === "wberaibgtlp" || vaultToken === "stlbgt" || vaultToken === "ybgt"
+  const four626bool = vaultToken === "oribgt" || vaultToken === "janoribgt" || vaultToken === "wberaibgtlp" || vaultToken === "stlbgt" || vaultToken === "ybgt"
 
   const invalidVault =
     vaultToken !== "rseth" &&
     vaultToken !== "unibtc" &&
     vaultToken !== "rusd" &&
     vaultToken !== "oribgt" &&
+    vaultToken !== "janoribgt" &&
     vaultToken !== "solvbtc" &&
     vaultToken !== "wberaibgtlp" &&
     vaultToken !== "stlbgt" &&
@@ -248,13 +274,15 @@ export const useVaultInfoConfig = ({ vaultToken }: VaultInfoConfigHookProps) => 
             ? contracts.rsethVault.address
             : vaultName === "oribgt"
               ? contracts.oribgtVault.address
-              : vaultName === "wberaibgtlp"
-                ? contracts.wberaibgtlpVault.address
-                : vaultName === "stlbgt"
-                  ? contracts.stlbgtVault.address
-                  : vaultName === "ybgt"
-                    ? contracts.ybgtVault.address
-                    : "";
+              : vaultName === "janoribgt"
+                ? contracts.janoribgtVault.address
+                : vaultName === "wberaibgtlp"
+                  ? contracts.wberaibgtlpVault.address
+                  : vaultName === "stlbgt"
+                    ? contracts.stlbgtVault.address
+                    : vaultName === "ybgt"
+                      ? contracts.ybgtVault.address
+                      : "";
   }
 
   const LPasset =
@@ -268,13 +296,15 @@ export const useVaultInfoConfig = ({ vaultToken }: VaultInfoConfigHookProps) => 
               ? goldivaultWalletInfoRseth.rseth
               : vaultToken === "oribgt"
                 ? goldivaultWalletInfoOribgt.ibgt
-                : vaultToken === "wberaibgtlp"
-                  ? goldivaultWalletInfoWberaibgtlp.origamiwberaibgtlp
-                  : vaultToken === "stlbgt"
-                    ? goldivaultWalletInfoStlbgt.lbgt
-                    : vaultToken === "ybgt"
-                      ? goldivaultWalletInfoYbgt.stybgt
-                      : {};
+                : vaultToken === "janoribgt"
+                  ? goldivaultWalletInfoJanOribgt.ibgt
+                  : vaultToken === "wberaibgtlp"
+                    ? goldivaultWalletInfoWberaibgtlp.origamiwberaibgtlp
+                    : vaultToken === "stlbgt"
+                      ? goldivaultWalletInfoStlbgt.lbgt
+                      : vaultToken === "ybgt"
+                        ? goldivaultWalletInfoYbgt.stybgt
+                        : {};
 
   const LPassetaddy =
     vaultToken === "solvbtc"
@@ -287,13 +317,15 @@ export const useVaultInfoConfig = ({ vaultToken }: VaultInfoConfigHookProps) => 
               ? contracts.rseth.address
               : vaultToken === "oribgt"
                 ? contracts.ibgt.address
-                : vaultToken === "wberaibgtlp"
-                  ? contracts.origamiwberaibgtisland.address
-                  : vaultToken === "stlbgt"
-                    ? contracts.lbgt.address
-                    : vaultToken === "ybgt"
-                      ? contracts.stybgt.address
-                      : "";
+                : vaultToken === "janoribgt"
+                  ? contracts.ibgt.address
+                  : vaultToken === "wberaibgtlp"
+                    ? contracts.origamiwberaibgtisland.address
+                    : vaultToken === "stlbgt"
+                      ? contracts.lbgt.address
+                      : vaultToken === "ybgt"
+                        ? contracts.stybgt.address
+                        : "";
 
   const LPassetLabel = 
     vaultToken === "solvbtc"
@@ -306,46 +338,56 @@ export const useVaultInfoConfig = ({ vaultToken }: VaultInfoConfigHookProps) => 
               ? "rsETH"
               : vaultToken === "oribgt"
                 ? "iBGT"
-                : vaultToken === "wberaibgtlp"
-                  ? "oAC-WBERA-iBGT LP"
-                  : vaultToken === "stlbgt"
-                    ? "LBGT"
-                    : vaultToken === "ybgt"
-                      ? "styBGT"
-                      : "";
+                : vaultToken === "janoribgt"
+                  ? "iBGT"
+                  : vaultToken === "wberaibgtlp"
+                    ? "oAC-WBERA-iBGT LP"
+                    : vaultToken === "stlbgt"
+                      ? "LBGT"
+                      : vaultToken === "ybgt"
+                        ? "styBGT"
+                        : "";
 
   const popupLPAsset =
     vaultToken === "oribgt"
       ? goldivaultWalletInfoOribgt.oribgt
-      : vaultToken === "stlbgt"
-        ? goldivaultWalletInfoStlbgt.stlbgt
-        : vaultToken === "ybgt"
-          ? goldivaultWalletInfoYbgt.ysysybgt
-          : 0
+      : vaultToken === "janoribgt"
+        ? goldivaultWalletInfoJanOribgt.oribgt
+        : vaultToken === "stlbgt"
+          ? goldivaultWalletInfoStlbgt.stlbgt
+          : vaultToken === "ybgt"
+            ? goldivaultWalletInfoYbgt.ysysybgt
+            : 0
 
   const popupLPAssetAddy =
     vaultToken === "oribgt"
       ? contracts.oribgt.address
-      : vaultToken === "stlbgt"
-        ? contracts.stlbgt.address
-        : vaultToken === "ybgt"
-          ? contracts.ysysybgt.address
-          : ""
+      : vaultToken === "janoribgt"
+        ? contracts.oribgt.address
+        : vaultToken === "stlbgt"
+          ? contracts.stlbgt.address
+          : vaultToken === "ybgt"
+            ? contracts.ysysybgt.address
+            : ""
   
   const popupLPAssetLabel =
     vaultToken === "rusd"
       ? "rUSD"
       : vaultToken === "oribgt"
         ? "oriBGT"
-        : vaultToken === "stlbgt"
-          ? "stLBGT"
-          : vaultToken === "ybgt"
-            ? "ysysyBGT"
-            : ""
+        : vaultToken === "janoribgt"
+          ? "oriBGT"
+          : vaultToken === "stlbgt"
+            ? "stLBGT"
+            : vaultToken === "ybgt"
+              ? "ysysyBGT"
+              : ""
 
   const popupDTLabel = 
     vaultToken === "oribgt"
       ? "iBGT"
+      : vaultToken === "janoribgt"
+        ? "iBGT"
         : vaultToken === "stlbgt"
           ? "LBGT"
           : vaultToken === "ybgt"
@@ -355,20 +397,24 @@ export const useVaultInfoConfig = ({ vaultToken }: VaultInfoConfigHookProps) => 
   const dtPicSrc = 
     vaultToken === "oribgt"
       ? "/images/logo-ibgt.svg"
-      : vaultToken === "stlbgt"
-        ? "/images/logo-lbgt.svg"
-        : vaultToken === "ybgt"
-          ? "/images/logo-ybgt.png"
-          : ""
+      : vaultToken === "janoribgt"
+        ? "/images/logo-ibgt.svg"
+        : vaultToken === "stlbgt"
+          ? "/images/logo-lbgt.svg"
+          : vaultToken === "ybgt"
+            ? "/images/logo-ybgt.png"
+            : ""
 
   const lpPicSrc = 
     vaultToken === "oribgt"
       ? "/images/logo-oribgt.svg"
-      : vaultToken === "stlbgt"
-        ? "/images/logo-lbgt.svg"
-        : vaultToken === "ybgt"
-          ? "/images/logo-ybgt.png"
-          : ""
+      : vaultToken === "janoribgt"
+        ? "/images/logo-oribgt.svg"
+        : vaultToken === "stlbgt"
+          ? "/images/logo-lbgt.svg"
+          : vaultToken === "ybgt"
+            ? "/images/logo-ybgt.png"
+            : ""
 
   const zapInAssetLabel = (initialAsset: string): string => {
     return vaultToken === "oribgt"
@@ -377,26 +423,32 @@ export const useVaultInfoConfig = ({ vaultToken }: VaultInfoConfigHookProps) => 
         ? initialAsset === "LBGT" ? "LBGT" : "stLBGT"
         : vaultToken === "ybgt"
           ? "yBGT"
-          : "";
+          : vaultToken === "janoribgt"
+            ? "iBGT"
+            : "";
   }
 
   const zapOutAsset = 
     vaultToken === "oribgt"
       ? goldivaultWalletInfoOribgt.zapOutAsset
-      : vaultToken === "stlbgt"
-        ? goldivaultWalletInfoStlbgt.kodiakIsland
-        : vaultToken === "ybgt"
-          ? goldivaultWalletInfoYbgt.kodiakIsland
-          : 0
+      : vaultToken === "janoribgt"
+        ? goldivaultWalletInfoJanOribgt.kodiakIsland
+        : vaultToken === "stlbgt"
+          ? goldivaultWalletInfoStlbgt.kodiakIsland
+          : vaultToken === "ybgt"
+            ? goldivaultWalletInfoYbgt.kodiakIsland
+            : 0
   
   const zapOutAssetLabel =
     vaultToken === "oribgt"
       ? "Staked Steer LP"
-      : vaultToken === "stlbgt"
-        ? "stLBGT / stLBGT-OT LP"
-        : vaultToken === "ybgt"
-          ? "ysysyBGT / yBGT-OT LP"
-          : ""
+      : vaultToken === "janoribgt"
+        ? "oriBGT / oriBGT-OT LP"
+        : vaultToken === "stlbgt"
+          ? "stLBGT / stLBGT-OT LP"
+          : vaultToken === "ybgt"
+            ? "ysysyBGT / yBGT-OT LP"
+            : ""
   
   const descriptionTitle = 
     vaultToken === "solvbtc"
@@ -409,52 +461,60 @@ export const useVaultInfoConfig = ({ vaultToken }: VaultInfoConfigHookProps) => 
               ? "rsETH"
               : vaultToken === "oribgt"
                 ? "oriBGT"
-                : vaultToken === "wberaibgtlp"
-                  ? "WBERA-iBGT LP"
-                  : vaultToken === "stlbgt"
-                    ? "LBGT"
-                    : vaultToken === "ybgt"
-                      ? "yBGT"
-                      : "";
+                : vaultToken === "janoribgt"
+                  ? "oriBGT"
+                  : vaultToken === "wberaibgtlp"
+                    ? "WBERA-iBGT LP"
+                    : vaultToken === "stlbgt"
+                      ? "LBGT"
+                      : vaultToken === "ybgt"
+                        ? "yBGT"
+                        : "";
   
   const islandSlug =
     vaultToken === "oribgt"
       ? "steeroribgt"
-      : vaultToken === "stlbgt"
-        ? "kodiakstlbgt"
-        : vaultToken === "ybgt"
-          ? "kodiakybgt"
-          : ""
+      : vaultToken === "janoribgt"
+        ? "kodiakjanoribgt"
+        : vaultToken === "stlbgt"
+          ? "kodiakstlbgt"
+          : vaultToken === "ybgt"
+            ? "kodiakybgt"
+            : ""
         
   const kodiakIslandAddy = 
-    vaultToken === "stlbgt"
-      ? contracts.stlbgtKodiakIsland.address
-      : vaultToken === "ybgt"
-        ? contracts.ybgtKodiakIsland.address
-        : ""
+    vaultToken === "janoribgt"
+      ? contracts.janoribgtKodiakIsland.address
+      : vaultToken === "stlbgt"
+        ? contracts.stlbgtKodiakIsland.address
+        : vaultToken === "ybgt"
+          ? contracts.ybgtKodiakIsland.address
+          : ""
   
-  // const activeVaults = ["oriBGT", "LBGT", "yBGT"]
-  const activeVaultTokens = ["stlbgt"]
-  const activeVaults = ["LBGT"]
-  const zappableVaults = ["oribgt", "stlbgt", "ybgt"]
+  const activeVaultTokens = ["stlbgt", "janoribgt"]
+  const zappableVaults = ["oribgt", "stlbgt", "ybgt", "janoribgt"]
 
   const zapInSteps =
     vaultToken === "oribgt"
       ? "1. Deposit iBGT into Origami for oriBGT 2. Deposit oriBGT into Goldilocks for oriBGT-OT 3. LP oriBGT and oriBGT-OT into Steer 4. Stake Steer LP tokens into reward vault"
-      : vaultToken === "stlbgt"
-        ? "1. Stake LBGT for stLBGT 2. Deposit stLBGT into Goldilocks for stLBGT-OT and stLBGT-YT 3. LP stLBGT and stLBGT-OT into the Kodiak Island"
-        : vaultToken === "ybgt"
-          ? "1. Stake yBGT for styBGT 2. Stake styBGT for ysysyBGT 3. Deposit ysysyBGT into Goldivaults for OT and YT 4. LP ysysyBGT receipt token and OT "
-          : ""
+      : vaultToken === "janoribgt"
+        ? "1. Deposit iBGT into Origami for oriBGT 2. Deposit oriBGT into Goldilocks for oriBGT-OT 3. LP oriBGT and oriBGT-OT into the Kodiak Island"
+        : vaultToken === "stlbgt"
+          ? "1. Stake LBGT for stLBGT 2. Deposit stLBGT into Goldilocks for stLBGT-OT and stLBGT-YT 3. LP stLBGT and stLBGT-OT into the Kodiak Island"
+          : vaultToken === "ybgt"
+            ? "1. Stake yBGT for styBGT 2. Stake styBGT for ysysyBGT 3. Deposit ysysyBGT into Goldivaults for OT and YT 4. LP ysysyBGT receipt token and OT "
+            : ""
 
   const zapOutSteps =
     vaultToken === "oribgt"
       ? "1. Unstake Steer LP tokens from reward vault 2. Remove oriBGT and oriBGT-OT liquidity from Steer 3. Redeem oriBGT-OT from Goldilocks 4. Redeem oriBGT from Origami"
-      : vaultToken === "stlbgt"
-        ? "1. Withdraw liquidity from Kodiak Island 2. Redeem stLBGT-OT from Goldilocks 3. Redeem stLBGT from Berapaw"
-        : vaultToken === "ybgt"
-          ? "1. Withdraw liquidity from Kodiak Island 2. Redeem OT from Goldilocks 3. Redeem ysysyBGT from Bearn"
-          : ""
+      : vaultToken === "janoribgt"
+        ? "1. Remove oriBGT and oriBGT-OT liquidity from Kodiak Island 2. Redeem oriBGT-OT from Goldilocks 3. Redeem oriBGT from Origami"
+        : vaultToken === "stlbgt"
+          ? "1. Withdraw liquidity from Kodiak Island 2. Redeem stLBGT-OT from Goldilocks 3. Redeem stLBGT from Berapaw"
+          : vaultToken === "ybgt"
+            ? "1. Withdraw liquidity from Kodiak Island 2. Redeem OT from Goldilocks 3. Redeem ysysyBGT from Bearn"
+            : ""
 
   const zapInCalls = (account: string): any[] => {
     return vaultToken === "oribgt"
@@ -674,7 +734,67 @@ export const useVaultInfoConfig = ({ vaultToken }: VaultInfoConfigHookProps) => 
               ]
             }
             ]
-          : []
+          : vaultToken === "janoribgt"
+            ? [
+                {
+                  // approve ibgt for oribgt
+                  to: contracts.ibgt.address as `0x${string}`,
+                  abi: contracts.ibgt.abi,
+                  functionName: 'approve',
+                  args: [contracts.oribgt.address, parseEther(`${zapInfo.dtFour626}`)]
+                },
+                {
+                  // deposit to oribgt
+                  to: contracts.oribgt.address as `0x${string}`,
+                  abi: contracts.oribgt.abi,
+                  functionName: 'deposit',
+                  args: [parseEther(`${zapInfo.dtFour626}`), account]
+                },
+                {
+                  // approve ibgt for goldivault
+                  to: contracts.ibgt.address as `0x${string}`,
+                  abi: contracts.ibgt.abi,
+                  functionName: 'approve',
+                  args: [contracts.janoribgtVault.address, parseEther(`${zapInfo.dtGoldivault}`)]
+                },
+                {
+                  // deposit to goldivault
+                  to: contracts.janoribgtVault.address as `0x${string}`,
+                  abi: contracts.janoribgtVault.abi,
+                  functionName: 'deposit',
+                  args: [parseEther(`${zapInfo.dtGoldivault}`)]
+                },
+                {
+                  // approve oribgt
+                  to: contracts.oribgt.address as `0x${string}`,
+                  abi: contracts.oribgt.abi,
+                  functionName: "approve",
+                  args: [contracts.baultRouter.address, parseEther(`${zapInfo.convertedDTLP}`)]
+                },
+                {
+                  // approve oribgt-ot
+                  to: contracts.janoribgtot.address as `0x${string}`,
+                  abi: contracts.janoribgtot.abi,
+                  functionName: "approve",
+                  args: [contracts.baultRouter.address, parseEther(`${zapInfo.dtGoldivault}`)]
+                },
+                {
+                  // add liq to kodiak
+                  to: contracts.baultRouter.address as `0x${string}`,
+                  abi: contracts.baultRouter.abi,
+                  functionName: "addLiquidity",
+                  args: [
+                    contracts.janoribgtKodiakIsland.address as `0x${string}`,
+                    parseEther(`${zapInfo.convertedDTLP}`),
+                    parseEther(`${zapInfo.dtGoldivault}`),
+                    parseEther(`${zapInfo.convertedDTLP * 0.99}`),
+                    parseEther(`${zapInfo.dtGoldivault * 0.99}`),
+                    parseEther(`${zapInfo.estimatedLP * 0.99}`),
+                    account as `0x${string}`
+                  ]
+                }
+              ]
+            : []
   }
 
   const zapOutCalls = (account: string, debouncedZap: number): any[] => {
@@ -781,7 +901,44 @@ export const useVaultInfoConfig = ({ vaultToken }: VaultInfoConfigHookProps) => 
                 args: [parseEther(`${zapInfo.otOut}`)]
               }
             ]
-          : []
+            : vaultToken === "janoribgt"
+              ? [
+                  {
+                    // approve LP from router
+                    to: contracts.janoribgtKodiakIsland.address as `0x${string}`,
+                    abi: contracts.janoribgtKodiakIsland.abi,
+                    functionName: "approve",
+                    args: [contracts.baultRouter.address, parseEther(`${debouncedZap}`)]
+                  },
+                  {
+                    // remove liquidity from kodiak
+                    to: contracts.baultRouter.address as `0x${string}`,
+                    abi: contracts.baultRouter.abi,
+                    functionName: "removeLiquidity",
+                    args: [
+                      contracts.janoribgtKodiakIsland.address as `0x${string}`,
+                      parseEther(`${debouncedZap}`),
+                      parseEther(`${zapInfo.dtOut * 0.99}`),
+                      parseEther(`${zapInfo.otOut * 0.99}`),
+                      account as `0x${string}`
+                    ]
+                  },
+                  {
+                    // redeem from origami
+                    to: contracts.oribgt.address as `0x${string}`,
+                    abi: contracts.oribgt.abi,
+                    functionName: 'redeem',
+                    args: [parseEther(`${zapInfo.dtOut}`), account, account]
+                  },
+                  {
+                    // redeem from goldilocks
+                    to: contracts.janoribgtVault.address as `0x${string}`,
+                    abi: contracts.janoribgtVault.abi,
+                    functionName: 'redeemOwnership',
+                    args: [parseEther(`${zapInfo.otOut}`)]
+                  }
+                ]
+              : []
   }
 
   return {
@@ -813,7 +970,6 @@ export const useVaultInfoConfig = ({ vaultToken }: VaultInfoConfigHookProps) => 
     zapOutAssetLabel,
     descriptionTitle,
     activeVaultTokens,
-    activeVaults,
     zapInSteps,
     zapOutSteps,
     zappableVaults,

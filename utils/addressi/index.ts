@@ -1,7 +1,8 @@
 import goldiswapABI from "../abi/Goldiswap.json";
 import goldilockedABI from "../abi/Goldilocked.json";
+import goldilendABI from "../abi/GoldilendBase.json";
+import rebasegoldilendABI from "../abi/RebaseGoldilend.json";
 import honeyABI from "../abi/Honey.json";
-import goldilendABI from "../abi/Goldilend.json";
 import ibgtABI from "../abi/IBGT.json";
 import bandbearABI from "../abi/BandBear.json";
 import bondbearABI from "../abi/BondBear.json";
@@ -22,7 +23,6 @@ import goldivault4626ABI from "../abi/Goldivault4626.json"
 import oriBGTABI from "../abi/oriBGT.json"
 import uniswapV3PoolABI from "../abi/UniswapV3Pool.json"
 import steerPeripheryABI from "../abi/SteerPeriphery.json"
-import wberaABI from "../abi/WBERA.json"
 import baultRouterABI from "../abi/BaultRouter.json"
 
 export const contracts = {
@@ -35,20 +35,20 @@ export const contracts = {
     abi: goldilockedABI.abi,
   },
   goldilend: {
-    address: "0xce1bB8cAafE287aE04cDFa46a85641d8FF9E1dBB",
-    abi: goldilendABI.abi,
+    address: "0x80D480Ad0c48A769eD481fA8a30B7c5DDABD2FDf", // proxy addy
+    abi: rebasegoldilendABI.abi
   },
-  glwbera: {
-    address: "0xcbDFC6D4CBbeD4EA806151C9f8F1E76Ab9356700",
+  glhoney: {
+    address: "0x5765047A55973c41BE5b96777676989eAc27A419",
     abi: ibgtABI.abi
   },
   honey: {
     address: "0xFCBD14DC51f0A4d49d5E53C2E0950e0bC26d0Dce",
     abi: honeyABI.abi,
   },
-  fakewbera: {
-    address: "0x22CDf6a60Af48C600043583F6Ff5F5DEb074c980",
-    abi: wberaABI.abi
+  fakehoney: {
+    address: "0x6a399AbbFd3AA3A76B37E271917A5350C42cB752",
+    abi: honeyABI.abi
   },
   wbera: {
     address: "0x6969696969696969696969696969696969696969",
@@ -59,7 +59,7 @@ export const contracts = {
     abi: ibgtABI.abi,
   },
   bandbear: {
-    address: "0x5C590b62F6c91d7DE4B92F9F3Ee527568380829A",
+    address: "0x1501a3a28DdCAFb57b2769e98E480e3fca3405b0",
     abi: bandbearABI.abi,
   },
   bondbear: {
@@ -226,6 +226,18 @@ export const contracts = {
     address: "0xB345a602c2e24051a57e2339a98c815a6e45059c",
     abi: ibgtABI.abi
   },
+  janoribgtVault: {
+    address: "0x37b940d85D7070F4013B3443a7cA9f419f346c6f",
+    abi: goldivault4626ABI.abi
+  },
+  janoribgtot: {
+    address: "0xe8cD4E99967c7121F8f733D8bF38916D725dDcba",
+    abi: ibgtABI.abi
+  },
+  janoribgtyt: {
+    address: "0x95255D406520b1296Ad1C61c308997B76D3655E3",
+    abi: ibgtABI.abi
+  },
   wberaibgtisland: {
     address: "0x564f011D557aAd1cA09BFC956Eb8a17C35d490e0",
     abi: ibgtABI.abi
@@ -328,6 +340,10 @@ export const contracts = {
     address: "0x1CfA34313547e490C73abca033a575F083fc44D1",
     abi: ibgtABI.abi
   },
+  janoribgtKodiakIsland: {
+    address: "0x4D7E4Aa9d7Ad8d77c87a86B102B7b4490c9E42D7",
+    abi: ibgtABI.abi
+  },
   vaultLPaddys: {
     weeth: "0xd7e3962974993870C28C25D031BF202021bf635B",
     ebtc: "0x339b8859a691eb5c8E8E576E6Caf4c3556711e34",
@@ -336,6 +352,7 @@ export const contracts = {
     rseth: "0xE457b56a1f9379B604dFBcE809Da6fEA1dECE717",
     rusd: "0x1a2A927F758AE242fB967481CF293D2a36883be6",
     oribgt: "0xCb2A95c52E718A6BA6AAb6587f1a3aFF4BfB0648",
+    janoribgt: "0x6E881Aa722275B1f78CEF01217Ff0cc242FcE881",
     wberaibgtlp: "0x59007956D237F76D40200d3948E23102a59C2213",
     stlbgt: "0x23549f334CD72cE0ba5f6051bf8602eBf12652Da",
     ybgt: "0x04780c47fbEC89BC797a702ce0FcE7E64e62CbFe",

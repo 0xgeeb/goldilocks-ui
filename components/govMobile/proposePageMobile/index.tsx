@@ -13,16 +13,16 @@ export const ProposePageMobile = () => {
       {navButtonsOpen && <NavBarButtons />}
       {!navButtonsOpen && (
         <>
-          <div className="relative flex-1 w-full bg-[url('/images/bg-goldiswap-mobile.png')] bg-cover">
-            <h1
-              className="absolute left-[3%] top-0 font-amaticbold text-[10vw] text-[#D9C6BA]"
-              id="page-title"
-            >
-              New Proposal
-            </h1>
-            <ProposeBoxMobile />
-          </div>
-          <FooterMobile />
+        <div className="relative flex-1 w-full bg-[url('/images/bg-goldiswap-mobile.png')] bg-cover">
+          <h1
+            className="absolute left-[3%] top-0 font-amaticbold text-[10vw] text-[#D9C6BA]"
+            id="page-title"
+          >
+            New Proposal
+          </h1>
+          <ProposeBoxMobile />
+        </div>
+        <FooterMobile />
         </>
       )}
     </main>

@@ -27,13 +27,13 @@ export const StatsMobile = () => {
         <span>iBGT backing per GiBGT:</span>
       </div>
       <div className="h-full w-[5%]"></div>
-      <div className="flex flex-col items-start">
+      {/* <div className="flex flex-col items-start">
         <span>{handleInfo(goldilendInfo.poolSize)}</span>
         <span>{handleInfo(goldilendInfo.stakedglwbera)}</span>
         <span>
           {handleInfo(goldilendInfo.poolSize / goldilendInfo.glwberaSupply)}
         </span>
-      </div>
+      </div> */}
     </div>
   );
 };

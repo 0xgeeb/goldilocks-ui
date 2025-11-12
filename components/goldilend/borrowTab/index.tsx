@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 import { useAccount } from "wagmi";
 
-import { formatAsString } from "@/app/_components/utils";
+import { formatAsString, formatAsInterest } from "@/app/_components/utils";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 import { useGoldilendTx } from "../../../hooks";
@@ -13,13 +13,13 @@ import { contracts } from "../../../utils/addressi";
 import { BorrowNotification } from "../../goldilend";
 
 export const BorrowTab = () => {
-  const [daysTilExpiration, setDaysTilExpiration] = useState<number>(14);
+  const [daysTilExpiration, setDaysTilExpiration] = useState<number>(7);
   const [buttonLoadingColor, setButtonLoadingColor] = useState<boolean>(false);
 
   const {
     ownedBeras,
     handleBeraClick,
-    infoLoading,
+    berasLoading,
     selectedBera,
     borrowLimit,
     updateBorrowLimit,
@@ -42,6 +42,7 @@ export const BorrowTab = () => {
     setLoanInterestRate,
     updateOwnedBeras,
     findLoans,
+    // infoLoading
   } = useGoldilend();
 
   const { checkLoanAllowance, sendGoldilendNFTApproveTx, sendBorrowTx } =
@@ -51,7 +52,7 @@ export const BorrowTab = () => {
 
   useEffect(() => {
     updateBorrowLimit();
-  }, [selectedBera]);
+  }, [selectedBera, updateBorrowLimit]);
 
   useEffect(() => {
     if (
@@ -64,7 +65,7 @@ export const BorrowTab = () => {
       setLoanInterest(0);
       setLoanInterestRate(0);
     }
-  }, [selectedBera, debouncedLoanAmount, debouncedLoanExpiration]);
+  }, [selectedBera, debouncedLoanAmount, debouncedLoanExpiration, getInterestRate, setLoanInterest, setLoanInterestRate]);
 
   useEffect(() => {
     if (checkDate(debouncedLoanExpiration)) {
@@ -73,7 +74,7 @@ export const BorrowTab = () => {
       const currentDate = new Date();
       const timeDifference = inputDate.getTime() - currentDate.getTime();
       const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
-      if (daysDifference >= 14 && daysDifference <= 365) {
+      if (daysDifference >= 1 && daysDifference <= 90) {
         setDaysTilExpiration(daysDifference);
       }
     }
@@ -82,6 +83,9 @@ export const BorrowTab = () => {
   const loadingElement = () => {
     return <span className="loader-small mx-auto mt-[10%]"></span>;
   };
+
+
+  // Info panel removed; UI uses marquee instead
 
   const checkDate = (dateString: string): boolean => {
     const dateParts = dateString.split("-");
@@ -101,7 +105,14 @@ export const BorrowTab = () => {
     if (timestampDigits < Math.floor(Date.now() / 1000)) {
       return false;
     }
-    if (timestampDigits < Math.floor(Date.now() / 1000) + 86400 * 14) {
+    
+    // Check if the date is at least the next calendar day
+    const currentDate = new Date();
+    const tomorrow = new Date(currentDate);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0); // Set to start of tomorrow
+    
+    if (parsedDate < tomorrow) {
       return false;
     }
     return true;
@@ -130,20 +141,24 @@ export const BorrowTab = () => {
       button && (button.innerHTML = "no collateral");
       return;
     }
-    const [bondFlag, bandFlag] = await checkLoanAllowance(
+    if (loanAmount + loanInterest > borrowLimit) {
+      button && (button.innerHTML = "exceeds limit");
+      return;
+    }
+    const [, bandFlag] = await checkLoanAllowance(
       address as `0x${string}`,
     );
     if (
-      (bondFlag || selectedBera.name !== "BondBera") &&
+      // (bondFlag || selectedBera.name !== "BondBera") &&
       (bandFlag || selectedBera.name !== "BandBera")
     ) {
       borrowTxFlow(button);
     } else {
       button && (button.innerHTML = "approving...");
       setButtonLoadingColor(true);
-      if (!bondFlag && selectedBera.name === "BondBera") {
-        await sendGoldilendNFTApproveTx(contracts.bondbear.address);
-      }
+      // if (!bondFlag && selectedBera.name === "BondBera") {
+      //   await sendGoldilendNFTApproveTx(contracts.bondbear.address);
+      // }
       if (!bandFlag && selectedBera.name === "BandBera") {
         await sendGoldilendNFTApproveTx(contracts.bandbear.address);
       }
@@ -168,7 +183,7 @@ export const BorrowTab = () => {
       openNotification(
         true,
         "You've successfully created a loan",
-        `You borrowed ${formatAsString(loanAmount)} WBERA against your bera`,
+        `You borrowed ${formatAsString(loanAmount - loanInterest)} HONEY against your bera`,
         borrowTx,
       );
       button && (button.innerHTML = "create loan");
@@ -176,7 +191,7 @@ export const BorrowTab = () => {
       updateOwnedBeras(selectedBera);
       findLoans();
       changeActiveToggle("BORROW");
-      setDaysTilExpiration(14);
+      setDaysTilExpiration(7);
       setTimeout(() => {
         openNotification(false, "", "", "");
       }, 10000);
@@ -184,12 +199,12 @@ export const BorrowTab = () => {
       button && (button.innerHTML = "create loan");
       setButtonLoadingColor(false);
       changeActiveToggle("BORROW");
-      setDaysTilExpiration(14);
+      setDaysTilExpiration(7);
       setTxConfirming(false);
     }
   };
 
-  const sliderValue = ((daysTilExpiration - 7) / (365 - 7)) * 100;
+  const sliderValue = ((daysTilExpiration - 1) / (90 - 1)) * 100;
 
   const handleSliderChange = (days: string) => {
     const daysNum = parseFloat(days);
@@ -208,7 +223,7 @@ export const BorrowTab = () => {
     <BorrowNotification />
   ) : (
     <div className="flex size-full flex-row">
-      <div className="flex size-full flex-col items-center border-r-2 border-black px-0">
+      <div className="flex w-[33%] flex-col items-center border-r-2 border-black px-0">
         <h1 className="mt-[2%] font-amaticbold text-[5vw] xl:text-[3vw]">
           select collateral
         </h1>
@@ -216,9 +231,20 @@ export const BorrowTab = () => {
           className="flex h-4/5 w-[85%] flex-wrap overflow-y-auto py-[2%]"
           id="hide-scrollbar"
         >
-          {infoLoading && isConnected ? (
+          {!isConnected ? (
+            <div className="flex size-full flex-col items-center justify-center opacity-50">
+              <img
+                className="mb-[5%] w-[70%]"
+                src="/images/icon-not-found.png"
+                alt="not-found"
+              />
+              <h1 className="font-amaticbold text-[5vw] xl:text-[3vw]">
+                no beras
+              </h1>
+            </div>
+          ) : berasLoading ? (
             loadingElement()
-          ) : !isConnected || ownedBeras.length == 0 ? (
+          ) : ownedBeras.length == 0 ? (
             <div className="flex size-full flex-col items-center justify-center opacity-50">
               <img
                 className="mb-[5%] w-[70%]"
@@ -247,7 +273,7 @@ export const BorrowTab = () => {
           )}
         </div>
       </div>
-      <div className="flex size-full flex-col items-center justify-between py-[1%]">
+      <div className="flex w-[33%] flex-col items-center justify-between py-[1%] border-r-2 border-black">
         <h1 className="font-amaticbold text-[5vw] xl:text-[2.5vw]">
           create loan
         </h1>
@@ -271,7 +297,7 @@ export const BorrowTab = () => {
           <div className="absolute bottom-[5%] left-[20%] flex w-3/5 flex-row items-center justify-between font-baloo text-[2vw] font-semibold xl:text-[0.8vw]">
             <span>borrow limit:</span>
             <span>
-              {borrowLimit > 0 ? formatAsString(borrowLimit) : "0.00"} WBERA
+              {borrowLimit > 0 ? formatAsString(borrowLimit) : "0.00"} HONEY
             </span>
           </div>
         </div>
@@ -303,8 +329,8 @@ export const BorrowTab = () => {
               className="size-full bg-black hover:cursor-pointer"
               id="date-slider"
               type="range"
-              min="14"
-              max="365"
+              min="1"
+              max="90"
               value={daysTilExpiration}
               onChange={(e) => handleSliderChange(e.target.value)}
               style={{
@@ -319,12 +345,21 @@ export const BorrowTab = () => {
           <span>{formatAsString(loanInterestRate)}%</span>
         </div>
         <div className="flex w-[90%] flex-row items-center justify-between font-baloo text-[1.8vw] font-semibold xl:text-[1vw]">
-          <span>Total Interest Due:</span>
-          <span>{formatAsString(loanInterest)}</span>
+          <span>Interest Due:</span>
+          <span>{formatAsInterest(loanInterest)}</span>
         </div>
         <div className="flex w-[85%] flex-row items-center justify-between bg-[#EFD9CA] px-2 font-baloo text-[1.6vw] font-semibold xl:text-[0.8vw]">
           <span>Total Amount to Repay:</span>
-          <span>{formatAsString(loanAmount + loanInterest)} WBERA</span>
+          <span>{formatAsString(loanAmount)} HONEY</span>
+        </div>
+        <div className="group relative flex w-[85%] flex-row items-center justify-between bg-[#C9E3B9] px-2 font-baloo text-[1.6vw] font-semibold xl:text-[0.8vw] cursor-pointer">
+          <span>You Will Receive:</span>
+          <span>{formatAsString(loanAmount - loanInterest)} HONEY</span>
+          <div className="absolute hidden group-hover:block bottom-full mb-2 left-1/2 -translate-x-1/2 z-10">
+            <div className="bg-[#EFD9CA] border-2 border-black text-black text-[1.2vw] font-baloo font-semibold py-2 px-3 shadow-lg max-w-[200px] text-center">
+              Interest on the loan is paid upfront from the borrow amount
+            </div>
+          </div>
         </div>
         <ConnectButton.Custom>
           {({ account, chain, openChainModal, openConnectModal }) => {
@@ -358,6 +393,7 @@ export const BorrowTab = () => {
           }}
         </ConnectButton.Custom>
       </div>
+      {/* Goldilend Info sidebar removed; stats now displayed in the page marquee */}
     </div>
   );
 };

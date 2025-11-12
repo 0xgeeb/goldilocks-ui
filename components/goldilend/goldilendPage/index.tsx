@@ -7,13 +7,13 @@ import { useAtom, useAtomValue } from "jotai";
 import { geoAtom } from "@/app/_components/atoms/geoAtom";
 import { pageLoadingAtom } from "@/app/_components/atoms/pageLoadingAtom";
 import CsrPageLayout from "@/app/_components/CsrPageLayout";
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import { cn } from "@/app/_components/utils";
+import styles from "@/app/(geo-check)/goldivault/_components/VaultsCardLayout.module.css";
 
-import { BoostPopup, BorrowBox, BorrowFetcher, Toggles } from "../";
+import { NewBorrowBox, BoostPopup, BorrowFetcher, Toggles, GoldilendStatsMarquee, NewAuctionsTab, NewGHoneyTab } from "../";
 import { useDesktop, useGoldilend } from "../../../providers";
 import { GoldilendPageMobile } from "../../goldilendMobile";
-import { Loading, MintNFTs, TAndCs } from "../../utils";
-import { NavBar } from "../../goldiswap"
+import { Loading, TAndCs } from "../../utils";
 
 export const GoldilendPage = () => {
   const [pageLoading, setPageLoading] = useAtom(pageLoadingAtom);
@@ -24,9 +24,6 @@ export const GoldilendPage = () => {
     setWutPopup,
     boostPopup,
     setBoostPopup,
-    findLoans,
-    refreshGoldilendInfo,
-    refreshGoldilendWalletInfo
   } = useGoldilend();
 
   const { isDesktop } = useDesktop();
@@ -34,19 +31,8 @@ export const GoldilendPage = () => {
   const signed = useAtomValue(geoAtom);
 
   useEffect(() => {
-    // findLoans();
-    refreshGoldilendInfo();
-    refreshGoldilendWalletInfo();
     setPageLoading(false);
-  }, []);
-
-  const client = new ApolloClient({
-    uri: process.env.NEXT_PUBLIC_GHOST_GRAPH_URL,
-    cache: new InMemoryCache(),
-    headers: {
-      "X-GHOST-KEY": process.env.NEXT_PUBLIC_GHOST_GRAPH_KEY!,
-    },
-  });
+  }, [setPageLoading]);
 
   const handlePopups = () => {
     if (wutPopup) {
@@ -66,29 +52,62 @@ export const GoldilendPage = () => {
   }
 
   return (
-    isDesktop ?
-    <main className="w-screen h-screen" onClick={() => handlePopups()}>
-      <NavBar wutPopup={wutPopup} setWutPopup={setWutPopup} />
-      <div className="w-[100%] h-[89%] xl:h-[85%] bg-cover bg-bottom bg-[url('/images/bg-goldilend.png')] relative">
-        <Toggles />
-        {boostPopup && <BoostPopup />}
-        <h1
-          className="absolute right-[70%] top-[1.5%] font-amaticbold text-[9vw] text-[#D9C6BA] lg:right-[73%] lg:top-0 lg:text-[7.5vw] xl:top-[15%]"
-          id="page-title"
-        >
-          GOLDILEND
-        </h1>
-        <h1
-          className={`absolute top-[3%] lg:top-[1%] xl:top-[36%] ${activeToggle === "BORROW" ? "right-[52.5%] lg:right-[58%] xl:right-[78%]" : "right-[57.5%] lg:right-[60%] xl:right-[80%]"} font-amaticbold text-[7vw] text-[#E7B941] lg:text-[6vw]`}
-          id="page-title"
-        >
-          {activeToggle}
-        </h1>
-        <BorrowBox />
-        {/* <BorrowFetcher /> */}
-        <MintNFTs />
-      </div>
-    </main>
-    : <GoldilendPageMobile />
+    isDesktop ? (
+      <CsrPageLayout
+        onPageClick={() => handlePopups()}
+        wutPopup={wutPopup}
+        setWutPopup={setWutPopup}
+        bgImageUrl="/images/bg-goldilend.png"
+      >
+        <div className="flex flex-col items-center justify-center px-4 pt-0 pb-2 sm:px-6 sm:pt-0 sm:pb-3 lg:px-12 lg:pt-0 lg:pb-4">
+          {/* Small nav bar - outside card, top-left within page width */}
+          <div className="w-full max-w-7xl flex justify-start mb-0 sm:mb-0 lg:mb-1">
+            <div
+              className="inline-flex items-center gap-2 rounded-2xl border border-amber-700/40 bg-amber-900/20 px-2 py-1 shadow-lg"
+              style={{ backdropFilter: "blur(18px)" }}
+            >
+              <Toggles />
+            </div>
+          </div>
+          <div
+            style={{
+              backdropFilter: "blur(18px)",
+              backgroundColor: "rgba(26,20,12, 0.75)",
+            }}
+            className={cn(
+              "flex w-full flex-col gap-4 rounded-3xl p-4 sm:p-5 lg:p-6 max-w-7xl relative",
+              styles.vaultsBg,
+            )}
+          >
+            {/* Stats Marquee */}
+            <GoldilendStatsMarquee />
+
+            {/* Data Fetcher */}
+            <BorrowFetcher />
+
+            {/* Main Content */}
+            <div className="flex flex-col gap-6 relative xl:flex-row xl:items-start xl:justify-center">
+                <div
+                  className={cn(
+                    "flex w-full flex-col gap-6",
+                    activeToggle === "GHONEY" ? "xl:max-w-none" : "xl:max-w-none"
+                  ) }
+                >
+                {boostPopup && <BoostPopup />}
+                {activeToggle === "GHONEY" ? (
+                  <NewGHoneyTab />
+                ) : activeToggle === "AUCTIONS" ? (
+                  <NewAuctionsTab />
+                ) : (
+                  <NewBorrowBox />
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </CsrPageLayout>
+    ) : (
+      <GoldilendPageMobile />
+    )
   );
 };

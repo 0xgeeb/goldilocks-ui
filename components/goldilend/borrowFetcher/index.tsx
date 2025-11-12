@@ -18,22 +18,23 @@ export const BorrowFetcher = () => {
 
   const { address, isConnected } = useAccount();
 
-  const { data, loading } = useGoldilendNfTsOwnedQuery({
-    variables: {
-      owner: address as `0x${string}`,
-    },
-    skip,
-  });
+  // const { data, loading } = useGoldilendNfTsOwnedQuery({
+  //   variables: {
+  //     owner: address as `0x${string}`,
+  //   },
+  //   skip,
+  // });
+
+  // useEffect(() => {
+  //   if (!loading && !!data) {
+  //     findBeras(data);
+  //     setSkip(true);
+  //     setInfoLoading(false);
+  //   }
+  // }, [data, loading]);
 
   useEffect(() => {
-    if (!loading && !!data) {
-      findBeras(data);
-      setSkip(true);
-      setInfoLoading(false);
-    }
-  }, [data, loading]);
-
-  useEffect(() => {
+    findBeras();
     findLoans();
     refreshGoldilendInfo();
     refreshGoldilendWalletInfo();

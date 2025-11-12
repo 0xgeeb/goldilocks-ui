@@ -8,13 +8,13 @@ function InputLogo({ type }: Props) {
   const tokenName = type === "honey" ? "HONEY" : "LOCKS";
 
   return (
-    <div className={cn(`flex h-1/2 flex-row items-center`)}>
+    <div className={cn(`flex flex-row items-center w-32`)}>
       <img
-        className="size-6 md:size-8"
+        className="size-8"
         src={`/images/logo-${type}.png`}
         alt="coinlogo"
       />
-      <h1 className="ml-1 font-baloo text-[3vw] font-semibold md:text-[2.4vw] lg:ml-3 lg:text-[1.4vw]">
+      <h1 className="ml-3 font-baloo text-xl font-semibold text-HoneyYellow whitespace-nowrap">
         {tokenName}
       </h1>
     </div>

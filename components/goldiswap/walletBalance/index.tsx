@@ -1,21 +1,23 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
+import { useEffect, useState, useRef } from "react";
 import { useAccount } from "wagmi";
+import { gsap } from 'gsap';
 
 import { formatAsString } from "@/app/_components/utils";
-
 import { useGoldiswap } from "../../../providers";
 
 export const WalletBalance = () => {
   const [walletOpen, setWalletOpen] = useState<boolean>(false);
+  const bubblesRef = useRef<HTMLDivElement[]>([]);
+  const overlayRef = useRef<HTMLDivElement>(null);
 
   const { isConnected } = useAccount();
   const { goldiswapWalletInfo, refreshGoldiswapWalletInfo } = useGoldiswap();
 
   useEffect(() => {
     refreshGoldiswapWalletInfo();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConnected]);
 
   const formatAsClaimable = (num: number): string => {
@@ -38,72 +40,204 @@ export const WalletBalance = () => {
     }
   };
 
-  useEffect(() => {
-    removeWalletOpen();
-    window.addEventListener("resize", removeWalletOpen);
-    return () => window.removeEventListener("resize", removeWalletOpen);
-  }, []);
+  const walletItems = [
+    { label: 'Locks Balance', value: handleInfo(goldiswapWalletInfo.locks), rotation: -8 },
+    { label: 'Honey Balance', value: handleInfo(goldiswapWalletInfo.honey), rotation: 8 },
+    { label: 'Porridge Balance', value: handleInfo(goldiswapWalletInfo.prg), rotation: -8 },
+    { label: 'Staked Locks', value: handleInfo(goldiswapWalletInfo.staked), rotation: 8 },
+    { label: 'Locked Locks', value: handleInfo(goldiswapWalletInfo.locked), rotation: -8 },
+    { label: 'Borrowed Honey', value: handleInfo(goldiswapWalletInfo.borrowed), rotation: 8 },
+    { label: 'Claimable Porridge', value: handleInfoClaimable(goldiswapWalletInfo.claimable), rotation: -8 },
+  ];
 
-  function removeWalletOpen() {
-    setWalletOpen(false);
-  }
+  useEffect(() => {
+    const bubbles = bubblesRef.current.filter(Boolean);
+    if (!bubbles.length) return;
+
+    if (walletOpen) {
+      gsap.set(bubbles, { scale: 0, transformOrigin: '50% 50%' });
+      
+      bubbles.forEach((bubble, i) => {
+        gsap.to(bubble, {
+          scale: 1,
+          duration: 0.5,
+          delay: i * 0.1,
+          ease: 'back.out(1.5)'
+        });
+      });
+    } else {
+      gsap.to(bubbles, {
+        scale: 0,
+        duration: 0.2,
+        ease: 'power3.in'
+      });
+    }
+  }, [walletOpen]);
 
   return (
     <>
-      <div
-        className={`absolute left-[50%] top-[45%] h-[4%] w-[14%] origin-bottom-left rotate-90 hover:scale-105 md:left-[80%] md:w-[13%] lg:left-3/4 lg:top-[43.5%] lg:w-[10.5%] xl:top-[12%] xl:w-[10%] 2xl:left-[71.875%] ${walletOpen && window.innerWidth >= 1280 ? "translate-x-[220%]" : ""} flex cursor-pointer items-center justify-center border-x-2 border-t-2 border-black bg-[#D5A774] font-baloo text-[1.5vw] font-semibold transition-transform ease-linear lg:text-[1.1vw] xl:text-[1vw] 2xl:text-[0.8vw]`}
-        onClick={() => setWalletOpen((prev) => !prev)}
+      <style>{`
+        @media (min-width: 900px) {
+          .wallet-bubble-item {
+            transform: rotate(var(--item-rot));
+          }
+          .wallet-bubble-item:hover {
+            transform: rotate(var(--item-rot)) scale(1.06);
+          }
+        }
+      `}</style>
+
+      <button
+        onClick={() => setWalletOpen(!walletOpen)}
+        className="rounded-xl px-4 py-2 cursor-pointer hover:opacity-90 transition-opacity flex items-center gap-2"
+        style={{
+          backgroundColor: "rgba(60, 50, 40, 0.4)",
+          border: "1px solid rgba(205, 133, 63, 0.3)",
+        }}
       >
-        <span className="-scale-100">WALLET BALANCE</span>
-      </div>
-      <div
-        className={`absolute left-[61%] top-[18%] h-[32%] w-[19%] md:top-[16%] lg:left-[53%] lg:top-[15%] lg:w-[22%] xl:top-[12%] 2xl:left-[49.875%] ${walletOpen ? "translate-x-full border-r-2" : ""} flex flex-col justify-between border-y-2 border-black bg-[#D5A774]/30 px-[0.5%] py-[1.5%] font-baloo text-[1.5vw] font-semibold text-white transition-transform ease-linear lg:text-[1.25vw] xl:px-[3%] xl:text-[1vw]`}
-      >
-        <div className="flex w-full flex-row items-center justify-between">
-          <span className="">
-            {window.innerWidth > 1024 ? "locks balance:" : "locks:"}
-          </span>
-          <span className="">{handleInfo(goldiswapWalletInfo.locks)}</span>
-        </div>
-        <div className="flex w-full flex-row items-center justify-between">
-          <span className="">
-            {window.innerWidth > 1024 ? "honey balance:" : "honey:"}
-          </span>
-          <span className="">{handleInfo(goldiswapWalletInfo.honey)}</span>
-        </div>
-        <div className="flex w-full flex-row items-center justify-between">
-          <span className="">
-            {window.innerWidth > 1024 ? "porridge balance:" : "porridge:"}
-          </span>
-          <span className="">{handleInfo(goldiswapWalletInfo.prg)}</span>
-        </div>
-        <div className="flex w-full flex-row items-center justify-between">
-          <span className="">
-            {window.innerWidth > 1024 ? "staked locks:" : "staked:"}
-          </span>
-          <span className="">{handleInfo(goldiswapWalletInfo.staked)}</span>
-        </div>
-        <div className="flex w-full flex-row items-center justify-between">
-          <span className="">
-            {window.innerWidth > 1024 ? "locked locks:" : "locked:"}
-          </span>
-          <span className="">{handleInfo(goldiswapWalletInfo.locked)}</span>
-        </div>
-        <div className="flex w-full flex-row items-center justify-between">
-          <span className="">
-            {window.innerWidth > 1024 ? "borrowed honey:" : "borrowed:"}
-          </span>
-          <span className="">{handleInfo(goldiswapWalletInfo.borrowed)}</span>
-        </div>
-        <div className="flex w-full flex-row items-center justify-between">
-          <span className="">
-            {window.innerWidth > 1024 ? "claimable porridge:" : "claimable:"}
-          </span>
-          <span className="">
-            {handleInfoClaimable(goldiswapWalletInfo.claimable)}
-          </span>
-        </div>
-      </div>
+        <img src="/images/icons/box.svg" alt="box" className="w-5 h-5" />
+        <span className="text-HoneyYellow font-amaticbold text-xl whitespace-nowrap">Check whatchu have</span>
+      </button>
+
+      {walletOpen && (
+        <>
+          {/* LEFT SIDE - LOCKS */}
+          {/* LOCKS Icon + Text */}
+          <div
+            ref={el => { if (el) bubblesRef.current[0] = el; }}
+            className="absolute left-16 top-54"
+            style={{ transform: 'rotate(-3deg)' }}
+          >
+            <div className="rounded-full shadow-lg px-4 py-2 flex items-center gap-2">
+              <img src="/images/logo-locks.png" alt="LOCKS" className="w-7 h-7 rounded-full" />
+              <span className="text-HoneyYellow font-amaticbold text-xl">LOCKS</span>
+            </div>
+          </div>
+
+          {/* LOCKS Balance */}
+          <div
+            ref={el => { if (el) bubblesRef.current[1] = el; }}
+            className="absolute left-14 top-66"
+            style={{ transform: 'rotate(3deg)' }}
+          >
+            <div className="rounded-full shadow-lg px-4 py-2">
+              <span className="text-white/70 font-baloo text-sm">Balance: </span>
+              <span className="text-HoneyYellow font-baloo text-sm font-semibold">{handleInfo(goldiswapWalletInfo.locks)}</span>
+            </div>
+          </div>
+
+          {/* LOCKS Staked */}
+          <div
+            ref={el => { if (el) bubblesRef.current[2] = el; }}
+            className="absolute left-18 top-78"
+            style={{ transform: 'rotate(-3deg)' }}
+          >
+            <div className="rounded-full shadow-lg px-4 py-2">
+              <span className="text-white/70 font-baloo text-sm">Staked: </span>
+              <span className="text-HoneyYellow font-baloo text-sm font-semibold">{handleInfo(goldiswapWalletInfo.staked)}</span>
+            </div>
+          </div>
+
+          {/* LOCKS Locked */}
+          <div
+            ref={el => { if (el) bubblesRef.current[3] = el; }}
+            className="absolute left-20 top-90"
+            style={{ transform: 'rotate(3deg)' }}
+          >
+            <div className="rounded-full shadow-lg px-4 py-2">
+              <span className="text-white/70 font-baloo text-sm">Locked: </span>
+              <span className="text-HoneyYellow font-baloo text-sm font-semibold">{handleInfo(goldiswapWalletInfo.locked)}</span>
+            </div>
+          </div>
+
+
+          {/* LOCKS Unvested */}
+          <div
+            ref={el => { if (el) bubblesRef.current[3] = el; }}
+            className="absolute left-18 top-102"
+            style={{ transform: 'rotate(3deg)' }}
+          >
+            <div className="rounded-full shadow-lg px-4 py-2">
+              <span className="text-white/70 font-baloo text-sm">Unvested: </span>
+              <span className="text-HoneyYellow font-baloo text-sm font-semibold">{handleInfo(69.69)}</span>
+            </div>
+          </div>
+
+          {/* RIGHT SIDE - HONEY */}
+          {/* HONEY Icon + Text */}
+          <div
+            ref={el => { if (el) bubblesRef.current[4] = el; }}
+            className="absolute right-18 top-44"
+            style={{ transform: 'rotate(3deg)' }}
+          >
+            <div className="rounded-full shadow-lg px-4 py-2 flex items-center gap-2">
+              <img src="/images/logo-honey.png" alt="HONEY" className="w-7 h-7 rounded-full" />
+              <span className="text-HoneyYellow font-amaticbold text-xl">HONEY</span>
+            </div>
+          </div>
+
+          {/* HONEY Balance */}
+          <div
+            ref={el => { if (el) bubblesRef.current[5] = el; }}
+            className="absolute right-24 top-56"
+            style={{ transform: 'rotate(-3deg)' }}
+          >
+            <div className="rounded-full shadow-lg px-4 py-2">
+              <span className="text-white/70 font-baloo text-sm">Balance: </span>
+              <span className="text-HoneyYellow font-baloo text-sm font-semibold">{handleInfo(goldiswapWalletInfo.honey)}</span>
+            </div>
+          </div>
+
+          {/* HONEY Borrowed */}
+          <div
+            ref={el => { if (el) bubblesRef.current[6] = el; }}
+            className="absolute right-10 top-68"
+            style={{ transform: 'rotate(3deg)' }}
+          >
+            <div className="rounded-full shadow-lg px-4 py-2">
+              <span className="text-white/70 font-baloo text-sm">Borrowed: </span>
+              <span className="text-HoneyYellow font-baloo text-sm font-semibold">{handleInfo(goldiswapWalletInfo.borrowed)}</span>
+            </div>
+          </div>
+
+          {/* RIGHT SIDE - PRG */}
+          {/* PRG Icon + Text */}
+          <div
+            ref={el => { if (el) bubblesRef.current[7] = el; }}
+            className="absolute right-18 top-80"
+            style={{ transform: 'rotate(-3deg)' }}
+          >
+            <div className="rounded-full shadow-lg px-4 py-2 flex items-center gap-2">
+              <img src="/images/logo-porridge.png" alt="PRG" className="w-7 h-7 rounded-full" />
+              <span className="text-HoneyYellow font-amaticbold text-xl">PRG</span>
+            </div>
+          </div>
+
+          {/* PRG Balance */}
+          <div
+            ref={el => { if (el) bubblesRef.current[8] = el; }}
+            className="absolute right-14 top-92"
+            style={{ transform: 'rotate(3deg)' }}
+          >
+            <div className="rounded-full shadow-lg px-4 py-2">
+              <span className="text-white/70 font-baloo text-sm">Balance: </span>
+              <span className="text-HoneyYellow font-baloo text-sm font-semibold">{handleInfo(goldiswapWalletInfo.prg)}</span>
+            </div>
+          </div>
+
+          {/* PRG Claimable */}
+          <div
+            ref={el => { if (el) bubblesRef.current[9] = el; }}
+            className="absolute right-12 top-104"
+            style={{ transform: 'rotate(-3deg)' }}
+          >
+            <div className="rounded-full shadow-lg px-4 py-2">
+              <span className="text-white/70 font-baloo text-sm">Claimable: </span>
+              <span className="text-HoneyYellow font-baloo text-sm font-semibold">{handleInfoClaimable(goldiswapWalletInfo.claimable)}</span>
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 };

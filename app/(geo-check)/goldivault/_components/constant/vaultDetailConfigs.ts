@@ -33,6 +33,22 @@ export const VAULT_DETAIL_CONFIGS = {
       poolUrl: `https://berascan.com/address/${contracts.vaultLPaddys.oribgt}`,
     },
   },
+  janoribgt: {
+    title: "oriBGT",
+    titleSize: "text-[8vw] md:text-[7vw] lg:text-[6vw]",
+    params: {
+      vaultToken: "janoribgt",
+      dt: "iBGT",
+      ot: "janoriBGT-OT",
+      yt: "janoriBGT-YT",
+      protocolUrl: "https://origami.finance/",
+      dexLink: `https://dexscreener.com/berachain/${contracts.vaultLPaddys.janoribgt}`,
+      poolName: "iBGT LP / oriBGT-OT LP",
+      liqManagerUrl:
+        "https://app.kodiak.finance/#/liquidity/v3/add/0x0EF5A21Aa086DF1c29fbe0B34aE32A8676D935E7/0x0d1E753a25fEa614826607726EE4BF69407F4119/500?chain=berachain_mainnet",
+      poolUrl: `https://berascan.com/address/${contracts.vaultLPaddys.janoribgt}`,
+    },
+  },
   unibtc: {
     title: "uniBTC",
     titleSize: "text-[8vw] md:text-[7vw] lg:text-[6vw]",

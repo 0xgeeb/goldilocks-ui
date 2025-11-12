@@ -29,11 +29,8 @@ const NavLinks = () => {
     },
     goldilend: {
       title: "Goldilend",
-      defaultPath: "/goldilend/borrow",
-      links: [
-        { path: "/goldilend/borrow", text: "Borrow" },
-        { path: "/goldilend/lend", text: "Lend" },
-      ],
+      defaultPath: "/goldilend",
+      links: [],
     },
     goldivault: {
       title: "Goldivaults",

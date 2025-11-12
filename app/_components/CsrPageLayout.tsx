@@ -26,7 +26,7 @@ function CsrPageLayout({
 
   return (
     <main
-      className="relative flex h-full w-full flex-col justify-between bg-cover"
+      className="relative flex min-h-screen w-full flex-col justify-between bg-cover"
       onClick={onPageClick}
       style={{
         backgroundImage: [maskBg, `url('${bgImageUrl}')`]
@@ -46,7 +46,7 @@ function CsrPageLayout({
           {navButtonsOpen && <NavBarButtons />}
         </div>
       )}
-      <div className="w-full shrink grow overflow-y-auto">
+      <div className="w-full flex-1 basis-0 overflow-y-auto">
         {!navButtonsOpen && children}
         {/* TODO: Add ChangeChain */}
         {/* <ChangeChain /> */}

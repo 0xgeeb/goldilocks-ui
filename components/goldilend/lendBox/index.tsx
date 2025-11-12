@@ -23,7 +23,7 @@ export const LendBox = () => {
     </>
   ) : (
     <>
-      <div className="absolute left-[20%] top-[14%] z-20 h-[40%] w-[60%] border-2 border-black bg-[#EEDCD2] xl:left-[30%] xl:w-[46%]">
+      <div className="absolute left-[15%] top-[14%] z-20 h-[40%] w-[70%] border-2 border-black bg-[#EEDCD2] xl:left-[30%] xl:w-[46%]">
         <div className="absolute left-0 top-3 w-6 skew-y-[45deg] border-b-2 border-black"></div>
         <div className="absolute bottom-3 left-0 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
         <div className="absolute right-0 top-3 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
@@ -42,7 +42,7 @@ export const LendBox = () => {
       </div>
       <LendWalletBalance />
       <LendButton />
-      <Stats />
+      {/* <Stats /> */}
     </>
   );
 };

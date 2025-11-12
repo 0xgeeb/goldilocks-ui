@@ -75,8 +75,8 @@ export const StakingTab = ({ params }: StakingTabProps) => {
       <LabelSet>
         <Label>
           {
-            activeToggle === "STAKE" ? `Stake ${params.yt}` :
-            activeToggle === "UNSTAKE" ? `Unstake ${params.yt}` :
+            activeToggle === "STAKE" ? `Stake ${vaultYTLabel}` :
+            activeToggle === "UNSTAKE" ? `Unstake ${vaultYTLabel}` :
             `Claim ${params.dt}`
           }
           {

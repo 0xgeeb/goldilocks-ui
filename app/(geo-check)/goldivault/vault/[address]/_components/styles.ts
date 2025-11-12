@@ -46,6 +46,25 @@ export const BUTTON_CLASSES = [
   "cursor-pointer"
 ].join(" ");
 
+export const SHORT_BUTTON_CLASSES = [
+  "w-full",
+  "h-[48px]",
+  "my-4",
+  "rounded-xl",
+  "transition",
+  "duration-150",
+  "bg-button-base",
+  "text-button-text",
+  "font-inter",
+  "text-lg",
+  "font-bold",
+  "disabled:text-button-disabledText",
+  "disabled:bg-button-disabled",
+  "hover:bg-button-hover",
+  "active:bg-button-active",
+  "cursor-pointer"
+].join(" ");
+
 export const LABEL_CLASSES = [
   "text-xs",
   "font-semibold",

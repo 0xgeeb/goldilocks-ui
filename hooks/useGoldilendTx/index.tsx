@@ -35,8 +35,8 @@ export const useGoldilendTx = () => {
     wallet: string,
   ): Promise<boolean> => {
     const allowanceResult = await readContract(config, {
-      address: contracts.wbera.address as `0x${string}`,
-      abi: contracts.wbera.abi,
+      address: contracts.honey.address as `0x${string}`,
+      abi: contracts.honey.abi,
       functionName: "allowance",
       args: [wallet, contracts.goldilend.address],
     });
@@ -72,12 +72,12 @@ export const useGoldilendTx = () => {
   };
 
   const checkLoanAllowance = async (wallet: string): Promise<boolean[]> => {
-    const bondbearAllApproved = await readContract(config, {
-      address: contracts.bondbear.address as `0x${string}`,
-      abi: contracts.bondbear.abi,
-      functionName: "isApprovedForAll",
-      args: [wallet, contracts.goldilend.address],
-    });
+    // const bondbearAllApproved = await readContract(config, {
+    //   address: contracts.bondbear.address as `0x${string}`,
+    //   abi: contracts.bondbear.abi,
+    //   functionName: "isApprovedForAll",
+    //   args: [wallet, contracts.goldilend.address],
+    // });
     const bandbearAllApproved = await readContract(config, {
       address: contracts.bandbear.address as `0x${string}`,
       abi: contracts.bandbear.abi,
@@ -85,10 +85,10 @@ export const useGoldilendTx = () => {
       args: [wallet, contracts.goldilend.address],
     });
 
-    const boAA = bondbearAllApproved as unknown as boolean;
+    // const boAA = bondbearAllApproved as unknown as boolean;
     const baAA = bandbearAllApproved as unknown as boolean;
 
-    return [boAA, baAA];
+    return [false, baAA];
   };
 
   const checkRepayAllowance = async (
@@ -96,8 +96,8 @@ export const useGoldilendTx = () => {
     wallet: string,
   ): Promise<boolean> => {
     const ibgtAllowance = await readContract(config, {
-      address: contracts.ibgt.address as `0x${string}`,
-      abi: contracts.ibgt.abi,
+      address: contracts.honey.address as `0x${string}`,
+      abi: contracts.honey.abi,
       functionName: "allowance",
       args: [wallet, contracts.goldilend.address],
     });
@@ -119,28 +119,6 @@ export const useGoldilendTx = () => {
         abi: contracts.bondbear.abi,
         functionName: "setApprovalForAll",
         args: [contracts.goldilend.address, true],
-      });
-      await waitForTransactionReceipt(config, { hash });
-    } catch (e) {
-      console.log("user denied tx");
-      console.log("or: ", e);
-    }
-  };
-
-  const sendiBGTApproveTx = async (amt: number, infinite: boolean) => {
-    try {
-      const hash = await writeContract(config, {
-        address: contracts.ibgt.address as `0x${string}`,
-        abi: contracts.ibgt.abi,
-        functionName: "approve",
-        args: [
-          contracts.goldilend.address,
-          infinite
-            ? parseEther(
-                "115792089237316195423570985008687907853269984665640564039457",
-              )
-            : parseEther(`${amt + 0.01}`),
-        ],
       });
       await waitForTransactionReceipt(config, { hash });
     } catch (e) {
@@ -171,11 +149,11 @@ export const useGoldilendTx = () => {
     }
   };
 
-  const sendWBERAApproveTx = async (amt: number, infinite: boolean) => {
+  const sendHoneyApproveTx = async (amt: number, infinite: boolean) => {
     try {
       const hash = await writeContract(config, {
-        address: contracts.wbera.address as `0x${string}`,
-        abi: contracts.wbera.abi,
+        address: contracts.honey.address as `0x${string}`,
+        abi: contracts.honey.abi,
         functionName: "approve",
         args: [
           contracts.goldilend.address,
@@ -234,7 +212,7 @@ export const useGoldilendTx = () => {
       const hash = await writeContract(config, {
         address: contracts.goldilend.address as `0x${string}`,
         abi: contracts.goldilend.abi,
-        functionName: "lock",
+        functionName: "deposit",
         args: [parseEther(`${stakeAmt}`)],
       });
       const data = await waitForTransactionReceipt(config, { hash });
@@ -252,7 +230,7 @@ export const useGoldilendTx = () => {
       const hash = await writeContract(config, {
         address: contracts.goldilend.address as `0x${string}`,
         abi: contracts.goldilend.abi,
-        functionName: "unlock",
+        functionName: "withdraw",
         args: [parseEther(`${unstakeAmt}`)],
       });
       const data = await waitForTransactionReceipt(config, { hash });
@@ -355,12 +333,13 @@ export const useGoldilendTx = () => {
     selectedBera: BeraInfo,
     duration: number,
   ): Promise<string> => {
+    console.log(loanAmt, duration, selectedBera.id)
     const bond = contracts.bondbear.address as `0x${string}`;
     const band = contracts.bandbear.address as `0x${string}`;
     try {
       const hash = await writeContract(config, {
         address: contracts.goldilend.address as `0x${string}`,
-        abi: parseAbi(["function borrow(uint256, uint256, address, uint256)"]),
+        abi: contracts.goldilend.abi,
         functionName: "borrow",
         args: [
           parseEther(`${loanAmt}`),
@@ -383,15 +362,10 @@ export const useGoldilendTx = () => {
     repayAmt: number,
     loanId: number,
     maxToggle: boolean,
+    realBorrowedAmount: bigint,
+    realInterest: bigint,
     wallet: string,
   ): Promise<string> => {
-    const loan = await readContract(config, {
-      address: contracts.goldilend.address as `0x${string}`,
-      abi: contracts.goldilend.abi,
-      functionName: "lookupLoan",
-      args: [wallet, loanId],
-    });
-    const userLoan = loan as unknown as LoanInfo;
     try {
       const hash = await writeContract(config, {
         address: contracts.goldilend.address as `0x${string}`,
@@ -399,7 +373,7 @@ export const useGoldilendTx = () => {
         functionName: "repay",
         args: [
           maxToggle
-            ? userLoan.borrowedAmount.toString()
+            ? realBorrowedAmount - realInterest
             : parseEther(`${repayAmt}`),
           loanId,
         ],
@@ -474,11 +448,11 @@ export const useGoldilendTx = () => {
     return "";
   };
 
-  const sendMintWBERATx = async (addy: string): Promise<string> => {
+  const sendMintFakeHoneyTx = async (addy: string): Promise<string> => {
     try {
       const hash = await writeContract(config, {
-        address: contracts.wbera.address as `0x${string}`,
-        abi: contracts.wbera.abi,
+        address: contracts.honey.address as `0x${string}`,
+        abi: contracts.honey.abi,
         functionName: 'mint',
         args: [addy, parseEther('1000000')]
       })
@@ -503,9 +477,8 @@ export const useGoldilendTx = () => {
     checkRepayAllowance,
     checkLockAllowance,
     checkStakeAllowance,
-    sendiBGTApproveTx,
+    sendHoneyApproveTx,
     sendGiBGTApproveTx,
-    sendWBERAApproveTx,
     sendLockTx,
     sendUnlockTx,
     sendStakeTx,
@@ -513,6 +486,6 @@ export const useGoldilendTx = () => {
     sendClaimTx,
     sendLiquidateTx,
     sendMintNFTTx,
-    sendMintWBERATx
+    sendMintFakeHoneyTx
   };
 };

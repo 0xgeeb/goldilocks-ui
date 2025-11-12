@@ -12,14 +12,14 @@ export const LendTogglesMobile = () => {
         <span className="scale-[-1]">CLAIM</span>
       </div>
       <div
-        className={`h-[100%] w-[25%] border-r-2 border-black ${lendActiveToggle === "UNSTAKE" ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} flex cursor-pointer items-center justify-center focus:bg-[#F3AA8A]`}
-        onClick={() => changeLendActiveToggle("UNSTAKE")}
+        className={`h-[100%] w-[25%] border-r-2 border-black ${lendActiveToggle === "WITHDRAW" ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} flex cursor-pointer items-center justify-center focus:bg-[#F3AA8A]`}
+        onClick={() => changeLendActiveToggle("WITHDRAW")}
       >
         <span className="scale-[-1]">UNSTAKE</span>
       </div>
       <div
-        className={`h-[100%] w-[25%] border-r-2 border-black ${lendActiveToggle === "STAKE" ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} flex cursor-pointer items-center justify-center focus:bg-[#F3AA8A]`}
-        onClick={() => changeLendActiveToggle("STAKE")}
+        className={`h-[100%] w-[25%] border-r-2 border-black ${lendActiveToggle === "DEPOSIT" ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} flex cursor-pointer items-center justify-center focus:bg-[#F3AA8A]`}
+        onClick={() => changeLendActiveToggle("DEPOSIT")}
       >
         <span className="scale-[-1]">STAKE</span>
       </div>

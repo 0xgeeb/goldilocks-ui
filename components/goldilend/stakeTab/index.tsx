@@ -54,9 +54,9 @@ export const StakeTab = () => {
         </div>
       </div>
       <div className="absolute left-[2%] top-[38%] flex flex-row items-center xl:left-[3%]">
-        <img className="h-8 w-8" src="/images/logo-gibgt.png" alt="coinlogo" />
+        <img className="h-8 w-8" src="/images/logo-honey.png" alt="coinlogo" />
         <h1 className="ml-1 mt-1 font-baloo text-[3vw] font-semibold xl:text-[1.8vw]">
-          WBERA
+          HONEY
         </h1>
       </div>
       <div className="absolute left-[30%] top-[30%] h-[36%] w-[65%] border-2 border-black bg-white xl:left-[22%] xl:w-[55.6%]">

@@ -21,7 +21,7 @@ export const BorrowNotification = () => {
           className="mt-[3%] h-[15%] w-[25%] border-2 border-black bg-[#E7B941] hover:scale-110 xl:h-[20%] xl:w-[19%]"
           rel="noreferrer"
         >
-          <button className="h-[100%] w-[100%] font-amaticbold text-[4vw] xl:text-[2vw]">
+          <button className="h-[100%] w-[100%] font-amaticbold text-[4vw] xl:text-[2vw] cursor-pointer">
             VIEW TX
           </button>
         </a>

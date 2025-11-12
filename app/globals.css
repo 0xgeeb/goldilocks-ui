@@ -1,3 +1,12 @@
+/* Remove default number input spinners */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -8,6 +17,23 @@
 }
 
 @config '../tailwind.config.ts';
+
+/* Explicit font-face for canvas text to reference Amatic SC */
+@font-face {
+  font-family: 'Amatic SC';
+  src: url('/fonts/AmaticSC-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Amatic SC';
+  src: url('/fonts/AmaticSC-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 
 @layer base {
   *,
@@ -118,6 +144,16 @@
 
 #date-slider {
   appearance: none;
+}
+
+/* Remove default WebKit search clear (blue X) so we can use our own yellow icon */
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
 }
 
 input[type="range"]::-webkit-slider-thumb {

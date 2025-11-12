@@ -27,7 +27,7 @@ export const HomePageMobile = () => {
                 <span>Goldiswap</span>
               </a>
               <a
-                href="/goldilend/borrow"
+                href="/goldilend"
                 className="cursor-pointer hover:scale-[150%]"
               >
                 <span>Goldilend</span>
@@ -146,7 +146,7 @@ export const HomePageMobile = () => {
             <h2 className="text-[6.5vw]">where beras borrow against their sweet assets</h2> */}
             <a
               className="mt-[5%] h-[20%] w-[55%] border-2 border-[#FFCD00]"
-              href="/goldilend/borrow"
+              href="/goldilend"
             >
               <div className="flex items-center justify-center text-[8vw]">
                 ENTER
@@ -208,7 +208,7 @@ export const HomePageMobile = () => {
               </div>
             </div>
             <span className="font-baloo text-[3.2vw] font-semibold text-[#D9C6BA]">
-              © 2024 Goldilocks DAO. All rights reserved.
+              © 2025 Goldilocks DAO. All rights reserved.
             </span>
           </div>
         </div>

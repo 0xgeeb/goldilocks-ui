@@ -224,6 +224,25 @@ const VaultInfoPane: React.FC<{ vaultToken: string }> = ({ vaultToken }) => {
             />
           </>
         )}
+        {vaultToken === "janoribgt" && (
+          <>
+            <InfoRow
+              textA="Underlying protocol link"
+              textB="Origami"
+              linkB="https://origami.finance/collections/berachain-collection/80094-0x69f1E971257419B1E9C405A553f252c64A29A30a/info"
+            />
+            <InfoRow
+              textA="Kodiak Island"
+              textB="Kodiak"
+              linkB="https://app.kodiak.finance/#/liquidity/pools/0x4d7e4aa9d7ad8d77c87a86b102b7b4490c9e42d7?chain=berachain_mainnet"
+            />
+            <InfoRow
+              textA="OT chart link"
+              textB="Dexscreener"
+              linkB="https://dexscreener.com/berachain/0x6e881aa722275b1f78cef01217ff0cc242fce881"
+            />
+          </>
+        )}
         {vaultToken === "stlbgt" && (
           <>
             <InfoRow

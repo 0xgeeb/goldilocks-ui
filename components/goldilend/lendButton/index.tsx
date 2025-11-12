@@ -32,9 +32,8 @@ export const LendButton = () => {
   const {
     checkLockAllowance,
     checkStakeAllowance,
-    sendiBGTApproveTx,
     sendGiBGTApproveTx,
-    sendWBERAApproveTx,
+    sendHoneyApproveTx,
     sendLockTx,
     sendStakeTx,
     sendUnstakeTx,
@@ -118,10 +117,10 @@ export const LendButton = () => {
 
   const stakeTxFlow = async (button: HTMLElement | null) => {
     if (stake == 0) {
-      button && (button.innerHTML = "stake");
+      button && (button.innerHTML = "deposit");
       return;
     }
-    if (stake > goldilendWalletInfo.wbera) {
+    if (stake > goldilendWalletInfo.honey) {
       button && (button.innerHTML = "not enough");
       return;
     } else {
@@ -140,12 +139,12 @@ export const LendButton = () => {
           setTxConfirming(false);
           openNotification(
             true,
-            "You've successfully staked $WBERA",
-            `You staked ${formatAsString(stake)} WBERA`,
+            "You've successfully deposited $HONEY",
+            `You deposited ${formatAsString(stake)} HONEY`,
             stakeTx,
           );
           if (button) {
-            button.innerHTML = "stake";
+            button.innerHTML = "deposit";
             setButtonLoadingColor(false);
           }
           refreshInfo();
@@ -154,7 +153,7 @@ export const LendButton = () => {
           }, 10000);
         } else {
           if (button) {
-            button.innerHTML = "stake";
+            button.innerHTML = "deposit";
             setButtonLoadingColor(false);
           }
           refreshInfo();
@@ -168,10 +167,10 @@ export const LendButton = () => {
 
   const unstakeTxFlow = async (button: HTMLElement | null) => {
     if (unstake == 0) {
-      button && (button.innerHTML = "unstake");
+      button && (button.innerHTML = "withdraw");
       return;
     }
-    if (unstake > goldilendWalletInfo.glwbera) {
+    if (unstake > goldilendWalletInfo.glhoney) {
       button && (button.innerHTML = "not enough");
       return;
     } else {
@@ -185,12 +184,12 @@ export const LendButton = () => {
         setTxConfirming(false);
         openNotification(
           true,
-          "You've successfully unstaked $glWBERA",
-          `You unstaked ${formatAsString(unstake)} glWBERA`,
+          "You've successfully withdrew $glHONEY",
+          `You withdrew ${formatAsString(unstake)} glHONEY`,
           unstakeTx,
         );
         if (button) {
-          button.innerHTML = "unstake";
+          button.innerHTML = "withdraw";
           setButtonLoadingColor(false);
         }
         refreshInfo();
@@ -199,7 +198,7 @@ export const LendButton = () => {
         }, 10000);
       } else {
         if (button) {
-          button.innerHTML = "unstake";
+          button.innerHTML = "withdraw";
           setButtonLoadingColor(false);
         }
         refreshInfo();
@@ -222,15 +221,15 @@ export const LendButton = () => {
       rightButton.style.backgroundColor = "#C9E3B9";
     }
     if (lendActiveToggle === "LOCK") {
-      await sendiBGTApproveTx(lock, false);
+      await sendHoneyApproveTx(lock, false);
       // updateAllowance(honeyBuy + 0.01)
       swapButton && (swapButton.innerHTML = "lock");
       setAllowanceButtons(false);
     } else {
-      await sendWBERAApproveTx(stake, false)
+      await sendHoneyApproveTx(stake, false)
       // await sendGiBGTApproveTx(stake, false);
       // updateAllowance(honeyBuy + 0.01)
-      swapButton && (swapButton.innerHTML = "stake");
+      swapButton && (swapButton.innerHTML = "deposit");
       setAllowanceButtons(false);
     }
   };
@@ -248,15 +247,15 @@ export const LendButton = () => {
       rightButton.style.backgroundColor = "#C9E3B9";
     }
     if (lendActiveToggle === "LOCK") {
-      await sendiBGTApproveTx(0, true);
+      await sendHoneyApproveTx(0, true);
       // updateAllowance(100000000)
       swapButton && (swapButton.innerHTML = "lock");
       setAllowanceButtons(false);
     } else {
-      await sendWBERAApproveTx(0, true)
+      await sendHoneyApproveTx(0, true)
       // await sendGiBGTApproveTx(0, true);
       // updateAllowance(100000000)
-      swapButton && (swapButton.innerHTML = "stake");
+      swapButton && (swapButton.innerHTML = "deposit");
       setAllowanceButtons(false);
     }
   };
@@ -266,10 +265,10 @@ export const LendButton = () => {
       return "lock";
     }
     if (lendActiveToggle === "STAKE") {
-      return "stake";
+      return "deposit";
     }
     if (lendActiveToggle === "UNSTAKE") {
-      return "unstake";
+      return "withdraw";
     }
   };
 

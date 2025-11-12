@@ -10,7 +10,7 @@ export const WutPopup = () => {
   const [govToggle, setGovToggle] = useState<boolean>(false);
 
   return (
-    <div className="absolute left-[21.5%] top-[11%] z-50 flex h-[35%] w-[15%] flex-col items-center justify-around border-b-2 border-l-2 border-r-2 border-black bg-[#EEDCD2] text-center font-amaticbold text-[2.75vw] font-semibold xl:left-[34%] xl:top-[15%] xl:w-[10%] xl:text-[2vw] 2xl:text-[1.5vw]">
+    <div className="absolute left-[21.5%] top-[11%] z-50 flex h-[35%] w-[15%] flex-col items-center justify-around border-b-2 border-l-2 border-r-2 border-black bg-[#EEDCD2] text-center font-amaticbold text-[2.75vw] font-medium xl:left-[34%] xl:top-[15%] xl:w-[10%] xl:text-[2vw] 2xl:text-[1.5vw]">
       <a
         href="https://goldilocks.gitbook.io/goldidocs"
         target="_blank"

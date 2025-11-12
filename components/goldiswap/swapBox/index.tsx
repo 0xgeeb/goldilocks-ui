@@ -276,75 +276,33 @@ export const SwapBox = () => {
   }, [redeemingHoney]);
 
   return (
-    <div className="absolute left-[10%] top-[18%] h-[48.87%] w-4/5 border-2 border-black bg-[#EEDCD2] md:left-[20%] md:top-[16%] md:w-3/5 lg:left-1/4 lg:top-[15%] lg:w-[50%] xl:top-[10.12%] xl:h-[55.25%] 2xl:left-[28.125%] 2xl:w-[43.75%]">
-      <div className="absolute left-0 top-3 w-6 skew-y-[45deg] border-b-2 border-black"></div>
-      <div className="absolute bottom-3 left-0 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
-      <div className="absolute right-0 top-3 w-6 -skew-y-[45deg] border-b-2 border-black"></div>
-      <div className="absolute bottom-3 right-0 w-6 skew-y-[45deg] border-b-2 border-black"></div>
-      <div
-        className={`absolute inset-6 ${txConfirming ? "" : "border-2 border-black"} bg-[#D9C6BA]`}
-      >
-        {chartOpen ? (
-          <Chart />
-        ) : txConfirming ? (
+    <div 
+      className="relative rounded-2xl p-4"
+      style={{
+        backgroundColor: "rgba(60, 50, 40, 0.4)",
+        border: "1px solid rgba(205, 133, 63, 0.3)",
+      }}
+    >
+      {chartOpen ? (
+        <Chart />
+      ) : txConfirming ? (
+        <div className="flex items-center justify-center min-h-[400px]">
           <img
-            className="size-full"
+            className="w-full max-w-md"
             src="/images/bg-transaction.png"
             alt="tx"
           />
-        ) : notification.toggle ? (
-          <Notification />
-        ) : (
-          <div className="relative flex size-full flex-col divide-y-2 divide-black">
-            <div className="absolute right-0 top-0 flex h-[10%] w-[50%] flex-row border-b-2 border-l-2 border-black font-baloo text-[2.5vw] font-semibold md:text-[2vw] lg:w-[42%] lg:text-[1.5vw] xl:text-[1.25vw] 2xl:w-[33.61%] 2xl:text-[1vw]">
-              <div
-                className="flex h-full w-[25%] cursor-pointer items-center justify-center border-r-2 border-black bg-[#DCC2A8] hover:bg-[#F3AA8A]"
-                onClick={() => handlePercentageButtons(1)}
-              >
-                25%
-              </div>
-              <div
-                className="flex h-full w-[25%] cursor-pointer items-center justify-center border-r-2 border-black bg-[#D5A774] hover:bg-[#F3AA8A]"
-                onClick={() => handlePercentageButtons(2)}
-              >
-                50%
-              </div>
-              <div
-                className="flex h-full w-[25%] cursor-pointer items-center justify-center border-r-2 border-black bg-[#D19A5B] hover:bg-[#F3AA8A]"
-                onClick={() => handlePercentageButtons(3)}
-              >
-                75%
-              </div>
-              <div
-                className="flex h-full w-[25%] cursor-pointer items-center justify-center bg-[#CC8634] hover:bg-[#F3AA8A]"
-                onClick={() => handlePercentageButtons(4)}
-              >
-                MAX
-              </div>
-            </div>
-
-            <div
-              className="absolute left-1/2 top-1/2 z-10 flex size-10 -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-3xl border-2! border-black bg-[#D9C6BA] hover:scale-110"
-              onClick={() => flipTokens()}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#0D111C"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <line x1="12" y1="5" x2="12" y2="19"></line>
-                <polyline points="19 12 12 19 5 12"></polyline>
-              </svg>
-            </div>
-            <div className="flex h-1/2 w-full items-center gap-4 border-t-0! px-8">
+        </div>
+      ) : notification.toggle ? (
+        <Notification />
+      ) : (
+        <div className="flex flex-col gap-3">
+          {/* Input Container with Arrow */}
+          <div className="relative">
+            {/* Top Input */}
+            <div className="flex items-center gap-4 p-3 rounded-xl bg-black/20 border border-amber-900/30 mb-2">
               <InputLogo type={activeToggle === "BUY" ? "honey" : "locks"} />
-              <div className="h-1/2 w-3/5 border-2 border-black bg-white">
+              <div className="flex-1">
                 <SwapInput
                   isLoading={topAmountLoading}
                   value={displayString}
@@ -356,18 +314,41 @@ export const SwapBox = () => {
                   }
                 />
               </div>
-              <div className="h-1/2">
-                <img
-                  className="size-8 cursor-pointer hover:animate-spin"
-                  src="/images/icon-settings.png"
-                  alt="settings"
-                  onClick={() => changeSlippageToggle(true)}
-                />
+              <button
+                className="w-16 py-1.5 rounded-lg text-sm font-baloo font-semibold bg-amber-600/40 hover:bg-amber-700/60 border border-amber-600/30 text-amber-200 transition-colors"
+                onClick={() => handlePercentageButtons(4)}
+              >
+                MAX
+              </button>
+            </div>
+
+            {/* Flip Button - Centered between inputs */}
+            <div className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2">
+              <div
+                className="flex size-10 cursor-pointer items-center justify-center rounded-full bg-amber-900/80 hover:bg-amber-800 border border-amber-600/40 hover:scale-110 transition-all shadow-lg"
+                onClick={() => flipTokens()}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#FFD700"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <polyline points="19 12 12 19 5 12"></polyline>
+                </svg>
               </div>
             </div>
-            <div className="flex h-1/2 w-full items-center gap-4 px-8">
+
+            {/* Bottom Input */}
+            <div className="flex items-center gap-4 p-3 rounded-xl bg-black/20 border border-amber-900/30 mt-2">
               <InputLogo type={activeToggle === "BUY" ? "locks" : "honey"} />
-              <div className="h-1/2 w-3/5 border-2 border-black bg-white">
+              <div className="flex-1">
                 <SwapInput
                   isLoading={bottomAmountLoading}
                   value={bottomDisplayString}
@@ -379,10 +360,18 @@ export const SwapBox = () => {
                   }
                 />
               </div>
+              <div className="w-16 flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity">
+                <img
+                  className="size-6"
+                  src="/images/yellow-settings.svg"
+                  alt="settings"
+                  onClick={() => changeSlippageToggle(true)}
+                />
+              </div>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

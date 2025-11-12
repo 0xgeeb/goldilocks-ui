@@ -115,45 +115,13 @@ export const NavBarButtons = () => {
             <span>Goldiswap</span>
           </a>
         )}
-        {pathname === "/goldilend/borrow" ? (
-          <>
-            <a className="text-[#DB7200]">
-              <span>Goldilend</span>
-            </a>
-            <a
-              href="/goldilend/borrow"
-              className="cursor-pointer text-[7vw] text-[#DB7200] underline underline-offset-8 hover:scale-[150%]"
-            >
-              <span>Borrow</span>
-            </a>
-            <a
-              href="/goldilend/lend"
-              className="cursor-pointer text-[7vw] hover:scale-[150%]"
-            >
-              <span>Lend</span>
-            </a>
-          </>
-        ) : pathname === "/goldilend/lend" ? (
-          <>
-            <a className="text-[#DB7200]">
-              <span>Goldilend</span>
-            </a>
-            <a
-              href="/goldilend/borrow"
-              className="cursor-pointer text-[7vw] hover:scale-[150%]"
-            >
-              <span>Borrow</span>
-            </a>
-            <a
-              href="/goldilend/lend"
-              className="cursor-pointer text-[7vw] text-[#DB7200] underline underline-offset-8 hover:scale-[150%]"
-            >
-              <span>Lend</span>
-            </a>
-          </>
+        {pathname.startsWith("/goldilend") ? (
+          <a className="text-[#DB7200]">
+            <span>Goldilend</span>
+          </a>
         ) : (
           <a
-            href="/goldilend/borrow"
+            href="/goldilend"
             className="cursor-pointer hover:scale-[150%]"
           >
             <span>Goldilend</span>

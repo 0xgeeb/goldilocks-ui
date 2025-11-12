@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   description: "Goldilocks Governance",
 };
 
+export const runtime = 'edge';
+
 type Props = {
   params: {
     number: string;

@@ -1,4 +1,5 @@
 export * from "./goldiswapPage";
+export * from "./goldiswapPortfolioPage";
 export * from "./swapBox";
 export * from "./goldiswapButton";
 export * from "./notification";
@@ -6,7 +7,9 @@ export * from "./slippagePopup";
 export * from "./redeemPopup";
 export * from "./toggles";
 export * from "./stats";
+export * from "./statsMarquee";
 export * from "./chart";
 export * from "./walletBalance";
+export * from "./portfolioWalletBalance";
 export * from "./locksFetcher";
 export * from './navBar'

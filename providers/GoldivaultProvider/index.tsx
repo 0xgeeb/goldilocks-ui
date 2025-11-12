@@ -205,6 +205,33 @@ export const VAULT_LABELS: VaultLabels = {
       stakedYt: "Staked Yield Token"
     },
   },
+  janoribgt: {
+    goldivaultInfo: {
+      endTime: {
+        label: "Vault Maturity",
+        hoverText: "The date the vault will mature and you can redeem your tokens"
+      },
+      fixedApr: "Fixed APR/Implied Yield",
+      otLiquidity: "Liquidity",
+      origamiLeverage: {
+        label: "Origami Leverage",
+        hoverText: "10x Origami Points Multiplier"
+      },
+      infraredLeverage: {
+        label: "Infrared Points Leverage",
+        hoverText: "1x Infrared Points Multiplier"
+      }
+    },
+    goldivaultWalletInfo: {
+      ibgt: "iBGT",
+      ibgtAllowance: "iBGT Allowance",
+      oribgtot: "OriBGT OT",
+      oribgtyt: "OriBGT YT",
+      claimable: "Claimable",
+      justYt: "Yield Token",
+      stakedYt: "Staked Yield Token"
+    },
+  },
   solvbtc: {
     goldivaultInfo: {
       endTime: {
@@ -367,6 +394,24 @@ const INITIAL_STATE: {
     steerLP: 0,
     zapOutAsset: 0
   },
+  goldivaultInfoJanOribgt: {
+    endTime: 0,
+    fixedApr: 0,
+    otLiquidity: 0,
+    origamiLeverage: 0,
+    infraredLeverage: 0
+  },
+  goldivaultWalletInfoJanOribgt: {
+    ibgt: 0,
+    ibgtAllowance: 0,
+    oribgt: 0,
+    janoribgtot: 0,
+    janoribgtyt: 0,
+    claimable: 0,
+    justYt: 0,
+    stakedYt: 0,
+    kodiakIsland: 0
+  },
   goldivaultInfoWberaibgtlp: {
     endTime: 0,
     fixedApr: 0,
@@ -449,6 +494,12 @@ const INITIAL_STATE: {
       ytPrice: 0,
     },
     oribgt: {
+      fixedApr: 0,
+      daysTil: "",
+      liquidity: 0,
+      ytPrice: 0
+    },
+    janoribgt: {
       fixedApr: 0,
       daysTil: "",
       liquidity: 0,
@@ -564,6 +615,8 @@ const INITIAL_STATE: {
   refreshGoldivaultWalletInfoRseth: async () => {},
   refreshGoldivaultInfoOribgt: async () => {},
   refreshGoldivaultWalletInfoOribgt: async () => {},
+  refreshGoldivaultInfoJanOribgt: async () => {},
+  refreshGoldivaultWalletInfoJanOribgt: async () => {},
   refreshGoldivaultInfoWberaibgtlp: async () => {},
   refreshGoldivaultWalletInfoWberaibgtlp: async () => {},
   refreshGoldivaultInfoStlbgt: async () => {},
@@ -670,7 +723,9 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
   const [goldivaultWalletInfoRsethState, setGoldivaultWalletInfoRsethState] =
     useState(INITIAL_STATE.goldivaultWalletInfoRseth);
   const [goldivaultInfoOribgtState, setGoldivaultInfoOribgtState] = useState(INITIAL_STATE.goldivaultInfoOribgt)
+  const [goldivaultInfoJanOribgtState, setGoldivaultInfoJanOribgtState] = useState(INITIAL_STATE.goldivaultInfoJanOribgt)
   const [goldivaultWalletInfoOribgtState, setGoldivaultWalletInfoOribgtState] = useState(INITIAL_STATE.goldivaultWalletInfoOribgt)
+  const [goldivaultWalletInfoJanOribgtState, setGoldivaultWalletInfoJanOribgtState] = useState(INITIAL_STATE.goldivaultWalletInfoJanOribgt)
   const [goldivaultInfoWberaibgtlpState, setGoldivaultInfoWberaibgtlpState] = useState(INITIAL_STATE.goldivaultInfoWberaibgtlp)
   const [goldivaultWalletInfoWberaibgtlpState, setGoldivaultWalletInfoWberaibgtlpState] = useState(INITIAL_STATE.goldivaultWalletInfoWberaibgtlp)
   const [goldivaultInfoStlbgtState, setGoldivaultInfoStlbgtState] = useState(INITIAL_STATE.goldivaultInfoStlbgt)
@@ -1900,6 +1955,173 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
     }
   }
 
+  const refreshGoldivaultInfoJanOribgt = async () => {
+    setInfoLoadingState(true);
+    const endTimeResult: any = await readContract(config, {
+      address: contracts.janoribgtVault.address as `0x${string}`,
+      abi: contracts.janoribgtVault.abi,
+      functionName: "endTime",
+      args: [],
+    })
+    const buyingOTQuoteResult: any = await readContract(config, {
+      address: contracts.quoterv2.address as `0x${string}`,
+      abi: contracts.quoterv2.abi,
+      functionName: "quoteExactOutputSingle",
+      args: [
+        [
+          contracts.oribgt.address,
+          contracts.janoribgtot.address,
+          parseEther("1"),
+          500,
+          0,
+        ],
+      ],
+    })
+    const buyingOTPrice = parseFloat(formatEther(buyingOTQuoteResult[0] as unknown as bigint))
+    const timeDifference = parseFloat(endTimeResult) * 1000 - Date.now();
+    const fixedDaysDifference = timeDifference / (1000 * 60 * 60 * 24);
+    const daysTil = parseFloat(fixedDaysDifference.toFixed(2));
+    const convertedQuote = await readContract(config, {
+      address: contracts.oribgt.address as `0x${string}`,
+      abi: contracts.oribgt.abi,
+      functionName: 'convertToAssets',
+      args: [parseEther(`${buyingOTPrice}`)]
+    })
+    const currentYtPrice = 1 - parseFloat(formatEther(convertedQuote as unknown as bigint))
+    const fixedAprResponse = currentYtPrice * 100 * (365 / daysTil);
+
+    const oribgtBalance = await readContract(config, {
+      address: contracts.oribgt.address as `0x${string}`,
+      abi: contracts.oribgt.abi,
+      functionName: "balanceOf",
+      args: [contracts.vaultLPaddys.janoribgt],
+    });
+    const oribgtOTLiquidity = await readContract(config, {
+      address: contracts.janoribgtot.address as `0x${string}`,
+      abi: contracts.janoribgtot.abi,
+      functionName: "balanceOf",
+      args: [contracts.vaultLPaddys.janoribgt],
+    });
+    const oribgtLiquidity = await readContract(config, {
+      address: contracts.oribgt.address as `0x${string}`,
+      abi: contracts.oribgt.abi,
+      functionName: "convertToAssets",
+      args: [oribgtBalance],
+    })
+    const beraPriceResult: any = await readContract(config, {
+      address: contracts.quoterv2.address as `0x${string}`,
+      abi: contracts.quoterv2.abi,
+      functionName: "quoteExactOutputSingle",
+      args: [
+        [
+          contracts.honey.address,
+          contracts.wbera.address,
+          parseEther(`1`),
+          3000,
+          0,
+        ],
+      ],
+    });
+    const beraPrice = parseFloat(formatEther(beraPriceResult[0] as unknown as bigint))
+    const ibgtPriceResult: any = await readContract(config, {
+      address: contracts.quoterv2.address as `0x${string}`,
+      abi: contracts.quoterv2.abi,
+      functionName: "quoteExactOutputSingle",
+      args: [
+        [
+          contracts.wbera.address,
+          contracts.ibgt.address,
+          parseEther(`1`),
+          3000,
+          0,
+        ],
+      ],
+    });
+    const ibgtPrice = parseFloat(formatEther(ibgtPriceResult[0] as unknown as bigint))
+    const liquidityTokens = (parseFloat(formatEther(oribgtLiquidity as unknown as bigint)) + parseFloat(formatEther(oribgtOTLiquidity as unknown as bigint)))
+    const liquidityResult = liquidityTokens * (ibgtPrice * beraPrice)
+
+    const response = {
+      endTime: parseFloat(endTimeResult),
+      fixedApr: fixedAprResponse,
+      otLiquidity: liquidityResult,
+      origamiLeverage: (1 / currentYtPrice) * 10,
+      infraredLeverage: (1 / currentYtPrice) * 1
+    }
+
+    setGoldivaultInfoJanOribgtState(response);
+    setInfoLoadingState(false);
+  }
+
+  const refreshGoldivaultWalletInfoJanOribgt = async () => {
+    if (address) {
+      setInfoLoadingState(true);
+      const ibgtBalResult = await readContract(config, {
+        address: contracts.ibgt.address as `0x${string}`,
+        abi: contracts.ibgt.abi,
+        functionName: "balanceOf",
+        args: [address],
+      });
+      const ibgtAllResult = await readContract(config, {
+        address: contracts.ibgt.address as `0x${string}`,
+        abi: contracts.ibgt.abi,
+        functionName: "allowance",
+        args: [address, contracts.janoribgtVault.address],
+      });
+      const oribgtBalResult = await readContract(config, {
+        address: contracts.oribgt.address as `0x${string}`,
+        abi: contracts.oribgt.abi,
+        functionName: "balanceOf",
+        args: [address],
+      })
+      const janoribgtotBalResult = await readContract(config, {
+        address: contracts.janoribgtot.address as `0x${string}`,
+        abi: contracts.janoribgtot.abi,
+        functionName: "balanceOf",
+        args: [address],
+      });
+      const janoribgtytBalResult = await readContract(config, {
+        address: contracts.janoribgtyt.address as `0x${string}`,
+        abi: contracts.janoribgtyt.abi,
+        functionName: "balanceOf",
+        args: [address],
+      });
+      const janoribgtYtStakedResult = await readContract(config, {
+        address: contracts.janoribgtVault.address as `0x${string}`,
+        abi: contracts.janoribgtVault.abi,
+        functionName: "ytStaked",
+        args: [address],
+      });
+      const claimableResult = await readContract(config, {
+        address: contracts.janoribgtVault.address as `0x${string}`,
+        abi: contracts.janoribgtVault.abi,
+        functionName: "userClaimableUnderlying",
+        args: [address],
+      })
+      const islandResult = await readContract(config, {
+        address: contracts.janoribgtKodiakIsland.address as `0x${string}`,
+        abi: contracts.janoribgtKodiakIsland.abi,
+        functionName: "balanceOf",
+        args: [address]
+      })
+
+      const response = {
+        ibgt: parseFloat(formatEther(ibgtBalResult as unknown as bigint)),
+        ibgtAllowance: parseFloat(formatEther(ibgtAllResult as unknown as bigint)),
+        oribgt: parseFloat(formatEther(oribgtBalResult as unknown as bigint)),
+        janoribgtot: parseFloat(formatEther(janoribgtotBalResult as unknown as bigint)),
+        janoribgtyt: parseFloat(formatEther(janoribgtytBalResult as unknown as bigint)) + parseFloat(formatEther(janoribgtYtStakedResult as unknown as bigint)),
+        claimable: parseFloat(formatEther(claimableResult as unknown as bigint)),
+        justYt: parseFloat(formatEther(janoribgtytBalResult as unknown as bigint)),
+        stakedYt: parseFloat(formatEther(janoribgtYtStakedResult as unknown as bigint)),
+        kodiakIsland: parseFloat(formatEther(islandResult as unknown as bigint))
+      };
+
+      setGoldivaultWalletInfoJanOribgtState(response);
+      setInfoLoadingState(false);
+    }
+  }
+
   const refreshVaultDisplayInfo = async () => {
     setInfoLoadingState(true);
 
@@ -2354,6 +2576,60 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
     const ytPriceYbgt = 1 - parseFloat(formatEther(convertedQuoteYbgt as unknown as bigint))
     const fixedAprResponseYbgt = ytPriceYbgt * 100 * (365 / daysTilYbgt)
 
+    // janoribgt
+    const endTimeResultJanOribgt: any = await readContract(config, {
+      address: contracts.janoribgtVault.address as `0x${string}`,
+      abi: contracts.janoribgtVault.abi,
+      functionName: "endTime",
+      args: []
+    })
+    const janoribgtOTLiquidity = await readContract(config, {
+      address: contracts.janoribgtot.address as `0x${string}`,
+      abi: contracts.janoribgtot.abi,
+      functionName: "balanceOf",
+      args: [contracts.vaultLPaddys.janoribgt],
+    });
+    const janoribgtBalance = await readContract(config, {
+      address: contracts.oribgt.address as `0x${string}`,
+      abi: contracts.oribgt.abi,
+      functionName: "balanceOf",
+      args: [contracts.vaultLPaddys.janoribgt],
+    });
+    const janoribgtLiquidity = await readContract(config, {
+      address: contracts.oribgt.address as `0x${string}`,
+      abi: contracts.oribgt.abi,
+      functionName: "convertToAssets",
+      args: [janoribgtBalance],
+    })
+    const liquidityTokensJanOribgt = (parseFloat(formatEther(janoribgtLiquidity as unknown as bigint)) + parseFloat(formatEther(janoribgtOTLiquidity as unknown as bigint)))
+    const liquidityResultJanOribgt = liquidityTokensJanOribgt * (ibgtPrice * beraPrice)
+    const buyingOTQuoteResultJanOribgt: any = await readContract(config, {
+      address: contracts.quoterv2.address as `0x${string}`,
+      abi: contracts.quoterv2.abi,
+      functionName: "quoteExactOutputSingle",
+      args: [
+        [
+          contracts.oribgt.address,
+          contracts.janoribgtot.address,
+          parseEther("1"),
+          500,
+          0,
+        ],
+      ],
+    })
+    const buyingOTPriceJanOribgt = parseFloat(formatEther(buyingOTQuoteResultJanOribgt[0] as unknown as bigint))
+    const timeDifferenceJanOribgt = parseFloat(endTimeResultJanOribgt) * 1000 - Date.now();
+    const fixedDaysDifferenceJanOribgt = timeDifferenceJanOribgt / (1000 * 60 * 60 * 24);
+    const daysTilJanOribgt = parseFloat(fixedDaysDifferenceJanOribgt.toFixed(2));
+    const convertedQuoteJanOribgt = await readContract(config, {
+      address: contracts.oribgt.address as `0x${string}`,
+      abi: contracts.oribgt.abi,
+      functionName: 'convertToAssets',
+      args: [parseEther(`${buyingOTPriceJanOribgt}`)]
+    })
+    const ytPriceJanOribgt = 1 - parseFloat(formatEther(convertedQuoteJanOribgt as unknown as bigint))
+    const fixedAprResponseJanOribgt = ytPriceJanOribgt * 100 * (365 / daysTilJanOribgt);
+
     const response = {
       rseth: {
         fixedApr: 0,
@@ -2384,6 +2660,12 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         daysTil: getRelativeDate(parseFloat(endTimeResultOribgt)),
         liquidity: liquidityResultOribgt,
         ytPrice: ytPriceOribgt
+      },
+      janoribgt: {
+        fixedApr: fixedAprResponseJanOribgt,
+        daysTil: getRelativeDate(parseFloat(endTimeResultJanOribgt)),
+        liquidity: liquidityResultJanOribgt,
+        ytPrice: ytPriceJanOribgt
       },
       stlbgt: {
         fixedApr: fixedAprResponseStlbgt,
@@ -2461,13 +2743,15 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
               ? goldivaultWalletInfoRsethState.rsethot
               : vault === "oribgt"
                 ? goldivaultWalletInfoOribgtState.oribgtot
-                : vault === "wberaibgtlp"
-                  ? goldivaultWalletInfoWberaibgtlpState.wberaibgtlpot
-                  : vault === "stlbgt"
-                    ? goldivaultWalletInfoStlbgtState.stlbgtot
-                    : vault === "ybgt"
-                      ? goldivaultWalletInfoYbgtState.ybgtot
-                      : {}; // @note
+                : vault === "janoribgt"
+                  ? goldivaultWalletInfoJanOribgtState.janoribgtot
+                  : vault === "wberaibgtlp"
+                    ? goldivaultWalletInfoWberaibgtlpState.wberaibgtlpot
+                    : vault === "stlbgt"
+                      ? goldivaultWalletInfoStlbgtState.stlbgtot
+                      : vault === "ybgt"
+                        ? goldivaultWalletInfoYbgtState.ybgtot
+                        : {}; // @note
     const vaultYT =
       vault === "solvbtc"
         ? goldivaultWalletInfoSolvbtcState.solvbtcyt
@@ -2479,13 +2763,15 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
               ? goldivaultWalletInfoRsethState.rsethyt
               : vault === "oribgt"
                 ? goldivaultWalletInfoOribgtState.oribgtyt
-                : vault === "wberaibgtlp"
-                  ? goldivaultWalletInfoWberaibgtlpState.wberaibgtlpyt
-                  : vault === "stlbgt"
-                    ? goldivaultWalletInfoStlbgtState.stlbgtyt
-                    : vault === "ybgt"
-                      ? goldivaultWalletInfoYbgtState.ybgtyt
-                      : {}; // @note
+                : vault === "janoribgt"
+                  ? goldivaultWalletInfoJanOribgtState.janoribgtyt
+                  : vault === "wberaibgtlp"
+                    ? goldivaultWalletInfoWberaibgtlpState.wberaibgtlpyt
+                    : vault === "stlbgt"
+                      ? goldivaultWalletInfoStlbgtState.stlbgtyt
+                      : vault === "ybgt"
+                        ? goldivaultWalletInfoYbgtState.ybgtyt
+                        : {}; // @note
     const vaultDT =
       vault === "solvbtc"
         ? goldivaultWalletInfoSolvbtcState.solvbtc
@@ -2497,51 +2783,65 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
               ? goldivaultWalletInfoRsethState.rseth
               : vault === "oribgt"
                 ? goldivaultWalletInfoOribgtState.ibgt
-                : vault === "wberaibgtlp"
-                  ? (activeToggleState === "TRADEOT" || activeToggleState === "TRADEYT") ? goldivaultWalletInfoWberaibgtlpState.origamiwberaibgtlp : goldivaultWalletInfoWberaibgtlpState.wberaibgtlp
-                  : vault === "stlbgt"
-                    ? activeToggleState === "ADDLIQ" ? goldivaultWalletInfoStlbgtState.stlbgt : goldivaultWalletInfoStlbgtState.lbgt
-                    : vault === "ybgt"
-                      ? (activeToggleState === "TRADEOT" || activeToggleState === "TRADEYT") ? goldivaultWalletInfoYbgtState.stybgt : goldivaultWalletInfoYbgtState.ybgt
-                      : {}; // @note This should be a number, not {}
+                : vault === "janoribgt"
+                  ? activeToggleState === "ADDLIQ" ? goldivaultWalletInfoJanOribgtState.oribgt : goldivaultWalletInfoJanOribgtState.ibgt
+                  : vault === "wberaibgtlp"
+                    ? (activeToggleState === "TRADEOT" || activeToggleState === "TRADEYT") ? goldivaultWalletInfoWberaibgtlpState.origamiwberaibgtlp : goldivaultWalletInfoWberaibgtlpState.wberaibgtlp
+                    : vault === "stlbgt"
+                      ? activeToggleState === "ADDLIQ" ? goldivaultWalletInfoStlbgtState.stlbgt : goldivaultWalletInfoStlbgtState.lbgt
+                      : vault === "ybgt"
+                        ? (activeToggleState === "TRADEOT" || activeToggleState === "TRADEYT") ? goldivaultWalletInfoYbgtState.stybgt : goldivaultWalletInfoYbgtState.ybgt
+                        : {}; // @note This should be a number, not {}
     const vaultLP =
       vault === "rusd"
         ? goldivaultWalletInfoRusdState.rusdaquabera
         : vault === "oribgt"
           ? goldivaultWalletInfoOribgtState.steerLP
-          : 0
+          : vault === "stlbgt"
+            ? goldivaultWalletInfoStlbgtState.kodiakIsland
+            : vault === "janoribgt"
+              ? goldivaultWalletInfoJanOribgtState.kodiakIsland
+                : 0
     const justYt = 
       vault === "oribgt"
         ? goldivaultWalletInfoOribgtState.justYt
-        : vault === "wberaibgtlp"
-          ? goldivaultWalletInfoWberaibgtlpState.justYt
-          : vault === "stlbgt"
-            ? goldivaultWalletInfoStlbgtState.justYt
-            : vault === "ybgt"
-              ? goldivaultWalletInfoYbgtState.justYt
-              : 0
+        : vault === "janoribgt"
+          ? goldivaultWalletInfoJanOribgtState.justYt
+          : vault === "wberaibgtlp"
+            ? goldivaultWalletInfoWberaibgtlpState.justYt
+            : vault === "stlbgt"
+              ? goldivaultWalletInfoStlbgtState.justYt
+              : vault === "ybgt"
+                ? goldivaultWalletInfoYbgtState.justYt
+                : 0
     const stakedYt = 
       vault === "oribgt"
         ? goldivaultWalletInfoOribgtState.stakedYt
-        : vault === "wberaibgtlp"
-          ? goldivaultWalletInfoWberaibgtlpState.stakedYt
-          : vault === "stlbgt"
-            ? goldivaultWalletInfoStlbgtState.stakedYt
-            : vault === "ybgt"
-              ? goldivaultWalletInfoYbgtState.stakedYt
-              : 0
+        : vault === "janoribgt"
+          ? goldivaultWalletInfoJanOribgtState.stakedYt
+          : vault === "wberaibgtlp"
+            ? goldivaultWalletInfoWberaibgtlpState.stakedYt
+            : vault === "stlbgt"
+              ? goldivaultWalletInfoStlbgtState.stakedYt
+              : vault === "ybgt"
+                ? goldivaultWalletInfoYbgtState.stakedYt
+                : 0
     const zapInAsset =
       vault === "oribgt"
       ? goldivaultWalletInfoOribgtState.ibgt
-      : vault === "stlbgt"
-        ? selectedZapAssetState === "LBGT" ? goldivaultWalletInfoStlbgtState.lbgt : goldivaultWalletInfoStlbgtState.stlbgt
-        : 0
+      : vault === "janoribgt"
+        ? goldivaultWalletInfoJanOribgtState.ibgt
+        : vault === "stlbgt"
+          ? selectedZapAssetState === "LBGT" ? goldivaultWalletInfoStlbgtState.lbgt : goldivaultWalletInfoStlbgtState.stlbgt
+          : 0
     const zapOutAsset =
       vault === "oribgt"
         ? goldivaultWalletInfoOribgtState.zapOutAsset
-        : vault === "stlbgt"
-          ? goldivaultWalletInfoStlbgtState.zapOutAsset
-          : 0
+        : vault === "janoribgt"
+          ? goldivaultWalletInfoJanOribgtState.kodiakIsland
+          : vault === "stlbgt"
+            ? goldivaultWalletInfoStlbgtState.kodiakIsland
+            : 0
 
     if (activeToggleState === "DEPOSIT") {
       setDisplayStringState(vaultDT.toFixed(4));
@@ -2655,27 +2955,33 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
     const islandAddy = 
       vault === "oribgt"
         ? contracts.steerOribgtPool.address
-        : vault === "stlbgt"
-          ? contracts.stlbgtKodiakIsland.address
-          : vault === "ybgt"
-            ? contracts.ybgtKodiakIsland.address
-            : ""
+        : vault === "janoribgt"
+          ? contracts.janoribgtKodiakIsland.address
+          : vault === "stlbgt"
+            ? contracts.stlbgtKodiakIsland.address
+            : vault === "ybgt"
+              ? contracts.ybgtKodiakIsland.address
+              : ""
     const islandABI = 
       vault === "oribgt"
         ? [{"type":"function","name":"getTotalAmounts","stateMutability":"view","inputs":[],"outputs":[{"name":"total0","type":"uint256"},{"name":"total1","type":"uint256"}]}]
-        : vault === "stlbgt"
+        : vault === "janoribgt"
           ? [{"type":"function","name":"getUnderlyingBalances","stateMutability":"view","inputs":[],"outputs":[{"name":"amount0Current","type":"uint256"},{"name":"amount1Current","type":"uint256"}]}]
-          : vault === "ybgt"
+          : vault === "stlbgt"
             ? [{"type":"function","name":"getUnderlyingBalances","stateMutability":"view","inputs":[],"outputs":[{"name":"amount0Current","type":"uint256"},{"name":"amount1Current","type":"uint256"}]}]
-            : []
+            : vault === "ybgt"
+              ? [{"type":"function","name":"getUnderlyingBalances","stateMutability":"view","inputs":[],"outputs":[{"name":"amount0Current","type":"uint256"},{"name":"amount1Current","type":"uint256"}]}]
+              : []
     const islandFunction = 
       vault === "oribgt"
         ? "getTotalAmounts"
-        : vault === "stlbgt"
+        : vault === "janoribgt"
           ? "getUnderlyingBalances"
-          : vault === "ybgt"
+          : vault === "stlbgt"
             ? "getUnderlyingBalances"
-            : ""
+            : vault === "ybgt"
+              ? "getUnderlyingBalances"
+              : ""
     if(direction === "ADDLIQ") {
       const totalAmountsResult: any = await readContract(config, {
         address: islandAddy as `0x${string}`,
@@ -2728,35 +3034,43 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
     const islandAddy = 
       vault === "oribgt"
         ? contracts.steerOribgtPool.address
-        : vault === "stlbgt"
-          ? contracts.stlbgtKodiakIsland.address
-          : vault === "ybgt"
-            ? contracts.ybgtKodiakIsland.address
-            : ""
+        : vault === "janoribgt"
+          ? contracts.janoribgtKodiakIsland.address
+          : vault === "stlbgt"
+            ? contracts.stlbgtKodiakIsland.address
+            : vault === "ybgt"
+              ? contracts.ybgtKodiakIsland.address
+              : ""
     const islandABI = 
       vault === "oribgt"
         ? [{"type":"function","name":"getTotalAmounts","stateMutability":"view","inputs":[],"outputs":[{"name":"total0","type":"uint256"},{"name":"total1","type":"uint256"}]}]
-        : vault === "stlbgt"
+        : vault === "janoribgt"
           ? [{"type":"function","name":"getUnderlyingBalances","stateMutability":"view","inputs":[],"outputs":[{"name":"amount0Current","type":"uint256"},{"name":"amount1Current","type":"uint256"}]}]
-          : vault === "ybgt"
+          : vault === "stlbgt"
             ? [{"type":"function","name":"getUnderlyingBalances","stateMutability":"view","inputs":[],"outputs":[{"name":"amount0Current","type":"uint256"},{"name":"amount1Current","type":"uint256"}]}]
-            : []
+            : vault === "ybgt"
+              ? [{"type":"function","name":"getUnderlyingBalances","stateMutability":"view","inputs":[],"outputs":[{"name":"amount0Current","type":"uint256"},{"name":"amount1Current","type":"uint256"}]}]
+              : []
     const islandFunction = 
       vault === "oribgt"
         ? "getTotalAmounts"
-        : vault === "stlbgt"
+        : vault === "janoribgt"
           ? "getUnderlyingBalances"
-          : vault === "ybgt"
+          : vault === "stlbgt"
             ? "getUnderlyingBalances"
-            : ""
+            : vault === "ybgt"
+              ? "getUnderlyingBalances"
+              : ""
     const four626Addy = 
       vault === "oribgt"
         ? contracts.oribgt.address
-        : vault === "stlbgt"
-          ? contracts.stlbgt.address
-          : vault === "ybgt"
-            ? contracts.ysysybgt.address
-            : ""
+        : vault === "janoribgt"
+          ? contracts.oribgt.address
+          : vault === "stlbgt"
+            ? contracts.stlbgt.address
+            : vault === "ybgt"
+              ? contracts.ysysybgt.address
+              : ""
     const totalAmountsResult: any = await readContract(config, {
       address: islandAddy as `0x${string}`,
       abi: islandABI,
@@ -2830,25 +3144,31 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         ? contracts.steerOribgtPool.address
         : vault === "stlbgt"
           ? contracts.stlbgtKodiakIsland.address
-          : vault === "ybgt"
-            ? contracts.ybgtKodiakIsland.address
-            : ""
+          : vault === "janoribgt"
+            ? contracts.janoribgtKodiakIsland.address
+            : vault === "ybgt"
+              ? contracts.ybgtKodiakIsland.address
+              : ""
     const islandABI = 
       vault === "oribgt"
         ? [{"type":"function","name":"getTotalAmounts","stateMutability":"view","inputs":[],"outputs":[{"name":"total0","type":"uint256"},{"name":"total1","type":"uint256"}]}]
         : vault === "stlbgt"
           ? [{"type":"function","name":"getUnderlyingBalances","stateMutability":"view","inputs":[],"outputs":[{"name":"amount0Current","type":"uint256"},{"name":"amount1Current","type":"uint256"}]}]
-          : vault === "ybgt"
+          : vault === "janoribgt"
             ? [{"type":"function","name":"getUnderlyingBalances","stateMutability":"view","inputs":[],"outputs":[{"name":"amount0Current","type":"uint256"},{"name":"amount1Current","type":"uint256"}]}]
-            : []
+            : vault === "ybgt"
+              ? [{"type":"function","name":"getUnderlyingBalances","stateMutability":"view","inputs":[],"outputs":[{"name":"amount0Current","type":"uint256"},{"name":"amount1Current","type":"uint256"}]}]
+              : []
     const islandFunction = 
       vault === "oribgt"
         ? "getTotalAmounts"
-        : vault === "stlbgt"
+        : vault === "janoribgt"
           ? "getUnderlyingBalances"
-          : vault === "ybgt"
+          : vault === "stlbgt"
             ? "getUnderlyingBalances"
-            : ""
+            : vault === "ybgt"
+              ? "getUnderlyingBalances"
+              : ""
     const zapOutAmt = debouncedZapState
     const totalAmountsResult: any = await readContract(config, {
       address: islandAddy as `0x${string}`,
@@ -3079,6 +3399,8 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       return contracts.rusdot.address;
     } else if (vault === "oribgt") {
       return contracts.oribgtot.address;
+    } else if (vault === "janoribgt") {
+      return contracts.janoribgtot.address;
     } else if (vault === "wberaibgtlp") {
       return contracts.wberaibgtlpot.address;
     } else if (vault === "stlbgt") {
@@ -3098,6 +3420,8 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
     } else if (vault === "rusd") {
       return contracts.rusd.address;
     } else if (vault === "oribgt") {
+      return contracts.oribgt.address;
+    } else if (vault === "janoribgt") {
       return contracts.oribgt.address;
     } else if (vault === "wberaibgtlp") {
       return contracts.origamiwberaibgtisland.address;
@@ -3119,6 +3443,8 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       return contracts.rusdVault.address;
     } else if (vault === "oribgt") {
       return contracts.oribgtVault.address;
+    } else if (vault === "janoribgt") {
+      return contracts.janoribgtVault.address;
     } else if (vault === "wberaibgtlp") {
       return contracts.wberaibgtlpVault.address;
     } else if (vault === "stlbgt") {
@@ -3139,6 +3465,8 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
       return goldivaultInfoRusdState.fixedApr;
     } else if (vault === "oribgt") {
       return goldivaultInfoOribgtState.fixedApr;
+    } else if (vault === "janoribgt") {
+      return goldivaultInfoJanOribgtState.fixedApr;
     } else if (vault === "wberaibgtlp") {
       return goldivaultInfoWberaibgtlpState.fixedApr;
     } else if (vault === "stlbgt") {
@@ -3161,13 +3489,15 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
               ? contracts.rseth.address
               : vault === "oribgt"
                 ? contracts.oribgt.address
-                : vault === "wberaibgtlp"
-                  ? contracts.origamiwberaibgtisland.address
-                  : vault === "stlbgt"
-                    ? contracts.stlbgt.address
-                    : vault === "ybgt"
-                      ? contracts.ysysybgt.address
-                      : "";
+                : vault === "janoribgt"
+                  ? contracts.oribgt.address
+                  : vault === "wberaibgtlp"
+                    ? contracts.origamiwberaibgtisland.address
+                    : vault === "stlbgt"
+                      ? contracts.stlbgt.address
+                      : vault === "ybgt"
+                        ? contracts.ysysybgt.address
+                        : "";
   }
 
   const quoteV3Swap = async (vault: string, vaultType: string, four626bool: boolean) => {
@@ -3721,7 +4051,9 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
           case "rusdvaultinfo":
             return `2.25x Reservoir points;${formatLeverageNum(vaultDisplayInfoState.rusd.ytPrice, 2.25)}x Reservoir point leverage`;
           case "oribgtvaultinfo":
-             return `10x Origami points and 1x Infrared points;${formatLeverageNum(vaultDisplayInfoState.oribgt.ytPrice, 10)}x Origami point leverage and ${formatLeverageNum(vaultDisplayInfoState.oribgt.ytPrice, 1)}x Infrared point leverage`
+            return `10x Origami points and 1x Infrared points;${formatLeverageNum(vaultDisplayInfoState.oribgt.ytPrice, 10)}x Origami point leverage and ${formatLeverageNum(vaultDisplayInfoState.oribgt.ytPrice, 1)}x Infrared point leverage`
+          case "janoribgtvaultinfo":
+            return `10x Origami points and 1x Infrared points;${formatLeverageNum(vaultDisplayInfoState.janoribgt.ytPrice, 10)}x Origami point leverage and ${formatLeverageNum(vaultDisplayInfoState.janoribgt.ytPrice, 1)}x Infrared point leverage`
           case "stlbgtvaultinfo":
             return `2x Berapaw points;${formatLeverageNum(vaultDisplayInfoState.stlbgt.ytPrice, 2)}x Berapaw Point Leverage`
           case "ybgtvaultinfo":
@@ -3762,6 +4094,8 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         return goldivaultInfoRsethState;
       case "oribgt":
         return goldivaultInfoOribgtState;
+      case "janoribgt":
+        return goldivaultInfoJanOribgtState;
       case "wberaibgtlp":
         return goldivaultInfoWberaibgtlpState;
       case "stlbgt":
@@ -3786,6 +4120,8 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         return refreshGoldivaultInfoRseth();
       case "oribgt":
         return refreshGoldivaultInfoOribgt();
+      case "janoribgt":
+        return refreshGoldivaultInfoJanOribgt();
       case "wberaibgtlp":
         return refreshGoldivaultInfoWberaibgtlp();
       case "stlbgt":
@@ -3810,6 +4146,8 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         return refreshGoldivaultWalletInfoRseth();
       case "oribgt":
         return refreshGoldivaultWalletInfoOribgt();
+      case "janoribgt":
+        return refreshGoldivaultWalletInfoJanOribgt();
       case "wberaibgtlp":
         return refreshGoldivaultWalletInfoWberaibgtlp();
       case "stlbgt":
@@ -3925,6 +4263,8 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         goldivaultWalletInfoRseth: goldivaultWalletInfoRsethState,
         goldivaultInfoOribgt: goldivaultInfoOribgtState,
         goldivaultWalletInfoOribgt: goldivaultWalletInfoOribgtState,
+        goldivaultInfoJanOribgt: goldivaultInfoJanOribgtState,
+        goldivaultWalletInfoJanOribgt: goldivaultWalletInfoJanOribgtState,
         goldivaultInfoWberaibgtlp: goldivaultInfoWberaibgtlpState,
         goldivaultWalletInfoWberaibgtlp: goldivaultWalletInfoWberaibgtlpState,
         goldivaultInfoStlbgt: goldivaultInfoStlbgtState,
@@ -3945,6 +4285,8 @@ export const GoldivaultProvider = (props: PropsWithChildren<{}>) => {
         refreshGoldivaultWalletInfoRseth,
         refreshGoldivaultInfoOribgt,
         refreshGoldivaultWalletInfoOribgt,
+        refreshGoldivaultInfoJanOribgt,
+        refreshGoldivaultWalletInfoJanOribgt,
         refreshGoldivaultInfoWberaibgtlp,
         refreshGoldivaultWalletInfoWberaibgtlp,
         refreshGoldivaultInfoStlbgt,

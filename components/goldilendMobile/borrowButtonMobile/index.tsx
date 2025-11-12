@@ -9,6 +9,8 @@ import { useGoldilendTx } from "../../../hooks";
 import { useGoldilend } from "../../../providers";
 import { contracts } from "../../../utils/addressi";
 
+const BORROW_LABEL = "Deposit & Borrow";
+
 export const BorrowButtonMobile = () => {
   const {
     selectedBera,
@@ -17,15 +19,12 @@ export const BorrowButtonMobile = () => {
     setTxConfirming,
     changeActiveToggle,
     openNotification,
-    selectScreen,
-    setSelectScreen,
     activeToggle,
     selectedPartners,
     boostMag,
     userBoost,
     updateOwnedBeras,
     updateOwnedPartners,
-    findBoost,
     findLoans,
   } = useGoldilend();
 
@@ -41,12 +40,7 @@ export const BorrowButtonMobile = () => {
   } = useGoldilendTx();
 
   const checkSelectedPartners = (partnerName: string): boolean => {
-    for (let i = 0; i < selectedPartners.length; i++) {
-      if (selectedPartners[i].name === partnerName) {
-        return true;
-      }
-    }
-    return false;
+    return selectedPartners.some((partner) => partner.name === partnerName);
   };
 
   const parseDate = (dateString: string): number => {
@@ -64,159 +58,18 @@ export const BorrowButtonMobile = () => {
     const parsedDate = new Date(year, month - 1, day);
     const timestamp = parsedDate.getTime();
     const timestampDigits = Math.floor(timestamp / 1000);
-    if (dateParts.length !== 3) {
-      return false;
-    }
-    if (isNaN(month) || isNaN(day) || isNaN(year)) {
-      return false;
-    }
-    if (isNaN(parsedDate.getTime())) {
-      return false;
-    }
-    if (timestampDigits < Math.floor(Date.now() / 1000)) {
-      return false;
-    }
-    if (timestampDigits < Math.floor(Date.now() / 1000) + 86400 * 14) {
-      return false;
-    }
+    if (dateParts.length !== 3) return false;
+    if (Number.isNaN(month) || Number.isNaN(day) || Number.isNaN(year)) return false;
+    if (Number.isNaN(parsedDate.getTime())) return false;
+    if (timestampDigits < Math.floor(Date.now() / 1000)) return false;
+    if (timestampDigits < Math.floor(Date.now() / 1000) + 86400 * 7) return false;
     return true;
-  };
-
-  const handleButtonClick = async () => {
-    const button = document.getElementById("borrow-button");
-    if (activeToggle === "BORROW") {
-      if (selectScreen) {
-        if (selectedBera.name === "") {
-          button && (button.innerHTML = "no beras");
-          return;
-        }
-        button && (button.innerHTML = "create loan");
-        setSelectScreen(false);
-      } else {
-        if (loanAmount == 0) {
-          button && (button.innerHTML = "no loan");
-          return;
-        }
-        if (!checkDate(loanExpiration)) {
-          button && (button.innerHTML = "invalid expiration");
-          return;
-        }
-        if (selectedBera.name === "") {
-          button && (button.innerHTML = "no collateral");
-          return;
-        }
-        const [bondFlag, bandFlag] = await checkLoanAllowance(
-          address as `0x${string}`,
-        );
-        if (
-          (bondFlag || selectedBera.name !== "BondBera") &&
-          (bandFlag || selectedBera.name !== "BandBera")
-        ) {
-          borrowTxFlow(button);
-        } else {
-          button && (button.innerHTML = "approving...");
-          if (!bondFlag && selectedBera.name === "BondBera") {
-            await sendGoldilendNFTApproveTx(contracts.bondbear.address);
-          }
-          if (!bandFlag && selectedBera.name === "BandBera") {
-            await sendGoldilendNFTApproveTx(contracts.bandbear.address);
-          }
-          button && (button.innerHTML = "create loan");
-        }
-      }
-    } else {
-      if (selectScreen) {
-        setSelectScreen(false);
-      } else {
-        if (selectedPartners.length == 0) {
-          button && (button.innerHTML = "no boost");
-          return;
-        }
-        const [combFlag, dromeFlag] = await checkBoostAllowance(
-          address as `0x${string}`,
-        );
-        if (
-          (combFlag || !checkSelectedPartners("HoneyComb")) &&
-          (dromeFlag || !checkSelectedPartners("Beradrome"))
-        ) {
-          boostTxFlow(button);
-        } else {
-          button && (button.innerHTML = "approving...");
-          if (!combFlag && checkSelectedPartners("HoneyComb")) {
-            await sendGoldilendNFTApproveTx(contracts.honeycomb.address);
-          }
-          if (!dromeFlag && checkSelectedPartners("Beradrome")) {
-            await sendGoldilendNFTApproveTx(contracts.beradrome.address);
-          }
-          button && (button.innerHTML = "create boost");
-        }
-      }
-    }
-  };
-
-  const handleWithdrawButtonClick = async () => {
-    const button = document.getElementById("borrow-button-withdraw");
-    if (userBoost.expiry > Math.floor(Date.now() / 1000)) {
-      button && (button.innerHTML = "not expired");
-      return;
-    }
-    setTxConfirming(true);
-    if (button) {
-      button.innerHTML = "confirming...";
-    }
-    const withdrawBoostTx = await sendWithdrawBoostTx();
-    if (withdrawBoostTx.substring(0, 2) === "0x") {
-      setTxConfirming(false);
-      openNotification(
-        true,
-        "You've successfully withdrew your boost",
-        ``,
-        withdrawBoostTx,
-      );
-      button && (button.innerHTML = "withdraw boost");
-      changeActiveToggle("BOOST");
-      setTimeout(() => {
-        openNotification(false, "", "", "");
-      }, 10000);
-    } else {
-      button && (button.innerHTML = "withdraw boost");
-      changeActiveToggle("BOOST");
-      setTxConfirming(false);
-    }
-  };
-
-  const boostTxFlow = async (button: HTMLElement | null) => {
-    setTxConfirming(true);
-    if (button) {
-      button.innerHTML = "confirming...";
-    }
-    const boostTx = await sendBoostTx(selectedPartners);
-    if (boostTx.substring(0, 2) === "0x") {
-      setTxConfirming(false);
-      openNotification(
-        true,
-        "You've successfully created a boost",
-        `You created a boost with a magnitude of ${formatAsString(boostMag)}`,
-        boostTx,
-      );
-      button && (button.innerHTML = "create boost");
-      updateOwnedPartners(selectedPartners);
-      findBoost();
-      changeActiveToggle("BOOST");
-      setTimeout(() => {
-        openNotification(false, "", "", "");
-      }, 10000);
-    } else {
-      button && (button.innerHTML = "create boost");
-      changeActiveToggle("BOOST");
-      setTxConfirming(false);
-    }
   };
 
   const borrowTxFlow = async (button: HTMLElement | null) => {
     setTxConfirming(true);
     if (button) {
-      button.innerHTML = "confirming...";
+      button.innerHTML = "Confirming...";
     }
     const borrowTx = await sendBorrowTx(
       loanAmount,
@@ -231,7 +84,9 @@ export const BorrowButtonMobile = () => {
         `You borrowed ${formatAsString(loanAmount)} iBGT against your bera`,
         borrowTx,
       );
-      button && (button.innerHTML = "create loan");
+      if (button) {
+        button.innerHTML = BORROW_LABEL;
+      }
       updateOwnedBeras(selectedBera);
       findLoans();
       changeActiveToggle("BORROW");
@@ -239,124 +94,247 @@ export const BorrowButtonMobile = () => {
         openNotification(false, "", "", "");
       }, 10000);
     } else {
-      button && (button.innerHTML = "create loan");
+      if (button) {
+        button.innerHTML = BORROW_LABEL;
+      }
       changeActiveToggle("BORROW");
       setTxConfirming(false);
     }
   };
 
-  const renderButton = (): string => {
-    if (activeToggle === "BORROW") {
-      return "create loan";
-    } else {
-      if (userBoost.partnerNFTs.length > 0 && selectedPartners.length == 0) {
-        return "my boost";
-      } else {
-        return "create boost";
+  const handleBorrowButton = async () => {
+    const button = document.getElementById("borrow-button");
+    if (!button) return;
+
+    if (loanAmount === 0) {
+      button.innerHTML = "Enter amount";
+      return;
+    }
+    if (!checkDate(loanExpiration)) {
+      button.innerHTML = "Invalid expiration";
+      return;
+    }
+    if (selectedBera.name === "") {
+      button.innerHTML = "Select collateral";
+      return;
+    }
+
+    const [bondFlag, bandFlag] = await checkLoanAllowance(address as `0x${string}`);
+    const needsBondApproval = !bondFlag && selectedBera.name === "BondBera";
+    const needsBandApproval = !bandFlag && selectedBera.name === "BandBera";
+
+    if (!needsBondApproval && !needsBandApproval) {
+      await borrowTxFlow(button);
+      return;
+    }
+
+    button.innerHTML = "Approving...";
+    if (needsBondApproval) {
+      await sendGoldilendNFTApproveTx(contracts.bondbear.address);
+    }
+    if (needsBandApproval) {
+      await sendGoldilendNFTApproveTx(contracts.bandbear.address);
+    }
+    button.innerHTML = BORROW_LABEL;
+  };
+
+  const handleBoostButton = async () => {
+    const button = document.getElementById("borrow-button");
+    if (!button) return;
+
+    if (selectedPartners.length === 0) {
+      button.innerHTML = "Select partners";
+      return;
+    }
+
+    const allowances = await checkBoostAllowance(address as `0x${string}`);
+    const approvalsNeeded = allowances.filter((allowance) => allowance === false);
+
+    if (approvalsNeeded.length > 0) {
+      button.innerHTML = "Approving...";
+      if (!checkSelectedPartners("Beradrome")) {
+        const beradromeAddress = boostMag.partners.multiSig.partnerAddress;
+        await sendBoostTx(beradromeAddress);
       }
+      if (!checkSelectedPartners("Honeycomb")) {
+        const honeycombAddress = boostMag.partners.honeycomb.partnerAddress;
+        await sendBoostTx(honeycombAddress);
+      }
+      button.innerHTML = "Create boost";
+      return;
+    }
+
+    button.innerHTML = "Confirming...";
+    const boostTx = await sendBoostTx(
+      boostMag.partners.honeycomb.partnerAddress,
+    );
+    if (boostTx.substring(0, 2) === "0x") {
+      setTxConfirming(false);
+      openNotification(
+        true,
+        "Boost applied",
+        "Your boost has been applied to your loan",
+        boostTx,
+      );
+      button.innerHTML = "Create boost";
+      updateOwnedPartners(selectedPartners);
+      changeActiveToggle("BOOST");
+      setTimeout(() => {
+        openNotification(false, "", "", "");
+      }, 10000);
+    } else {
+      button.innerHTML = "Create boost";
+      changeActiveToggle("BOOST");
+      setTxConfirming(false);
     }
   };
 
-  return activeToggle === "BOOST" &&
-    selectScreen == false &&
-    userBoost.partnerNFTs.length > 1 ? (
-    <>
-      <ConnectButton.Custom>
-        {({ account, chain, openChainModal, openConnectModal }) => {
-          return (
+  const handleWithdrawButtonClick = async () => {
+    const button = document.getElementById("borrow-button-withdraw");
+    if (!button) return;
+    if (userBoost.partnerNFTs.length === 0) {
+      button.innerHTML = "No boost deposited";
+      return;
+    }
+    button.innerHTML = "Withdrawing...";
+    const withdrawTx = await sendWithdrawBoostTx();
+    if (withdrawTx.substring(0, 2) === "0x") {
+      openNotification(
+        true,
+        "Boost withdrawn",
+        "Your boost has been withdrawn",
+        withdrawTx,
+      );
+      button.innerHTML = "Withdraw boost";
+      updateOwnedPartners(selectedPartners);
+      changeActiveToggle("BOOST");
+      setTimeout(() => {
+        openNotification(false, "", "", "");
+      }, 10000);
+    } else {
+      button.innerHTML = "Withdraw boost";
+      changeActiveToggle("BOOST");
+    }
+  };
+
+  const handleButtonClick = async () => {
+    if (activeToggle === "BORROW") {
+      await handleBorrowButton();
+    } else {
+      await handleBoostButton();
+    }
+  };
+
+  const renderButtonLabel = (): string => {
+    if (activeToggle === "BORROW") {
+      return BORROW_LABEL;
+    }
+    if (userBoost.partnerNFTs.length > 0 && selectedPartners.length === 0) {
+      return "My boost";
+    }
+    return "Create boost";
+  };
+
+  if (
+    activeToggle === "BOOST" &&
+    userBoost.partnerNFTs.length > 1
+  ) {
+    return (
+      <div className="mt-6 flex flex-col gap-3">
+        <ConnectButton.Custom>
+          {({ account, chain, openChainModal, openConnectModal }) => (
             <button
-              className="absolute left-[22.5%] top-[67.5%] flex h-[7.5%] w-[55%] items-center justify-center border-2 border-black bg-[#E7B941] font-amaticbold text-[9vw] hover:scale-110 hover:bg-[#C9E3B9]"
+              className="w-full rounded-xl border border-HoneyYellow/60 bg-HoneyYellow px-4 py-3 font-amaticbold text-4xl text-black shadow-lg transition hover:bg-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500"
               id="borrow-button"
               onClick={() => {
                 const button = document.getElementById("borrow-button");
+                if (!button) return;
 
                 if (!account) {
-                  if (button && button.innerHTML === "connect wallet") {
+                  if (button.innerHTML.toLowerCase() === "connect wallet") {
                     openConnectModal();
                   } else {
-                    button && (button.innerHTML = "connect wallet");
+                    button.innerHTML = "Connect wallet";
                   }
                 } else if (chain?.name !== "Berachain") {
-                  if (button && button.innerHTML === "where berachain") {
+                  if (button.innerHTML.toLowerCase() === "where berachain") {
                     openChainModal();
                   } else {
-                    button && (button.innerHTML = "where berachain");
+                    button.innerHTML = "Where Berachain";
                   }
                 } else {
                   handleButtonClick();
                 }
               }}
             >
-              add to boost
+              Add to boost
             </button>
-          );
-        }}
-      </ConnectButton.Custom>
-      <ConnectButton.Custom>
-        {({ account, chain, openChainModal, openConnectModal }) => {
-          return (
+          )}
+        </ConnectButton.Custom>
+        <ConnectButton.Custom>
+          {({ account, chain, openChainModal, openConnectModal }) => (
             <button
-              className="absolute left-[22.5%] top-[77.5%] flex h-[7.5%] w-[55%] items-center justify-center border-2 border-black bg-[#E7B941] font-amaticbold text-[9vw] hover:scale-110 hover:bg-[#C9E3B9]"
+              className="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 font-amaticbold text-4xl text-white shadow-lg transition hover:border-HoneyYellow/60 hover:bg-amber-900/40 focus:outline-none focus:ring-2 focus:ring-amber-500"
               id="borrow-button-withdraw"
               onClick={() => {
-                const button = document.getElementById(
-                  "borrow-button-withdraw",
-                );
+                const button = document.getElementById("borrow-button-withdraw");
+                if (!button) return;
 
                 if (!account) {
-                  if (button && button.innerHTML === "connect wallet") {
+                  if (button.innerHTML.toLowerCase() === "connect wallet") {
                     openConnectModal();
                   } else {
-                    button && (button.innerHTML = "connect wallet");
+                    button.innerHTML = "Connect wallet";
                   }
                 } else if (chain?.name !== "Berachain") {
-                  if (button && button.innerHTML === "where berachain") {
+                  if (button.innerHTML.toLowerCase() === "where berachain") {
                     openChainModal();
                   } else {
-                    button && (button.innerHTML = "where berachain");
+                    button.innerHTML = "Where Berachain";
                   }
                 } else {
                   handleWithdrawButtonClick();
                 }
               }}
             >
-              withdraw boost
+              Withdraw boost
             </button>
-          );
-        }}
-      </ConnectButton.Custom>
-    </>
-  ) : (
-    <ConnectButton.Custom>
-      {({ account, chain, openChainModal, openConnectModal }) => {
-        return (
-          <button
-            className="absolute left-[22.5%] top-3/4 flex h-[7.5%] w-[55%] items-center justify-center border-2 border-black bg-[#E7B941] font-amaticbold text-[9vw] hover:scale-110 hover:bg-[#C9E3B9] tall:top-[67.5%]"
-            id="borrow-button"
-            onClick={() => {
-              const button = document.getElementById("borrow-button");
+          )}
+        </ConnectButton.Custom>
+      </div>
+    );
+  }
 
-              if (!account) {
-                if (button && button.innerHTML === "connect wallet") {
-                  openConnectModal();
-                } else {
-                  button && (button.innerHTML = "connect wallet");
-                }
-              } else if (chain?.name !== "Berachain") {
-                if (button && button.innerHTML === "where berachain") {
-                  openChainModal();
-                } else {
-                  button && (button.innerHTML = "where berachain");
-                }
+  return (
+    <ConnectButton.Custom>
+      {({ account, chain, openChainModal, openConnectModal }) => (
+        <button
+          className="mt-6 w-full rounded-xl border border-HoneyYellow/60 bg-HoneyYellow px-4 py-3 font-amaticbold text-4xl text-black shadow-lg transition hover:bg-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500"
+          id="borrow-button"
+          onClick={() => {
+            const button = document.getElementById("borrow-button");
+            if (!button) return;
+
+            if (!account) {
+              if (button.innerHTML.toLowerCase() === "connect wallet") {
+                openConnectModal();
               } else {
-                handleButtonClick();
+                button.innerHTML = "Connect wallet";
               }
-            }}
-          >
-            {renderButton()}
-          </button>
-        );
-      }}
+            } else if (chain?.name !== "Berachain") {
+              if (button.innerHTML.toLowerCase() === "where berachain") {
+                openChainModal();
+              } else {
+                button.innerHTML = "Where Berachain";
+              }
+            } else {
+              handleButtonClick();
+            }
+          }}
+        >
+          {renderButtonLabel()}
+        </button>
+      )}
     </ConnectButton.Custom>
   );
 };

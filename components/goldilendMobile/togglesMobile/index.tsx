@@ -1,28 +1,33 @@
+import { cn } from "@/app/_components/utils";
 import { useGoldilend } from "../../../providers";
+
+const TABS = [
+  { key: "BORROW", label: "Borrow" },
+  { key: "REPAY", label: "Repay" },
+  { key: "AUCTIONS", label: "Auctions" },
+  { key: "GHONEY", label: "gHONEY" },
+];
 
 export const TogglesMobile = () => {
   const { activeToggle, changeActiveToggle } = useGoldilend();
 
   return (
-    <div className="absolute left-[15.5%] top-[7.5%] flex h-[3.9%] w-[35vh] origin-top-left rotate-[90deg] flex-row border-b-2 border-l-2 border-r-2 border-black bg-[#D9C6BA] font-baloo text-[3vw]">
-      <div
-        className={`h-[100%] w-[33.33%] border-r-2 border-black ${activeToggle === "BOOST" ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} flex cursor-pointer items-center justify-center focus:bg-[#F3AA8A]`}
-        onClick={() => changeActiveToggle("BOOST")}
-      >
-        <span className="scale-[-1]">BOOST</span>
-      </div>
-      <div
-        className={`h-[100%] w-[33.33%] border-r-2 border-black ${activeToggle === "REPAY" ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} flex cursor-pointer items-center justify-center focus:bg-[#F3AA8A]`}
-        onClick={() => changeActiveToggle("REPAY")}
-      >
-        <span className="scale-[-1]">REPAY</span>
-      </div>
-      <div
-        className={`h-[100%] w-[33.33%] ${activeToggle === "BORROW" ? "bg-[#E7B941]" : "bg-[#D9C6BA]"} flex cursor-pointer items-center justify-center focus:bg-[#F3AA8A]`}
-        onClick={() => changeActiveToggle("BORROW")}
-      >
-        <span className="scale-[-1]">BORROW</span>
-      </div>
+    <div className="flex w-full items-center gap-1.5 overflow-x-auto" id="hide-scrollbar">
+      {TABS.map((tab) => (
+        <button
+          key={tab.key}
+          type="button"
+          className={cn(
+            "flex-1 rounded-lg border px-1.5 py-1.5 text-[12px] font-baloo font-semibold transition-all cursor-pointer whitespace-nowrap min-w-0",
+            activeToggle === tab.key
+              ? "bg-HoneyYellow text-black border-HoneyYellow/50"
+              : "bg-black/20 text-white border-amber-900/30"
+          )}
+          onClick={() => tab.key === "GHONEY" && changeActiveToggle(tab.key)}
+        >
+          {tab.label}
+        </button>
+      ))}
     </div>
   );
 };

@@ -40,6 +40,10 @@ const nextConfig = {
       {
         source: '/api/oribgtytchartdata',
         destination: 'http://52.23.253.24:3001/oribgtytchartdata'
+      },
+      {
+        source: '/api/ownedBeras/:walletAddress',
+        destination: 'http://98.81.96.90:3001/ownedBeras/:walletAddress'
       }
     ]
   }

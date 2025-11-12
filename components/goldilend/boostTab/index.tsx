@@ -24,7 +24,6 @@ export const BoostTab = () => {
     selectedPartners,
     findSelectedPartnerIdxs,
     handlePartnerClick,
-    updateBoostMag,
     boostMag,
     notification,
     txConfirming,
@@ -33,7 +32,6 @@ export const BoostTab = () => {
     changeActiveToggle,
     userBoost,
     updateOwnedPartners,
-    findBoost,
   } = useGoldilend();
 
   const {
@@ -44,10 +42,6 @@ export const BoostTab = () => {
   } = useGoldilendTx();
 
   const { address, isConnected } = useAccount();
-
-  useEffect(() => {
-    updateBoostMag();
-  }, [selectedPartners]);
 
   const loadingElement = () => {
     return <span className="loader-small m-auto"></span>;
@@ -177,7 +171,7 @@ export const BoostTab = () => {
       button && (button.innerHTML = "create boost");
       setButtonLoadingColor(false);
       updateOwnedPartners(selectedPartners);
-      findBoost();
+      // findBoost();
       changeActiveToggle("BOOST");
       setTimeout(() => {
         openNotification(false, "", "", "");

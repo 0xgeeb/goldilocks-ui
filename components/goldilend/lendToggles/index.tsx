@@ -6,7 +6,7 @@ export const LendToggles = () => {
   return (
     <>
       <div
-        className={`absolute h-[7%] w-[40%] xl:h-[8%] xl:w-[25%] ${lendActiveToggle === "LIQUIDATE" ? "left-[58%] xl:left-[43.5%]" : "left-[58%] xl:left-[40.5%]"} top-[3%] flex flex-row items-center justify-between`}
+        className={`absolute h-[7%] w-[25%] xl:h-[8%] xl:w-[25%] ${lendActiveToggle === "LIQUIDATE" ? "left-[58%] xl:left-[43.5%]" : "left-[58%] xl:left-[40.5%]"} top-[3%] flex flex-row items-center justify-between`}
       >
         {/* <div
           className={`h-[100%] w-[22.5%] border-2 border-black font-baloo text-[2vw] font-semibold xl:text-[1vw] ${lendActiveToggle === "LOCK" ? "bg-[#E7B941]" : "bg-[#E2D6CF]"} flex cursor-pointer items-center justify-center hover:bg-[#C9E3B9]`}
@@ -15,16 +15,16 @@ export const LendToggles = () => {
           LOCK
         </div> */}
         <div
-          className={`h-[100%] w-[22.5%] border-2 border-black font-baloo text-[2vw] font-semibold xl:text-[1vw] ${lendActiveToggle === "STAKE" ? "bg-[#E7B941]" : "bg-[#E2D6CF]"} flex cursor-pointer items-center justify-center hover:bg-[#C9E3B9]`}
-          onClick={() => changeLendActiveToggle("STAKE")}
+          className={`h-[100%] w-[50%] border-2 border-black font-baloo text-[2vw] font-semibold xl:text-[1vw] ${lendActiveToggle === "DEPOSIT" ? "bg-[#E7B941]" : "bg-[#E2D6CF]"} flex cursor-pointer items-center justify-center hover:bg-[#C9E3B9]`}
+          onClick={() => changeLendActiveToggle("DEPOSIT")}
         >
-          STAKE
+          DEPOSIT
         </div>
         <div
-          className={`h-[100%] w-[22.5%] border-2 border-black font-baloo text-[2vw] font-semibold xl:text-[1vw] ${lendActiveToggle === "UNSTAKE" ? "bg-[#E7B941]" : "bg-[#E2D6CF]"} flex cursor-pointer items-center justify-center hover:bg-[#C9E3B9]`}
-          onClick={() => changeLendActiveToggle("UNSTAKE")}
+          className={`h-[100%] w-[50%] border-2 border-black font-baloo text-[2vw] font-semibold xl:text-[1vw] ${lendActiveToggle === "WITHDRAW" ? "bg-[#E7B941]" : "bg-[#E2D6CF]"} flex cursor-pointer items-center justify-center hover:bg-[#C9E3B9]`}
+          onClick={() => changeLendActiveToggle("WITHDRAW")}
         >
-          UNSTAKE
+          WITHDRAW
         </div>
         {/* <div
           className={`h-[100%] w-[22.5%] border-2 border-black font-baloo text-[2vw] font-semibold xl:text-[1vw] ${lendActiveToggle === "CLAIM" ? "bg-[#E7B941]" : "bg-[#E2D6CF]"} flex cursor-pointer items-center justify-center hover:bg-[#C9E3B9]`}

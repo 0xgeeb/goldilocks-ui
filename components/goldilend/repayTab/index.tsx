@@ -38,7 +38,7 @@ export const RepayTab = () => {
     goldilendWalletInfo,
   } = useGoldilend();
 
-  const { checkRepayAllowance, sendRepayTx, sendiBGTApproveTx } =
+  const { checkRepayAllowance, sendRepayTx, sendHoneyApproveTx } =
     useGoldilendTx();
 
   const { address, isConnected } = useAccount();
@@ -95,13 +95,16 @@ export const RepayTab = () => {
     loanId: number,
     amt: number,
     borrowedAmt: number,
+    interest: number,
+    realBorrowedAmount: bigint,
+    realInterest: bigint
   ) => {
     const button = document.getElementById("repay-button" + loanId);
     if (amt == 0) {
       button && (button.innerHTML = "no amount");
       return;
     }
-    if (amt > goldilendWalletInfo.ibgt) {
+    if (amt > goldilendWalletInfo.honey) {
       button && (button.innerHTML = "no balance");
       return;
     } else {
@@ -118,7 +121,9 @@ export const RepayTab = () => {
         const repayTx = await sendRepayTx(
           amt,
           loanId,
-          amt == borrowedAmt,
+          amt == borrowedAmt - interest,
+          realBorrowedAmount,
+          realInterest,
           address as `0x${string}`,
         );
         if (repayTx.substring(0, 2) === "0x") {
@@ -126,7 +131,7 @@ export const RepayTab = () => {
           openNotification(
             true,
             "You've successfully repaid your loan",
-            `You repaid ${formatAsString(amt)} iBGT`,
+            `You repaid ${formatAsString(amt)} HONEY`,
             repayTx,
           );
           if (button) {
@@ -167,7 +172,7 @@ export const RepayTab = () => {
       rightButton.innerHTML = "approving...";
       rightButton.style.backgroundColor = "#C9E3B9";
     }
-    await sendiBGTApproveTx(amt, false);
+    await sendHoneyApproveTx(amt, false);
     // updateAllowance(honeyBuy + 0.01)
     swapButton && (swapButton.innerHTML = "REPAY LOAN");
     // setAllowanceButtons(false)
@@ -188,7 +193,7 @@ export const RepayTab = () => {
       rightButton.innerHTML = "approving...";
       rightButton.style.backgroundColor = "#C9E3B9";
     }
-    await sendiBGTApproveTx(0, true);
+    await sendHoneyApproveTx(0, true);
     // updateAllowance(100000000)
     swapButton && (swapButton.innerHTML = "REPAY LOAN");
     // setAllowanceButtons(false)
@@ -211,7 +216,7 @@ export const RepayTab = () => {
       </div>
       {infoLoading && isConnected ? (
         loadingElement()
-      ) : !isConnected || userLoans.length == 0 ? (
+      ) : userLoans.length == 0 ? (
         <div className="flex size-full flex-col items-center opacity-50">
           <img
             className="my-[5%] h-2/5"
@@ -226,14 +231,14 @@ export const RepayTab = () => {
             className="relative flex w-full flex-row items-center border-b-2 border-black py-[2%] font-baloo font-semibold"
             key={index}
           >
-            {loan.borrowedAmount == 0 && (
-              <div className="absolute right-0 z-30 flex h-1/4 w-[30%] rotate-[16deg] items-center justify-center border-2 border-black bg-[#79AF45] text-[2vw] xl:text-[1.1vw]">
-                REPAID
-              </div>
-            )}
             {loan.endDate < Math.floor(Date.now() / 1000) && (
               <div className="absolute right-0 z-30 flex h-1/4 w-[30%] rotate-[16deg] items-center justify-center border-2 border-black bg-[#CC7E16] text-[2vw] xl:text-[1.1vw]">
                 EXPIRED
+              </div>
+            )}
+            {loan.repaid && (
+              <div className="absolute right-0 z-30 flex h-1/4 w-[30%] rotate-[16deg] items-center justify-center border-2 border-black bg-[#79AF45] text-[2vw] xl:text-[1.1vw]">
+                REPAID
               </div>
             )}
             {loan.liquidated && (
@@ -247,11 +252,11 @@ export const RepayTab = () => {
             <div className="ml-[7%] flex h-[50%] w-2/5 flex-col justify-center px-[3%] text-[1.5vw] xl:text-[0.8vw]">
               <div className="flex w-full flex-row items-center justify-between">
                 <span>total amount to repay:</span>
-                <span>{formatNum(loan.borrowedAmount)} iBGT</span>
+                <span>{formatNum(loan.borrowedAmount - loan.interest < 0 ? 0 : loan.borrowedAmount - loan.interest)} HONEY</span>
               </div>
               <div className="flex w-full flex-row items-center justify-between">
                 <span>interest:</span>
-                <span>{formatNum(loan.interest)} iBGT</span>
+                <span>{formatNum(loan.interest)} HONEY</span>
               </div>
               <div className="flex w-full flex-row items-center justify-between">
                 <span>expiration date:</span>
@@ -266,24 +271,22 @@ export const RepayTab = () => {
                 className="flex h-[65%] w-[90%] flex-row items-center justify-around overflow-x-auto"
                 id="hide-scrollbar"
               >
-                {loan.collateralNFTs.map((nft, index) => (
-                  <img
-                    className="mr-[5%] h-full w-[30%] border-2 border-black"
-                    src={
-                      nft === contracts.bondbear.address
-                        ? "/images/icon-bondbear.png"
-                        : "/images/icon-bandbear.png"
-                    }
-                    alt="collateral"
-                    key={index}
-                  />
-                ))}
+                <img
+                  className="mr-[5%] h-full w-[30%] border-2 border-black"
+                  src={
+                    loan.collateralNFTs[0] === contracts.bondbear.address
+                      ? "/images/icon-bondbear.png"
+                      : "/images/icon-bandbear.png"
+                  }
+                  alt="collateral"
+                  key={index}
+                />
               </div>
             </div>
             <div className="relative flex h-full w-[28%] flex-col">
               <div
                 className="absolute left-[1%] top-[7.5%] flex h-[45%] w-[25%] cursor-pointer items-center justify-center border-y-2 border-l-2 border-black bg-[#CC8634] text-[2vw] hover:scale-110 hover:bg-[#C9E3B9] xl:text-[0.9vw]"
-                onClick={() => handleMaxClick(loan.loanId, loan.borrowedAmount)}
+                onClick={() => handleMaxClick(loan.loanId, loan.borrowedAmount - loan.interest)}
               >
                 MAX
               </div>
@@ -299,13 +302,13 @@ export const RepayTab = () => {
                   }
                 />
                 <span className="mr-[1%] text-[1.5vw] text-[#7B7876] xl:text-[0.8vw]">
-                  iBGT
+                  HONEY
                 </span>
               </div>
               {allowanceFlags[loan.loanId] && (
                 <div>
                   <button
-                    className="absolute left-[1%] top-[65%] h-2/5 w-[42%] border-2 border-black bg-[#E7B941] text-[1.2vw] hover:scale-110 hover:bg-[#C9E3B9] xl:text-[0.7vw]"
+                    className="absolute left-[1%] top-[65%] h-2/5 w-[42%] border-2 border-black bg-[#E7B941] text-[1.2vw] hover:scale-110 hover:bg-[#C9E3B9] xl:text-[0.7vw] cursor-pointer"
                     id={`left-approve-button${loan.loanId}`}
                     onClick={() =>
                       handleLeftButtonClick(
@@ -317,7 +320,7 @@ export const RepayTab = () => {
                     approve tx
                   </button>
                   <button
-                    className="absolute left-[53%] top-[65%] h-2/5 w-[42%] border-2 border-black bg-[#E7B941] text-[1.2vw] hover:scale-110 hover:bg-[#C9E3B9] xl:text-[0.7vw]"
+                    className="absolute left-[53%] top-[65%] h-2/5 w-[42%] border-2 border-black bg-[#E7B941] text-[1.2vw] hover:scale-110 hover:bg-[#C9E3B9] xl:text-[0.7vw] cursor-pointer"
                     id={`right-approve-button${loan.loanId}`}
                     onClick={() => handleRightButtonClick(loan.loanId)}
                   >
@@ -330,7 +333,7 @@ export const RepayTab = () => {
                   {({ account, chain, openChainModal, openConnectModal }) => {
                     return (
                       <button
-                        className={`absolute left-[30%] top-[65%] h-2/5 w-[65%] border-2 border-black ${buttonLoadingColor ? "bg-[#C9E3B9] text-black" : "bg-[#E7B941] text-black"} text-[1.8vw] hover:scale-110 hover:bg-[#C9E3B9] hover:text-black xl:text-[0.9vw]`}
+                        className={`absolute left-[30%] top-[65%] h-2/5 w-[65%] border-2 border-black ${buttonLoadingColor ? "bg-[#C9E3B9] text-black" : "bg-[#E7B941] text-black"} text-[1.8vw] hover:scale-110 hover:bg-[#C9E3B9] hover:text-black xl:text-[0.9vw] cursor-pointer`}
                         id={`repay-button${loan.loanId}`}
                         onClick={() => {
                           const button = document.getElementById(
@@ -360,6 +363,9 @@ export const RepayTab = () => {
                               loan.loanId,
                               parseFloat(inputValues[loan.loanId]),
                               loan.borrowedAmount,
+                              loan.interest,
+                              loan.realBorrowedAmount,
+                              loan.realInterest
                             );
                           }
                         }}

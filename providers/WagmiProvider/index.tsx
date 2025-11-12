@@ -7,6 +7,7 @@ import {
   http,
   createConfig,
 } from "wagmi";
+import { createPublicClient } from "viem"
 import {
   BerachainMainnet,
   Bepolia,
@@ -58,6 +59,11 @@ export const config = createConfig({
   transports: {
     [BerachainMainnet.id]: http()
   },
+});
+
+export const client = createPublicClient({
+  chain: BerachainMainnet,
+  transport: http()
 });
 
 const queryClient = new QueryClient();

@@ -145,6 +145,33 @@ export const useGoldivaultTx = () => {
       })
       allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
     }
+    else if(vault === "janoribgt") {
+      allowanceResult = await readContract(config, {
+        address: contracts.ibgt.address as `0x${string}`,
+        abi: contracts.ibgt.abi,
+        functionName: 'allowance',
+        args: [wallet, contracts.janoribgtVault.address]
+      })
+      allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
+    }
+    else if(vault === "janoriBGT-OT") {
+      allowanceResult = await readContract(config, {
+        address: contracts.janoribgtot.address as `0x${string}`,
+        abi: contracts.janoribgtot.abi,
+        functionName: 'allowance',
+        args: [wallet, contracts.janoribgtVault.address]
+      })
+      allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
+    }
+    else if(vault === "janoriBGT-YT") {
+      allowanceResult = await readContract(config, {
+        address: contracts.janoribgtyt.address as `0x${string}`,
+        abi: contracts.janoribgtyt.abi,
+        functionName: 'allowance',
+        args: [wallet, contracts.janoribgtVault.address]
+      })
+      allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
+    }
     else if(vault === 'ebtc') {
       allowanceResult = await readContract(config, {
         address: contracts.ebtc.address as `0x${string}`,
@@ -311,6 +338,33 @@ export const useGoldivaultTx = () => {
       allowanceResult = await readContract(config, {
         address: contracts.ybgtot.address as `0x${string}`,
         abi: contracts.ybgtot.abi,
+        functionName: 'allowance',
+        args: [wallet, contracts.baultRouter.address]
+      })
+      allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
+    }
+    else if(vault === 'kodiakjanoribgtlp') {
+      allowanceResult = await readContract(config, {
+        address: contracts.janoribgtKodiakIsland.address as `0x${string}`,
+        abi: contracts.janoribgtKodiakIsland.abi,
+        functionName: 'allowance',
+        args: [wallet, contracts.baultRouter.address]
+      })
+      allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
+    }
+    else if(vault === 'kodiakjanoribgt') {
+      allowanceResult = await readContract(config, {
+        address: contracts.oribgt.address as `0x${string}`,
+        abi: contracts.oribgt.abi,
+        functionName: 'allowance',
+        args: [wallet, contracts.baultRouter.address]
+      })
+      allowanceNum = parseFloat(formatEther(allowanceResult as unknown as bigint))
+    }
+    else if(vault === 'kodiakjanoribgtot') {
+      allowanceResult = await readContract(config, {
+        address: contracts.janoribgtot.address as `0x${string}`,
+        abi: contracts.janoribgtot.abi,
         functionName: 'allowance',
         args: [wallet, contracts.baultRouter.address]
       })
@@ -693,6 +747,51 @@ export const useGoldivaultTx = () => {
         console.log('or: ', e)
       }
     }
+    else if (vault === "janoribgt") {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.ibgt.address as `0x${string}`,
+          abi: contracts.ibgt.abi,
+          functionName: 'approve',
+          args: [contracts.janoribgtVault.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
+        })
+        await waitForTransactionReceipt(config, { hash })
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+    else if (vault === "janoriBGT-OT") {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.janoribgtot.address as `0x${string}`,
+          abi: contracts.janoribgtot.abi,
+          functionName: 'approve',
+          args: [contracts.janoribgtVault.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
+        })
+        await waitForTransactionReceipt(config, { hash })
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+    else if (vault === "janoriBGT-YT") {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.janoribgtyt.address as `0x${string}`,
+          abi: contracts.janoribgtyt.abi,
+          functionName: 'approve',
+          args: [contracts.janoribgtVault.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
+        })
+        await waitForTransactionReceipt(config, { hash })
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
     else if(vault === 'wberaibgtlp') {
       try {
         const hash = await writeContract(config, {
@@ -918,13 +1017,43 @@ export const useGoldivaultTx = () => {
         console.log('or: ', e)
       }
     }
-    else if (vault === "iBGT") {
+    else if(vault === "kodiakjanoribgt") {
       try {
         const hash = await writeContract(config, {
-          address: contracts.stybgt.address as `0x${string}`,
-          abi: contracts.stybgt.abi,
+          address: contracts.oribgt.address as `0x${string}`,
+          abi: contracts.oribgt.abi,
           functionName: 'approve',
-          args: [contracts.ysysybgt.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
+          args: [contracts.baultRouter.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
+        })
+        await waitForTransactionReceipt(config, { hash })
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+    else if(vault === "kodiakjanoribgtot") {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.janoribgtot.address as `0x${string}`,
+          abi: contracts.janoribgtot.abi,
+          functionName: 'approve',
+          args: [contracts.baultRouter.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
+        })
+        await waitForTransactionReceipt(config, { hash })
+      }
+      catch (e) {
+        console.log('user denied tx')
+        console.log('or: ', e)
+      }
+    }
+    else if(vault === "kodiakjanoribgtlp") {
+      try {
+        const hash = await writeContract(config, {
+          address: contracts.janoribgtKodiakIsland.address as `0x${string}`,
+          abi: contracts.janoribgtKodiakIsland.abi,
+          functionName: 'approve',
+          args: [contracts.baultRouter.address, infinite ? parseEther('115792089237316195423570985008687907853269984665640564039457') : parseEther(`${amt + 0.01}`)]
         })
         await waitForTransactionReceipt(config, { hash })
       }
@@ -1401,11 +1530,13 @@ export const useGoldivaultTx = () => {
     const vaultaddy =
       vault === "oribgt"
         ? contracts.oribgt.address
-        : vault === "stlbgt"
-          ? contracts.stlbgt.address
-          : vault === "ybgt"
-            ? contracts.stybgt.address
-            : ""
+        : vault === "janoribgt"
+          ? contracts.oribgt.address
+          : vault === "stlbgt"
+            ? contracts.stlbgt.address
+            : vault === "ybgt"
+              ? contracts.stybgt.address
+              : ""
     try {
       const hash = await writeContract(config, {
         address: vaultaddy as `0x${string}`,
@@ -1429,11 +1560,13 @@ export const useGoldivaultTx = () => {
     const vaultaddy =
       vault === "oribgt"
         ? contracts.oribgt.address
-        : vault === "stlbgt"
-          ? contracts.stlbgt.address
-          : vault === "ybgt"
-            ? contracts.stybgt.address
-            : ""
+        : vault === "janoribgt"
+          ? contracts.oribgt.address
+          : vault === "stlbgt"
+            ? contracts.stlbgt.address
+            : vault === "ybgt"
+              ? contracts.stybgt.address
+              : ""
     try {
       const hash = await writeContract(config, {
         address: vaultaddy as `0x${string}`,

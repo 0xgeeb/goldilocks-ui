@@ -48,6 +48,25 @@ const config: Config = {
       screens: {
         tall: { raw: "(min-height: 900px)" },
       },
+      keyframes: {
+        marquee: {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-100%)' },
+        },
+        'marquee-slow': {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-100%)' },
+        },
+        'marquee-fast': {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-100%)' },
+        },
+      },
+      animation: {
+        'marquee': 'marquee 30s linear infinite',
+        'marquee-slow': 'marquee-slow 45s linear infinite',
+        'marquee-fast': 'marquee-fast 20s linear infinite',
+      },
     },
   },
   plugins: [],

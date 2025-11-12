@@ -31,6 +31,7 @@ export const LiqManagerTab = ({ params }: LiqManagerTabProps) => {
     walletInfoLoading,
     goldivaultWalletInfoRusd,
     goldivaultWalletInfoOribgt,
+    goldivaultWalletInfoJanOribgt,
     goldivaultWalletInfoStlbgt,
     goldivaultWalletInfoYbgt,
     handleBalanceClick,
@@ -88,6 +89,9 @@ export const LiqManagerTab = ({ params }: LiqManagerTabProps) => {
       else if(params.vaultToken === "ybgt") {
         return goldivaultWalletInfoYbgt.ysysybgt
       }
+      else if(params.vaultToken === "janoribgt") {
+        return goldivaultWalletInfoJanOribgt.oribgt
+      }
       else {
         return goldivaultWalletInfoOribgt.oribgt
       }
@@ -101,6 +105,9 @@ export const LiqManagerTab = ({ params }: LiqManagerTabProps) => {
       }
       else if(params.vaultToken === "ybgt") {
         return goldivaultWalletInfoYbgt.kodiakIsland
+      }
+      else if(params.vaultToken === "janoribgt") {
+        return goldivaultWalletInfoJanOribgt.kodiakIsland
       }
       else {
         return goldivaultWalletInfoOribgt.steerLP
@@ -168,7 +175,7 @@ export const LiqManagerTab = ({ params }: LiqManagerTabProps) => {
         </Label>
       </Container>
       {
-        (activeToggle === "ADDLIQ" && (params.vaultToken === "oribgt" || params.vaultToken === "stlbgt" || params.vaultToken === "ybgt")) &&
+        (activeToggle === "ADDLIQ" && (params.vaultToken === "oribgt" || params.vaultToken === "janoribgt" || params.vaultToken === "stlbgt" || params.vaultToken === "ybgt")) &&
         <>
           <div className='my-2'></div>
           <FieldWithLabel
@@ -190,7 +197,7 @@ export const LiqManagerTab = ({ params }: LiqManagerTabProps) => {
         </>
       }
       {
-        (activeToggle === "REMOVELIQ" && (params.vaultToken === "oribgt" || params.vaultToken === "stlbgt" || params.vaultToken === "ybgt")) &&
+        (activeToggle === "REMOVELIQ" && (params.vaultToken === "oribgt" || params.vaultToken === "janoribgt" || params.vaultToken === "stlbgt" || params.vaultToken === "ybgt")) &&
         <>
           <div className='my-2'></div>
           <FieldWithLabel

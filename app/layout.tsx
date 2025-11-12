@@ -10,6 +10,9 @@ import { LayoutProps } from "../utils/interfaces";
 export const metadata: Metadata = {
   title: "Goldilocks",
   description: "Berachain Defi",
+  icons: {
+    icon: '/icon.ico',
+  },
 };
 
 const inter = Inter({

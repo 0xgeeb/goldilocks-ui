@@ -1,37 +1,53 @@
 import { useGoldilend } from "../../../providers";
 
 export const Toggles = () => {
-  const { activeToggle, changeActiveToggle, setBoostPopup } = useGoldilend();
+  const { activeToggle, changeActiveToggle } = useGoldilend();
+
+  const baseButtonClasses =
+    "rounded-lg transition-all border-0 font-baloo cursor-pointer px-5 py-2 text-lg sm:px-6 sm:py-2.5 sm:text-xl lg:px-7 lg:py-3 relative";
 
   return (
-    <div className="absolute left-[62%] top-[3%] flex h-[8%] w-[33%] flex-row items-center justify-between xl:left-[46%] xl:w-[20%]">
-      <div
-        className={`h-[100%] w-[30%] border-2 border-black font-baloo text-[2vw] font-semibold xl:text-[1vw] ${activeToggle === "BORROW" ? "bg-[#E7B941]" : "bg-[#E2D6CF]"} flex cursor-pointer items-center justify-center hover:bg-[#C9E3B9]`}
-        onClick={() => changeActiveToggle("BORROW")}
+    <div className="flex flex-wrap items-end gap-2 font-amaticbold text-lg sm:text-xl font-semibold">
+      <button
+        className={`${baseButtonClasses} ${
+          activeToggle === "BORROW"
+            ? "bg-HoneyYellow text-black shadow-[0_-2px_8px_rgba(251,191,36,0.3)]"
+            : "text-white hover:bg-HoneyYellow/30 hover:text-black"
+        }`}
+        // onClick={() => changeActiveToggle("BORROW")} // commenting out to only enable ghoney deposits
       >
-        BORROW
-      </div>
-      <div
-        className={`h-[100%] w-[30%] border-2 border-black font-baloo text-[2vw] font-semibold xl:text-[1vw] ${activeToggle === "REPAY" ? "bg-[#E7B941]" : "bg-[#E2D6CF]"} flex cursor-pointer items-center justify-center hover:bg-[#C9E3B9]`}
-        onClick={() => changeActiveToggle("REPAY")}
+        Borrow
+      </button>
+      <button
+        className={`${baseButtonClasses} ${
+          activeToggle === "REPAY"
+            ? "bg-HoneyYellow text-black shadow-[0_-2px_8px_rgba(251,191,36,0.3)]"
+            : "text-white hover:bg-HoneyYellow/30 hover:text-black"
+        }`}
+        // onClick={() => changeActiveToggle("REPAY")} // commenting out to only enable ghoney deposits
       >
-        REPAY
-      </div>
-      {/* <div
-        className={`h-[100%] w-[30%] border-2 border-black font-baloo text-[2vw] font-semibold xl:text-[1vw] ${activeToggle === "BOOST" ? "bg-[#E7B941]" : "bg-[#E2D6CF]"} flex cursor-pointer items-center justify-center hover:bg-[#C9E3B9]`}
-        onClick={() => changeActiveToggle("BOOST")}
+        Repay
+      </button>
+      <button
+        className={`${baseButtonClasses} ${
+          activeToggle === "AUCTIONS"
+            ? "bg-HoneyYellow text-black shadow-[0_-2px_8px_rgba(251,191,36,0.3)]"
+            : "text-white hover:bg-HoneyYellow/30 hover:text-black"
+        }`}
+        // onClick={() => changeActiveToggle("AUCTIONS")} // commenting out to only enable ghoney deposits
       >
-        <span>BOOST</span>
-        <span
-          className="absolute right-[1%] top-[4%] rounded-full border-2 border-black px-1 text-[1.5vw] hover:bg-black hover:text-white md:text-[1vw] lg:right-[1%] lg:text-[0.6vw] xl:top-[6%] tall:lg:text-[0.8vw]"
-          onClick={(e) => {
-            e.stopPropagation();
-            setBoostPopup(true);
-          }}
-        >
-          ?
-        </span>
-      </div> */}
+        Auctions
+      </button>
+      <button
+        className={`${baseButtonClasses} ${
+          activeToggle === "GHONEY"
+            ? "bg-HoneyYellow text-black shadow-[0_-2px_8px_rgba(251,191,36,0.3)]"
+            : "text-white hover:bg-HoneyYellow/30 hover:text-black"
+        }`}
+        onClick={() => changeActiveToggle("GHONEY")}
+      >
+        gHONEY
+      </button>
     </div>
   );
 };

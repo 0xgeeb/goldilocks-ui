@@ -30,6 +30,7 @@ const INITIAL_STATE = {
     borrowed: 0,
     claimable: 0,
     honeySwapAllowance: 0,
+    unvested: 0
   },
 
   simInfo: {
@@ -867,6 +868,12 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
         functionName: "allowance",
         args: [address, contracts.goldiswap.address],
       });
+      const unvestedResult = await readContract(config, {
+        address: contracts.goldilocked.address as `0x${string}`,
+        abi: contracts.goldilocked.abi,
+        functionName: "userVestingCheck",
+        args: [address],
+      })
 
       const response = {
         locks: parseFloat(formatEther(locksBalance as unknown as bigint)),
@@ -881,6 +888,7 @@ export const GoldiswapProvider = (props: PropsWithChildren<{}>) => {
         honeySwapAllowance: parseFloat(
           formatEther(honeySwapAllowanceResult as unknown as bigint),
         ),
+        unvested: parseFloat(formatEther(unvestedResult as unknown as bigint))
       };
 
       setGoldiswapWalletInfoState(response);

@@ -61,7 +61,7 @@ export const HomePage = () => {
                 <span>Goldiswap</span>
               </a>
               <a
-                href="/goldilend/borrow"
+                href="/goldilend"
                 className="cursor-pointer hover:scale-[150%]"
               >
                 <span>Goldilend</span>
@@ -149,7 +149,7 @@ export const HomePage = () => {
             </div>
             <a
               className="mb-[12%] h-[15%] w-1/5 cursor-pointer border-2 border-[#FFCD00] hover:scale-110 hover:bg-[#FFCD00] hover:text-black xl:mb-[6%]"
-              href="/goldilend/borrow"
+              href="/goldilend"
             >
               <div className="flex items-center justify-center text-[3vw] xl:text-[2vw]">
                 ENTER
@@ -187,66 +187,61 @@ export const HomePage = () => {
             </a>
           </div>
           <div className="h-[15vh] w-full bg-black"></div>
-          <div className="z-50 mx-auto mb-[0.75%] flex flex-row items-center justify-center font-amaticbold text-[1.5vw] text-[#D9C6BA]">
-            <span>Audited by</span>
-            <a
-              className="cursor-pointer hover:scale-110"
-              href="https://yaudit.dev/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <img
-                className="mx-3 size-8"
-                src="/images/yaudit-logo.png"
-                alt="yaudit"
-              />
-            </a>
-            <span className="text-[1.15vw]">&</span>
-            <a
-              className="cursor-pointer hover:scale-110"
-              href="https://www.cyfrin.io/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <img
-                className="mx-3 size-10"
-                src="/images/cyfrin-logo.png"
-                alt="cyfrin"
-              />
-            </a>
-            <span className="text-[1.15vw]">&</span>
-            <a
-              className="cursor-pointer hover:scale-110"
-              href="https://www.hyacinthaudits.xyz/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <img
-                className="mx-3 h-10 w-16"
-                src="/images/hyacinth-logo.svg"
-                alt="hyacinth"
-              />
-            </a>
-            <span className="text-[1.15vw]">&</span>
-            <a
-              className="cursor-pointer hover:scale-110"
-              href="https://www.halborn.com/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <img
-                className="mx-3 size-9"
-                src="/images/halborn-logo.svg"
-                alt="halborn"
-              />
-            </a>
-          </div>
-          <div className="absolute bottom-[0.5%] z-10 flex w-full flex-row items-center justify-between px-[2.5%]">
-            <img
-              className="size-10 cursor-pointer hover:animate-spin"
-              src="/images/icon-share.png"
-              alt="share"
-            />
+          <div className="absolute bottom-[0.5%] z-10 flex w-full flex-col items-center justify-center px-[2.5%]">
+            <div className="flex flex-row items-center justify-center font-amaticbold mb-2 text-[2.25vw] lg:text-[1.5vw] text-[#D9C6BA]">
+              <span>Audited by</span>
+              <a
+                className="cursor-pointer hover:scale-110"
+                href="https://electisec.com/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <img
+                  className="mx-2 size-8"
+                  src="/images/electisec-logo-green.png"
+                  alt="electisec"
+                />
+              </a>
+              <span className="text-[1.75vw] lg:text-[1.15vw]">&</span>
+              <a
+                className="cursor-pointer hover:scale-110"
+                href="https://www.cyfrin.io/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <img
+                  className="mx-3 size-10"
+                  src="/images/cyfrin-logo.png"
+                  alt="cyfrin"
+                />
+              </a>
+              <span className="text-[1.75vw] lg:text-[1.15vw]">&</span>
+              <a
+                className="cursor-pointer hover:scale-110"
+                href="https://www.hyacinthaudits.xyz/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <img
+                  className="mx-3 h-10 w-16"
+                  src="/images/hyacinth-logo.svg"
+                  alt="hyacinth"
+                />
+              </a>
+              <span className="text-[1.75vw] lg:text-[1.15vw]">&</span>
+              <a
+                className="cursor-pointer hover:scale-110"
+                href="https://www.halborn.com/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <img
+                  className="mx-3 size-9"
+                  src="/images/halborn-logo.svg"
+                  alt="halborn"
+                />
+              </a>
+            </div>
             <div className="flex flex-row items-center text-[#D9C6BA]">
               <span className="mr-3 font-amatic text-[2.4vw] xl:text-[1.7vw] 2xl:mr-6 2xl:text-[1.3vw]">
                 OOGA BOOGA
@@ -272,7 +267,7 @@ export const HomePage = () => {
                 />
               </a>
               <span className="ml-3 font-baloo text-[1.2vw] xl:text-[0.9vw] 2xl:ml-6 2xl:text-[0.7vw]">
-                © 2024 Goldilocks DAO. All rights reserved.
+                © 2025 Goldilocks DAO. All rights reserved.
               </span>
             </div>
           </div>

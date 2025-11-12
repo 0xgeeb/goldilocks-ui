@@ -13,7 +13,6 @@ export const BoostTabMobile = () => {
     selectedPartners,
     findSelectedPartnerIdxs,
     handlePartnerClick,
-    updateBoostMag,
     boostMag,
     notification,
     txConfirming,
@@ -23,10 +22,6 @@ export const BoostTabMobile = () => {
   } = useGoldilend();
 
   const { isConnected } = useAccount();
-
-  useEffect(() => {
-    updateBoostMag();
-  }, [selectedPartners]);
 
   const loadingElement = () => {
     return <span className="loader-small m-auto"></span>;
