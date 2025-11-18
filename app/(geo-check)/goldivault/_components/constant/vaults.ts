@@ -6,13 +6,13 @@ export const VAULTS = [
     imageUrl: "logo-oribgt.svg",
     vaultName: "oriBGT Vault",
   },
-  {
-    address: "janoribgt",
-    mouseFlag: "janoribgtvaultinfo",
-    tokenName: "oriBGT",
-    imageUrl: "logo-oribgt.svg",
-    vaultName: "oriBGT Vault",
-  },
+  // {
+  //   address: "janoribgt",
+  //   mouseFlag: "janoribgtvaultinfo",
+  //   tokenName: "oriBGT",
+  //   imageUrl: "logo-oribgt.svg",
+  //   vaultName: "oriBGT Vault",
+  // },
   {
     address: "rusd",
     mouseFlag: "rusdvaultinfo",
