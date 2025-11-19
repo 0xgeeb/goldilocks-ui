@@ -4,8 +4,8 @@ import { GoldilendGHoneyPage } from "../../../../components/goldilend"
 import { GoldilendProvider } from "../../../../providers"
 
 export const metadata: Metadata = {
-  title: "gHONEY",
-  description: "Goldilend gHONEY"
+  title: "gHoney",
+  description: "Goldilend Honey"
 }
 
 export default function GoldilendGHoney() {

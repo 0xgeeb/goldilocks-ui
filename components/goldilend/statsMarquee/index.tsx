@@ -14,7 +14,7 @@ const badgeClass =
   "inline-flex items-center gap-2 px-2.5 py-1 rounded-full border border-amber-700/50 bg-amber-900/20 text-HoneyYellow font-baloo font-semibold leading-none";
 
 const CategoryBadge = ({ label, icon }: { label: string; icon?: ReactNode }) => (
-  <span className={`${badgeClass} text-base uppercase tracking-wide sm:text-lg`}>
+  <span className={`${badgeClass} text-base tracking-wide sm:text-lg`}>
     {icon}
     {label}
   </span>
@@ -94,7 +94,8 @@ export const GoldilendStatsMarquee = () => {
   );
   const totalRedeemable = handleNum(redeemableRaw);
   // reward vault link rendered directly in JSX
-  const totalLent = handleNum(goldilendInfo.poolSize);
+  // const totalLent = handleNum(goldilendInfo.poolSize);
+  const totalLent = '-'
   const totalBorrowed = handleNum(goldilendInfo.outstandingDebt);
 
   return (
@@ -116,14 +117,14 @@ export const GoldilendStatsMarquee = () => {
             <div className="h-8 w-px bg-white/20" />
           </MarqueeItem>
 
-          {/* gHONEY */}
+          {/* gHoney */}
           <MarqueeItem className="flex items-center gap-4 px-4 sm:px-6">
             <CategoryBadge
-              label="gHONEY"
+              label="gHoney"
               icon={
                 <Image
                   src="/images/bhoney-logo.png"
-                  alt="gHONEY"
+                  alt="gHoney"
                   width={26}
                   height={26}
                   className="rounded-full"
@@ -137,7 +138,7 @@ export const GoldilendStatsMarquee = () => {
                 icon={
                   <Image
                     src="/images/bhoney-logo.png"
-                    alt="gHONEY"
+                    alt="gHoney"
                     width={18}
                     height={18}
                     className="rounded-full"
@@ -150,7 +151,7 @@ export const GoldilendStatsMarquee = () => {
                 icon={
                   <Image
                     src="/images/bhoney-logo.png"
-                    alt="gHONEY"
+                    alt="gHoney"
                     width={18}
                     height={18}
                     className="rounded-full"
@@ -158,9 +159,9 @@ export const GoldilendStatsMarquee = () => {
                 }
               />
               <StatPill
-                label="Reward Vault"
+                label="Beradrome Farm"
                 value="Open"
-                href="https://x.com/0xgeeb"
+                href="https://www.beradrome.com/farms/0x3E185233A6aA7390bc9292ab26E955c47b95B5A8"
                 icon={
                   <Image src="/images/icon-share.png" alt="share" width={16} height={16} />
                 }

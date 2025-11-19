@@ -90,8 +90,8 @@ export const NewGHoneyTabMobile = () => {
     </div>
   );
 
-  const topToken = lendActiveToggle === "DEPOSIT" ? "HONEY" : "gHONEY";
-  const bottomToken = lendActiveToggle === "DEPOSIT" ? "gHONEY" : "HONEY";
+  const topToken = lendActiveToggle === "DEPOSIT" ? "HONEY" : "gHoney";
+  const bottomToken = lendActiveToggle === "DEPOSIT" ? "gHoney" : "HONEY";
 
   const flip = useCallback(() => {
     changeLendActiveToggle(lendActiveToggle === "DEPOSIT" ? "WITHDRAW" : "DEPOSIT");
@@ -104,7 +104,7 @@ export const NewGHoneyTabMobile = () => {
         <div className="flex items-center justify-between gap-3 mb-3">
           <div
             ref={registerBubble(0)}
-            className="inline-flex items-center gap-2 rounded-full border border-amber-700/40 bg-black/80 px-3 py-1.5 font-baloo text-base uppercase tracking-wide font-semibold text-HoneyYellow -rotate-6"
+            className="inline-flex items-center gap-2 rounded-full border border-amber-700/40 bg-black/80 px-3 py-1.5 font-baloo text-base tracking-wide font-semibold text-HoneyYellow -rotate-6"
           >
             <img
               src={topToken === "HONEY" ? "/images/logo-honey.png" : "/images/bhoney-logo.png"}
@@ -138,7 +138,7 @@ export const NewGHoneyTabMobile = () => {
                     isLoading={false}
                     value={displayString}
                     onChange={(v) => handleStakeChange(v, lendActiveToggle)}
-                    balance={handleStakeBalance(lendActiveToggle === "DEPOSIT" ? "HONEY" : "gHONEY") as unknown as string}
+                    balance={handleStakeBalance(lendActiveToggle === "DEPOSIT" ? "HONEY" : "gHoney") as unknown as string}
                     walletInfoLoading={walletInfoLoading}
                   />
                 </div>
@@ -194,7 +194,7 @@ export const NewGHoneyTabMobile = () => {
                     isLoading={false}
                     value={displayString}
                     onChange={(v) => handleStakeChange(v, lendActiveToggle)}
-                    balance={handleStakeBalance(lendActiveToggle === "DEPOSIT" ? "gHONEY" : "HONEY") as unknown as string}
+                    balance={handleStakeBalance(lendActiveToggle === "DEPOSIT" ? "gHoney" : "HONEY") as unknown as string}
                     walletInfoLoading={walletInfoLoading}
                   />
                 </div>
@@ -203,11 +203,11 @@ export const NewGHoneyTabMobile = () => {
           </div>
         </div>
 
-        {/* gHONEY Token + Balance Bubbles - Below Input */}
+        {/* gHoney Token + Balance Bubbles - Below Input */}
         <div className="flex items-center justify-between gap-3 mt-3">
           <div
             ref={registerBubble(2)}
-            className="inline-flex items-center gap-2 rounded-full border border-amber-700/40 bg-black/80 px-3 py-1.5 font-baloo text-base uppercase tracking-wide font-semibold text-HoneyYellow rotate-6"
+            className="inline-flex items-center gap-2 rounded-full border border-amber-700/40 bg-black/80 px-3 py-1.5 font-baloo text-base tracking-wide font-semibold text-HoneyYellow rotate-6"
           >
             <img
               src={bottomToken === "HONEY" ? "/images/logo-honey.png" : "/images/bhoney-logo.png"}

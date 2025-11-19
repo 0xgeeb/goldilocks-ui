@@ -65,8 +65,8 @@ export const NewGHoneyTab = () => {
     return value > 0 ? formatAsString(value) : "-";
   };
 
-  const topToken = lendActiveToggle === "DEPOSIT" ? "HONEY" : "gHONEY";
-  const bottomToken = lendActiveToggle === "DEPOSIT" ? "gHONEY" : "HONEY";
+  const topToken = lendActiveToggle === "DEPOSIT" ? "HONEY" : "gHoney";
+  const bottomToken = lendActiveToggle === "DEPOSIT" ? "gHoney" : "HONEY";
 
   const flip = useCallback(() => {
     changeLendActiveToggle(lendActiveToggle === "DEPOSIT" ? "WITHDRAW" : "DEPOSIT");
@@ -103,7 +103,7 @@ export const NewGHoneyTab = () => {
                     isLoading={false}
                     value={displayString}
                     onChange={(v) => handleStakeChange(v, lendActiveToggle)}
-                    balance={handleStakeBalance(lendActiveToggle === "DEPOSIT" ? "HONEY" : "gHONEY") as unknown as string}
+                    balance={handleStakeBalance(lendActiveToggle === "DEPOSIT" ? "HONEY" : "gHoney") as unknown as string}
                     walletInfoLoading={walletInfoLoading}
                   />
                 </div>
@@ -180,7 +180,7 @@ export const NewGHoneyTab = () => {
                     isLoading={false}
                     value={displayString}
                     onChange={(v) => handleStakeChange(v, lendActiveToggle)}
-                    balance={handleStakeBalance(lendActiveToggle === "DEPOSIT" ? "gHONEY" : "HONEY") as unknown as string}
+                    balance={handleStakeBalance(lendActiveToggle === "DEPOSIT" ? "gHoney" : "HONEY") as unknown as string}
                     walletInfoLoading={walletInfoLoading}
                   />
                 </div>

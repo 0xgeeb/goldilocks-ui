@@ -5,7 +5,7 @@ const TABS = [
   { key: "BORROW", label: "Borrow" },
   { key: "REPAY", label: "Repay" },
   { key: "AUCTIONS", label: "Auctions" },
-  { key: "GHONEY", label: "gHONEY" },
+  { key: "GHONEY", label: "gHoney" },
 ];
 
 export const TogglesMobile = () => {

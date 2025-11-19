@@ -46,7 +46,7 @@ export const Toggles = () => {
         }`}
         onClick={() => changeActiveToggle("GHONEY")}
       >
-        gHONEY
+        gHoney
       </button>
     </div>
   );

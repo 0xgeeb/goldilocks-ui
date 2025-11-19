@@ -136,12 +136,12 @@ export const NewStakeTab = () => {
                     <FormWrapper className="">
                         <LabelSet>
                             <Label>
-                                {lendActiveToggle === "DEPOSIT" ? "Deposit HONEY" : "Withdraw gHONEY"}
+                                {lendActiveToggle === "DEPOSIT" ? "Deposit HONEY" : "Withdraw gHoney"}
                             </Label>
                         </LabelSet>
                         <FieldWithLabel
                             id="number-input"
-                            label={lendActiveToggle === "DEPOSIT" ? "HONEY" : "gHONEY"}
+                            label={lendActiveToggle === "DEPOSIT" ? "HONEY" : "gHoney"}
                             value={displayString}
                             onChange={(e) => handleStakeChange(e.target.value, lendActiveToggle)}
                         />
@@ -165,7 +165,7 @@ export const NewStakeTab = () => {
                         </LabelSet>
                         <FieldWithLabel
                             id="number-input"
-                            label={lendActiveToggle === "DEPOSIT" ? "gHONEY" : "HONEY"}
+                            label={lendActiveToggle === "DEPOSIT" ? "gHoney" : "HONEY"}
                             value={displayString}
                             disabled={true}
                         /> 
@@ -241,7 +241,7 @@ export const NewStakeTab = () => {
                             textB={handleInfo(goldilendInfo.glhoneySupply) as string}
                         />
                         <InfoRow 
-                            textA="Total gHONEY Supply:"
+                            textA="Total gHoney Supply:"
                             textB={handleInfo(goldilendInfo.glhoneySupply) as string}
                         />
                         <InfoRow 
@@ -249,7 +249,7 @@ export const NewStakeTab = () => {
                             textB={handleInfo(goldilendInfo.outstandingDebt) as string}
                         />
                         <InfoRow 
-                            textA="Total Redeemable gHONEY:"
+                            textA="Total Redeemable gHoney:"
                             textB={handleInfo(Math.min(goldilendInfo.poolSize - goldilendInfo.outstandingDebt, goldilendInfo.maxUtilization * goldilendInfo.poolSize)) as string}
                         />
                     </dl>
