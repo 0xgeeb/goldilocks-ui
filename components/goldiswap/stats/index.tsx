@@ -55,46 +55,41 @@ export const Stats = () => {
   };
 
   return (
-    <div 
-      className="rounded-2xl p-6"
-      style={{
-        backgroundColor: "rgba(60, 50, 40, 0.4)",
-        border: "1px solid rgba(205, 133, 63, 0.3)",
-      }}
-    >
-      <h2 className="text-HoneyYellow font-amaticbold text-2xl mb-4">Goldiswap Info</h2>
-      <dl className="flex flex-col gap-3 font-baloo text-sm">
-        <div className="flex justify-between items-center">
-          <dt className="text-white/70">Locks Supply:</dt>
-          <dd className={`text-white font-semibold ${handleColors(goldiswapInfo.supply, simInfo.supply)}`}>
+    <div className="absolute left-[5%] top-[84%] flex w-[90%] flex-col items-center justify-between font-baloo text-[2.5vw] text-white md:left-[10%] md:top-[82%] md:w-4/5 md:text-[2vw] lg:text-[1.75vw] xl:left-[20%] xl:top-[80%] xl:w-3/5 xl:text-[1.5vw] 2xl:left-[27.5%] 2xl:w-[45%] 2xl:text-[1.1vw]">
+      <div className="flex h-[50%] w-full flex-row items-center justify-between">
+        <div className="flex flex-row items-center">
+          <span className="mr-2">locks supply:</span>
+          <span className={handleColors(goldiswapInfo.supply, simInfo.supply)}>
             {simInfo.toggle
               ? handleInfo(simInfo.supply)
               : handleInfo(goldiswapInfo.supply)}
-          </dd>
+          </span>
         </div>
-        <div className="flex justify-between items-center">
-          <dt className="text-white/70">Current FSL:</dt>
-          <dd className={`text-white font-semibold ${handleColors(goldiswapInfo.fsl, simInfo.fsl)}`}>
+        <div className="flex flex-row items-center">
+          <span className="mr-2">current fsl:</span>
+          <span className={handleColors(goldiswapInfo.fsl, simInfo.fsl)}>
             {simInfo.toggle
               ? handleInfo(simInfo.fsl)
               : handleInfo(goldiswapInfo.fsl)}
-          </dd>
+          </span>
         </div>
-        <div className="flex justify-between items-center">
-          <dt className="text-white/70">Current PSL:</dt>
-          <dd className={`text-white font-semibold ${handleColors(goldiswapInfo.psl, simInfo.psl)}`}>
+        <div className="flex flex-row items-center">
+          <span className="mr-2">current psl:</span>
+          <span className={handleColors(goldiswapInfo.psl, simInfo.psl)}>
             {simInfo.toggle
               ? handleInfo(simInfo.psl)
               : handleInfo(goldiswapInfo.psl)}
-          </dd>
+          </span>
         </div>
-        <div className="flex justify-between items-center">
-          <dt className="text-white/70">Floor Price:</dt>
-          <dd
-            className={`text-white font-semibold ${handleFloorColors(
+      </div>
+      <div className="flex h-[50%] w-full flex-row items-center justify-between tall:mt-[0.25%]">
+        <div className="flex flex-row items-center">
+          <span className="mr-2">floor price:</span>
+          <span
+            className={handleFloorColors(
               floorPrice(goldiswapInfo.fsl, goldiswapInfo.supply),
               floorPrice(simInfo.fsl, simInfo.supply),
-            )}`}
+            )}
           >
             $
             {simInfo.toggle
@@ -102,59 +97,61 @@ export const Stats = () => {
               : handlePrice(
                   floorPrice(goldiswapInfo.fsl, goldiswapInfo.supply),
                 )}
-          </dd>
+          </span>
         </div>
-        <div className="flex justify-between items-center">
-          <dt className="text-white/70">PSL/FSL Ratio:</dt>
-          <dd
-            className={`text-white font-semibold ${handleColors(
+        <div className="flex flex-row items-center">
+          <span className="mr-2">PSL/FSL ratio:</span>
+          <span
+            className={handleColors(
               (goldiswapInfo.psl / goldiswapInfo.fsl) * 100,
               (goldiswapInfo.psl / goldiswapInfo.fsl) * 100,
-            )}`}
+            )}
           >
             {simInfo.toggle
               ? handlePrice(
                   (goldiswapInfo.psl / goldiswapInfo.fsl) * 100,
                 )
               : handlePrice((goldiswapInfo.psl / goldiswapInfo.fsl) * 100)}%
-          </dd>
+          </span>
         </div>
-        <div className="flex justify-between items-center">
-          <dt className="text-white/70">Target Ratio:</dt>
-          <dd
-            className={`text-white font-semibold ${handleColors(
+        <div className="flex flex-row items-center">
+          <span className="mr-2">target ratio:</span>
+          <span
+            className={handleColors(
               goldiswapInfo.targetRatio,
               simInfo.targetRatio,
-            )}`}
+            )}
           >
             {simInfo.toggle
               ? handlePrice(simInfo.targetRatio * 100)
               : handlePrice(goldiswapInfo.targetRatio * 100)}
             %
-          </dd>
+          </span>
         </div>
-        <div className="flex justify-between items-center">
-          <dt className="text-white/70">Porridge Value:</dt>
-          <dd
-            className={`text-white font-semibold ${handleColors(goldiswapInfo.prgValue, simInfo.prgValue)}`}
+      </div>
+      <div className="flex h-[50%] w-full flex-row items-center justify-between tall:mt-[0.25%]">
+        <div className="flex flex-row items-center">
+          <span className="mr-2">porridge value:</span>
+          <span
+            className={handleColors(goldiswapInfo.prgValue, simInfo.prgValue)}
           >
             $
             {simInfo.toggle
               ? handlePrice(simInfo.prgValue)
               : handlePrice(goldiswapInfo.prgValue)}
-          </dd>
+          </span>
         </div>
-        <div className="flex justify-between items-center">
-          <dt className="text-white/70">Porridge Supply:</dt>
-          <dd className="text-white font-semibold">{handleInfo(goldiswapInfo.prgSupply)}</dd>
+        <div className="flex flex-row items-center">
+          <span className="mr-2">porridge supply:</span>
+          <span>{handleInfo(goldiswapInfo.prgSupply)}</span>
         </div>
-        <div className="flex justify-between items-center">
-          <dt className="text-white/70">Porridge Market Cap:</dt>
-          <dd
-            className={`text-white font-semibold ${handleColors(
+        <div className="flex flex-row items-center">
+          <span className="mr-2">porridge market cap:</span>
+          <span
+            className={handleColors(
               goldiswapInfo.prgMarketCap,
               simInfo.prgValue * goldiswapInfo.prgSupply,
-            )}`}
+            )}
           >
             {simInfo.toggle
               ? handleInfo(
@@ -162,9 +159,9 @@ export const Stats = () => {
                 )
               : handleInfo(goldiswapInfo.prgMarketCap / 1000000)}
             m
-          </dd>
+          </span>
         </div>
-      </dl>
+      </div>
     </div>
   );
 };
