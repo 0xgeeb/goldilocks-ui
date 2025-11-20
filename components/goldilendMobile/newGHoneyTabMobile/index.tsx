@@ -5,7 +5,7 @@ import { gsap } from "gsap";
 import { useAccount } from "wagmi";
 
 import { formatAsString } from "@/app/_components/utils";
-import SwapInput from "@/components/goldiswap/swapBox/SwapInput";
+import SwapInput from "../../goldilend/swapInput";
 import { GhoneyButton } from "../../goldilend"
 import { useGoldilend } from "@/providers";
 

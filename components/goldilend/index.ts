@@ -28,3 +28,4 @@ export * from "./newLiquidateTab";
 export * from "./statsMarquee";
 export * from "./newAuctionsTab";
 export * from "./ghoneyButton";
+export * from "./swapInput";
