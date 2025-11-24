@@ -192,14 +192,14 @@ export const HomePage = () => {
               <span>Audited by</span>
               <a
                 className="cursor-pointer hover:scale-110"
-                href="https://electisec.com/"
+                href="https://yaudit.dev/"
                 target="_blank"
                 rel="noreferrer"
               >
                 <img
                   className="mx-2 size-8"
-                  src="/images/electisec-logo-green.png"
-                  alt="electisec"
+                  src="/images/yaudit-logo.png"
+                  alt="yaudit"
                 />
               </a>
               <span className="text-[1.75vw] lg:text-[1.15vw]">&</span>
