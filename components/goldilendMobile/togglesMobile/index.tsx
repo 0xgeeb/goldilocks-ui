@@ -23,7 +23,7 @@ export const TogglesMobile = () => {
               ? "bg-HoneyYellow text-black border-HoneyYellow/50"
               : "bg-black/20 text-white border-amber-900/30"
           )}
-          onClick={() => tab.key === "GHONEY" && changeActiveToggle(tab.key)}
+          onClick={() => changeActiveToggle(tab.key)}
         >
           {tab.label}
         </button>

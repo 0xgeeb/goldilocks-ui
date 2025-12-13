@@ -11,7 +11,7 @@ export const BorrowFetcher = () => {
   const {
     findBeras,
     findLoans,
-    setInfoLoading,
+    findAuctions,
     refreshGoldilendInfo,
     refreshGoldilendWalletInfo,
   } = useGoldilend();
@@ -34,10 +34,11 @@ export const BorrowFetcher = () => {
   // }, [data, loading]);
 
   useEffect(() => {
-    findBeras();
-    findLoans();
     refreshGoldilendInfo();
     refreshGoldilendWalletInfo();
+    findBeras();
+    findLoans();
+    findAuctions()
   }, [address, isConnected]);
 
   return null;

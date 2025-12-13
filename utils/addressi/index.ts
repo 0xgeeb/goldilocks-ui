@@ -1,6 +1,5 @@
 import goldiswapABI from "../abi/Goldiswap.json";
 import goldilockedABI from "../abi/Goldilocked.json";
-import goldilendABI from "../abi/GoldilendBase.json";
 import rebasegoldilendABI from "../abi/RebaseGoldilend.json";
 import honeyABI from "../abi/Honey.json";
 import ibgtABI from "../abi/IBGT.json";
@@ -35,7 +34,7 @@ export const contracts = {
     abi: goldilockedABI.abi,
   },
   goldilend: {
-    address: "0x80D480Ad0c48A769eD481fA8a30B7c5DDABD2FDf", // proxy addy
+    address: "0x80D480Ad0c48A769eD481fA8a30B7c5DDABD2FDf",
     abi: rebasegoldilendABI.abi
   },
   glhoney: {
@@ -46,10 +45,6 @@ export const contracts = {
     address: "0xFCBD14DC51f0A4d49d5E53C2E0950e0bC26d0Dce",
     abi: honeyABI.abi,
   },
-  fakehoney: {
-    address: "0x6a399AbbFd3AA3A76B37E271917A5350C42cB752",
-    abi: honeyABI.abi
-  },
   wbera: {
     address: "0x6969696969696969696969696969696969696969",
     abi: ibgtABI.abi
@@ -58,12 +53,32 @@ export const contracts = {
     address: "0xac03CABA51e17c86c921E1f6CBFBdC91F8BB2E6b",
     abi: ibgtABI.abi,
   },
-  bandbear: {
-    address: "0x1501a3a28DdCAFb57b2769e98E480e3fca3405b0",
+  fakebear: {
+    address: "0x12B32F41d11dF8D8f6d23090d0DC8fcB3F5Ac0f4",
     abi: bandbearABI.abi,
   },
+  bitbear: {
+    address: "0x72D876D9cdf4001b836f8E47254d0551EdA2eebB",
+    abi: bondbearABI.abi,
+  },
+  bandbear: {
+    address: "0x7711B2Eb2451259dbF211e30157ceB7CFeb79a19",
+    abi: bondbearABI.abi,
+  },
+  babybear: {
+    address: "0xDDeAf391c4be2d01ca52aBb8C159a06820ef078C",
+    abi: bondbearABI.abi,
+  },
+  boobear: {
+    address: "0xf49ec5db255854C4a567de5AB3826c9AAbaFc7cF",
+    abi: bondbearABI.abi,
+  },
   bondbear: {
-    address: "0x186C96B9c362DBBf4D33C6dAd04127F0238F5499",
+    address: "0xA0CF472E6132F6B822a944f6F31aA7b261c7c375",
+    abi: bondbearABI.abi,
+  },
+  bongbear: {
+    address: "0x141De07E5D4C4759EC9301DA106115D4841f66cD",
     abi: bondbearABI.abi,
   },
   beradrome: {

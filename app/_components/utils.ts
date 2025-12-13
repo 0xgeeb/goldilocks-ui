@@ -13,6 +13,10 @@ export const formatAsString = (num: number): string => {
   return num?.toLocaleString("en-US", { maximumFractionDigits: 2 });
 };
 
+export const formatAsLongerNumber = (num: number): string => {
+  return num?.toLocaleString("en-US", { maximumFractionDigits: 3 });
+};
+
 export const formatAsInterest = (num: number): string => {
   return num?.toLocaleString("en-US", { maximumFractionDigits: 10 });
 };

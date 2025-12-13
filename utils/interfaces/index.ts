@@ -51,6 +51,7 @@ export interface WalletInitialState {
 export interface BeraInfo {
   name: string;
   id: number;
+  idRaw?: string; // Raw string token ID for Bong Bears with very large numbers
   valuation: number;
   index: number;
 }
@@ -70,15 +71,20 @@ export interface BoostInfo {
 }
 
 export interface LoanInfo {
-  collateralNFTs: string[];
-  collateralNFTIds: number[];
-  borrowedAmount: number;
-  interest: number;
-  duration: number;
-  endDate: number;
   loanId: number;
+  borrowedAmount: number;
+  repaidAmount: number;
+  interest: number;
+  endDate: number;
   repaid: boolean;
   liquidated: boolean;
+  collateralNFT: string;
+  collateralValuation: number;
+  principal: number;
+  status?: "EXPIRING_SOON" | "ACTIVE" | "EXPIRED" | "GRACE_PERIOD";
+  beraId: number;
+  beraIdRaw?: string; // Raw string token ID for Bong Bears with very large numbers
+  duration: number;
   realBorrowedAmount: bigint;
   realInterest: bigint;
 }
@@ -97,6 +103,22 @@ export interface LoanData {
   realInterest: bigint;
 }
 
+export interface AuctionInfo {
+  auctionId: number;
+  loanOriginator: string;
+  loanId: number;
+  collateralValue: number;
+  outstandingDebt: number;
+  currentHighestBid: number | null;
+  highestBidder: string | null;
+  potentialDiscount: number;
+  endDate: number;
+  beraId: number;
+  beraIdRaw?: string; // Raw string token ID for Bong Bears with very large numbers
+  collateralNFT: string;
+  status: "EXPIRING_SOON" | "HIGH_VALUE" | "NO_BIDS" | "ENDED" | "ACTIVE";
+}
+
 export interface GoldilendInitialState {
   goldilendInfo: {
     glhoneySupply: number;
@@ -104,6 +126,13 @@ export interface GoldilendInitialState {
     outstandingDebt: number;
     maxUtilization: number;
     protocolInterestRate: number;
+    fakebearFairValue: number;
+    bitbearFairValue: number;
+    babybearFairValue: number;
+    boobearFairValue: number;
+    bondbearFairValue: number;
+    bandbearFairValue: number;
+    bongbearFairValue: number;
   };
   goldilendWalletInfo: {
     honey: number;
@@ -134,6 +163,9 @@ export interface GoldilendInitialState {
   userLoans: LoanInfo[];
   userBoost: BoostInfo;
   liquidatableLoans: LoanInfo[];
+  auctionList: AuctionInfo[];
+  auctionsLoading: boolean;
+  setAuctionsLoading: (_loading: boolean) => void;
   notification: {
     toggle: boolean;
     action: string;
@@ -179,13 +211,14 @@ export interface GoldilendInitialState {
   handleBeraClick: (_bera: BeraInfo) => void;
   handlePartnerClick: (_partner: PartnerInfo) => void;
   findSelectedPartnerIdxs: () => number[];
-  updateBorrowLimit: () => void;
+  updateBorrowLimit: (collateralAddress?: string) => void;
   handleBorrowChange: (_input: string) => void;
   handleLoanDateChange: (_input: string) => void;
   loanExpiration: string;
   debouncedLoanExpiration: string;
   findLoans: () => void;
   findBeras: () => void;
+  findAuctions: () => void;
   getInterestRate: () => void;
   updateOwnedBeras: (_borrowedAgainstBera: BeraInfo) => void;
   updateOwnedPartners: (_nfts: PartnerInfo | PartnerInfo[]) => void;

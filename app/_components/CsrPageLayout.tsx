@@ -48,7 +48,7 @@ function CsrPageLayout({
       )}
       <div className="w-full flex-1 basis-0 overflow-y-auto">
         {!navButtonsOpen && children}
-        {/* TODO: Add ChangeChain */}
+        {/* todo: Add ChangeChain */}
         {/* <ChangeChain /> */}
       </div>
       {!navButtonsOpen && <Footer />}

@@ -9,6 +9,24 @@ import { useGoldilendTx } from "../../../hooks";
 import { useGoldilend } from "../../../providers";
 import { contracts } from "../../../utils/addressi";
 
+const getSelectedBeraContractAddress = (beraName: string): string => {
+  if (!beraName) return contracts.bandbear.address;
+
+  const collectionName = beraName.split(" #")[0];
+
+  const contractMap: Record<string, string> = {
+    "Fake Bear": contracts.fakebear.address,
+    "Bit Bear": contracts.bitbear.address,
+    "Baby Bear": contracts.babybear.address,
+    "Boo Bear": contracts.boobear.address,
+    "Bond Bear": contracts.bondbear.address,
+    "Band Bear": contracts.bandbear.address,
+    "Bong Bear": contracts.bongbear.address,
+  };
+
+  return contractMap[collectionName] || contracts.bandbear.address;
+};
+
 const BORROW_LABEL = "Deposit & Borrow";
 
 export const BorrowButtonMobile = () => {
@@ -16,6 +34,8 @@ export const BorrowButtonMobile = () => {
     selectedBera,
     loanExpiration,
     loanAmount,
+    loanInterest,
+    borrowLimit,
     setTxConfirming,
     changeActiveToggle,
     openNotification,
@@ -34,7 +54,6 @@ export const BorrowButtonMobile = () => {
     checkLoanAllowance,
     sendGoldilendNFTApproveTx,
     sendBorrowTx,
-    checkBoostAllowance,
     sendBoostTx,
     sendWithdrawBoostTx,
   } = useGoldilendTx();
@@ -62,7 +81,16 @@ export const BorrowButtonMobile = () => {
     if (Number.isNaN(month) || Number.isNaN(day) || Number.isNaN(year)) return false;
     if (Number.isNaN(parsedDate.getTime())) return false;
     if (timestampDigits < Math.floor(Date.now() / 1000)) return false;
-    if (timestampDigits < Math.floor(Date.now() / 1000) + 86400 * 7) return false;
+
+    // Check if the date is at least the next calendar day
+    const currentDate = new Date();
+    const tomorrow = new Date(currentDate);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0); // Set to start of tomorrow
+
+    if (parsedDate < tomorrow) {
+      return false;
+    }
     return true;
   };
 
@@ -74,14 +102,14 @@ export const BorrowButtonMobile = () => {
     const borrowTx = await sendBorrowTx(
       loanAmount,
       selectedBera,
-      parseDate(loanExpiration),
+      parseDate(loanExpiration) > 86400 ? parseDate(loanExpiration) : 86400,
     );
     if (borrowTx.substring(0, 2) === "0x") {
       setTxConfirming(false);
       openNotification(
         true,
         "You've successfully created a loan",
-        `You borrowed ${formatAsString(loanAmount)} iBGT against your bera`,
+        `You borrowed ${formatAsString(loanAmount - loanInterest)} HONEY against your bera`,
         borrowTx,
       );
       if (button) {
@@ -107,85 +135,34 @@ export const BorrowButtonMobile = () => {
     if (!button) return;
 
     if (loanAmount === 0) {
-      button.innerHTML = "Enter amount";
+      button.innerHTML = "no loan";
       return;
     }
     if (!checkDate(loanExpiration)) {
-      button.innerHTML = "Invalid expiration";
+      button.innerHTML = "invalid expiration";
       return;
     }
     if (selectedBera.name === "") {
-      button.innerHTML = "Select collateral";
+      button.innerHTML = "no collateral";
+      return;
+    }
+    if (loanAmount + loanInterest > borrowLimit) {
+      button.innerHTML = "exceeds limit";
       return;
     }
 
-    const [bondFlag, bandFlag] = await checkLoanAllowance(address as `0x${string}`);
-    const needsBondApproval = !bondFlag && selectedBera.name === "BondBera";
-    const needsBandApproval = !bandFlag && selectedBera.name === "BandBera";
-
-    if (!needsBondApproval && !needsBandApproval) {
-      await borrowTxFlow(button);
-      return;
-    }
-
-    button.innerHTML = "Approving...";
-    if (needsBondApproval) {
-      await sendGoldilendNFTApproveTx(contracts.bondbear.address);
-    }
-    if (needsBandApproval) {
-      await sendGoldilendNFTApproveTx(contracts.bandbear.address);
-    }
-    button.innerHTML = BORROW_LABEL;
-  };
-
-  const handleBoostButton = async () => {
-    const button = document.getElementById("borrow-button");
-    if (!button) return;
-
-    if (selectedPartners.length === 0) {
-      button.innerHTML = "Select partners";
-      return;
-    }
-
-    const allowances = await checkBoostAllowance(address as `0x${string}`);
-    const approvalsNeeded = allowances.filter((allowance) => allowance === false);
-
-    if (approvalsNeeded.length > 0) {
-      button.innerHTML = "Approving...";
-      if (!checkSelectedPartners("Beradrome")) {
-        const beradromeAddress = boostMag.partners.multiSig.partnerAddress;
-        await sendBoostTx(beradromeAddress);
-      }
-      if (!checkSelectedPartners("Honeycomb")) {
-        const honeycombAddress = boostMag.partners.honeycomb.partnerAddress;
-        await sendBoostTx(honeycombAddress);
-      }
-      button.innerHTML = "Create boost";
-      return;
-    }
-
-    button.innerHTML = "Confirming...";
-    const boostTx = await sendBoostTx(
-      boostMag.partners.honeycomb.partnerAddress,
+    const selectedBeraContract = getSelectedBeraContractAddress(selectedBera.name);
+    const isApproved = await checkLoanAllowance(
+      address as `0x${string}`,
+      selectedBeraContract
     );
-    if (boostTx.substring(0, 2) === "0x") {
-      setTxConfirming(false);
-      openNotification(
-        true,
-        "Boost applied",
-        "Your boost has been applied to your loan",
-        boostTx,
-      );
-      button.innerHTML = "Create boost";
-      updateOwnedPartners(selectedPartners);
-      changeActiveToggle("BOOST");
-      setTimeout(() => {
-        openNotification(false, "", "", "");
-      }, 10000);
+
+    if (isApproved) {
+      await borrowTxFlow(button);
     } else {
-      button.innerHTML = "Create boost";
-      changeActiveToggle("BOOST");
-      setTxConfirming(false);
+      button.innerHTML = "approving...";
+      await sendGoldilendNFTApproveTx(selectedBeraContract);
+      button.innerHTML = BORROW_LABEL;
     }
   };
 
@@ -218,11 +195,7 @@ export const BorrowButtonMobile = () => {
   };
 
   const handleButtonClick = async () => {
-    if (activeToggle === "BORROW") {
       await handleBorrowButton();
-    } else {
-      await handleBoostButton();
-    }
   };
 
   const renderButtonLabel = (): string => {

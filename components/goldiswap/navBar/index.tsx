@@ -59,16 +59,16 @@ export const NavBar = ({ wutPopup, setWutPopup }: NavBarProps) => {
             pathname === '/goldilend/borrow' ?
             <>
               <a className="text-[#DB7200]"><span>Goldilend</span></a>
-              <a href="/goldilend/borrow" className="hover:scale-[150%] cursor-pointer text-[#DB7200] underline underline-offset-8 text-[2.1vw] xl:text-[1.6vw]"><span>Borrow</span></a>
-              <a href="/goldilend/lend" className="hover:scale-[150%] cursor-pointer text-[2.1vw] xl:text-[1.6vw]"><span>Lend</span></a>
+              <a href="/goldilend" className="hover:scale-[150%] cursor-pointer text-[#DB7200] underline underline-offset-8 text-[2.1vw] xl:text-[1.6vw]"><span>Borrow</span></a>
+              <a href="/goldilend" className="hover:scale-[150%] cursor-pointer text-[2.1vw] xl:text-[1.6vw]"><span>Lend</span></a>
             </> :
             pathname === '/goldilend/lend' ?
             <>
               <a className="text-[#DB7200]"><span>Goldilend</span></a>
-              <a href="/goldilend/borrow" className="hover:scale-[150%] cursor-pointer text-[2.1vw] xl:text-[1.6vw]"><span>Borrow</span></a>
-              <a href="/goldilend/lend" className="hover:scale-[150%] cursor-pointer text-[#DB7200] underline underline-offset-8 text-[2.1vw] xl:text-[1.6vw]"><span>Lend</span></a>
+              <a href="/goldilend" className="hover:scale-[150%] cursor-pointer text-[2.1vw] xl:text-[1.6vw]"><span>Borrow</span></a>
+              <a href="/goldilend" className="hover:scale-[150%] cursor-pointer text-[#DB7200] underline underline-offset-8 text-[2.1vw] xl:text-[1.6vw]"><span>Lend</span></a>
             </> :
-            <a href="/goldilend/borrow" className="hover:scale-[150%] cursor-pointer"><span>Goldilend</span></a>
+            <a href="/goldilend" className="hover:scale-[150%] cursor-pointer"><span>Goldilend</span></a>
           }
           {
             pathname === '/goldivault/vaults' ?

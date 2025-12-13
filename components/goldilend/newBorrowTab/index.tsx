@@ -8,7 +8,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 import { FormWrapper } from "@/app/(geo-check)/goldivault/vault/[address]/_components/./FormComponents";
 
-import { formatAsString } from "@/app/_components/utils";
+import { formatAsString, formatAsLongerNumber } from "@/app/_components/utils";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "@/components/ui/carousel";
 import { Input } from "@/components/ui/input";
 import Slider from "@/components/ui/slider";
@@ -17,6 +17,7 @@ import Slider from "@/components/ui/slider";
 import { useGoldilend } from "@/providers";
 import { useGoldilendTx } from "../../../hooks";
 import { contracts } from "../../../utils/addressi";
+import { bongbears } from "../../../utils/bongbears";
 
 
 export const NewBorrowTab = () => {
@@ -35,98 +36,81 @@ export const NewBorrowTab = () => {
         "Band Bear",
         "Baby Bear",
         "Bit Bear",
+        "Fake Bear"
     ], []);
     const [filtersOpen, setFiltersOpen] = useState<boolean>(false);
     const [selectedCollections, setSelectedCollections] = useState<Record<string, boolean>>(
         () => collectionNames.reduce((acc, n) => { acc[n] = true; return acc; }, {} as Record<string, boolean>)
     );
-    const mockBeras = useMemo(() => ([
-        { name: "Bong Bear #75", id: 75, valuation: 100000, index: 0 },
-        { name: "Bong Bear #90", id: 90, valuation: 20000, index: 1 },
-        { name: "Bong Bear #22", id: 22, valuation: 30000, index: 2 },
-        { name: "Bong Bear #68", id: 68, valuation: 15000, index: 3 },
-        { name: "Bong Bear #31", id: 31, valuation: 18000, index: 4 },
-        { name: "Bong Bear #34", id: 34, valuation: 22000, index: 5 },
-        { name: "Bong Bear #44", id: 44, valuation: 17000, index: 6 },
-    ]), []);
-    const mockImgById = useMemo(() => ({
-        75: "https://i2.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/68b8c1674bf468085f015ed07a3bd6/5968b8c1674bf468085f015ed07a3bd6.jpeg?w=1000",
-        90: "https://i2.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/8fac1fd9e0d9b799cf8195eb3c93cc/5f8fac1fd9e0d9b799cf8195eb3c93cc.jpeg?w=1000",
-        22: "https://i2.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/0e72de6ad7cf6551df57cb583120bb/e50e72de6ad7cf6551df57cb583120bb.jpeg?w=1000",
-        68: "https://i2.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/62950fe1bdecfafcb68c58245327c6/6d62950fe1bdecfafcb68c58245327c6.jpeg?w=1000",
-        31: "https://i2.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/a0ccad5fccf7dbb5ca455a52ae038d/70a0ccad5fccf7dbb5ca455a52ae038d.jpeg?w=1000",
-        34: "https://i2.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/db186a56c1c596535493f0928ad705/c6db186a56c1c596535493f0928ad705.jpeg?w=1000",
-        44: "https://i2.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/b7f90f33cb12c9b8db5028a6a284c1/b5b7f90f33cb12c9b8db5028a6a284c1.jpeg?w=1000",
-    } as Record<number, string>), []);
     const [carouselApi, setCarouselApi] = useState<CarouselApi | null>(null);
     const [openTooltip, setOpenTooltip] = useState<string | null>(null);
+    
+    const {
+        ownedBeras,
+        handleBeraClick,
+        berasLoading,
+        selectedBera,
+        borrowLimit,
+        updateBorrowLimit,
+        borrowDisplayString,
+        handleBorrowChange,
+        loanExpiration,
+        handleLoanDateChange,
+        loanAmount,
+        // txConfirming,
+        setTxConfirming,
+        // notification,
+        changeActiveToggle,
+        openNotification,
+        getInterestRate,
+        debouncedLoanAmount,
+        debouncedLoanExpiration,
+        loanInterest,
+        setLoanInterest,
+        loanInterestRate,
+        setLoanInterestRate,
+        updateOwnedBeras,
+        findLoans,
+        goldilendInfo
+    } = useGoldilend();
+
+    const { checkLoanAllowance, sendGoldilendNFTApproveTx, sendBorrowTx } = useGoldilendTx();
+    
+    const { address, isConnected } = useAccount();
 
     useEffect(() => {
         const q = idQuery.replace(/[^0-9]/g, "");
         if (!carouselApi || !q) return;
-        const exactIdx = mockBeras.findIndex((b) => String(b.id) === q);
+        const exactIdx = ownedBeras.findIndex((b) => String(b.id) === q);
         if (exactIdx >= 0) {
             // Snap to the slide where the exact match is located
             try { carouselApi.scrollTo(exactIdx, true); } catch { /* noop */ }
         }
-    }, [idQuery, carouselApi, mockBeras]);
-
-    const {
-    ownedBeras,
-    handleBeraClick,
-    berasLoading,
-    selectedBera,
-    borrowLimit,
-    updateBorrowLimit,
-    borrowDisplayString,
-    handleBorrowChange,
-    loanExpiration,
-    handleLoanDateChange,
-    loanAmount,
-    // txConfirming,
-    setTxConfirming,
-    // notification,
-    changeActiveToggle,
-    openNotification,
-    getInterestRate,
-    debouncedLoanAmount,
-    debouncedLoanExpiration,
-    loanInterest,
-    setLoanInterest,
-    loanInterestRate,
-    setLoanInterestRate,
-    updateOwnedBeras,
-    findLoans,
-    } = useGoldilend();
-
-    const { checkLoanAllowance, sendGoldilendNFTApproveTx, sendBorrowTx } = useGoldilendTx();
-
-    const { address, isConnected } = useAccount();
-    const showMock = isConnected;
-
+    }, [idQuery, carouselApi, ownedBeras]);
+    
     const enabledCollections = useMemo(() => new Set(
         Object.keys(selectedCollections).filter((k) => selectedCollections[k])
     ), [selectedCollections]);
 
     const visibleMockBeras = useMemo(() => {
-        if (!showMock) return [] as typeof mockBeras;
-        return mockBeras.filter((b) => enabledCollections.has(b.name.split(" #")[0]));
-    }, [showMock, mockBeras, enabledCollections]);
+        return ownedBeras.filter((b) => enabledCollections.has(b.name.split(" #")[0]));
+    }, [ownedBeras, enabledCollections]);
 
     const prettyFromReal = (n: string) => n.replace("Bera", " Bear");
     const filteredOwnedBeras = useMemo(() => {
-        return ownedBeras.filter((bera) => enabledCollections.has(prettyFromReal(bera.name)));
+        // return ownedBeras.filter((bera) => enabledCollections.has(prettyFromReal(bera.name)));
+        return ownedBeras.filter((bera) => enabledCollections.has(bera.name.split(" #")[0]));
     }, [ownedBeras, enabledCollections]);
 
-    useEffect(() => {
-        if (showMock && selectedBera.name === "" && mockBeras.length > 0) {
-            handleBeraClick(mockBeras[0]);
-        }
-    }, [showMock, selectedBera.name, mockBeras, handleBeraClick]);
+    // useEffect(() => {
+    //     if (showMock && selectedBera.name === "" && mockBeras.length > 0) {
+    //         handleBeraClick(mockBeras[0]);
+    //     }
+    // }, [showMock, selectedBera.name, mockBeras, handleBeraClick]);
 
     useEffect(() => {
         updateBorrowLimit();
-    }, [selectedBera, updateBorrowLimit]);
+    }, [selectedBera]);
 
     useEffect(() => {
         if (
@@ -148,7 +132,7 @@ export const NewBorrowTab = () => {
             const currentDate = new Date();
             const timeDifference = inputDate.getTime() - currentDate.getTime();
             const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
-            if (daysDifference >= 1 && daysDifference <= 90) {
+            if (daysDifference >= 7 && daysDifference <= 30) {
                 setDaysTilExpiration(daysDifference);
             }
         }
@@ -176,8 +160,6 @@ export const NewBorrowTab = () => {
     const loadingElement = () => {
         return <span className="loader-small mx-auto mt-[10%]"></span>;
     };
-
-
 
     const checkDate = (dateString: string): boolean => {
         const dateParts = dateString.split("-");
@@ -219,6 +201,68 @@ export const NewBorrowTab = () => {
         return Math.floor((timestamp - currentTimestamp) / 1000);
     };
 
+    const formatBeraName = (beraName: string): string => {
+        const parts = beraName.split(" #");
+        if (parts.length !== 2) return beraName;
+
+        const collectionName = parts[0];
+        const tokenId = parts[1];
+
+        // Abbreviate long Bong Bear token IDs
+        if (collectionName === "Bong Bear" && tokenId.length > 10) {
+            const abbreviated = `${tokenId.slice(0, 6)}...${tokenId.slice(-4)}`;
+            return `${collectionName} #${abbreviated}`;
+        }
+
+        return beraName;
+    };
+
+    const getBeraImageUrl = (beraName: string, tokenId: number | string, tokenIdRaw?: string): string => {
+        const collectionName = beraName.split(" #")[0];
+
+        // Special handling for Bong Bear collection
+        if (collectionName === "Bong Bear") {
+            // Use raw token ID if available (for very large Bong Bear IDs)
+            const tokenIdStr = tokenIdRaw || String(tokenId);
+            const url = bongbears[tokenIdStr];
+            if (url) {
+                return url;
+            }
+        }
+
+        const ipfsMap: Record<string, { hash: string; extension: string }> = {
+            "Fake Bear": { hash: "bafybeihgxnn7fec5vozkittbginoq4jhn2ctwgke3mbph2rnmtdmjt364m", extension: "jpg" },
+            "Bit Bear": { hash: "Qmek1nCGxXmSGj6qq15eyxwkh8CpDN6vc9zrzQpQxAf2nm", extension: "gif" },
+            "Baby Bear": { hash: "bafybeigmu2j3b562vwcu43n2pzpezevw3m6jj7q7diwaefy6s5zc6gzak4", extension: "jpg" },
+            "Boo Bear": { hash: "bafybeiftuvpxxtr5y3kvf5rvdy6i37h6kqklatksj3e66by4vvtg2b4x2u", extension: "jpg" },
+            "Bond Bear": { hash: "bafybeifikg7bvjizari7dtdejd54mj6smllgbh37alps2roan73d5674sm", extension: "jpg" },
+            "Band Bear": { hash: "bafybeihgxnn7fec5vozkittbginoq4jhn2ctwgke3mbph2rnmtdmjt364m", extension: "jpg" },
+        };
+
+        const defaultConfig = { hash: "bafybeihgxnn7fec5vozkittbginoq4jhn2ctwgke3mbph2rnmtdmjt364m", extension: "jpg" };
+        const config = ipfsMap[collectionName] || defaultConfig;
+
+        return `https://ipfs.io/ipfs/${config.hash}/${tokenId}.${config.extension}`;
+    };
+
+    const getSelectedBeraContractAddress = (): string => {
+        if (!selectedBera.name) return contracts.bandbear.address;
+
+        const collectionName = selectedBera.name.split(" #")[0];
+
+        const contractMap: Record<string, string> = {
+            "Fake Bear": contracts.fakebear.address,
+            "Bit Bear": contracts.bitbear.address,
+            "Baby Bear": contracts.babybear.address,
+            "Boo Bear": contracts.boobear.address,
+            "Bond Bear": contracts.bondbear.address,
+            "Band Bear": contracts.bandbear.address,
+            "Bong Bear": contracts.bongbear.address,
+        };
+
+        return contractMap[collectionName] || contracts.bandbear.address;
+    };
+
     const handleButtonClick = async () => {
         const button = document.getElementById("borrow-button");
         if (loanAmount == 0) {
@@ -237,25 +281,20 @@ export const NewBorrowTab = () => {
             button && (button.innerHTML = "exceeds limit");
             return;
         }
-        const [, bandFlag] = await checkLoanAllowance(
+
+        const selectedBeraContract = getSelectedBeraContractAddress();
+        const isApproved = await checkLoanAllowance(
             address as `0x${string}`,
+            selectedBeraContract
         );
-        if (
-            // (bondFlag || selectedBera.name !== "BondBera") &&
-            (bandFlag || selectedBera.name !== "BandBera")
-        ) {
+
+        if (isApproved) {
             borrowTxFlow(button);
         } else {
+            console.log('approve flow')
             button && (button.innerHTML = "approving...");
-            // loading color removed
-            // if (!bondFlag && selectedBera.name === "BondBera") {
-            //   await sendGoldilendNFTApproveTx(contracts.bondbear.address);
-            // }
-            if (!bandFlag && selectedBera.name === "BandBera") {
-            await sendGoldilendNFTApproveTx(contracts.bandbear.address);
-            }
+            await sendGoldilendNFTApproveTx(selectedBeraContract);
             button && (button.innerHTML = "deposit & borrow");
-            
         }
     };
 
@@ -269,7 +308,7 @@ export const NewBorrowTab = () => {
     const borrowTx = await sendBorrowTx(
         loanAmount,
         selectedBera,
-        parseDate(loanExpiration),
+        parseDate(loanExpiration) > 86400 ? parseDate(loanExpiration) : 86400,
     );
     if (borrowTx.substring(0, 2) === "0x") {
         setTxConfirming(false);
@@ -315,6 +354,24 @@ export const NewBorrowTab = () => {
     const day = currentDate.getDate().toString().padStart(2, "0");
     const year = currentDate.getFullYear().toString();
     handleLoanDateChange(`${month}-${day}-${year}`);
+    };
+
+    const getSelectedBeraFairValue = (): number => {
+        if (!selectedBera.name) return 0;
+
+        const collectionName = selectedBera.name.split(" #")[0];
+
+        const fairValueMap: Record<string, number> = {
+            "Fake Bear": goldilendInfo.fakebearFairValue,
+            "Bit Bear": goldilendInfo.bitbearFairValue,
+            "Baby Bear": goldilendInfo.babybearFairValue,
+            "Boo Bear": goldilendInfo.boobearFairValue,
+            "Bond Bear": goldilendInfo.bondbearFairValue,
+            "Band Bear": goldilendInfo.bandbearFairValue,
+            "Bong Bear": goldilendInfo.bongbearFairValue,
+        };
+
+        return fairValueMap[collectionName] || 0;
     };
 
     return (
@@ -388,91 +445,62 @@ export const NewBorrowTab = () => {
                         </div>
                     </div>
                     <div className="h-0.5 w-full max-w-md bg-stone-800 mx-auto mb-4" />
-                    {showMock && (
-                      <div className="w-full flex items-center justify-center">
-                         <div className="relative mx-auto w-full max-w-[1200px] h-[200px] sm:h-[220px]">
-                           {visibleMockBeras.length === 0 ? (
-                              <div className="flex h-full items-center justify-center opacity-50 mx-auto w-full">
-                               <div className="flex flex-col items-center">
-                                 <img className="mb-[5%] w-[40%] md:w-[20%]" src="/images/icon-not-found.png" alt="not-found" />
-                                 <h2 className="font-amaticbold text-center text-4xl sm:text-5xl md:text-6xl font-bold text-white">no beras</h2>
-                               </div>
-                             </div>
-                           ) : (
-                          <Carousel opts={{ align: "center", loop: true, slidesToScroll: 1, dragFree: true, containScroll: "trimSnaps" }} className="w-full max-w-[1200px] mx-auto" setApi={setCarouselApi}>
-                            <CarouselContent className="-ml-1 select-none">
-                               {visibleMockBeras.map((b, index) => (
-                                  <CarouselItem key={index} className="basis-[190px] md:basis-[200px] pl-1 select-none">
-                                    <div className="flex flex-col items-center">
-                                      <img
-                                        className={`block w-full max-w-[190px] md:max-w-[200px] object-contain rounded-xl cursor-pointer ${selectedBera.name === b.name ? "border-4 border-HoneyYellow" : "border-2 border-white/20"}`}
-                                        src={mockImgById[b.id]}
-                                        alt={b.name}
-                                        draggable={false}
-                                        onClick={() => handleBeraClick(b)}
-                                      />
-                                      <div className="mt-1 text-center w-full max-w-[180px]">
-                                        <span className="font-amaticbold text-HoneyYellow text-2xl leading-none truncate">{b.name}</span>
-                                      </div>
+                    <div className="w-full flex items-center justify-center">
+                        <div className="relative mx-auto w-full max-w-[1200px] h-[200px] sm:h-[220px]">
+                            {
+                                berasLoading ? (
+                                    <div className="flex justify-center items-center">
+                                        {loadingElement()}
                                     </div>
-                                  </CarouselItem>
-                                ))}
-                            </CarouselContent>
-                            <CarouselPrevious className="left-[-28px] -translate-x-1/2" />
-                            <CarouselNext className="right-[-28px] translate-x-1/2" />
-                           </Carousel>
-                           )}
-                          {/* centralized selected name removed per request */}
+                                ) :
+                                visibleMockBeras.length === 0 ? (
+                                    <div className="flex h-full items-center justify-center opacity-50 mx-auto w-full">
+                                    <div className="flex flex-col items-center">
+                                        <img className="mb-[5%] w-[40%] md:w-[20%]" src="/images/icon-not-found.png" alt="not-found" />
+                                        <h2 className="font-amaticbold text-center text-4xl sm:text-5xl md:text-6xl font-bold text-white">no beras</h2>
+                                    </div>
+                                    </div>
+                                ) : (
+                                <Carousel opts={{ align: "center", loop: true, slidesToScroll: 1, dragFree: true, containScroll: "trimSnaps" }} className="w-full max-w-[1200px] mx-auto" setApi={setCarouselApi}>
+                                    <CarouselContent className="-ml-1 select-none">
+                                        {filteredOwnedBeras.map((b, index) => (
+                                            <CarouselItem key={index} className="basis-[190px] md:basis-[200px] pl-1 select-none">
+                                            <div className="flex flex-col items-center">
+                                                <img
+                                                className={`block w-full max-w-[190px] md:max-w-[200px] object-contain rounded-xl cursor-pointer ${selectedBera.name === b.name ? "border-4 border-HoneyYellow" : "border-2 border-white/20"}`}
+                                                src={getBeraImageUrl(b.name, b.id, b.idRaw)}
+                                                alt={b.name}
+                                                draggable={false}
+                                                onClick={() => handleBeraClick(b)}
+                                                />
+                                                <div className="mt-1 text-center w-full max-w-[180px]">
+                                                <span className="font-amaticbold text-HoneyYellow text-2xl leading-none truncate">{formatBeraName(b.name)}</span>
+                                                </div>
+                                            </div>
+                                            </CarouselItem>
+                                        ))}
+                                    </CarouselContent>
+                                    <CarouselPrevious className="left-[-28px] -translate-x-1/2" />
+                                    <CarouselNext className="right-[-28px] translate-x-1/2" />
+                                </Carousel>
+                            )}
+                            {/* centralized selected name removed per request */}
                         </div>
-                      </div>
-                    )}
-                    { !showMock && (
-                      berasLoading ? (
-                        <div className="w-full flex-1 flex items-center justify-center">{loadingElement()}</div>
-                      ) : (!isConnected || filteredOwnedBeras.length === 0) ? (
-                        <div className="w-full flex items-center justify-center">
-                          <div className="relative mx-auto w-full max-w-[1200px] h-[200px] sm:h-[220px]">
-                            <div className="flex h-full items-center justify-center opacity-50">
-                              <div className="flex flex-col items-center">
-                                <img className="mb-[5%] w-[40%] md:w-[20%]" src="/images/icon-not-found.png" alt="not-found" />
-                                <h2 className="font-amaticbold text-center text-4xl sm:text-5xl md:text-6xl font-bold text-white">no beras</h2>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 justify-center gap-2.5 overflow-y-auto p-2 max-h-[340px]" id="hide-scrollbar">
-                          {filteredOwnedBeras.map((bera, index) => (
-                                <div key={index} className="">
-                                    <img
-                                className={`h-[100px] w-[100px] border-3 border-white rounded-xl hover:cursor-pointer ${selectedBera.index == bera.index ? "border-6 border-white" : "opacity-65"}`}
-                                        onClick={() => handleBeraClick(bera)}
-                                        src={
-                                            bera.name === "BondBera"
-                                                ? "/images/icon-bondbear.png"
-                                                : "/images/icon-bandbear.png"
-                                        }
-                                        alt="bera"
-                                    />
-                                </div>
-                          ))}
                     </div>
-                      )
-                    ) }
                     {/* Summary cards moved from right to left under carousel */}
                     <div className="w-full mt-3">
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
                         <div className="rounded-xl bg-black/10 border border-amber-900/20 px-4 py-3 w-full flex flex-col items-center">
                           <div className="text-white text-2xl font-baloo font-semibold text-center">Collateral</div>
                           <div className="mt-1 inline-flex items-center px-2.5 py-1 rounded-full border border-amber-700/50 bg-amber-900/20 text-HoneyYellow font-baloo text-2xl leading-none justify-center">
-                            {selectedBera.name || "None"}
+                            {selectedBera.name ? formatBeraName(selectedBera.name) : "None"}
                           </div>
                         </div>
                         <div className="rounded-xl bg-black/10 border border-amber-900/20 px-4 py-3 w-full flex flex-col items-center">
                           <div className="text-white text-2xl font-baloo font-semibold text-center">Value</div>
                           <div className="mt-1 inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-amber-700/50 bg-amber-900/20 text-HoneyYellow font-baloo text-2xl leading-none justify-center">
                             <img src="/images/logo-honey.png" alt="HONEY" className="h-5 w-5" />
-                            <span>{selectedBera.valuation ? formatAsString(selectedBera.valuation as number) : "-"}</span>
+                            <span>{selectedBera.name ? formatAsLongerNumber(getSelectedBeraFairValue()) : "-"}</span>
                           </div>
                         </div>
                       </div>
@@ -544,7 +572,7 @@ export const NewBorrowTab = () => {
                           <button
                             type="button"
                             className="w-full sm:w-16 py-1.5 rounded-lg text-sm font-baloo bg-amber-600/40 hover:bg-amber-700/60 border border-amber-600/30 text-amber-200 transition-colors cursor-pointer"
-                            onClick={() => handleBorrowChange(String((Number(selectedBera.valuation ?? 0) * 0.8) || 0))}
+                            onClick={() => handleBorrowChange(borrowLimit.toString())}
                           >
                             MAX
                           </button>
@@ -556,16 +584,16 @@ export const NewBorrowTab = () => {
                               {/* Left column: first 3 in order */}
                               <div className="flex flex-col gap-3">
                                 <div className="flex w-full items-center justify-between gap-4">
-                                    <span className="text-white text-[0.75rem] sm:text-xs font-baloo font-semibold uppercase tracking-wide">Max Borrow (80% LTV)</span>
+                                    <span className="text-white text-[0.75rem] sm:text-xs font-baloo font-semibold uppercase tracking-wide">Max Borrow</span>
                                   <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-amber-700/50 bg-amber-900/20 text-HoneyYellow font-baloo text-lg sm:text-xl leading-none justify-center">
                                     <img src="/images/logo-honey.png" alt="HONEY" className="h-4 w-4" />
-                                    <span>{selectedBera.valuation ? formatAsString((selectedBera.valuation as number) * 0.8) : "-"}</span>
+                                    <span>{formatAsLongerNumber(borrowLimit)}</span>
                                   </div>
                                 </div>
                                 <div className="flex w-full items-center justify-between gap-4">
                                   <div className="flex items-center gap-2">
                                     <span className="text-white text-[0.75rem] sm:text-xs font-baloo font-semibold uppercase tracking-wide">Interest Rate</span>
-                                    <span className="relative inline-flex group">
+                                    {/* <span className="relative inline-flex group">
                                       <span
                                         className="flex items-center justify-center w-5 h-5 rounded-full border-2 border-HoneyYellow/70 text-HoneyYellow text-xs leading-none font-bold cursor-pointer touch-manipulation pointer-events-auto"
                                         aria-label="Rate info"
@@ -592,7 +620,7 @@ export const NewBorrowTab = () => {
                                           style={{ backgroundColor: "rgba(60, 50, 40, 0.95)", borderRight: "2px solid rgba(205, 133, 63, 0.5)", borderBottom: "2px solid rgba(205, 133, 63, 0.5)" }}
                                         />
                                       </div>
-                                    </span>
+                                    </span> */}
                                   </div>
                                   <div className="inline-flex items-center px-2.5 py-1 rounded-full border border-amber-700/50 bg-amber-900/20 text-HoneyYellow font-baloo text-lg sm:text-xl leading-none justify-center text-center">{loanInterestRate ? `${Number(loanInterestRate).toFixed(2)}%` : "-"}</div>
                                 </div>
@@ -600,7 +628,7 @@ export const NewBorrowTab = () => {
                                   <span className="text-white text-[0.75rem] sm:text-xs font-baloo font-semibold uppercase tracking-wide">Interest (Upfront)</span>
                                   <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-amber-700/50 bg-amber-900/20 text-HoneyYellow font-baloo text-lg sm:text-xl leading-none justify-center">
                                     <img src="/images/logo-honey.png" alt="HONEY" className="h-4 w-4" />
-                                    <span>{loanInterest ? formatAsString(loanInterest) : "-"}</span>
+                                    <span>{loanInterest ? formatAsLongerNumber(loanInterest) : "-"}</span>
                                   </div>
                                 </div>
                               </div>
@@ -610,7 +638,7 @@ export const NewBorrowTab = () => {
                                   <span className="text-white text-[0.75rem] sm:text-xs font-baloo font-semibold uppercase tracking-wide">You Receive</span>
                                   <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-amber-700/50 bg-amber-900/20 text-HoneyYellow font-baloo text-lg sm:text-xl leading-none justify-center">
                                     <img src="/images/logo-honey.png" alt="HONEY" className="h-4 w-4" />
-                                    <span>{(loanAmount - loanInterest) > 0 ? formatAsString(loanAmount - loanInterest) : "-"}</span>
+                                    <span>{(loanAmount - loanInterest) > 0 ? formatAsLongerNumber(loanAmount - loanInterest) : "-"}</span>
                                   </div>
                                 </div>
                                 <div className="flex w-full items-center justify-between gap-4">
@@ -621,7 +649,7 @@ export const NewBorrowTab = () => {
                                     <span className="text-white text-[0.75rem] sm:text-xs font-baloo font-semibold uppercase tracking-wide">Total to Repay</span>
                                   <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-amber-700/50 bg-amber-900/20 text-HoneyYellow font-baloo text-lg sm:text-xl leading-none justify-center">
                                     <img src="/images/logo-honey.png" alt="HONEY" className="h-4 w-4" />
-                                    <span>{(loanAmount - loanInterest) > 0 ? formatAsString(loanAmount - loanInterest) : "-"}</span>
+                                    <span>{(loanAmount) > 0 ? formatAsLongerNumber(loanAmount) : "-"}</span>
                                   </div>
                                 </div>
                               </div>
@@ -665,7 +693,7 @@ export const NewBorrowTab = () => {
                                         }
                                       }}
                                     >
-                                      Deposit & Borrow
+                                      deposit & Borrow
                                     </button>
                                   )
                                 }}

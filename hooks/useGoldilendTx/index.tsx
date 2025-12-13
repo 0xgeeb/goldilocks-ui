@@ -51,44 +51,15 @@ export const useGoldilendTx = () => {
     }
   };
 
-  const checkBoostAllowance = async (wallet: string): Promise<boolean[]> => {
-    const honeycombAllApproved = await readContract(config, {
-      address: contracts.honeycomb.address as `0x${string}`,
-      abi: contracts.honeycomb.abi,
-      functionName: "isApprovedForAll",
-      args: [wallet, contracts.goldilend.address],
-    });
-    const beradromeAllApproved = await readContract(config, {
-      address: contracts.beradrome.address as `0x${string}`,
-      abi: contracts.beradrome.abi,
+  const checkLoanAllowance = async (wallet: string, nftContractAddress: string): Promise<boolean> => {
+    const isApproved = await readContract(config, {
+      address: nftContractAddress as `0x${string}`,
+      abi: contracts.bandbear.abi, // All bera contracts share the same ERC721 ABI
       functionName: "isApprovedForAll",
       args: [wallet, contracts.goldilend.address],
     });
 
-    const hcAA = honeycombAllApproved as unknown as boolean;
-    const bdAA = beradromeAllApproved as unknown as boolean;
-
-    return [hcAA, bdAA];
-  };
-
-  const checkLoanAllowance = async (wallet: string): Promise<boolean[]> => {
-    // const bondbearAllApproved = await readContract(config, {
-    //   address: contracts.bondbear.address as `0x${string}`,
-    //   abi: contracts.bondbear.abi,
-    //   functionName: "isApprovedForAll",
-    //   args: [wallet, contracts.goldilend.address],
-    // });
-    const bandbearAllApproved = await readContract(config, {
-      address: contracts.bandbear.address as `0x${string}`,
-      abi: contracts.bandbear.abi,
-      functionName: "isApprovedForAll",
-      args: [wallet, contracts.goldilend.address],
-    });
-
-    // const boAA = bondbearAllApproved as unknown as boolean;
-    const baAA = bandbearAllApproved as unknown as boolean;
-
-    return [false, baAA];
+    return isApproved as unknown as boolean;
   };
 
   const checkRepayAllowance = async (
@@ -333,9 +304,23 @@ export const useGoldilendTx = () => {
     selectedBera: BeraInfo,
     duration: number,
   ): Promise<string> => {
-    console.log(loanAmt, duration, selectedBera.id)
-    const bond = contracts.bondbear.address as `0x${string}`;
-    const band = contracts.bandbear.address as `0x${string}`;
+    // Map collection name to contract address
+    const getBeraContractAddress = (beraName: string): `0x${string}` => {
+      const collectionName = beraName.split(" #")[0];
+
+      const contractMap: Record<string, `0x${string}`> = {
+        "Fake Bear": contracts.fakebear.address as `0x${string}`,
+        "Bit Bear": contracts.bitbear.address as `0x${string}`,
+        "Baby Bear": contracts.babybear.address as `0x${string}`,
+        "Boo Bear": contracts.boobear.address as `0x${string}`,
+        "Bond Bear": contracts.bondbear.address as `0x${string}`,
+        "Band Bear": contracts.bandbear.address as `0x${string}`,
+        "Bong Bear": contracts.bongbear.address as `0x${string}`,
+      };
+
+      return contractMap[collectionName] || contracts.bandbear.address as `0x${string}`;
+    };
+
     try {
       const hash = await writeContract(config, {
         address: contracts.goldilend.address as `0x${string}`,
@@ -343,8 +328,9 @@ export const useGoldilendTx = () => {
         functionName: "borrow",
         args: [
           parseEther(`${loanAmt}`),
+          parseEther('5000'),
           BigInt(duration),
-          selectedBera.name === "BondBera" ? bond : band,
+          getBeraContractAddress(selectedBera.name),
           BigInt(selectedBera.id),
         ],
       });
@@ -365,16 +351,21 @@ export const useGoldilendTx = () => {
     realBorrowedAmount: bigint,
     realInterest: bigint,
     wallet: string,
+    repaidAmount?: number,
   ): Promise<string> => {
     try {
+      // When maxToggle is true, use precise BigInt math to calculate remaining amount
+      // to avoid rounding issues. Subtract any partial repayments from the original amount.
+      const repayAmount = maxToggle
+        ? realBorrowedAmount - parseEther(`${repaidAmount || 0}`)
+        : parseEther(`${repayAmt}`);
+
       const hash = await writeContract(config, {
         address: contracts.goldilend.address as `0x${string}`,
         abi: contracts.goldilend.abi,
         functionName: "repay",
         args: [
-          maxToggle
-            ? realBorrowedAmount - realInterest
-            : parseEther(`${repayAmt}`),
+          repayAmount,
           loanId,
         ],
       });
@@ -387,6 +378,37 @@ export const useGoldilendTx = () => {
 
     return "";
   };
+
+    const sendRenewTx = async (
+        addy: string,
+        loanId: number,
+        newBorrowAmount: number,
+        newDuration: number,
+        realInterest: bigint
+    ): Promise<string> => {
+        try {
+            console.log(loanId, newDuration, newBorrowAmount, realInterest)
+            const hash = await writeContract(config, {
+                address: contracts.goldilend.address as `0x${string}`,
+                abi: contracts.goldilend.abi,
+                functionName: "renew",
+                args: [
+                    loanId,
+                    newDuration,
+                    parseEther(newBorrowAmount.toString()),
+                    parseEther('5000')
+                ]
+            })
+            const data = await waitForTransactionReceipt(config, { hash })
+            return data.transactionHash
+        }
+        catch (e) {
+            console.log("user denied tx");
+            console.log("or: ", e);
+        }
+
+        return "";
+    }
 
   const sendLiquidateTx = async (addy: string, id: number): Promise<string> => {
     try {
@@ -405,6 +427,44 @@ export const useGoldilendTx = () => {
 
     return "";
   };
+
+  const sendPlaceBidTx = async (loanOriginator: string, id: number, bidAmount: number): Promise<string> => {
+    try {
+        const hash = await writeContract(config, {
+            address: contracts.goldilend.address as `0x${string}`,
+            abi: contracts.goldilend.abi,
+            functionName: "placeBid",
+            args: [loanOriginator, id, parseEther(bidAmount.toString())],
+        });
+        const data = await waitForTransactionReceipt(config, { hash });
+        return data.transactionHash;
+    }
+    catch (e) {
+        console.log("user denied tx");
+        console.log("or: ", e);
+    }
+
+    return ""
+  }
+
+  const sendCloseAuctionTx = async (loanOriginator: string, id: number): Promise<string> => {
+    try {
+        const hash = await writeContract(config, {
+            address: contracts.goldilend.address as `0x${string}`,
+            abi: contracts.goldilend.abi,
+            functionName: "closeAuction",
+            args: [loanOriginator, id],
+        });
+        const data = await waitForTransactionReceipt(config, { hash });
+        return data.transactionHash;
+    }
+    catch (e) {
+        console.log("user denied tx");
+        console.log("or: ", e);
+    }
+
+    return ""
+  }
 
   const sendMintNFTTx = async (nft: string, addy: string): Promise<string> => {
     try {
@@ -467,7 +527,6 @@ export const useGoldilendTx = () => {
   }
 
   return {
-    checkBoostAllowance,
     checkLoanAllowance,
     sendGoldilendNFTApproveTx,
     sendBoostTx,
@@ -486,6 +545,9 @@ export const useGoldilendTx = () => {
     sendClaimTx,
     sendLiquidateTx,
     sendMintNFTTx,
-    sendMintFakeHoneyTx
+    sendMintFakeHoneyTx,
+    sendRenewTx,
+    sendPlaceBidTx,
+    sendCloseAuctionTx
   };
 };

@@ -2,19 +2,13 @@
 
 import type { ReactNode } from "react";
 import Image from "next/image";
-import {
-  Marquee,
-  MarqueeContent,
-  MarqueeItem,
-} from '@/components/ui/shadcn-io/marquee';
-
 import { useGoldilend } from "../../../providers";
 
 const badgeClass =
-  "inline-flex items-center gap-2 px-2.5 py-1 rounded-full border border-amber-700/50 bg-amber-900/20 text-HoneyYellow font-baloo font-semibold leading-none";
+  "inline-flex flex-shrink-0 items-center gap-1 px-1 py-0.5 h-4 sm:gap-1.5 sm:px-1.5 sm:py-0.5 sm:h-6 rounded-full border border-amber-700/50 bg-amber-900/20 text-HoneyYellow font-baloo font-semibold leading-[9px] sm:leading-[12px] whitespace-nowrap";
 
 const CategoryBadge = ({ label, icon }: { label: string; icon?: ReactNode }) => (
-  <span className={`${badgeClass} text-base tracking-wide sm:text-lg`}>
+  <span className={`${badgeClass} text-[7px] tracking-wide sm:text-sm`}>
     {icon}
     {label}
   </span>
@@ -36,7 +30,7 @@ const StatPill = ({
   href?: string;
 }) => {
   const suffixText = suffix && value !== "-" ? suffix : "";
-  const className = `${badgeClass} text-sm sm:text-base`;
+  const className = `${badgeClass} text-[7px] sm:text-sm`;
 
   const content = (
     <>
@@ -50,7 +44,7 @@ const StatPill = ({
   );
 
   return (
-    <div className="flex items-center gap-2 text-sm text-white sm:text-base">
+    <div className="flex items-center gap-2 text-[7px] text-white sm:text-sm">
       <span className="font-baloo font-semibold text-white">{label}</span>
       {href ? (
         <a
@@ -67,6 +61,23 @@ const StatPill = ({
     </div>
   );
 };
+
+const Section = ({
+  label,
+  icon,
+  children,
+}: {
+  label: string;
+  icon?: ReactNode;
+  children: ReactNode;
+}) => (
+  <div className="flex flex-nowrap items-center gap-2 sm:gap-4 whitespace-nowrap">
+    <CategoryBadge label={label} icon={icon} />
+    <div className="flex flex-nowrap items-center gap-2 sm:gap-4 whitespace-nowrap">
+      {children}
+    </div>
+  </div>
+);
 
 export const GoldilendStatsMarquee = () => {
   const { goldilendInfo, infoLoading } = useGoldilend();
@@ -86,138 +97,97 @@ export const GoldilendStatsMarquee = () => {
     ? (goldilendInfo.outstandingDebt / goldilendInfo.poolSize) * 100
     : 0;
 
-  // Values sourced to match Goldilend Info panel
-  const maxDurationDays = '30 days';
   const redeemableRaw = Math.min(
     Math.max(goldilendInfo.poolSize - goldilendInfo.outstandingDebt, 0),
     goldilendInfo.maxUtilization * goldilendInfo.poolSize
   );
   const totalRedeemable = handleNum(redeemableRaw);
   // reward vault link rendered directly in JSX
-  // const totalLent = handleNum(goldilendInfo.poolSize);
-  const totalLent = '-'
+  const totalLent = handleNum(goldilendInfo.poolSize);
   const totalBorrowed = handleNum(goldilendInfo.outstandingDebt);
 
   return (
-    <div className="w-full overflow-hidden py-0">
-      <Marquee>
-        <MarqueeContent speed="slow" pauseOnHover>
-          {/* PARAMS */}
-          <MarqueeItem className="flex items-center gap-4 px-4 sm:px-6">
-            <CategoryBadge label="Params" />
-            <div className="flex flex-wrap items-center gap-3 sm:gap-4">
-              <StatPill label="Max Duration" value={maxDurationDays} />
-              <StatPill label="Max Utilization" value={handleNum(goldilendInfo.maxUtilization)} suffix="%" />
-              <StatPill label="Max Interest Rate" value={handleNum(goldilendInfo.protocolInterestRate, 2)} suffix="%" />
-            </div>
-          </MarqueeItem>
+    <div className="w-full overflow-x-auto py-0">
+      <div className="flex w-full flex-col items-center gap-2 px-1 sm:gap-5 sm:px-3 xl:min-w-max xl:flex-row xl:items-center xl:justify-center">
+        <Section
+          label="HONEY"
+          icon={
+            <Image
+              src="/images/logo-honey.png"
+              alt="HONEY"
+              width={14}
+              height={14}
+            />
+          }
+        >
+          <StatPill
+            label="Lent"
+            value={totalLent}
+            icon={
+              <Image src="/images/logo-honey.png" alt="HONEY" width={10} height={10} />
+            }
+          />
+          <StatPill
+            label="Borrowed"
+            value={totalBorrowed}
+            icon={
+              <Image src="/images/logo-honey.png" alt="HONEY" width={10} height={10} />
+            }
+          />
+          <StatPill
+            label="Util"
+            value={handleNum(utilization)}
+            suffix="%"
+          />
+        </Section>
 
-          {/* Separator */}
-          <MarqueeItem className="px-2 sm:px-4">
-            <div className="h-8 w-px bg-white/20" />
-          </MarqueeItem>
-
-          {/* gHoney */}
-          <MarqueeItem className="flex items-center gap-4 px-4 sm:px-6">
-            <CategoryBadge
+        <Section
               label="gHoney"
               icon={
                 <Image
                   src="/images/bhoney-logo.png"
                   alt="gHoney"
-                  width={26}
-                  height={26}
+              width={14}
+              height={14}
                   className="rounded-full"
                 />
               }
-            />
-            <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+        >
               <StatPill
-                label="Total Supply"
+            label="Supply"
                 value={handleNum(goldilendInfo.glhoneySupply)}
                 icon={
                   <Image
                     src="/images/bhoney-logo.png"
                     alt="gHoney"
-                    width={18}
-                    height={18}
+                width={10}
+                height={10}
                     className="rounded-full"
                   />
                 }
               />
               <StatPill
-                label="Total Redeemable"
+            label="Redeemable"
                 value={totalRedeemable}
                 icon={
                   <Image
                     src="/images/bhoney-logo.png"
                     alt="gHoney"
-                    width={18}
-                    height={18}
+                width={10}
+                height={10}
                     className="rounded-full"
                   />
                 }
               />
               <StatPill
-                label="Beradrome Farm"
+            label="Vault"
                 value="Open"
-                href="https://www.beradrome.com/farms/0x3E185233A6aA7390bc9292ab26E955c47b95B5A8"
-                icon={
-                  <Image src="/images/icon-share.png" alt="share" width={16} height={16} />
-                }
+            href="https://www.beradrome.com/farms/0x3E185233A6aA7390bc9292ab26E955c47b95B5A8"
+            icon={<Image src="/images/icon-share.png" alt="share" width={10} height={10} />}
                 iconPosition="end"
               />
+        </Section>
             </div>
-          </MarqueeItem>
-
-          {/* Separator */}
-          <MarqueeItem className="px-2 sm:px-4">
-            <div className="h-8 w-px bg-white/20" />
-          </MarqueeItem>
-
-          {/* HONEY */}
-          <MarqueeItem className="flex items-center gap-4 px-4 sm:px-6">
-            <CategoryBadge
-              label="HONEY"
-              icon={
-                <Image
-                  src="/images/logo-honey.png"
-                  alt="HONEY"
-                  width={26}
-                  height={26}
-                />
-              }
-            />
-            <div className="flex flex-wrap items-center gap-3 sm:gap-4">
-              <StatPill
-                label="Total Lent"
-                value={totalLent}
-                icon={
-                  <Image src="/images/logo-honey.png" alt="HONEY" width={16} height={16} />
-                }
-              />
-              <StatPill
-                label="Total Borrowed"
-                value={totalBorrowed}
-                icon={
-                  <Image src="/images/logo-honey.png" alt="HONEY" width={16} height={16} />
-                }
-              />
-              <StatPill
-                label="Utilization"
-                value={handleNum(utilization)}
-                suffix="%"
-              />
-            </div>
-          </MarqueeItem>
-
-          {/* Separator */}
-          <MarqueeItem className="px-2 sm:px-4">
-            <div className="h-8 w-px bg-white/20" />
-          </MarqueeItem>
-
-        </MarqueeContent>
-      </Marquee>
     </div>
   );
 };

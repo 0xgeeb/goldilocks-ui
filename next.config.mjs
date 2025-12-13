@@ -44,6 +44,14 @@ const nextConfig = {
       {
         source: '/api/ownedBeras/:walletAddress',
         destination: 'http://98.81.96.90:3001/ownedBeras/:walletAddress'
+      },
+      {
+        source: '/api/loans/:walletAddress',
+        destination: 'http://98.81.96.90:3001/loans/:walletAddress'
+      },
+      {
+        source: '/api/liquidatable-loans',
+        destination: 'http://98.81.96.90:3001/liquidatable-loans'
       }
     ]
   }

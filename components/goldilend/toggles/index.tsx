@@ -14,7 +14,7 @@ export const Toggles = () => {
             ? "bg-HoneyYellow text-black shadow-[0_-2px_8px_rgba(251,191,36,0.3)]"
             : "text-white hover:bg-HoneyYellow/30 hover:text-black"
         }`}
-        // onClick={() => changeActiveToggle("BORROW")} // commenting out to only enable ghoney deposits
+        onClick={() => changeActiveToggle("BORROW")}
       >
         Borrow
       </button>
@@ -24,7 +24,7 @@ export const Toggles = () => {
             ? "bg-HoneyYellow text-black shadow-[0_-2px_8px_rgba(251,191,36,0.3)]"
             : "text-white hover:bg-HoneyYellow/30 hover:text-black"
         }`}
-        // onClick={() => changeActiveToggle("REPAY")} // commenting out to only enable ghoney deposits
+        onClick={() => changeActiveToggle("REPAY")}
       >
         Repay
       </button>
@@ -34,7 +34,7 @@ export const Toggles = () => {
             ? "bg-HoneyYellow text-black shadow-[0_-2px_8px_rgba(251,191,36,0.3)]"
             : "text-white hover:bg-HoneyYellow/30 hover:text-black"
         }`}
-        // onClick={() => changeActiveToggle("AUCTIONS")} // commenting out to only enable ghoney deposits
+        onClick={() => changeActiveToggle("AUCTIONS")}
       >
         Auctions
       </button>

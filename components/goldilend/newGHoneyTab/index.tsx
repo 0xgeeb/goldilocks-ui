@@ -200,7 +200,13 @@ export const NewGHoneyTab = () => {
             </div>
           </div>
         </div>
+        <p className="font-amaticbold text-center text-HoneyYellow text-lg sm:text-xl leading-tight">
+          Please note; conversion of gHoney to HONEY is subject to available liquidity at the time of transaction.
+        </p>
         <GhoneyButton />
+        <p className="font-baloo text-center text-HoneyYellow text-[10px] leading-tight italic">
+            Depositors should be aware of the possibility of bad debt. This can occur when a liquidated loan auction is unsuccessful and there is insufficient HONEY in the insurance fund to repay the balance of the unpaid loan. In this event, there is a possibility that gHoney redemptions will become unavailable.
+        </p>
       </div>
     </div>
   );
