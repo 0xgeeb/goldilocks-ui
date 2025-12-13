@@ -146,7 +146,7 @@ export const BorrowButtonMobile = () => {
       button.innerHTML = "no collateral";
       return;
     }
-    if (loanAmount + loanInterest > borrowLimit) {
+    if (loanAmount > borrowLimit) {
       button.innerHTML = "exceeds limit";
       return;
     }

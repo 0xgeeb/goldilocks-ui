@@ -277,7 +277,7 @@ export const NewBorrowTab = () => {
             button && (button.innerHTML = "no collateral");
             return;
         }
-        if (loanAmount + loanInterest > borrowLimit) {
+        if (loanAmount > borrowLimit) {
             button && (button.innerHTML = "exceeds limit");
             return;
         }
